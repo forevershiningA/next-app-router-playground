@@ -1,0 +1,38 @@
+[
+  {
+    "type": "A09-checkout-failure",
+    "confirmed": true,
+    "writes": [
+      {
+        "path": "/api/orders",
+        "data": {
+          "projectId": "audit-project",
+          "paymentMethod": "other",
+          "status": "pending"
+        }
+      },
+      {
+        "path": "/api/email",
+        "data": {
+          "type": "order",
+          "recipientEmail": "audit@example.invalid",
+          "recipientName": "Audit Example",
+          "countryCode": "au",
+          "orderId": "audit-project",
+          "invoiceNumber": "INV-AUDIT-PR",
+          "designName": "Audit sample",
+          "quoteItems": [],
+          "subtotalCents": 110000,
+          "taxCents": 11000,
+          "totalCents": 121000,
+          "currency": "AUD",
+          "customerAddress": "1 Sample Street, Perth, 6000, Australia"
+        }
+      }
+    ]
+  },
+  {
+    "type": "A01-checkout-query",
+    "confirmed": true
+  }
+]

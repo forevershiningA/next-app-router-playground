@@ -71,6 +71,7 @@ import {
   isDesignerStepSlug,
 } from '#/lib/designer-route-state';
 import { useMobileNavStore } from '#/lib/mobile-nav-store';
+import { captureDesignSnapshot } from '#/lib/project-serializer';
 
 // Menu items grouped by workflow stage
 const menuGroups = [
@@ -387,7 +388,9 @@ export default function DesignerNav() {
     (catalog?.product?.type === 'headstone' &&
       catalog.product.name.toLowerCase().includes('stainless steel'));
   const supportsFlowerPots =
-    catalog?.product.type === 'headstone' && productId !== '8' && productId !== '22';
+    catalog?.product.type === 'headstone' &&
+    productId !== '8' &&
+    productId !== '22';
   const ssCorners = useHeadstoneStore((s) => s.ssCorners);
   const setSsCorners = useHeadstoneStore((s) => s.setSsCorners);
   const ssHoles = useHeadstoneStore((s) => s.ssHoles);
@@ -564,7 +567,14 @@ export default function DesignerNav() {
       sessionStorage.setItem('designer:return-from-menu', pathname);
     }
     router.push(designerHref('design-menu'));
-  }, [closeFullscreenPanel, designerHref, designerStepSlug, pathname, router, setCropCanvasData]);
+  }, [
+    closeFullscreenPanel,
+    designerHref,
+    designerStepSlug,
+    pathname,
+    router,
+    setCropCanvasData,
+  ]);
   const [showSaveDesignModal, setShowSaveDesignModal] = React.useState(false);
   const [showNewDesignConfirm, setShowNewDesignConfirm] = React.useState(false);
   const [isSavingDesign, setIsSavingDesign] = React.useState(false);
@@ -630,7 +640,9 @@ export default function DesignerNav() {
   const [showCanvas, setShowCanvas] = React.useState(false);
   const [isLoadingPanel, setIsLoadingPanel] = React.useState(false);
   const [motifHeightStepIndex, setMotifHeightStepIndex] = React.useState(0);
-  const [lastMotifCategoryId, setLastMotifCategoryId] = React.useState<string | null>(null);
+  const [lastMotifCategoryId, setLastMotifCategoryId] = React.useState<
+    string | null
+  >(null);
 
   const motifOffsets = useHeadstoneStore((s) => s.motifOffsets);
   const setMotifOffset = useHeadstoneStore((s) => s.setMotifOffset);
@@ -1727,7 +1739,7 @@ export default function DesignerNav() {
                     </span>
                   </div>
                 </div>
-                <div className="grid grid-cols-3 gap-1 rounded-lg border border-white/10 bg-white/[0.04] p-1 day:border-gray-200 day:bg-gray-100">
+                <div className="day:border-gray-200 day:bg-gray-100 grid grid-cols-3 gap-1 rounded-lg border border-white/10 bg-white/[0.04] p-1">
                   {motifHeightSteps.map((step, index) => (
                     <button
                       key={step.label}
@@ -1736,7 +1748,7 @@ export default function DesignerNav() {
                       className={`rounded-md px-2 py-1.5 text-xs font-medium transition-colors ${
                         motifHeightStepIndex === index
                           ? 'bg-[#D7B356] text-slate-900 shadow-sm'
-                          : 'text-white/60 hover:bg-white/10 hover:text-white day:text-gray-600'
+                          : 'day:text-gray-600 text-white/60 hover:bg-white/10 hover:text-white'
                       }`}
                     >
                       {step.label}
@@ -1752,9 +1764,7 @@ export default function DesignerNav() {
                     value={activeOffset.heightMm ?? initHeight}
                     onChange={(e) => {
                       if (!selectedMotifId) return;
-                      const clampedValue = clampHeight(
-                        Number(e.target.value),
-                      );
+                      const clampedValue = clampHeight(Number(e.target.value));
                       setMotifOffset(selectedMotifId, {
                         ...activeOffset,
                         heightMm: clampedValue,
@@ -2327,6 +2337,7 @@ export default function DesignerNav() {
 
       // Prepare design state matching DesignerSnapshot schema
       const designState = {
+        ...captureDesignSnapshot(),
         version: 1,
         productId: state.productId,
         shapeUrl: state.shapeUrl,
@@ -2350,19 +2361,9 @@ export default function DesignerNav() {
         fixingType: state.fixingType,
         showInsetContour: state.showInsetContour,
         showBase: state.showBase,
-        inscriptions: state.inscriptions.map((insc) => ({
-          id: insc.id,
-          text: insc.text,
-          font: insc.font,
-          sizeMm: insc.sizeMm,
-          color: insc.color,
-          xPos: insc.xPos,
-          yPos: insc.yPos,
-          rotationDeg: insc.rotationDeg,
-          target: insc.target,
-          baseWidthMm: insc.baseWidthMm,
-          baseHeightMm: insc.baseHeightMm,
-        })),
+        inscriptions: state.inscriptions.map(
+          ({ ref: _ref, ...inscription }) => inscription,
+        ),
         selectedMotifs: state.selectedMotifs.map((motif) => ({
           id: motif.id,
           svgPath: motif.svgPath,
@@ -2800,67 +2801,67 @@ export default function DesignerNav() {
             </div>
             <div className="-mx-3 border-t border-white/10 md:-mx-3.5"></div>
             {supportsFlowerPots && (
-            <div className="order-last space-y-3 md:order-none">
-              <div className="-mx-3.5 border-t border-white/10"></div>
-              <fieldset className="space-y-2 text-sm">
-                <legend className="day:text-[#625a51] text-white/75">
-                  Base option
-                </legend>
-                <div
-                  className="flex gap-2"
-                  role="group"
-                  aria-label="Base option"
-                >
-                  <button
-                    type="button"
-                    onClick={() => setBaseOption('none')}
-                    className={styleTabClass(baseOption === 'none')}
-                  >
-                    None
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setBaseOption('flower-pots')}
-                    className={styleTabClass(baseOption === 'flower-pots')}
-                  >
-                    Flower Pots
-                  </button>
-                </div>
-              </fieldset>
-              {baseOption === 'flower-pots' && (
+              <div className="order-last space-y-3 md:order-none">
+                <div className="-mx-3.5 border-t border-white/10"></div>
                 <fieldset className="space-y-2 text-sm">
                   <legend className="day:text-[#625a51] text-white/75">
-                    Lid finish
+                    Base option
                   </legend>
                   <div
                     className="flex gap-2"
                     role="group"
-                    aria-label="Lid finish"
+                    aria-label="Base option"
                   >
-                    {[
-                      { label: 'Black Lid', value: 'black' },
-                      { label: 'Silver Lid', value: 'silver' },
-                      { label: 'Gold Lid', value: 'gold' },
-                    ].map((option) => (
-                      <button
-                        key={option.value}
-                        type="button"
-                        onClick={() =>
-                          setBaseLidFinish(
-                            option.value as 'black' | 'silver' | 'gold',
-                          )
-                        }
-                        className={styleTabClass(
-                          baseLidFinish === option.value,
-                        )}
-                      >
-                        {option.label}
-                      </button>
-                    ))}
+                    <button
+                      type="button"
+                      onClick={() => setBaseOption('none')}
+                      className={styleTabClass(baseOption === 'none')}
+                    >
+                      None
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setBaseOption('flower-pots')}
+                      className={styleTabClass(baseOption === 'flower-pots')}
+                    >
+                      Flower Pots
+                    </button>
                   </div>
                 </fieldset>
-              )}
-            </div>
+                {baseOption === 'flower-pots' && (
+                  <fieldset className="space-y-2 text-sm">
+                    <legend className="day:text-[#625a51] text-white/75">
+                      Lid finish
+                    </legend>
+                    <div
+                      className="flex gap-2"
+                      role="group"
+                      aria-label="Lid finish"
+                    >
+                      {[
+                        { label: 'Black Lid', value: 'black' },
+                        { label: 'Silver Lid', value: 'silver' },
+                        { label: 'Gold Lid', value: 'gold' },
+                      ].map((option) => (
+                        <button
+                          key={option.value}
+                          type="button"
+                          onClick={() =>
+                            setBaseLidFinish(
+                              option.value as 'black' | 'silver' | 'gold',
+                            )
+                          }
+                          className={styleTabClass(
+                            baseLidFinish === option.value,
+                          )}
+                        >
+                          {option.label}
+                        </button>
+                      ))}
+                    </div>
+                  </fieldset>
+                )}
+              </div>
             )}
           </div>
         )}
@@ -3651,7 +3652,7 @@ export default function DesignerNav() {
           {/* Panel Header — desktop only. On mobile the step header floats over
               the canvas via a portal (see mobile step-header overlay below) so
               the bottom sheet holds just the controls. */}
-          <div className="day:border-[#ddd2c2] day:bg-[#f4f1eb] relative hidden border-b border-white/10 bg-[#1b1511] px-5 py-2.5 md:block md:py-4">
+          <div className="day:border-[#ddd2c2] day:bg-[#f4f1eb] relative hidden border-b border-white/10 bg-[#1b1511] px-5 py-2.5 md:block md:py-3">
             {/* Row 1: Guided Step label + step badge */}
             <div className="mb-1 flex items-center justify-center gap-2.5 md:mb-2">
               <p
@@ -3677,7 +3678,7 @@ export default function DesignerNav() {
               {fullscreenPanelTitle}
             </h2>
             {/* Fancy divider */}
-            <div className="my-2 flex items-center gap-3 md:my-3">
+            <div className="my-2 flex items-center gap-3">
               <div className="to-primary/40 h-px flex-1 bg-gradient-to-r from-transparent via-white/20" />
               <div className="bg-primary/50 h-1 w-1 rotate-45" />
               <div className="to-primary/40 h-px flex-1 bg-gradient-to-l from-transparent via-white/20" />
@@ -3879,7 +3880,7 @@ export default function DesignerNav() {
                     nextPanelSlug && handleNavigateToPanel(nextPanelSlug)
                   }
                   disabled={!nextPanelSlug || isImageCropActive}
-                  className="flex min-h-11 flex-[1.35] items-center justify-center gap-1.5 rounded-lg bg-[#D7B356] px-3 text-sm font-semibold text-slate-950 disabled:bg-white/10 disabled:text-white/40 day:disabled:bg-[#e5ded3] day:disabled:text-[#8c7657]"
+                  className="day:disabled:bg-[#e5ded3] day:disabled:text-[#8c7657] flex min-h-11 flex-[1.35] items-center justify-center gap-1.5 rounded-lg bg-[#D7B356] px-3 text-sm font-semibold text-slate-950 disabled:bg-white/10 disabled:text-white/40"
                 >
                   {isImageCropActive
                     ? 'Finish crop'
@@ -3896,9 +3897,9 @@ export default function DesignerNav() {
                               ? 'Next: Motifs'
                               : nextPanelSlug === 'save-design'
                                 ? 'Next: Save Design'
-                            : nextPanelSlug === 'select-size'
-                              ? 'Next: Select Size'
-                              : `Next: ${nextPanelTitle ?? 'Continue'}`}
+                                : nextPanelSlug === 'select-size'
+                                  ? 'Next: Select Size'
+                                  : `Next: ${nextPanelTitle ?? 'Continue'}`}
                   <span aria-hidden="true">→</span>
                 </button>
               </div>,

@@ -76,6 +76,9 @@ export type SavedInscription = {
   target?: 'headstone' | 'base' | 'ledger';
   baseWidthMm?: number;
   baseHeightMm?: number;
+  layer?: number;
+  textAlign?: 'left' | 'center' | 'right';
+  coordinateSpace?: 'mm-center';
 };
 
 export type DesignerSnapshot = {

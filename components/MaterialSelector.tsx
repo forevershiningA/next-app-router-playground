@@ -1,10 +1,23 @@
 'use client';
 
-import React, { useEffect, useMemo, useState, useRef, useCallback } from 'react';
+import React, {
+  useEffect,
+  useMemo,
+  useState,
+  useRef,
+  useCallback,
+} from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { ArrowUpTrayIcon, CheckCircleIcon, NoSymbolIcon } from '@heroicons/react/24/outline';
-import { useHeadstoneStore, type Material as MaterialOption } from '#/lib/headstone-store';
+import {
+  ArrowUpTrayIcon,
+  CheckCircleIcon,
+  NoSymbolIcon,
+} from '@heroicons/react/24/outline';
+import {
+  useHeadstoneStore,
+  type Material as MaterialOption,
+} from '#/lib/headstone-store';
 import SegmentedControl from './ui/SegmentedControl';
 import { getDesignerProductStepHref } from '#/lib/designer-product-routes';
 import { bronzes } from '#/app/_internal/_data';
@@ -18,17 +31,31 @@ type MaterialSelectorProps = {
   forceTarget?: 'headstone' | 'base' | 'ledger' | 'kerbset';
 };
 
-export default function MaterialSelector({ materials, disableInternalScroll = false, forceTarget }: MaterialSelectorProps) {
+export default function MaterialSelector({
+  materials,
+  disableInternalScroll = false,
+  forceTarget,
+}: MaterialSelectorProps) {
   const router = useRouter();
-  const setHeadstoneMaterialUrl = useHeadstoneStore((s) => s.setHeadstoneMaterialUrl);
+  const setHeadstoneMaterialUrl = useHeadstoneStore(
+    (s) => s.setHeadstoneMaterialUrl,
+  );
   const setBaseMaterialUrl = useHeadstoneStore((s) => s.setBaseMaterialUrl);
   const setLedgerMaterialUrl = useHeadstoneStore((s) => s.setLedgerMaterialUrl);
-  const setKerbsetMaterialUrl = useHeadstoneStore((s) => s.setKerbsetMaterialUrl);
+  const setKerbsetMaterialUrl = useHeadstoneStore(
+    (s) => s.setKerbsetMaterialUrl,
+  );
   const setIsMaterialChange = useHeadstoneStore((s) => s.setIsMaterialChange);
-  const currentHeadstoneMaterialUrl = useHeadstoneStore((s) => s.headstoneMaterialUrl);
+  const currentHeadstoneMaterialUrl = useHeadstoneStore(
+    (s) => s.headstoneMaterialUrl,
+  );
   const currentBaseMaterialUrl = useHeadstoneStore((s) => s.baseMaterialUrl);
-  const currentLedgerMaterialUrl = useHeadstoneStore((s) => s.ledgerMaterialUrl);
-  const currentKerbsetMaterialUrl = useHeadstoneStore((s) => s.kerbsetMaterialUrl);
+  const currentLedgerMaterialUrl = useHeadstoneStore(
+    (s) => s.ledgerMaterialUrl,
+  );
+  const currentKerbsetMaterialUrl = useHeadstoneStore(
+    (s) => s.kerbsetMaterialUrl,
+  );
   const selected = useHeadstoneStore((s) => s.selected);
   const editingObject = useHeadstoneStore((s) => s.editingObject);
   const setEditingObject = useHeadstoneStore((s) => s.setEditingObject);
@@ -49,7 +76,9 @@ export default function MaterialSelector({ materials, disableInternalScroll = fa
   const isUrn = catalog?.product.type === 'urn';
   const usesBackgrounds = isFullColourPlaque || isUrn;
   const isFullMonument = catalog?.product.type === 'full-monument';
-  const [bgTab, setBgTab] = React.useState<'background' | 'color'>('background');
+  const [bgTab, setBgTab] = React.useState<'background' | 'color'>(
+    'background',
+  );
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Background crop state using the existing crop system
@@ -86,9 +115,12 @@ export default function MaterialSelector({ materials, disableInternalScroll = fa
   }, [showCropSection, isLandscape, setSelectedMask]);
 
   // Update crop canvas data in store when crop state changes
-  const updateCropAreaCallback = useCallback((newCropArea: typeof cropArea) => {
-    setCropArea(newCropArea);
-  }, [setCropArea]);
+  const updateCropAreaCallback = useCallback(
+    (newCropArea: typeof cropArea) => {
+      setCropArea(newCropArea);
+    },
+    [setCropArea],
+  );
 
   useEffect(() => {
     if (showCropSection && uploadedImage) {
@@ -108,7 +140,21 @@ export default function MaterialSelector({ materials, disableInternalScroll = fa
       });
     }
     // Don't clear on unmount — let handleApplyBackground or handleCancelCrop clear it
-  }, [showCropSection, uploadedImage, selectedMask, cropScale, cropRotation, flipX, flipY, cropArea, hasFixedSizes, allowFreeformHandles, maskMetrics, setCropCanvasData, updateCropAreaCallback]);
+  }, [
+    showCropSection,
+    uploadedImage,
+    selectedMask,
+    cropScale,
+    cropRotation,
+    flipX,
+    flipY,
+    cropArea,
+    hasFixedSizes,
+    allowFreeformHandles,
+    maskMetrics,
+    setCropCanvasData,
+    updateCropAreaCallback,
+  ]);
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -165,7 +211,17 @@ export default function MaterialSelector({ materials, disableInternalScroll = fa
       ctx.rotate((cropRotation * Math.PI) / 180);
       ctx.scale(flipX ? -1 : 1, flipY ? -1 : 1);
       ctx.scale(cropScale / 100, cropScale / 100);
-      ctx.drawImage(img, cropX, cropY, cropW, cropH, -cropW / 2, -cropH / 2, cropW, cropH);
+      ctx.drawImage(
+        img,
+        cropX,
+        cropY,
+        cropW,
+        cropH,
+        -cropW / 2,
+        -cropH / 2,
+        cropW,
+        cropH,
+      );
       ctx.restore();
 
       // Upload the cropped JPEG to wiecznapamiec.pl via the proxy API route.
@@ -175,9 +231,15 @@ export default function MaterialSelector({ materials, disableInternalScroll = fa
       if (!blob) throw new Error('canvas.toBlob returned null');
 
       const form = new FormData();
-      form.append('file', new File([blob], 'background.jpg', { type: 'image/jpeg' }));
+      form.append(
+        'file',
+        new File([blob], 'background.jpg', { type: 'image/jpeg' }),
+      );
 
-      const response = await fetch('/api/upload-background', { method: 'POST', body: form });
+      const response = await fetch('/api/upload-background', {
+        method: 'POST',
+        body: form,
+      });
       if (!response.ok) throw new Error(`Upload failed: ${response.status}`);
       const { url } = (await response.json()) as { url: string };
 
@@ -199,15 +261,22 @@ export default function MaterialSelector({ materials, disableInternalScroll = fa
   };
 
   const buildTextureUrl = (material: MaterialOption) => {
-    const basePath = isBronzePlaque ? '/textures/phoenix/l/' : '/textures/forever/l/';
+    const basePath = isBronzePlaque
+      ? '/textures/phoenix/l/'
+      : '/textures/forever/l/';
     return (
       resolveMaterialAssetPath(material.textureUrl, basePath) ??
       resolveMaterialAssetPath(material.image, basePath)
     );
   };
 
-  const buildThumbnailUrl = (material: MaterialOption, fallbackTexture: string | null) => {
-    const basePath = isBronzePlaque ? '/textures/phoenix/l/' : '/textures/forever/l/';
+  const buildThumbnailUrl = (
+    material: MaterialOption,
+    fallbackTexture: string | null,
+  ) => {
+    const basePath = isBronzePlaque
+      ? '/textures/phoenix/l/'
+      : '/textures/forever/l/';
     const thumb = resolveMaterialAssetPath(material.thumbnailUrl, basePath);
     if (thumb) {
       return thumb;
@@ -218,15 +287,15 @@ export default function MaterialSelector({ materials, disableInternalScroll = fa
   // Use bronze materials for Bronze Plaque (id 5), otherwise use regular materials
   const displayMaterials = useMemo(() => {
     if (isBronzePlaque) {
-      return bronzes.map(b => ({
+      return bronzes.map((b) => ({
         id: b.id,
         name: b.name,
         image: b.image,
-        category: 'bronze'
+        category: 'bronze',
       }));
     }
     if (usesBackgrounds) {
-      return materials.filter(m => m.category === bgTab);
+      return materials.filter((m) => m.category === bgTab);
     }
     return materials;
   }, [isBronzePlaque, usesBackgrounds, materials, bgTab]);
@@ -255,13 +324,18 @@ export default function MaterialSelector({ materials, disableInternalScroll = fa
   }, [editingObject, isPlaque, setEditingObject, setSelected]);
 
   // Initialise SS plaque to brushed finish when the URL isn't already one of the two SS swatches
-  const isStainlessFinishUrl = (url: string | null | undefined) => url?.includes('ss-swatch') ?? false;
+  const isStainlessFinishUrl = (url: string | null | undefined) =>
+    url?.includes('ss-swatch') ?? false;
   const normalizeStainlessFinishUrl = (url: string | null | undefined) => {
-    if (url?.includes('high-polished-ss-swatch')) return '/textures/forever/l/high-polished-ss-swatch.webp';
+    if (url?.includes('high-polished-ss-swatch'))
+      return '/textures/forever/l/high-polished-ss-swatch.webp';
     return '/textures/forever/l/brushed-ss-swatch.webp';
   };
   useEffect(() => {
-    if (isStainlessSteel && !isStainlessFinishUrl(currentHeadstoneMaterialUrl)) {
+    if (
+      isStainlessSteel &&
+      !isStainlessFinishUrl(currentHeadstoneMaterialUrl)
+    ) {
       setHeadstoneMaterialUrl('/textures/forever/l/brushed-ss-swatch.webp');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -277,6 +351,11 @@ export default function MaterialSelector({ materials, disableInternalScroll = fa
         : materialTarget === 'kerbset'
           ? currentKerbsetMaterialUrl
           : currentHeadstoneMaterialUrl;
+
+  const selectedMaterialName =
+    displayMaterials.find(
+      (material) => buildTextureUrl(material) === currentMaterialUrl,
+    )?.name ?? null;
 
   const targetOptions = useMemo(() => {
     if (isPlaque) {
@@ -307,7 +386,9 @@ export default function MaterialSelector({ materials, disableInternalScroll = fa
     }
 
     setIsMaterialChange(true);
-    const targetObject = isPlaque ? 'headstone' : (forceTarget ?? editingObject);
+    const targetObject = isPlaque
+      ? 'headstone'
+      : (forceTarget ?? editingObject);
 
     if (targetObject === 'base') {
       setBaseMaterialUrl(materialUrl);
@@ -327,7 +408,7 @@ export default function MaterialSelector({ materials, disableInternalScroll = fa
 
   // Resize helper — keeps center fixed, maintains aspect ratio
   const resizeCropArea = (newHeight: number) => {
-    setCropArea(prev => {
+    setCropArea((prev) => {
       const centerX = prev.x + prev.width / 2;
       const centerY = prev.y + prev.height / 2;
       const currentAspectRatio = prev.width / prev.height;
@@ -355,7 +436,9 @@ export default function MaterialSelector({ materials, disableInternalScroll = fa
 
     return (
       <div className="space-y-3">
-        <div className="text-xs font-medium uppercase tracking-[0.16em] text-white/50">Finish</div>
+        <div className="text-xs font-medium tracking-[0.16em] text-white/50 uppercase">
+          Finish
+        </div>
         <div className="grid grid-cols-2 gap-2">
           {ssFinishes.map(({ label, url }) => {
             const isSelected = activeSsUrl === url;
@@ -381,16 +464,18 @@ export default function MaterialSelector({ materials, disableInternalScroll = fa
                   <img
                     src={url}
                     alt={label}
-                    className="absolute inset-0 w-full h-full object-cover"
+                    className="absolute inset-0 h-full w-full object-cover"
                   />
                   {isSelected && (
-                    <span className="absolute right-1.5 top-1.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-[#D7B356] text-slate-950 shadow-lg">
+                    <span className="absolute top-1.5 right-1.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-[#D7B356] text-slate-950 shadow-lg">
                       <CheckCircleIcon className="h-3.5 w-3.5" />
                     </span>
                   )}
                 </div>
                 <div className="flex min-h-12 items-center justify-center px-2 py-2">
-                  <div className={`text-center text-xs font-semibold leading-tight line-clamp-2 ${isSelected ? 'text-[#D7B356]' : 'text-slate-100'}`}>
+                  <div
+                    className={`line-clamp-2 text-center text-xs leading-tight font-semibold ${isSelected ? 'text-[#D7B356]' : 'text-slate-100'}`}
+                  >
                     {label}
                   </div>
                 </div>
@@ -406,13 +491,15 @@ export default function MaterialSelector({ materials, disableInternalScroll = fa
   if (usesBackgrounds && showCropSection && uploadedImage) {
     return (
       <div className="space-y-4">
-        <div className="flex items-center justify-between mb-4">
-          <h4 className="text-white font-medium">Crop Background</h4>
+        <div className="mb-4 flex items-center justify-between">
+          <h4 className="font-medium text-white">Crop Background</h4>
         </div>
 
         {/* Position and Resize Crop Area */}
         <div>
-          <div className="text-sm text-white font-medium mb-3">Position and Resize Crop Area</div>
+          <div className="mb-3 text-sm font-medium text-white">
+            Position and Resize Crop Area
+          </div>
 
           {/* Size Slider */}
           <div className="space-y-2">
@@ -423,24 +510,48 @@ export default function MaterialSelector({ materials, disableInternalScroll = fa
               max="80"
               value={cropArea.height}
               onChange={(e) => resizeCropArea(parseInt(e.target.value))}
-              className="w-full h-1.5 rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#1F1F1F]"
+              className="h-1.5 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#1F1F1F] [&::-webkit-slider-thumb]:bg-[#D7B356]"
             />
-            <div className="flex justify-between items-center">
+            <div className="flex items-center justify-between">
               <button
-                onClick={() => resizeCropArea(Math.max(20, cropArea.height - 5))}
-                className="flex flex-col items-center gap-1 text-white/60 hover:text-white text-xs"
+                onClick={() =>
+                  resizeCropArea(Math.max(20, cropArea.height - 5))
+                }
+                className="flex flex-col items-center gap-1 text-xs text-white/60 hover:text-white"
               >
-                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
+                <svg
+                  className="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M20 12H4"
+                  />
                 </svg>
                 Smaller
               </button>
               <button
-                onClick={() => resizeCropArea(Math.min(80, cropArea.height + 5))}
-                className="flex flex-col items-center gap-1 text-white/60 hover:text-white text-xs"
+                onClick={() =>
+                  resizeCropArea(Math.min(80, cropArea.height + 5))
+                }
+                className="flex flex-col items-center gap-1 text-xs text-white/60 hover:text-white"
               >
-                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                <svg
+                  className="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 4v16m8-8H4"
+                  />
                 </svg>
                 Larger
               </button>
@@ -449,31 +560,55 @@ export default function MaterialSelector({ materials, disableInternalScroll = fa
 
           {/* Rotation Slider */}
           <div className="mt-4 space-y-2">
-            <div className="text-sm text-white/80">SELECT ROTATION: {cropRotation}°</div>
+            <div className="text-sm text-white/80">
+              SELECT ROTATION: {cropRotation}°
+            </div>
             <input
               type="range"
               min="-180"
               max="180"
               value={cropRotation}
               onChange={(e) => setCropRotation(parseInt(e.target.value))}
-              className="w-full h-1.5 rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#1F1F1F]"
+              className="h-1.5 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#1F1F1F] [&::-webkit-slider-thumb]:bg-[#D7B356]"
             />
-            <div className="flex justify-between items-center">
+            <div className="flex items-center justify-between">
               <button
-                onClick={() => setCropRotation(Math.max(-180, cropRotation - 5))}
-                className="flex flex-col items-center gap-1 text-white/60 hover:text-white text-xs"
+                onClick={() =>
+                  setCropRotation(Math.max(-180, cropRotation - 5))
+                }
+                className="flex flex-col items-center gap-1 text-xs text-white/60 hover:text-white"
               >
-                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
+                <svg
+                  className="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M20 12H4"
+                  />
                 </svg>
                 Decrease
               </button>
               <button
                 onClick={() => setCropRotation(Math.min(180, cropRotation + 5))}
-                className="flex flex-col items-center gap-1 text-white/60 hover:text-white text-xs"
+                className="flex flex-col items-center gap-1 text-xs text-white/60 hover:text-white"
               >
-                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                <svg
+                  className="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 4v16m8-8H4"
+                  />
                 </svg>
                 Increase
               </button>
@@ -483,10 +618,20 @@ export default function MaterialSelector({ materials, disableInternalScroll = fa
           {/* Crop Button */}
           <button
             onClick={handleApplyBackground}
-            className="mt-4 w-full rounded-lg bg-[#1F1F1F] border border-white/20 px-4 py-3 text-white font-medium hover:bg-[#2A2A2A] transition-colors flex items-center justify-center gap-2"
+            className="mt-4 flex w-full items-center justify-center gap-2 rounded-lg border border-white/20 bg-[#1F1F1F] px-4 py-3 font-medium text-white transition-colors hover:bg-[#2A2A2A]"
           >
-            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            <svg
+              className="h-5 w-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+              />
             </svg>
             Apply Background
           </button>
@@ -495,19 +640,39 @@ export default function MaterialSelector({ materials, disableInternalScroll = fa
           <div className="mt-4 grid grid-cols-2 gap-2">
             <button
               onClick={() => setFlipX(!flipX)}
-              className="rounded-lg bg-[#1F1F1F] border border-white/20 px-3 py-2 text-white text-sm hover:bg-[#2A2A2A] transition-colors flex items-center justify-center gap-2"
+              className="flex items-center justify-center gap-2 rounded-lg border border-white/20 bg-[#1F1F1F] px-3 py-2 text-sm text-white transition-colors hover:bg-[#2A2A2A]"
             >
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+              <svg
+                className="h-4 w-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"
+                />
               </svg>
               Flip X
             </button>
             <button
               onClick={() => setFlipY(!flipY)}
-              className="rounded-lg bg-[#1F1F1F] border border-white/20 px-3 py-2 text-white text-sm hover:bg-[#2A2A2A] transition-colors flex items-center justify-center gap-2"
+              className="flex items-center justify-center gap-2 rounded-lg border border-white/20 bg-[#1F1F1F] px-3 py-2 text-sm text-white transition-colors hover:bg-[#2A2A2A]"
             >
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
+              <svg
+                className="h-4 w-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"
+                />
               </svg>
               Flip Y
             </button>
@@ -516,10 +681,20 @@ export default function MaterialSelector({ materials, disableInternalScroll = fa
           {/* Cancel */}
           <button
             onClick={handleCancelCrop}
-            className="mt-2 w-full rounded-lg border border-red-900/50 bg-red-950/30 px-4 py-2 text-red-400 text-sm font-medium hover:bg-red-950/50 transition-colors flex items-center justify-center gap-2"
+            className="mt-2 flex w-full items-center justify-center gap-2 rounded-lg border border-red-900/50 bg-red-950/30 px-4 py-2 text-sm font-medium text-red-400 transition-colors hover:bg-red-950/50"
           >
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+            <svg
+              className="h-4 w-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+              />
             </svg>
             Cancel
           </button>
@@ -535,7 +710,11 @@ export default function MaterialSelector({ materials, disableInternalScroll = fa
           <SegmentedControl
             value={forceTarget ?? editingObject}
             onChange={(value) => {
-              const nextTarget = value as 'headstone' | 'base' | 'ledger' | 'kerbset';
+              const nextTarget = value as
+                | 'headstone'
+                | 'base'
+                | 'ledger'
+                | 'kerbset';
               setEditingObject(nextTarget);
               setSelected(nextTarget);
               if (forceTarget && nextTarget !== forceTarget) {
@@ -568,47 +747,72 @@ export default function MaterialSelector({ materials, disableInternalScroll = fa
         className="hidden"
         onChange={handleFileUpload}
       />
-      
+
       <div className="flex items-center justify-between gap-3 pr-2">
-        <div className="text-xs font-medium text-slate-300">
-          Showing {displayMaterials.length + (usesBackgrounds && bgTab === 'background' ? 2 : 0)} option{displayMaterials.length + (usesBackgrounds && bgTab === 'background' ? 2 : 0) !== 1 ? 's' : ''}
+        <div className="day:text-[#51493f] text-xs font-semibold text-slate-200">
+          Showing{' '}
+          {displayMaterials.length +
+            (usesBackgrounds && bgTab === 'background' ? 2 : 0)}{' '}
+          option
+          {displayMaterials.length +
+            (usesBackgrounds && bgTab === 'background' ? 2 : 0) !==
+          1
+            ? 's'
+            : ''}
         </div>
-        <div className="text-[10px] font-medium uppercase tracking-[0.16em] text-white/35">
-          Select one
+        <div className="day:text-[#776e62] truncate text-right text-[10px] font-semibold tracking-[0.1em] text-white/55 uppercase">
+          {selectedMaterialName ? (
+            <>
+              Selected:{' '}
+              <span className="day:text-[#9a6b1d] text-[#e3b85f]">
+                {selectedMaterialName}
+              </span>
+            </>
+          ) : (
+            'Select one'
+          )}
         </div>
       </div>
 
       <div
-        className={`grid grid-cols-3 gap-2 pr-2 ${disableInternalScroll ? '' : 'overflow-y-auto custom-scrollbar'}`}
+        className={`grid grid-cols-3 gap-2 pr-2 ${disableInternalScroll ? '' : 'custom-scrollbar overflow-y-auto'}`}
       >
         {/* No Background button — first position in Background tab */}
         {usesBackgrounds && bgTab === 'background' && (
           <button
             onClick={() => {
               setIsMaterialChange(true);
-              setHeadstoneMaterialUrl('/textures/forever/l/brushed-ss-swatch.webp');
+              setHeadstoneMaterialUrl(
+                '/textures/forever/l/brushed-ss-swatch.webp',
+              );
               setTimeout(() => setIsMaterialChange(false), 100);
             }}
-            className={`group relative flex h-full cursor-pointer flex-col overflow-hidden rounded-lg border bg-[#171717] text-left transition-all ${
-              currentHeadstoneMaterialUrl === '/textures/forever/l/brushed-ss-swatch.webp' || !currentHeadstoneMaterialUrl
+            className={`group day:border-[#d8d1c6] day:bg-[#fbfaf7] relative flex h-full cursor-pointer flex-col overflow-hidden rounded-lg border bg-[#171717] text-left transition-all ${
+              currentHeadstoneMaterialUrl ===
+                '/textures/forever/l/brushed-ss-swatch.webp' ||
+              !currentHeadstoneMaterialUrl
                 ? 'border-[#D7B356] shadow-lg shadow-[#D7B356]/15'
                 : 'border-white/10 hover:-translate-y-0.5 hover:border-[#D7B356]/60 hover:shadow-lg hover:shadow-[#D7B356]/10'
             }`}
             title="No Background"
           >
-            <div className="relative flex aspect-square items-center justify-center overflow-hidden bg-[#101010]">
+            <div className="day:bg-[#eeeae2] relative flex aspect-square items-center justify-center overflow-hidden bg-[#101010]">
               <div className="flex flex-col items-center gap-1">
                 <NoSymbolIcon className="h-6 w-6 text-gray-400 transition-colors group-hover:text-[#D7B356]" />
                 <span className="text-[10px] text-gray-400">None</span>
               </div>
-              {(currentHeadstoneMaterialUrl === '/textures/forever/l/brushed-ss-swatch.webp' || !currentHeadstoneMaterialUrl) && (
-                <span className="absolute right-1.5 top-1.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-[#D7B356] text-slate-950 shadow-lg">
+              {(currentHeadstoneMaterialUrl ===
+                '/textures/forever/l/brushed-ss-swatch.webp' ||
+                !currentHeadstoneMaterialUrl) && (
+                <span className="absolute top-1.5 right-1.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-[#D7B356] text-slate-950 shadow-lg">
                   <CheckCircleIcon className="h-3.5 w-3.5" />
                 </span>
               )}
             </div>
-            <div className="flex min-h-12 items-center justify-center px-2 py-2">
-              <div className="text-center text-xs font-semibold leading-tight text-slate-100 line-clamp-2">No Background</div>
+            <div className="flex min-h-10 items-center justify-center px-2 py-2">
+              <div className="day:text-[#2f2921] line-clamp-2 text-center text-xs leading-tight font-semibold text-slate-100">
+                No Background
+              </div>
             </div>
           </button>
         )}
@@ -617,17 +821,19 @@ export default function MaterialSelector({ materials, disableInternalScroll = fa
         {usesBackgrounds && bgTab === 'background' && (
           <button
             onClick={() => fileInputRef.current?.click()}
-            className="group relative flex h-full cursor-pointer flex-col overflow-hidden rounded-lg border border-dashed border-white/20 bg-[#171717] text-left transition-all hover:-translate-y-0.5 hover:border-[#D7B356]/60 hover:shadow-lg hover:shadow-[#D7B356]/10"
+            className="group day:border-[#cfc6b8] day:bg-[#fbfaf7] relative flex h-full cursor-pointer flex-col overflow-hidden rounded-lg border border-dashed border-white/20 bg-[#171717] text-left transition-all hover:-translate-y-0.5 hover:border-[#D7B356]/60 hover:shadow-lg hover:shadow-[#D7B356]/10"
             title="Upload Image"
           >
-            <div className="relative flex aspect-square items-center justify-center overflow-hidden bg-[#101010]">
+            <div className="day:bg-[#eeeae2] relative flex aspect-square items-center justify-center overflow-hidden bg-[#101010]">
               <div className="flex flex-col items-center gap-1">
                 <ArrowUpTrayIcon className="h-6 w-6 text-gray-400 transition-colors group-hover:text-[#D7B356]" />
                 <span className="text-[10px] text-gray-400">Upload</span>
               </div>
             </div>
-            <div className="flex min-h-12 items-center justify-center px-2 py-2">
-              <div className="text-center text-xs font-semibold leading-tight text-slate-100 line-clamp-2">Upload Image</div>
+            <div className="flex min-h-10 items-center justify-center px-2 py-2">
+              <div className="day:text-[#2f2921] line-clamp-2 text-center text-xs leading-tight font-semibold text-slate-100">
+                Upload Image
+              </div>
             </div>
           </button>
         )}
@@ -635,23 +841,26 @@ export default function MaterialSelector({ materials, disableInternalScroll = fa
         {displayMaterials.map((material) => {
           const textureUrl = buildTextureUrl(material);
           const thumbnailUrl = buildThumbnailUrl(material, textureUrl);
-          const isSelected = textureUrl ? currentMaterialUrl === textureUrl : false;
-          const coverSrc = thumbnailUrl ?? '/textures/forever/l/Imperial-Red.webp';
+          const isSelected = textureUrl
+            ? currentMaterialUrl === textureUrl
+            : false;
+          const coverSrc =
+            thumbnailUrl ?? '/textures/forever/l/Imperial-Red.webp';
 
           return (
             <button
               key={material.id}
               onClick={() => textureUrl && handleMaterialSelect(material)}
-              className={`group relative flex h-full cursor-pointer flex-col overflow-hidden rounded-lg border bg-[#171717] text-left transition-all disabled:cursor-not-allowed disabled:opacity-60 ${
+              className={`group day:border-[#d8d1c6] day:bg-[#fbfaf7] relative flex h-full cursor-pointer flex-col overflow-hidden rounded-lg border bg-[#171717] text-left transition-all disabled:cursor-not-allowed disabled:opacity-60 ${
                 isSelected
-                  ? 'border-[#D7B356] shadow-lg shadow-[#D7B356]/15'
+                  ? 'day:bg-[#fffaf0] border-[#D7B356] shadow-lg ring-1 shadow-[#D7B356]/15 ring-[#D7B356]/45'
                   : 'border-white/10 hover:-translate-y-0.5 hover:border-[#D7B356]/60 hover:shadow-lg hover:shadow-[#D7B356]/10'
               }`}
               title={material.name}
               disabled={!textureUrl}
             >
               {/* Material Image */}
-              <div className="relative aspect-square overflow-hidden bg-[#101010]">
+              <div className="day:bg-[#eeeae2] relative aspect-square overflow-hidden bg-[#101010]">
                 <Image
                   src={coverSrc}
                   alt={material.name}
@@ -660,15 +869,17 @@ export default function MaterialSelector({ materials, disableInternalScroll = fa
                   sizes="100px"
                 />
                 {isSelected && (
-                  <span className="absolute right-1.5 top-1.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-[#D7B356] text-slate-950 shadow-lg">
+                  <span className="absolute top-1.5 right-1.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-[#D7B356] text-slate-950 shadow-lg">
                     <CheckCircleIcon className="h-3.5 w-3.5" />
                   </span>
                 )}
               </div>
-              
+
               {/* Material Name */}
-              <div className="flex min-h-12 items-center justify-center px-2 py-2">
-                <div className={`text-center text-xs font-semibold leading-tight line-clamp-2 ${isSelected ? 'text-[#D7B356]' : 'text-slate-100'}`}>
+              <div className="flex min-h-10 items-center justify-center px-2 py-2">
+                <div
+                  className={`line-clamp-2 text-center text-xs leading-tight font-semibold ${isSelected ? 'day:text-[#9a6b1d] text-[#D7B356]' : 'day:text-[#2f2921] text-slate-100'}`}
+                >
                   {material.name}
                 </div>
               </div>

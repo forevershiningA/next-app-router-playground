@@ -24,12 +24,8 @@ vi.mock('#/lib/auth/session', () => ({
 vi.mock('#/lib/db/index', () => ({
   db: {
     query: {
-      projects: {
-        findFirst: vi.fn(async () => mocks.project),
-      },
-      sharedDesigns: {
-        findFirst: vi.fn(async () => mocks.share),
-      },
+      projects: { findFirst: vi.fn(async () => mocks.project) },
+      sharedDesigns: { findFirst: vi.fn(async () => mocks.share) },
     },
     insert: vi.fn(() => ({
       values: vi.fn(async (payload: Record<string, unknown>) => {
@@ -39,9 +35,7 @@ vi.mock('#/lib/db/index', () => ({
     update: vi.fn(() => ({
       set: vi.fn((payload: Record<string, unknown>) => {
         mocks.updatePayloads.push(payload);
-        return {
-          where: vi.fn(async () => undefined),
-        };
+        return { where: vi.fn(async () => undefined) };
       }),
     })),
   },
@@ -70,28 +64,44 @@ describe('protected share flow', () => {
 
   it('requires authentication before creating a share link', async () => {
     const response = await createShare(
-      jsonRequest('http://localhost/api/share/create', { projectId: 'project-1' }),
+      jsonRequest('http://localhost/api/share/create', {
+        projectId: 'project-1',
+      }),
     );
 
     expect(response.status).toBe(401);
-    await expect(response.json()).resolves.toMatchObject({ error: 'Unauthorized' });
+    await expect(response.json()).resolves.toMatchObject({
+      error: 'Unauthorized',
+    });
   });
 
   it('hides projects owned by another account', async () => {
-    mocks.session = { accountId: 'owner-1', email: 'owner@example.com', role: 'user' };
+    mocks.session = {
+      accountId: 'owner-1',
+      email: 'owner@example.com',
+      role: 'user',
+    };
     mocks.project = { id: 'project-1', accountId: 'owner-2' };
 
     const response = await createShare(
-      jsonRequest('http://localhost/api/share/create', { projectId: 'project-1' }),
+      jsonRequest('http://localhost/api/share/create', {
+        projectId: 'project-1',
+      }),
     );
 
     expect(response.status).toBe(404);
-    await expect(response.json()).resolves.toMatchObject({ error: 'Project not found' });
+    await expect(response.json()).resolves.toMatchObject({
+      error: 'Project not found',
+    });
     expect(mocks.insertedShare).toBeNull();
   });
 
   it('creates a protected share link with a one-time access code for the owner', async () => {
-    mocks.session = { accountId: 'owner-1', email: 'owner@example.com', role: 'user' };
+    mocks.session = {
+      accountId: 'owner-1',
+      email: 'owner@example.com',
+      role: 'user',
+    };
     mocks.project = { id: 'project-1', accountId: 'owner-1' };
 
     const response = await createShare(
@@ -119,16 +129,25 @@ describe('protected share flow', () => {
     });
     expect(body.shareToken).toHaveLength(32);
     await expect(
-      bcrypt.compare(body.accessCode, mocks.insertedShare?.accessCodeHash as string),
+      bcrypt.compare(
+        body.accessCode,
+        mocks.insertedShare?.accessCodeHash as string,
+      ),
     ).resolves.toBe(true);
 
     const expiresAt = mocks.insertedShare?.expiresAt as Date;
-    expect(expiresAt.getTime()).toBeLessThanOrEqual(Date.now() + 90 * 24 * 60 * 60 * 1000 + 1000);
+    const maximumExpiry = new Date();
+    maximumExpiry.setDate(maximumExpiry.getDate() + 90);
+    expect(expiresAt.getTime()).toBeLessThanOrEqual(
+      maximumExpiry.getTime() + 1000,
+    );
   });
 
   it('rejects malformed access codes', async () => {
     const response = await verifyShare(
-      jsonRequest('http://localhost/api/share/token-1/verify', { code: '1234' }),
+      jsonRequest('http://localhost/api/share/token-1/verify', {
+        code: '1234',
+      }),
       { params: Promise.resolve({ token: 'token-1' }) },
     );
 
@@ -149,12 +168,16 @@ describe('protected share flow', () => {
     };
 
     const response = await verifyShare(
-      jsonRequest('http://localhost/api/share/token-1/verify', { code: '000000' }),
+      jsonRequest('http://localhost/api/share/token-1/verify', {
+        code: '000000',
+      }),
       { params: Promise.resolve({ token: 'token-1' }) },
     );
 
     expect(response.status).toBe(401);
-    await expect(response.json()).resolves.toMatchObject({ error: 'Invalid access code' });
+    await expect(response.json()).resolves.toMatchObject({
+      error: 'Invalid access code',
+    });
     expect(mocks.updatePayloads).toHaveLength(1);
     expect(mocks.updatePayloads[0]).toMatchObject({
       failedAccessAttempts: 5,
@@ -173,7 +196,9 @@ describe('protected share flow', () => {
     };
 
     const response = await verifyShare(
-      jsonRequest('http://localhost/api/share/token-1/verify', { code: '123456' }),
+      jsonRequest('http://localhost/api/share/token-1/verify', {
+        code: '123456',
+      }),
       { params: Promise.resolve({ token: 'token-1' }) },
     );
 
@@ -183,8 +208,12 @@ describe('protected share flow', () => {
       failedAccessAttempts: 0,
       lockedUntil: null,
     });
-    expect(response.headers.get('set-cookie')).toContain('share_access_token-1=');
+    expect(response.headers.get('set-cookie')).toContain(
+      'share_access_token-1=',
+    );
     expect(response.headers.get('set-cookie')).toContain('HttpOnly');
-    expect(response.headers.get('set-cookie')).toContain('Path=/shared/token-1');
+    expect(response.headers.get('set-cookie')).toContain(
+      'Path=/shared/token-1',
+    );
   });
 });

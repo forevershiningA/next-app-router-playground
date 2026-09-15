@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-09-09
+**Last Updated:** 2026-09-15
 
 **Status entry order:** Add new dated status entries immediately after the table of contents, before the existing status entries. Keep status entries in reverse chronological order (newest first); do not append them to the end of this file.
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots), **Vitest 4.1.8** (unit tests), **Playwright 1.59.1** (E2E tests)
@@ -8,6 +8,7 @@
 ---
 
 ## Table of Contents
+
 1. [Project Overview](#project-overview)
 2. [Architecture](#architecture)
 3. [Key Directories](#key-directories)
@@ -100,6 +101,93 @@
 90. [September 1 Home Refresh, Studio Designer Scenery, and Hydration Reliability](#current-status-2026-09-01--home-refresh-studio-designer-scenery-and-hydration-reliability)
 91. [September 8 Mobile Designer Day Mode and Size Sheet Polish](#current-status-2026-09-08--mobile-designer-day-mode-and-size-sheet-polish)
 92. [September 9 GSC Audit and Design Gallery SEO](#current-status-2026-09-09--gsc-audit-and-design-gallery-seo)
+93. [September 13 Regression Audit and Local Payment Test Status](#current-status-2026-09-13--regression-audit-and-local-payment-test-status)
+94. [September 14 Initial Audit Remediation](#current-status-2026-09-14--initial-audit-remediation)
+95. [September 15 Designer Material and Scene-Chip Polish](#current-status-2026-09-15--designer-material-and-scene-chip-polish)
+
+---
+
+## Current Status (2026-09-15) — Designer Material and Scene-Chip Polish
+
+- **Client/server import boundary fixed:** `lib/motif-pricing.ts` is again safe for UI and browser imports. Its browser-only `fetchAndParseMotifPricing` uses `fetch` and the native `DOMParser`; the server implementation is isolated in `lib/server/motif-pricing.ts`, which imports `server-only`, `fs/promises`, and `dom-parser-polyfill`. Server callers must import from `#/lib/server/motif-pricing`, never from the shared module. This prevents Pages Router/client dependency graphs from resolving `server-only` through the shared pricing module.
+- **Material selector day-mode polish:** `components/MaterialSelector.tsx` improves contrast for the option counter and selection state, uses lighter material-card footers in the day theme, and keeps the selected material visible inline without consuming additional vertical space. `components/DesignerNav.tsx` also shortens the desktop guided-step header slightly so material choices begin higher in the sidebar.
+- **Unified scene overlay chips:** `components/ThreeScene.tsx` combines product context and Quick Enquiry into a horizontally centred top chip. It now shares the bottom price chip's dark pill language, 48 px height, translucent common border, and divider; Quick Enquiry no longer has its own border. The selected shape name is shown in the bottom dimension/price chip instead of below the product name; non-headstone selections retain their part label (Base, Ledger, or Kerbset).
+- **Validation:** `pnpm type-check` and `git diff --check` pass. Targeted ESLint runs report only existing warnings in `DesignerNav.tsx`, `MaterialSelector.tsx`, and `ThreeScene.tsx`; no ESLint errors were introduced. A production build reached the module bundling stage without the previous `server-only` import error, then stalled without further output and was stopped.
+
+## Current Status (2026-09-14) — Initial Audit Remediation
+
+- **A03 partially addressed:** `/api/email` rejects `password-reset` payloads for both anonymous and authenticated callers. Reset emails can only be initiated through the dedicated forgot-password handler, which generates its own token and URL. Rate limiting remains outstanding; do not mark the whole finding closed yet.
+- **A06 fixed in code:** configured site URL takes precedence over the deployment hostname; deployment and localhost fallbacks are preserved, and trailing slashes are normalized. Email copy now matches the existing 24-hour token expiry.
+- **A04 fixed in code:** background uploads now use a timestamp-guarded, asset-only update. A callback from an older save cannot replay its title, design, price, quote, or nullable catalogue IDs over a newer save.
+- **A05 fixed in code:** `pricingBreakdown` updates atomically with design state and price.
+- **A08 fixed in code:** Designer navigation now starts its save payload from `captureDesignSnapshot`, preserving ledger/kerb settings and inscription `coordinateSpace`, `textAlign`, and `layer`.
+- **A09 partially addressed:** card, PayPal, and offline checkout paths stop on a failed order response. A Stripe return URL alone no longer marks an order paid or shows “Order Received”; it reports that verification is pending. Provider-side payment verification and backend-owned transactional email are still required.
+- **A01 substantially addressed for Stripe:** the client can only create pending orders, cannot PATCH an order to paid, and checkout sessions are linked to that pending order. `POST /api/webhooks/stripe` verifies Stripe’s signature, payment status, amount, and currency before atomically marking the order/payment completed. Configure `STRIPE_WEBHOOK_SECRET` and register the endpoint with Stripe before enabling live card payments. PayPal is hidden until it has matching server-side verification.
+- **A02 addressed for checkout:** order creation now derives headstone, base, addition, motif, inscription, and emblem prices from the saved snapshot plus server-side XML/catalog data. The order and Stripe session use this authoritative quote, not `totalPriceCents` supplied while saving a project. Checkout blocks image-bearing designs until their server-owned pricing rule is added, rather than accepting a browser-calculated image cost.
+- **A13 partially addressed:** CI runs the unit suite, and the share-expiry assertion now checks a calendar-date maximum instead of a fixed 90 × 24-hour duration. `pnpm test` passes locally: 104 tests in 10 files. Playwright is not yet a CI gate.
+- Eight normal regression tests in `tests/unit/password-reset-security.test.ts` passed, covering malicious reset payloads, authentication, URL configuration, token expiry, and unknown accounts. Mail and database operations are mocked; no emails were sent or production data changed.
+- The focused audit suite passes: 10 tests in two files. A07, A10–A12, server pricing for image-bearing designs, payment deployment/backend email work for A09, rate limiting for A03, and Playwright coverage in CI remain open. The September 13 report records the original baseline.
+
+### Stripe payment implementation and live readiness
+
+- **Order and payment boundary:** `app/api/orders/route.ts` accepts only `stripe` and `other` pending orders. `app/api/orders/[id]/route.ts` allows owners to cancel but rejects every client attempt to set payment state.
+- **Authoritative checkout quote:** `lib/server/design-pricing.ts` loads server-side catalog/XML data and calculates headstone, base, additions, motifs, inscriptions, and emblems. The resulting subtotal, tax, total, and currency are persisted in the order and used by `app/api/checkout/stripe/route.ts`. A saved project’s client-provided `totalPriceCents` is no longer the amount charged by Stripe.
+- **Stripe verification:** `app/api/webhooks/stripe/route.ts` requires `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, and Stripe’s `stripe-signature`. For completed/successful asynchronous checkout events it requires a pending matching order and matching amount/currency before changing the order/payment to paid/completed. Repeated events are idempotent because the order update requires `status = pending`.
+- **Checkout UI:** `app/my-account/designs/[id]/buy/page.tsx` creates the pending order before requesting Stripe Checkout and supplies its ID to Stripe session creation. A `payment=success` browser query is only a return indicator and never marks an order paid. PayPal is hidden until an equivalent trusted server flow exists.
+- **Deployment required before enabling live cards:** set `STRIPE_WEBHOOK_SECRET` in the deployment environment, register `https://<production-host>/api/webhooks/stripe` for `checkout.session.completed` and `checkout.session.async_payment_succeeded`, then send signed Stripe test events against the deployed endpoint. The environment template and README list the new variable.
+
+### Current limits and validation
+
+- Checkout deliberately returns a validation error for designs containing uploaded images because their price is not yet calculated on the server. Do not replace that guard with the client’s `imageCost`; add a trusted server pricing rule first.
+- No real payment, Stripe event, email, database mutation, browser checkout, or production deployment has been performed for this remediation batch. The webhook’s external configuration and an end-to-end Stripe test remain required.
+- Latest local checks: `pnpm type-check` passed; `pnpm test` passed with **104 tests in 10 files**; and `pnpm exec vitest run --config docs/audits/2026-09-13/vitest.config.ts` passed with **10 tests in 2 files**. `git diff --check` passed. A full build was not rerun after the Stripe/quote changes.
+
+## Current Status (2026-09-13) — Regression Audit and Local Payment Test Status
+
+### Audit status: findings remain open
+
+A regression and production-readiness audit was performed against commit `25ef792ff7`. **This was an audit, not an implementation batch: none of the 13 reported issues has been fixed by this work.** Application code, dependencies, production data, and payment configuration were not changed. Only audit evidence/documentation was added, followed by this status entry. Do not interpret passing reproduction tests or earlier historical audit-fix entries as closure of these findings.
+
+The full report, priorities, source locations, limitations, and proposed fixes are in [docs/audits/2026-09-13/README.md](docs/audits/2026-09-13/README.md). P0 blocks real-payment readiness; P1 indicates urgent security, data-loss, or functional work; P2 covers data consistency and automation.
+
+| ID  | Priority | Open finding and relevant code                                                                                                                                                                                                                                                                                     |
+| --- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| A01 | P0       | `app/api/orders/route.ts` and `app/api/orders/[id]/route.ts` accept client-supplied `paid` status without provider verification. The buy page treats `?payment=success` as success. No server-side payment verification/webhook was found in the reviewed `app/` and `lib/` paths.                                 |
+| A02 | P1       | `/api/projects` accepts client-supplied prices; `/api/checkout/stripe` and `/api/orders` trust those stored prices without authoritative server-side recalculation. Reading the amount from the database does not make it trusted.                                                                                 |
+| A03 | P1       | `/api/email` allows unauthenticated `password-reset` payloads with an arbitrary recipient and `resetUrl`; the template uses that link. This can abuse configured SMTP.                                                                                                                                             |
+| A04 | P1       | The project upload `after()` callback calls the full `saveProjectRecord` again. An older callback finishing last can overwrite a newer title, design, and price. Omitted material/shape/border IDs also become null.                                                                                               |
+| A05 | P2       | `lib/projects-db.ts` includes `pricingBreakdown` in INSERT but not UPDATE, leaving old quote details after a price/design update.                                                                                                                                                                                  |
+| A06 | P1       | `app/api/auth/forgot-password/route.ts` mixes `??` and `?:` without the intended parentheses. A configured site URL can produce `https://undefined/...` or be replaced by the deployment hostname.                                                                                                                 |
+| A07 | P1       | Installed Next.js 15.5.7 lacks published security fixes. The report links official advisories, including the August 2026 release covering 15.5.24. No dependency update or exploitation test was performed.                                                                                                        |
+| A08 | P1       | `DesignerNav` manually serializes a different snapshot from `captureDesignSnapshot`: it omits ledger/kerbset visibility and dimensions plus inscription `coordinateSpace`, `textAlign`, and `layer`. Base dimensions, border, and fastening ARE preserved; the initial suspicion about those fields was disproved. |
+| A09 | P1       | The buy page can show “Order Received!” after `/api/orders` returns 500. PayPal also does not await a successful order save, and Stripe checkout can proceed after order creation fails.                                                                                                                           |
+| A10 | P1       | Orders reference the mutable project; SVG export reads its current state. Schema and migration define cascading deletion from projects to orders and then payments/items. There is no immutable purchased-design snapshot in this flow. Actual production constraints were not inspected.                          |
+| A11 | P2       | A 1100 AUD project produces a 1210 AUD email total; order subtotal/tax also disagree with the original quote calculation. The frontend invents an invoice number and passes the project ID as the email order ID.                                                                                                  |
+| A12 | P1       | Checkout collects shipping details and notes but does not send them in the order-creation payload. Some paths send the address separately by email; notes are lost.                                                                                                                                                |
+| A13 | P2       | CI runs types/lint/format/build but not Vitest or Playwright. The share-expiry test depends on local daylight-saving transitions. Existing E2E do not cover the newly identified concurrency and checkout failures.                                                                                                |
+
+### Local 1 AUD payment mode: historical removal, not restored
+
+The user confirmed that a **1 AUD checkout option on local development was intentional for testing**. Git history shows its localhost-only checkbox, `testMode` state, and amount override were removed in commit `5e247a81d3` (`Update - Audit GPT 5.5`), before this audit. The current buy page uses `project.totalPriceCents`, and the Stripe handler also charges the stored project amount on localhost. There is currently no dedicated local 1 AUD override in this flow.
+
+The audit's 100-cent example was an isolated test with a mocked Stripe client; it neither restored the UI option nor initiated a payment. A legitimate local test amount is distinct from A02, which concerns trusting client-controlled prices outside a restricted test mode. If this feature is restored during future payment work, enforce the development-only override on the server and keep it separate from production pricing. Restoration has not been implemented in this session.
+
+### Validation and evidence
+
+- `pnpm type-check`, `pnpm lint`, and `pnpm build` passed. Build generated 113 static pages and emitted `jose` Edge Runtime warnings for CompressionStream/DecompressionStream.
+- `pnpm test`: **95 passed, 1 failed**. `share-flow.test.ts` compares 90 × 24 hours against calendar-day `setDate` arithmetic. From September 13 in Europe/Warsaw, the period crosses the autumn clock change and lasts 2161 hours. Re-running that file with `TZ=UTC` passed all six tests; the contract/test must be made deterministic.
+- **10 isolated audit tests passed by reproducing defects.** These are evidence tests, not acceptance tests, and are deliberately outside normal `pnpm test`. Run with `pnpm exec vitest run --config docs/audits/2026-09-13/vitest.config.ts`. After fixes, replace their unsafe-behavior expectations with normal regression assertions.
+- Seven unauthenticated API checks on the local production build returned 401: project GET/POST/DELETE, order POST/PATCH, Stripe checkout, and share creation.
+- Homepage and designer smoke checks passed on desktop (1440 × 900) and emulated mobile (390 × 844). The inspected views had no observed page errors, HTTP responses >=400, or horizontal overflow. Mobile material selection, navigation to size, and width increase to 610 mm also worked.
+- The simple designer scene reported 16 draw calls, 1644 triangles, 19 geometries, and 22 textures. Mobile canvas backing size was 487 × 1055 for CSS 390 × 844, consistent with the 1.25 DPR cap; the renderer uses `frameloop="demand"`. These measurements do not establish performance for all models or physical phones.
+- Browser tests with intercepted API/payment requests reproduced the false success after HTTP 500 and after `payment=success`, and captured the inconsistent invoice payload. Screenshots and JSON results are stored beside the report.
+- Full-repository formatting was stopped after **43,191 reported mismatches**, primarily generated assets (42,652 in `public/`, also 140 in `app/`, 99 in `components/`, and 101 in `lib/`). This is an incomplete inventory of pre-existing problems, not a successful format check. See `format-summary.json`; the raw `.log` is local/gitignored. No mass formatting was performed.
+
+No real payments, emails, database mutations, or production penetration tests were performed. Mutating route reproductions used mocked dependencies, and checkout UI requests were intercepted. Existing authenticated E2E that save real projects/send email were not run. Real two-account database isolation, physical iPhone/Safari behavior, exhaustive SVG manufacturing alignment, and full dependency/infrastructure auditing remain unverified. The temporary local server on port 3107 was stopped.
+
+### Recommended next work
+
+First address payment verification, trusted server pricing, the public email endpoint, and framework security updates. Then make project uploads revision-safe, unify serialization, and preserve immutable order data; repair checkout error handling, invoice values, and shipping persistence. The reset URL can be fixed independently as a small urgent change. Add deterministic CI coverage for these behaviors. The audit findings remain open until those changes and their verification are actually completed.
 
 ---
 
@@ -109,14 +197,14 @@
 
 The current `gsc/` CSV export covers June 7–September 6, 2026, with search type Web. `Strony.csv` contains exactly 1,000 URL rows and is not a complete inventory or an indexing report. Its page aggregates differ from the property-level daily totals; do not combine them or treat these figures as proof of a before/after improvement.
 
-| URL group | Rows | Clicks | Impressions |
-| --- | ---: | ---: | ---: |
-| `/designs` | 1 | 4 | 97 |
-| Product collections | 4 | 1 | 21 |
-| Theme categories | 68 | 17 | 619 |
-| Individual designs | 910 | 94 | 5,286 |
-| Design guides | 2 | 0 | 14 |
-| Other pages | 15 | 29 | 1,778 |
+| URL group           | Rows | Clicks | Impressions |
+| ------------------- | ---: | -----: | ----------: |
+| `/designs`          |    1 |      4 |          97 |
+| Product collections |    4 |      1 |          21 |
+| Theme categories    |   68 |     17 |         619 |
+| Individual designs  |  910 |     94 |       5,286 |
+| Design guides       |    2 |      0 |          14 |
+| Other pages         |   15 |     29 |       1,778 |
 
 The gallery accounts for 116 of 145 page-attributed clicks in this export. `Wykres.csv` totals 139 clicks and 6,758 impressions across 92 days. Of the 910 individual design rows, 837 have no clicks; this alone does not justify deletion or `noindex`. Visible queries include flower engraving, butterflies, horses, and doves. Query and page exports are separate aggregates, not query-to-URL attribution.
 
@@ -148,6 +236,7 @@ The changes were made locally; no production deployment or production HTML parit
 - `pnpm test -- tests/unit/design-seo.test.ts` passed all three tests: the teacher exception, rejection of empty/retired collections, and sitemap parity with category indexing policy plus inclusion of eligible design URLs.
 - Tests required an approved run outside the sandbox after pnpm hit an `EPERM` reading the user path. No production build or browser validation was run for this SEO pass.
 - Existing user changes under `gsc/`, including replaced/deleted export files, were preserved.
+
 ## Current Status (2026-09-08) — Mobile Designer Day Mode and Size Sheet Polish
 
 Primary files: `components/DesignerNav.tsx`, `components/ConditionalNav.tsx`, `components/MobileHeader.tsx`, and `styles/globals.css`. The reference palette is the final personalisation section of `app/_ui/HomeSplash.tsx`.
@@ -985,7 +1074,7 @@ Primary file: `components/three/headstone/HeadstoneBaseAuto.tsx`.
   - front/back: `width × height`;
   - left/right: `depth × height`;
   - top/bottom: `width × depth`.
-  This prevents narrow base sides from receiving the much larger width-based repeat count.
+    This prevents narrow base sides from receiving the much larger width-based repeat count.
 - The separate base box receives far less fill on vertical faces than the upright extrusion in the current scene. Its vertical granite materials therefore use the granite map as a modest emissive fill (`0.85`) while retaining `MeshPhysicalMaterial` reflections. The top/bottom remain physically lit without this fill.
 - The polished material is calibrated for the current lower-intensity scene environment (`envMapIntensity: 2.4`, `roughness: 0.15`, `clearcoatRoughness: 0.1`).
 - Rock-pitch remains a separate path. Its rough detail comes from its normal maps; do not use a dark `#444444` granite color multiplier if the intended result is to match the polished granite colour family.
@@ -996,11 +1085,11 @@ Primary file: `components/SvgHeadstone.tsx`.
 
 The upright geometry has three material groups:
 
-| Material index | Surface | Texture repeat basis |
-| --- | --- | --- |
-| 0 | Front cap | width × height |
-| 1 | Continuous narrow sides | perimeter × depth |
-| 2 | Back cap | width × height |
+| Material index | Surface                 | Texture repeat basis |
+| -------------- | ----------------------- | -------------------- |
+| 0              | Front cap               | width × height       |
+| 1              | Continuous narrow sides | perimeter × depth    |
+| 2              | Back cap                | width × height       |
 
 The back previously shared the side texture transform, applying the full perimeter repeat across the back cap and creating obvious vertical tiling. It now has its own cloned map and `width × height` repeat. Every material branch (granite, full-colour, stainless, and urn) returns three materials to support this group layout.
 
@@ -1027,12 +1116,12 @@ This section is the current reference for the full-monument refinements that fol
 
 Primary files:
 
-| File | Responsibility |
-| --- | --- |
-| `lib/granite-material.ts` | Defines the shared `GRANITE_TILE_SIZE_M = 0.35` physical swatch size and creates polished granite PBR materials. |
-| `components/SvgHeadstone.tsx` | Applies the shared scale to upright front, continuous side strip, and back cap. |
-| `components/three/headstone/HeadstoneBaseAuto.tsx` | Uses independent front/side/top texture clones with physical repeats. |
-| `components/three/headstone/LedgerSlab.tsx`, `KerbsetBorder.tsx` | Use dimension-aware texture clones for every box face. |
+| File                                                             | Responsibility                                                                                                   |
+| ---------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| `lib/granite-material.ts`                                        | Defines the shared `GRANITE_TILE_SIZE_M = 0.35` physical swatch size and creates polished granite PBR materials. |
+| `components/SvgHeadstone.tsx`                                    | Applies the shared scale to upright front, continuous side strip, and back cap.                                  |
+| `components/three/headstone/HeadstoneBaseAuto.tsx`               | Uses independent front/side/top texture clones with physical repeats.                                            |
+| `components/three/headstone/LedgerSlab.tsx`, `KerbsetBorder.tsx` | Use dimension-aware texture clones for every box face.                                                           |
 
 - Do not reintroduce random per-tile flips, offsets, or rotations. They made a single selected granite (for example Australian/Chinese Calca) read as unrelated stone across monument parts.
 - The prior fixed `3 × 1` ledger repeat was removed. All granite components use the shared physical tile size, preventing the dense grid on the horizontal ledger and the mismatched grain scale versus the upright.
@@ -1074,13 +1163,13 @@ Focused lint checks can report legacy warnings (not errors), notably the unused 
 
 The designer canvas is now demand-rendered and only invalidates while an interaction or short transition is still active. This avoids an idle 60 FPS render loop.
 
-| File | Current responsibility |
-| --- | --- |
-| `components/ThreeScene.tsx` | Uses R3F `frameloop="demand"`, caps DPR more tightly on compact/coarse-pointer devices, and disables `preserveDrawingBuffer`. |
-| `components/three/Scene.tsx` | Invalidates while auto-rotation converges, avoids automatic static-shadow refreshes, and applies the compact-device scene reductions. |
-| `components/three/headstone/HeadstoneBaseAuto.tsx`, `LedgerSlab.tsx`, `KerbsetBorder.tsx` | End their transition frame loops once the target transform is reached. |
-| `components/three/SunRays.tsx` | Static shader time; it no longer keeps the canvas rendering. |
-| `components/three/AtmosphericSky.tsx` | Compact mode renders only reduced-detail clouds. |
+| File                                                                                      | Current responsibility                                                                                                                |
+| ----------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| `components/ThreeScene.tsx`                                                               | Uses R3F `frameloop="demand"`, caps DPR more tightly on compact/coarse-pointer devices, and disables `preserveDrawingBuffer`.         |
+| `components/three/Scene.tsx`                                                              | Invalidates while auto-rotation converges, avoids automatic static-shadow refreshes, and applies the compact-device scene reductions. |
+| `components/three/headstone/HeadstoneBaseAuto.tsx`, `LedgerSlab.tsx`, `KerbsetBorder.tsx` | End their transition frame loops once the target transform is reached.                                                                |
+| `components/three/SunRays.tsx`                                                            | Static shader time; it no longer keeps the canvas rendering.                                                                          |
+| `components/three/AtmosphericSky.tsx`                                                     | Compact mode renders only reduced-detail clouds.                                                                                      |
 
 Compact devices use lower environment/contact-shadow resolution, omit sun rays and the non-shadow rim light, use lower-resolution outback terrain textures, and cap texture anisotropy more conservatively. The compact terrain assets are:
 
@@ -1121,10 +1210,10 @@ The user manually tested addition placement. Do not use Playwright for this canv
 
 Primary files:
 
-| File | Role |
-| --- | --- |
+| File                                 | Role                                                                                    |
+| ------------------------------------ | --------------------------------------------------------------------------------------- |
 | `components/three/AdditionModel.tsx` | Applies the product-specific depth allowance when dragging statues and vases on a base. |
-| `lib/addition-utils.ts` | Clamps addition depth movement within the available base range. |
+| `lib/addition-utils.ts`              | Clamps addition depth movement within the available base range.                         |
 
 Products whose name contains `Traditional Engraved` allow statues and vases to move an additional `60mm` rearward on the base. This allowance is product-specific; other product families retain their existing movement limits.
 
@@ -1138,14 +1227,14 @@ Flower Pots are represented as a base configuration choice, not as entries in th
 
 Primary files:
 
-| File | Role |
-| --- | --- |
-| `components/DesignerNav.tsx` | Shows the Base option selector and conditional lid-finish radio buttons. |
+| File                             | Role                                                                        |
+| -------------------------------- | --------------------------------------------------------------------------- |
+| `components/DesignerNav.tsx`     | Shows the Base option selector and conditional lid-finish radio buttons.    |
 | `components/CheckPricePanel.tsx` | Lists the selected Flower Pots and lid finish under the existing Base line. |
-| `lib/headstone-store.types.ts` | Defines `baseOption` and `baseLidFinish`. |
-| `lib/headstone-store.ts` | Stores defaults and reset behavior. |
-| `lib/project-schemas.ts` | Defines backward-compatible saved-design fields. |
-| `lib/project-serializer.ts` | Captures and restores the base option and lid finish. |
+| `lib/headstone-store.types.ts`   | Defines `baseOption` and `baseLidFinish`.                                   |
+| `lib/headstone-store.ts`         | Stores defaults and reset behavior.                                         |
+| `lib/project-schemas.ts`         | Defines backward-compatible saved-design fields.                            |
+| `lib/project-serializer.ts`      | Captures and restores the base option and lid finish.                       |
 
 Current behavior:
 
@@ -1171,13 +1260,13 @@ This session covered the `/select-product` sample-price experience and several B
 
 Primary files:
 
-| File | Role |
-| --- | --- |
-| `app/select-product/page.tsx` | Loads product sample prices and descriptions. |
-| `app/select-product/_ui/ProductSelectionGrid.tsx` | Displays `Sample price`, default dimensions, and the `Select product` CTA. |
-| `lib/server/product-pricing.ts` | Calculates a sample using the first catalog shape's `table.initWidth` and `table.initHeight`. |
-| `lib/server/xml-data.ts` | Reads catalog XML locally and falls back to the deployed public `/xml/catalog-id-{id}.xml` asset. |
-| `lib/types/pricing.ts` | Defines `ProductPriceSample`. |
+| File                                              | Role                                                                                              |
+| ------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| `app/select-product/page.tsx`                     | Loads product sample prices and descriptions.                                                     |
+| `app/select-product/_ui/ProductSelectionGrid.tsx` | Displays `Sample price`, default dimensions, and the `Select product` CTA.                        |
+| `lib/server/product-pricing.ts`                   | Calculates a sample using the first catalog shape's `table.initWidth` and `table.initHeight`.     |
+| `lib/server/xml-data.ts`                          | Reads catalog XML locally and falls back to the deployed public `/xml/catalog-id-{id}.xml` asset. |
+| `lib/types/pricing.ts`                            | Defines `ProductPriceSample`.                                                                     |
 
 Current behavior:
 
@@ -1211,16 +1300,16 @@ The Bronze Plaque workflow now includes a Bronze-only `select-fastening` step.
 
 Primary files:
 
-| File | Role |
-| --- | --- |
-| `components/FixingSelector.tsx` | Two-column selector used in the left sidebar. |
-| `app/select-fastening/page.tsx` | Direct route placeholder; the actual panel is rendered by `DesignerNav`. |
-| `components/DesignerNav.tsx` | Adds the Setup menu item, guided-panel ordering, and selector panel. |
-| `components/ConditionalNav.tsx` | Keeps the sidebar/bottom sheet open and labels the step `Fastening Type`. |
-| `components/ConditionalCanvas.tsx` | Keeps the 3D canvas visible during the step. |
-| `lib/designer-route-state.ts` | Registers `select-fastening` as a valid designer route. |
-| `app/[productSlug]/[designerStep]/page.tsx` | Resolves the product-prefixed route. |
-| `public/png/fixingsystem/` | Existing option images. |
+| File                                        | Role                                                                      |
+| ------------------------------------------- | ------------------------------------------------------------------------- |
+| `components/FixingSelector.tsx`             | Two-column selector used in the left sidebar.                             |
+| `app/select-fastening/page.tsx`             | Direct route placeholder; the actual panel is rendered by `DesignerNav`.  |
+| `components/DesignerNav.tsx`                | Adds the Setup menu item, guided-panel ordering, and selector panel.      |
+| `components/ConditionalNav.tsx`             | Keeps the sidebar/bottom sheet open and labels the step `Fastening Type`. |
+| `components/ConditionalCanvas.tsx`          | Keeps the 3D canvas visible during the step.                              |
+| `lib/designer-route-state.ts`               | Registers `select-fastening` as a valid designer route.                   |
+| `app/[productSlug]/[designerStep]/page.tsx` | Resolves the product-prefixed route.                                      |
+| `public/png/fixingsystem/`                  | Existing option images.                                                   |
 
 Options:
 
@@ -1263,10 +1352,10 @@ This session refined homepage `HeroCanvas` behavior, corrected bronze plaque fin
 
 Primary files:
 
-| File | Role |
-| --- | --- |
-| `components/HeroCanvas.tsx` | Three.js/R3F hero model, intro slide/scale animation, and `onReady` callback. |
-| `app/_ui/HomeSplash.tsx` | Dynamic mount delay, viewport gating, wrapper fade, rotation controls, and homepage copy. |
+| File                        | Role                                                                                      |
+| --------------------------- | ----------------------------------------------------------------------------------------- |
+| `components/HeroCanvas.tsx` | Three.js/R3F hero model, intro slide/scale animation, and `onReady` callback.             |
+| `app/_ui/HomeSplash.tsx`    | Dynamic mount delay, viewport gating, wrapper fade, rotation controls, and homepage copy. |
 
 Current behavior:
 
@@ -1315,10 +1404,10 @@ Problem:
 
 Fix:
 
-| File | Behavior |
-| --- | --- |
-| `app/designs/[productType]/[category]/[slug]/page.tsx` | SSR design table and Product JSON-LD now use the bronze plaque finish override. |
-| `components/DesignContentBlock.tsx` | Hydrated "Sizes, Materials & Options" table and bronze care copy now use the bronze plaque finish override. |
+| File                                                   | Behavior                                                                                                    |
+| ------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------- |
+| `app/designs/[productType]/[category]/[slug]/page.tsx` | SSR design table and Product JSON-LD now use the bronze plaque finish override.                             |
+| `components/DesignContentBlock.tsx`                    | Hydrated "Sizes, Materials & Options" table and bronze care copy now use the bronze plaque finish override. |
 
 Current bronze plaque finish value:
 
@@ -1370,16 +1459,16 @@ This session focused on the public homepage `/`, especially `components/HeroCanv
 
 The homepage `HeroCanvas` was rebuilt to follow the stronger visual approach from `discountheadstones/HeroCanvas.tsx`, while keeping it compatible with the Next.js app.
 
-| Area | Current Behavior |
-| --- | --- |
-| Granite material | Uses `/textures/forever/l/Blue-Pearl.webp` with `meshPhysicalMaterial`, `clearcoat`, `clearcoatRoughness`, larger grain, `SRGBColorSpace`, and 16x anisotropy. |
-| Headstone scale | `MODEL_SCALE = 0.94`, `MODEL_Y = -1.04`. The homepage canvas container is larger (`h-[40vh]`, `sm:h-[57vh]`, min heights `330px/430px`). |
+| Area               | Current Behavior                                                                                                                                                  |
+| ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Granite material   | Uses `/textures/forever/l/Blue-Pearl.webp` with `meshPhysicalMaterial`, `clearcoat`, `clearcoatRoughness`, larger grain, `SRGBColorSpace`, and 16x anisotropy.    |
+| Headstone scale    | `MODEL_SCALE = 0.94`, `MODEL_Y = -1.04`. The homepage canvas container is larger (`h-[40vh]`, `sm:h-[57vh]`, min heights `330px/430px`).                          |
 | Entrance animation | The model enters from its own center by scaling `0.68 -> MODEL_SCALE` over `1.15s` with `easeOutCubic`. It no longer slides upward from the bottom of the canvas. |
-| Idle motion | After interaction delay, the model uses a subtle front-facing sway instead of a full spin that turns the memorial away from the user. |
-| Base geometry | Base uses `buildBoxGeometryWithScaledUvs()` so Blue Pearl texture on the box does not look like dense repeated noise. |
-| Text on stone | Front inscriptions use `InscriptionMesh` canvas textures for stronger readability over granite, adapted from Discount Headstones. |
-| Ceramic photo | Ceramic image is smaller and positioned so it does not cover `Margaret Ann Cole`. Current front layout is moved up via `FRONT_LAYOUT_Y_OFFSET = 0.12`. |
-| Lighting | Uses `Environment preset="city"` plus a small set of directional/ambient lights and canvas shadows, adapted from Discount Headstones. |
+| Idle motion        | After interaction delay, the model uses a subtle front-facing sway instead of a full spin that turns the memorial away from the user.                             |
+| Base geometry      | Base uses `buildBoxGeometryWithScaledUvs()` so Blue Pearl texture on the box does not look like dense repeated noise.                                             |
+| Text on stone      | Front inscriptions use `InscriptionMesh` canvas textures for stronger readability over granite, adapted from Discount Headstones.                                 |
+| Ceramic photo      | Ceramic image is smaller and positioned so it does not cover `Margaret Ann Cole`. Current front layout is moved up via `FRONT_LAYOUT_Y_OFFSET = 0.12`.            |
+| Lighting           | Uses `Environment preset="city"` plus a small set of directional/ambient lights and canvas shadows, adapted from Discount Headstones.                             |
 
 Current front inscription/photo layout notes:
 
@@ -1407,11 +1496,11 @@ The "Designer workflow" section was rewritten to avoid technical/internal langua
 
 Current workflow cards:
 
-| Card | Current Copy Direction |
-| --- | --- |
-| `Start gently` | Begin with a Headstone, Monument, or Plaque and explore without pressure. |
-| `Shape their story` | Add words, photos, motifs, and materials while previewing in 3D. |
-| `Take time to decide` | Save, share with family, review quote, or ask for help. |
+| Card                  | Current Copy Direction                                                    |
+| --------------------- | ------------------------------------------------------------------------- |
+| `Start gently`        | Begin with a Headstone, Monument, or Plaque and explore without pressure. |
+| `Shape their story`   | Add words, photos, motifs, and materials while previewing in 3D.          |
+| `Take time to decide` | Save, share with family, review quote, or ask for help.                   |
 
 Do not reintroduce copy like "The home page should set expectations..." on public UI. That was an internal implementation note and should stay out of customer-facing pages.
 
@@ -1421,11 +1510,11 @@ The user copied the Discount Headstones source files into `discountheadstones/`.
 
 Relevant files:
 
-| File | Notes |
-| --- | --- |
+| File                                | Notes                                                                                                                                                       |
+| ----------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `discountheadstones/HeroCanvas.tsx` | Source reference for Blue Pearl material, physical material settings, environment lighting, canvas text inscriptions, slow motion, and ready event pattern. |
-| `discountheadstones/HeroDecor.tsx` | Ceramic/photo decor reference. It was fixed locally so React hooks are not called after an early return. |
-| `discountheadstones/global.d.ts` | Now declares `ImportMeta.env.BASE_URL` so copied Vite-style files type-check inside this repo. |
+| `discountheadstones/HeroDecor.tsx`  | Ceramic/photo decor reference. It was fixed locally so React hooks are not called after an early return.                                                    |
+| `discountheadstones/global.d.ts`    | Now declares `ImportMeta.env.BASE_URL` so copied Vite-style files type-check inside this repo.                                                              |
 
 Important compatibility notes:
 
@@ -1435,12 +1524,12 @@ Important compatibility notes:
 
 ### Files Changed
 
-| File | Current Behavior |
-| --- | --- |
-| `components/HeroCanvas.tsx` | Homepage 3D memorial uses Blue Pearl physical material, canvas inscriptions, scaled-center entrance, larger model, ceramic photo layout, and natural lighting. |
-| `app/_ui/HomeSplash.tsx` | Homepage subtitle is smaller/two-line; canvas area is larger; workflow copy is compassionate and product-specific. |
-| `discountheadstones/global.d.ts` | Adds `ImportMetaEnv`/`ImportMeta` declarations for the copied Vite files. |
-| `discountheadstones/HeroDecor.tsx` | Hook order fixed by moving hook-using implementation into an inner component rendered only when `photoUrl` exists. |
+| File                               | Current Behavior                                                                                                                                               |
+| ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `components/HeroCanvas.tsx`        | Homepage 3D memorial uses Blue Pearl physical material, canvas inscriptions, scaled-center entrance, larger model, ceramic photo layout, and natural lighting. |
+| `app/_ui/HomeSplash.tsx`           | Homepage subtitle is smaller/two-line; canvas area is larger; workflow copy is compassionate and product-specific.                                             |
+| `discountheadstones/global.d.ts`   | Adds `ImportMetaEnv`/`ImportMeta` declarations for the copied Vite files.                                                                                      |
+| `discountheadstones/HeroDecor.tsx` | Hook order fixed by moving hook-using implementation into an inner component rendered only when `photoUrl` exists.                                             |
 
 ### Verification
 
@@ -1468,23 +1557,23 @@ The important distinction is that these routes have two layers:
 
 ### Problems Fixed
 
-| Issue | Resolution |
-| --- | --- |
-| Main design preview was blurry/oversized | Detail pages now use `/screenshots/v2026-3d/{designId}.png` instead of `{designId}_small.png` for the main preview. The image has `w-auto h-auto max-w-full` and `maxHeight: 45vh`, so it renders at natural size unless it must scale down to fit the first viewport. |
-| Fixed `1200x630` dimensions were wrong for some screenshots | Removed hardcoded width/height from the raw `<img>` tags. Example: `1725769905504.png` is `711x710`, not `1200x630`. Do not assume all regenerated screenshots share one aspect ratio. |
-| Duplicate under-image CTA was no longer needed | The temporary `Personalise This Design` CTA below the main image was removed after the restored client page brought back the existing sidebar/mobile `Start with this design` button. |
-| Client accordions disappeared | `DesignPageClient` had stopped being mounted from `page.tsx`, leaving only the SSR fallback visible. It is now rendered after the SSR fallback again, restoring the Product Description, Price Quote, Personalization Options, and other accordions. |
-| Public copy implied Australia-only supply | Public design detail copy/schema no longer says `AUD`, `GST`, `mainland Australia`, or country-specific delivery. Delivery/install wording is now quote/destination-neutral. |
-| Product JSON-LD implied AUD/shipping regions | Removed the `AggregateOffer` block with `priceCurrency: AUD`, shipping rate, and country-specific shipping details from design detail Product schema. |
-| Hydrated SEO content had region-specific compliance/shipping copy | `components/DesignContentBlock.tsx` now uses generic "Cemetery Requirements" wording and says requirements, delivery, and installation depend on the local cemetery/destination and quote. |
+| Issue                                                             | Resolution                                                                                                                                                                                                                                                             |
+| ----------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Main design preview was blurry/oversized                          | Detail pages now use `/screenshots/v2026-3d/{designId}.png` instead of `{designId}_small.png` for the main preview. The image has `w-auto h-auto max-w-full` and `maxHeight: 45vh`, so it renders at natural size unless it must scale down to fit the first viewport. |
+| Fixed `1200x630` dimensions were wrong for some screenshots       | Removed hardcoded width/height from the raw `<img>` tags. Example: `1725769905504.png` is `711x710`, not `1200x630`. Do not assume all regenerated screenshots share one aspect ratio.                                                                                 |
+| Duplicate under-image CTA was no longer needed                    | The temporary `Personalise This Design` CTA below the main image was removed after the restored client page brought back the existing sidebar/mobile `Start with this design` button.                                                                                  |
+| Client accordions disappeared                                     | `DesignPageClient` had stopped being mounted from `page.tsx`, leaving only the SSR fallback visible. It is now rendered after the SSR fallback again, restoring the Product Description, Price Quote, Personalization Options, and other accordions.                   |
+| Public copy implied Australia-only supply                         | Public design detail copy/schema no longer says `AUD`, `GST`, `mainland Australia`, or country-specific delivery. Delivery/install wording is now quote/destination-neutral.                                                                                           |
+| Product JSON-LD implied AUD/shipping regions                      | Removed the `AggregateOffer` block with `priceCurrency: AUD`, shipping rate, and country-specific shipping details from design detail Product schema.                                                                                                                  |
+| Hydrated SEO content had region-specific compliance/shipping copy | `components/DesignContentBlock.tsx` now uses generic "Cemetery Requirements" wording and says requirements, delivery, and installation depend on the local cemetery/destination and quote.                                                                             |
 
 ### Files Changed
 
-| File | Current Behavior |
-| --- | --- |
-| `app/designs/[productType]/[category]/[slug]/page.tsx` | Renders SSR fallback plus `DesignPageClient`. Main fallback preview uses the full screenshot with natural dimensions and `maxHeight: 45vh`. SSR fallback price/spec copy is quote-neutral and region-neutral. |
-| `app/designs/[productType]/[category]/[slug]/DesignPageClient.tsx` | Hydrated main preview uses the full screenshot, natural dimensions, and `maxHeight: 45vh`. CTA click logic is shared by sidebar/mobile buttons via `startPersonalising()`. |
-| `components/DesignContentBlock.tsx` | Public cemetery/compliance and lead-time FAQ copy is generic across regions. It no longer imports or uses region-specific shipping/compliance helpers. |
+| File                                                               | Current Behavior                                                                                                                                                                                              |
+| ------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `app/designs/[productType]/[category]/[slug]/page.tsx`             | Renders SSR fallback plus `DesignPageClient`. Main fallback preview uses the full screenshot with natural dimensions and `maxHeight: 45vh`. SSR fallback price/spec copy is quote-neutral and region-neutral. |
+| `app/designs/[productType]/[category]/[slug]/DesignPageClient.tsx` | Hydrated main preview uses the full screenshot, natural dimensions, and `maxHeight: 45vh`. CTA click logic is shared by sidebar/mobile buttons via `startPersonalising()`.                                    |
+| `components/DesignContentBlock.tsx`                                | Public cemetery/compliance and lead-time FAQ copy is generic across regions. It no longer imports or uses region-specific shipping/compliance helpers.                                                        |
 
 ### Price Quote Accordion Notes
 
@@ -1526,30 +1615,30 @@ This session focused on the bronze plaque designer canvas after manual testing w
 
 ### Problems Fixed
 
-| Issue | Resolution |
-| --- | --- |
-| Plaque selection outline was too thick | `components/three/RotatingBoxOutline.tsx` now draws the selection outline with `THREE.LineSegments` / `LineBasicMaterial`, producing a thin 1px-style line instead of thick box geometry. |
-| Plaque outline stayed visible after selecting an inscription/image/motif | `components/three/headstone/HeadstoneAssembly.tsx` now hides headstone/base/ledger/kerbset outlines while any child design element is selected. |
-| Adding a new element did not clear the previous selected element | `lib/headstone-store.ts` now clears competing selected IDs when adding, duplicating, or selecting inscriptions, images, motifs, additions, and emblems. Only one selection outline should be visible at a time. |
-| Newly added image/motif/inscription could render behind older elements | The store now assigns each new/duplicated design element a monotonic `layer`, and render components use that layer for `renderOrder` and a tiny physical lift. |
+| Issue                                                                     | Resolution                                                                                                                                                                                                                                               |
+| ------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Plaque selection outline was too thick                                    | `components/three/RotatingBoxOutline.tsx` now draws the selection outline with `THREE.LineSegments` / `LineBasicMaterial`, producing a thin 1px-style line instead of thick box geometry.                                                                |
+| Plaque outline stayed visible after selecting an inscription/image/motif  | `components/three/headstone/HeadstoneAssembly.tsx` now hides headstone/base/ledger/kerbset outlines while any child design element is selected.                                                                                                          |
+| Adding a new element did not clear the previous selected element          | `lib/headstone-store.ts` now clears competing selected IDs when adding, duplicating, or selecting inscriptions, images, motifs, additions, and emblems. Only one selection outline should be visible at a time.                                          |
+| Newly added image/motif/inscription could render behind older elements    | The store now assigns each new/duplicated design element a monotonic `layer`, and render components use that layer for `renderOrder` and a tiny physical lift.                                                                                           |
 | Clicking a motif over an image/inscription selected the element behind it | `components/three/ImageModel.tsx` and `components/three/MotifModel.tsx` now use consistent physical front-surface offsets so the newest visual layer is also the closest raycast hit. Motif selection is also handled on `pointerdown`, matching images. |
-| Console warning: `THREE.Color: Unknown color 0xffffff` | Color values from catalog/XML/store are normalized from `0xffffff` format to `#ffffff` before reaching Three.js color props. |
+| Console warning: `THREE.Color: Unknown color 0xffffff`                    | Color values from catalog/XML/store are normalized from `0xffffff` format to `#ffffff` before reaching Three.js color props.                                                                                                                             |
 
 ### Files Changed
 
-| File | Current Behavior |
-| --- | --- |
-| `components/three/RotatingBoxOutline.tsx` | Thin, non-raycastable selection outline. |
-| `components/three/headstone/HeadstoneAssembly.tsx` | Parent plaque/headstone outlines are suppressed when a child element has selection. |
-| `lib/headstone-store.ts` | Central selection exclusivity, color normalization, and `getNextDesignLayer()` layer assignment for inscriptions/images/motifs/emblems. |
-| `lib/headstone-store.types.ts` | Adds optional `layer?: number` to persisted design element types. Existing saved designs are compatible because missing layers default to `0`. |
-| `lib/xml-parser.ts` | Normalizes XML color/default-color attributes from `0xRRGGBB` to `#RRGGBB`. |
-| `components/HeadstoneInscription.tsx` | Accepts `layer`, normalizes text color, applies layered render order/lift, and disables depth writes/tests on text materials for predictable overlay rendering. |
-| `components/three/ImageModel.tsx` | Accepts `layer`, applies render order and physical lift, uses small local photo/selection Z offsets so raycasting follows element layer instead of ceramic/photo depth. |
-| `components/three/MotifModel.tsx` | Accepts `layer`, applies render order and physical lift, disables depth testing on motif materials, and selects motifs on `pointerdown`. |
-| `components/three/headstone/ShapeSwapper.tsx` | Passes layer values into headstone-surface inscriptions, images, and motifs. |
-| `components/three/headstone/HeadstoneBaseAuto.tsx` | Passes layer values into base-surface inscriptions, images, and motifs. |
-| `components/three/headstone/LedgerSurfaceContent.tsx` | Passes layer values into ledger-surface inscriptions, images, and motifs. |
+| File                                                  | Current Behavior                                                                                                                                                        |
+| ----------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `components/three/RotatingBoxOutline.tsx`             | Thin, non-raycastable selection outline.                                                                                                                                |
+| `components/three/headstone/HeadstoneAssembly.tsx`    | Parent plaque/headstone outlines are suppressed when a child element has selection.                                                                                     |
+| `lib/headstone-store.ts`                              | Central selection exclusivity, color normalization, and `getNextDesignLayer()` layer assignment for inscriptions/images/motifs/emblems.                                 |
+| `lib/headstone-store.types.ts`                        | Adds optional `layer?: number` to persisted design element types. Existing saved designs are compatible because missing layers default to `0`.                          |
+| `lib/xml-parser.ts`                                   | Normalizes XML color/default-color attributes from `0xRRGGBB` to `#RRGGBB`.                                                                                             |
+| `components/HeadstoneInscription.tsx`                 | Accepts `layer`, normalizes text color, applies layered render order/lift, and disables depth writes/tests on text materials for predictable overlay rendering.         |
+| `components/three/ImageModel.tsx`                     | Accepts `layer`, applies render order and physical lift, uses small local photo/selection Z offsets so raycasting follows element layer instead of ceramic/photo depth. |
+| `components/three/MotifModel.tsx`                     | Accepts `layer`, applies render order and physical lift, disables depth testing on motif materials, and selects motifs on `pointerdown`.                                |
+| `components/three/headstone/ShapeSwapper.tsx`         | Passes layer values into headstone-surface inscriptions, images, and motifs.                                                                                            |
+| `components/three/headstone/HeadstoneBaseAuto.tsx`    | Passes layer values into base-surface inscriptions, images, and motifs.                                                                                                 |
+| `components/three/headstone/LedgerSurfaceContent.tsx` | Passes layer values into ledger-surface inscriptions, images, and motifs.                                                                                               |
 
 ### Important Implementation Notes
 
@@ -1564,13 +1653,13 @@ This session focused on the bronze plaque designer canvas after manual testing w
 
 This session also simplified Check Price and aligned the bottom canvas price-chip popup with the full Check Price quote style.
 
-| File | Current Behavior |
-| --- | --- |
+| File                                     | Current Behavior                                                                                                                                                                                                                                            |
+| ---------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `app/check-price/_ui/CheckPriceGrid.tsx` | Full `/check-price` page now uses a simpler itemized quote table, full-width content, designer-style header, and category chips (`All Items`, primary product type, `Inscriptions`, `Motifs`, `Emblems`, `Images`, `Additions`) that filter the quote rows. |
-| `app/check-price/_ui/CheckPriceGrid.tsx` | Laser/free-inscription products no longer receive the old hardcoded `$50` per inscription. Inscription rows calculate from the store/catalog model and respect `showInscriptionColor` / product `32` free behavior. |
-| `app/check-price/_ui/CheckPriceGrid.tsx` | `Download PDF` uses the My Account PDF path via `captureDesignSnapshot()`, `generateDesignPDF()`, and `buildPdfQuoteFromProject()`. `Save Design` clicks the existing designer save button when available. |
-| `components/CheckPricePanel.tsx` | The bottom canvas price chip still opens `activePanel === 'checkprice'`, but the popup is now the same simplified quote style without the full page top header/filter bar. It renders as a modal over the canvas scene. |
-| `components/CheckPricePanel.tsx` | Modal quote rows are flattened item rows rather than expandable grouped sections. It includes live designer pricing for product/base/ledger/kerbset/inscriptions/motifs/emblems/images/additions. |
+| `app/check-price/_ui/CheckPriceGrid.tsx` | Laser/free-inscription products no longer receive the old hardcoded `$50` per inscription. Inscription rows calculate from the store/catalog model and respect `showInscriptionColor` / product `32` free behavior.                                         |
+| `app/check-price/_ui/CheckPriceGrid.tsx` | `Download PDF` uses the My Account PDF path via `captureDesignSnapshot()`, `generateDesignPDF()`, and `buildPdfQuoteFromProject()`. `Save Design` clicks the existing designer save button when available.                                                  |
+| `components/CheckPricePanel.tsx`         | The bottom canvas price chip still opens `activePanel === 'checkprice'`, but the popup is now the same simplified quote style without the full page top header/filter bar. It renders as a modal over the canvas scene.                                     |
+| `components/CheckPricePanel.tsx`         | Modal quote rows are flattened item rows rather than expandable grouped sections. It includes live designer pricing for product/base/ledger/kerbset/inscriptions/motifs/emblems/images/additions.                                                           |
 
 Important Check Price notes:
 
@@ -1582,14 +1671,14 @@ Important Check Price notes:
 
 The easy display-only mm/in toggle was implemented. Internal sizes, positions, catalog values, and pricing calculations remain in millimeters.
 
-| File | Current Behavior |
-| --- | --- |
-| `lib/unit-system.ts` | `formatImperialFromMm()` now rounds up to whole inches with `Math.ceil(inches - 1e-9)`. Example: `23 5/8"` displays as `24"`. Exact whole-inch values such as `12"` stay exact despite floating-point noise. |
-| `lib/use-unit-system.ts` | `useUnitSystem()` is reactive in the current tab. `useSetUnitSystem()` writes `unit_system=metric|imperial` plus `unit_system_user=1`, then dispatches a `unit-system-changed` browser event. |
-| `middleware.ts` | Country-based `unit_system` defaults are still set, but middleware now respects `unit_system_user=1` and does not overwrite the user’s manual mm/in choice on navigation. |
-| `components/ThreeScene.tsx` | Adds a compact `mm / in` toggle in the top-right canvas overlay. The selected chip uses Forever Shining gold `#cfac6c`. |
-| `components/ThreeScene.tsx` | The bottom price chip size label already uses `formatDimensionPair(widthMm, heightMm, unitSystem)`, so it updates immediately when the toggle changes. |
-| `components/CheckPricePanel.tsx` | Modal dimensions already use `formatDimensionPair()` / `formatDimensionTriplet()` in the new quote rows. |
+| File                             | Current Behavior                                                                                                                                                                                             |
+| -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------- |
+| `lib/unit-system.ts`             | `formatImperialFromMm()` now rounds up to whole inches with `Math.ceil(inches - 1e-9)`. Example: `23 5/8"` displays as `24"`. Exact whole-inch values such as `12"` stay exact despite floating-point noise. |
+| `lib/use-unit-system.ts`         | `useUnitSystem()` is reactive in the current tab. `useSetUnitSystem()` writes `unit_system=metric                                                                                                            | imperial`plus`unit_system_user=1`, then dispatches a `unit-system-changed` browser event. |
+| `middleware.ts`                  | Country-based `unit_system` defaults are still set, but middleware now respects `unit_system_user=1` and does not overwrite the user’s manual mm/in choice on navigation.                                    |
+| `components/ThreeScene.tsx`      | Adds a compact `mm / in` toggle in the top-right canvas overlay. The selected chip uses Forever Shining gold `#cfac6c`.                                                                                      |
+| `components/ThreeScene.tsx`      | The bottom price chip size label already uses `formatDimensionPair(widthMm, heightMm, unitSystem)`, so it updates immediately when the toggle changes.                                                       |
+| `components/CheckPricePanel.tsx` | Modal dimensions already use `formatDimensionPair()` / `formatDimensionTriplet()` in the new quote rows.                                                                                                     |
 
 Next session plan for units:
 
@@ -1656,30 +1745,30 @@ This session reviewed live Lighthouse JSON reports for the homepage and design S
 
 ### Reports Reviewed
 
-| Report | Route | Performance | Key Finding |
-| --- | --- | ---: | --- |
-| `lighthouse5.json` | `/` | 52 | Homepage regressed when `HeroCanvas` loaded too early; LCP and TBT were poor. |
-| `lighthouse6.json` | `/` | 78 | Homepage recovered after delaying `HeroCanvas` and avoiding the static headstone placeholder. |
-| `l1.json` | `/designs` | 57 | The designs index shipped a very large document: about `190 KB` transfer / `3.56 MB` resource. |
-| `l2.json` | `/designs` | 70 | Removing thousands of deep sidebar links cut the document to about `31 KB` transfer / `714 KB` resource. |
-| `l3.json` | `/designs` | 66 | Payload improved further (`26 KB` / `505 KB`), score dipped mostly due Lighthouse TBT variance. |
-| `li1.json` | `/designs/traditional-headstone/biblical-memorial/curved-gable-may-heavens-eternal-happiness-be-thine` | 75 | Individual design page loaded a full `687 KB` PNG as LCP preview. |
-| `li2.json` | same individual design page | 70 | `_small.png` fixed image payload/LCP, but heavy `DesignPageClient` caused very high TBT (`2480 ms`). |
-| `li3.json` | same individual design page | 87 | Deferring `DesignPageClient` until user action cut TBT to `380 ms` and bootup to `2.0 s`. |
-| `light1.json` | `/designs/traditional-headstone/biblical-memorial` | 68 | Category page repeated the `/designs` issue: about `213 KB` transfer / `3.7 MB` document resource. |
+| Report             | Route                                                                                                  | Performance | Key Finding                                                                                              |
+| ------------------ | ------------------------------------------------------------------------------------------------------ | ----------: | -------------------------------------------------------------------------------------------------------- |
+| `lighthouse5.json` | `/`                                                                                                    |          52 | Homepage regressed when `HeroCanvas` loaded too early; LCP and TBT were poor.                            |
+| `lighthouse6.json` | `/`                                                                                                    |          78 | Homepage recovered after delaying `HeroCanvas` and avoiding the static headstone placeholder.            |
+| `l1.json`          | `/designs`                                                                                             |          57 | The designs index shipped a very large document: about `190 KB` transfer / `3.56 MB` resource.           |
+| `l2.json`          | `/designs`                                                                                             |          70 | Removing thousands of deep sidebar links cut the document to about `31 KB` transfer / `714 KB` resource. |
+| `l3.json`          | `/designs`                                                                                             |          66 | Payload improved further (`26 KB` / `505 KB`), score dipped mostly due Lighthouse TBT variance.          |
+| `li1.json`         | `/designs/traditional-headstone/biblical-memorial/curved-gable-may-heavens-eternal-happiness-be-thine` |          75 | Individual design page loaded a full `687 KB` PNG as LCP preview.                                        |
+| `li2.json`         | same individual design page                                                                            |          70 | `_small.png` fixed image payload/LCP, but heavy `DesignPageClient` caused very high TBT (`2480 ms`).     |
+| `li3.json`         | same individual design page                                                                            |          87 | Deferring `DesignPageClient` until user action cut TBT to `380 ms` and bootup to `2.0 s`.                |
+| `light1.json`      | `/designs/traditional-headstone/biblical-memorial`                                                     |          68 | Category page repeated the `/designs` issue: about `213 KB` transfer / `3.7 MB` document resource.       |
 
 ### Changes Applied
 
-| File | Current Behavior |
-| --- | --- |
-| `app/_ui/HomeSplash.tsx` | `HeroCanvas` is delayed behind a deterministic client timer and shows a light spinner state instead of rendering a static headstone first. This avoided the visible static-to-3D headstone swap and recovered homepage performance to `78` in `lighthouse6.json`. |
-| `components/ServerDesignsTreeNav.tsx` | Accepts `maxDesignLinksPerCategory`, defaulting to `40` for existing behavior. Passing `0` renders product/category navigation without individual design links. |
-| `app/designs/page.tsx` | Uses `ServerDesignsTreeNav maxDesignLinksPerCategory={0}` on desktop and a lightweight product-only mobile nav. This reduced `/designs` document resource from about `3.56 MB` to about `505-714 KB` in live reports. |
-| `components/DesignsIndexMobileNavToggle.tsx` | Lightweight client mobile navigation for public design index/category routes. It avoids embedding the full server design tree as hidden mobile drawer content. |
-| `app/designs/[productType]/[category]/page.tsx` | Uses the lightweight mobile nav and `ServerDesignsTreeNav maxDesignLinksPerCategory={0}` for the category page. Expected next report: much smaller `document.resourceSize` versus `light1.json`. |
-| `app/designs/[productType]/[category]/[slug]/page.tsx` | Historical July 28 state: SSR preview used `_small.png` and did not mount `DesignPageClient` initially. Superseded on 2026-08-02 because this removed all client accordions from the public detail page. |
-| `app/designs/[productType]/[category]/[slug]/StartSavedDesignButton.tsx` | New small client CTA. On click it dynamically imports `loadDesignById`, loads the canonical design into the editor store, then routes to `/select-size`. This keeps SEO pages fast while preserving the personalize flow. |
-| `app/designs/[productType]/[category]/[slug]/DesignPageClient.tsx` | Historical July 28 state used `_small.png` and avoided mounting the component. Superseded on 2026-08-02: the component is mounted again and uses full preview PNGs with natural dimensions plus `maxHeight: 45vh`. |
+| File                                                                     | Current Behavior                                                                                                                                                                                                                                                  |
+| ------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `app/_ui/HomeSplash.tsx`                                                 | `HeroCanvas` is delayed behind a deterministic client timer and shows a light spinner state instead of rendering a static headstone first. This avoided the visible static-to-3D headstone swap and recovered homepage performance to `78` in `lighthouse6.json`. |
+| `components/ServerDesignsTreeNav.tsx`                                    | Accepts `maxDesignLinksPerCategory`, defaulting to `40` for existing behavior. Passing `0` renders product/category navigation without individual design links.                                                                                                   |
+| `app/designs/page.tsx`                                                   | Uses `ServerDesignsTreeNav maxDesignLinksPerCategory={0}` on desktop and a lightweight product-only mobile nav. This reduced `/designs` document resource from about `3.56 MB` to about `505-714 KB` in live reports.                                             |
+| `components/DesignsIndexMobileNavToggle.tsx`                             | Lightweight client mobile navigation for public design index/category routes. It avoids embedding the full server design tree as hidden mobile drawer content.                                                                                                    |
+| `app/designs/[productType]/[category]/page.tsx`                          | Uses the lightweight mobile nav and `ServerDesignsTreeNav maxDesignLinksPerCategory={0}` for the category page. Expected next report: much smaller `document.resourceSize` versus `light1.json`.                                                                  |
+| `app/designs/[productType]/[category]/[slug]/page.tsx`                   | Historical July 28 state: SSR preview used `_small.png` and did not mount `DesignPageClient` initially. Superseded on 2026-08-02 because this removed all client accordions from the public detail page.                                                          |
+| `app/designs/[productType]/[category]/[slug]/StartSavedDesignButton.tsx` | New small client CTA. On click it dynamically imports `loadDesignById`, loads the canonical design into the editor store, then routes to `/select-size`. This keeps SEO pages fast while preserving the personalize flow.                                         |
+| `app/designs/[productType]/[category]/[slug]/DesignPageClient.tsx`       | Historical July 28 state used `_small.png` and avoided mounting the component. Superseded on 2026-08-02: the component is mounted again and uses full preview PNGs with natural dimensions plus `maxHeight: 45vh`.                                                |
 
 ### Current Performance Interpretation
 
@@ -1720,16 +1809,16 @@ This session reviewed `lighthouse.json` for the live home page `https://forevers
 
 ### Changes Applied
 
-| File | Current Behavior |
-| --- | --- |
-| `app/_ui/HomeSplash.tsx` | `HeroCanvas` no longer mounts immediately on first paint. It now uses a deterministic `setTimeout(..., 900)` before rendering the dynamic 3D canvas, with a same-size static headstone placeholder during the short delay. |
-| `app/_ui/HomeSplash.tsx` | Heavy `/select-product` CTA links on the homepage use `prefetch={false}` to avoid pulling the large designer RSC payload during the home page load. |
-| `app/_ui/HomeSplash.tsx` | Header logo now has explicit `sizes` and uses `quality={75}`. Do not use `quality={60}` unless `next.config.ts` `images.qualities` is expanded; current allowed values are `[75, 90, 100]`. |
-| `app/_ui/HomeSplash.tsx` | Small workflow eyebrow labels were changed from `text-gray-500` to `text-gray-300` in dark mode to fix Lighthouse contrast warnings. |
-| `app/_ui/HomeSplash.tsx` | Footer social short labels (`IG`, `FB`, `PI`, `X`, `YT`) are wrapped in `aria-hidden="true"` so the visible abbreviation no longer conflicts with the full `aria-label`. |
-| `styles/globals.css` | Global CSS font loading now prefers `/fonts/Garamond.woff2` with `/fonts/Garamond.ttf` fallback. |
-| `public/fonts/Garamond.woff2` | New WOFF2 asset generated from the existing `public/fonts/Garamond.ttf`. Size is about `45 KB` versus about `196 KB` for the TTF. |
-| `components/HeroCanvas.tsx` | Important: the Drei/Troika 3D `<Text>` nodes still use `/fonts/Garamond.ttf`. A temporary switch to `.woff2` caused the real canvas to render blank after the placeholder disappeared. Keep 3D text on TTF unless tested with screenshots. |
+| File                          | Current Behavior                                                                                                                                                                                                                           |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `app/_ui/HomeSplash.tsx`      | `HeroCanvas` no longer mounts immediately on first paint. It now uses a deterministic `setTimeout(..., 900)` before rendering the dynamic 3D canvas, with a same-size static headstone placeholder during the short delay.                 |
+| `app/_ui/HomeSplash.tsx`      | Heavy `/select-product` CTA links on the homepage use `prefetch={false}` to avoid pulling the large designer RSC payload during the home page load.                                                                                        |
+| `app/_ui/HomeSplash.tsx`      | Header logo now has explicit `sizes` and uses `quality={75}`. Do not use `quality={60}` unless `next.config.ts` `images.qualities` is expanded; current allowed values are `[75, 90, 100]`.                                                |
+| `app/_ui/HomeSplash.tsx`      | Small workflow eyebrow labels were changed from `text-gray-500` to `text-gray-300` in dark mode to fix Lighthouse contrast warnings.                                                                                                       |
+| `app/_ui/HomeSplash.tsx`      | Footer social short labels (`IG`, `FB`, `PI`, `X`, `YT`) are wrapped in `aria-hidden="true"` so the visible abbreviation no longer conflicts with the full `aria-label`.                                                                   |
+| `styles/globals.css`          | Global CSS font loading now prefers `/fonts/Garamond.woff2` with `/fonts/Garamond.ttf` fallback.                                                                                                                                           |
+| `public/fonts/Garamond.woff2` | New WOFF2 asset generated from the existing `public/fonts/Garamond.ttf`. Size is about `45 KB` versus about `196 KB` for the TTF.                                                                                                          |
+| `components/HeroCanvas.tsx`   | Important: the Drei/Troika 3D `<Text>` nodes still use `/fonts/Garamond.ttf`. A temporary switch to `.woff2` caused the real canvas to render blank after the placeholder disappeared. Keep 3D text on TTF unless tested with screenshots. |
 
 ### HeroCanvas Regression Notes
 
@@ -1797,16 +1886,16 @@ This session tightened the `/designs` SEO hub and the individual `/designs/{prod
 
 ### New / Changed Files
 
-| File | Current Behavior |
-| --- | --- |
-| `components/ServerDesignsTreeNav.tsx` | Server-rendered `/designs` sidebar for public SEO listing pages. Uses native `details/summary`, crawlable `Link`s, and a lightweight `Start Design` link. It intentionally does not import `LoadDesignButton` to avoid pulling the heavy modal/client bundle into SEO listing pages. |
-| `app/designs/layout.tsx` | No longer a client component. The old `useEffect` body-class mutation was removed to reduce unnecessary JS on design routes. |
-| `app/designs/page.tsx` | Server-renders the main hub and server-side search results. Adds `CollectionPage`, `ItemList`, `BreadcrumbList`, and `FAQPage` JSON-LD. Adds bottom SEO copy and FAQ. Removes `unoptimized` from listing images so Next can serve optimized formats. |
-| `app/designs/[productType]/page.tsx` | Uses `ServerDesignsTreeNav` for desktop/mobile listing navigation and removes `unoptimized` from listing images. |
-| `app/designs/[productType]/[category]/page.tsx` | Uses `ServerDesignsTreeNav` for desktop/mobile listing navigation and removes `unoptimized` from listing images. |
-| `app/designs/[productType]/[category]/[slug]/page.tsx` | Improves individual design metadata, OpenGraph/Twitter title, Product schema, ImageObject schema, image alt text, and SSR-visible content. Adds `About This Custom Memorial Design` with contextual links to category/product/guide pages. |
-| `components/ConditionalNav.tsx` | Does not render the old global client `DesignsTreeNav` on `/designs`, `/designs/{productSlug}`, or `/designs/{productSlug}/{category}` because those pages now include their own server-rendered sidebar. Deep design pages still keep the client navigation/editor behavior. |
-| `middleware.ts` | Stops setting the `unit_system` cookie on public SEO paths (`/`, `/designs`, `/designs/{productSlug}`, `/designs/{productSlug}/{category}`, `/memorials/*`) to avoid unnecessary `Set-Cookie` and weaker public cache behavior. |
+| File                                                   | Current Behavior                                                                                                                                                                                                                                                                     |
+| ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `components/ServerDesignsTreeNav.tsx`                  | Server-rendered `/designs` sidebar for public SEO listing pages. Uses native `details/summary`, crawlable `Link`s, and a lightweight `Start Design` link. It intentionally does not import `LoadDesignButton` to avoid pulling the heavy modal/client bundle into SEO listing pages. |
+| `app/designs/layout.tsx`                               | No longer a client component. The old `useEffect` body-class mutation was removed to reduce unnecessary JS on design routes.                                                                                                                                                         |
+| `app/designs/page.tsx`                                 | Server-renders the main hub and server-side search results. Adds `CollectionPage`, `ItemList`, `BreadcrumbList`, and `FAQPage` JSON-LD. Adds bottom SEO copy and FAQ. Removes `unoptimized` from listing images so Next can serve optimized formats.                                 |
+| `app/designs/[productType]/page.tsx`                   | Uses `ServerDesignsTreeNav` for desktop/mobile listing navigation and removes `unoptimized` from listing images.                                                                                                                                                                     |
+| `app/designs/[productType]/[category]/page.tsx`        | Uses `ServerDesignsTreeNav` for desktop/mobile listing navigation and removes `unoptimized` from listing images.                                                                                                                                                                     |
+| `app/designs/[productType]/[category]/[slug]/page.tsx` | Improves individual design metadata, OpenGraph/Twitter title, Product schema, ImageObject schema, image alt text, and SSR-visible content. Adds `About This Custom Memorial Design` with contextual links to category/product/guide pages.                                           |
+| `components/ConditionalNav.tsx`                        | Does not render the old global client `DesignsTreeNav` on `/designs`, `/designs/{productSlug}`, or `/designs/{productSlug}/{category}` because those pages now include their own server-rendered sidebar. Deep design pages still keep the client navigation/editor behavior.        |
+| `middleware.ts`                                        | Stops setting the `unit_system` cookie on public SEO paths (`/`, `/designs`, `/designs/{productSlug}`, `/designs/{productSlug}/{category}`, `/memorials/*`) to avoid unnecessary `Set-Cookie` and weaker public cache behavior.                                                      |
 
 ### Important Superseded Notes
 
@@ -1826,12 +1915,12 @@ pnpm build
 
 Final build output for the key design SEO routes:
 
-| Route | First Load JS |
-| --- | ---: |
-| `/designs` | ~112 kB |
-| `/designs/[productType]` | ~112 kB |
-| `/designs/[productType]/[category]` | ~112 kB |
-| `/designs/[productType]/[category]/[slug]` | ~740 kB |
+| Route                                      | First Load JS |
+| ------------------------------------------ | ------------: |
+| `/designs`                                 |       ~112 kB |
+| `/designs/[productType]`                   |       ~112 kB |
+| `/designs/[productType]/[category]`        |       ~112 kB |
+| `/designs/[productType]/[category]/[slug]` |       ~740 kB |
 
 Notes:
 
@@ -2004,12 +2093,7 @@ This session fixed the saved-design screenshot/photo placeholder path so migrate
 The latest `_errors.json` only contains:
 
 ```json
-[
-  {
-    "id": "1687980532355",
-    "error": "Headstone not visible in render"
-  }
-]
+[{ "id": "1687980532355", "error": "Headstone not visible in render" }]
 ```
 
 Earlier render-visibility failures seen during the first affected refresh were:
@@ -2428,10 +2512,10 @@ This update supersedes parts of the 2026-07-17 mobile step-header notes. The mob
 
 There are now two distinct mobile header states:
 
-| State | Component | Current behavior |
-|------|------|------|
-| Section panel closed | `components/MobileHeader.tsx` | Stable full-width dark top bar. Shows the global product context only: hamburger space, product name, and current price on a second line. No section name and no Prev/Next. |
-| Section panel open | `components/DesignerNav.tsx` portal header | Full-width warm dark top bar. Shows `Menu`, centered `Step X of Y` + current task (for Select Size: `Sizing & Base`), and `Prev` / gold `Next`. Day/night is not shown here; keep it in the main menu. |
+| State                | Component                                  | Current behavior                                                                                                                                                                                       |
+| -------------------- | ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Section panel closed | `components/MobileHeader.tsx`              | Stable full-width dark top bar. Shows the global product context only: hamburger space, product name, and current price on a second line. No section name and no Prev/Next.                            |
+| Section panel open   | `components/DesignerNav.tsx` portal header | Full-width warm dark top bar. Shows `Menu`, centered `Step X of Y` + current task (for Select Size: `Sizing & Base`), and `Prev` / gold `Next`. Day/night is not shown here; keep it in the main menu. |
 
 Important details:
 
@@ -2476,12 +2560,12 @@ This session audited and fixed the mobile (below `md` / 768px) behavior of the d
 
 The root layout (`app/layout.tsx`) mounts `MobileHeader`, `ConditionalNav`, `MainContent`, and `ThemeToggle`. `ConditionalNav` (`components/ConditionalNav.tsx`) is the central router-aware nav switch:
 
-| Route group | Rendered nav |
-|------|------|
+| Route group                 | Rendered nav                                                        |
+| --------------------------- | ------------------------------------------------------------------- |
 | Designer routes (incl. `/`) | `renderDesignerSidebar()` → `DesignerNav` inside a slide-out drawer |
-| `/my-account*` | `AccountNav` |
-| `/designs*` | `DesignsTreeNav` |
-| everything else | `GlobalNav` |
+| `/my-account*`              | `AccountNav`                                                        |
+| `/designs*`                 | `DesignsTreeNav`                                                    |
+| everything else             | `GlobalNav`                                                         |
 
 `isDesignerRoutePath(pathname)` returns `true` for `/` too, so guards use `isDesignerRoutePath(pathname) && pathname !== '/'`.
 
@@ -2489,11 +2573,11 @@ The root layout (`app/layout.tsx`) mounts `MobileHeader`, `ConditionalNav`, `Mai
 
 The drawer open/close flag was local `useState` in `ConditionalNav`, which prevented sibling components from reacting to it. It now lives in a dedicated Zustand store so any component can subscribe.
 
-| File | Role |
-|------|------|
-| `lib/mobile-nav-store.ts` | **New.** `useMobileNavStore` with `isOpen`, `setOpen(value)`, `toggle()`. Single source of truth for the mobile designer drawer. |
-| `components/ConditionalNav.tsx` | Reads `isOpen`/`setOpen`/`toggle` from the store instead of local state. Renders floating hamburger + drawer. |
-| `components/MobileHeader.tsx` | Subscribes to `isOpen`; returns `null` while the drawer is open so the top info bar doesn't overlap the drawer header on mobile. |
+| File                            | Role                                                                                                                             |
+| ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| `lib/mobile-nav-store.ts`       | **New.** `useMobileNavStore` with `isOpen`, `setOpen(value)`, `toggle()`. Single source of truth for the mobile designer drawer. |
+| `components/ConditionalNav.tsx` | Reads `isOpen`/`setOpen`/`toggle` from the store instead of local state. Renders floating hamburger + drawer.                    |
+| `components/MobileHeader.tsx`   | Subscribes to `isOpen`; returns `null` while the drawer is open so the top info bar doesn't overlap the drawer header on mobile. |
 
 ### Fixes Applied This Session
 
@@ -2505,13 +2589,19 @@ The drawer open/close flag was local `useState` in `ConditionalNav`, which preve
 
 4. **Day/night toggle moved into the sidebar on mobile.** Added a `md:hidden` Sun/Moon toggle (via `useTheme` from `components/ThemeProvider.tsx`) inside both the panel header and the menu-list mobile header. `ThemeToggle` now hides below `md` on designer routes (`hidden md:flex`) so it no longer floats over the drawer.
 
-5. **"Menu" button no longer closes the drawer.** `ConditionalNav`'s pathname effect used to force-close the drawer on every navigation. Because in-drawer step UIs render *inside* the drawer, navigating between them (e.g. tapping "Menu" → `design-menu`, or Prev/Next) wrongly collapsed it. The effect now keeps the drawer open when the destination slug is in `DRAWER_PANEL_SLUGS` and closes it otherwise.
+5. **"Menu" button no longer closes the drawer.** `ConditionalNav`'s pathname effect used to force-close the drawer on every navigation. Because in-drawer step UIs render _inside_ the drawer, navigating between them (e.g. tapping "Menu" → `design-menu`, or Prev/Next) wrongly collapsed it. The effect now keeps the drawer open when the destination slug is in `DRAWER_PANEL_SLUGS` and closes it otherwise.
 
    ```ts
    const DRAWER_PANEL_SLUGS = new Set([
-     'design-menu', 'select-size', 'select-material', 'select-border',
-     'inscriptions', 'select-motifs', 'select-additions',
-     'select-images', 'select-emblems',
+     'design-menu',
+     'select-size',
+     'select-material',
+     'select-border',
+     'inscriptions',
+     'select-motifs',
+     'select-additions',
+     'select-images',
+     'select-emblems',
    ]);
    ```
 
@@ -2555,7 +2645,6 @@ The mobile drawer was reworked so the 3D product stays visible while editing. Th
 
 All changes validated with `pnpm type-check`, `pnpm lint` (`--max-warnings 0`), and a full `pnpm build` — all pass (exit 0, 111/111 static pages). There is no automated test suite for nav behavior; `pnpm build` is the primary gate and mobile behavior was verified visually from `screen.png`.
 
-
 ---
 
 ## Current Status (2026-07-08) - Pet Bowl SVG Overlays, Saved Design Email Spacing, Memorial Nav, and Showroom Strategy
@@ -2566,21 +2655,23 @@ This session focused on Product ID `135`, Laser Etched Black Granite Pet Rock, e
 
 Product ID `135` should use its catalog-native pet rock shapes, not the Bronze Plaque shapes.
 
-| File | Current Behavior |
-|------|------------------|
-| `public/xml/catalog-id-135.xml` | Pet Rock catalog entries include Bone, Cat Bowl, Dog Bowl, Paw, and Heart. |
+| File                                          | Current Behavior                                                                                                                                      |
+| --------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `public/xml/catalog-id-135.xml`               | Pet Rock catalog entries include Bone, Cat Bowl, Dog Bowl, Paw, and Heart.                                                                            |
 | `app/select-shape/_ui/ShapeSelectionGrid.tsx` | Product ID `135` branches to catalog shapes, filters out unrelated portrait/plaque entries, and maps Cat/Dog bowl selection to controlled shape URLs. |
-| `components/ShapeSelector.tsx` | Matches the same Pet Rock shape URL/preview behavior used by the shape grid. |
-| `components/three/headstone/ShapeSwapper.tsx` | Detects Product ID `135`, normalizes old Cat/Dog bowl URLs, and passes a front artwork overlay URL into `SvgHeadstone`. |
-| `components/SvgHeadstone.tsx` | Supports `sourceSvgOverlayUrl`, converts SVG overlays to canvas textures, and renders them as flat front overlay planes on the shape face. |
+| `components/ShapeSelector.tsx`                | Matches the same Pet Rock shape URL/preview behavior used by the shape grid.                                                                          |
+| `components/three/headstone/ShapeSwapper.tsx` | Detects Product ID `135`, normalizes old Cat/Dog bowl URLs, and passes a front artwork overlay URL into `SvgHeadstone`.                               |
+| `components/SvgHeadstone.tsx`                 | Supports `sourceSvgOverlayUrl`, converts SVG overlays to canvas textures, and renders them as flat front overlay planes on the shape face.            |
 
 Current Pet Rock shape assets:
+
 - `public/shapes/headstones/pet_bowl_outline.svg`: simple circular body used for both Cat Bowl and Dog Bowl 3D geometry.
 - `public/shapes/headstones/cat_bowl_a.svg`: current Cat Bowl preview and 3D front artwork overlay, simplified in Illustrator. It is still one compound SVG path, so use it as a texture overlay, not as extracted 3D geometry.
 - `public/shapes/headstones/pet_bowl_a.svg`: current Dog Bowl preview and 3D front artwork overlay, simplified in Illustrator.
 - `public/shapes/headstones/cat_bowl.svg`, `cat_bowl.ai`, `cat_bowl.json`, `pet_bowl.svg`, and `dog_bowl.json`: earlier bowl source/attempt files; keep unless the user asks to remove them.
 
 Current direction:
+
 - Cat Bowl and Dog Bowl should be clean circular black granite bodies in 3D, with fish/bone/dog artwork and the two circular bowl lines drawn as a white flat front-face SVG texture overlay.
 - The decorative artwork should not be part of the extruded 3D silhouette, because that produced angle/light-dependent raised details.
 - `SvgHeadstone` injects overlay CSS at render time so SVG paths become `fill: none`, white stroke, `stroke-width: 2.13px`. This is important for Illustrator exports that otherwise render as filled black shapes and disappear on the black bowl.
@@ -2588,6 +2679,7 @@ Current direction:
 - Preserve `preserveTopForShape = false` for Pet Rock plaques; reusing the top-profile preservation path caused the bowl/circle variants to flatten or distort.
 
 Important selection mappings:
+
 - Cat Bowl preview: `/shapes/headstones/cat_bowl_a.svg`
 - Cat Bowl 3D shape URL: `/shapes/headstones/pet_bowl_outline.svg?petRock=cat`
 - Cat Bowl overlay: `/shapes/headstones/cat_bowl_a.svg`
@@ -2599,12 +2691,12 @@ Important selection mappings:
 
 Saved Design email subjects and headings need a space after the hyphen before the design name.
 
-| File | Current Behavior |
-|------|------------------|
-| `lib/email/helpers.ts` | `appendDesignName(label, designName)` appends names as `Label - Design Name` and avoids duplicate/missing spacing. |
-| `lib/email/index.ts` | Saved Design email subject uses the helper. |
-| `lib/email/templates/SavedDesignEmail.tsx` | Saved Design email title uses the helper. |
-| `tests/unit/email-helpers.test.ts` | Covers spacing helper behavior. |
+| File                                       | Current Behavior                                                                                                   |
+| ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------ |
+| `lib/email/helpers.ts`                     | `appendDesignName(label, designName)` appends names as `Label - Design Name` and avoids duplicate/missing spacing. |
+| `lib/email/index.ts`                       | Saved Design email subject uses the helper.                                                                        |
+| `lib/email/templates/SavedDesignEmail.tsx` | Saved Design email title uses the helper.                                                                          |
+| `tests/unit/email-helpers.test.ts`         | Covers spacing helper behavior.                                                                                    |
 
 Expected example:
 
@@ -2616,14 +2708,15 @@ Your Design has been Saved - test X
 
 Top navigation on public memorial product pages should highlight the current product type.
 
-| Route | Selected top nav item |
-|------|------------------------|
-| `/memorials/plaques` | `Plaques` |
-| `/memorials/headstones` | `Headstones` |
-| `/memorials/full-monuments` | `Full Monuments` |
-| `/memorials/urns` | `Urns` |
+| Route                       | Selected top nav item |
+| --------------------------- | --------------------- |
+| `/memorials/plaques`        | `Plaques`             |
+| `/memorials/headstones`     | `Headstones`          |
+| `/memorials/full-monuments` | `Full Monuments`      |
+| `/memorials/urns`           | `Urns`                |
 
 Implementation file:
+
 - `app/memorials/[type]/page.tsx`
 
 ### Marketing and Online Showroom Strategy
@@ -2635,23 +2728,27 @@ Browse finished memorial designs, choose one you like, customize it in live 3D, 
 ```
 
 This mirrors the real stonemason showroom experience:
+
 - customer sees premade headstones/plaques/monuments,
 - chooses a style close to what they want,
 - provides the cemetery/location and installation context,
 - then personalizes wording, material, size, motifs, and photos.
 
 Recommended language:
+
 - Use `Customize this design in 3D` for design-gallery CTAs instead of generic `Start designing`.
 - Describe `/designs` as a showroom/collection of finished memorial ideas, not just a gallery.
 - Frame size controls as `Cemetery size requirements`, because plot limits and cemetery regulations are the practical reason for width/height/thickness controls.
 - Keep pro controls available, but make the default path design-first: `Design collection -> Customize in 3D -> Quote / installation enquiry`.
 
 Market positioning:
+
 - Primary: standard online memorial range for common AU/UK/CA/USA headstones, plaques, pet memorials, lawn memorials, bronze plaques, and laser-etched headstones.
 - Secondary: cultural and custom collections for Italian, Greek, European, Orthodox, Catholic, and other community-specific monument styles.
 - Custom/high-end work should be presented as a consultation pathway, not forced into the standard instant-design flow.
 
 Social/media strategy:
+
 - Avoid duplicating large funeral brands' broad grief-support content.
 - Compete on clarity, preview confidence, and transparency: choose a real design, edit it, see it in 3D, understand size/price implications, and avoid ordering blind.
 - Strong recurring formats: design transformations, flat proof vs 3D preview, layout mistake fixes, cemetery-size guidance, pet memorial examples, price transparency, and showroom browsing at home with family.
@@ -2662,11 +2759,13 @@ Social/media strategy:
 The `/designs` strategy is to recreate/anonymize legacy saved designs into public, editable showroom designs. This is likely the strongest marketing asset because it converts real historical design work into searchable inspiration pages.
 
 Example reviewed:
+
 - `https://forevershining.org/designs/traditional-headstone/biblical-memorial`
 - Metadata currently positions it as `Biblical Memorial - Traditional Engraved Headstone Designs`.
 - The page advertises `49` biblical memorial designs and targets AU/UK/US/global with canonical/hreflang metadata.
 
 Strategic notes:
+
 - Anonymized designs should feel like intentional sample showroom designs, not fake customer records.
 - Keep real names/private data out; use sample names, sample dates, and neutral memorial wording.
 - Category pages should ideally expose indexable design-card content server-side: design names, image thumbnails, alt text, links to detail pages, and short descriptions. The fetched HTML currently showed a client-rendered loading shell plus metadata; if design cards are only client-rendered, SEO may be weaker than the metadata suggests.
@@ -2678,14 +2777,15 @@ Strategic notes:
 
 Recent Bronze Plaque work touched solid borders for Rectangle, Oval Landscape, Oval Portrait, and Circle plaque shapes.
 
-| File | Current Behavior / Caution |
-|------|----------------------------|
-| `components/three/BronzeBorder.tsx` | Border thickness/placement is being tuned against the old working implementation from GitHub. |
-| `components/SvgHeadstone.tsx` | Non-rectangular plaque shape handling is sensitive; changes here can fix Circle while breaking Oval Landscape/Portrait. |
-| `components/three/headstone/ShapeSwapper.tsx` | Product/shape branching affects whether shape-top preservation is applied. |
-| `components/three/headstone/HeadstoneAssembly.tsx` | Assembly-level offsets can make non-rectangular plaque borders appear sunk into the ground. |
+| File                                               | Current Behavior / Caution                                                                                              |
+| -------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| `components/three/BronzeBorder.tsx`                | Border thickness/placement is being tuned against the old working implementation from GitHub.                           |
+| `components/SvgHeadstone.tsx`                      | Non-rectangular plaque shape handling is sensitive; changes here can fix Circle while breaking Oval Landscape/Portrait. |
+| `components/three/headstone/ShapeSwapper.tsx`      | Product/shape branching affects whether shape-top preservation is applied.                                              |
+| `components/three/headstone/HeadstoneAssembly.tsx` | Assembly-level offsets can make non-rectangular plaque borders appear sunk into the ground.                             |
 
 Known visual risks:
+
 - Circle Bronze Plaque border previously became vertically squashed and sat at the bottom of the shape.
 - Oval Portrait could become distorted.
 - Oval Landscape could sit in the ground.
@@ -2695,18 +2795,20 @@ Known visual risks:
 
 Product-prefixed Designer routes were extended beyond `/bronze-plaque/select-shape`.
 
-| File | Current Behavior |
-|------|------------------|
-| `lib/designer-route-state.ts` | Normalizes product-prefixed Designer routes to their step slug. |
-| `lib/designer-product-routes.ts` | Central product slug/metadata helper for Designer URLs. |
-| `app/[productSlug]/...` | Dynamic product-prefixed Designer step routes exist for the workflow. |
+| File                             | Current Behavior                                                      |
+| -------------------------------- | --------------------------------------------------------------------- |
+| `lib/designer-route-state.ts`    | Normalizes product-prefixed Designer routes to their step slug.       |
+| `lib/designer-product-routes.ts` | Central product slug/metadata helper for Designer URLs.               |
+| `app/[productSlug]/...`          | Dynamic product-prefixed Designer step routes exist for the workflow. |
 
 Target route style:
+
 - `/bronze-plaque/select-shape`
 - `/bronze-plaque/select-material`
 - other design steps should follow the same product-prefixed pattern where supported.
 
 SEO requirement:
+
 - Designer step metadata should be unique per selected product and step.
 - Titles/descriptions/keywords should be tailored to the product, for example Bronze Plaque copy on Bronze Plaque routes, not generic DYO Headstones copy.
 
@@ -2714,12 +2816,13 @@ SEO requirement:
 
 Google Search Console reported critical Product structured-data issues for Headstones, Memorial Plaques, and Bronze Plaques: missing `offers`, `review`, or `aggregateRating`.
 
-| File | Current Behavior |
-|------|------------------|
-| `app/page.tsx` | Broad Product nodes now include offer information so the Product schema is not missing required commercial fields. |
-| `app/memorials/[type]/page.tsx` | Product items on memorial pages include category/offer data. |
+| File                            | Current Behavior                                                                                                   |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| `app/page.tsx`                  | Broad Product nodes now include offer information so the Product schema is not missing required commercial fields. |
+| `app/memorials/[type]/page.tsx` | Product items on memorial pages include category/offer data.                                                       |
 
 Current intent:
+
 - Prefer `offers` over fake review data.
 - Keep structured data truthful; do not invent reviews or ratings.
 
@@ -2727,11 +2830,11 @@ Current intent:
 
 The Granite Image workflow had two issues: crop handles did not match the visible image mask, and selecting Granite Image could prevent selecting Headstone Image plus Inscription together.
 
-| File | Current Behavior |
-|------|------------------|
+| File                        | Current Behavior                                                                                                                                 |
+| --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `components/CropCanvas.tsx` | Crop handles are aligned to the visible mask/image bounds after cropping. This file may have a large diff from line endings; avoid casual edits. |
-| `lib/headstone-store.ts` | Selecting an image should no longer clear `selectedInscriptionId`. |
-| `lib/image-pricing.ts` | Granite Image product/code pricing is zero (`$0`), not `$80`. |
+| `lib/headstone-store.ts`    | Selecting an image should no longer clear `selectedInscriptionId`.                                                                               |
+| `lib/image-pricing.ts`      | Granite Image product/code pricing is zero (`$0`), not `$80`.                                                                                    |
 
 ### Verification and Working Tree Notes
 
@@ -2755,31 +2858,33 @@ This session focused on stabilizing product-prefixed Designer URLs, updating Hom
 
 The Designer now supports URLs like `/bronze-plaque/select-shape` without breaking the left sidebar, active menu state, or canvas visibility rules.
 
-| File | Current Behavior |
-|------|------------------|
-| `lib/designer-route-state.ts` | Central helper that normalizes Designer routes. `getDesignerStepSlug('/bronze-plaque/select-shape')` returns `select-shape`; legacy `/select-shape` still returns `select-shape`. |
-| `components/ConditionalNav.tsx` | Uses `isDesignerRoutePath(...)` so product-prefixed Designer routes show the Designer sidebar. |
-| `components/ConditionalCanvas.tsx` | Uses normalized Designer step slugs so product-prefixed `/select-shape` still hides the canvas, while canvas-visible steps still work. |
-| `components/DesignerNav.tsx` | Uses normalized Designer step slugs for active workflow group, active menu item, full-screen panel state, and canvas-visible panel routing. |
-| `app/select-product/_ui/ProductSelectionGrid.tsx` | Product selection now routes to `/{productSlug}/select-shape` when a product slug is available. |
-| `tests/unit/designer-route-state.test.ts` | Covers legacy route detection, product-prefixed route detection, and non-Designer nested route rejection. |
+| File                                              | Current Behavior                                                                                                                                                                  |
+| ------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `lib/designer-route-state.ts`                     | Central helper that normalizes Designer routes. `getDesignerStepSlug('/bronze-plaque/select-shape')` returns `select-shape`; legacy `/select-shape` still returns `select-shape`. |
+| `components/ConditionalNav.tsx`                   | Uses `isDesignerRoutePath(...)` so product-prefixed Designer routes show the Designer sidebar.                                                                                    |
+| `components/ConditionalCanvas.tsx`                | Uses normalized Designer step slugs so product-prefixed `/select-shape` still hides the canvas, while canvas-visible steps still work.                                            |
+| `components/DesignerNav.tsx`                      | Uses normalized Designer step slugs for active workflow group, active menu item, full-screen panel state, and canvas-visible panel routing.                                       |
+| `app/select-product/_ui/ProductSelectionGrid.tsx` | Product selection now routes to `/{productSlug}/select-shape` when a product slug is available.                                                                                   |
+| `tests/unit/designer-route-state.test.ts`         | Covers legacy route detection, product-prefixed route detection, and non-Designer nested route rejection.                                                                         |
 
 Important behavior:
+
 - `/bronze-plaque/select-shape` should show the Designer sidebar with `Select Shape` active and should render the full shape grid, not the 3D canvas.
 - `/select-shape` remains supported.
 - Product-prefixed route detection is intentionally limited to two-segment routes where the second segment is a known Designer step, so unrelated public routes like `/products/bronze-plaque` are not treated as Designer routes.
 
 Verified screenshot:
+
 - `C:\tmp\bronze-plaque-select-shape-fixed.png`
 
 ### Home Page SEO Metadata
 
 Home Page metadata was broadened from headstone-only wording to memorial-wide wording.
 
-| File | Current Behavior |
-|------|------------------|
-| `app/page.tsx` | Home metadata title uses absolute title `Design & Buy Memorials, Headstones, Plaques & Urns`; description mentions headstones, plaques, full monuments, urns, and pet memorials. WebPage JSON-LD name/description is aligned. |
-| `app/metadata.ts` | `homeMetadata` is aligned to the same title/description to avoid stale title reuse. |
+| File              | Current Behavior                                                                                                                                                                                                              |
+| ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `app/page.tsx`    | Home metadata title uses absolute title `Design & Buy Memorials, Headstones, Plaques & Urns`; description mentions headstones, plaques, full monuments, urns, and pet memorials. WebPage JSON-LD name/description is aligned. |
+| `app/metadata.ts` | `homeMetadata` is aligned to the same title/description to avoid stale title reuse.                                                                                                                                           |
 
 Current Home title:
 
@@ -2788,6 +2893,7 @@ Design & Buy Memorials, Headstones, Plaques & Urns
 ```
 
 Rationale:
+
 - Title is kept concise enough for search results.
 - Longer product coverage, including `full monuments` and `pet memorials`, lives in the description rather than overloading the title.
 - The page title uses `absolute` metadata so it does not inherit the root `| DYO Headstones` template.
@@ -2796,15 +2902,16 @@ Rationale:
 
 Product ID `2350` (`Stainless Steel Vitreous Enamel Inlaid Urn`) has special inscription rendering behavior.
 
-| File | Current Behavior |
-|------|------------------|
-| `components/three/headstone/ShapeSwapper.tsx` | Suppresses the cyan inscription selection/resize outline for stainless steel urns while preserving click-to-select and edit-panel behavior. |
-| `components/HeadstoneInscription.tsx` | Detects stainless steel urns (`catalog.product.type === 'urn'` and product ID `2350` or stainless product name). |
-| `components/HeadstoneInscription.tsx` | Uses a small urn-specific lift of `0.18mm` so lettering reads as sitting on the enamel inlay rather than floating visibly above it. |
-| `components/HeadstoneInscription.tsx` | Uses render-order/polygon-offset safeguards and `depthWrite: false` for stainless steel urn text to reduce angle-based z-fighting against the inlay. |
-| `components/HeadstoneInscription.tsx` | Disables the default black text outline for stainless steel urn inscriptions; Arial and other normal fonts should not appear artificially bold/outlined. |
+| File                                          | Current Behavior                                                                                                                                         |
+| --------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `components/three/headstone/ShapeSwapper.tsx` | Suppresses the cyan inscription selection/resize outline for stainless steel urns while preserving click-to-select and edit-panel behavior.              |
+| `components/HeadstoneInscription.tsx`         | Detects stainless steel urns (`catalog.product.type === 'urn'` and product ID `2350` or stainless product name).                                         |
+| `components/HeadstoneInscription.tsx`         | Uses a small urn-specific lift of `0.18mm` so lettering reads as sitting on the enamel inlay rather than floating visibly above it.                      |
+| `components/HeadstoneInscription.tsx`         | Uses render-order/polygon-offset safeguards and `depthWrite: false` for stainless steel urn text to reduce angle-based z-fighting against the inlay.     |
+| `components/HeadstoneInscription.tsx`         | Disables the default black text outline for stainless steel urn inscriptions; Arial and other normal fonts should not appear artificially bold/outlined. |
 
 Important visual rules:
+
 - Stainless Steel Urn inscriptions should sit visually on the inlaid/enamel face, not float in front of it.
 - Stainless Steel Urn inscriptions should not show the editable cyan selection outline/handles.
 - Stainless Steel Urn inscriptions should not receive the generic black outline used by some non-plaque products.
@@ -2822,6 +2929,7 @@ pnpm exec tsc --noEmit
 `pnpm build` was attempted but exceeded the command timeout before returning; it did not produce a TypeScript error in the captured work. Browser verification used a dev server on port `3001` because port `3000` was already occupied.
 
 Working-tree note:
+
 - `screen.png` continues to be a user-provided visual reference and may be modified. Do not revert it unless explicitly requested.
 
 ---
@@ -2832,31 +2940,32 @@ This session moved the public marketing/SEO layer closer to production for Forev
 
 ### Public Product-Type Pages
 
-| Route | Purpose |
-|------|---------|
-| `/memorials/headstones` | Headstones product-type page. |
-| `/memorials/plaques` | Plaques product-type page covering Bronze Plaques, Memorial Plaques, Full Colour Plaques, traditional engraved plaques, and stainless plaque options. |
-| `/memorials/full-monuments` | Full Monuments product-type page. Public wording should use `Full Monuments`, not `Full Memorials`. |
-| `/memorials/urns` | Urns product-type page. |
-| `/memorials/pet-memorials` | Pet Memorials product-type page using catalog-native pet products: Product ID `8` Laser-Etched Pet Mini Headstone, Product ID `9` Laser-Etched Pet Plaque, and Product ID `135` Laser-Etched Pet Rock. |
+| Route                       | Purpose                                                                                                                                                                                                |
+| --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `/memorials/headstones`     | Headstones product-type page.                                                                                                                                                                          |
+| `/memorials/plaques`        | Plaques product-type page covering Bronze Plaques, Memorial Plaques, Full Colour Plaques, traditional engraved plaques, and stainless plaque options.                                                  |
+| `/memorials/full-monuments` | Full Monuments product-type page. Public wording should use `Full Monuments`, not `Full Memorials`.                                                                                                    |
+| `/memorials/urns`           | Urns product-type page.                                                                                                                                                                                |
+| `/memorials/pet-memorials`  | Pet Memorials product-type page using catalog-native pet products: Product ID `8` Laser-Etched Pet Mini Headstone, Product ID `9` Laser-Etched Pet Plaque, and Product ID `135` Laser-Etched Pet Rock. |
 
 Implementation files:
 
-| File | Current Behavior |
-|------|------------------|
-| `app/memorials/[type]/page.tsx` | Dynamic memorial product-type pages with metadata, JSON-LD, header/footer, product cards, Designer guidance, and links into the Designer. |
-| `app/memorials/[type]/MemorialHeaderGallery.tsx` | Client lightbox/gallery component used in the memorial page header. Thumbnail clicks open a modal popup; Escape closes it. |
-| `lib/memorial-product-pages.ts` | Server helper that maps product-type slugs to Designer products, XML descriptions, size text, catalog shapes, tutorial notes, and curated gallery images. |
-| `app/_internal/_data.ts` | Product IDs `8`, `9`, and `135` are available as `pet-memorials` catalog products. |
-| `app/select-product/page.tsx` | Adds XML description tags for Pet Mini Headstone, Pet Plaque, and Pet Rock so the Designer product list uses catalog/language copy. |
-| `app/select-product/_ui/ProductSelectionGrid.tsx` | Adds a visible `Pet Memorials` group in the Designer product selector. |
-| `app/select-shape/page.tsx` | Reads `productId` from `searchParams` for product-aware shape-step metadata, while still rendering the standard shape grid. |
-| `app/[productSlug]/select-shape/page.tsx` | Product-slug Designer entry route, e.g. `/bronze-plaque/select-shape`; renders the same shape grid and resolves metadata from the slug. |
-| `app/select-shape/_ui/ShapeSelectionGrid.tsx` | Product ID `8` is restricted to basic traditional shapes; Product IDs `9` and `135` are treated as plaque-style products while catalog XML is loading. |
-| `lib/designer-product-routes.ts` | Central product ID/slug helper for Designer URLs and product-specific shape-step metadata. |
-| `app/sitemap.ts` | Adds `/memorials/{type}` pages to the sitemap. |
+| File                                              | Current Behavior                                                                                                                                          |
+| ------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `app/memorials/[type]/page.tsx`                   | Dynamic memorial product-type pages with metadata, JSON-LD, header/footer, product cards, Designer guidance, and links into the Designer.                 |
+| `app/memorials/[type]/MemorialHeaderGallery.tsx`  | Client lightbox/gallery component used in the memorial page header. Thumbnail clicks open a modal popup; Escape closes it.                                |
+| `lib/memorial-product-pages.ts`                   | Server helper that maps product-type slugs to Designer products, XML descriptions, size text, catalog shapes, tutorial notes, and curated gallery images. |
+| `app/_internal/_data.ts`                          | Product IDs `8`, `9`, and `135` are available as `pet-memorials` catalog products.                                                                        |
+| `app/select-product/page.tsx`                     | Adds XML description tags for Pet Mini Headstone, Pet Plaque, and Pet Rock so the Designer product list uses catalog/language copy.                       |
+| `app/select-product/_ui/ProductSelectionGrid.tsx` | Adds a visible `Pet Memorials` group in the Designer product selector.                                                                                    |
+| `app/select-shape/page.tsx`                       | Reads `productId` from `searchParams` for product-aware shape-step metadata, while still rendering the standard shape grid.                               |
+| `app/[productSlug]/select-shape/page.tsx`         | Product-slug Designer entry route, e.g. `/bronze-plaque/select-shape`; renders the same shape grid and resolves metadata from the slug.                   |
+| `app/select-shape/_ui/ShapeSelectionGrid.tsx`     | Product ID `8` is restricted to basic traditional shapes; Product IDs `9` and `135` are treated as plaque-style products while catalog XML is loading.    |
+| `lib/designer-product-routes.ts`                  | Central product ID/slug helper for Designer URLs and product-specific shape-step metadata.                                                                |
+| `app/sitemap.ts`                                  | Adds `/memorials/{type}` pages to the sitemap.                                                                                                            |
 
 Current route behavior:
+
 - Product cards link to `/{productSlug}/select-shape`, for example `/bronze-plaque/select-shape`, so the Designer opens with the selected product and skips the product-list page.
 - `/select-shape?productId={id}` remains supported for backwards compatibility. Legacy `/select-product?productId={id}` links are redirected by `RouterBinder` after selecting the product.
 - `/select-shape?productId={id}` and `/{productSlug}/select-shape` both generate product-aware metadata through `lib/designer-product-routes.ts`; Product ID `5` should show Bronze Plaque metadata, not generic DYO Headstones metadata.
@@ -2875,6 +2984,7 @@ Current route behavior:
 ### Memorial Page Header and Gallery
 
 The memorial pages use a compact public header:
+
 - Same transparent Forever Shining logo asset as the Home Page.
 - Top nav includes `Home`, `Plaques`, `Headstones`, `Full Monuments`, `Urns`, and `Start Designing`.
 - The hero area is a 50%/50% desktop split: product intro on the left and a compact real-gallery preview on the right.
@@ -2887,6 +2997,7 @@ Current gallery examples are curated per memorial type in `lib/memorial-product-
 ### Memorial Footer
 
 The memorial footer is intentionally similar to the Home footer:
+
 - Logo/social column.
 - `Memorials` links.
 - `Help & Guides` links.
@@ -2895,11 +3006,13 @@ The memorial footer is intentionally similar to the Home footer:
 The `Get in Touch` column is wider on desktop and displays the two contact blocks side by side:
 
 North America first:
+
 - `(+1) 647 388 0931`
 - `admin@bronze-plaque.com`
 - `1101 Eagle Ridge Drive, Oshawa Ontario L1K 0L8`
 
 Australia second:
+
 - `+61 8 6191 0396`
 - `admin@forevershining.com.au`
 - `1/44 Port Kembla Dve, Bibra Lake WA 6163`
@@ -2910,12 +3023,13 @@ Footer copyright year is now `© 2026 Forever Shining. All rights reserved.`
 
 Files:
 
-| File | Current Behavior |
-|------|------------------|
-| `app/page.tsx` | Adds richer metadata and JSON-LD for Organization, LocalBusiness, WebPage, FAQPage, offers, social profiles, and two contact points. |
-| `app/_ui/HomeSplash.tsx` | Updated footer links/socials/contact details; footer memorial links now point to real `/memorials/*` pages instead of hash modals. |
+| File                     | Current Behavior                                                                                                                     |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `app/page.tsx`           | Adds richer metadata and JSON-LD for Organization, LocalBusiness, WebPage, FAQPage, offers, social profiles, and two contact points. |
+| `app/_ui/HomeSplash.tsx` | Updated footer links/socials/contact details; footer memorial links now point to real `/memorials/*` pages instead of hash modals.   |
 
 Important public copy/naming rules:
+
 - Use `Headstones`, not `Mini Headstones`, for public product category copy.
 - Use product names with capital letters: `Bronze Plaques`, `Memorial Plaques`, `Headstones`.
 - Use `Full Monuments`, not `Full Memorials`.
@@ -2924,6 +3038,7 @@ Important public copy/naming rules:
 - Home footer contact order is North America first, then Australia.
 
 Social profiles now used in public structured data/footer:
+
 - `https://www.facebook.com/ForeverShiningAustralia/`
 - `https://www.instagram.com/forevershiningaus/`
 - `https://twitter.com/ForeverShiningA`
@@ -2933,6 +3048,7 @@ Social profiles now used in public structured data/footer:
 ### SEO Notes
 
 Based on `seo.txt`, the useful work already applied was:
+
 - Replace hash-only product modal links with crawlable product-type pages.
 - Add sitemap entries for the new public pages.
 - Use XML/catalog/tutorial source data to generate page copy so pages are not thin duplicates.
@@ -2941,6 +3057,7 @@ Based on `seo.txt`, the useful work already applied was:
 - Use real product-type gallery images on memorial pages.
 
 Further useful SEO work:
+
 - Add more unique, human-edited copy per product type once final product positioning is approved.
 - Add internal links from design gallery/product SEO pages into the matching `/memorials/*` pages.
 - Consider adding canonical image assets locally if WordPress gallery image URLs become unstable.
@@ -2955,6 +3072,7 @@ pnpm lint
 ```
 
 Visual screenshots captured during review:
+
 - `C:\tmp\memorials-headstones-header-gallery-50-50.png`
 - `C:\tmp\memorials-headstones-popup.png`
 - `C:\tmp\memorials-headstones-footer-wide-contact.png`
@@ -2963,6 +3081,7 @@ Visual screenshots captured during review:
 - `C:\tmp\home-designer-aligned-full.png`
 
 Working-tree notes:
+
 - `screen.png` is a user-provided visual reference and may be modified. Do not revert it.
 - `seo.txt` is an untracked research/reference file. Do not remove it unless explicitly requested.
 
@@ -2974,34 +3093,34 @@ This session moved stainless steel headstone inscriptions away from visual recta
 
 ### Current Direction
 
-| Area | Current Behavior |
-|------|------------------|
-| Stainless inscription fonts | Stainless steel headstones use generated stencil font variants instead of normal fonts with colored masking rectangles. |
-| Default stainless font | `Franklin Gothic Stencil` is the default for stainless light transmitting/reflective headstones. |
-| Normal inscription fonts | Non-stainless headstones continue to default to `Garamond` and hide stencil-only font options. |
-| Browser font files | Stencil font entries point at `public/fonts/stencil/*.woff2`. |
-| Three/Troika text files | Stencil WOFF2 paths are mapped back to their sibling `.ttf` files because Troika text rendering expects usable font outlines. |
+| Area                        | Current Behavior                                                                                                              |
+| --------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| Stainless inscription fonts | Stainless steel headstones use generated stencil font variants instead of normal fonts with colored masking rectangles.       |
+| Default stainless font      | `Franklin Gothic Stencil` is the default for stainless light transmitting/reflective headstones.                              |
+| Normal inscription fonts    | Non-stainless headstones continue to default to `Garamond` and hide stencil-only font options.                                |
+| Browser font files          | Stencil font entries point at `public/fonts/stencil/*.woff2`.                                                                 |
+| Three/Troika text files     | Stencil WOFF2 paths are mapped back to their sibling `.ttf` files because Troika text rendering expects usable font outlines. |
 
 ### Generated Font Assets
 
 Generated stencil assets currently live in `public/fonts/stencil/`:
 
-| Font Family | Files |
-|-------------|-------|
-| Arial Stencil | `arial_stencil.ttf`, `arial_stencil.woff2` |
-| Dobkin Stencil | `Dobkin_stencil.ttf`, `Dobkin_stencil.woff2` |
-| Franklin Gothic Stencil | `FranklinGothic_stencil.ttf`, `FranklinGothic_stencil.woff2` |
-| Garamond Stencil | `Garamond_stencil.ttf`, `Garamond_stencil.woff2` |
-| Great Vibes Stencil | `GreatVibes-Regular_stencil.ttf`, `GreatVibes-Regular_stencil.woff2` |
+| Font Family                | Files                                                                            |
+| -------------------------- | -------------------------------------------------------------------------------- |
+| Arial Stencil              | `arial_stencil.ttf`, `arial_stencil.woff2`                                       |
+| Dobkin Stencil             | `Dobkin_stencil.ttf`, `Dobkin_stencil.woff2`                                     |
+| Franklin Gothic Stencil    | `FranklinGothic_stencil.ttf`, `FranklinGothic_stencil.woff2`                     |
+| Garamond Stencil           | `Garamond_stencil.ttf`, `Garamond_stencil.woff2`                                 |
+| Great Vibes Stencil        | `GreatVibes-Regular_stencil.ttf`, `GreatVibes-Regular_stencil.woff2`             |
 | Lucida Calligraphy Stencil | `LucidaUnicodeCalligraphy_stencil.ttf`, `LucidaUnicodeCalligraphy_stencil.woff2` |
-| Xirwena Stencil | `xirwena1_stencil.ttf`, `xirwena1_stencil.woff2` |
+| Xirwena Stencil            | `xirwena1_stencil.ttf`, `xirwena1_stencil.woff2`                                 |
 
 ### Scripts
 
-| File | Purpose |
-|------|---------|
-| `scripts/create-stencil-fonts.py` | Uses `fontTools` and `skia-pathops` to subtract side-entry bridge notches from TrueType glyph outlines and write `_stencil.ttf` files. |
-| `scripts/convert-fonts-to-woff2.py` | Converts generated TTF/OTF files to WOFF2 using `fontTools` and `brotli`. |
+| File                                | Purpose                                                                                                                                |
+| ----------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| `scripts/create-stencil-fonts.py`   | Uses `fontTools` and `skia-pathops` to subtract side-entry bridge notches from TrueType glyph outlines and write `_stencil.ttf` files. |
+| `scripts/convert-fonts-to-woff2.py` | Converts generated TTF/OTF files to WOFF2 using `fontTools` and `brotli`.                                                              |
 
 Regeneration commands:
 
@@ -3017,6 +3136,7 @@ python -m pip install fonttools skia-pathops brotli
 ```
 
 Important script behavior:
+
 - Only TrueType `glyf` fonts are supported by `create-stencil-fonts.py`.
 - OTF/CFF fonts such as `Adorable.otf`, `ChopinScript.otf`, and `French Script Std Regular.otf` are skipped by the generator.
 - Current bridge glyph set is `04689ABDOPQRabdegopq`.
@@ -3025,18 +3145,18 @@ Important script behavior:
 
 ### App Integration
 
-| File | Current Behavior |
-|------|------------------|
-| `app/_internal/_data.ts` | Adds stencil font entries with `category: 'stencil'`. |
-| `lib/stencil-fonts.ts` | Central stainless-product detection and default inscription font selection. Product IDs `1` and `23` are treated as stainless headstones. |
-| `lib/font-utils.ts` | Maps stencil WOFF2 font entries to sibling TTF files for Three/Troika text rendering. |
-| `lib/headstone-store.ts` | `addInscriptionLine` uses `getDefaultInscriptionFont(...)` instead of hardcoded `Garamond`. |
-| `components/InscriptionEditPanel.tsx` | Filters font options: stainless headstones show stencil fonts; other products show non-stencil fonts. Native select options force readable black text on white option backgrounds. |
-| `app/inscriptions/InscriptionOverlayPanel.tsx` | Uses the same stainless font filtering/default logic in the overlay panel. |
-| `components/three/headstone/ShapeSwapper.tsx` | Uses `getThreeTextFontUrl(...)` for inscription font maps. |
-| `components/three/headstone/HeadstoneBaseAuto.tsx` | Uses `getThreeTextFontUrl(...)` for base inscription rendering. |
-| `components/three/headstone/LedgerSurfaceContent.tsx` | Uses `getThreeTextFontUrl(...)` for ledger inscription rendering. |
-| `components/HeadstoneInscription.tsx` | Runtime rectangular bridge masks are skipped when a stencil font is active to avoid double-bridging. |
+| File                                                  | Current Behavior                                                                                                                                                                   |
+| ----------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `app/_internal/_data.ts`                              | Adds stencil font entries with `category: 'stencil'`.                                                                                                                              |
+| `lib/stencil-fonts.ts`                                | Central stainless-product detection and default inscription font selection. Product IDs `1` and `23` are treated as stainless headstones.                                          |
+| `lib/font-utils.ts`                                   | Maps stencil WOFF2 font entries to sibling TTF files for Three/Troika text rendering.                                                                                              |
+| `lib/headstone-store.ts`                              | `addInscriptionLine` uses `getDefaultInscriptionFont(...)` instead of hardcoded `Garamond`.                                                                                        |
+| `components/InscriptionEditPanel.tsx`                 | Filters font options: stainless headstones show stencil fonts; other products show non-stencil fonts. Native select options force readable black text on white option backgrounds. |
+| `app/inscriptions/InscriptionOverlayPanel.tsx`        | Uses the same stainless font filtering/default logic in the overlay panel.                                                                                                         |
+| `components/three/headstone/ShapeSwapper.tsx`         | Uses `getThreeTextFontUrl(...)` for inscription font maps.                                                                                                                         |
+| `components/three/headstone/HeadstoneBaseAuto.tsx`    | Uses `getThreeTextFontUrl(...)` for base inscription rendering.                                                                                                                    |
+| `components/three/headstone/LedgerSurfaceContent.tsx` | Uses `getThreeTextFontUrl(...)` for ledger inscription rendering.                                                                                                                  |
+| `components/HeadstoneInscription.tsx`                 | Runtime rectangular bridge masks are skipped when a stencil font is active to avoid double-bridging.                                                                               |
 
 ### Current Rule
 
@@ -3055,6 +3175,7 @@ pnpm exec tsc --noEmit
 ```
 
 Working-tree note:
+
 - `screen.png` is a local visual reference artifact and may show as modified. Do not commit it unless preserving the screenshot is intentional.
 
 ---
@@ -3065,65 +3186,69 @@ This session focused on user-facing designer flow fixes across product selection
 
 ### Product and Shape Selection
 
-| File | Current Behavior |
-|------|------------------|
+| File                                              | Current Behavior                                                                                                                                                                                               |
+| ------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `app/select-product/_ui/ProductSelectionGrid.tsx` | `/select-product` groups products by type: Plaques first, Headstones second, then other products. Product selection awaits `setProductId(product.id)` before navigation to reduce stale/blank 3D viewer state. |
-| `app/select-shape/_ui/ShapeSelectionGrid.tsx` | Shape thumbnails use a brighter dark-mode silhouette (`#999999` equivalent) so black shapes remain legible on dark backgrounds. |
+| `app/select-shape/_ui/ShapeSelectionGrid.tsx`     | Shape thumbnails use a brighter dark-mode silhouette (`#999999` equivalent) so black shapes remain legible on dark backgrounds.                                                                                |
 
 ### Add Your Image and Crop Flow
 
-| File | Current Behavior |
-|------|------------------|
-| `components/ImageSelector.tsx` | Crop rotation now supports left/right rotation with `0` in the middle and range `-180` to `180`. |
+| File                           | Current Behavior                                                                                                                                    |
+| ------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `components/ImageSelector.tsx` | Crop rotation now supports left/right rotation with `0` in the middle and range `-180` to `180`.                                                    |
 | `components/ImageSelector.tsx` | Crop action label changed to `Add Cropped Image to Headstone`. Extra crop controls were reduced so the primary action is visible without scrolling. |
-| `components/DesignerNav.tsx` | While image crop mode is active, navigating away is prevented; clicking Menu hides the crop canvas and restores the normal headstone canvas state. |
+| `components/DesignerNav.tsx`   | While image crop mode is active, navigating away is prevented; clicking Menu hides the crop canvas and restores the normal headstone canvas state.  |
 
 Current rule:
+
 - Crop mode should not allow users to accidentally continue into motif selection or another designer step while the crop interface is still active.
 
 ### Motif Selection
 
-| File | Current Behavior |
-|------|------------------|
-| `components/MotifSelectorPanel.tsx` | Motif list items hide raw asset names such as `1_127_07`; those names remain useful for quote/order data but are not user-facing in category lists. |
-| `app/select-motifs/_ui/MotifSelectionGrid.tsx` | Full-page motif lists follow the same hidden-name behavior. |
+| File                                           | Current Behavior                                                                                                                                    |
+| ---------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `components/MotifSelectorPanel.tsx`            | Motif list items hide raw asset names such as `1_127_07`; those names remain useful for quote/order data but are not user-facing in category lists. |
+| `app/select-motifs/_ui/MotifSelectionGrid.tsx` | Full-page motif lists follow the same hidden-name behavior.                                                                                         |
 
 ### Uploaded Custom SVG Shapes
 
-| File | Current Behavior |
-|------|------------------|
-| `components/SvgHeadstone.tsx` | Uploaded custom SVG shapes can render the source SVG as a transparent front overlay via `sourceSvgOverlayUrl`, preserving visual detail closer to the uploaded SVG. |
-| `components/three/headstone/ShapeSwapper.tsx` | Detects custom `data:image/svg+xml` and `blob:` shapes and passes the source overlay to `SvgHeadstone`. |
+| File                                          | Current Behavior                                                                                                                                                    |
+| --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `components/SvgHeadstone.tsx`                 | Uploaded custom SVG shapes can render the source SVG as a transparent front overlay via `sourceSvgOverlayUrl`, preserving visual detail closer to the uploaded SVG. |
+| `components/three/headstone/ShapeSwapper.tsx` | Detects custom `data:image/svg+xml` and `blob:` shapes and passes the source overlay to `SvgHeadstone`.                                                             |
 
 Current rule:
+
 - Custom uploaded SVGs should preserve recognizable source detail where possible, instead of only relying on the extruded silhouette.
 
 ### Bronze Plaque Behavior
 
-| File | Current Behavior |
-|------|------------------|
-| `app/select-product/_ui/ProductSelectionGrid.tsx` | Bronze plaque product selection waits for store hydration before routing, reducing intermittent blank 3D viewer loads. |
-| `app/select-shape/_ui/ShapeSelectionGrid.tsx` | Non-rectangular Bronze Plaque shapes automatically select the solid outline border. |
-| `components/BorderSelector.tsx` | For non-rectangular Bronze Plaques, border options are limited to `Plain cut` and `Solid`. |
-| `app/select-border/_ui/BorderSelectionGrid.tsx` | Full-page border selection uses the same `Plain cut` / `Solid` filtering for non-rectangular Bronze Plaques. |
-| `components/three/BronzeBorder.tsx` | Solid borders for oval/circle Bronze Plaques are generated procedurally to follow the plaque shape instead of showing rectangular borders. |
-| `components/three/headstone/ShapeSwapper.tsx` | Passes outline/border metadata to `BronzeBorder` for shape-following bronze borders. |
+| File                                              | Current Behavior                                                                                                                           |
+| ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| `app/select-product/_ui/ProductSelectionGrid.tsx` | Bronze plaque product selection waits for store hydration before routing, reducing intermittent blank 3D viewer loads.                     |
+| `app/select-shape/_ui/ShapeSelectionGrid.tsx`     | Non-rectangular Bronze Plaque shapes automatically select the solid outline border.                                                        |
+| `components/BorderSelector.tsx`                   | For non-rectangular Bronze Plaques, border options are limited to `Plain cut` and `Solid`.                                                 |
+| `app/select-border/_ui/BorderSelectionGrid.tsx`   | Full-page border selection uses the same `Plain cut` / `Solid` filtering for non-rectangular Bronze Plaques.                               |
+| `components/three/BronzeBorder.tsx`               | Solid borders for oval/circle Bronze Plaques are generated procedurally to follow the plaque shape instead of showing rectangular borders. |
+| `components/three/headstone/ShapeSwapper.tsx`     | Passes outline/border metadata to `BronzeBorder` for shape-following bronze borders.                                                       |
 
 Current rule:
+
 - Non-rectangular Bronze Plaques must not show rectangular border artwork. They use either no border (`Plain cut`) or a generated solid border following the plaque outline.
 
 ### Stainless Steel Headstone Base and Material Flow
 
-| File | Current Behavior |
-|------|------------------|
-| `components/DesignerNav.tsx` | Stainless steel headstones show Base options as `No Base / Stainless / Granite`. |
-| `components/DesignerNav.tsx` | `Stainless` sets the base texture to `/textures/forever/l/brushed-ss-swatch.webp`; `Granite` sets it to the default granite texture. |
-| `components/DesignerNav.tsx` | `Select Material` is shown for stainless steel headstones only when the active size target is `Base` and the selected base type is `Granite`. |
-| `components/DesignerNav.tsx` | Opening `Select Material` in that flow forces the material target to `base`. Switching back to `Headstone` routes to `/select-size`, which hides `Select Material`. |
-| `components/MaterialSelector.tsx` | Adds `forceTarget?: 'headstone' | 'base' | 'ledger' | 'kerbset'`; when forced to `base`, selected granites update `baseMaterialUrl`, while the Headstone/Base switcher remains visible for returning to size editing. |
-| `components/three/headstone/HeadstoneBaseAuto.tsx` | Existing renderer behavior treats any base texture containing `ss-swatch` as stainless steel; other base textures render as granite. |
+| File                                               | Current Behavior                                                                                                                                                    |
+| -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `components/DesignerNav.tsx`                       | Stainless steel headstones show Base options as `No Base / Stainless / Granite`.                                                                                    |
+| `components/DesignerNav.tsx`                       | `Stainless` sets the base texture to `/textures/forever/l/brushed-ss-swatch.webp`; `Granite` sets it to the default granite texture.                                |
+| `components/DesignerNav.tsx`                       | `Select Material` is shown for stainless steel headstones only when the active size target is `Base` and the selected base type is `Granite`.                       |
+| `components/DesignerNav.tsx`                       | Opening `Select Material` in that flow forces the material target to `base`. Switching back to `Headstone` routes to `/select-size`, which hides `Select Material`. |
+| `components/MaterialSelector.tsx`                  | Adds `forceTarget?: 'headstone'                                                                                                                                     | 'base' | 'ledger' | 'kerbset'`; when forced to `base`, selected granites update `baseMaterialUrl`, while the Headstone/Base switcher remains visible for returning to size editing. |
+| `components/three/headstone/HeadstoneBaseAuto.tsx` | Existing renderer behavior treats any base texture containing `ss-swatch` as stainless steel; other base textures render as granite.                                |
 
 Current rule:
+
 - Stainless steel headstone material selection remains hidden for the stainless headstone body.
 - Granite material selection is available only for the granite base, not for the stainless headstone itself.
 - Selecting `Headstone` from the forced base material panel should return the user to `/select-size` and remove `Select Material` from the left sidebar.
@@ -3138,6 +3263,7 @@ pnpm lint
 ```
 
 Notes:
+
 - Playwright screenshots often require an active dev server and may require elevated execution on this Windows workspace because browser/cache paths can hit sandbox ACL limits.
 - `screen.png`, `screen2.png`, and `test-svgrepo-com.svg` are local visual/reference artifacts from the custom SVG investigation and may appear in the working tree.
 
@@ -3149,76 +3275,82 @@ This session aligned stainless steel motif rendering, motif category imagery, si
 
 ### Stainless Steel Motif Rendering
 
-| File | Current Behavior |
-|------|------------------|
-| `lib/stainless-texture.ts` | Shared procedural stainless texture helper used by both the headstone body and stainless motifs. |
-| `components/SvgHeadstone.tsx` | Stainless headstone material now uses the shared stainless texture settings. |
+| File                              | Current Behavior                                                                                                                             |
+| --------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| `lib/stainless-texture.ts`        | Shared procedural stainless texture helper used by both the headstone body and stainless motifs.                                             |
+| `components/SvgHeadstone.tsx`     | Stainless headstone material now uses the shared stainless texture settings.                                                                 |
 | `components/three/MotifModel.tsx` | Stainless motifs use the same stainless texture and render as shallow raised/extruded metallic motif pieces, instead of flat color swatches. |
 
 Current rule:
+
 - Stainless motifs on stainless steel headstones should appear as raised stainless pieces matching the headstone material, not painted flat decals.
 - Stainless motif color swatches are hidden in the left sidebar because stainless motifs use the product material finish.
 
 ### Motif Category Images
 
-| File | Current Behavior |
-|------|------------------|
-| `lib/motif-category-image.ts` | Resolves motif category main images from the `img:` marker in motif data. |
-| `components/MotifSelectorPanel.tsx` | Category cards use the `img:`-marked image where available. |
-| `components/MotifOverlayPanel.tsx` | Overlay/category list uses the same category image resolver. |
-| `app/select-motifs/page.tsx` | Main select-motifs page uses the same category image resolver. |
+| File                                | Current Behavior                                                          |
+| ----------------------------------- | ------------------------------------------------------------------------- |
+| `lib/motif-category-image.ts`       | Resolves motif category main images from the `img:` marker in motif data. |
+| `components/MotifSelectorPanel.tsx` | Category cards use the `img:`-marked image where available.               |
+| `components/MotifOverlayPanel.tsx`  | Overlay/category list uses the same category image resolver.              |
+| `app/select-motifs/page.tsx`        | Main select-motifs page uses the same category image resolver.            |
 
 Current rule:
+
 - For Motifs in the Motifs List, the main category image should come from the image marked as `img:` in the motif data.
 
 ### Shape Ordering
 
-| File | Current Behavior |
-|------|------------------|
-| `lib/shape-ordering.ts` | Central shape ordering helper. |
+| File                                          | Current Behavior                  |
+| --------------------------------------------- | --------------------------------- |
+| `lib/shape-ordering.ts`                       | Central shape ordering helper.    |
 | `app/select-shape/_ui/ShapeSelectionGrid.tsx` | Uses the central ordering helper. |
-| `components/ShapeSelector.tsx` | Uses the central ordering helper. |
+| `components/ShapeSelector.tsx`                | Uses the central ordering helper. |
 
 Current rule:
+
 - If `Serpentine` is available for the selected product, it should appear first in the Shapes list.
 - If a product does not offer Serpentine, the product-specific list stays otherwise intact.
 
 ### Sidebar Language and Controls
 
-| Area | Current Behavior |
-|------|------------------|
-| Workflow status label | `Upcoming` was changed to `Available` to avoid implying unavailable/future functionality. |
-| Duplicate controls | User-facing `Copy` button labels were changed to `Duplicate`. |
-| Stainless motif color controls | Hidden for stainless steel headstone motifs. |
+| Area                           | Current Behavior                                                                          |
+| ------------------------------ | ----------------------------------------------------------------------------------------- |
+| Workflow status label          | `Upcoming` was changed to `Available` to avoid implying unavailable/future functionality. |
+| Duplicate controls             | User-facing `Copy` button labels were changed to `Duplicate`.                             |
+| Stainless motif color controls | Hidden for stainless steel headstone motifs.                                              |
 
 Files touched:
+
 - `components/DesignerNav.tsx`
 - `components/ImageSelector.tsx`
 - `components/InscriptionEditPanel.tsx`
 
 ### Check Price and Bottom Canvas Chip Modal
 
-| File | Current Behavior |
-|------|------------------|
-| `lib/material-utils.ts` | Maps stainless swatch asset names to user-facing names such as `Highly Polished Stainless Steel` and `Brushed Stainless Steel`. |
-| `lib/check-price-utils.ts` | Adds stainless steel headstone product detection for the pricing detail UI. |
-| `components/CheckPricePanel.tsx` | Bottom canvas chip modal shows stainless motif detail as `Material: ...` instead of `Color`, with no color swatch. |
-| `app/check-price/_ui/CheckPriceGrid.tsx` | Full Check Price page uses the same stainless motif material wording. |
+| File                                     | Current Behavior                                                                                                                |
+| ---------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| `lib/material-utils.ts`                  | Maps stainless swatch asset names to user-facing names such as `Highly Polished Stainless Steel` and `Brushed Stainless Steel`. |
+| `lib/check-price-utils.ts`               | Adds stainless steel headstone product detection for the pricing detail UI.                                                     |
+| `components/CheckPricePanel.tsx`         | Bottom canvas chip modal shows stainless motif detail as `Material: ...` instead of `Color`, with no color swatch.              |
+| `app/check-price/_ui/CheckPriceGrid.tsx` | Full Check Price page uses the same stainless motif material wording.                                                           |
 
 Current rule:
+
 - Stainless motif rows should show `Material: Highly Polished Stainless Steel` or `Material: Brushed Stainless Steel`.
 - Non-stainless motif rows still show paint/color details and color swatches.
 
 ### Saved Designs, PDF, and Email Quote Details
 
-| File | Current Behavior |
-|------|------------------|
-| `lib/design-quote.ts` | Quote motif items now carry `detailLabel: 'Color' | 'Material'` while keeping `colorName` for compatibility. Stainless steel headstone motifs use the selected headstone material name as the detail value. |
+| File                               | Current Behavior                                                                                          |
+| ---------------------------------- | --------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `lib/design-quote.ts`              | Quote motif items now carry `detailLabel: 'Color'                                                         | 'Material'`while keeping`colorName` for compatibility. Stainless steel headstone motifs use the selected headstone material name as the detail value. |
 | `components/PriceQuoteDisplay.tsx` | Saved design quote cards display `Material: ...` for stainless motifs and `Color: ...` for normal motifs. |
-| `lib/pdf-generator.ts` | Generated PDFs use the motif detail label instead of hardcoding `Color`. |
-| `lib/email/helpers.ts` | Detailed email quote line items use the same motif detail label. |
+| `lib/pdf-generator.ts`             | Generated PDFs use the motif detail label instead of hardcoding `Color`.                                  |
+| `lib/email/helpers.ts`             | Detailed email quote line items use the same motif detail label.                                          |
 
 Compatibility note:
+
 - `colorName` remains part of the quote item shape so existing quote consumers do not break.
 - The display label is separate, which lets stainless motifs use material wording without changing normal motif behavior.
 
@@ -3232,6 +3364,7 @@ pnpm lint
 ```
 
 Working-tree note:
+
 - `screen.png` is still a local screenshot/reference artifact and may show as modified. Do not commit it unless preserving the visual reference is intentional.
 
 ---
@@ -3244,12 +3377,13 @@ This session continued the stainless steel headstone work after comparing the cu
 
 Two legacy Word `.doc` specs were extracted via binary text runs because `pandoc` cannot read `.doc` and Word COM automation was blocked in the shell session.
 
-| File | Key Knowledge |
-|------|---------------|
+| File                                                       | Key Knowledge                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `dyo-specs-reflective-stainless-headstones-2010-12-16.doc` | Product code `23`; Stainless Steel Light Reflective Headstone; pricing based on `width + height`; size range `300-1200mm`; no ratio limits; supports 12 shapes: `gable`, `curved gable`, `peak`, `curved peak`, `cropped peak`, `curved top`, `serpentine`, `half round`, `gothic`, `left wave`, `right wave`, `square/rectangle`; fonts limited to `Arial`, `Franklin-Demi`, `French Script`, `Lucida Calligraphy`; note required that other shapes/sizes are special options. |
-| `dyo-specs-transmitting-stainless-plaques-2010-12-06.doc` | Product code `39`; Stainless Steel Light Transmitting Plaque; comes with inbuilt stand; pseudo-shapes `Plain` (`100x100-600x600`) and `Border` (`175x175-600x600`); border options include `Flush Border Transmitting`, `Raised Border Transmitting`, and `Raised Border - No Pattern`. |
+| `dyo-specs-transmitting-stainless-plaques-2010-12-06.doc`  | Product code `39`; Stainless Steel Light Transmitting Plaque; comes with inbuilt stand; pseudo-shapes `Plain` (`100x100-600x600`) and `Border` (`175x175-600x600`); border options include `Flush Border Transmitting`, `Raised Border Transmitting`, and `Raised Border - No Pattern`.                                                                                                                                                                                         |
 
 Important interpretation:
+
 - Stainless steel headstones and stainless plaques should stay separate in the UI and renderer.
 - The current app product IDs for stainless headstones are still `1` and `23`; product `52` is the existing stainless plaque path.
 - Product `23` from the old spec is the reflective stainless headstone.
@@ -3258,34 +3392,37 @@ Important interpretation:
 
 The left-sidebar designer panels were refreshed to follow the Select Product card/list styling:
 
-| Area | Current Direction |
-|------|-------------------|
-| Select Shape | Updated toward the same card/list styling as Select Product. |
-| Select Material | Should not be available for stainless steel headstones. |
-| Select Size | Updated toward the current sidebar style. |
-| Add Your Inscription | Updated toward the current sidebar style. |
-| Add Your Image | Sidebar, crop section, and selected-image panel updated toward the current style. |
-| Select Additions | Should not be available for stainless steel headstones. |
-| Select Motifs | Sidebar and selected-motif panel updated toward the current style. |
+| Area                 | Current Direction                                                                 |
+| -------------------- | --------------------------------------------------------------------------------- |
+| Select Shape         | Updated toward the same card/list styling as Select Product.                      |
+| Select Material      | Should not be available for stainless steel headstones.                           |
+| Select Size          | Updated toward the current sidebar style.                                         |
+| Add Your Inscription | Updated toward the current sidebar style.                                         |
+| Add Your Image       | Sidebar, crop section, and selected-image panel updated toward the current style. |
+| Select Additions     | Should not be available for stainless steel headstones.                           |
+| Select Motifs        | Sidebar and selected-motif panel updated toward the current style.                |
 
 Stainless steel headstone workflow rule:
+
 - Hide or skip Select Material and Select Additions for stainless steel headstone products.
 - `components/DesignerNav.tsx`, `app/select-shape/_ui/ShapeSelectionGrid.tsx`, and `lib/headstone-store.ts` contain related navigation/flow changes.
 
 Canvas label rule:
+
 - The top-left canvas label should include both product name and selected shape name when available.
 
 ### Stainless Rim and Material Rendering
 
 The stainless headstone now has a generated raised border/rim based on the same outline points used by the selected SVG shape.
 
-| File | Current Behavior |
-|------|------------------|
-| `components/SvgHeadstone.tsx` | Adds private `StainlessHeadstoneRim`, using `TubeGeometry` along `apiData.outlinePoints`. It renders a subtle raised stainless bead and a thin darker inset groove. Geometry/materials are disposed in cleanup. |
-| `components/SvgHeadstone.tsx` | Adds `showStainlessRim?: boolean`. When true, stainless headstone body material uses the same clean physical-metal settings as the raised rim instead of the older generated brushed canvas maps. |
-| `components/three/headstone/ShapeSwapper.tsx` | `isStainlessSteel` includes product IDs `1`, `23`, and `52`, but `showStainlessRim` is enabled only for product IDs `1` and `23` so plaque product `52` is not affected. |
+| File                                          | Current Behavior                                                                                                                                                                                                |
+| --------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `components/SvgHeadstone.tsx`                 | Adds private `StainlessHeadstoneRim`, using `TubeGeometry` along `apiData.outlinePoints`. It renders a subtle raised stainless bead and a thin darker inset groove. Geometry/materials are disposed in cleanup. |
+| `components/SvgHeadstone.tsx`                 | Adds `showStainlessRim?: boolean`. When true, stainless headstone body material uses the same clean physical-metal settings as the raised rim instead of the older generated brushed canvas maps.               |
+| `components/three/headstone/ShapeSwapper.tsx` | `isStainlessSteel` includes product IDs `1`, `23`, and `52`, but `showStainlessRim` is enabled only for product IDs `1` and `23` so plaque product `52` is not affected.                                        |
 
 Current stainless headstone visual target:
+
 - Use the Cook reference look: reflective steel face, raised rim following the silhouette, and a thin darker inset/shadow line.
 - The first rim pass was too heavy and too black; it was reduced to a smaller, more inset rim and a thinner grey groove.
 - The headstone face now uses the same clean PBR steel settings as the rim for product IDs `1` and `23`.
@@ -3295,11 +3432,13 @@ Current stainless headstone visual target:
 Stencil bridge masking for stainless inscriptions is still the major unresolved rendering issue.
 
 Current state:
+
 - `components/HeadstoneInscription.tsx` contains stainless-specific bridge-mask attempts.
 - Screenshots still showed bridge masks not convincingly cutting the glyph counters, especially examples like `o` and `p` in `Jose`.
 - Rectangular overlay masks are not a reliable final approach because Troika SDF text does not expose true glyph counter geometry.
 
 Recommended next implementation remains:
+
 - Use glyph-path or raster-alpha processing for stainless inscriptions.
 - Apply bridge cuts directly into the text alpha/mask, rather than placing separate rectangles in front of the inscription.
 - Keep fabrication-oriented constraints in mind: island detection, minimum bridge width, cut gap, stroke width, and eventual SVG/DXF export.
@@ -3318,6 +3457,7 @@ pnpm lint
 ```
 
 Known screenshot gap:
+
 - A fresh automated Playwright screenshot was not captured in the latest pass because `localhost:3001` did not respond within the short timeout.
 - Manual screenshot review drove the rim tuning.
 
@@ -3368,8 +3508,6 @@ Screenshots captured during refinement:
 
 ---
 
-
-
 ---
 
 ## Current Status (2026-06-27) - Stainless Headstone Inscription Stencil Bridge Investigation
@@ -3378,11 +3516,11 @@ Flash reference screenshot for the stainless steel headstone inscription preview
 
 ### What Was Tried
 
-| File | Change |
-|------|--------|
-| `components/HeadstoneInscription.tsx` | Added stainless-headstone detection for product IDs `1` and `23`, plus headstone catalogs with `formula="Steel"` |
-| `components/HeadstoneInscription.tsx` | Removed the normal black outline from stainless headstone inscriptions so text does not look artificially bold |
-| `components/HeadstoneInscription.tsx` | Added a Troika `caretPositions`-based bridge-mask preview attempt for counter glyphs (`o`, `b`, `e`, `a`, `d`, `p`, `q`, `B`, `O`, `P`, `R`, `8`, etc.) |
+| File                                  | Change                                                                                                                                                     |
+| ------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `components/HeadstoneInscription.tsx` | Added stainless-headstone detection for product IDs `1` and `23`, plus headstone catalogs with `formula="Steel"`                                           |
+| `components/HeadstoneInscription.tsx` | Removed the normal black outline from stainless headstone inscriptions so text does not look artificially bold                                             |
+| `components/HeadstoneInscription.tsx` | Added a Troika `caretPositions`-based bridge-mask preview attempt for counter glyphs (`o`, `b`, `e`, `a`, `d`, `p`, `q`, `B`, `O`, `P`, `R`, `8`, etc.)    |
 | `components/HeadstoneInscription.tsx` | Tried material/depth changes for the bridge masks: smaller masks, `meshBasicMaterial`, higher `renderOrder`, `depthTest={false}`, and `depthWrite={false}` |
 
 ### Current Result
@@ -3423,23 +3561,26 @@ Saved Design confirmation emails were verified working again on the live site af
 
 ### What Changed
 
-| File | Change |
-|------|--------|
+| File                        | Change                                                                                                             |
+| --------------------------- | ------------------------------------------------------------------------------------------------------------------ |
 | `app/api/projects/route.ts` | Replaced the fire-and-forget `sendEmail(...).catch(...)` call with a Next.js `after(async () => { ... })` callback |
-| `app/api/projects/route.ts` | Added explicit result checking so failed sends log `[api/projects] Email send failed: ...` |
+| `app/api/projects/route.ts` | Added explicit result checking so failed sends log `[api/projects] Email send failed: ...`                         |
 
 Root cause:
+
 - The save endpoint returned `NextResponse.json({ project: summary })` immediately after starting `sendEmail()`.
 - On Vercel/serverless, work not awaited or registered with `after()` can be frozen or terminated after the response is sent.
 - `STARTER.md` already documented this as a pending risk from the April email work; the live failure matched that risk.
 
 Current behavior:
+
 - The project save response still returns quickly.
 - Screenshot/file uploads continue to run in their existing `after()` callback.
 - Saved-design email sending now also runs in an `after()` callback, so Vercel keeps it attached to the request lifecycle.
 - If SMTP is missing or rejects the message, logs should now include either the existing `[Email] Skipping send ... no SMTP host configured` warning or `[api/projects] Email send failed: ...`.
 
 Live verification:
+
 - After deployment, saving a design on the live site successfully delivered the Saved Design email.
 
 Verification before deployment:
@@ -3450,6 +3591,7 @@ pnpm lint
 ```
 
 Related note:
+
 - Quote-table styling changes are independent of delivery. They only affect rendered email HTML after `sendEmail()` runs.
 - If saved-design emails fail again, first check Vercel Runtime Logs and Production env vars: `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS` or country-specific `SMTP_AU_*`.
 
@@ -3461,13 +3603,14 @@ Stainless steel headstone motifs were updated after comparing `screen.png` from 
 
 ### What Changed
 
-| File | Change |
-|------|--------|
-| `components/three/MotifModel.tsx` | Adds stainless-specific motif detection for product IDs `1` and `23`, plus any headstone catalog with `formula="Steel"` |
-| `components/three/MotifModel.tsx` | Splits normal motif masking (`applyLineArtAlphaMask`) from stainless silhouette masking (`applySolidSilhouetteMask`) |
+| File                              | Change                                                                                                                                        |
+| --------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| `components/three/MotifModel.tsx` | Adds stainless-specific motif detection for product IDs `1` and `23`, plus any headstone catalog with `formula="Steel"`                       |
+| `components/three/MotifModel.tsx` | Splits normal motif masking (`applyLineArtAlphaMask`) from stainless silhouette masking (`applySolidSilhouetteMask`)                          |
 | `components/three/MotifModel.tsx` | Stainless motifs now render with a metallic `meshPhysicalMaterial` and subtle contact shadow instead of the standard flat `meshBasicMaterial` |
 
 Current stainless motif behavior:
+
 - Applies to Stainless Steel Light Transmitting Headstone (`productId === '1'`) and Stainless Steel Light Reflective Headstone (`productId === '23'`).
 - SVG motif assets are still rasterized to a canvas, but stainless products now use a flood-fill silhouette pass:
   - pixels reachable from the bitmap border and considered transparent/near-white become background;
@@ -3477,11 +3620,13 @@ Current stainless motif behavior:
 - A slightly enlarged dark mask behind the motif provides a contact-shadow/raised-piece cue.
 
 Why this matters:
+
 - The customer-facing preview now communicates one stainless motif shape, not dozens of fine cut lines.
 - It better matches a manufacturable interpretation for stainless steel motifs where internal feather/eye/detail strokes should not be individually cut.
 - Non-stainless products keep the previous line-art/luminance-alpha behavior.
 
 Known limitation:
+
 - The silhouette pass assumes the motif has a mostly closed outer contour. If the outer line has gaps, the outside flood fill can leak into the figure and prevent the silhouette from filling correctly.
 - If that happens, add a small close-gaps/dilation pass before flood fill, or use an explicit silhouette asset for that motif category.
 
@@ -3493,10 +3638,12 @@ pnpm lint
 ```
 
 Dev server note:
+
 - `pnpm dev -p 3001` was started successfully after correcting the argument syntax from `pnpm dev -- -p 3001` to `pnpm dev -p 3001`.
 - The running app responded with HTTP `200` at `http://localhost:3001`.
 
 Working-tree note:
+
 - `screen.png` is a local reference/screenshot file and may show as modified. Do not commit it unless intentionally preserving the latest visual evidence.
 
 ---
@@ -3507,21 +3654,24 @@ The meadow scenery grass floor was corrected so it no longer becomes visibly pix
 
 ### What Changed
 
-| File | Change |
-|------|--------|
+| File                         | Change                                                                                                                                                               |
+| ---------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `components/three/Scene.tsx` | `GrassFloor` now uses the full grass textures (`grass_color.webp`, `grass_normal.webp`, `grass_ao.webp`) with `THREE.RepeatWrapping` and a single fixed repeat value |
 
 Current grass-floor behavior:
+
 - The grass repeat is now static across product sizes.
 - `grassRepeat` is fixed at `144` for every product, instead of changing with plaque/headstone size.
 - This keeps the ground sampling stable between 600×600 mm headstones and 300×200 mm bronze plaques.
 - The outback floor remains separate and unchanged.
 
 Why this mattered:
+
 - The previous size-dependent repeat made the plaque view sample the meadow texture too coarsely at close range.
 - A fixed repeat density keeps the same visual pattern and prevents the floor from blowing up into visible texels when the camera autofits smaller products.
 
 Verification:
+
 - `pnpm exec eslint components/three/Scene.tsx` still passes with the existing unrelated warning about the unused `shapeUrl` binding in the same file.
 
 ---
@@ -3534,19 +3684,20 @@ This batch adds the first implementation slice for legacy stainless steel headst
 
 The first pass intentionally covers only the two requested products:
 
-| Product ID | Product | Source in `pricing-au.xml` |
-|------------|---------|----------------------------|
-| `1` | Stainless Steel Light Transmitting Headstone | `D-X-HS-SS-LT-XX` |
-| `23` | Stainless Steel Light Reflective Headstone | `D-X-HS-SS-LR-XX` |
+| Product ID | Product                                      | Source in `pricing-au.xml` |
+| ---------- | -------------------------------------------- | -------------------------- |
+| `1`        | Stainless Steel Light Transmitting Headstone | `D-X-HS-SS-LT-XX`          |
+| `23`       | Stainless Steel Light Reflective Headstone   | `D-X-HS-SS-LR-XX`          |
 
 Current catalog files:
 
-| File | Purpose |
-|------|---------|
-| `public/xml/catalog-id-1.xml` | Current-format catalog for Stainless Steel Light Transmitting Headstone |
-| `public/xml/catalog-id-23.xml` | Current-format catalog for Stainless Steel Light Reflective Headstone |
+| File                           | Purpose                                                                 |
+| ------------------------------ | ----------------------------------------------------------------------- |
+| `public/xml/catalog-id-1.xml`  | Current-format catalog for Stainless Steel Light Transmitting Headstone |
+| `public/xml/catalog-id-23.xml` | Current-format catalog for Stainless Steel Light Reflective Headstone   |
 
 Both catalog files:
+
 - Use the 11 traditional headstone shapes as the initial shape set.
 - Use stainless material swatches from `/textures/forever/l/*ss-swatch.webp`.
 - Include the stainless headstone base product `26` as a nested `type="base"` product so base pricing is picked up by `parseCatalogXML()`.
@@ -3555,14 +3706,15 @@ Both catalog files:
 
 ### Product Selection
 
-| File | Change |
-|------|--------|
-| `app/_internal/_data.ts` | Adds product cards for IDs `1` and `23` under `headstones` |
-| `app/select-product/page.tsx` | Adds fallback descriptions because language XML does not yet have dedicated description tags |
-| `public/webp/products/APP_ID_1-*.webp` | Generated product card images from `Blomfield headstone.jpg` |
-| `public/webp/products/APP_ID_23-*.webp` | Generated product card images from `Cook headstone.jpg` |
+| File                                    | Change                                                                                       |
+| --------------------------------------- | -------------------------------------------------------------------------------------------- |
+| `app/_internal/_data.ts`                | Adds product cards for IDs `1` and `23` under `headstones`                                   |
+| `app/select-product/page.tsx`           | Adds fallback descriptions because language XML does not yet have dedicated description tags |
+| `public/webp/products/APP_ID_1-*.webp`  | Generated product card images from `Blomfield headstone.jpg`                                 |
+| `public/webp/products/APP_ID_23-*.webp` | Generated product card images from `Cook headstone.jpg`                                      |
 
 Reference source images currently exist in the working tree:
+
 - `Blomfield headstone.jpg`
 - `Abela headstone inlay.jpg`
 - `Cook headstone.jpg`
@@ -3573,12 +3725,13 @@ Do not assume those root JPG files should be committed unless they are intention
 
 Initial screenshot review (`screen.png`) showed the new stainless steel headstones rendering as plain matte grey. Root cause: the renderer only treated product `52` as stainless steel, so product IDs `1` and `23` fell through to the default non-metal headstone material.
 
-| File | Change |
-|------|--------|
-| `components/three/headstone/ShapeSwapper.tsx` | `isStainlessSteel` now includes product IDs `1`, `23`, and `52` |
+| File                                               | Change                                                                                                                                    |
+| -------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| `components/three/headstone/ShapeSwapper.tsx`      | `isStainlessSteel` now includes product IDs `1`, `23`, and `52`                                                                           |
 | `components/three/headstone/HeadstoneBaseAuto.tsx` | Bases using `ss-swatch` textures now use a `MeshPhysicalMaterial` with metalness, clearcoat, roughness, and stronger environment response |
 
 Important behavior:
+
 - Product `1` uses `high-polished-ss-swatch.webp` in the XML, so it enters the polished stainless branch.
 - Product `23` uses `brushed-ss-swatch.webp`, so it enters the brushed stainless branch.
 - The upright and base now use stainless PBR treatment; there is still no dedicated stainless headstone mesh geometry.
@@ -3587,15 +3740,15 @@ Important behavior:
 
 The old stainless inscription products existed in `pricing-au.xml` but were missing from the current AU inscription XML. Without these entries, parser smoke tests fell back and logged missing inscription IDs.
 
-| File | Change |
-|------|--------|
+| File                                | Change                                                             |
+| ----------------------------------- | ------------------------------------------------------------------ |
 | `public/xml/au_EN/inscriptions.xml` | Adds compact products `2` and `41` with old first-60-free formulas |
 
 Mapped inscription products:
 
-| ID | Meaning | Pricing |
-|----|---------|---------|
-| `2` | Stainless Steel Inscription Reflective (first 60 free) | `0.00+0($q-0)` to 60, then `0.00+1.60($q-60)` at multiplier `1.25` |
+| ID   | Meaning                                                  | Pricing                                                            |
+| ---- | -------------------------------------------------------- | ------------------------------------------------------------------ |
+| `2`  | Stainless Steel Inscription Reflective (first 60 free)   | `0.00+0($q-0)` to 60, then `0.00+1.60($q-60)` at multiplier `1.25` |
 | `41` | Stainless Steel Inscription Transmitting (first 60 free) | `0.00+0($q-0)` to 60, then `0.00+3.20($q-60)` at multiplier `1.25` |
 
 Both use `min_height="7"`, `max_height="300"`, and `init_height="20"` from the old pricing/catalog constraints.
@@ -3605,6 +3758,7 @@ Both use `min_height="7"`, `max_height="300"`, and `init_height="20"` from the o
 This batch is only catalog + initial rendering support. It does not implement the candidate R&D/manufacturing work package from `ForeverShining_SoftwareSpecificGuide_FY2026.docx`.
 
 Still pending:
+
 - Laser-cut bridge-safe text geometry.
 - Enclosed glyph island detection.
 - Minimum bridge width / cut gap / stroke width validation.
@@ -3631,6 +3785,7 @@ Parser/catalog smoke test passed with the same DOM implementation used by the se
 ```
 
 Meaning:
+
 - Both catalogs parse.
 - Each exposes 11 shapes.
 - Main price calculation works at the default 600 x 600 x 100 mm dimensions.
@@ -3638,6 +3793,7 @@ Meaning:
 - Inscription min height and two-tier inscription price model are present.
 
 Known verification gap:
+
 - A fresh browser screenshot was not captured after the stainless material fix because the local dev-server background start failed in the shell environment. `screen.png` is the pre-fix evidence showing matte grey rendering.
 
 ---
@@ -3650,11 +3806,11 @@ This batch is uncommitted working-tree context from the 3D Designer polish sessi
 
 The `/designs/...` detail pages were improved in a batch-friendly way:
 
-| File | Change |
-|------|--------|
-| `app/designs/[productType]/[category]/[slug]/DesignPageClient.tsx` | Cleaner product-page structure and copy for design detail pages |
-| `components/DesignContentBlock.tsx` | Updated content section presentation/copy |
-| `lib/saved-designs-data.ts` | Gallery data/content support for the updated detail-page experience |
+| File                                                               | Change                                                              |
+| ------------------------------------------------------------------ | ------------------------------------------------------------------- |
+| `app/designs/[productType]/[category]/[slug]/DesignPageClient.tsx` | Cleaner product-page structure and copy for design detail pages     |
+| `components/DesignContentBlock.tsx`                                | Updated content section presentation/copy                           |
+| `lib/saved-designs-data.ts`                                        | Gallery data/content support for the updated detail-page experience |
 
 The intent is to improve all current gallery designs through shared templates and generated/supporting content rather than hand-editing each page.
 
@@ -3662,11 +3818,12 @@ The intent is to improve all current gallery designs through shared templates an
 
 Bronze plaque inscriptions were changed from flat white text to a more realistic raised bronze look based on the supplied plaque photos.
 
-| File | Change |
-|------|--------|
+| File                                  | Change                                                                                          |
+| ------------------------------------- | ----------------------------------------------------------------------------------------------- |
 | `components/HeadstoneInscription.tsx` | Detects plaque products more broadly and applies bronze-specific text color/material properties |
 
 Current behavior:
+
 - Bronze plaque text uses a warm bronze color (`#c7a06a`) with high metalness and stronger environment response.
 - A subtle dark backing/shadow is rendered behind bronze plaque text to mimic raised letters on the dark plaque surface.
 - Non-bronze plaque/headstone text behavior remains separate.
@@ -3675,31 +3832,34 @@ Current behavior:
 
 Single Thickness Stainless Steel Plaque and Stainless Steel Inlaid Urn material rendering were updated to avoid the previous overly dark/flat look.
 
-| File | Change |
-|------|--------|
-| `components/SvgHeadstone.tsx` | Adds procedural stainless steel color, roughness, and normal maps via `CanvasTexture` |
-| `components/MaterialSelector.tsx` | Uses `/textures/forever/l/*ss-swatch.webp` stainless finish URLs and normalizes older swatch paths |
-| `app/select-material/_ui/MaterialSelectionGrid.tsx` | Same stainless finish URL normalization for material selection |
-| `components/three/headstone/ShapeSwapper.tsx` | Detects polished finish by filename substring instead of exact old JPG path |
+| File                                                | Change                                                                                             |
+| --------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| `components/SvgHeadstone.tsx`                       | Adds procedural stainless steel color, roughness, and normal maps via `CanvasTexture`              |
+| `components/MaterialSelector.tsx`                   | Uses `/textures/forever/l/*ss-swatch.webp` stainless finish URLs and normalizes older swatch paths |
+| `app/select-material/_ui/MaterialSelectionGrid.tsx` | Same stainless finish URL normalization for material selection                                     |
+| `components/three/headstone/ShapeSwapper.tsx`       | Detects polished finish by filename substring instead of exact old JPG path                        |
 
 Current stainless behavior:
+
 - Brushed stainless uses a light silver base with anisotropic-looking horizontal texture variation.
 - Polished stainless is brighter, smoother, and more reflective than brushed.
 - Generated stainless textures are disposed on cleanup.
 - Finish detection accepts both old and new swatch path formats by checking for `ss-swatch` / `high-polished-ss-swatch`.
 
 Important caveat:
+
 - `components/three/headstone/UrnEnamelInlay.tsx` was intentionally reverted to its original behavior after several heart-border/glitch attempts made the result worse. Do not continue from the failed heart-outline experiments unless the inlay geometry is redesigned more carefully.
 
 ### Stainless Steel Default Inscription Color
 
 The Single Thickness Stainless Steel Plaque should honor the XML `default-color="#000000"` even when `color="0"` disables the color picker.
 
-| File | Change |
-|------|--------|
+| File                     | Change                                                                                                               |
+| ------------------------ | -------------------------------------------------------------------------------------------------------------------- |
 | `lib/headstone-store.ts` | Product default inscription color is read from `catalog.product.defaultColor` before falling back to legacy defaults |
 
 Current behavior:
+
 - When inscription color selection is hidden, the store now still uses the product XML default color if present.
 - For SS Plaque this means black text by default instead of forced white.
 
@@ -3707,11 +3867,12 @@ Current behavior:
 
 The inscription edit panel UI was tightened after screenshots showed overly long CTAs and crowded action states.
 
-| File | Change |
-|------|--------|
+| File                                  | Change                                                                    |
+| ------------------------------------- | ------------------------------------------------------------------------- |
 | `components/InscriptionEditPanel.tsx` | Shorter labels, compact action area, clearer selected/non-selected states |
 
 Current behavior:
+
 - Input toggle labels are `Single` and `Multiple`.
 - Empty/single state CTA is `+ Add line`.
 - Multi-line state CTA is `+ Add inscription`.
@@ -3722,11 +3883,12 @@ Current behavior:
 
 The image crop UI was tightened for readability and shorter actions.
 
-| File | Change |
-|------|--------|
+| File                           | Change                                                                                   |
+| ------------------------------ | ---------------------------------------------------------------------------------------- |
 | `components/ImageSelector.tsx` | Compact crop controls, clearer step labels, shorter crop CTA, centered default placement |
 
 Current behavior:
+
 - Step labels are `Step 1 · Mask`, `Step 2 · Photo finish`, and `Step 3 · Crop area`.
 - Size and rotation controls show current values.
 - Smaller/larger and `-5°`/`+5°` controls use compact two-column rows.
@@ -3745,6 +3907,7 @@ git diff --check
 ```
 
 Notes:
+
 - `pnpm lint` reports a Babel deoptimization notice for large `lib/saved-designs-data.ts`; this is informational.
 - `git diff --check` reports LF/CRLF warnings for touched files; no whitespace errors were reported.
 - `screen.png` and the uploaded bronze reference photos are local working files and should not be committed unless intentionally needed.
@@ -3767,17 +3930,17 @@ design: simplify email templates
 
 Updated the shared React Email template system:
 
-| File | Change |
-|------|--------|
-| `lib/email/templates/components/EmailLayout.tsx` | Replaced dark decorative shell with a white minimal layout, thin slate borders, centered logo, serif title, light footer |
-| `lib/email/templates/components/DesignPreview.tsx` | Simplified image frame and CTA buttons to match `/designs/` styling |
-| `lib/email/templates/components/QuoteTable.tsx` | Removed dark table header/footer; now uses light rows, slate borders, and restrained totals |
-| `lib/email/templates/components/ContactInfo.tsx` | Converted contact box to a simple light slate panel |
-| `lib/email/templates/SavedDesignEmail.tsx` | Removed decorative icons/copy, simplified hero, price card, access-code panel, next steps, and guarantee block |
-| `lib/email/templates/OrderInvoiceEmail.tsx` | Updated invoice details and info panels to the minimal light style |
-| `lib/email/templates/EnquiryEmail.tsx` | Updated message/details styling to the minimal light style |
-| `lib/email/templates/RegistrationEmail.tsx` | Updated typography and links to match the shared palette |
-| `lib/email/templates/PasswordResetEmail.tsx` | Updated reset CTA and text styling to match the shared palette |
+| File                                               | Change                                                                                                                   |
+| -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| `lib/email/templates/components/EmailLayout.tsx`   | Replaced dark decorative shell with a white minimal layout, thin slate borders, centered logo, serif title, light footer |
+| `lib/email/templates/components/DesignPreview.tsx` | Simplified image frame and CTA buttons to match `/designs/` styling                                                      |
+| `lib/email/templates/components/QuoteTable.tsx`    | Removed dark table header/footer; now uses light rows, slate borders, and restrained totals                              |
+| `lib/email/templates/components/ContactInfo.tsx`   | Converted contact box to a simple light slate panel                                                                      |
+| `lib/email/templates/SavedDesignEmail.tsx`         | Removed decorative icons/copy, simplified hero, price card, access-code panel, next steps, and guarantee block           |
+| `lib/email/templates/OrderInvoiceEmail.tsx`        | Updated invoice details and info panels to the minimal light style                                                       |
+| `lib/email/templates/EnquiryEmail.tsx`             | Updated message/details styling to the minimal light style                                                               |
+| `lib/email/templates/RegistrationEmail.tsx`        | Updated typography and links to match the shared palette                                                                 |
+| `lib/email/templates/PasswordResetEmail.tsx`       | Updated reset CTA and text styling to match the shared palette                                                           |
 
 ### Design Direction
 
@@ -3863,6 +4026,7 @@ This update captures the current audit/fix batch. The project is not yet widely 
 Family sharing is now protected by a one-time generated review code returned only when the share is created.
 
 **Core behavior:**
+
 - Owners/admins create a share through `/api/share/create`.
 - The API returns the `shareToken`, `shareUrl`, and a generated 6-digit `accessCode` once.
 - Family members open `/shared/{token}` and must enter the review code before seeing the design.
@@ -3886,13 +4050,14 @@ Family sharing is now protected by a one-time generated review code returned onl
 
 New migration added:
 
-| File | Purpose |
-|------|---------|
+| File                                   | Purpose                                                                 |
+| -------------------------------------- | ----------------------------------------------------------------------- |
 | `drizzle/0004_strange_grim_reaper.sql` | Adds order workflow timestamps/notes and protected-share access columns |
-| `drizzle/meta/0004_snapshot.json` | Drizzle snapshot for migration 0004 |
-| `drizzle/meta/_journal.json` | Journal updated through 0004 |
+| `drizzle/meta/0004_snapshot.json`      | Drizzle snapshot for migration 0004                                     |
+| `drizzle/meta/_journal.json`           | Journal updated through 0004                                            |
 
 New columns:
+
 - `orders.notes`
 - `orders.paid_at`
 - `orders.factory_order_at`
@@ -3910,6 +4075,7 @@ New columns:
 ### Security Hardening
 
 Completed audit fixes:
+
 - Removed `typescript.ignoreBuildErrors` from `next.config.ts`; production builds no longer ignore TypeScript errors.
 - `/api/seed-materials` now returns 404 in production and is admin-only outside production.
 - Stripe checkout/order flow no longer trusts client-supplied amount/currency/design name; the server derives pricing/project data.
@@ -3921,8 +4087,8 @@ Completed audit fixes:
 
 The production build previously stalled while generating many design detail pages. The detail route now avoids pre-rendering the entire catalog:
 
-| File | Change |
-|------|--------|
+| File                                                   | Change                                                                              |
+| ------------------------------------------------------ | ----------------------------------------------------------------------------------- |
 | `app/designs/[productType]/[category]/[slug]/page.tsx` | `generateStaticParams()` returns `[]`, `dynamicParams = true`, `revalidate = 86400` |
 
 This keeps detail pages available on demand while avoiding an expensive full static generation pass.
@@ -3930,6 +4096,7 @@ This keeps detail pages available on demand while avoiding an expensive full sta
 ### Lint and TypeScript Gate
 
 The lint gate is now usable on the current codebase:
+
 - `package.json`: `lint` uses `eslint . --quiet`.
 - `package.json`: `lint:strict` remains available as `eslint . --max-warnings 0`.
 - ESLint ignores generated/archived output such as `src`, `archive`, `test-results`, and `playwright-report`.
@@ -3938,12 +4105,12 @@ The lint gate is now usable on the current codebase:
 
 ### Tests Added or Updated
 
-| File | Coverage |
-|------|----------|
+| File                            | Coverage                                                                                                     |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------------ |
 | `tests/unit/share-flow.test.ts` | Share auth required, owner enforcement, code generation, malformed/wrong codes, lockout, correct-code cookie |
-| `tests/e2e/share-flow.spec.ts` | Authenticated user creates project/share; unauthenticated family member must enter valid code |
-| `tests/e2e/auth.setup.ts` | Uses API login and saves Playwright storage state |
-| `playwright.config.ts` | 60s test timeout to tolerate cold Next.js route compilation |
+| `tests/e2e/share-flow.spec.ts`  | Authenticated user creates project/share; unauthenticated family member must enter valid code                |
+| `tests/e2e/auth.setup.ts`       | Uses API login and saves Playwright storage state                                                            |
+| `playwright.config.ts`          | 60s test timeout to tolerate cold Next.js route compilation                                                  |
 
 ### Verified Commands
 
@@ -3959,6 +4126,7 @@ pnpm build
 ```
 
 Notes:
+
 - `pnpm build` passed before the final Playwright timeout/assertion cleanup. No production code changed after that, only `playwright.config.ts` and the E2E assertion.
 - The focused E2E test needs valid `TEST_USER_EMAIL` and `TEST_USER_PASSWORD` in `.env.test.local`.
 
@@ -3969,16 +4137,18 @@ Vercel initially failed during type-check because two share routes imported `nan
 Fixed by replacing `nanoid(32)` with Node's built-in crypto token generation:
 
 ```ts
-randomBytes(24).toString('base64url')
+randomBytes(24).toString('base64url');
 ```
 
 Updated files:
+
 - `app/api/share/create/route.ts`
 - `app/api/share/email/route.ts`
 
 After those fixes, the Vercel build completed successfully.
 
 Deployed-site smoke test completed on 2026-06-19:
+
 1. Login on the Vercel site worked.
 2. Saving two designs worked.
 3. Sending the design email worked.
@@ -3986,11 +4156,13 @@ Deployed-site smoke test completed on 2026-06-19:
    `https://forevershining.org/design/4a486f8e-6ba3-489a-a61c-cd708af25544`
 
 Remote database follow-up completed on 2026-06-19:
+
 - Ran `npm run db:sync` to sync the remote database used by the deployed site.
 
 ### Current Working-Tree Context
 
 This audit batch touches many files across:
+
 - protected share flow
 - checkout/order trust boundaries
 - upload validation
@@ -3999,6 +4171,7 @@ This audit batch touches many files across:
 - focused unit and E2E tests
 
 Before committing, review the full diff and consider grouping into one audit/security commit or a small series of commits:
+
 1. protected sharing and migration
 2. security hardening
 3. lint/build/test gate cleanup
@@ -4019,15 +4192,19 @@ A full round of layout, accessibility, and SEO fixes across the `/designs` galle
 
 ### ✅ Sidebar Badge — Design Count (not Category Count)
 
-**Problem:** Product-type badges in `DesignsTreeNav` showed the number of *categories* (e.g. 4), not the number of *designs* (e.g. 812). Misleading at a glance.
+**Problem:** Product-type badges in `DesignsTreeNav` showed the number of _categories_ (e.g. 4), not the number of _designs_ (e.g. 812). Misleading at a glance.
 
 **Fix (`components/DesignsTreeNav.tsx`):**
+
 ```ts
 // Before (category count)
-Object.keys(productNode.categories).length
+Object.keys(productNode.categories).length;
 
 // After (design count)
-Object.values(productNode.categories).reduce((sum, cat) => sum + cat.designs.length, 0)
+Object.values(productNode.categories).reduce(
+  (sum, cat) => sum + cat.designs.length,
+  0,
+);
 ```
 
 ---
@@ -4045,13 +4222,14 @@ Object.values(productNode.categories).reduce((sum, cat) => sum + cat.designs.len
 **Before:** `<span className="font-serif text-xl font-light text-slate-900 tracking-tight">Forever Shining</span>`
 
 **After (`components/DesignsTreeNav.tsx`):**
+
 ```tsx
 <Image
   src="/ico/forever-transparent-logo-bw.png"
   alt="Forever Shining"
   width={400}
   height={246}
-  className="w-full h-auto"
+  className="h-auto w-full"
   priority
 />
 ```
@@ -4067,6 +4245,7 @@ Object.values(productNode.categories).reduce((sum, cat) => sum + cat.designs.len
 **Problem:** During data load, `DesignsTreeNav` returns early (before its `<nav className="bg-white">` wrapper renders), exposing the parent container's old dark `bg-[#1b1511]` background + blue loading text.
 
 **Fixes:**
+
 - **`components/ConditionalNav.tsx`**: Wrapper div changed from `bg-[#1b1511] day:bg-stone-100 ... md:bg-transparent md:border-gray-800` → `bg-white md:bg-white md:border-slate-200` everywhere
 - **`components/DesignsTreeNav.tsx`**: Loading and empty states now explicitly have `bg-white h-full` so no parent bleed-through
 
@@ -4091,6 +4270,7 @@ Object.values(productNode.categories).reduce((sum, cat) => sum + cat.designs.len
 **Problem:** Category buttons and individual design links used `text-xs` (12px) — too small for older users.
 
 **Fix (`components/DesignsTreeNav.tsx`):**
+
 - Category buttons: `text-xs` → `text-sm`
 - Design leaf links: `text-xs` → `text-sm`
 
@@ -4105,6 +4285,7 @@ Object.values(productNode.categories).reduce((sum, cat) => sum + cat.designs.len
 ### ✅ Design Detail Page — H1, Breadcrumb & Subtitle (Client + SSR)
 
 **Problem — Three conflicting signals:**
+
 1. Sidebar active item: "Cropped Peak - Dedicated Mother" (correct — from slug)
 2. Breadcrumb last item: "In loving memory" (wrong — was `designMetadata.title`, the first inscription text)
 3. H1: "Biblical Memorial – Laser-Etched Black Granite Headstone (Cropped Peak)" (wrong — verbose category+product+shape)
@@ -4113,19 +4294,22 @@ Object.values(productNode.categories).reduce((sum, cat) => sum + cat.designs.len
 **Fix — two files needed (CSR + SSR):**
 
 #### `DesignPageClient.tsx` (client-rendered — what users see after JS hydrates)
+
 - Breadcrumb last item: `{designMetadata.title}` → `{formattedDesignTitle}`
 - H1: verbose string → `{formattedDesignTitle}` (e.g. "Cropped Peak – Dedicated Mother")
 - Subtitle `<p>`: broken `{slugText}` → `{categoryTitle} · {simplifiedProductName} {productTypeDisplay}` (e.g. "Biblical Memorial · Laser-Etched Black Granite Headstone")
 - Breadcrumb also simplified (removed redundant `productType` crumb)
 
 #### `app/designs/[productType]/[category]/[slug]/page.tsx` (server-rendered — what Google sees)
+
 - Added `formattedH1` computed from existing `shapeName` + `phraseFromSlug`:
   ```ts
-  const formattedH1 = shapeName && phraseFromSlug
-    ? `${shapeName} – ${phraseFromSlug}`
-    : shapeName
-    ? `${shapeName} – ${categoryTitle}`
-    : formatSlugForDisplay(slug);
+  const formattedH1 =
+    shapeName && phraseFromSlug
+      ? `${shapeName} – ${phraseFromSlug}`
+      : shapeName
+        ? `${shapeName} – ${categoryTitle}`
+        : formatSlugForDisplay(slug);
   ```
 - SSR `#design-ssr-content` block updated: breadcrumb last item, `<h1>`, and subtitle all use `formattedH1`
 - JSON-LD `BreadcrumbList` position 6 (`design.title`) → `formattedH1`
@@ -4133,14 +4317,14 @@ Object.values(productNode.categories).reduce((sum, cat) => sum + cat.designs.len
 
 #### Files Changed (2026-06-04)
 
-| File | Change |
-|------|--------|
-| `components/ThemeToggle.tsx` | Returns `null` on `/designs` routes |
-| `components/DesignsTreeNav.tsx` | Logo image; loading state bg-white; lighter active styles; `text-sm` font sizes; `line-clamp-2`; `px-6` container padding; design count badges |
-| `components/ConditionalNav.tsx` | Sidebar wrapper: `bg-white`, `border-slate-200` (was dark bg + gray-800 border) |
-| `components/DesignSmartSearch.tsx` | Removed `max-w-3xl mx-auto` from results status bar |
-| `app/designs/[productType]/[category]/[slug]/DesignPageClient.tsx` | H1 → `formattedDesignTitle`; breadcrumb last item fixed; subtitle fixed |
-| `app/designs/[productType]/[category]/[slug]/page.tsx` | SSR H1, breadcrumb, subtitle, and JSON-LD all use new `formattedH1` |
+| File                                                               | Change                                                                                                                                         |
+| ------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| `components/ThemeToggle.tsx`                                       | Returns `null` on `/designs` routes                                                                                                            |
+| `components/DesignsTreeNav.tsx`                                    | Logo image; loading state bg-white; lighter active styles; `text-sm` font sizes; `line-clamp-2`; `px-6` container padding; design count badges |
+| `components/ConditionalNav.tsx`                                    | Sidebar wrapper: `bg-white`, `border-slate-200` (was dark bg + gray-800 border)                                                                |
+| `components/DesignSmartSearch.tsx`                                 | Removed `max-w-3xl mx-auto` from results status bar                                                                                            |
+| `app/designs/[productType]/[category]/[slug]/DesignPageClient.tsx` | H1 → `formattedDesignTitle`; breadcrumb last item fixed; subtitle fixed                                                                        |
+| `app/designs/[productType]/[category]/[slug]/page.tsx`             | SSR H1, breadcrumb, subtitle, and JSON-LD all use new `formattedH1`                                                                            |
 
 ---
 
@@ -4154,11 +4338,11 @@ Three rounds of iterative UX improvements to the `/designs?q=` search page, driv
 
 The old flat text-bag scoring returned wrong results for visual queries (e.g. `?q=heart` showed a plain square headstone because a long inscription contained the word "heart" many times). Replaced with **tiered scoring**:
 
-| Bucket | Fields | Weight |
-|--------|--------|--------|
-| Visual | `shapeName`, `mlMotif`, `mlStyle`, motif names | ×3 |
-| Title | `title`, `slug` | ×2 |
-| Inscription | inscription/description text | ×0.5, **capped at 5 pts** |
+| Bucket      | Fields                                         | Weight                    |
+| ----------- | ---------------------------------------------- | ------------------------- |
+| Visual      | `shapeName`, `mlMotif`, `mlStyle`, motif names | ×3                        |
+| Title       | `title`, `slug`                                | ×2                        |
+| Inscription | inscription/description text                   | ×0.5, **capped at 5 pts** |
 
 The inscription cap prevents long epitaphs from dominating over a heart-shaped monument.
 
@@ -4184,21 +4368,24 @@ Filter chips appear below the search bar whenever ML type/style/motif or feature
 The native `<select>` showed strikethrough text in Chromium because `@plugin "@tailwindcss/typography"` in `styles/globals.css` injects `del { text-decoration: line-through }` which bleeds into native select text when `font-light` is applied.
 
 **Fix**: Replaced the native `<select>` with a custom sort dropdown using `appearance-none` + `font-normal` + a React-rendered `<ChevronDownIcon>` chevron. The wrapper pattern:
+
 ```tsx
 <div className="relative">
-  <select
-    className="appearance-none pl-3 pr-7 py-1.5 border border-slate-200 rounded-lg text-sm text-slate-700 font-normal ..."
-  >...</select>
-  <ChevronDownIcon className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
+  <select className="appearance-none rounded-lg border border-slate-200 py-1.5 pr-7 pl-3 text-sm font-normal text-slate-700 ...">
+    ...
+  </select>
+  <ChevronDownIcon className="pointer-events-none absolute top-1/2 right-2 h-3.5 w-3.5 -translate-y-1/2 text-slate-400" />
 </div>
 ```
 
 #### 6. Filter Button — Moved Outside Search Input
 
-The funnel icon was inside the text input (`pr-24` padding) which is a UX anti-pattern — it suggests filtering the *typed text*, not the *results*. Restructured the search bar as `flex gap-2`:
+The funnel icon was inside the text input (`pr-24` padding) which is a UX anti-pattern — it suggests filtering the _typed text_, not the _results_. Restructured the search bar as `flex gap-2`:
+
 ```
 [ 🔍 Search input with ✕ clear         ] [ 🝖 Filters ]
 ```
+
 The Filters button turns dark (`bg-slate-900`) and shows an amber badge count when ML/feature filters are active.
 
 #### 7. "Clear all filters" — Only Shown When Filters Active
@@ -4208,12 +4395,14 @@ Previously showed whenever any search was active (including plain text). Now onl
 #### 8. Card UI Simplification
 
 **Removed:**
+
 - ML confidence badge (color-coded indigo/violet/amber/green — visually chaotic)
 - `MOTIFS` header label
 - Feature count badges ("3 MOTIFS", "PHOTO", "ADDITIONS")
 - `ALL CAPS` product names
 
 **Added:**
+
 - Motif names as **unified gray pills** (`bg-slate-100 text-slate-600 rounded-full`), max 3 shown + `+N more` overflow
 - **Deduplication** of motif pills — `heart` and `hearts` collapse to one tag via stemming (`replace(/s$/, '')`)
 - **"Quote on request"** fallback when `mlData?.design_price` is null/zero (uniform card height)
@@ -4225,10 +4414,10 @@ The badge was creating false expectations ("Smart Search active" but results did
 
 #### Files Changed
 
-| File | Change |
-|------|--------|
-| `lib/ml-search-service.ts` | `matchedOn` field on `SearchResult`; tiered scoring replacing flat text-bag |
-| `components/DesignSmartSearch.tsx` | Filter button outside input; sort dropdown (no native `<select>`); filter chips; "Clear all" condition; removed AI badge + `mlReady`/`mlRanked` props |
+| File                                | Change                                                                                                                                                                                          |
+| ----------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `lib/ml-search-service.ts`          | `matchedOn` field on `SearchResult`; tiered scoring replacing flat text-bag                                                                                                                     |
+| `components/DesignSmartSearch.tsx`  | Filter button outside input; sort dropdown (no native `<select>`); filter chips; "Clear all" condition; removed AI badge + `mlReady`/`mlRanked` props                                           |
 | `app/designs/DesignsPageClient.tsx` | `fullSearchResults` (uncapped); `displayResults` via `useMemo`; `sortBy` state; ML-ready re-run fix; card UI rewrite (gray pills, no colored tags, deduplication, "Quote on request", VIEW CTA) |
 
 ---
@@ -4239,17 +4428,17 @@ The designs sidebar (`components/DesignsTreeNav.tsx`) used `bg-gradient-to-tr fr
 
 #### Visual Changes
 
-| Before | After |
-|--------|-------|
-| `bg-gradient-to-tr from-sky-900 to-yellow-900` | `bg-white` |
-| White/slate-300 text | slate-900/slate-700/slate-500 text |
-| `bg-white/15` active state (frosted glass) | `bg-slate-900 text-white` (crisp) |
-| `bg-white/10` hover | `hover:bg-slate-100` |
-| `forever-transparent-logo.png` (white glowing logo on dark bg) | Serif text `"Forever Shining"` (works on white) |
-| `bg-white/10 text-white` "3D Designer" button | `border border-slate-300 text-slate-600 hover:bg-slate-50` — matches Filters button style |
-| `"3114 thoughtfully crafted designs"` count (mismatched with 2278 in main content) | Removed — count confusion eliminated |
-| Visible default scrollbar | `[&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-thumb]:bg-slate-200` — 1px subtle |
-| `border-r border-gray-800` on wrapper | `border-r border-slate-200` |
+| Before                                                                             | After                                                                                     |
+| ---------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| `bg-gradient-to-tr from-sky-900 to-yellow-900`                                     | `bg-white`                                                                                |
+| White/slate-300 text                                                               | slate-900/slate-700/slate-500 text                                                        |
+| `bg-white/15` active state (frosted glass)                                         | `bg-slate-900 text-white` (crisp)                                                         |
+| `bg-white/10` hover                                                                | `hover:bg-slate-100`                                                                      |
+| `forever-transparent-logo.png` (white glowing logo on dark bg)                     | Serif text `"Forever Shining"` (works on white)                                           |
+| `bg-white/10 text-white` "3D Designer" button                                      | `border border-slate-300 text-slate-600 hover:bg-slate-50` — matches Filters button style |
+| `"3114 thoughtfully crafted designs"` count (mismatched with 2278 in main content) | Removed — count confusion eliminated                                                      |
+| Visible default scrollbar                                                          | `[&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-thumb]:bg-slate-200` — 1px subtle       |
+| `border-r border-gray-800` on wrapper                                              | `border-r border-slate-200`                                                               |
 
 #### Count Discrepancy — Root Cause & Fix
 
@@ -4263,10 +4452,10 @@ The sidebar links navigate to `/designs/[productType]/[category]` pages (Option 
 
 #### Files Changed
 
-| File | Change |
-|------|--------|
+| File                            | Change                                                                                       |
+| ------------------------------- | -------------------------------------------------------------------------------------------- |
 | `components/DesignsTreeNav.tsx` | Light theme throughout; text logo; thin scrollbar; removed count; unified button/link styles |
-| `components/ConditionalNav.tsx` | `border-r border-gray-800` → `border-r border-slate-200` on sidebar wrapper div |
+| `components/ConditionalNav.tsx` | `border-r border-gray-800` → `border-r border-slate-200` on sidebar wrapper div              |
 
 ---
 
@@ -4316,6 +4505,7 @@ The `/designs` search results page (`app/designs/DesignsPageClient.tsx`) was upd
 ```
 
 Priority chain matches `LoadDesignButton.tsx`:
+
 1. `/screenshots/v2026-3d/{id}_small.png` (3D transparent PNG)
 2. Legacy `_small.jpg` derived from `design.preview`
 3. Hidden if both fail
@@ -4327,16 +4517,14 @@ Priority chain matches `LoadDesignButton.tsx`:
 
 #### Files Changed
 
-| File | Change |
-|------|--------|
-| `app/_ui/HomeSplash.tsx` | Hero search form, canvas −10% height, content shifted up |
-| `app/designs/page.tsx` | Made `async`, reads `searchParams`, passes `initialQuery` |
-| `app/designs/DesignsPageClient.tsx` | Filters by v2026-3d-ids, thumbnails from `/screenshots/v2026-3d/` |
-| `public/screenshots/v2026-3d-ids.json` | Generated — 3,041 IDs with 3D `_small.png` renders |
+| File                                   | Change                                                            |
+| -------------------------------------- | ----------------------------------------------------------------- |
+| `app/_ui/HomeSplash.tsx`               | Hero search form, canvas −10% height, content shifted up          |
+| `app/designs/page.tsx`                 | Made `async`, reads `searchParams`, passes `initialQuery`         |
+| `app/designs/DesignsPageClient.tsx`    | Filters by v2026-3d-ids, thumbnails from `/screenshots/v2026-3d/` |
+| `public/screenshots/v2026-3d-ids.json` | Generated — 3,041 IDs with 3D `_small.png` renders                |
 
 ---
-
-
 
 ### ✅ Playwright E2E Test Suite Added
 
@@ -4352,6 +4540,7 @@ pnpx playwright install chromium   # install Chromium browser binary
 #### Configuration (`playwright.config.ts`)
 
 Key settings:
+
 - `testDir: 'tests/e2e'`
 - Two projects: `setup` (auth) → `chromium` (depends on setup)
 - `webServer`: `pnpm dev`, `reuseExistingServer: !CI` — reuses running dev server locally
@@ -4361,6 +4550,7 @@ Key settings:
 #### Required Setup (one-time)
 
 Create `.env.test.local` (gitignored — see `.env.test.local.example`):
+
 ```
 TEST_USER_EMAIL=your-test-account@example.com
 TEST_USER_PASSWORD=your-test-password
@@ -4368,20 +4558,20 @@ TEST_USER_PASSWORD=your-test-password
 
 #### New Scripts (`package.json`)
 
-| Command | Description |
-|---------|-------------|
-| `pnpm test:e2e` | Run all 13 E2E tests (headless) |
-| `pnpm test:e2e:ui` | Interactive Playwright UI mode |
-| `pnpm test:e2e:debug` | Step-by-step debugger |
-| `pnpm test:e2e:report` | Open last HTML report |
+| Command                | Description                     |
+| ---------------------- | ------------------------------- |
+| `pnpm test:e2e`        | Run all 13 E2E tests (headless) |
+| `pnpm test:e2e:ui`     | Interactive Playwright UI mode  |
+| `pnpm test:e2e:debug`  | Step-by-step debugger           |
+| `pnpm test:e2e:report` | Open last HTML report           |
 
 #### Test Files (`tests/e2e/`)
 
-| File | Tests | What's covered |
-|------|-------|----------------|
-| `auth.setup.ts` | 1 | Login via `/login` UI → saves `storageState` for all authenticated tests |
-| `designer.spec.ts` | 5 | Save modal open/submit/validate/close; auth guard (unauthenticated → 401) |
-| `projects-api.spec.ts` | 7 | `POST /api/projects` (save, 400 on missing state, default title), `GET` (list, limit), `DELETE` (delete + verify gone, 400 on missing ID) |
+| File                   | Tests | What's covered                                                                                                                            |
+| ---------------------- | ----- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| `auth.setup.ts`        | 1     | Login via `/login` UI → saves `storageState` for all authenticated tests                                                                  |
+| `designer.spec.ts`     | 5     | Save modal open/submit/validate/close; auth guard (unauthenticated → 401)                                                                 |
+| `projects-api.spec.ts` | 7     | `POST /api/projects` (save, 400 on missing state, default title), `GET` (list, limit), `DELETE` (delete + verify gone, 400 on missing ID) |
 
 **Total: 13 E2E tests.**
 
@@ -4393,6 +4583,7 @@ TEST_USER_PASSWORD=your-test-password
 #### Auth Strategy
 
 Uses Playwright's `storageState` pattern (not NextAuth):
+
 - `auth.setup.ts` logs in via the real UI → cookie `session` (JWT, httpOnly, 7-day expiry) is captured
 - All `[chromium]` project tests load `playwright/.auth/user.json` so they start already authenticated
 - `auth.setup.ts` runs before any `[chromium]` tests via `dependencies: ['setup']`
@@ -4427,34 +4618,31 @@ export default defineConfig({
   test: {
     environment: 'node',
     include: ['tests/unit/**/*.test.ts'],
-    coverage: {
-      provider: 'v8',
-      include: ['lib/**/*.ts'],
-    },
+    coverage: { provider: 'v8', include: ['lib/**/*.ts'] },
   },
   resolve: {
-    alias: { '#': path.resolve(__dirname, '.') },  // mirrors tsconfig #/* alias
+    alias: { '#': path.resolve(__dirname, '.') }, // mirrors tsconfig #/* alias
   },
 });
 ```
 
 #### New Scripts (`package.json`)
 
-| Command | Description |
-|---------|-------------|
-| `pnpm test` | Run all unit tests once |
-| `pnpm test:watch` | Watch mode (re-runs on file change) |
-| `pnpm test:coverage` | Run with V8 coverage report |
+| Command              | Description                         |
+| -------------------- | ----------------------------------- |
+| `pnpm test`          | Run all unit tests once             |
+| `pnpm test:watch`    | Watch mode (re-runs on file change) |
+| `pnpm test:coverage` | Run with V8 coverage report         |
 
 #### Test Files (`tests/unit/`)
 
-| File | Tests | What's covered |
-|------|-------|----------------|
-| `unit-system.test.ts` | 26 | `resolveUnitSystemFromCountry`, `parseUnitSystemCookie`, `formatImperialFromMm`, `formatLengthFromMm`, `formatDimensionPair/Triplet` |
-| `slug.test.ts` | 9 | `toSlug` — lowercasing, hyphens, punctuation stripping, numbers |
-| `xml-parser-price.test.ts` | 18 | `calculatePrice` (linear formula, noteFilter, range matching), `calculatePricePowerLaw` (power-law + minimum-size surcharge), `computeQuantity` (all quantity types) |
-| `inscription-sanitizer.test.ts` | 20 | `hashString`, `getGenderFromCategory`, `sanitizeInscription` (memorial phrase preservation, name replacement, pattern-only mode) |
-| `motif-pricing.test.ts` | 9 | `calculateMotifPrice` (laser=free, color tiers, fallback, retail multiplier) |
+| File                            | Tests | What's covered                                                                                                                                                       |
+| ------------------------------- | ----- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `unit-system.test.ts`           | 26    | `resolveUnitSystemFromCountry`, `parseUnitSystemCookie`, `formatImperialFromMm`, `formatLengthFromMm`, `formatDimensionPair/Triplet`                                 |
+| `slug.test.ts`                  | 9     | `toSlug` — lowercasing, hyphens, punctuation stripping, numbers                                                                                                      |
+| `xml-parser-price.test.ts`      | 18    | `calculatePrice` (linear formula, noteFilter, range matching), `calculatePricePowerLaw` (power-law + minimum-size surcharge), `computeQuantity` (all quantity types) |
+| `inscription-sanitizer.test.ts` | 20    | `hashString`, `getGenderFromCategory`, `sanitizeInscription` (memorial phrase preservation, name replacement, pattern-only mode)                                     |
+| `motif-pricing.test.ts`         | 9     | `calculateMotifPrice` (laser=free, color tiers, fallback, retail multiplier)                                                                                         |
 
 **Total: 82 tests — all passing.**
 
@@ -4468,6 +4656,7 @@ export default defineConfig({
 #### Adding New Tests
 
 Place test files in `tests/unit/` as `*.test.ts`. Focus on pure functions in `lib/`:
+
 - No `fetch()`, no DOM, no React hooks
 - Import using the `#/` alias: `import { fn } from '#/lib/my-module'`
 
@@ -4479,31 +4668,34 @@ Continuing the day/night rollout from the prior session. All changes follow the 
 
 #### New Files Updated
 
-| File | What was fixed |
-|------|---------------|
-| `components/DesignerNav.tsx` (Add Inscription section) | Tabs (`day:bg-gray-100`, `day:text-gray-900`), input fields (`day:bg-white day:border-gray-300 day:text-gray-900`), labels, font size slider, color swatches |
-| `components/DesignerNav.tsx` (Add Your Image section) | Upload zone, image list cards, position/size sliders, action buttons |
-| `components/DesignerNav.tsx` (Crop section) | Crop canvas overlay, control buttons, dimension inputs |
-| `components/DesignerNav.tsx` (Select Additions section) | Addition thumbnails, category tabs, size sliders |
-| `components/DesignerNav.tsx` (Select Motifs section) | Motif grid, category filter, size/position controls |
-| `app/check-price/_ui/CheckPriceGrid.tsx` | Full page: header, both cards (Your Design + Price Summary), all expandable sections, section dividers, price values, notes box, "What's Included" section |
-| `components/ProjectActions.tsx` | Save card, saved designs list card, inputs, buttons, list items |
-| `app/_ui/HomeSplash.tsx` | Full homepage: hero, How It Works, CTA, footer — see details below |
+| File                                                    | What was fixed                                                                                                                                               |
+| ------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `components/DesignerNav.tsx` (Add Inscription section)  | Tabs (`day:bg-gray-100`, `day:text-gray-900`), input fields (`day:bg-white day:border-gray-300 day:text-gray-900`), labels, font size slider, color swatches |
+| `components/DesignerNav.tsx` (Add Your Image section)   | Upload zone, image list cards, position/size sliders, action buttons                                                                                         |
+| `components/DesignerNav.tsx` (Crop section)             | Crop canvas overlay, control buttons, dimension inputs                                                                                                       |
+| `components/DesignerNav.tsx` (Select Additions section) | Addition thumbnails, category tabs, size sliders                                                                                                             |
+| `components/DesignerNav.tsx` (Select Motifs section)    | Motif grid, category filter, size/position controls                                                                                                          |
+| `app/check-price/_ui/CheckPriceGrid.tsx`                | Full page: header, both cards (Your Design + Price Summary), all expandable sections, section dividers, price values, notes box, "What's Included" section   |
+| `components/ProjectActions.tsx`                         | Save card, saved designs list card, inputs, buttons, list items                                                                                              |
+| `app/_ui/HomeSplash.tsx`                                | Full homepage: hero, How It Works, CTA, footer — see details below                                                                                           |
 
 #### ✅ Critical Bug: Gradient Override Pattern
 
 Tailwind `bg-gradient-to-br` / `bg-gradient-to-r` sets `background-image: linear-gradient(...)`. Adding `day:bg-white` only sets `background-color`, which CSS renders **behind** `background-image` — so the gradient wins.
 
 **Fix**: Always add `day:bg-none` (sets `background-image: none`) **before** the `day:bg-[color]`:
+
 ```tsx
 // ✅ Correct
-className="bg-gradient-to-br from-gray-800 to-gray-900 day:bg-none day:bg-white"
+className =
+  'bg-gradient-to-br from-gray-800 to-gray-900 day:bg-none day:bg-white';
 
 // ❌ Wrong — gradient will still show in day mode
-className="bg-gradient-to-br from-gray-800 to-gray-900 day:bg-white"
+className = 'bg-gradient-to-br from-gray-800 to-gray-900 day:bg-white';
 ```
 
 Also, **dark-only decorative overlay divs** (glow orbs, black vignette gradients) must be hidden in day mode:
+
 ```tsx
 <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/30 to-black/70 day:hidden" />
 <div className="absolute -top-32 right-0 bg-[#d4af37]/30 blur-[180px] day:hidden" />
@@ -4521,7 +4713,7 @@ useEffect(() => {
   const html = document.documentElement;
   setIsDayMode(html.dataset.theme === 'day');
   const observer = new MutationObserver(() =>
-    setIsDayMode(html.dataset.theme === 'day')
+    setIsDayMode(html.dataset.theme === 'day'),
   );
   observer.observe(html, { attributes: true, attributeFilter: ['data-theme'] });
   return () => observer.disconnect();
@@ -4529,6 +4721,7 @@ useEffect(() => {
 ```
 
 Then use it in JSX:
+
 ```tsx
 <div style={{ background: isDayMode ? '#f9fafb' : 'radial-gradient(circle at 50% 100%, #3E3020 0%, #121212 60%)' }}>
 ```
@@ -4537,16 +4730,16 @@ Then use it in JSX:
 
 #### Day Mode Color Palette (Homepage / Sections)
 
-| Section | Day background | Notes |
-|---------|---------------|-------|
-| Root wrapper | `#f9fafb` (gray-50) | Replaces dark radial gradient |
-| "How It Works" | `#f3f4f6` (gray-100) | Replaces dark linear gradient |
-| CTA section | `#fffbeb` (amber-50) | Replaces dark radial gradient |
-| Footer | `day:bg-gray-100` | Tailwind class (no inline style needed) |
-| Step / feature cards | `day:bg-white day:border-amber-200` | White on gray section bg |
-| Headings | `#1a1a1a` / `day:text-gray-900` | Near-black |
-| Body text | `#374151` / `day:text-gray-600` | Gray-700 |
-| Gold accents | `#b45309` / `day:text-amber-700` | Amber-700 replaces gold |
+| Section              | Day background                      | Notes                                   |
+| -------------------- | ----------------------------------- | --------------------------------------- |
+| Root wrapper         | `#f9fafb` (gray-50)                 | Replaces dark radial gradient           |
+| "How It Works"       | `#f3f4f6` (gray-100)                | Replaces dark linear gradient           |
+| CTA section          | `#fffbeb` (amber-50)                | Replaces dark radial gradient           |
+| Footer               | `day:bg-gray-100`                   | Tailwind class (no inline style needed) |
+| Step / feature cards | `day:bg-white day:border-amber-200` | White on gray section bg                |
+| Headings             | `#1a1a1a` / `day:text-gray-900`     | Near-black                              |
+| Body text            | `#374151` / `day:text-gray-600`     | Gray-700                                |
+| Gold accents         | `#b45309` / `day:text-amber-700`    | Amber-700 replaces gold                 |
 
 #### Default Theme Decision
 
@@ -4563,12 +4756,15 @@ A full **Day / Night** (light / dark) mode toggle has been implemented across th
 #### Core Implementation
 
 **`styles/globals.css`** — Tailwind v4 custom variant:
+
 ```css
 @custom-variant day (&:where([data-theme=day], [data-theme=day] *));
 ```
+
 This gives `day:` a specificity of `(0,1,1)`, which beats all standard utilities — no `!important` needed.
 
 **`app/layout.tsx`**:
+
 - `<html data-theme="dark">` as default (dark mode on first load)
 - Inline no-FOUC script reads `localStorage.getItem('theme')` and applies it before hydration
 - `<ThemeProvider>` (React context) + `<ThemeToggle>` button in layout
@@ -4580,47 +4776,49 @@ This gives `day:` a specificity of `(0,1,1)`, which beats all standard utilities
 #### Tailwind `day:` Variant Pattern
 
 The convention used throughout the app:
+
 ```tsx
 // Backgrounds
-className="bg-[#0A0A0A] day:bg-white"
-className="bg-gradient-to-br from-[...] to-[...] day:bg-none day:bg-gray-50"
+className = 'bg-[#0A0A0A] day:bg-white';
+className = 'bg-gradient-to-br from-[...] to-[...] day:bg-none day:bg-gray-50';
 
 // Text
-className="text-white day:text-gray-900"         // headings
-className="text-white/70 day:text-gray-600"      // body
-className="text-white/40 day:text-gray-400"      // muted
+className = 'text-white day:text-gray-900'; // headings
+className = 'text-white/70 day:text-gray-600'; // body
+className = 'text-white/40 day:text-gray-400'; // muted
 
 // Borders
-className="border-white/10 day:border-gray-200"
+className = 'border-white/10 day:border-gray-200';
 
 // Hide dark-only decorative gradients
-className="bg-gradient-to-br from-[...] to-[...] day:hidden"
+className = 'bg-gradient-to-br from-[...] to-[...] day:hidden';
 
 // Inputs
-className="bg-white/5 border-white/15 text-white day:bg-white day:border-gray-300 day:text-gray-900"
+className =
+  'bg-white/5 border-white/15 text-white day:bg-white day:border-gray-300 day:text-gray-900';
 ```
 
 #### Pages / Components Updated for Day Mode
 
-| File | What was fixed |
-|------|---------------|
-| `app/layout.tsx` | Theme system bootstrap, no-FOUC script |
-| `components/ThemeToggle.tsx` | Toggle button (new) |
-| `components/ThemeProvider.tsx` | Theme context (new) |
-| `components/DesignerNav.tsx` | Full sidebar: header, nav links, section panels, pill buttons (No Base/Polished/Rock Pitch) |
-| `components/ui/SegmentedControl.tsx` | Track bg `day:bg-gray-100`, inactive tabs `day:text-gray-500` |
-| `components/QuickEnquiryForm.tsx` | Sidebar accordion form — bg, title, labels, inputs |
-| `components/QuickEnquiryModal.tsx` | Modal dialog — backdrop, card bg (gradient suppressed), all labels/inputs/buttons |
-| `app/my-account/page.tsx` | Account overview |
-| `app/my-account/designs/page.tsx` | Saved designs list |
-| `app/my-account/designs/[id]/page.tsx` | Single design detail + Share Email panel |
-| `app/my-account/details/page.tsx` | Account details form (CSS constants + all elements) |
-| `app/my-account/invoice/page.tsx` | Invoice page |
-| `app/orders/page.tsx` | Orders list |
-| `app/select-product/_ui/ProductSelectionGrid.tsx` | Product selector page |
-| `app/select-shape/_ui/ShapeSelectionGrid.tsx` | Shape selector (both urn + regular render paths) |
-| `app/privacy/page.tsx` | Privacy policy page (new — see below) |
-| `app/inscriptions/InscriptionOverlayPanel.tsx` | Select Font / Select Color tabs |
+| File                                              | What was fixed                                                                              |
+| ------------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| `app/layout.tsx`                                  | Theme system bootstrap, no-FOUC script                                                      |
+| `components/ThemeToggle.tsx`                      | Toggle button (new)                                                                         |
+| `components/ThemeProvider.tsx`                    | Theme context (new)                                                                         |
+| `components/DesignerNav.tsx`                      | Full sidebar: header, nav links, section panels, pill buttons (No Base/Polished/Rock Pitch) |
+| `components/ui/SegmentedControl.tsx`              | Track bg `day:bg-gray-100`, inactive tabs `day:text-gray-500`                               |
+| `components/QuickEnquiryForm.tsx`                 | Sidebar accordion form — bg, title, labels, inputs                                          |
+| `components/QuickEnquiryModal.tsx`                | Modal dialog — backdrop, card bg (gradient suppressed), all labels/inputs/buttons           |
+| `app/my-account/page.tsx`                         | Account overview                                                                            |
+| `app/my-account/designs/page.tsx`                 | Saved designs list                                                                          |
+| `app/my-account/designs/[id]/page.tsx`            | Single design detail + Share Email panel                                                    |
+| `app/my-account/details/page.tsx`                 | Account details form (CSS constants + all elements)                                         |
+| `app/my-account/invoice/page.tsx`                 | Invoice page                                                                                |
+| `app/orders/page.tsx`                             | Orders list                                                                                 |
+| `app/select-product/_ui/ProductSelectionGrid.tsx` | Product selector page                                                                       |
+| `app/select-shape/_ui/ShapeSelectionGrid.tsx`     | Shape selector (both urn + regular render paths)                                            |
+| `app/privacy/page.tsx`                            | Privacy policy page (new — see below)                                                       |
+| `app/inscriptions/InscriptionOverlayPanel.tsx`    | Select Font / Select Color tabs                                                             |
 
 #### ✅ Privacy Page Created
 
@@ -4641,12 +4839,14 @@ The admin panel (`/admin/**`) uses a **separate** `[data-admin-theme=dark]` CSS 
 Installed **Recharts 3.8.1** (`pnpm add recharts`).
 
 `app/admin/_components/DashboardCharts.tsx` — four chart components:
+
 - `RevenueOrdersChart` — dual-axis area chart (orders/month left axis, revenue right axis)
 - `OrderStatusChart` — donut/pie chart with percent labels per status
 - `CustomersChart` — bar chart of new customers per month
 - `DesignsChart` — bar chart of new saved designs per month
 
 `app/admin/page.tsx` — added four raw SQL queries via `db.execute(sql`...`)`:
+
 - Monthly orders + revenue (last 12 months) using `date_trunc('month', ...)` + `to_char(..., 'Mon YY')`
 - Monthly new customers
 - Monthly new designs
@@ -4655,10 +4855,12 @@ Installed **Recharts 3.8.1** (`pnpm add recharts`).
 Results are transformed in JS into a 12-month label series (filling months with 0 if no data). Charts rendered in a 2-row × 2-column responsive grid below the KPI stat cards.
 
 **Recharts 3 type quirks**: `ValueType` and `NameType` are NOT re-exported from the `recharts` package root — define them locally:
+
 ```ts
 type TooltipValue = number | string | ReadonlyArray<number | string>;
 type TooltipName = number | string;
 ```
+
 Pie label function uses `PieLabelRenderProps`; access the slice name via `props.name` (set by `nameKey="status"`).
 
 ---
@@ -4674,6 +4876,7 @@ Pie label function uses `PieLabelRenderProps`; access the slice name via `props.
 The Quick Enquiry button was relocated from the bottom of the DesignerNav sidebar to the **3D canvas overlay**, stacked directly below the `• Product Name` pill at `top-6 left-6`.
 
 **`components/ThreeScene.tsx`** — changes inside `ProductNameHeader()` (the inner component that renders the canvas overlays):
+
 - Added `import QuickEnquiryModal from '#/components/QuickEnquiryModal'`
 - Added `const [showQuickEnquiry, setShowQuickEnquiry] = useState(false)` to `ProductNameHeader()`
 - Wrapped the product name chip and new Quick Enquiry button in a shared `absolute top-6 left-6 z-10 hidden lg:flex flex-col gap-2 items-start` container
@@ -4702,6 +4905,7 @@ Both elements in the canvas overlay now use `h-8` as the single source of truth 
 Every admin list table now has zebra striping: odd rows are white/transparent, even rows are `bg-gray-100 dark:bg-gray-700/50`. Hover state bumped to `hover:bg-gray-100` on all rows.
 
 Files updated:
+
 - `app/admin/designs/page.tsx`
 - `app/admin/orders/page.tsx`
 - `app/admin/customers/page.tsx`
@@ -4712,6 +4916,7 @@ Files updated:
 - `app/admin/orders/[id]/page.tsx` (order items table + payments table)
 
 Pattern used in all:
+
 ```tsx
 {rows.map((row, index) => (
   <tr
@@ -4737,14 +4942,17 @@ Heavy client-only modules (`RouterBinder`, `DefaultDesignLoader`, `ConditionalCa
 ### ✅ Admin Orders Page Improvements
 
 `app/admin/orders/page.tsx`:
+
 - Thumbnail image doubled in size (`h-12` → `h-24`)
 - "Export SVG" button moved below the thumbnail in the Design cell
 
 `app/admin/orders/[id]/edit/_design-elements-section.tsx`:
+
 - Motif name and thumbnail image are now links opening the SVG in a new tab
 - Inscription text has a **CopyText** inline button — click to copy, shows "Copied!" for 2 s
 
 `app/admin/orders/[id]/edit/page.tsx`:
+
 - Main design image shown via `ThumbnailModal` (click to view full-size popup)
 
 ---
@@ -4752,6 +4960,7 @@ Heavy client-only modules (`RouterBinder`, `DefaultDesignLoader`, `ConditionalCa
 ### ✅ Admin Designs Page Improvements
 
 `app/admin/designs/page.tsx`:
+
 - Added **Thumbnail** column (2nd after Title) using `ThumbnailModal h-16 w-16`
 - Added **Edit Design** button (`app/admin/_components/EditDesignButton.tsx`) — client component that replicates My Account's `handleEdit` flow: `fetch /api/projects/${id}` → `applyDesignSnapshot` → `router.push('/select-size')`
 - Added **View Design** link to `/design/${id}` (public share page)
@@ -4771,6 +4980,7 @@ Old approach: iframe loading static HTML files at `/saved-designs/html/{year}/{m
 New shareable URL for any saved design — usable in emails and social media.
 
 **Files created**:
+
 - `app/api/design/[id]/route.ts` — public (no auth) endpoint returning only `id`, `title`, `designState`
 - `app/design/[id]/page.tsx` — server component with OG/Twitter metadata, Forever Shining logo header, compact title + price, 50%-width clickable design image, "Open in Designer" button, inline Price Quote
 - `app/design/[id]/_open-button.tsx` — `'use client'` component: renders clickable image with hover "Open in Designer" overlay + gold button; both call `handleOpen` which fetches the public API, applies the design snapshot, navigates to `/select-size`
@@ -4778,6 +4988,7 @@ New shareable URL for any saved design — usable in emails and social media.
 **Shell exclusion**: `ConditionalNav`, `MainContent`, `ConditionalCanvas` all check `pathname?.startsWith('/design/')` to hide the 3D designer shell on share pages.
 
 **Share page layout** (final):
+
 - Header: Forever Shining logo (`h-20`) left + "Create Your Own" gold CTA right
 - Compact title + price line (side-by-side, below header)
 - Design image at 50% width, centred, clickable (triggers Open in Designer)
@@ -4788,10 +4999,12 @@ New shareable URL for any saved design — usable in emails and social media.
 ### ✅ Admin Payments Page
 
 `app/admin/payments/page.tsx`:
+
 - Removed the **Ref** column (was causing table overflow)
 - Added **+ Add Payment** CTA button (same style as Add Order)
 
 `app/admin/payments/new/page.tsx` — new payment form matching orders/new style:
+
 - Fields: Order ID, Provider (Bank Transfer / Stripe / PayPal / PayWay / Cash / Cheque / Other), Transaction/Reference, Amount, Currency, Status, Received At
 - Same header layout (title + description left, "← Back to Payments" right, border-bottom), section heading, 2-col grid, red error box
 
@@ -4808,6 +5021,7 @@ Two entry points exist for the Quick Enquiry feature — both POST to `app/api/e
 3. **Check-price card** (`components/QuickEnquiryForm.tsx`): Collapsible dark-themed card on the `/check-price` page below Saved Designs.
 
 `components/QuickEnquiryModal.tsx` — dark-themed modal (matching DesignerNav style), uses `createPortal` to `document.body`:
+
 - Fields: Name, Email*, Phone, Message*
 - Reads `currentProjectId` from Zustand store; attaches it to the POST body if set
 - Shows green "✓ Enquiry sent!" success message and auto-closes
@@ -4825,8 +5039,6 @@ Two entry points exist for the Quick Enquiry feature — both POST to `app/api/e
 - [ ] **Test Quick Enquiry end-to-end**: verify submission appears in `/admin/enquiries`
 
 ---
-
-
 
 ### ✅ Admin Orders — Invoice View
 
@@ -4846,11 +5058,13 @@ Layout uses the same admin white/dark-mode card styling as the rest of the admin
 `app/admin/orders/[id]/edit/page.tsx` — interactive client component for editing an order:
 
 **Top section** (read-only):
+
 - Invoice number, status badge, customer info
 
 **Order details** (editable): status selector, payment method, notes
 
 **Design Elements section** (the key feature):
+
 - Every inscription, motif, ceramic image, and 3D addition from `designState` is listed as a card
 - Each card has a **checkbox on the right side** for selection
 - "**Mail Selected**" button (a `<select>` / button composite) **above** the design elements list — sends the checked items to the supplier via the supplier-mail API
@@ -4880,22 +5094,25 @@ The admin Edit page calls this API when "Mail Selected" is clicked with at least
 **Purpose**: Suppliers use the SVG to position elements in Illustrator/Photoshop for laser etching or sandblasting. The SVG is overlaid at 50% opacity over the saved design screenshot to verify placement.
 
 **Output**: A single SVG file (`order-INV-xxx.svg`) containing:
+
 1. **Stone outline** — the shape path scaled to the stone's `widthMm × heightMm` dimensions in mm
 2. **Inscriptions** — `<text>` elements positioned using the stored `xPos`/`yPos` coordinates
 3. **Motifs** — SVG paths scaled to the motif's `heightMm`, positioned at the motif offset
 
 **Coordinate system** (critical — matches Three.js geometry pipeline):
+
 - `geoToMm = widthMm / dx` where `dx` = actual path bounding-box width (from `computePathBounds()`)
 - Stone outline: `translate(tx, ty) scale(geoToMm, geoToMm)` — isotropic transform
   - `tx = cx - centerX * geoToMm`, `ty = -minY * geoToMm`
 - Inscriptions (`coordinateSpace` handling):
   - `undefined` or `'absolute'` → `svgY = stoneH - yPos * geoToMm` (geo Y=0 is stone bottom)
-  - `'mm-center'` → `svgY = cy - yPos`, `svgX = cx + xPos`  
+  - `'mm-center'` → `svgY = cy - yPos`, `svgX = cx + xPos`
   - `'offset'` → `svgY = cy + yPos * geoToMm`, `svgX = cx + xPos * geoToMm`
   - Default zero `(0,0)` → always maps to stone centre `(cx, cy)`
 - Motifs: same `geoToSvg()` function, then positioned with `translate(mx, my)` + aspect-correct scale
 
 **`computePathBounds()` helper** (lines 39–65 of route.ts):
+
 - Parses all number-pairs from SVG `d` attributes as `(X, Y)` coordinates
 - Returns `{ minX, maxX, minY, maxY, dx, dy, centerX }`
 - Used to compute isotropic `geoToMm = widthMm / dx` (replaces the old `widthMm / shapeViewW` which used viewBox width 400 regardless of actual path extent)
@@ -4914,11 +5131,13 @@ The admin Edit page calls this API when "Mail Selected" is clicked with at least
 **Test order**: `INV-202605-81AH`, shape `cropped_peak.svg`, stone 850×850mm.
 
 **Actual DB values** (confirmed by querying `orders` + `projects`):
+
 - Inscriptions have no `coordinateSpace` field → treated as absolute geometry-local coords
 - "Larkin Watts": `yPos=306.54` → `svgY = 850 - 306.54×2.125 = 198.6mm` from stone top (76.6% up from bottom)
 - Motif butterfly: `coordinateSpace='mm-center'`, `yPos=44.15` → `svgY = cy - 44.15 = 380.85mm`
 
 **Three.js coordinate pipeline** (confirmed by reading `SvgHeadstone.tsx` + `AutoFit.tsx`):
+
 - `dx_3js = 400` (from `getPoints(256)` sampling of cropped_peak.svg after Y-scale 0.9975)
 - `geoToMm = 850/400 = 2.125` ← this is what the code computes AND what Three.js uses → no error here
 - Stone bottom at geo Y=0, stone top at geo Y=400 (targetH_SV)
@@ -4929,6 +5148,7 @@ The admin Edit page calls this API when "Mail Selected" is clicked with at least
 **Current hypothesis**: The visual mismatch may be caused by the stone outline in the SVG not perfectly matching the 3D-rendered shape, causing the user to misalign when overlaying. The `cropped_peak.svg` has a Y-scale transform `matrix(1,0,0,0.9975,0,0)` in the SVG source that `computePathBounds` ignores (reads raw path from `<defs>` without applying the parent `<g>` transform). Effect is a ~0.25% Y stretch in the SVG outline → 1.6mm difference at the stone bottom.
 
 **Next steps**:
+
 - Apply the `<g transform>` matrix when extracting path coordinates in `computePathBounds`
 - Add an SVG debug comment showing all computed values (`dx`, `geoToMm`, per-inscription `xPos`/`yPos`/`svgX`/`svgY`) to help verify
 - Check whether `cropped_peak.svg`'s 0.9975 Y-scale is significant enough to cause visible misalignment at the bottom
@@ -4950,6 +5170,7 @@ The admin Edit page calls this API when "Mail Selected" is clicked with at least
 ### 🔍 Google Search Console Analysis (forevershining.org)
 
 GSC data as of 2026-05-25:
+
 - **2,100 pages indexed** — green trend rising since ~May 7 (positive signal)
 - **1,370 not indexed** breakdown:
   | Reason | Count |
@@ -4962,6 +5183,7 @@ GSC data as of 2026-05-25:
   | Duplicate without canonical | 1 |
 
 Root causes identified:
+
 1. **Near-duplicate content** — intro paragraph was picked from 4 templates by `parseInt(design.id) % 4`; within the same category/product, hundreds of pages were nearly identical
 2. **Fake structured data review** — same hardcoded `"Margaret T."` review with `4.8/247` rating on all 3,114 design pages → Google spam signal
 3. **Zero pre-rendering** — `generateStaticParams()` returned `[]`; every Googlebot hit triggered a cold ISR render
@@ -4972,6 +5194,7 @@ Root causes identified:
 ### ✅ Fix 1 — Unique Per-Design Intro Content (`components/DesignContentBlock.tsx`)
 
 Replaced the 4-template rotating `generateIntro()` with a truly unique paragraph per design:
+
 - Decodes `design.inscriptions` HTML entities and extracts the first ~10 words as a quoted inscription snippet
 - Incorporates `design.motifNames`, `design.shapeName`, `categoryTitle`, and `productType`
 - Falls back to shape + motif description when inscriptions are absent
@@ -4992,6 +5215,7 @@ If real reviews become available (e.g. from a reviews DB table), add `aggregateR
 ### ✅ Fix 3 — Sitemap Filtered to Designs With Screenshots (`app/sitemap.ts`)
 
 Added `getScreenshotIds()` using `fs.readdirSync('public/screenshots/v2026-3d')`:
+
 - Builds a `Set<string>` of design IDs with a real `.png` on disk (excludes `_small` variants)
 - `indexableDesigns` only includes designs where `screenshotIds.has(design.id)` is true
 - Eliminated ~73 broken `images:` entries (out of 3,114) pointing to non-existent PNGs
@@ -5002,12 +5226,18 @@ Added `getScreenshotIds()` using `fs.readdirSync('public/screenshots/v2026-3d')`
 ### ✅ Fix 4 — Pre-render Top 500 Designs at Build Time (`app/designs/.../page.tsx`)
 
 Changed `generateStaticParams()` from `return []` to returning the 500 most-recently added designs:
+
 ```typescript
 return getAllSavedDesigns()
   .sort((a, b) => parseInt(b.id) - parseInt(a.id))
   .slice(0, 500)
-  .map((design) => ({ productType: design.productSlug, category: design.category, slug: design.slug }));
+  .map((design) => ({
+    productType: design.productSlug,
+    category: design.category,
+    slug: design.slug,
+  }));
 ```
+
 These pages are now pre-rendered as static HTML at build time. Googlebot no longer triggers cold ISR renders for the most-visited URLs. Remaining ~2,600 pages continue to use `revalidate = 86400` ISR.
 
 ---
@@ -5033,6 +5263,7 @@ A full modern admin panel was created at `app/admin/` — white/dark-mode design
 **Layout** (`app/admin/layout.tsx`): Left sidebar with nav links (Dashboard, Orders, Customers, Designs, Payments, Enquiries, System), dark-mode toggle (Day/Night button, top-right), responsive.
 
 **Pages created**:
+
 - `app/admin/page.tsx` — Dashboard with stat cards (Total Orders, Customers, Designs, Enquiries, New Enquiries) + Recent Orders table
 - `app/admin/orders/page.tsx` — Orders list with status badges, invoice numbers, customer info
 - `app/admin/orders/new/page.tsx` — Add Custom Order form: `CustomerPicker` combobox (debounced search via `GET /api/admin/customers/search?q=`), line items with multi-line `<textarea>` descriptions, totals
@@ -5040,6 +5271,7 @@ A full modern admin panel was created at `app/admin/` — white/dark-mode design
 - `app/admin/customers/new/page.tsx` — New Customer form: Account (email, password, role), Personal Details (name, phone, DOB, gender), Business Details (org, tradingName, taxId, website), Address (4-field, country dropdown defaulting to Australia)
 
 **API routes added**:
+
 - `GET /api/admin/customers/search?q=` — case-insensitive search on email, firstName, lastName, organization; returns up to 20 results
 
 ---
@@ -5057,6 +5289,7 @@ A full modern admin panel was created at `app/admin/` — white/dark-mode design
    - Cheque: PO Box 1268, Bibra Lake WA 6965
 
 Both payment SDKs loaded via `next/script` with `strategy="lazyOnload"`:
+
 - `https://js.stripe.com/v3/`
 - `https://www.paypal.com/sdk/js?client-id=ARAQC6sW5wGhZbGbPoaqMhKYylVVgDXkLP3PVKGhDd_OywkKfwoqybq9Wf0-wPVghD4qxkbKIOHquUpt&currency=AUD`
 
@@ -5071,6 +5304,7 @@ Client calls `window.Stripe(NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY).redirectToChecko
 **Image URL guard**: only passes `images` to Stripe if `screenshotUrl` starts with `http` (Stripe requires absolute URLs).
 
 **Required env vars** (set in `.env.local` + Vercel Environment Variables):
+
 - `STRIPE_SECRET_KEY=sk_live_...` (retrieve from Stripe dashboard — do NOT commit)
 - `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_live_...` (retrieve from Stripe dashboard)
 
@@ -5097,10 +5331,12 @@ Amber checkbox "🧪 Test mode — charge $1.00 instead of real price" shown onl
 **Critical bug fixed**: previously, completed payments (Stripe, PayPal, BPAY) never wrote to the `orders` table, so the admin dashboard always showed 0.
 
 **New API routes**:
+
 - `POST /api/orders` — creates `orders` + `orderItems` + `payments` records. Accepts `{ projectId, amountCents, currency, paymentMethod, paymentRef, status, designName }`. Generates invoice number `INV-YYYYMM-RAND`. Returns `{ orderId, invoiceNumber }`.
 - `PATCH /api/orders/[id]` — updates order status + payment status. Used by Stripe success redirect to mark order as `paid`.
 
 **Flow per payment method**:
+
 - **Stripe**: `POST /api/orders` (status=`pending`) → store `orderId` in `sessionStorage` → redirect to Stripe. On `?payment=success` return: read `orderId`, `PATCH /api/orders/[id]` → status=`paid`.
 - **PayPal**: `POST /api/orders` (status=`paid`) in `onApprove` callback with PayPal `details.id` as `providerRef`.
 - **BPAY/Other**: `POST /api/orders` (status=`pending`) before showing confirmation.
@@ -5125,6 +5361,7 @@ Amber checkbox "🧪 Test mode — charge $1.00 instead of real price" shown onl
 `components/DesignerNav.tsx`: Added step-based navigation so users can move between fullscreen panels without returning to the menu.
 
 **New computed values** (in the main component body):
+
 - `navigablePanelSlugs` — `useMemo` that filters `menuItems` to those in `fullscreenPanelSlugs` and visible for the current product type (hides `select-material` for laser, `select-border` when no border, `select-additions` for plaques, `select-emblems` when not product 5)
 - `currentPanelIndex` — index of `activeFullscreenPanel` within `navigablePanelSlugs`
 - `prevPanelSlug` / `nextPanelSlug` — adjacent slugs (undefined at boundaries → buttons disabled)
@@ -5159,14 +5396,17 @@ The two sub-panel headers ("Corners", "Holes") also use the same `Guided Step` l
 ### ✅ Card Selectors — Selected State & Hover Polish
 
 **`components/MaterialSelector.tsx`**:
+
 - Selected card outer button: `ring-2 ring-[#D7B356] ring-offset-1 ring-offset-[#1b1511]`
 - Gold checkmark badge: `absolute right-1 top-1 flex h-4 w-4 items-center justify-center rounded-full bg-[#D7B356]` with SVG check path `M5 13l4 4L19 7`
 - Unselected hover: `hover:ring-1 hover:ring-[#D7B356]/50 hover:ring-offset-1`
 
 **`components/ShapeSelector.tsx`**:
+
 - Gold checkmark badge added to both urn shapes and standard shapes selected cards
 
 **`components/BorderSelector.tsx`**:
+
 - Unselected cards: `hover:border-[#D7B356]/40`
 - Selected card: gold checkmark badge inside the preview div
 
@@ -5207,7 +5447,7 @@ The "Guided Step" row shows a step badge using `currentPanelIndex + 1` / `naviga
 
 ### ✅ Physical Punch-Through Holes in 3D Canvas (front & back)
 
-`components/three/headstone/SsPlaqueHoles.tsx` *(new file, completely rewritten from circle geometry to canvas alpha map)*:
+`components/three/headstone/SsPlaqueHoles.tsx` _(new file, completely rewritten from circle geometry to canvas alpha map)_:
 
 Implements true transparent cutouts using a canvas `alphaMap` on cloned face materials:
 
@@ -5223,6 +5463,7 @@ Implements true transparent cutouts using a canvas `alphaMap` on cloned face mat
 `components/three/headstone/ShapeSwapper.tsx`: renders `<SsPlaqueHoles>` inside the `SvgHeadstone` callback when `isStainlessSteel`. Passes `meshRef={api.mesh}`, `worldWidth={api.worldWidth}`, `worldHeight={api.worldHeight}`. Component is always rendered (handles `'none'` internally via early return in the effect — no guard in ShapeSwapper).
 
 **Key constants** (`SsPlaqueHoles.tsx`):
+
 - `HOLE_RADIUS_M = 0.004` — 4 mm radius hole
 - `EDGE_INSET_M = 0.018` — 18 mm from each edge
 - `RIM_RATIO = 1.4` — rim is 40% larger than hole
@@ -5263,6 +5504,7 @@ Implements true transparent cutouts using a canvas `alphaMap` on cloned face mat
 ### ✅ Sitemap Fixes (3,293 unindexed pages)
 
 `app/sitemap.ts`:
+
 - Replaced `force-dynamic` with `revalidate = 86400` (ISR caching — was rebuilding on every Googlebot request)
 - Fixed all `lastModified` to use actual dates: design pages now use `new Date(parseInt(design.id))` (design IDs are Unix ms timestamps)
 - Added `images` array to design page sitemap entries (image sitemap)
@@ -5276,6 +5518,7 @@ Implements true transparent cutouts using a canvas `alphaMap` on cloned face mat
 ### ✅ SSR Content — Design Detail Pages
 
 `app/designs/[productType]/[category]/[slug]/page.tsx`: Replaced the minimal 4-tile grid + feature bullets in `div#design-ssr-content` with:
+
 - A full **Design Specifications `<dl>` table** (material, shape, finish, category, inscription count, motifs, photo, size)
 - A **Price Guide `<table>`** with line-item breakdown (headstone range, inscriptions, motifs, ceramic photo, delivery — AUD, no personal data)
 
@@ -5290,9 +5533,9 @@ Implements true transparent cutouts using a canvas `alphaMap` on cloned face mat
 
 **`middleware.ts`**: Added `BLOCKED_PATHS = /^\/ml\/[^/]+\/saved-designs\/html\/[^/]+\.html$/` — returns 404 for direct URL access before any auth/cookie logic (lines 22–25). The middleware matcher deliberately excludes `.html` from its static-asset bypass regex, so this works.
 
-**`lib/inscription-sanitizer.ts`** *(new)*: Shared pure-function anonymization library extracted from `DesignPageClient.tsx`. Exports: `NameDatabase`, `hashString`, `getGenderFromCategory`, `getRandomName`, `getRandomSurname`, `getRandomFirstName`, `sanitizeInscription`. Anonymization is seeded-deterministic — same input always gives same output (hash of original text).
+**`lib/inscription-sanitizer.ts`** _(new)_: Shared pure-function anonymization library extracted from `DesignPageClient.tsx`. Exports: `NameDatabase`, `hashString`, `getGenderFromCategory`, `getRandomName`, `getRandomSurname`, `getRandomFirstName`, `sanitizeInscription`. Anonymization is seeded-deterministic — same input always gives same output (hash of original text).
 
-**`scripts/anonymize-price-quotes.ts`** *(new)*: Pre-processing script — generates `html-anon/` directories with anonymized HTML for all 3 mlDirs (`forevershining`, `headstonesdesigner`, `bronze-plaque`). Includes mtime check (skip if `html-anon/` output newer than source) for safe re-runs. Run via: `pnpm anonymize-quotes`.
+**`scripts/anonymize-price-quotes.ts`** _(new)_: Pre-processing script — generates `html-anon/` directories with anonymized HTML for all 3 mlDirs (`forevershining`, `headstonesdesigner`, `bronze-plaque`). Includes mtime check (skip if `html-anon/` output newer than source) for safe re-runs. Run via: `pnpm anonymize-quotes`.
 
 **`package.json`**: Added `"anonymize-quotes": "tsx scripts/anonymize-price-quotes.ts"` script.
 
@@ -5381,10 +5624,10 @@ Full-page view uses image cards; sidebar view uses a compact 2-button grid. Thum
 
 `components/SvgHeadstone.tsx`: added `isStainlessSteel` and `ssFinish: 'brushed' | 'polished'` props. When `isStainlessSteel` is true the `useMemo` builds a `MeshPhysicalMaterial` preset instead of the granite material:
 
-| Preset | metalness | roughness | clearcoat | clearcoatRoughness | envMapIntensity |
-|--------|-----------|-----------|-----------|-------------------|-----------------|
-| **Brushed** | 0.88 | 0.32 | 0.70 | 0.25 | 1.6 |
-| **Polished** | 1.00 | 0.05 | 1.00 | 0.04 | 3.0 |
+| Preset       | metalness | roughness | clearcoat | clearcoatRoughness | envMapIntensity |
+| ------------ | --------- | --------- | --------- | ------------------ | --------------- |
+| **Brushed**  | 0.88      | 0.32      | 0.70      | 0.25               | 1.6             |
+| **Polished** | 1.00      | 0.05      | 1.00      | 0.04               | 3.0             |
 
 Brushed uses the swatch JPEG as an albedo map (`clonedFaceMap`). Polished has no face texture (warm silver color `0xdedad6`).
 
@@ -5421,6 +5664,7 @@ The 300×200 mm plaque puts the camera only ~0.28 m away, causing the grass repe
 `lib/saved-design-loader-utils.ts`: Added `NUMBERED_MATERIAL_TEXTURES` lookup table (materials 01–31) built from `public/xml/en_EN/stones.xml`. Previously, old saved designs storing `material: "01"` would fall through to the 2KB placeholder `01.webp` instead of the correct named texture.
 
 `mapTexture()` now checks numbered patterns **first** (before all other named-string fallbacks):
+
 - `01` → `Sandstone.webp`
 - `02` → `White-Carrara.webp`
 - `08` → `G654.webp`
@@ -5478,6 +5722,7 @@ Commit: `02df115653`
 `app/designs/[productType]/[category]/[slug]/page.tsx`: Fixed two "enhancement" errors shown in Google Search Console:
 
 **1. Missing `price` (Opisy produktów / Product descriptions error)**
+
 - Switched `"@type": "Offer"` → `"@type": "AggregateOffer"` with `lowPrice` per product type:
   - Granite headstone: AUD 695
   - Stainless steel: AUD 795
@@ -5486,6 +5731,7 @@ Commit: `02df115653`
 - `priceCurrency` changed to `"AUD"` (primary market)
 
 **2. Missing `hasMerchantReturnPolicy` + `shippingRate` (Informacje o sprzedawcy / Seller info error)**
+
 - Added `hasMerchantReturnPolicy`: `MerchantReturnNotPermitted` for AU/GB/US/CA (custom memorial products cannot be returned)
 - Added `shippingRate`: `MonetaryAmount { value: "0", currency: "AUD" }` (free delivery)
 - Added `transitTime` to `ShippingDeliveryTime` (1–2 weeks, was only `handlingTime`)
@@ -5522,6 +5768,7 @@ Added a second scenery option **"Outback"** alongside the existing scenery in `c
 New `SCENERY` config object in `Scene.tsx` keyed by `'day' | 'outback'`; `sceneryVariant` state in the store (`lib/headstone-store.ts` + types).
 
 Textures stored in `public/textures/three/outback/`:
+
 - `red_sand_diff_2k.jpg` (2.2 MB) — active diffuse
 - `red_sand_nor_gl_2k.jpg` (4.4 MB) — active normal map
 - `outback_diff_2k.jpg` / `outback_nor_gl_2k.jpg` — unused originals (can be deleted to save ~9 MB)
@@ -5544,14 +5791,14 @@ Textures stored in `public/textures/three/outback/`:
 
 `components/SceneryToggleButton.tsx`: six background colour swatches updated to:
 
-| Label | Hex |
-|-------|-----|
-| Pure White (Light) | `#ffffff` |
+| Label                      | Hex       |
+| -------------------------- | --------- |
+| Pure White (Light)         | `#ffffff` |
 | Light Gray (Light/Neutral) | `#efefef` |
-| Warm Beige (Light/Warm) | `#e8e4dc` |
-| Medium Gray (Mid-tone) | `#9ca3af` |
-| Dark Charcoal (Dark) | `#1e2228` |
-| Deep Navy (Dark/Cool) | `#1a2035` |
+| Warm Beige (Light/Warm)    | `#e8e4dc` |
+| Medium Gray (Mid-tone)     | `#9ca3af` |
+| Dark Charcoal (Dark)       | `#1e2228` |
+| Deep Navy (Dark/Cool)      | `#1a2035` |
 
 ---
 
@@ -5614,6 +5861,7 @@ First line of the saved-design email template changed from a lighter placeholder
 ### ✅ Grass Texture Improvements
 
 Replaced the flat repeating grass texture with a multi-layered approach in `components/three/headstone/GrassFloor.tsx` (and `Scene.tsx` fog/lighting tweaks):
+
 - Reduced repeat tiling to eliminate obvious pattern repetition
 - Added subtle colour variation and dirt-blend overlay texture
 - Tuned fog near/far values so grass fades naturally without pixelation near the base
@@ -5632,6 +5880,7 @@ When the **Crop** button is clicked, a spinner overlay now appears immediately b
 Saved design thumbnails in the My Account page now use the same transparent/neutral-background style as the Design Gallery cards. Previously they showed the grass/sky scenery which looked inconsistent.
 
 Implementation: `DesignerNav.tsx` `handleSaveDesign` now:
+
 1. Calls `setScreenshotMode(true)` to enter clean capture mode.
 2. Waits 2 × `requestAnimationFrame` so R3F re-renders.
 3. Captures the canvas (background fill `#e8e4dc` warm neutral via `encodeCanvasForUpload`).
@@ -5640,6 +5889,7 @@ Implementation: `DesignerNav.tsx` `handleSaveDesign` now:
 `Scene.tsx` gates all scenery behind `!screenshotMode` (and `!hideScenery`), producing a clean headstone-on-neutral background.
 
 New store fields in `lib/headstone-store.types.ts` + `lib/headstone-store.ts`:
+
 - `screenshotMode: boolean` / `setScreenshotMode(v)`
 
 ---
@@ -5658,11 +5908,13 @@ New store fields in `lib/headstone-store.types.ts` + `lib/headstone-store.ts`:
 
 **Fix** (`components/LoadDesignButton.tsx`):
 After a successful load, imperatively clear:
+
 ```tsx
 useHeadstoneStore.getState().setActivePanel(null);
 useHeadstoneStore.getState().setSelectedMotifId(null);
 useHeadstoneStore.getState().setSelectedImageId(null);
 ```
+
 Then `router.push('/design-menu')` so nothing is selected and the URL is clean.
 
 ---
@@ -5670,12 +5922,14 @@ Then `router.push('/design-menu')` so nothing is selected and the URL is clean.
 ### ✅ SceneryToggleButton — Bottom-Right Background Toggle
 
 New component `components/SceneryToggleButton.tsx` (mounted in `ConditionalCanvas.tsx`):
+
 - Fixed `bottom-6 right-4` floating button
 - Opens a popover with a **Scenery** option + 6 colour swatches: Warm white `#e8e4dc`, Light grey `#efefef`, Stone `#d0c9bc`, Dark slate `#2d3748`, Charcoal `#1e2228`, Navy `#1a2035`
 - Persisted to `localStorage` key `fs_scene_bg` as `{ hideScenery, color }`
 - Restored on mount
 
 New store fields:
+
 - `hideScenery: boolean` / `setHideScenery(v)`
 - `solidBgColor: string` / `setSolidBgColor(color)`
 
@@ -5690,6 +5944,7 @@ New store fields:
 **Three-layer fix:**
 
 1. **CSS background on canvas container** (`components/ThreeScene.tsx`):
+
    ```tsx
    const hideScenery = useHeadstoneStore((s) => s.hideScenery);
    const solidBgColor = useHeadstoneStore((s) => s.solidBgColor);
@@ -5700,9 +5955,11 @@ New store fields:
      style={hideScenery ? { backgroundColor: solidBgColor } : undefined}
    >
    ```
+
    Since the Canvas has `alpha: true` + `style={{ background: 'transparent' }}`, transparent WebGL pixels show the CSS background through.
 
 2. **Imperative `useEffect`** (`components/three/Scene.tsx`):
+
    ```tsx
    useEffect(() => {
      if (hideScenery) {
@@ -5711,6 +5968,7 @@ New store fields:
      }
    }, [hideScenery, scene]);
    ```
+
    Bypasses R3F reconciler timing by directly clearing `scene.background` and `scene.fog`.
 
 3. **`visible` prop on scenery groups** instead of conditional rendering:
@@ -5721,10 +5979,23 @@ New store fields:
    Setting `THREE.Group.visible = false` is a direct THREE.js property update — more reliable than unmounting in R3F for visibility toggling.
 
 **`<color attach="background">` logic** after fix:
+
 ```tsx
-{screenshotMode && <color attach="background" args={['#e8e4dc']} />}  {/* screenshot: warm neutral */}
-{!is2DMode && !noScenery && <color attach="background" args={['#A8C9E6']} />}  {/* normal: sky blue */}
-{/* hideScenery: no <color> — CSS backgroundColor on container handles it */}
+{
+  screenshotMode && <color attach="background" args={['#e8e4dc']} />;
+}
+{
+  /* screenshot: warm neutral */
+}
+{
+  !is2DMode && !noScenery && <color attach="background" args={['#A8C9E6']} />;
+}
+{
+  /* normal: sky blue */
+}
+{
+  /* hideScenery: no <color> — CSS backgroundColor on container handles it */
+}
 ```
 
 ---
@@ -5744,9 +6015,11 @@ New store fields:
 After saving a design on the live site, `<img src="/screen.png">` appeared instead of a real thumbnail.
 
 #### Root Cause
+
 `UPLOAD_REMOTE_URL` / `UPLOAD_REMOTE_SECRET` env vars may not be set → `after()` upload silently fails → `screenshotPath`/`thumbnailPath` remain `null` in DB → UI falls back to `/screen.png`.
 
 #### Fix (`app/api/projects/route.ts`)
+
 Store the raw screenshot data URL directly into `screenshotPath` and `thumbnailPath` in the **fast-path DB write** (before `after()` fires). The `after()` callback still runs and overwrites with real file URLs if the upload to wiecznapamiec.pl succeeds. On Vercel without upload env vars, the data URL is shown as-is — always a real thumbnail. **Commit:** `63fb58a144`
 
 ---
@@ -5754,9 +6027,11 @@ Store the raw screenshot data URL directly into `screenshotPath` and `thumbnailP
 ### ✅ Fixed: Save Design 500 Error on Localhost (Missing `json_path` Column)
 
 #### Root Cause
+
 `ALTER TABLE "projects" ADD COLUMN "json_path" text` had been applied to the remote DB via Drizzle schema but **not** run locally. The fallback `isJsonPathColumnMissing()` was present in `lib/projects-db.ts` but not triggering reliably.
 
 #### Fix
+
 Ran `pnpm db:push` locally (confirmed via interactive prompt). Column added. **Commit:** `d4e50aa774`
 
 ---
@@ -5766,6 +6041,7 @@ Ran `pnpm db:push` locally (confirmed via interactive prompt). Column added. **C
 When "Add Your Image" was placed on the headstone the image wasn't selected and no edit panel appeared — the user had to manually click it.
 
 #### Fix (`lib/headstone-store.ts` — `addImage()`)
+
 Added `selectedImageId: image.id` and `activePanel: 'image'` to the `set()` call, mirroring the pattern used by `addMotif()`. **Commit:** `57ec1d0755`
 
 ---
@@ -5780,15 +6056,15 @@ Save Design was buried under the Account accordion. Moved it to the last positio
 
 Multiple improvements to reduce vertical space and improve usability:
 
-| Change | Detail |
-|--------|--------|
-| Removed type-info header | Large image thumbnail + "Ceramic Photo" + "Selected image type" block removed from above crop section |
-| Compacted title | "Crop Section" header + info button replaced with a small `selectedType.name` label |
-| Mask filtering | Ceramic / Vitreous Enamel / Plana → only show oval, horizontal-oval, square, rectangle (4 masks); Granite/laser-etched → all 7 masks |
-| Smaller mask grid | `grid-cols-5`, 28px thumbnails, `p-1` padding, `rounded-md` |
-| Gold "Crop Image" button | Background `#D7B356`, text black — matches slider gold theme |
-| Rotation range 0–360 | Slider changed from `-180/180` to `0/360`; Decrease/Increase ±5 buttons wrap with modulo |
-| Rotate ↺/↻ wrapping | `handleRotateLeft` / `handleRotateRight` (±90) now use `((deg % 360) + 360) % 360` — no longer escape 0–360 range |
+| Change                   | Detail                                                                                                                               |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------ |
+| Removed type-info header | Large image thumbnail + "Ceramic Photo" + "Selected image type" block removed from above crop section                                |
+| Compacted title          | "Crop Section" header + info button replaced with a small `selectedType.name` label                                                  |
+| Mask filtering           | Ceramic / Vitreous Enamel / Plana → only show oval, horizontal-oval, square, rectangle (4 masks); Granite/laser-etched → all 7 masks |
+| Smaller mask grid        | `grid-cols-5`, 28px thumbnails, `p-1` padding, `rounded-md`                                                                          |
+| Gold "Crop Image" button | Background `#D7B356`, text black — matches slider gold theme                                                                         |
+| Rotation range 0–360     | Slider changed from `-180/180` to `0/360`; Decrease/Increase ±5 buttons wrap with modulo                                             |
+| Rotate ↺/↻ wrapping      | `handleRotateLeft` / `handleRotateRight` (±90) now use `((deg % 360) + 360) % 360` — no longer escape 0–360 range                    |
 
 **Commit:** `7bab619cde`
 
@@ -5816,9 +6092,11 @@ Accordion sections (Setup / Design / Account) now open/close instantly — `tran
 Saving a design on the live site (forevershining.org) returned HTTP 500 / "Unable to save project".
 
 #### Root Cause
+
 `app/api/projects/route.ts` (POST handler) was doing **3 sequential HTTP uploads** to wiecznapamiec.pl (screenshot → thumbnail → JSON) before returning a response. Vercel Hobby plan enforces a **10-second function timeout**; the combined upload time exceeded this limit and Vercel killed the function.
 
 #### Fix — Next.js 15 `after()`
+
 Used `after()` from `next/server` (Next.js 15 stable) to run all file uploads **after the response has been sent** to the client:
 
 1. **Fast path** (synchronous): Write design state to PostgreSQL → return `{ project: summary }` immediately (typically <1 second)
@@ -5849,14 +6127,18 @@ return NextResponse.json({ project: summary }); // returns immediately
 Three.js reported `Could not load https://www.wiecznapamiec.pl/forevershining/uploads/backgrounds/…jpg: undefined` because the `Access-Control-Allow-Origin` response header had value `"e"` (a literal character) instead of a real origin or `"*"`.
 
 #### Root Cause
+
 `legacy/.htaccess` used Apache's `SetEnvIf` + `%{CORS_ORIGIN}e` pattern. When the environment variable is unset (or unsupported by the server's Apache version), `%{CORS_ORIGIN}e` expands to just the letter `e` — resulting in `Access-Control-Allow-Origin: e`.
 
 #### Fix
+
 Replaced the conditional env-var pattern with a simple unconditional wildcard in `legacy/.htaccess`:
+
 ```apache
 Header set Access-Control-Allow-Origin "*"
 Header set Access-Control-Allow-Methods "GET, OPTIONS"
 ```
+
 This file must be deployed to `public_html/forevershining/uploads/.htaccess` on wiecznapamiec.pl.
 
 ---
@@ -5876,6 +6158,7 @@ This file must be deployed to `public_html/forevershining/uploads/.htaccess` on 
 ### ✅ Upload Year/Month Subfolder Structure
 
 `legacy/upload.php` creates `YEAR/MONTH/` subdirectories inside each upload type folder so uploads are organized chronologically:
+
 ```
 uploads/
   backgrounds/2026/05/{uuid}.jpg
@@ -5894,16 +6177,17 @@ uploads/
 
 ---
 
-
-
 ### Urn Background Inlay — Final Fixes
 
 #### Default White Inlay
+
 All urn shapes now default to **white** background inlay (instead of transparent/none).
+
 - `lib/headstone-store.ts` — initial state for `urnBackgroundColor` set to `'#ffffff'`
 - `components/three/headstone/UrnEnamelInlay.tsx` — `defaultColor` fallback is `'#ffffff'`
 
 #### Background Thumbnails Disappear After Shape Change
+
 **Bug**: Selecting a background, then changing the urn shape, cleared all background thumbnails from the panel.
 **Root cause**: Shape change reset the `headstoneMaterial` store slice, which `MaterialSelectionGrid` relied on for its local list.
 **Fix**: `app/select-material/_ui/MaterialSelectionGrid.tsx` — persists the loaded backgrounds list in `useRef` so re-renders triggered by shape changes don't empty the thumbnail grid.
@@ -5915,6 +6199,7 @@ All urn shapes now default to **white** background inlay (instead of transparent
 All binary file uploads (background images, portrait photos, screenshots, PDFs) are now stored as real files on the wiecznapamiec.pl server instead of being embedded as base64 data URLs in the PostgreSQL `designState` column.
 
 #### Problem
+
 - **Vercel filesystem is read-only** at runtime — `writeFile` to `public/` in a serverless function silently fails or throws.
 - Old `/api/upload-background` route wrote to `public/uploads/` → worked on localhost, failed on Vercel.
 - Portrait images and background uploads were stored as 1–5 MB base64 strings in Zustand → saved into PostgreSQL `designState` jsonb column.
@@ -5940,7 +6225,9 @@ lib/upload/proxy.ts     (shared helper)
 ```
 
 #### PHP Endpoint (`legacy/upload.php`)
+
 Single unified endpoint — deploy to `public_html/forevershining/upload.php`:
+
 - Accepts `multipart/form-data` with `file` + `subdir` fields
 - Subdir whitelist: `backgrounds`, `images`, `screenshots`, `pdfs`
 - Per-subdir MIME validation and file-size limits
@@ -5949,34 +6236,46 @@ Single unified endpoint — deploy to `public_html/forevershining/upload.php`:
 - Uses `__DIR__` for filesystem path, hardcoded public URL `https://www.wiecznapamiec.pl/forevershining/uploads/`
 
 #### Apache CORS (`legacy/.htaccess`)
+
 Deploy to `public_html/forevershining/uploads/.htaccess`:
+
 ```apache
 Header set Access-Control-Allow-Origin "*"
 Header set Access-Control-Allow-Methods "GET, OPTIONS"
 ```
+
 Required so browsers can load images from wiecznapamiec.pl into WebGL canvases (Three.js taints the canvas without CORS headers).
 
 #### Next.js Proxy Helper (`lib/upload/proxy.ts`)
+
 ```typescript
 export type UploadSubdir = 'backgrounds' | 'images' | 'screenshots' | 'pdfs';
-export async function proxyUpload(file: File | Blob, subdir: UploadSubdir): Promise<string>
-export async function extractFile(request: NextRequest): Promise<File | Blob>
+export async function proxyUpload(
+  file: File | Blob,
+  subdir: UploadSubdir,
+): Promise<string>;
+export async function extractFile(request: NextRequest): Promise<File | Blob>;
 ```
+
 - Dev: saves to `public/uploads/{subdir}/` using `fs.writeFile`
 - Prod: POSTs to `UPLOAD_REMOTE_URL` with `UPLOAD_REMOTE_SECRET` header
 
 #### Vercel Environment Variables (Production)
+
 ```bash
 UPLOAD_REMOTE_URL=https://www.wiecznapamiec.pl/forevershining/upload.php
 UPLOAD_REMOTE_SECRET=<strong random secret — must match $secret in upload.php>
 ```
 
 #### crossOrigin Fix for WebGL
+
 Loading cross-origin URLs into WebGL requires `loader.crossOrigin = 'anonymous'` AND CORS headers from the server.
+
 - `components/three/ImageModel.tsx` — added `loader.crossOrigin = 'anonymous'`
 - `components/three/headstone/UrnEnamelInlay.tsx` — added `loader.crossOrigin = 'anonymous'`
 
 #### Server Deployment Checklist
+
 1. Upload `legacy/upload.php` → `public_html/forevershining/upload.php`
 2. Edit `$secret` in `upload.php` to match `UPLOAD_REMOTE_SECRET` Vercel env var
 3. Upload `legacy/.htaccess` → `public_html/forevershining/uploads/.htaccess`
@@ -5984,6 +6283,7 @@ Loading cross-origin URLs into WebGL requires `loader.crossOrigin = 'anonymous'`
 5. Set `UPLOAD_REMOTE_URL` and `UPLOAD_REMOTE_SECRET` in Vercel → Settings → Environment Variables
 
 #### Adding a New Upload Type
+
 1. Add subdir to PHP whitelist in `upload.php`
 2. Create new Next.js route:
    ```typescript
@@ -5995,6 +6295,7 @@ Loading cross-origin URLs into WebGL requires `loader.crossOrigin = 'anonymous'`
    ```
 
 #### Design State Stays in PostgreSQL
+
 Only binary files go to the file server. Design state JSON (shape, material, inscriptions, motifs, etc.) continues to be stored in the `designState` jsonb column in PostgreSQL — it's structured, queryable, and needed for listing, reloading, and email generation.
 
 ---
@@ -6004,11 +6305,13 @@ Only binary files go to the file server. Design state JSON (shape, material, ins
 ### Work Done Today
 
 #### 1. Urn Inlay Border — `removeLoops` symmetry improvement
+
 **File**: `components/three/headstone/UrnEnamelInlay.tsx`
 
 Changed `removeLoops()` from picking the **first** crossing found to picking the crossing whose intersection point is **closest to X=0** (the heart's axis of symmetry). This makes the top-cleft joint collapse symmetrically.
 
 Three glitches remain (deferred):
+
 - Top cleft: V-joint still slightly asymmetric
 - Top-right lobe: small gray blob outside heart boundary
 - These are earcut triangulation artifacts from the self-intersecting inset polygon at the concave cleft
@@ -6016,47 +6319,56 @@ Three glitches remain (deferred):
 #### 2. Urn Pricing — `lib/xml-parser.ts` + `CheckPriceGrid.tsx`
 
 **Bug 1 — `end_quantity="0"` treated as max 0 (never matched)**
+
 - `calculatePrice()` condition was `quantity <= p.endQuantity` → `1 <= 0` = false → returned $0
 - Fix: `endQuantity === 0` is now the legacy sentinel for "unlimited" (no upper bound)
 
 **Bug 2 — `computeQuantity` for "Units" returned `max(width, height) = 307`**
+
 - Formula `2016.88+2016.88($q-1)` with q=307 → ~$800,231 (wrong!)
 - Fix: `"Units"` quantity type now returns `1` (number of items ordered)
 
 **Bug 3 — `isUrnProduct` needed fallback**
+
 - `catalog` loads async; during load `catalog = null` so `type` check fails
 - Fix: `isUrnProduct = catalog?.product?.type === 'urn' || productId === '2350'`
 
 **Correct urn prices** (quantity=1, matched by `note` field in price model):
-| Shape     | Base price | × 1.2924  | Final     |
+| Shape | Base price | × 1.2924 | Final |
 |-----------|------------|-----------|-----------|
-| Heart     | $2,016.88  | ×1.2924   | $2,606.14 |
-| Oval      | $1,937.67  | ×1.2924   | $2,503.89 |
-| Rectangle | $1,915.52  | ×1.2924   | $2,475.29 |
-| Triangle  | $1,741.32  | ×1.2924   | $2,250.26 |
+| Heart | $2,016.88 | ×1.2924 | $2,606.14 |
+| Oval | $1,937.67 | ×1.2924 | $2,503.89 |
+| Rectangle | $1,915.52 | ×1.2924 | $2,475.29 |
+| Triangle | $1,741.32 | ×1.2924 | $2,250.26 |
 
 **Files Modified**:
+
 - `lib/xml-parser.ts` — `calculatePrice()` now accepts optional `noteFilter?: string`; `computeQuantity()` "Units" → returns 1
 - `app/check-price/_ui/CheckPriceGrid.tsx` — urn detection, `quantity=1`, `urnShapeCode` as noteFilter, display "Background" instead of "Material/Size"
 
 #### 3. Rectangle & Triangle Inlay — Seam-Duplicate Root Cause + Fix
+
 **File**: `components/three/headstone/UrnEnamelInlay.tsx`
 
 **Root cause — THREE.js `getSpacedPoints` + SVGLoader `autoClose` interaction:**
+
 - `CurvePath.getSpacedPoints(N)` returns `N+1` base points **plus** an extra `pts[0]` when `autoClose = true` → **N+2 total**
 - SVGLoader sets `autoClose = true` on any path that ends with `Z`/`z` (all urn SVGs do)
 - So `getSpacedPoints(4096)` returns **4098** points, not 4097
 - The old fix `i < pts.length - 1 = 4097` still sampled `pts[4096]` — the seam duplicate
 
 **Why linear-closed shapes (Rectangle, Triangle) broke:**
+
 - Rectangle SVG ends with `L 50 30` → `LineCurve.getPointAt(1)` = P3 **exactly** → `pts[4096]` is a **zero-distance duplicate** of `pts[0]`
 - Zero-length edge triggers fallback normal `(1, 0)` in `insetPolygon` → catastrophically wrong inset
 - Triangle has the same issue: ends with `L 198.9 50.7`
 
 **Why Oval/Heart appeared fine:**
+
 - They end with cubic bezier curves → `getPointAt(1)` has ~1e-8 floating-point error → near-duplicate, not exact → tiny miter error (~3e-8 units = invisible)
 
 **Fix implemented** (lines 221-245, `geomData` useMemo):
+
 - Strip all trailing points within **0.1 SVG units** of `pts[0]` before sampling
 - Safe epsilon: nearest real perimeter neighbour is always ≥ 4 SVG units away (segment spacing ≈ 0.25–0.39 SVG units)
 - Handles exact linear duplicates (0 distance), bezier near-duplicates (~1e-8), and the autoClose extra point
@@ -6064,23 +6376,26 @@ Three glitches remain (deferred):
 **Status**: Fix implemented, pending browser verification
 
 #### 4. Pre-existing type errors (14 total, unchanged)
-| File | Count | Error |
-|------|-------|-------|
-| `app/api/share/email/route.ts:54` | 1 | TS2322 type mismatch |
-| `discountheadstones/vite.config.ts:3` | 1 | TS2307 missing @tailwindcss/vite types |
-| `lib/ml-search-service.ts` | 8 | TS2802 Set/Map iterator downlevelIteration |
-| `scripts/dedup-designs.ts` | 4 | TS2802 Set/Map iterator downlevelIteration |
+
+| File                                  | Count | Error                                      |
+| ------------------------------------- | ----- | ------------------------------------------ |
+| `app/api/share/email/route.ts:54`     | 1     | TS2322 type mismatch                       |
+| `discountheadstones/vite.config.ts:3` | 1     | TS2307 missing @tailwindcss/vite types     |
+| `lib/ml-search-service.ts`            | 8     | TS2802 Set/Map iterator downlevelIteration |
+| `scripts/dedup-designs.ts`            | 4     | TS2802 Set/Map iterator downlevelIteration |
 
 ---
 
 ## Current Status (2026-05-04) — Product 2350 Urn Vitreous Enamel Inlay (IN PROGRESS)
 
 ### Context
+
 Product 2350 is the **Stainless Steel Vitreous Enamel Inlaid Urn** (`catalog-id-2350.xml`, `type="urn"`, `background="1"`).
 Shapes: Heart, Oval, Rectangle, Triangle.
 Only Heart and Oval get the landscape oval base stand. Rectangle and Triangle do NOT.
 
 ### Architecture
+
 - **Urn body**: `MeshPhysicalMaterial` metalness=0.98, roughness=0.18 → brushed stainless steel. No texture on body.
 - **Vitreous enamel inlay**: separate `<UrnEnamelInlay>` mesh rendered inside `SvgHeadstone` children callback.
 - **Background panel**: same as Full Colour Plaque. Opens automatically on first shape select. No Headstone/Base tab.
@@ -6111,13 +6426,13 @@ Only renders when texture is loaded (`if (!geomData || !tex) return null`).
 
 ### What FAILED (do not retry)
 
-| Approach | Failure reason |
-|---|---|
-| Polygon inset (miter-join insetPolygon) | Self-intersections at heart notch and triangle tip → earcut glitches |
-| `canvas + ctx.drawImage + CanvasTexture` | Texture never appeared on mesh; only reflective clearcoat (blue sky reflection) showed |
-| `MeshPhysicalMaterial transparent:true + alphaTest:0.01` | When tex=null, rendered as blue-sky reflective surface instead of nothing |
-| `flipY = false` | Image appeared upside-down on shape |
-| Legacy "contain" scale `ch/max(imgW,imgH)` on canvas | Still didn't fix canvas not appearing |
+| Approach                                                 | Failure reason                                                                         |
+| -------------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| Polygon inset (miter-join insetPolygon)                  | Self-intersections at heart notch and triangle tip → earcut glitches                   |
+| `canvas + ctx.drawImage + CanvasTexture`                 | Texture never appeared on mesh; only reflective clearcoat (blue sky reflection) showed |
+| `MeshPhysicalMaterial transparent:true + alphaTest:0.01` | When tex=null, rendered as blue-sky reflective surface instead of nothing              |
+| `flipY = false`                                          | Image appeared upside-down on shape                                                    |
+| Legacy "contain" scale `ch/max(imgW,imgH)` on canvas     | Still didn't fix canvas not appearing                                                  |
 
 ### What WORKS
 
@@ -6213,6 +6528,7 @@ Both fixes (#1 + #2) applied and build passes cleanly. **User reports the transf
 ---
 
 **Files Modified (2026-05-03):**
+
 - `components/HeadstoneInscription.tsx` — `useFrame` null-closure fix (reads `headstone.mesh.current` inside callback); `yPos: 0` on headstone→base transfer
 - `components/InscriptionEditPanel.tsx` — align controls hidden on single tab; infinite loop fixes; auto-tab-switch on multi-line inscription selection
 
@@ -6236,18 +6552,18 @@ All bronze plaque borders use the `integratedRails` path (SVG geometry with rail
 2. **Coverage target too low (0.97–0.99)** — other borders were shrunk until bounding box ≈ 97–99% of plaque width, leaving frame elements only ~6mm thick.
 
 **Fix in `components/three/BronzeBorder.tsx`:**
+
 - Removed `&& borderSlug !== 'border1a'` exclusion — bar now gets coverage shrink like all others.
 - Changed `targetCoverage` from `lerp(0.97, 0.99, ...)` to a constant **`3.0`** (1.5× increase from the initial 2.0 baseline).
 
 `targetCoverage > 1.0` is intentional: `createCornerMesh` slices each quadrant, so geometry extending beyond the plaque renders cleanly. The higher coverage makes frame elements physically thicker:
+
 - Simple borders: ~18mm frame on a 560×400mm plaque
 - Bar border: ~25mm frame (naturally thicker due to SVG bar-element widths)
 
 Note: `components/three/BronzeBorde_gpt5.tsx` is an **unused backup** — do not edit it; all active border logic lives in `BronzeBorder.tsx`.
 
 ---
-
-
 
 ## Current Status (2026-04-24) — STARTER extraction; Bronze Plaque border fixes & store reset
 
@@ -6265,11 +6581,12 @@ Note: `components/three/BronzeBorde_gpt5.tsx` is an **unused backup** — do not
 - UI updates: Inscription editor overlay and edit panel now support per-line selection and an "Add New Line" flow (app/inscriptions/InscriptionOverlayPanel.tsx, components/InscriptionEditPanel.tsx).
 - Rendering updates: components/HeadstoneInscription.tsx and LedgerSurfaceContent.tsx fixed positioning and z-ordering for stacked lines and ledger-targeted text.
 - State updates: lib/headstone-store.ts: manage inscriptions as an ordered array, addInscriptionLine, duplicateInscription, updateInscription, and cost calculation adjustments.
-- Minor related changes: ShapeSwapper and ConditionalCanvas tweaks for consistent layout; small UI fixes on login/my-account/orders; email helper/template cleanup (lib/email/*).
+- Minor related changes: ShapeSwapper and ConditionalCanvas tweaks for consistent layout; small UI fixes on login/my-account/orders; email helper/template cleanup (lib/email/\*).
 
 Files changed in the commit: STARTER.md, app/api/projects/route.ts, app/login/page.tsx, app/my-account/page.tsx, app/orders/page.tsx, components/ConditionalCanvas.tsx, components/HeadstoneInscription.tsx, components/InscriptionEditPanel.tsx, components/three/headstone/HeadstoneBaseAuto.tsx, components/three/headstone/LedgerSurfaceContent.tsx, components/three/headstone/ShapeSwapper.tsx, lib/email/helpers.ts, lib/email/templates/components/EmailLayout.tsx, lib/headstone-store.ts, lib/headstone-store.types.ts, screen.png
 
 Notes:
+
 - QA: Verify inscription spacing on narrow plaques and ledger surfaces; run a quick visual QA for dates and multi-line wrapping.
 - Follow-up: Consider adding an explicit "line order" UI (up/down) if users expect reordering frequently.
 
@@ -6280,13 +6597,17 @@ Session focused on fixing broken save-design confirmation emails on `forevershin
 First production email arrived but with the design screenshot rendered as raw text (`<img alt="test email10" src="data:image/jpeg;base64,…"` literally visible in the body).
 
 #### Root Cause
+
 The screenshot was embedded as a `data:image/jpeg;base64,…` URI inside `<img src>`. Problems:
+
 - Gmail clips messages >102 KB; a 100–300 KB base64 data URI alone blows past that.
 - Gmail sanitizes/strips `data:` URIs in `<img>` tags in many flows → after clipping/sanitization, remaining markup shows as text.
 - Large single-line base64 in an HTML attribute interacts poorly with SMTP encoding.
 
 #### Fix — CID Inline Attachment
+
 `lib/email/index.ts`:
+
 - Added `dataUriToInlineImage()` helper that parses `data:image/...;base64,...` and returns a nodemailer-ready attachment (`filename`, `content: Buffer`, `contentType`, `cid`).
 - In `sendEmail()`: before rendering the template, if `data.screenshotUrl` is a data URI, convert it once, build a copy of the payload with `screenshotUrl: 'cid:design-screenshot'`, and pass THAT copy to `renderTemplate()` and `getSubject()`.
 - Append the inline attachment to `mailOptions.attachments` (alongside the PDF if present) with `contentDisposition: 'inline'`.
@@ -6311,19 +6632,23 @@ Attempt 3 — Embed XMLs as escaped TS string literals: worked, but the 663 KB `
 #### Changes
 
 Files created:
+
 - `scripts/embed-email-xml.mjs` — build-time parser. Reads `public/xml/countries24.xml` + `languages24.xml` via `@xmldom/xmldom`, writes pre-shaped JSON.
 - `lib/email/config/data/countries24.json` (17 KB, 8 countries)
 - `lib/email/config/data/languages24.json` (490 KB, 8 locales)
 
 Files rewritten:
+
 - `lib/email/config/countries.ts` — removed `fs`/`path`/`DOMParser`. Static `import countries24 from './data/countries24.json'`. `getCountryConfig(code)` remains sync. `BCC_MAP` / `DEFAULT_BCC` retained and attached at runtime (emails not stored in JSON).
 - `lib/email/config/translations.ts` — lazy `import('./data/languages24.json')` with promise cache (`inflight`). `getTranslationMap(locale)` and `t(locale, key)` are now **async**.
 
 Files edited:
+
 - `lib/email/index.ts` — added `await` before `getTranslationMap(locale)` (~line 199).
 - `next.config.ts` — removed the previously-added `outputFileTracingIncludes` block (back to original).
 
 Files deleted:
+
 - `lib/email/config/data/countries24.xml`, `languages24.xml` (intermediate copies)
 - `lib/email/config/data/countries24.ts`, `languages24.ts` (string-literal wrappers from Attempt 3)
 
@@ -6383,11 +6708,14 @@ Follow-up session on 2026-04-20 after initial email system deployment.
 Designs saved after the email-system deployment produced blank/white thumbnails instead of proper 3D screenshots.
 
 #### Root Cause
+
 Two combined issues:
+
 1. **Timing** — `canvas.toDataURL()` could return a blank frame if the WebGL drawing buffer was stale (no render between last frame and capture).
 2. **Alpha transparency** — The Three.js canvas has `alpha: true`, so transparent areas rendered as white in JPEG exports (previous compositor only added a background when resizing).
 
 #### Fix
+
 - `components/three/Scene.tsx`: Expose `window.__r3fCamera` alongside existing `__r3fGL` / `__r3fScene` so external capture code has access to the camera.
 - `components/DesignerNav.tsx` (`captureBestCanvasScreenshot`):
   - Preferred path calls `gl.render(scene, camera)` directly to force a fresh frame before reading the drawing buffer.
@@ -6400,6 +6728,7 @@ Two combined issues:
 When an unauthenticated user clicked "Save Design", the flow redirected to `/my-account` for login but did not return them to the save action.
 
 #### Fix
+
 - `components/DesignerNav.tsx`:
   - On "Save Design" click while unauthenticated, redirects to `/my-account?returnTo=/current-path?action=save-design`.
   - On mount, checks `window.location.search` for `?action=save-design`; if present, cleans up the URL via `history.replaceState` and opens the Save Design modal.
@@ -6412,6 +6741,7 @@ When an unauthenticated user clicked "Save Design", the flow redirected to `/my-
 Email sending silently failed on `forevershining.org` because no SMTP env vars were set on Vercel.
 
 #### Fix
+
 - `lib/email/index.ts`: `sendEmail()` now checks for `SMTP_{COUNTRY}_HOST` / `SMTP_HOST` before attempting to send. If neither is configured, logs a single clear warning:
   ```
   [Email] Skipping send (type=..., to=...): no SMTP host configured.
@@ -6420,7 +6750,9 @@ Email sending silently failed on `forevershining.org` because no SMTP env vars w
   and returns `{ success: false, error: 'SMTP not configured' }` instead of throwing a generic network error.
 
 #### SMTP Setup (home.pl / wiecznapamiec)
+
 The legacy `dyo5.php` uses a single home.pl mailbox for **PL / EU / UK** routes (AU uses office365):
+
 ```php
 // case "pl": case "eu": case "co.uk": case "uk":
 Host     = 'wiecznapamiec.home.pl'
@@ -6433,6 +6765,7 @@ BCC: biuro@wiecznapamiec.pl, polcreation@gmail.com
 ```
 
 On Vercel, set these env vars (use the generic fallback so all countries route through this mailbox for now, or use the PL prefix to restrict to PL only):
+
 ```bash
 # Generic fallback — used by every country that has no country-specific override
 SMTP_HOST=wiecznapamiec.home.pl
@@ -6446,6 +6779,7 @@ SMTP_PL_PORT=587
 SMTP_PL_USER=biuro@wiecznapamiec.pl
 SMTP_PL_PASS=<mailbox password>
 ```
+
 `lib/email/transport.ts` tries `SMTP_{COUNTRY}_*` first, then falls back to `SMTP_*`. Port 587 with STARTTLS is handled automatically (secure: false when port !== 465).
 
 Note: `forevershining.org` is the AU site — its legacy `countryCode: 'au'` routes via office365 in `dyo5.php`, but without AU-specific SMTP env vars set, it will fall back to the wiecznapamiec mailbox above, which is fine for testing.
@@ -6482,6 +6816,7 @@ Other country SMTPs (`SMTP_AU_*`, `SMTP_US_*`, `SMTP_PL_*`, etc.) are **not** ne
 Complete email system migrated from legacy PHP/PHPMailer to modern Next.js stack.
 
 #### Architecture
+
 - **Transport**: Nodemailer with per-country SMTP configuration from environment variables
 - **Templates**: React Email JSX components (type-safe, server-rendered to HTML)
 - **Translations**: Parsed from existing `public/xml/languages24.xml` (~300+ keys per language)
@@ -6489,28 +6824,31 @@ Complete email system migrated from legacy PHP/PHPMailer to modern Next.js stack
 - **PDF Attachments**: Server-side generation using jsPDF for saved-design and order emails
 
 #### Email Types (Discriminated Union on `type` field)
-| Type | Template | PDF | Trigger Point |
-|------|----------|-----|---------------|
-| `saved-design` | `SavedDesignEmail.tsx` | ✅ Quote PDF | `POST /api/projects` after successful save |
-| `order` | `OrderInvoiceEmail.tsx` | ✅ Invoice PDF | Buy page via `POST /api/email` |
-| `enquiry` | `EnquiryEmail.tsx` | ❌ | `POST /api/share/email` (replaced 501 stub) |
-| `registration` | `RegistrationEmail.tsx` | ❌ | `POST /api/auth/register` after account creation |
-| `password-reset` | `PasswordResetEmail.tsx` | ❌ | `POST /api/auth/forgot-password` |
+
+| Type             | Template                 | PDF            | Trigger Point                                    |
+| ---------------- | ------------------------ | -------------- | ------------------------------------------------ |
+| `saved-design`   | `SavedDesignEmail.tsx`   | ✅ Quote PDF   | `POST /api/projects` after successful save       |
+| `order`          | `OrderInvoiceEmail.tsx`  | ✅ Invoice PDF | Buy page via `POST /api/email`                   |
+| `enquiry`        | `EnquiryEmail.tsx`       | ❌             | `POST /api/share/email` (replaced 501 stub)      |
+| `registration`   | `RegistrationEmail.tsx`  | ❌             | `POST /api/auth/register` after account creation |
+| `password-reset` | `PasswordResetEmail.tsx` | ❌             | `POST /api/auth/forgot-password`                 |
 
 #### Key Files
-| File | Purpose |
-|------|---------|
-| `lib/email/types.ts` | TypeScript types (EmailData union, CountryEmailConfig, QuoteLineItem, SendEmailResult) |
-| `lib/email/index.ts` | Main `sendEmail()` orchestrator — renders template, generates PDF, sends via SMTP |
-| `lib/email/transport.ts` | Nodemailer SMTP transport factory with per-country config caching |
-| `lib/email/config/countries.ts` | Parses `countries24.xml` → `Map<string, CountryEmailConfig>`, BCC routing |
-| `lib/email/config/translations.ts` | Parses `languages24.xml` → `TranslationsByLocale`, `t(locale, key)` helper |
-| `lib/email/helpers.ts` | `breakdownToQuoteItems()` converts PricingBreakdown → QuoteLineItem[], `countryToCode()` |
-| `lib/email/pdf-email.ts` | Server-side PDF generation using jsPDF, returns Buffer for attachment |
-| `lib/email/templates/components/` | Shared: `EmailLayout.tsx`, `DesignPreview.tsx`, `QuoteTable.tsx`, `ContactInfo.tsx` |
-| `app/api/email/route.ts` | `POST /api/email` endpoint with auth check (password-reset skips auth) |
+
+| File                               | Purpose                                                                                  |
+| ---------------------------------- | ---------------------------------------------------------------------------------------- |
+| `lib/email/types.ts`               | TypeScript types (EmailData union, CountryEmailConfig, QuoteLineItem, SendEmailResult)   |
+| `lib/email/index.ts`               | Main `sendEmail()` orchestrator — renders template, generates PDF, sends via SMTP        |
+| `lib/email/transport.ts`           | Nodemailer SMTP transport factory with per-country config caching                        |
+| `lib/email/config/countries.ts`    | Parses `countries24.xml` → `Map<string, CountryEmailConfig>`, BCC routing                |
+| `lib/email/config/translations.ts` | Parses `languages24.xml` → `TranslationsByLocale`, `t(locale, key)` helper               |
+| `lib/email/helpers.ts`             | `breakdownToQuoteItems()` converts PricingBreakdown → QuoteLineItem[], `countryToCode()` |
+| `lib/email/pdf-email.ts`           | Server-side PDF generation using jsPDF, returns Buffer for attachment                    |
+| `lib/email/templates/components/`  | Shared: `EmailLayout.tsx`, `DesignPreview.tsx`, `QuoteTable.tsx`, `ContactInfo.tsx`      |
+| `app/api/email/route.ts`           | `POST /api/email` endpoint with auth check (password-reset skips auth)                   |
 
 #### SMTP Configuration (Environment Variables)
+
 ```bash
 # Generic fallback
 SMTP_HOST=smtp.example.com
@@ -6526,15 +6864,18 @@ SMTP_AU_PASS=password
 ```
 
 #### BCC Routing (from legacy dyo5.php)
+
 Each country has BCC addresses for `savedDesigns`, `orders`, `admin`, and `always` — configured in `lib/email/config/countries.ts`.
 
 #### Email Branding
+
 - Gold theme: `#DEBD68` for headers and links
 - Dark header: `#060709` background
 - Footer: Country-specific contact info from `countries24.xml`
 - Logo: Per-country logo URL from config
 
 #### Dependencies Added
+
 - `nodemailer@8.0.5` — SMTP transport
 - `@react-email/components@1.0.12` — JSX email templates
 - `@types/nodemailer@8.0.0` — TypeScript types
@@ -6544,12 +6885,14 @@ Each country has BCC addresses for `savedDesigns`, `orders`, `admin`, and `alway
 Complete forgot-password / reset-password flow using the existing `password_resets` DB table.
 
 #### API Routes
-| Endpoint | Method | Purpose |
-|----------|--------|---------|
-| `/api/auth/forgot-password` | POST | Generates secure random token (SHA-256 hashed), stores in DB, sends reset email. Always returns success to prevent email enumeration. |
-| `/api/auth/reset-password` | POST | Validates token (unconsumed + not expired), updates password hash, marks token consumed. 24-hour expiry. |
+
+| Endpoint                    | Method | Purpose                                                                                                                               |
+| --------------------------- | ------ | ------------------------------------------------------------------------------------------------------------------------------------- |
+| `/api/auth/forgot-password` | POST   | Generates secure random token (SHA-256 hashed), stores in DB, sends reset email. Always returns success to prevent email enumeration. |
+| `/api/auth/reset-password`  | POST   | Validates token (unconsumed + not expired), updates password hash, marks token consumed. 24-hour expiry.                              |
 
 #### Security
+
 - Token: `crypto.randomBytes(32)` → hex string in URL, SHA-256 hash stored in DB
 - Anti-enumeration: Same success response regardless of whether email exists
 - Token consumed in same transaction as password update
@@ -6560,9 +6903,11 @@ Complete forgot-password / reset-password flow using the existing `password_rese
 All draggable items (inscriptions, motifs, images, additions, emblems) now show a grab/grabbing cursor on hover/drag.
 
 #### Root Cause
+
 `styles/globals.css` has a wildcard CSS rule `*:not(input)... { cursor: default; }` that overrides `document.body.style.cursor`. The fix uses `gl.domElement.style.cursor` (inline styles override non-`!important` CSS).
 
 #### Files Modified (7 files)
+
 - `components/HeadstoneInscription.tsx` — inscription drag cursor
 - `components/three/MotifModel.tsx` — motif drag cursor
 - `components/three/ImageModel.tsx` — image drag cursor
@@ -6576,6 +6921,7 @@ All draggable items (inscriptions, motifs, images, additions, emblems) now show 
 When clicking "Back to Menu" from a sub-page (e.g., Inscriptions), the sidebar now reopens the last-used accordion section (Setup/Design/Account) instead of always defaulting to Setup.
 
 #### Implementation
+
 - `DesignerNav.tsx`: Tracks `lastManualGroup` ref that updates on manual accordion clicks
 - "Back to Menu" handler restores `lastManualGroup` instead of resetting to index 0
 
@@ -6584,6 +6930,7 @@ When clicking "Back to Menu" from a sub-page (e.g., Inscriptions), the sidebar n
 When the base is set to "No Base" in Select Size, the headstone was floating in the air because the assembly group always offset Y by `baseHeightMeters`.
 
 #### Fix
+
 - `HeadstoneAssembly.tsx` line 96: Changed `position={[0, baseHeightMeters, 0]}` → `position={[0, showBase ? baseHeightMeters : 0, 0]}`
 - Now only applies Y offset when `showBase` is true; headstone rests at ground level (y=0) without a base
 
@@ -6592,18 +6939,21 @@ When the base is set to "No Base" in Select Size, the headstone was floating in 
 The sticky table header (PRODUCT / QTY / PRICE / ITEM TOTAL) in the Check Price popup had a semi-transparent background (`bg-[#d4af37]/12`), causing scrolled content to show through.
 
 #### Fix
+
 - `CheckPricePanel.tsx`: Changed to solid `bg-[#1a1508]` with `z-10` and bottom shadow
 - Content no longer overlaps header when scrolling the quote table
 
 ### ✅ Full Color Plaque — Free Inscriptions & Motifs
 
 Product 32 (Full Color Plaque) inscriptions and motifs are now free, matching the XML catalog config:
+
 ```xml
 <addition id="1701" type="inscription" name="Inscription" />
 <addition id="1700" type="motif" name="Motif" formula="Enamel" />
 ```
 
 #### Implementation
+
 - `lib/headstone-store.ts`: Early returns in `recalculateInscriptionPrices()` and `recalculateMotifPrices()` for product 32
 - `lib/motif-pricing.ts`: Early return for product 32 motifs
 - Sidebar inscription/motif panels no longer show prices for product 32
@@ -6615,6 +6965,7 @@ Product 32 (Full Color Plaque) inscriptions and motifs are now free, matching th
 The sidebar navigation section headers (Setup / Design / Account) have been completely redesigned to match the "Forever Shining" memorial brand identity, moving from a generic app look to a dignified, inviting experience.
 
 #### Design Approach: Classic Serif + Golden Thread (Options 1 + 2)
+
 - **Typography**: Section titles ("Setup", "Design", "Account") use **Playfair Display** serif font (already loaded in `app/layout.tsx`), replacing the default sans-serif
 - **Roman Numerals**: Step numbers changed from "01"/"02"/"03" to Roman numerals I / II / III in thin gold-stroked circles (`border-[#DEBD68]`, `text-[#DEBD68]`)
 - **Italic Step Labels**: "Step I" / "Step II" / "Step III" rendered in serif italic for a softer, human touch
@@ -6622,6 +6973,7 @@ The sidebar navigation section headers (Setup / Design / Account) have been comp
 - **Browse Designs CTA**: Styled with gold border (`border-[#DEBD68]/30`), Playfair Display font, and sparkle icon to match brand
 
 #### Accordion Behavior (Collapsible Sections)
+
 - Only **one section open at a time** — clicking a section closes the others
 - State: `openGroup` (single number index, `-1` = all collapsed)
 - `toggleGroup(index)` — opens clicked group, closes others; re-clicking closes it
@@ -6632,11 +6984,13 @@ The sidebar navigation section headers (Setup / Design / Account) have been comp
 - Collapsed cards have equal top/bottom padding around the circle indicator
 
 #### Updated Headers
+
 - **Mobile header** (~line 2826): Matches serif + Roman numeral styling
 - **Fullscreen panel header** (~line 2689): Same serif treatment
 - **Spacing**: `gap-5` (20px) between section cards, `mt-5` above Browse Designs
 
 #### Key Files
+
 - `components/DesignerNav.tsx` — Section headers at ~lines 2964-3005, accordion state at ~lines 381-408
 
 ### ✅ Select Emblems — Bronze Plaque Only
@@ -6650,6 +7004,7 @@ The "Select Emblems" menu item now only appears for Bronze Plaque products (prod
 ### ✅ Product 32 (Full Color Plaque) — Free Image Auto-Selection
 
 For Full Color Plaque (product 32), the image workflow is simplified:
+
 - **Auto-selects Free Image** (type ID 137) on mount — skips the image type selection grid
 - **Hides "Back to image types" button** — no need to go back since there's only one relevant type
 - **No ceramic mesh**: Free Image (type 137) excluded from `needsCeramicBase` in `ImageModel.tsx`
@@ -6658,6 +7013,7 @@ For Full Color Plaque (product 32), the image workflow is simplified:
 - These images will be printed directly on the plaque, not applied as ceramic overlays
 
 #### Key Files
+
 - `components/ImageSelector.tsx` — Auto-select logic, hidden back button, hidden mask UI
 - `components/three/ImageModel.tsx` — Ceramic base exclusion, flat z-positioning
 
@@ -6666,6 +7022,7 @@ For Full Color Plaque (product 32), the image workflow is simplified:
 Gold Gilding and Silver Gilding color options now only appear for products with `formula="Engraved"` (Traditional Engraved Headstone, Traditional Engraved Plaque, Traditional Engraved Full Monument).
 
 #### Implementation
+
 - **Added `formula` field** to `CatalogData.product` interface in `lib/xml-parser.ts`
 - **Parsed from XML**: `productElement.getAttribute('formula')` — values: `"Engraved"`, `"Laser"`, `"Enamel"`, `"Bronze"`
 - **Filter condition**: `const isEngraved = catalog?.product.formula === 'Engraved'`
@@ -6676,12 +7033,13 @@ Gold Gilding and Silver Gilding color options now only appear for products with 
 - The "Select Color" label and regular color palette grid remain visible for all products that support color — only the Gold/Silver Gilding shortcuts are hidden
 
 #### Product Formula Values (from XML catalogs)
-| Formula | Products | Gilding |
-|---------|----------|---------|
-| `Engraved` | Traditional Engraved Headstone (124), Plaque (34), Full Monument (101) | ✅ Yes |
-| `Laser` | Laser Etched products (8, 22, 30, 51, 100) | ❌ No (entire color section hidden by `isLaser`) |
-| `Enamel` | Full Color Plaque (32), Vitreous Enamel products (11, 50, 2350) | ❌ No |
-| `Bronze` | Bronze products (5, 53) | ❌ No |
+
+| Formula    | Products                                                               | Gilding                                          |
+| ---------- | ---------------------------------------------------------------------- | ------------------------------------------------ |
+| `Engraved` | Traditional Engraved Headstone (124), Plaque (34), Full Monument (101) | ✅ Yes                                           |
+| `Laser`    | Laser Etched products (8, 22, 30, 51, 100)                             | ❌ No (entire color section hidden by `isLaser`) |
+| `Enamel`   | Full Color Plaque (32), Vitreous Enamel products (11, 50, 2350)        | ❌ No                                            |
+| `Bronze`   | Bronze products (5, 53)                                                | ❌ No                                            |
 
 ### ✅ Motif Preview Color Consistency
 
@@ -6697,12 +7055,14 @@ Motif category thumbnails in the sidebar now use the product's `defaultColor` fr
 The "New Design" button now uses a styled confirmation modal instead of `window.confirm()`, and properly resets all dimensions including base.
 
 #### Styled Confirm Modal
+
 - **Created `components/ConfirmModal.tsx`** — Reusable portal-based modal (`createPortal` to `document.body`, z-[9999])
 - **Styling**: Dark gradient background, gold confirm button (`bg-[#D7B356]`), rounded card — matches `SaveDesignModal` design
 - **Props**: `title`, `message`, `confirmLabel`, `cancelLabel`, `onConfirm`, `onCancel`
 - **Replaces** browser `confirm()` in `DesignerNav.tsx` New Design handler
 
 #### Base Dimension Reset
+
 - `resetDesign()` in `lib/headstone-store.ts` now resets:
   - `baseWidthMm: 1260` (900 × 1.4 ratio)
   - `baseHeightMm: 100`
@@ -6717,6 +7077,7 @@ The "New Design" button now uses a styled confirmation modal instead of `window.
 Selected images now have an **"Update"** button alongside Duplicate and Delete, allowing users to replace the photo while preserving position, size, mask, type, and rotation.
 
 #### How It Works
+
 1. **User selects an image** on the headstone → sidebar shows editing panel with Update / Duplicate / Delete
 2. **Click "Update"** → file picker opens (hidden `<input type="file">` triggered via ref)
 3. **User selects new photo** → crop screen shows with the new image, sidebar switches from editing panel to crop controls
@@ -6725,6 +7086,7 @@ Selected images now have an **"Update"** button alongside Duplicate and Delete, 
 6. **Preserved properties**: `xPos`, `yPos`, `widthMm`, `heightMm`, `rotationZ`, `maskShape`, `typeId`, `typeName`, `sizeVariant`, `target`
 
 #### Implementation
+
 - **Store action** (`lib/headstone-store.ts`): `updateImageData(id, imageUrl, croppedAspectRatio, colorMode)` — maps over `selectedImages`, replaces only photo-related fields, clears `cropCanvasData`
 - **Type** (`lib/headstone-store.types.ts`): Added `updateImageData` to `HeadstoneState` interface
 - **UI** (`components/ImageSelector.tsx`):
@@ -6735,6 +7097,7 @@ Selected images now have an **"Update"** button alongside Duplicate and Delete, 
   - Cleanup: `updatingImageId` cleared on Cancel, Back, crop error, and successful crop
 
 #### Key Files
+
 - `lib/headstone-store.ts` — `updateImageData` action (after `duplicateImage`)
 - `lib/headstone-store.types.ts` — Type definition
 - `components/ImageSelector.tsx` — Update button, file input, crop flow branching
@@ -6757,6 +7120,7 @@ Selected images now have an **"Update"** button alongside Duplicate and Delete, 
 All product 32 (Full Color Plaque) configuration data has been moved out of `app/_internal/_data.ts` into PostgreSQL tables and XML catalog files, following the principle that product config should never be hardcoded in TypeScript.
 
 #### Sizes → Database (`sizes` table)
+
 - **9 fixed sizes** migrated from hardcoded `fullColourPlaqueSizes` array to `sizes` table
 - **Source XML**: `public/xml/au_EN/sizes.xml` (product 201)
 - **Seed script**: `scripts/seed-sizes.ts` — parses XML, inserts rows with `widthMm`, `heightMm`, `priceCents`
@@ -6765,6 +7129,7 @@ All product 32 (Full Color Plaque) configuration data has been moved out of `app
 - **Consumers**: `DesignerNav.tsx`, `CheckPricePanel.tsx`, `ThreeScene.tsx` all use `fixedSizes` from store
 
 #### Backgrounds → Database (`backgrounds` table)
+
 - **40 backgrounds** migrated from hardcoded `backgrounds` array to `backgrounds` table (category: `background`)
 - **35 color textures** discovered from `public/jpg/backgrounds/colors/s/*.jpg` and seeded (category: `color`)
 - **Source XML**: `public/xml/au_EN/backgrounds.xml` — names updated to generic "Background 1" through "Background 40"
@@ -6774,6 +7139,7 @@ All product 32 (Full Color Plaque) configuration data has been moved out of `app
 - **DB totals**: 77 rows (40 active backgrounds + 2 inactive + 35 colors)
 
 #### Removed from `_data.ts`
+
 - `fullColourPlaqueSizes` array and `FixedSize` type → now in DB + `lib/headstone-store.types.ts`
 - `backgrounds` array → now in DB
 - `fullColourPlaqueBorders` remains in `_data.ts` (not yet migrated)
@@ -6802,21 +7168,25 @@ First position in Background tab. Resets plaque to default brushed stainless ste
 Second position in Background tab. Allows uploading a custom photo as the plaque background.
 
 #### How It Works
+
 1. **Sidebar** (`MaterialSelector.tsx`): Click "Upload Image" → file picker → image goes to existing `CropCanvas` (via `useImageCropState` hook + `setCropCanvasData`)
 2. Inline crop controls shown: size slider (Smaller/Larger), rotation slider (Decrease/Increase), Flip X/Y, Apply/Cancel — styled to match `ImageSelector.tsx`
 3. **Apply Background** → crop processed on canvas → `canvas.toBlob()` → `POST /api/upload-background` → returns server URL → set as `headstoneMaterialUrl`
 4. **Fullscreen** (`MaterialSelectionGrid.tsx`): Simpler flow — file picker → FormData POST to `/api/upload-background` → set URL → navigate to next step
 
 #### Server-Side Upload API (`app/api/upload-background/route.ts`)
+
 - `POST /api/upload-background` — thin proxy using `lib/upload/proxy.ts`
 - Dev: saves to `public/uploads/backgrounds/{uuid}.jpg`, returns `/uploads/backgrounds/{uuid}.jpg`
 - Production: proxies to `https://www.wiecznapamiec.pl/forevershining/upload.php`, returns full `https://www.wiecznapamiec.pl/forevershining/uploads/backgrounds/{uuid}.jpg`
 - See **File Storage System** section for full architecture
 
 #### Why Server-Side Upload (not blob/data URLs)
+
 drei's `useTexture` pipeline (R3F's memoized `TextureLoader` singleton → Three.js `ImageLoader.load()`) corrupts blob: and data: URLs by prepending `/`. This causes `Could not load /blob:http://...` errors. Standard file paths (and cross-origin HTTPS URLs with CORS headers) bypass this entirely.
 
 **Defense-in-depth guards remain:**
+
 - `SvgHeadstone.tsx`: `useBlobTexture` hook (lines ~20-51) — loads blob/data URLs via native `THREE.TextureLoader().loadAsync()`, bypassing drei
 - `ShapeSwapper.tsx`: `isBlobOrDataTex` flag skips `PreloadTexture` component for blob/data URLs
 - `ShapeSwapper.tsx`: `requestedTex` useMemo has blob/data passthrough checks
@@ -6842,6 +7212,7 @@ After Select Shape, product 32 goes to Background selection (not Select Border l
 Complete implementation of Product 32, a ceramic full-colour plaque on a stainless steel frame.
 
 #### Product Configuration (`public/xml/catalog-id-32.xml`)
+
 - **Product ID**: 32, **Type**: `plaque`, **Material type**: `backgrounds`, **materialID**: `17`
 - **Shapes**: Only 2 — Rectangle (Landscape) and Rectangle (Portrait)
 - **Borders**: 2 options — "No Border" and "Stainless Steel Border" (Border 4)
@@ -6849,19 +7220,20 @@ Complete implementation of Product 32, a ceramic full-colour plaque on a stainle
 - **Flags**: `border="1"`, `fixed="1"`, `sizes="9"`, `background="1"`, `laser="0"`
 
 #### Fixed Size System (Database)
+
 Product 32 uses 9 preset sizes (not continuous sliders), now served from the `sizes` database table:
 
-| # | Width × Height (mm) | Price |
-|---|---------------------|-------|
-| 1 | 110 × 150 | $350 |
-| 2 | 122 × 152 | $390 |
-| 3 | 130 × 180 | $440 |
-| 4 | 150 × 200 | $500 |
-| 5 | 180 × 240 | $570 |
-| 6 | 200 × 250 | $600 |
-| 7 | 240 × 300 | $700 |
-| 8 | 216 × 381 | $780 |
-| 9 | 280 × 380 | $990 |
+| #   | Width × Height (mm) | Price |
+| --- | ------------------- | ----- |
+| 1   | 110 × 150           | $350  |
+| 2   | 122 × 152           | $390  |
+| 3   | 130 × 180           | $440  |
+| 4   | 150 × 200           | $500  |
+| 5   | 180 × 240           | $570  |
+| 6   | 200 × 250           | $600  |
+| 7   | 240 × 300           | $700  |
+| 8   | 216 × 381           | $780  |
+| 9   | 280 × 380           | $990  |
 
 - **UI**: Discrete-step slider (1–9 stops) in `DesignerNav.tsx` `renderSelectSizePanel()`
 - **Pricing**: `CheckPricePanel.tsx` uses price lookup from `fixedSizes` store state
@@ -6869,6 +7241,7 @@ Product 32 uses 9 preset sizes (not continuous sliders), now served from the `si
 - **Stainless Steel Border**: Fixed $299 add-on (product ID 37), shown in Check Price when SS border selected
 
 #### Stainless Steel Border (`BronzeBorder.tsx`)
+
 - Border 4 SVG rendered with stainless steel texture (dedicated `generateStainlessSteelTexture()`)
 - **Fixed physical frame width**: SVG scale uses `fixedFrameFactor = 200 / minDimensionMm` (no clamping)
 - **Coverage clamping skipped** for SS borders (bronze borders clamp to 97-99% coverage)
@@ -6876,6 +7249,7 @@ Product 32 uses 9 preset sizes (not continuous sliders), now served from the `si
 - Data: `fullColourPlaqueBorders` in `_data.ts` (2 entries: No Border + SS Border)
 
 #### Key Files
+
 - `components/MaterialSelector.tsx` — Background/Color toggle, No Background, Upload Image, crop controls
 - `app/select-material/_ui/MaterialSelectionGrid.tsx` — Fullscreen version of same
 - `components/SvgHeadstone.tsx` — `stretchFace`, `sideTexture`, `useBlobTexture` hook
@@ -6906,19 +7280,23 @@ Product 32 uses 9 preset sizes (not continuous sliders), now served from the `si
 All design pages now use generated 3D screenshots (`/screenshots/v2026-3d/{id}.png`) instead of legacy 2D screenshots from `/ml/*/saved-designs/screenshots/`. This change spans:
 
 #### Category Pages (`/designs/[productType]/[category]`)
+
 - `CategoryPageClient.tsx` — Removed `graniteThumb` legacy screenshot `<img>` element and `onError` handler from design cards. Kept dimensions + granite name text.
 - Design cards already had 3D screenshots at the top; the old legacy thumbnail in the specs section was the duplicate removed.
 
 #### Individual Design Pages (`/designs/.../[slug]`)
+
 - **2D preview block removed** — The entire old 2D preview rendering (~509 lines: SVG shape rendering, inscriptions overlay, motifs overlay, draggable elements, inscription editing UI) was removed from `DesignPageClient.tsx`.
 - **Replaced with** a simple `<img>` tag loading `/screenshots/v2026-3d/{designId}.png` with `_small.png` fallback on error.
 - **SSR content** (`page.tsx`) already used 3D screenshot path — confirmed at line ~541.
 
 #### Related Designs Sections
+
 - `DesignContentBlock.tsx` — "Similar Designs" and "More Memorial Designs" sections updated to use `/screenshots/v2026-3d/{id}_small.png` instead of `relatedDesign.preview` / `catDesign.preview`. Changed `object-cover` to `object-contain p-2` for transparent PNGs.
 - Removed "Customize This Design" CTA button at the bottom of `DesignContentBlock.tsx`. Cleaned up unused `editUrl` / `getEditUrl()` code.
 
 #### SEO Metadata (page.tsx)
+
 - **OpenGraph images**: Changed from `design.preview` to `/screenshots/v2026-3d/${design.id}.png`
 - **Twitter card images**: Same change
 - **JSON-LD Product schema `image`**: Now uses absolute URL `${baseUrl}/screenshots/v2026-3d/${design.id}.png`
@@ -6926,6 +7304,7 @@ All design pages now use generated 3D screenshots (`/screenshots/v2026-3d/{id}.p
 - **`<link rel="preload">`**: Points to 3D screenshot (unconditional, was conditional)
 
 #### extract-design-specs.ts
+
 - `getScreenshotPath()` and `getFallbackThumbnailPath()` now return `/screenshots/v2026-3d/{designId}_small.png` instead of old `/ml/{mlDir}/saved-designs/screenshots/...` paths.
 
 ### ✅ "Personalize Design" CTA Button
@@ -6933,12 +7312,14 @@ All design pages now use generated 3D screenshots (`/screenshots/v2026-3d/{id}.p
 Added a "Personalize Design" button below the 3D screenshot on individual design pages. Loads the design into the local 3D editor (same flow as My Account → Edit).
 
 #### How It Works
+
 1. `DesignPageClient.tsx` loads the design into the Zustand store on mount via `useEffect` → `fetchCanonicalDesign()` → `loadCanonicalDesignIntoEditor()`
 2. Button is **disabled** until `canonicalLoadState === 'success'` — shows inline spinner with "Loading Design…" while loading
 3. On click: sets `loadingIntoEditor = true` (triggers full-screen overlay) → `router.push('/select-size')`
 4. **Mobile sticky CTA** at the bottom also updated — was linking to external `headstonesdesigner.com`, now uses same local `router.push('/select-size')` flow
 
 #### FORCE_LEGACY_PARITY_IDS Removed
+
 - The `FORCE_LEGACY_PARITY_IDS` set (only contained `1578016189116`) forced certain designs through `loadSavedDesignIntoEditor` instead of `loadCanonicalDesignIntoEditor`. This was needed for the old 2D preview rendering but is wrong for the 3D editor.
 - All designs now use the canonical loader path — same path the Load Design popup uses successfully.
 - `shouldForceLegacyParity` hardcoded to `false`, legacy branch removed from the loading `useEffect`.
@@ -6948,16 +7329,19 @@ Added a "Personalize Design" button below the 3D screenshot on individual design
 Dark overlay with spinner shown during design loading transitions. Matches the existing popup/modal pattern used across the app.
 
 #### Design Pages (`DesignPageClient.tsx`)
+
 - Overlay shown when user clicks "Personalize Design" button (`loadingIntoEditor` state)
 - `fixed inset-0 z-[99999] bg-black/80 backdrop-blur-sm` with centered white spinner
 - Text: "Loading design…" in `font-mono`
 
 #### Load Design Popup (`LoadDesignButton.tsx`)
+
 - Overlay shown after modal closes while design is loading (`loading && !isOpen`)
 - Uses `createPortal(…, document.body)` to render above everything
 - Same visual style as design page overlay
 
 #### SSR Content Hiding Fix
+
 - `document.getElementById('design-ssr-content')?.remove()` caused `NotFoundError: Failed to execute 'removeChild' on 'Node'` when `router.push` triggered React unmounting
 - Fixed to `el.style.display = 'none'` — node stays in DOM for React's cleanup
 
@@ -6966,18 +7350,20 @@ Dark overlay with spinner shown during design loading transitions. Matches the e
 The old 2D screenshots in `public/ml/*/saved-designs/screenshots/` totalled **4.3 GB across 95,119 files** — the main cause of Vercel build timeouts (45-minute limit exceeded).
 
 #### Changes
+
 - `.vercelignore` updated: replaced individual JPG exclusion rules with a single `public/ml/**/screenshots/` line that excludes the entire screenshots directories
 - **Before**: Excluded full-size JPGs but kept `_small.jpg` thumbnails (~850 MB)
 - **After**: Excludes everything in screenshots dirs (~4.3 GB saved)
 - The `_cropped.json` metadata files in those dirs are no longer critical — the loading effect has a fallback that derives dimensions from the design JSON
 
 #### Size Impact
-| Directory | Size | Files | Status |
-|-----------|------|-------|--------|
-| `public/ml/bronze-plaque/saved-designs/screenshots/` | 853 MB | 12,634 | **Excluded** |
-| `public/ml/forevershining/saved-designs/screenshots/` | 2,289 MB | 52,727 | **Excluded** |
-| `public/ml/headstonesdesigner/saved-designs/screenshots/` | 1,204 MB | 29,758 | **Excluded** |
-| `public/screenshots/v2026-3d/` | 1,005 MB | 9,124 | **Included** (3D renders) |
+
+| Directory                                                 | Size     | Files  | Status                    |
+| --------------------------------------------------------- | -------- | ------ | ------------------------- |
+| `public/ml/bronze-plaque/saved-designs/screenshots/`      | 853 MB   | 12,634 | **Excluded**              |
+| `public/ml/forevershining/saved-designs/screenshots/`     | 2,289 MB | 52,727 | **Excluded**              |
+| `public/ml/headstonesdesigner/saved-designs/screenshots/` | 1,204 MB | 29,758 | **Excluded**              |
+| `public/screenshots/v2026-3d/`                            | 1,005 MB | 9,124  | **Included** (3D renders) |
 
 ### 📌 Next Steps
 
@@ -6996,6 +7382,7 @@ The old 2D screenshots in `public/ml/*/saved-designs/screenshots/` totalled **4.
 Clicking **"Back to Menu"** from any fullscreen panel (e.g., Select Material, Select Size) previously left the URL on the panel's route (e.g., `/select-material`) and kept the corresponding menu item highlighted. Now "Back to Menu" navigates to a new **`/design-menu`** route that shows the full sidebar menu + 3D canvas with no item highlighted.
 
 #### Implementation
+
 - **New route `app/design-menu/page.tsx`** — minimal page that returns `null` (sidebar + canvas render from layout)
 - **`handleBackToMenu`** callback in `DesignerNav.tsx` (~line 382): calls `closeFullscreenPanel()` + `router.push('/design-menu')`
 - **"Back to Menu" button** wired to `handleBackToMenu` instead of bare `closeFullscreenPanel`
@@ -7004,6 +7391,7 @@ Clicking **"Back to Menu"** from any fullscreen panel (e.g., Select Material, Se
 - **No menu item highlighted**: since `/design-menu` doesn't match any `fullscreenPanelSlug`, the route-sync `useEffect` auto-closes any active panel, and no menu item gets the active/highlighted style
 
 #### Files Changed
+
 - `app/design-menu/page.tsx` — New file (returns null)
 - `components/DesignerNav.tsx` — `handleBackToMenu`, `canvasVisiblePages` includes `/design-menu`, Back to Menu onClick
 - `components/ConditionalCanvas.tsx` — `isDesignMenuPage` keeps canvas visible
@@ -7014,14 +7402,17 @@ Clicking **"Back to Menu"** from any fullscreen panel (e.g., Select Material, Se
 The Select Additions panel showed an empty state when returning to it after previously selecting an addition and navigating away. The additions catalog was invisible because `selectedAdditionId` was stale (still set from the prior session) even though `activePanel !== 'addition'`.
 
 #### Root Cause
+
 The catalog visibility check used `!selectedAdditionId` — if any addition had ever been selected, the catalog was hidden (even when the user wasn't actively editing). Motifs correctly used `!hasActiveMotif` which checks both selection AND active panel state.
 
 #### Fix
+
 - Added `hasActiveAdditionForPanel` computed value (~line 467): checks `selectedAdditionId && activePanel === 'addition'`
 - Changed `isAdditionCatalogVisible` and the catalog render guard from `!selectedAdditionId` to `!hasActiveAdditionForPanel`
 - Now follows the same pattern as motifs: catalog shows unless the user is actively editing a specific addition
 
 #### Files Changed
+
 - `components/DesignerNav.tsx` — `hasActiveAdditionForPanel`, `isAdditionCatalogVisible` fix, catalog render guard fix
 
 ### ✅ Additions Grid Desktop Flash Fix
@@ -7029,11 +7420,13 @@ The catalog visibility check used `!selectedAdditionId` — if any addition had 
 On desktop, the `AdditionSelectionGrid` briefly flashed over the canvas for one frame when navigating to `/select-additions`. The grid is mobile-only but rendered during SSR because `isDesktop` started as `false`.
 
 #### Fix
+
 - Changed `isDesktop` state from `useState(false)` to `useState<boolean | null>(null)`
 - Changed render guard from `!isDesktop` to `isDesktop === false` (strict equality)
 - Grid only renders after client-side media query confirms mobile — no SSR flash
 
 #### Files Changed
+
 - `app/select-additions/page.tsx` — `isDesktop` initialization and `showGrid` check
 
 ### 📌 Next Steps
@@ -7066,16 +7459,22 @@ export function computeQuantity(
   dims: { width: number; height: number; depth: number },
 ): number {
   switch (priceModel.quantityType) {
-    case 'Width * Height':  return dims.width * dims.height;
-    case 'Width + Height':  return dims.width + dims.height + dims.depth;
-    case 'Width':           return dims.width + dims.depth;
-    case 'Area':            return dims.width * dims.height;
-    default:                return dims.width + dims.height + dims.depth;
+    case 'Width * Height':
+      return dims.width * dims.height;
+    case 'Width + Height':
+      return dims.width + dims.height + dims.depth;
+    case 'Width':
+      return dims.width + dims.depth;
+    case 'Area':
+      return dims.width * dims.height;
+    default:
+      return dims.width + dims.height + dims.depth;
   }
 }
 ```
 
 **Files updated to use `computeQuantity()`:**
+
 - `components/ThreeScene.tsx` — bottom price chip
 - `components/CheckPricePanel.tsx` — price popup
 - `components/DesignerNav.tsx` — sidebar price
@@ -7134,20 +7533,23 @@ Added `'public/screenshots/**/*'` to `outputFileTracingExcludes` in `next.config
 All screenshot generation is now finished. The batch ran for ~15 hours overnight, capturing the remaining ~1,200 designs.
 
 #### Final Results
-| Metric | Value |
-|--------|-------|
-| **Total PNGs on disk** | **3,041** |
-| **JPG thumbnails** | **3,040** |
-| **New this session** | **+1,208** |
-| **Skipped (existing)** | 1,878 |
-| **Known failures (blocklisted)** | 47 designs |
-| **New failures** | 6 designs |
-| **Remaining (no JSON)** | 22 designs |
-| **Capture rate** | ~2/min (~120/hour) with concurrency=1 |
-| **Total runtime** | ~15 hours |
+
+| Metric                           | Value                                 |
+| -------------------------------- | ------------------------------------- |
+| **Total PNGs on disk**           | **3,041**                             |
+| **JPG thumbnails**               | **3,040**                             |
+| **New this session**             | **+1,208**                            |
+| **Skipped (existing)**           | 1,878                                 |
+| **Known failures (blocklisted)** | 47 designs                            |
+| **New failures**                 | 6 designs                             |
+| **Remaining (no JSON)**          | 22 designs                            |
+| **Capture rate**                 | ~2/min (~120/hour) with concurrency=1 |
+| **Total runtime**                | ~15 hours                             |
 
 #### New Failures (Headstone Not Visible)
+
 6 additional designs failed with "Headstone not visible in render" — likely missing viewport dimensions in their JSON:
+
 - `1662337522025`, `1667480366612`, `1670405007473`, `1673437084641`, `1675259335154`, `1752619990342`
 
 These should be added to the `KNOWN_FAILURES` set in `scripts/batch-screenshot.js`.
@@ -7157,6 +7559,7 @@ These should be added to the `KNOWN_FAILURES` set in `scripts/batch-screenshot.j
 Removed the hardcoded `V2026_3D_IDS` Set (~221 IDs) from `LoadDesignButton.tsx`. This set was created during the first batch run and never updated — causing ~2,800 designs to still show old legacy screenshots even though 3D screenshots existed.
 
 #### Before
+
 ```typescript
 // Hardcoded set of 221 design IDs — all other designs used legacy thumbnails
 const V2026_3D_IDS = new Set(['1578016189116', '1593953642523', ...]);
@@ -7167,6 +7570,7 @@ function getPopupPreviewSrc(designId, preview) {
 ```
 
 #### After
+
 ```typescript
 // Always try 3D screenshot first — onError fallback handles the ~50 missing ones
 function getPopupPreviewSrc(designId, preview) {
@@ -7175,12 +7579,14 @@ function getPopupPreviewSrc(designId, preview) {
 ```
 
 The `onError` fallback chain on both `<img>` elements (Popular grid + category grid) gracefully handles the ~50 designs without 3D screenshots:
+
 1. Try `/screenshots/v2026-3d/{id}_small.png` (3D transparent PNG)
 2. Try legacy `_small.jpg` path (ML screenshot)
 3. Try full-size legacy preview
 4. Hide image element
 
 #### Files Changed
+
 - `components/LoadDesignButton.tsx` — Removed `V2026_3D_IDS` set, simplified `getPopupPreviewSrc()` to always use 3D path, updated both `onError` handlers to remove `V2026_3D_IDS` guard
 
 ### 📌 Next Steps
@@ -7200,14 +7606,15 @@ The `onError` fallback chain on both `<img>` elements (Popular grid + category g
 Continued batch screenshot generation for all 3,092 designs with canonical JSON. Major stability improvements to the script after repeated browser crashes.
 
 #### Progress Summary
-| Metric | Value |
-|--------|-------|
-| **Total PNGs on disk** | **1,827** (was 641 at session start) |
-| **New this session** | **+1,186** |
-| **JPG thumbnails** | 1,826 |
-| **Known failures** | 41 designs (blocklisted) |
-| **Remaining** | ~1,265 designs |
-| **Capture rate** | ~2/min (~120/hour) with concurrency=1 |
+
+| Metric                 | Value                                 |
+| ---------------------- | ------------------------------------- |
+| **Total PNGs on disk** | **1,827** (was 641 at session start)  |
+| **New this session**   | **+1,186**                            |
+| **JPG thumbnails**     | 1,826                                 |
+| **Known failures**     | 41 designs (blocklisted)              |
+| **Remaining**          | ~1,265 designs                        |
+| **Capture rate**       | ~2/min (~120/hour) with concurrency=1 |
 
 #### Script Improvements (`scripts/batch-screenshot.js`)
 
@@ -7226,6 +7633,7 @@ Continued batch screenshot generation for all 3,092 designs with canonical JSON.
 6. **maxRetries=0** — No retries (was 2). Each failure costs ~20s instead of ~2min. Known-failing designs are blocklisted instead.
 
 #### How to Resume
+
 ```bash
 # Start dev server (must use Turbopack to avoid middleware EvalError)
 npx next dev --turbopack --port 3001
@@ -7235,6 +7643,7 @@ node scripts/batch-screenshot.js --skip-existing --concurrency=1
 ```
 
 #### Files Changed
+
 - `scripts/batch-screenshot.js` — Chunked browser relaunch, KNOWN_FAILURES blocklist (41 IDs), context refresh after failures, incremental error saving, stability flags, maxRetries=0
 
 ### 📌 Next Steps
@@ -7255,6 +7664,7 @@ node scripts/batch-screenshot.js --skip-existing --concurrency=1
 The Check Price popup (`components/CheckPricePanel.tsx`) was restyled to match the HomeSplash modal aesthetic from the home page.
 
 #### Changes
+
 - **Outer shell**: `rounded-3xl` container with `border-[#d4af37]/35` gold border and gold gradient glow overlay (`bg-gradient-to-b from-[#d4af37]/18 via-[#d4af37]/6 to-transparent`)
 - **Eyebrow pill badge**: "Price Breakdown" pill with `border-[#d4af37]/45 bg-[#d4af37]/10 text-[#f3d48f]`
 - **Native dark classes**: Replaced all CSS override hacks (`.check-price-panel__table .text-gray-900 { color: #f5eee1 !important; }`) with native Tailwind dark-theme classes throughout
@@ -7262,6 +7672,7 @@ The Check Price popup (`components/CheckPricePanel.tsx`) was restyled to match t
 - **Serif title**: "Your Design Pricing" in `font-serif` matching HomeSplash pattern
 
 #### Files Changed
+
 - `components/CheckPricePanel.tsx` — Complete restyle of header, table headers, all row sections, footer; removed all CSS override hacks
 
 ### ✅ Load Design Popup Restyled (Dark Luxury Theme)
@@ -7269,6 +7680,7 @@ The Check Price popup (`components/CheckPricePanel.tsx`) was restyled to match t
 The Load Design popup (`components/LoadDesignButton.tsx`) was restyled with the same HomeSplash modal aesthetic.
 
 #### Changes
+
 - **Outer container**: `rounded-3xl` with gold border, gold gradient glow overlay
 - **Eyebrow pill badge**: "Design Gallery" pill badge
 - **Search bar**: Gold-accented focus ring (`focus:ring-[#d4af37]/50 focus:border-[#d4af37]/50`)
@@ -7278,6 +7690,7 @@ The Load Design popup (`components/LoadDesignButton.tsx`) was restyled with the 
 - **Close button**: Matching HomeSplash style
 
 #### Files Changed
+
 - `components/LoadDesignButton.tsx` — Complete restyle of outer container, header, search bar, ML filters, favorites drawer, category sections, card grid, and action buttons
 
 ### ✅ Mass Legacy Design Conversion (22,226 Designs)
@@ -7285,24 +7698,28 @@ The Load Design popup (`components/LoadDesignButton.tsx`) was restyled with the 
 Batch-converted all legacy designs from three `ml/` source directories to canonical JSON format.
 
 #### Before
+
 - **3,114** designs in catalog (`lib/saved-designs-data.ts`)
 - **223** had canonical JSON (from prior P3D conversions)
 - **2,891** missing — no screenshots possible
 
 #### Conversion Run
+
 ```bash
 node scripts/batch-convert-saved-designs.js --out-dir public/designs/v2026
 ```
 
 #### Source Breakdown
-| mlDir | JSON source files | In catalog |
-|-------|------------------|------------|
-| `forevershining/` | 12,487 | 1,426 |
-| `headstonesdesigner/` | 7,529 | 1,224 |
-| `bronze-plaque/` | 2,814 | 241 |
-| **Total** | **22,830** | **2,891** |
+
+| mlDir                 | JSON source files | In catalog |
+| --------------------- | ----------------- | ---------- |
+| `forevershining/`     | 12,487            | 1,426      |
+| `headstonesdesigner/` | 7,529             | 1,224      |
+| `bronze-plaque/`      | 2,814             | 241        |
+| **Total**             | **22,830**        | **2,891**  |
 
 #### Results
+
 - **22,226 converted** (0 failures), all high confidence
 - **3,092 of 3,114** catalog designs now have canonical JSON (was 223)
 - **22 remaining** — no source files in any mlDir
@@ -7310,6 +7727,7 @@ node scripts/batch-convert-saved-designs.js --out-dir public/designs/v2026
 - Report: `database-exports/conversion-report-*.json`
 
 #### Files Used (not modified)
+
 - `scripts/batch-convert-saved-designs.js` — Handles all three mlDirs (forevershining, headstonesdesigner, bronze-plaque)
 
 ### ✅ Batch Screenshot Generation (Initial Runs — see 2026-04-10 for latest)
@@ -7317,16 +7735,20 @@ node scripts/batch-convert-saved-designs.js --out-dir public/designs/v2026
 Regenerating 3D screenshots for all 3,092 designs with canonical JSON.
 
 #### First Run (223 original designs)
+
 ```bash
 node scripts/batch-screenshot.js
 ```
+
 - **221/223 success**, 2 failures (designs 1636037970908 and 1726182269646 — "Headstone not visible")
 - Runtime: ~113 min (~30s per design)
 
 #### Second Run (all 3,092 designs, skip existing)
+
 ```bash
 node scripts/batch-screenshot.js --skip-existing
 ```
+
 - Completed 616/3,092 before stalling — continued in 2026-04-10 session
 - Rate: ~90 designs/hour
 - ⚠️ Process hung on problematic designs — fixed in 2026-04-10 with chunked browser relaunch + blocklist
@@ -7349,17 +7771,20 @@ node scripts/batch-screenshot.js --skip-existing
 Base inscriptions (e.g., "CICERO" on the pedestal base of a full monument) were completely invisible in loaded designs. This was a deep multi-layered bug:
 
 #### Root Cause Chain
+
 1. **`INSCRIPTION_SIZE_SCALE = 0.85` was declared but NEVER applied** — font sizes in loaded designs were 15% too large
 2. **Base mesh `unitsPerMeter = 1000`** was wrong — base is a unit cube scaled in meters, changed to `unitsPerMeter = 1`
 3. **`useEffect` for `surfaceBounds` was perpetually cancelled** — 19 headstone inscriptions each call `updateLineStore`, causing re-renders that cancel the base inscription's useEffect before it can compute bounds
 4. **`baseMesh.position` is `(0,0,0)` at React render time** — `HeadstoneBaseAuto` sets position via `useFrame` (not React state), so the inscription group was placed at the origin
 
 #### Solution
+
 - **useFrame hook** in `HeadstoneInscription.tsx` (~line 517): imperatively tracks base mesh `position` and `scale` every frame, matching `HeadstoneBaseAuto`'s own pattern. Bypasses React rendering entirely.
 - **Visibility guard**: `visible={coordinateSpace !== 'mm-center' || !!surfaceBounds || (isBaseSurface && !!baseMesh)}`
 - **mm-center branch**: dedicated coordinate handling for base surface inscriptions (unit-cube local coords → assembly meters)
 
 #### Files Changed
+
 - `components/HeadstoneInscription.tsx` — useFrame position tracking, visibility guard, base mm-center branch
 - `components/three/headstone/HeadstoneBaseAuto.tsx` — `baseAPI.unitsPerMeter = 1` (was 1000)
 - `lib/saved-design-loader-utils.ts` — Applied `INSCRIPTION_SIZE_SCALE` to font sizes
@@ -7369,6 +7794,7 @@ Base inscriptions (e.g., "CICERO" on the pedestal base of a full monument) were 
 Base motifs now render correctly and can be dragged on the base surface.
 
 #### Fixes
+
 - **mm-center groupPosition branch** in `MotifModel.tsx` (~lines 607-614): reads `stone.position` directly for base surface placement
 - **Drag handler** in `MotifModel.tsx` (~lines 247-275): converts unit-cube local coords to mm offsets for base surface
 - **Inscription drag handler** in `HeadstoneInscription.tsx` (~lines 289-357): base-specific unit-cube → assembly-meters conversion
@@ -7378,11 +7804,14 @@ Base motifs now render correctly and can be dragged on the base surface.
 Border ornaments on bronze plaques were too small compared to legacy original designs.
 
 #### Root Cause
+
 The `buildBorderGroup()` function in `BronzeBorder.tsx` had two issues:
+
 1. **`uniformScale *= 2.5`** — initial SVG scale was too small, border stayed undersized
 2. **Coverage targets too low** — `minTargetCoverage = 0.78`, `maxTargetCoverage = 0.90` capped the border at 78-90% of plaque area. Original legacy borders filled ~97%+ of the plaque
 
 #### Fix
+
 - `uniformScale` multiplier: `2.5` → `5.0`
 - `minTargetCoverage`: `0.78` → `0.97`
 - `maxTargetCoverage`: `0.90` → `0.99`
@@ -7390,6 +7819,7 @@ The `buildBorderGroup()` function in `BronzeBorder.tsx` had two issues:
 For a 306×200mm plaque, border ornaments now cover 97% of the plaque area (was 78%), placing decorative elements right near the edges like the original.
 
 #### Files Changed
+
 - `components/three/BronzeBorder.tsx` — Coverage targets and scale multiplier
 
 ### ✅ Anonymization Sanitizer Fixes
@@ -7397,29 +7827,36 @@ For a 306×200mm plaque, border ornaments now cover 97% of the plaque area (was 
 Design 1635118332028 showed real names ("Margaret Edith SEATON", "nee (DICKINS)") — the sanitizer had three bugs:
 
 #### Bug 1: Substring Matching in Sentence Regex
+
 The `sentenceRegex` used `/(are|or|is|be|me|...)/i` WITHOUT word boundaries (`\b`). This matched substrings inside names:
+
 - "M**are**garet" → matched `are` → classified as "sentence" → skipped anonymization
 - "Vict**or**ia", "Rob**ert**" (contains `be`), "Ja**me**s" (contains `me`), etc.
 
 **Fix:** Added `\b` word boundaries: `/\b(the|you|me|...)\b/i`
 
 #### Bug 2: Parentheses Not Stripped
+
 `upperWords` cleanup regex `['".,!?]` didn't include `()`. So `"(DICKINS)"` was never matched against the surname database.
 
 **Fix:** Extended regex to `['".,!?()]`
 
 #### Bug 3: "nee (SURNAME)" Pattern Not Handled
+
 The maiden name pattern "nee (DICKINS)" or "née SURNAME" was never explicitly handled.
 
 **Fix:** Added dedicated handler before word-level analysis:
+
 ```javascript
 const neeMatch = text.match(/\b(?:nee|née)\s*\(?([A-Za-z'-]+)\)?/i);
 ```
 
 #### Impact Assessment
+
 Full scan of 23,086 designs found 18,090 potentially affected by the regex bug. Many are already-anonymized replacement names being re-matched (harmless), but some contain real names that slipped through.
 
 #### Files Changed
+
 - `scripts/utils/inscription-sanitizer.js` — All three fixes + nee handler
 - `public/designs/v2026-rollout-full-20260324-190828/1635118332028.json` — Re-anonymized
 
@@ -7434,6 +7871,7 @@ The Load Design popup now filters designs by the **current product ID** (not jus
 - Search and ML filters stay within the selected route product.
 
 #### Implementation
+
 - `getProductTypeFromId()` in `LoadDesignButton.tsx` maps product IDs to their exact product type
 - Each design in `SAVED_DESIGNS` has a `productId` that is matched against the currently selected product
 - Fallback: if no product is selected, all designs are shown
@@ -7443,24 +7881,26 @@ The Load Design popup now filters designs by the **current product ID** (not jus
 Created structured project documentation in `/docs/` with VitePress static site generator.
 
 #### Documentation Pages
-| Page | Contents |
-|------|----------|
-| `docs/index.md` | Overview & quick start |
-| `docs/architecture.md` | Tech stack, directory structure, data flow |
-| `docs/routes.md` | App Router structure, all routes |
-| `docs/three-scene.md` | 3D scene graph, lighting, camera |
-| `docs/components.md` | React component inventory |
-| `docs/state-management.md` | Zustand store architecture |
-| `docs/database-schema.md` | Drizzle ORM schema |
-| `docs/configuration.md` | Config files, env vars |
-| `docs/scripts.md` | Build & utility scripts |
-| `docs/api-store.md` | Store API reference |
-| `docs/api-utilities.md` | Utility functions reference |
-| `docs/api-three.md` | Three.js components reference |
-| `docs/api-auth-db.md` | Auth & DB API reference |
-| `docs/api-hooks-constants.md` | Hooks & constants reference |
+
+| Page                          | Contents                                   |
+| ----------------------------- | ------------------------------------------ |
+| `docs/index.md`               | Overview & quick start                     |
+| `docs/architecture.md`        | Tech stack, directory structure, data flow |
+| `docs/routes.md`              | App Router structure, all routes           |
+| `docs/three-scene.md`         | 3D scene graph, lighting, camera           |
+| `docs/components.md`          | React component inventory                  |
+| `docs/state-management.md`    | Zustand store architecture                 |
+| `docs/database-schema.md`     | Drizzle ORM schema                         |
+| `docs/configuration.md`       | Config files, env vars                     |
+| `docs/scripts.md`             | Build & utility scripts                    |
+| `docs/api-store.md`           | Store API reference                        |
+| `docs/api-utilities.md`       | Utility functions reference                |
+| `docs/api-three.md`           | Three.js components reference              |
+| `docs/api-auth-db.md`         | Auth & DB API reference                    |
+| `docs/api-hooks-constants.md` | Hooks & constants reference                |
 
 #### Commands
+
 ```bash
 pnpm docs:dev    # Dev server with hot reload
 pnpm docs:build  # Static HTML build (14 pages)
@@ -7471,6 +7911,7 @@ VitePress configured with `base: './'` for `file://` protocol browsing.
 ### ✅ Type Error Fixes
 
 Reduced pre-existing TypeScript errors from 28 to 13 across 7 files:
+
 - `app/designs/DesignsPageClient.tsx` — Fixed `useRef` for React 19
 - `lib/headstone-store.types.ts` — Added `'absolute'` to emblem coordinateSpace union
 - `lib/headstone-store.ts` — Removed 3 duplicate properties
@@ -7496,6 +7937,7 @@ Remaining 13 errors are config-level (`downlevelIteration` tsconfig issues).
 The Load Design popup now uses `public/screenshots/v2026-3d/` 3D screenshots as thumbnail images, with proper fallback to legacy ML screenshots.
 
 #### Thumbnail Source Priority
+
 ```typescript
 // getPopupPreviewSrc(id: string) in LoadDesignButton.tsx
 // Always tries 3D screenshot first — onError fallback handles missing ones
@@ -7507,6 +7949,7 @@ The Load Design popup now uses `public/screenshots/v2026-3d/` 3D screenshots as 
 As of 2026-04-11, 3,040 designs have `_small.jpg` thumbnails in `v2026-3d/`. The ~50 designs without 3D screenshots gracefully fall back to legacy previews via the `onError` chain. The original hardcoded `V2026_3D_IDS` Set (222 IDs from April 6) was removed — no longer needed since nearly all designs now have 3D screenshots.
 
 #### Files Changed
+
 - `components/LoadDesignButton.tsx` — `getPopupPreviewSrc()` always returns 3D path, both `<img>` onError handlers fall back through legacy paths
 
 ### ✅ Design Dedup: Sibling Detection (148 New Duplicates)
@@ -7514,7 +7957,9 @@ As of 2026-04-11, 3,040 designs have `_small.jpg` thumbnails in `v2026-3d/`. The
 The dedup script (`scripts/dedup-designs.ts`) previously only detected "drafts that grew richer" (older → newer with more content). It missed **reverse evolution** — families simplifying designs over time.
 
 #### New Sibling Detection Pass (Step 1b)
+
 For pairs in the same `shapeName + mlDir` group with ≥70% **bidirectional** word overlap in inscriptions:
+
 - Keeps the **richest** design (highest richness score)
 - Hides all others as siblings
 - Bidirectional: both `wordsA⊂B ≥ 70%` AND `wordsB⊂A ≥ 70%`
@@ -7522,11 +7967,13 @@ For pairs in the same `shapeName + mlDir` group with ≥70% **bidirectional** wo
 **Results:** 148 new sibling duplicates found. `data/hidden-designs.json` grew from 657 → 793 entries.
 
 #### Example (LOCI Family)
+
 - `1708723212727` — **kept** (richest: 4 inscriptions + 2 motifs)
 - `1712843604404` — hidden (3 inscriptions + 2 motifs, sibling)
 - `1708790342849` — hidden (2 inscriptions + 2 motifs, sibling)
 
 #### Files Changed
+
 - `scripts/dedup-designs.ts` — Added sibling detection pass (~lines 163-200)
 - `data/hidden-designs.json` — Updated (657 → 793 entries)
 
@@ -7535,27 +7982,30 @@ For pairs in the same `shapeName + mlDir` group with ≥70% **bidirectional** wo
 The batch screenshot script was completely reworked to produce clean, tightly-cropped monument-only images.
 
 #### Environment Strip
+
 Before capture, the script accesses the Three.js scene via `window.__r3fScene` (exposed by `Scene.tsx`) and hides all environment objects:
 
-| Object | Detection Method |
-|--------|-----------------|
-| GrassFloor / SimpleGrassFloor | PlaneGeometry with width or height ≥ 10 |
-| GradientBackground sky dome | SphereGeometry + BackSide (side === 1) |
-| AtmosphericSky dome | SphereGeometry + BackSide |
-| SunRays | ShaderMaterial with `uInnerColor` or `colorTop` uniforms |
-| ContactShadows | Group containing OrthographicCamera child |
-| Sparkles | Points objects |
-| SelectionBox outlines | LineSegments objects |
-| Clouds (drei) | Group containing Sprite or InstancedMesh children |
-| Fog | `scene.fog = null` |
+| Object                        | Detection Method                                         |
+| ----------------------------- | -------------------------------------------------------- |
+| GrassFloor / SimpleGrassFloor | PlaneGeometry with width or height ≥ 10                  |
+| GradientBackground sky dome   | SphereGeometry + BackSide (side === 1)                   |
+| AtmosphericSky dome           | SphereGeometry + BackSide                                |
+| SunRays                       | ShaderMaterial with `uInnerColor` or `colorTop` uniforms |
+| ContactShadows                | Group containing OrthographicCamera child                |
+| Sparkles                      | Points objects                                           |
+| SelectionBox outlines         | LineSegments objects                                     |
+| Clouds (drei)                 | Group containing Sprite or InstancedMesh children        |
+| Fog                           | `scene.fog = null`                                       |
 
 #### Transparent Background
+
 - `scene.background = null` + `gl.setClearColor(0x000000, 0)` → fully transparent WebGL canvas
 - Auto-crop uses **alpha channel** detection (`alpha > 10` threshold) instead of color matching
 - Full-size PNG saved with RGBA transparency (color type 6)
 - JPEG thumbnails get `#1a1a1a` dark background fill (JPEG has no transparency)
 
 #### Auto-Crop Pipeline
+
 1. `gl.readPixels()` — Read all pixels from WebGL canvas (bottom-to-top, Y-flipped)
 2. Alpha-threshold scan — Find tight bounding box of non-transparent pixels
 3. Add 4% padding (minimum 8px) on each side
@@ -7563,9 +8013,11 @@ Before capture, the script accesses the Three.js scene via `window.__r3fScene` (
 5. Save both files; fallback to uncropped Playwright screenshot if crop fails
 
 #### Scene.tsx Exposure
+
 `Scene.tsx` now exposes `window.__r3fScene` and `window.__r3fGL` via useEffect for external tooling (batch screenshots, debugging).
 
 #### Results (April 6, 2026 → Completed April 11, 2026)
+
 - **Initial:** 222 transparent PNGs + 222 JPEG thumbnails
 - **Final (April 11):** **3,041 transparent PNGs** + **3,040 JPEG thumbnails** in `public/screenshots/v2026-3d/`
 - Tightly cropped to monument bounds (typical: 350-800px wide × 500-960px tall)
@@ -7573,6 +8025,7 @@ Before capture, the script accesses the Three.js scene via `window.__r3fScene` (
 - Total runtime: ~15 hours for ~1,208 new captures + ~5 hours for earlier batches
 
 #### Files Changed
+
 - `scripts/batch-screenshot.js` — Environment strip, transparent background, alpha-based auto-crop, configurable BASE_URL (default port 3001)
 - `components/three/Scene.tsx` — Added `window.__r3fScene` / `window.__r3fGL` exposure (~line 165-172)
 
@@ -7581,17 +8034,20 @@ Before capture, the script accesses the Three.js scene via `window.__r3fScene` (
 The photo placeholder image was migrated from `.jpg` to `.png` across the entire codebase.
 
 #### Code References Fixed
-| File | Change |
-|------|--------|
-| `components/three/ImageModel.tsx` | `vitreous-enamel-image.jpg` → `.png` |
-| `components/HeroCanvas.tsx` | `vitreous-enamel-image.jpg` → `.png` |
+
+| File                               | Change                                             |
+| ---------------------------------- | -------------------------------------------------- |
+| `components/three/ImageModel.tsx`  | `vitreous-enamel-image.jpg` → `.png`               |
+| `components/HeroCanvas.tsx`        | `vitreous-enamel-image.jpg` → `.png`               |
 | `lib/saved-design-loader-utils.ts` | Fallback URL + motif asset remap (`.jpg` → `.png`) |
-| `scripts/convert-p3d-design.js` | Converter output uses `.png` |
+| `scripts/convert-p3d-design.js`    | Converter output uses `.png`                       |
 
 #### Design JSON Batch Fix
+
 421 P3D design JSON files in `public/designs/v2026-p3d/` had `vitreous-enamel-image.jpg` baked into the `asset` field. All were batch-updated to `.png`.
 
 #### Loader Safety Net
+
 `saved-design-loader-utils.ts` line 2005: motif assets with `assetType: "photo-placeholder"` now apply `.replace('vitreous-enamel-image.jpg', 'vitreous-enamel-image.png')` — catches any remaining old JSONs that weren't batch-fixed.
 
 ### 📌 Next Steps
@@ -7612,6 +8068,7 @@ The photo placeholder image was migrated from `.jpg` to `.png` across the entire
 The Load Design modal was **completely rewritten** from product-first grouping to category-first grouping with a polished thumbnail grid.
 
 #### Architecture Change
+
 - **Before:** `PickerTree` — Product → Category → Design (list rows with 64px thumbnails)
 - **After:** `CategoryTree` — Category → Design (visual grid cards, no product nesting)
 
@@ -7628,17 +8085,20 @@ The Load Design modal was **completely rewritten** from product-first grouping t
 `buildCategoryTree()` groups all designs by category regardless of product type. `CATEGORY_ORDER` array controls curated sort priority (Pets first, then family categories, themes, religious).
 
 #### Visual Grid Cards
+
 - **Layout:** `grid-cols-2 gap-3 sm:grid-cols-3` — 2 columns on mobile, 3 on desktop
 - **Thumbnails:** `aspect-[4/3]` container, `object-contain` on black background — all designs uniform
 - **Opacity:** 80% idle → 100% on hover with scale `1.03` transition
 - **Metadata:** Date derived from 13-digit timestamp ID instead of repeating category name
 
 #### Hover UX
+
 - Centered **"Open Design"** button appears on hover with semi-transparent backdrop
 - ⭐ Favorite and ↗ Open-in-new-tab icons in top-right (localhost only)
 - 🗑️ Trash icon isolated at bottom-left to prevent accidental deletion
 
 #### Files Changed
+
 - `components/LoadDesignButton.tsx` — Complete rewrite (~578 lines)
 
 ### ✅ Pets Category Cleanup (254 → 111 Designs)
@@ -7646,19 +8106,23 @@ The Load Design modal was **completely rewritten** from product-first grouping t
 The Pets product category contained many human memorials that were miscategorized.
 
 #### Audit Script (`scripts/audit-pets-category.js`)
+
 Created a text-based classifier using:
+
 - **Name detection**: Common first/last name databases
 - **Lifespan analysis**: Short lifespans typical for pets vs human lifespans
 - **Keyword matching**: Pet-specific ("paw", "furry friend") vs human-specific ("wife", "mother") keywords
 - **Inscription structure**: Memorial phrase patterns
 
 #### Results
+
 - **140 automatic reclassifications** — Designs with human relationship words, human-length lifespans, or no pet indicators
 - **4 manual reclassifications** — Confirmed by visual inspection (1659117755289, 1744068681242, 1727308984905, 1668799359538)
 - **1 pet found in other categories** — Winston (`1741675923334`) moved to Pets
 - **Final count: 111 genuine pet designs** (down from 254)
 
 #### Files Changed
+
 - `lib/saved-designs-data.ts` — 145 design entries reclassified
 - `scripts/audit-pets-category.js` — Audit/reclassification script (created)
 
@@ -7669,6 +8133,7 @@ Created a text-based classifier using:
 Playwright-based automation that loads each design into the 3D editor, anonymizes inscriptions via route interception, hides UI chrome, and captures a clean canvas screenshot.
 
 #### Pipeline Overview
+
 1. **Chromium with SwiftShader** (`--use-angle=swiftshader`) for headless WebGL
 2. **Route interception**: `page.route()` intercepts design JSON fetches, applies `sanitizeInscription()` before fulfilling
 3. **Load design** via `window.__loadDesignById(id)` (dev-only bridge)
@@ -7679,6 +8144,7 @@ Playwright-based automation that loads each design into the 3D editor, anonymize
 8. **`canvas.screenshot()`** — Playwright's native screenshot (NOT `canvas.toDataURL()` — troika-three-text fonts aren't in framebuffer)
 
 #### Anonymization
+
 - `scripts/utils/inscription-sanitizer.js` — Gender-aware name replacement
 - Name databases: `public/json/firstnames_f_small.json`, `firstnames_m_small.json`, `surnames_small.json`
 - Deterministic replacement via hash of original text
@@ -7690,27 +8156,32 @@ Playwright-based automation that loads each design into the 3D editor, anonymize
   - Impact: ~18k of 23k designs potentially affected by the original regex bug
 
 #### Known Issues & Workarounds
+
 - **baseSwapping stuck**: `enforceTexture()` sets `baseSwapping: true`; if `PreloadTexture.onReady` never fires, stays true forever. Script force-clears after 8s.
 - **Sky-only renders**: Some P3D designs have `coordinateSpace: "headstone-center-mm"` → missing viewport dims → elements scaled to ~0.7px. Only 2 affected: `1636037970908` (failed), `1752608698736` (removed).
 - **`canvas.toDataURL()` DOES NOT WORK**: troika-three-text loads fonts async — text not in framebuffer when `toDataURL()` is called. Always use Playwright `canvas.screenshot()`.
 
 #### Results (Final — April 11, 2026)
+
 - **3,041 transparent PNGs** + **3,040 JPEG thumbnails** in `public/screenshots/v2026-3d/`
 - **53 failures** total: 47 original blocklisted + 6 new (all "headstone not visible" — missing viewport dims)
 - **22 designs** have no canonical JSON at all (no source files in any mlDir)
 - Error report: `public/screenshots/v2026-3d/_errors.json`
 
 #### Dev-Only Bridges Added
+
 - `window.__loadDesignById` in `components/DefaultDesignLoader.tsx` (line ~50)
 - `window.__headstoneStore` in `lib/headstone-store.ts` (line ~1940)
 - Both guarded by `isDevEnvironment` check — not exposed in production
 
 #### Files Created
+
 - `scripts/batch-screenshot.js` — Main batch generator (~548 lines)
 - `scripts/utils/inscription-sanitizer.js` — Name anonymizer
 - `public/screenshots/v2026-3d/*.png` — 221 anonymized screenshots
 
 #### Files Modified
+
 - `components/DefaultDesignLoader.tsx` — Added `window.__loadDesignById`
 - `lib/headstone-store.ts` — Added `window.__headstoneStore`
 - `package.json` — Added `playwright@1.59.1` and `@playwright/test@1.59.1` as devDependencies
@@ -7720,6 +8191,7 @@ Playwright-based automation that loads each design into the 3D editor, anonymize
 **`pnpm dev` (webpack) causes `EvalError` in Edge Runtime middleware.** Webpack uses `eval()` at line 348 of compiled middleware.js — disallowed in Edge Runtime.
 
 **Fix:** Always use Turbopack for local development:
+
 ```bash
 npx next dev --turbopack
 ```
@@ -7744,15 +8216,18 @@ The `turbopack: { root: process.cwd() }` config already exists in `next.config.t
 All fixes are **universal mechanisms** applied to all 860 P3D designs, not design-specific tweaks.
 
 #### Coordinate System Fixes
+
 - **Forevershining P3D positions**: Negate BOTH X and Y (`p3dSign = -1`). The haxe 3D model faces the opposite direction; P3D regionPosition uses Y-DOWN + X-LEFT convention.
 - **Forevershining companion JSON positions**: Negate Y only (`ySign = -1`). Companion JSON uses Y-DOWN (negative Y = upward) but X is already correct.
 - **Headstonesdesigner**: No negation needed (Y-UP convention matches canonical).
 - P3D positions exactly match companion JSON positions when both exist (verified: design 1595787261483, motif 2 at y=104.9 in both sources).
 
 #### Auto-Layout Algorithm (for motifs with lost positions)
+
 ~80% of P3D headstone motifs have `(0,0)` positions — original layouts from the haxe renderer were never saved.
 
 The converter handles these with a multi-stage layout:
+
 1. **Memorial phrases** ("IN LOVING MEMORY", "REST IN PEACE" etc.) placed ABOVE the positioned reference inscription
 2. **Names/dates** placed BELOW the reference inscription
 3. **Deco zone** computed from lowest inscription Y position (init `Infinity`, not `0`)
@@ -7760,20 +8235,24 @@ The converter handles these with a multi-stage layout:
 5. **All motifs**: Universal size cap — no motif exceeds headstone dimensions
 
 #### Embedded PNG Rendering
+
 - **No oval mask**: P3D embedded-png and photo-placeholder motifs render with `maskShape: ''` (empty string) → no ceramic oval base, flat plane rendering
 - **Photo placeholders**: Companion JSON `type='Photo'` recognized; uses `jpg/photos/vitreous-enamel-image.png` as placeholder (migrated from `.jpg` in April 2026)
 - **Photo dimensions**: Uses companion JSON width/height when available (P3D stores oversized dimensions)
 
 #### Anonymization Fix
+
 - `sanitizeInscription()` regex for sentence detection (the, you, me, etc.) now uses `\b` word boundaries
 - Prevents false matches like "the" in "HEATHER" or "or" in "DOROTHY"
 
 #### Files Changed
+
 - `scripts/convert-p3d-design.js` — P3D→canonical converter (12 fixes, see below)
 - `lib/saved-design-loader-utils.ts` — Added `photo-placeholder` to image loading, `maskShape: ''` for all P3D images
 - `public/designs/v2026-p3d/*.json` — All 860 designs re-converted
 
 #### Batch Results
+
 - **860/869** designs convert successfully (9 corrupted p3d files — unchanged)
 - `pnpm build` passes ✅
 
@@ -7782,20 +8261,24 @@ The converter handles these with a multi-stage layout:
 Bronze plaque designs (`mlDir: 'bronze-plaque'`) from the rollout conversion pipeline had two issues:
 
 #### Problem: Positions Treated as Pixels Instead of Millimeters
+
 The bronze-plaque companion JSON stores inscription/motif positions in **mm** (like forevershining), but the rollout converter (`batch-convert-saved-designs.js` / `convert-saved-design.js`) stored them as `x_px`/`y_px`. The loader then applied a px→mm conversion ratio, shrinking positions to ~1/3 of correct values.
 
 **Fix:** When `mlDir === 'bronze-plaque'`, store positions as `x_mm`/`y_mm` with Y negation (companion uses Y-DOWN), and font sizes as `size_mm`. The loader's `convertPositionToMm()` returns `_mm` values directly (line 1621) — no scaling, no stage compensation.
 
 Example: Design 1669305872595 (560×241mm plaque, 20 inscriptions)
+
 - Before: y_px=-88 → converted to yMm=31.8 (wrong, clustered in center)
 - After: y_mm=88 → used directly (correct, 88mm above center = near top)
 
 #### Problem: Border Not Loading in Canonical Loader
+
 `loadCanonicalDesignIntoEditor()` didn't extract border name from embedded legacy data. The legacy loader (`loadSavedDesignIntoEditor()`) did call `setBorderName()`, but the canonical path skipped it.
 
 **Fix:** Added extraction of `legacyRawHeadstoneItem.border` in canonical loader → `store.setBorderName()`.
 
 #### Files Changed
+
 - `scripts/batch-convert-saved-designs.js` — Bronze-plaque `_mm` position/font handling
 - `scripts/convert-saved-design.js` — Same changes in `buildInscription`/`buildMotif`
 - `lib/saved-design-loader-utils.ts` — Border extraction from legacy raw data in canonical loader
@@ -7818,6 +8301,7 @@ Example: Design 1669305872595 (560×241mm plaque, 20 inscriptions)
 A **white/coloured inset contour line** that follows the headstone shape a few cm inside the edges, rendered with Three.js fat lines (`Line2` + `LineGeometry` + `LineMaterial`).
 
 #### Implementation (`components/three/InsetContourLine.tsx`)
+
 - Samples the headstone SVG path at `SAMPLE_COUNT = 200` points
 - Offsets each point inward by `INSET_MM = 15` using vertex normals
 - Trims bottom edge (below `BOTTOM_TRIM_Y`) and top region for certain shapes
@@ -7825,6 +8309,7 @@ A **white/coloured inset contour line** that follows the headstone shape a few c
 - Limited to first 11 traditional shapes (not slant/ogee/gothic etc.)
 
 #### Store Integration
+
 - `borderName: string | null` in Zustand store (via `setBorderName()`)
 - Toggle in `ShapeSelector` panel — shows/hides border toggle for supported shapes
 - Persisted in saved designs
@@ -7834,24 +8319,28 @@ A **white/coloured inset contour line** that follows the headstone shape a few c
 Decodes the proprietary `.p3d` file format (used by the legacy haxe 3D designer) and converts to canonical v2026 JSON.
 
 #### P3D Format (`haxe/` directory heritage)
+
 - **Header:** `FF FF 00 00` + `"WPF0"` (magic) + `00 00 FF FF` + `"PROJ"` + 10 metadata bytes = 26 bytes total
 - **Payload:** zlib-compressed → 3 skip bytes + XML scene tree + binary section (embedded PNGs)
 - **Variant:** 12 files use text-CSV encoding (byte values as comma-separated ASCII decimals)
 - **Corrupted:** 9 files are undecompressable
 
 #### XML Hierarchy
+
 ```
 project > scenery > base > kerb > (lid-back > lid > elements[motifs])
                                  + (stand-back > stand > table[headstone] > inscriptions[motifs])
 ```
 
 Each motif has:
+
 - `<regionPosition x="" y="" rotation="">` — position in mm from surface center
 - `<storageObject>` with model properties (width, height, depth, texture)
 - `<displayObjectValue embed-pointer="">` — pointer to PNG in binary section
 - `<extra type="json"><![CDATA[{"id":N,"src":"path/to/motif.svg"}]]></extra>` — links to companion JSON via `itemID`
 
 #### Converter Script (`scripts/convert-p3d-design.js`)
+
 - **Companion JSON cross-reference**: `itemID` in companion JSON (`ml/*/saved-designs/json/`) matches p3d `extraJson.id`
 - **Inscriptions → editable text**: Extracts label, font_family, font_size (mm), color, position from companion JSON
 - **Motifs → SVG refs**: Maps `companionMotif.src` (e.g., `"butterfly_005"`) to `/shapes/motifs/butterfly_005.svg`
@@ -7871,6 +8360,7 @@ node scripts/convert-p3d-design.js
 ```
 
 #### Batch Results
+
 - **860/869** designs converted successfully (9 corrupted p3d files)
 - **651** designs with editable inscriptions (5,065 inscription elements total)
 - **428** designs with SVG motif references (1,187 motif elements total)
@@ -7878,6 +8368,7 @@ node scripts/convert-p3d-design.js
 - Extracted PNG assets: `public/designs/p3d-assets/`
 
 #### Position Data Limitations (KEY KNOWLEDGE)
+
 - **P3D `regionPosition`**: ~80% of headstone motifs have `(0,0)`. The haxe renderer used an internal auto-layout system NOT captured in saved files.
 - **Companion JSON `x`/`y`**: Inscriptions have partially-correct positions. Motifs mostly `(0,0)`. Multiple inscriptions can share the same y-coordinate (e.g., several at `y=119.619`) causing overlap.
 - **Auto-layout handles 3 cases**:
@@ -7889,6 +8380,7 @@ node scripts/convert-p3d-design.js
 ### ✅ P3D Loader Integration
 
 #### `fetchCanonicalDesign()` (`lib/saved-design-loader-utils.ts`)
+
 - **Priority order**: tries `v2026-p3d/` first, then falls back to main rollout `v2026/`
 - **Position mode**: `p3d-mm-center` — positions in mm from surface center, no DPR or stage compensation
 - **Shape loading**: Reads from `product.shape` OR `components.headstone.shape` (fallback added for p3d designs)
@@ -7899,6 +8391,7 @@ node scripts/convert-p3d-design.js
 - `GLOBAL_LAYOUT_SCALE = 1` for p3d designs
 
 #### Callers Updated
+
 - `components/DefaultDesignLoader.tsx` — uses `fetchCanonicalDesign()`
 - `app/designs/[productType]/[category]/[slug]/DesignPageClient.tsx` — uses `fetchCanonicalDesign()`
 - `components/TestCanonicalLoader.tsx` — uses `fetchCanonicalDesign()`
@@ -7908,6 +8401,7 @@ node scripts/convert-p3d-design.js
 **Problem:** Clicking Base or Ledger caused camera to zoom way out (1800m bounding box) because `Box3.setFromObject()` included motif meshes positioned at mm coordinates in a meters scene.
 
 #### Fix (`components/three/FullMonumentFit.tsx`)
+
 - **`computeMeshBox()`**: Mesh-only bounding box traversal — skips `motif-*` named meshes, meshes >10m from origin, and `LineSegments` (border/outline helpers)
 - **`shouldFocusBase`**: Detects base click → targets upright-assembly group (headstone+base) instead of full monument
 - **`shouldZoomIn` / `shouldFocusHeadstone`**: Proper zoom levels per component
@@ -7947,6 +8441,7 @@ node scripts/convert-p3d-design.js
 Bronze Plaques now support **Emblems** — decorative PNG icons placed on the plaque surface. The entire feature is plaque-only and hidden for other product types.
 
 #### Data Layer (`app/_internal/_emblems-loader.ts`)
+
 - **236 emblem IDs** sourced from `createJS/dyo/Data.js` EmblemsData array
 - PNG images in 3 sizes: `/public/png/emblems/{xs,s,m}/{id}.png`
 - **7 fixed height sizes** from `public/xml/en_EN/emblems.xml`: 50, 75, 100, 150, 220, 300, 400mm
@@ -7954,6 +8449,7 @@ Bronze Plaques now support **Emblems** — decorative PNG icons placed on the pl
 - Default size variant: 3 (100mm on largest dimension)
 
 #### Store (`lib/headstone-store.ts` + `lib/headstone-store.types.ts`)
+
 - `selectedEmblems: Array<{ id, emblemId, imageUrl }>` — added emblems list
 - `emblemOffsets: Record<string, EmblemOffset>` — per-emblem position/size/rotation/flip state
 - `EmblemOffset` includes: `xPos, yPos, sizeVariant, rotationZ, flipX, flipY, widthMm, heightMm, target, coordinateSpace`
@@ -7962,11 +8458,13 @@ Bronze Plaques now support **Emblems** — decorative PNG icons placed on the pl
 - Uses `withOffsetSurfaceDimensions<EmblemOffset>()` for surface-aware positioning
 
 #### UI Components
+
 - **`app/select-emblems/_ui/EmblemSelectionGrid.tsx`** — Flat grid of all 236 emblem thumbnails with search filter, lazy-loaded images, renders in sidebar panel (not fullscreen overlay)
 - **`components/EmblemOverlayPanel.tsx`** — Edit panel with size slider (TailwindSlider, 7 discrete steps), rotation slider, flip X/Y buttons, duplicate/delete. Size label shows `Size WIDTHxHEIGHTmm` with actual computed dimensions
 - **`app/select-emblems/page.tsx`** — Route page, hidden on desktop (returns null), shows grid on mobile only. Auto-selects Bronze Plaque (product '5') if not already selected
 
 #### 3D Rendering (`components/three/EmblemModel.tsx`)
+
 - Loads emblem PNG as `THREE.Texture` (tries `/m/` then `/s/` then `/xs/` size)
 - Renders as textured `PlaneGeometry` on the headstone front face
 - **Proportional sizing**: Derives aspect ratio from loaded texture. If landscape (aspect ≥ 1), `sizeVariant` controls width, height = width/aspect. If portrait, `sizeVariant` controls height, width = height×aspect. Writes computed `widthMm`/`heightMm` back to store for UI display
@@ -7975,6 +8473,7 @@ Bronze Plaques now support **Emblems** — decorative PNG icons placed on the pl
 - Integrated in `ShapeSwapper.tsx` scene graph
 
 #### Sidebar Integration (`components/DesignerNav.tsx`)
+
 - Menu item "Select Emblems" with `requiresPlaque: true` — only visible for plaque products
 - Menu item "Select Additions" with `hiddenForPlaque: true` — hidden for plaque products (additions not applicable to plaques)
 - `/select-emblems` added to `canvasVisiblePages` array (required for panel to stay open)
@@ -8020,10 +8519,12 @@ The legacy design loading pipeline now has a **deterministic, universal** coordi
 #### Root Cause Discovery
 
 Legacy CreateJS designs stored item positions in **DPR-scaled stage coordinates** (physical pixels from center), NOT CSS pixels. The old loader used the viewport CSS dimensions in the mm-per-pixel ratio, which was wrong for DPR > 1 devices:
+
 - **Old formula (WRONG for DPR>1):** `mmPerPx = headstoneHeightMm / viewportCssHeight`
 - **New formula (CORRECT):** `mmPerPx = headstoneHeightMm / (init_height × DPR)`
 
 Evidence from CreateJS source code (`createJS/modules/Canvas.js`):
+
 - `canvas.width = dyo.w * dyo.dpr; canvas.height = dyo.h * dyo.dpr` — canvas IS DPR-scaled
 - `dyo.w = window.innerWidth - headerWidth` — these are CSS dimensions = init_width/init_height
 - `stage.scaleX = dyo.dpr` — stage coordinates are in DPR-scaled physical pixels
@@ -8032,29 +8533,33 @@ Evidence from CreateJS source code (`createJS/modules/Canvas.js`):
 #### Changes Made (commit 9120a4844e)
 
 **`lib/saved-design-loader-utils.ts`:**
+
 1. **Deterministic DPR** (line ~1421-1424): `effectiveLegacySavedDpr = hasLegacySavedDpr ? legacySavedDprRaw : 1` — uses stored value directly, defaults to 1. Removed `inferLegacySavedDprHeuristic()` and `inferLegacySavedDprDeterministic()` calls (both functions still exist as dead code for future cleanup).
 2. **Broadened useDirectCssStageDesktopMapping** (line ~1431-1433): Now enabled for ALL `positionMode === 'legacy-stage-px'` designs with init dimensions. Removed gates: `effectiveCoordinateSpace === 'css-stage'`, `isDesktopLegacyPayload`, `effectiveLegacySavedDpr <= 1.05`, `canonicalViewportDpr <= 1.05`.
 3. **DPR in denominator** (line ~1482-1489): `mmPerPxY = headstoneHeightMm / (legacyInitHeight * effectiveLegacySavedDpr)` — divides by DPR to convert from physical-pixel stage coords to mm.
 
 **`components/three/MotifModel.tsx`:**
+
 1. **Texture flip fix** (line 166): `activeTexture.flipY = false` — CanvasTexture with default flipY=true renders right-side-up, but our PlaneGeometry UV mapping needs flipY=false.
 2. **ScaleY negation** (line 564): `scaleY = planeHeightUnits * (flipY ? 1 : -1)` — non-flipped motifs get negative scaleY to compensate the canvas Y-down origin in GL.
 
 #### Heuristics REMOVED (replaced by deterministic logic)
+
 - `inferLegacySavedDprHeuristic()` — guessed DPR from candidate list by minimizing spread error
-- `inferLegacySavedDprDeterministic()` — async fetch of _cropped.json to compute DPR from screenshot dimensions
+- `inferLegacySavedDprDeterministic()` — async fetch of \_cropped.json to compute DPR from screenshot dimensions
 - `effectiveLegacySavedDpr <= 1.05` threshold — blocked init-based mapping for DPR>1 designs
 - `shouldTreatCssStageAsBufferPx` — no longer relevant since `useDirectCssStageDesktopMapping` now covers all init-dimension designs
 
 #### Verification Math
 
-| Design | DPR | init_h | viewport_h | Old mmPerPxY | New mmPerPxY | Change |
-|--------|-----|--------|------------|-------------|-------------|--------|
-| 1725769905504 | 2.325 | 476 | 689 | 0.885 | 0.551 | -37.7% (FIXED) |
-| 1755301653966 | 1 | 860 | 1080 | 1.211 | 1.211 | 0% (unchanged) |
-| 1597573022772 | None→1 | 663 | 663 | 0.905 | 0.905 | 0% (unchanged) |
+| Design        | DPR    | init_h | viewport_h | Old mmPerPxY | New mmPerPxY | Change         |
+| ------------- | ------ | ------ | ---------- | ------------ | ------------ | -------------- |
+| 1725769905504 | 2.325  | 476    | 689        | 0.885        | 0.551        | -37.7% (FIXED) |
+| 1755301653966 | 1      | 860    | 1080       | 1.211        | 1.211        | 0% (unchanged) |
+| 1597573022772 | None→1 | 663    | 663        | 0.905        | 0.905        | 0% (unchanged) |
 
 Design 1725769905504 angel motif verification:
+
 - y_px=47.239 × 0.551 = 26.0mm below center (8.5% of headstone half) — matches reference screenshot ✓
 - With old ratio: 47.239 × 0.885 = 41.8mm (13.7%) — too far below, triggered range-fit shifting
 
@@ -8076,12 +8581,12 @@ All sidebar panels now display **dynamic prices** from XML catalog data instead 
 
 #### Panel Price Displays
 
-| Panel | Source | Calculation |
-|-------|--------|-------------|
-| **Motif** | `motifs-biondan.xml` via `motif-pricing.ts` | `calculateMotifPrice(heightMm, color, priceModel, isLaser)` — height-based tiers, color note matching (Gold/Silver Gilding, Paint Fill) |
+| Panel           | Source                                               | Calculation                                                                                                                                        |
+| --------------- | ---------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Motif**       | `motifs-biondan.xml` via `motif-pricing.ts`          | `calculateMotifPrice(heightMm, color, priceModel, isLaser)` — height-based tiers, color note matching (Gold/Silver Gilding, Paint Fill)            |
 | **Inscription** | `inscriptions.xml` via store `inscriptionPriceModel` | `calculatePrice(priceModel, sizeMm)` — Height quantity type, color-aware tier matching. Shows "Free" for free products (e.g., Black Granite laser) |
-| **Image** | `images.xml` via `lib/image-pricing.ts` | `calculateImagePrice(product, widthMm, heightMm, colorMode)` — Width+Height quantity, BW/Color note tiers |
-| **Addition** | `FALLBACK_SIZES` in `_additions-loader.ts` | `activeAdditionSize.retailPrice` — Pre-computed from `motifs-biondan.xml` per sourceId + sizeVariant |
+| **Image**       | `images.xml` via `lib/image-pricing.ts`              | `calculateImagePrice(product, widthMm, heightMm, colorMode)` — Width+Height quantity, BW/Color note tiers                                          |
+| **Addition**    | `FALLBACK_SIZES` in `_additions-loader.ts`           | `activeAdditionSize.retailPrice` — Pre-computed from `motifs-biondan.xml` per sourceId + sizeVariant                                               |
 
 #### Price Pill (Canvas Bottom)
 
@@ -8093,6 +8598,7 @@ totalPrice = headstonePrice + basePrice + ledgerPrice + kerbsetPrice
 ```
 
 New store fields added:
+
 - `imageCost: number` — recalculated on add/remove/duplicate/resize image
 - `additionCost: number` — recalculated on add/remove/duplicate/resize/sizeVariant change
 - `calculateImageCost()` — async, fetches XML pricing map, sums per-image prices
@@ -8101,10 +8607,12 @@ New store fields added:
 #### Save/Checkout Pricing
 
 `DesignerNav.tsx` `handleSaveDesign()` now computes actual per-item prices:
+
 - **Additions**: Iterates `selectedAdditions`, looks up `retailPrice` from `data.additions[baseId].sizes[variant-1]`
 - **Inscriptions**: Iterates valid inscriptions, applies `calculatePrice()` with color-tier matching
 
 #### Files Modified
+
 - `components/InscriptionEditPanel.tsx` — Dynamic inscription price display
 - `components/ImageSelector.tsx` — Dynamic image price display (already existed)
 - `components/DesignerNav.tsx` — Dynamic addition price, save pricing, panel UI cleanup
@@ -8115,6 +8623,7 @@ New store fields added:
 ### ✅ Panel UI Consistency
 
 All item panels (Motif, Addition, Inscription, Image) now share a consistent style:
+
 - **Removed**: Grey wrapper div (`rounded-2xl border border-[#3A3A3A] bg-[#1F1F1F]/95`)
 - **Removed**: "Selected: {long-instance-id}" text and "Clear selection" button
 - **Unified**: `space-y-4` layout, gold Duplicate button (`bg-[#D7B356]`), red Delete button
@@ -8125,18 +8634,21 @@ All item panels (Motif, Addition, Inscription, Image) now share a consistent sty
 Implemented ML-powered search and filtering for the `/designs` gallery page and the Load Design modal.
 
 #### ML Data Structure (`public/ml/`)
+
 - **forevershining**: `ml/forevershining/ml.json` — 3,021 entries with classification labels
 - **headstonesdesigner**: `ml/headstonesdesigner/ml.json` — 1,100 entries
 - Each entry has: `ml_style`, `ml_type`, `ml_motif`, `ml_tags` (comma-separated keywords)
 - Categories: 6 types, 5 styles, 40+ motif categories
 
 #### TF.js Model
+
 - `public/ml/forevershining/my-model.json` — Model topology (generated)
 - `public/ml/forevershining/my-model.weights.bin` — 626,672 bytes (3,018 output units)
 - Architecture: Dense(3→50) → LeakyReLU → Dropout → Dense(50→50) → LeakyReLU → Dropout → Dense(50→N, softmax)
 - Input: `[type_idx/types_count, style_idx/styles_count, motif_idx/motifs_count]`
 
 #### Search Service (`lib/ml-search-service.ts`)
+
 - Loads and caches ML data from both forevershining and headstonesdesigner
 - **Text search**: Tokenized multi-word scoring against design titles, descriptions, ml_tags
 - **Category filters**: Type, Style, Motif dropdown filtering
@@ -8144,11 +8656,13 @@ Implemented ML-powered search and filtering for the `/designs` gallery page and 
 - **Feature toggles**: Filter by photo/motif/addition presence
 
 #### UI Components
+
 - `components/DesignSmartSearch.tsx` — Search bar + Type/Style/Motif filter dropdowns + feature toggles
 - `app/designs/DesignsPageClient.tsx` — Integrated smart search with debounced queries, ML tag badges, AI Recommended markers, pricing from ml.json
 - `components/LoadDesignButton.tsx` — ML filter dropdowns, enhanced search with ml_tags, motif tag badges
 
 #### Dependencies Added
+
 - `@tensorflow/tfjs` (v4.22.0) — TensorFlow.js for browser-side model inference
 
 ### 📌 Next Steps
@@ -8168,10 +8682,12 @@ Implemented ML-powered search and filtering for the `/designs` gallery page and 
 Comprehensive debugging of legacy saved design loading across both **forevershining** and **headstonesdesigner** systems. Multiple test designs verified.
 
 #### 1. ReferenceError Fix — `hasLegacyInitViewport` hoisting
+
 - `hasLegacyInitViewport` was used before its `const` declaration (block-scoped, doesn't hoist)
 - **Fix**: Moved definition to outer scope before first use
 
 #### 2. Motif Flip Handling — Direct Legacy.raw Read
+
 - **Root cause**: Batch converter used `item.flipx === -1` (strict equality) which fails for STRING values like `"1"` vs number `1`
 - Legacy convention: `flipx=-1` = flipped, `flipx=1` = not flipped (values may be string or number)
 - **Fix**: Reads flip values directly from `legacy.raw` using `Number(item.flipx) === -1`
@@ -8180,26 +8696,31 @@ Comprehensive debugging of legacy saved design loading across both **forevershin
 - Fixed both converter scripts to use `Number()` coercion
 
 #### 3. Uniform mmPerPx Position Scaling
+
 - Legacy CreateJS uses `use = min(w*dpr, h*dpr) * 0.975` with uniform scaling
 - **Fix**: `uniformMmPerPx = totalMonumentHeightMm / (min(initW, initH) * DPR * 0.975)`
 - DPR falls back to `designData.scene?.viewportPx?.dpr` when not in headstone item
 
 #### 4. Forevershining Motif Height Fix
+
 - **Critical discovery**: Forevershining stores motif heights in **mm** (product catalog units), NOT CSS px
 - The converter misnames them as `height_px`
 - **Fix**: `resolveMotifHeightMm` returns `height_px` directly as mm when `isForevershining`
 
 #### 5. Headstonesdesigner Motif Height Fix
+
 - `height_px` is in **design pixel coordinates** (proportional to `init_height`), NOT physical draw px
 - Verified empirically: design 1725769905504 has both `height_mm` and `height_px` → ratio = `headstoneHeightMm / init_height` exactly
 - **Fix**: `resolveMotifHeightMm` uses `height_px × canonicalHeadstoneHeightMm / legacyInitHeight`
 
 #### 6. Font Size Fallback Fix
+
 - Both systems store `font_size` / `size_px` in **mm** (product catalog units) in the saved JSON
 - The CSS font string (e.g., "104.34px Garamond") is the ONLY value in rendering px
 - **Fix**: When CSS font string unavailable, return `size_px` directly as mm (both systems)
 
 #### 7. Texture Mapping System
+
 - ALL numbered textures (`01.webp`–`35.webp`) are ~2KB tiny placeholder files in the texture directory
 - `Glory-Black-2.webp` (1540 bytes) is intentionally a solid black texture for laser etching — NOT a placeholder
 - Added `MATERIAL_TEXTURES` dictionary and `mapTexture()` function for named texture resolution
@@ -8216,12 +8737,14 @@ Comprehensive debugging of legacy saved design loading across both **forevershin
 | `Blue-Pearl` | `Blue-Pearl.webp` |
 
 #### 8. Base Element Routing
+
 - Converter `convert-saved-design.js` was hardcoding `surface: "headstone/front"` for all items
 - **Fix**: Uses legacy `item.part` field for surface detection
 - Loader also has position-based fallback: items with `yMm < -(HEADSTONE_HALF_MM * 1.02)` are reclassified to base
 - Built `legacyItemPartByCanonicalId` map from `legacy.raw` items for cross-referencing
 
 #### 9. Photo/Image Element Loading
+
 - Batch converter excluded photos by default (requires `--include-photos` flag)
 - All rollout designs have `photos: []` even when `legacy.raw` contains Photo/Picture items
 - **Fix**: Loader now synthesizes photo entries from `legacy.raw` when `canonicalPhotoSnapshot` is empty
@@ -8229,6 +8752,7 @@ Comprehensive debugging of legacy saved design loading across both **forevershin
 - Falls back to `/jpg/photos/vitreous-enamel-image.jpg` placeholder when original images unavailable
 
 #### 10. Photo Rendering — Oval/Rect Masking
+
 - Photos rendered as rectangular planes would cover the ceramic base (JPG has no alpha channel)
 - **Fix**: `ImageModel.tsx` creates a flat `ShapeGeometry` from the same SVG mask used for the ceramic base
 - UV coordinates normalized to [0,1] with Y-flip compensation for negative scale
@@ -8236,6 +8760,7 @@ Comprehensive debugging of legacy saved design loading across both **forevershin
 - Fallback to rectangular `PlaneGeometry` when no mask SVG available
 
 #### Files Modified
+
 - `lib/saved-design-loader-utils.ts` — 16+ fixes (coordinate conversion, texture mapping, photo synthesis, flip handling, font/motif sizes, base routing)
 - `components/three/ImageModel.tsx` — Photo masking with SVG ShapeGeometry, vitreous enamel placeholder fallback
 - `scripts/convert-saved-design.js` — Surface detection from `item.part`, flip `Number()` coercion
@@ -8245,21 +8770,23 @@ Comprehensive debugging of legacy saved design loading across both **forevershin
 - Various rollout JSON files — Texture path fixes
 
 #### Designs Verified
-| Design ID | System | Status |
-|-----------|--------|--------|
-| 1725769905504 | headstonesdesigner | ✅ Positions, motifs, flips correct |
-| 1578016189116 | forevershining | ✅ Textures, motif heights, font sizes correct |
-| 1654222051474 | forevershining | ✅ White-Carrara dimension suffix fixed |
-| 1704011685894 | forevershining | ✅ Base routing for 40-motif floral border |
-| 1630558777652 | forevershining | ✅ Texture mapping (mapTexture before enforceTexture) |
-| 1714311178594 | headstonesdesigner | ✅ Motif heights (init_height ratio) |
-| 1739765356856 | headstonesdesigner | ✅ Motif flips (legacy.raw direct read) |
-| 1610832359060 | forevershining | ✅ Glory-Black-2 laser etching texture confirmed correct |
-| 1702923274519 | headstonesdesigner | ✅ Photo element loading with ceramic oval mask |
+
+| Design ID     | System             | Status                                                   |
+| ------------- | ------------------ | -------------------------------------------------------- |
+| 1725769905504 | headstonesdesigner | ✅ Positions, motifs, flips correct                      |
+| 1578016189116 | forevershining     | ✅ Textures, motif heights, font sizes correct           |
+| 1654222051474 | forevershining     | ✅ White-Carrara dimension suffix fixed                  |
+| 1704011685894 | forevershining     | ✅ Base routing for 40-motif floral border               |
+| 1630558777652 | forevershining     | ✅ Texture mapping (mapTexture before enforceTexture)    |
+| 1714311178594 | headstonesdesigner | ✅ Motif heights (init_height ratio)                     |
+| 1739765356856 | headstonesdesigner | ✅ Motif flips (legacy.raw direct read)                  |
+| 1610832359060 | forevershining     | ✅ Glory-Black-2 laser etching texture confirmed correct |
+| 1702923274519 | headstonesdesigner | ✅ Photo element loading with ceramic oval mask          |
 
 ### 🔑 Key Architecture Knowledge for Legacy Design Loading (Updated)
 
 **Canonical JSON structure** (`public/designs/v2026-rollout-full-20260324-190828/<id>.json`):
+
 - `legacy.raw[]` — array of items, first item is headstone with `init_width`, `init_height`, `dpr` fields
 - `scene.viewportPx` — `{ width, height, dpr }` — represents PAGE viewport (larger than canvas)
 - `scene.coordinateSystem` — `{ positionMode, headstonePlacement, coordinateSpace, flipMode }`
@@ -8267,12 +8794,14 @@ Comprehensive debugging of legacy saved design loading across both **forevershin
 - **Note**: Batch converter excluded photos by default — `photos: []` in most rollout files. Loader synthesizes from `legacy.raw`.
 
 **Key dimensions distinction**:
+
 - `init_width/init_height` = CSS canvas dimensions (viewport minus UI chrome) = `dyo.w/dyo.h`
 - `scene.viewportPx.width/height` = may be PAGE viewport dimensions (NOT the same as init!)
 - Physical canvas pixels = `init_width × DPR` by `init_height × DPR`
 - Stored positions are in physical canvas pixel space (center-relative, Y-down)
 
 **Loader pipeline** (`lib/saved-design-loader-utils.ts`, ~2200+ lines):
+
 - `convertPositionToMm()` — converts legacy px positions to mm using uniform mmPerPx scaling
 - `resolveFontSizeMm()` — CSS px font string → mm via viewport ratio; OR returns `size_px` directly (already mm)
 - `resolveMotifHeightMm()` — forevershining: `height_px` is mm; headstonesdesigner: `height_px × headstoneHeightMm / init_height`
@@ -8283,12 +8812,14 @@ Comprehensive debugging of legacy saved design loading across both **forevershin
 - Photo synthesis from `legacy.raw` when `canonicalPhotoSnapshot` is empty
 
 **Motif rendering** (`components/three/MotifModel.tsx`):
+
 - Uses CanvasTexture with `flipY=false` (compensated by negative scaleY)
 - flipX/flipY convention: `1` or `false` = NOT flipped, `-1` or `true` = flipped
 - Flip values read directly from `legacy.raw` (handles string/number types via `Number()`)
 - Supports coordinateSpace: 'mm-center' (loaded designs) and 'offset' (user-placed)
 
 **Photo rendering** (`components/three/ImageModel.tsx`):
+
 - Creates 3D ceramic/enamel base from SVG mask shape (extruded with bevels)
 - Photo texture masked to SVG shape via flat `ShapeGeometry` (not rectangular plane)
 - UV coordinates normalized [0,1] with Y-flip for negative scale compensation
@@ -8296,6 +8827,7 @@ Comprehensive debugging of legacy saved design loading across both **forevershin
 - `typeId=7` (Ceramic Image) gets ceramic base; `typeId=21` (Granite Image) renders flat
 
 **Texture system**:
+
 - ALL numbered textures (`01.webp`–`35.webp`) in `/textures/forever/l/` are ~2KB placeholders
 - `Glory-Black-2.webp` (1540 bytes) is intentionally solid black for laser etching — NOT broken
 - Real textures are 150KB–330KB named files (e.g., `African-Black.webp`, `Blue-Pearl.webp`)
@@ -8354,6 +8886,7 @@ Comprehensive debugging of legacy saved design loading across both **forevershin
      - `pnpm build` ✅
 
 ### 📌 Next technical steps (legacy parity)
+
 - Final visual sign-off pass for `1578016189116`.
 - If residual mismatch appears on any additional ID, capture per-element diagnostics (`x_px/y_px` → computed `xMm/yMm` → final rendered `xPos/yPos`) and adjust shared mapping rules only.
 - Re-run canonical regeneration for additional affected legacy IDs using the new coordinate-space metadata pipeline.
@@ -8398,10 +8931,12 @@ Comprehensive debugging of legacy saved design loading across both **forevershin
    - `pnpm type-check` passes after each major change slice in this batch.
 
 ### ⚠️ Known Gaps (March 25, 2026)
+
 - **`1578016189116` still requires visual parity confirmation in browser**: fallback path is enforced, but final UX parity should be re-verified against legacy SVG/div expectation.
 - **Canonical rollout remains mixed-mode by policy**: non-skipped IDs use rollout-full canonical, while skipped/fallback IDs intentionally route through legacy behavior.
 
 ### 📌 March 25 Action Plan Status
+
 - Runtime rollout switch: ✅ done
 - Skipped-ID integration: ✅ done
 - Outlier parity routing for `1578016189116`: ✅ implemented (final visual sign-off pending)
@@ -8451,6 +8986,7 @@ Comprehensive debugging of legacy saved design loading across both **forevershin
    - File: `components/CheckPricePanel.tsx`.
 
 ### ⚠️ Known Gaps (March 23, 2026)
+
 - **Saved Design 2 (`1578016189116`)** remains unresolved; current evidence still points to loader interpretation / non-text asset hydration behavior rather than simple reconversion.
 - **Unit-system rollout is partial by design**: safe-scope surfaces are done, but additional `mm` labels remain in deeper Designer panels and can be migrated in a follow-up pass.
 
@@ -8528,6 +9064,7 @@ Comprehensive debugging of legacy saved design loading across both **forevershin
    - `pnpm build --no-lint` succeeded after each hero update slice in this session (initial placement, ceramic-mask conversion, depth/UV fix, and final polish pass).
 
 ### ⚠️ Known Gaps (March 21, 2026)
+
 - **TypeScript baseline**: `pnpm type-check` still fails because of unrelated existing issues, including `app/_internal/_data.ts`, `app/_ui/HomeSplash.tsx`, `app/api/motifs/db/route.ts`, `app/select-motifs/_ui/MotifSelectionGrid.tsx`, and multiple `archive/*` files.
 - **Lint baseline**: `pnpm lint` remains unusable because the repository is on ESLint 9 without a matching `eslint.config.*` migration.
 - **Saved Design 2 (`1578016189116`) still not resolved**: Remaining issue still appears to be loader interpretation and/or missing non-text asset hydration, not simply “needs reconversion”.
@@ -8559,6 +9096,7 @@ Comprehensive debugging of legacy saved design loading across both **forevershin
    - `pnpm build --no-lint` succeeded after the account-isolation API fix.
 
 ### ⚠️ Known Gaps (March 20, 2026)
+
 - **TypeScript baseline**: `pnpm type-check` still fails because of unrelated existing issues, including `app/_internal/_data.ts`, `app/_ui/HomeSplash.tsx`, `app/api/motifs/db/route.ts`, `app/select-motifs/_ui/MotifSelectionGrid.tsx`, and multiple `archive/*` files.
 - **Lint baseline**: `pnpm lint` remains unusable because the repository is on ESLint 9 without a matching `eslint.config.*` migration.
 - **Saved Design 2 (`1578016189116`) still not resolved**: Remaining issue still appears to be loader interpretation and/or missing non-text asset hydration, not simply “needs reconversion”.
@@ -8611,6 +9149,7 @@ Comprehensive debugging of legacy saved design loading across both **forevershin
    - Type-check/lint baselines remain unchanged from prior status (see Known Gaps).
 
 ### ⚠️ Known Gaps (March 19, 2026)
+
 - **TypeScript baseline**: `pnpm type-check` still fails because of unrelated existing issues, including `app/_internal/_data.ts`, `app/_ui/HomeSplash.tsx`, `app/api/motifs/db/route.ts`, `app/select-motifs/_ui/MotifSelectionGrid.tsx`, and multiple `archive/*` files.
 - **Lint baseline**: `pnpm lint` remains unusable because the repository is on ESLint 9 without a matching `eslint.config.*` migration.
 - **Saved Design 2 (`1578016189116`) still not resolved**: Remaining issue still appears to be loader interpretation and/or missing non-text asset hydration, not simply “needs reconversion”.
@@ -8669,6 +9208,7 @@ Comprehensive debugging of legacy saved design loading across both **forevershin
    - **Files**: `app/api/projects/route.ts`, `components/DesignerNav.tsx`.
 
 ### ⚠️ Known Gaps (March 18, 2026)
+
 - **TypeScript baseline**: `pnpm type-check` still fails because of unrelated existing issues, including `app/_internal/_data.ts`, `app/_ui/HomeSplash.tsx`, `app/api/motifs/db/route.ts`, `app/select-motifs/_ui/MotifSelectionGrid.tsx`, and multiple `archive/*` files.
 - **Lint baseline**: `pnpm lint` remains unusable because the repository is on ESLint 9 without a matching `eslint.config.*` migration.
 - **User re-save needed for legacy projects**: older saved records with incomplete historical pricing/asset data may require re-saving to fully reflect the latest PDF quote and thumbnail behavior.
@@ -8726,6 +9266,7 @@ Comprehensive debugging of legacy saved design loading across both **forevershin
    - `pnpm type-check` was not re-run after every follow-up because the repo still has unrelated baseline failures outside these files.
 
 ### ⚠️ Known Gaps (March 17, 2026)
+
 - **TypeScript baseline**: `pnpm type-check` still fails because of unrelated existing issues, including `app/_internal/_data.ts`, `app/_ui/HomeSplash.tsx`, `app/api/motifs/db/route.ts`, `app/select-motifs/_ui/MotifSelectionGrid.tsx`, and multiple `archive/*` files.
 - **Lint baseline**: `pnpm lint` remains unusable because the repository is on ESLint 9 without a matching `eslint.config.*` migration.
 - **Pricing regression tests**: Full-monument and additions-related pricing behavior still relies heavily on manual regression after catalog, material, camera, or UI changes.
@@ -8800,6 +9341,7 @@ Comprehensive debugging of legacy saved design loading across both **forevershin
    - **Files**: `lib/saved-design-loader-utils.ts`, `scripts/convert-legacy-design.js`, `scripts/convert-saved-design.js`, regenerated canonical JSON samples.
 
 ### ⚠️ Known Gaps (March 16, 2026)
+
 - **TypeScript baseline**: `pnpm type-check` still fails because of unrelated existing issues, including `app/_internal/_data.ts`, `app/_ui/HomeSplash.tsx`, `app/api/motifs/db/route.ts`, `app/select-motifs/_ui/MotifSelectionGrid.tsx`, and multiple `archive/*` files.
 - **Lint baseline**: `pnpm lint` remains unusable because the repository is on ESLint 9 without a matching `eslint.config.*` migration.
 - **Pricing regression tests**: Full-monument and additions-related pricing behavior still relies heavily on manual regression after catalog, material, or UI changes.
@@ -8841,6 +9383,7 @@ Comprehensive debugging of legacy saved design loading across both **forevershin
    - **Files**: `components/three/AdditionModel.tsx`, `components/three/headstone/HeadstoneBaseAuto.tsx`, `lib/headstone-store.ts`.
 
 ### ⚠️ Known Gaps (March 13, 2026)
+
 - **Base additions need visual re-check**: The base-space/parent-space transform bug has been fixed in `components/three/AdditionModel.tsx`, but the change still needs in-app visual confirmation against the latest `screen.png` regression scenario.
 - **TypeScript baseline**: `pnpm type-check` still fails because of pre-existing errors, most notably in `components/DesignerNav.tsx` (`TS2554`, missing `CatalogData.material`, `shape`, `border`).
 - **Lint baseline**: `pnpm lint` remains unusable because the repository is on ESLint 9 without a matching `eslint.config.*` migration.
@@ -8862,8 +9405,8 @@ Comprehensive debugging of legacy saved design loading across both **forevershin
    - **Files**: `components/three/headstone/LedgerSurfaceContent.tsx`, `components/HeadstoneInscription.tsx`, `components/three/MotifModel.tsx`, `components/three/ImageModel.tsx`, `components/three/AdditionModel.tsx`.
 
 2. **Full Monument — Ledger/Kerbset Z-positioning (start at Base front face) - COMPLETE**
-   - **Root cause**: `LedgerSlab` and `KerbsetBorder` computed their Z start as `-(uprightThickness/2000)` — the base's *back* face — causing them to overlap (clip through) the entire base volume.
-   - **Fix**: Changed `standBackZ` in both components to `-(uprightThickness/2000) + baseThickness/1000`, i.e., the base *front* face. Both components now read `baseThicknessMm` from the store (`stand.initDepth`), which is the base's depth in mm.
+   - **Root cause**: `LedgerSlab` and `KerbsetBorder` computed their Z start as `-(uprightThickness/2000)` — the base's _back_ face — causing them to overlap (clip through) the entire base volume.
+   - **Fix**: Changed `standBackZ` in both components to `-(uprightThickness/2000) + baseThickness/1000`, i.e., the base _front_ face. Both components now read `baseThicknessMm` from the store (`stand.initDepth`), which is the base's depth in mm.
    - **Files**: `components/three/headstone/LedgerSlab.tsx`, `components/three/headstone/KerbsetBorder.tsx`.
 
 3. **Full Monument — Arrow-key rotation pivot fixed - COMPLETE**
@@ -8931,6 +9474,7 @@ Comprehensive debugging of legacy saved design loading across both **forevershin
    - **Files**: `components/SelectionBox.tsx`, `components/three/ImageModel.tsx`, `styles/globals.css`, `app/select-product/_ui/ProductSelectionGrid.tsx`, `app/select-shape/_ui/ShapeSelectionGrid.tsx`.
 
 ### ⚠️ Known Gaps (March 11, 2026)
+
 - **Registration flow**: `/api/auth/register` now exists, but sub-page auth guards still need a fuller pass.
 - **TypeScript baseline**: `pnpm run type-check` fails due to pre-existing errors; we haven’t addressed them yet this cycle.
 - **Pricing regression tests**: Ledger/Kerb totals were added, but automated coverage is still missing—manual regression is required after catalog changes.
@@ -8965,6 +9509,7 @@ Comprehensive debugging of legacy saved design loading across both **forevershin
    - **`Scene.tsx`**: Dynamic `orbitTarget` (`[0, 0.8, -(ledgerDepthMm/1000)*0.55]` for full-monument; `[0, 3.8, 0]` otherwise) and relaxed `minPolarAngle` for full-monument added as complementary controls.
 
 ### ⚠️ Known Gaps (March 10, 2026)
+
 - **Full Monument pricing**: `catalog.product.ledgerPriceModel` and `kerbsetPriceModel` are parsed from XML but not yet included in the price total (`DesignerNav.tsx` ~line 1152 only sums `headstonePrice + basePrice`).
 - **Registration flow**: `/api/auth/register` now exists, but account-area coverage is still incomplete.
 
@@ -8973,6 +9518,7 @@ Comprehensive debugging of legacy saved design loading across both **forevershin
 ## Current Status (2026-03-07)
 
 ### ✅ Recent Changes (March 7, 2026)
+
 1. **Seed Materials API Route Import Fix - COMPLETE**
    - **Root cause**: `next build` on Vercel escalated the long-standing warning in `app/api/seed-materials/route.ts` into a hard failure because webpack couldn't resolve `db` from the bare alias `#/lib/db`.
    - **Fix**: Updated the route to import from `#/lib/db/index`, matching every other API route that uses the Drizzle connection exported there.
@@ -8984,6 +9530,7 @@ Comprehensive debugging of legacy saved design loading across both **forevershin
    - **Verification**: `pnpm run build` succeeds on Windows (and Linux/macOS) while still honoring the 4 GB heap cap that prevents OOMs on Vercel.
 
 ### ⚠️ Known Gaps (March 7, 2026)
+
 - **Full Monument designer tabs**: Ledger and Kerbset dimension tabs still aren't wired into the pricing logic.
 - **Registration flow**: `/api/auth/register` now exists, but auth/authorization coverage outside the main gate still needs work.
 
@@ -9024,6 +9571,7 @@ Comprehensive debugging of legacy saved design loading across both **forevershin
    - Fixed by restoring the newline separator. The page now prerenders cleanly with `allDesigns` starting as `[]` and populating client-side via the `useEffect` dynamic import.
 
 ### ⚠️ Known Gaps (March 6, 2026)
+
 - **`app/api/seed-materials/route.ts`**: Emits a build warning — `'db' is not exported from '#/lib/db'`. Non-fatal (dev utility route only), doesn't block the build. _(Resolved March 7 — see Current Status above.)_
 - **Full Monument designer tabs**: Ledger and Kerbset size tabs appear but dimensions are not yet connected to pricing.
 - **Register endpoint**: `/api/auth/register` not yet created (AuthGate register tab present).
@@ -9033,6 +9581,7 @@ Comprehensive debugging of legacy saved design loading across both **forevershin
 ## Current Status (2026-03-05)
 
 ### ✅ Recent Changes (March 5, 2026)
+
 1. **Authentication System - COMPLETE**
    - **Real JWT auth** replacing mocked auth: `lib/auth/session.ts` fully rewritten using `jose` (edge-compatible JWT library, v6.2.0)
    - **Session cookie**: httpOnly, secure in prod, sameSite lax, 7-day max age, cookie name `session`
@@ -9089,8 +9638,8 @@ Comprehensive debugging of legacy saved design loading across both **forevershin
 
 8. **Vercel Build Fixes**
    - **pnpm lockfile out of sync**: `jose@6.2.0` was installed but not in `pnpm-lock.yaml`. Fixed by running `pnpm install` locally and committing the updated lockfile.
-    - **OOM (Out of Memory) build kill**: Build container ran out of 8 GB RAM. Fixed by adding `NODE_OPTIONS='--max-old-space-size=4096'` to the build script in `package.json`.
-      - _Update (March 7, 2026):_ `cross-env` now wraps the build script so Windows developers can set `NODE_OPTIONS` identically.
+   - **OOM (Out of Memory) build kill**: Build container ran out of 8 GB RAM. Fixed by adding `NODE_OPTIONS='--max-old-space-size=4096'` to the build script in `package.json`.
+     - _Update (March 7, 2026):_ `cross-env` now wraps the build script so Windows developers can set `NODE_OPTIONS` identically.
    - **38-minute build**: After OOM fix, `config.cache = false` (added to reduce memory) backfired — it disabled webpack's filesystem cache, forcing full recompilation of Three.js/R3F/etc. on every build. Fixed by removing `cache = false` and instead setting `config.parallelism = 2` to limit concurrent module compilation.
    - **Files**: `package.json`, `next.config.ts`, `pnpm-lock.yaml`
 
@@ -9101,6 +9650,7 @@ Comprehensive debugging of legacy saved design loading across both **forevershin
    - **`SESSION_SECRET` required on Vercel**: Must be set as a Vercel environment variable. Without it, `lib/auth/session.ts`'s `getSecret()` throws and login returns 500.
 
 ### ⚠️ Known Gaps (March 5, 2026)
+
 - **Sub-page auth gates**: `/my-account/details`, `/my-account/invoice`, `/my-account/designs/[id]`, etc. don't yet have a full auth/authorization pass
 - **Sub-page auth gates**: `/my-account/details`, `/my-account/invoice`, `/my-account/designs/[id]`, etc. don't guard against unauthenticated access
 - **Email sharing**: Returns 501 — needs real SendGrid/Resend implementation
@@ -9109,16 +9659,18 @@ Comprehensive debugging of legacy saved design loading across both **forevershin
 - **Legacy naming**: Some helper scripts and notes still use "neon" naming even though the live remote target has moved.
 
 ### 🔑 Vercel Environment Variables Required
-| Variable | Purpose |
-|---|---|
-| `DATABASE_URL` | Active PostgreSQL connection string (local or remote) |
-| `SESSION_SECRET` | JWT signing secret (any long random string) |
+
+| Variable         | Purpose                                               |
+| ---------------- | ----------------------------------------------------- |
+| `DATABASE_URL`   | Active PostgreSQL connection string (local or remote) |
+| `SESSION_SECRET` | JWT signing secret (any long random string)           |
 
 ---
 
 ## Current Status (2026-03-02)
 
 ### ✅ Recent Changes (March 2, 2026)
+
 1. **Materials Database Migration - COMPLETE**
    - **Issue Fixed**: Database contained wrong placeholder materials (Polished Black Granite, Luka Grey, etc.)
    - **Solution**: Replaced with correct 29 granite materials from `app/_internal/_data.ts`
@@ -9178,46 +9730,42 @@ Comprehensive debugging of legacy saved design loading across both **forevershin
    - **NPM Script**: `npm run db:seed-shapes`
 
 ### ✅ Recent Changes (February 28, 2026)
+
 1. **Additions Migration to PostgreSQL - COMPLETE**
    - **XML Parsing System**: Created custom regex-based parser for `public/xml/en_EN/motifs-biondan.xml`
      - Extracts all product data including size variants, dimensions, pricing
      - Handles duplicate IDs by appending suffixes (e.g., `B2581S_2`, `B2581S_3`)
      - Outputs structured JSON with all addition metadata
-   
    - **Database Schema**: Added `additions` table to PostgreSQL
      - Columns: id, name, type, categoryId, categoryName, thumbnailUrl, model3dUrl
      - **sizes**: JSONB column storing array of size variants with:
        - variant (1-4), code, width/height/depth (mm), weight (kg)
        - availability flag, wholesale/retail pricing, notes
      - Indexes and timestamps for efficient querying
-   
    - **Migration Scripts**: Created automated seeding pipeline
      - `scripts/parse-additions-xml.ts`: XML → JSON converter
      - `scripts/seed-additions.ts`: PostgreSQL seeder with direct connection
      - Seeded 82 additions across 5 categories
-   
    - **Data Statistics**:
      - **Total**: 82 additions migrated
      - **Categories**: Biondan Bronze (24), Crosses (13), Roses (24), Statues (11), Vases (10)
      - **Size Variants**: 60 single-size (73%), 22 multi-size (27%), max 4 variants
      - **Example**: B2225 has 2 sizes (100×100×20mm @ $131.74, 140×140×20mm @ $162.79)
-   
    - **Next Steps**: Update DesignerNav size slider to:
      - Fetch selected addition's data from database
      - Show only available size variants (not generic 1-4)
      - Display actual dimensions (e.g., "100×100mm", "140×140mm")
      - Update pricing based on selected size variant
-   
    - **Files Created**:
      - `scripts/parse-additions-xml.ts`, `scripts/seed-additions.ts`
      - `data/additions-parsed.json` (82 additions with full metadata)
      - `ADDITIONS_MIGRATION_COMPLETE.md` (comprehensive documentation)
-   
    - **Files Modified**:
      - `lib/db/schema.ts`: Added additions table schema
      - `drizzle/0001_kind_wide_pack.sql`: Migration SQL
 
 ### ✅ Recent Changes (February 27, 2026)
+
 1. **My Account Page - Complete Redesign**
    - **Redesigned More Popup** - Comprehensive design quote modal
      - Wider layout (max-w-4xl) for better content display
@@ -9228,13 +9776,11 @@ Comprehensive debugging of legacy saved design loading across both **forevershin
      - Modal height reduced by 15% for more compact display
      - Delete button moved after Buy Now, Close button at end with ml-auto
      - No backdrop blur (changed to simple 90% black overlay for performance)
-   
    - **Thumbnail Display** - Real-size thumbnails in list and modals
      - Thumbnails show at natural size (no oversizing/stretching)
      - List view uses `thumbnailPath` field from database
      - Full screenshot displayed only in preview modal
      - Centered thumbnail in More popup with hover effect
-   
    - **HTML Quote Generation** - Detailed product breakdown
      - **NO screenshots** in HTML - only product table
      - Main product row: Product ID, name, shape, material, size
@@ -9245,26 +9791,22 @@ Comprehensive debugging of legacy saved design loading across both **forevershin
      - Dark gradient background matching popup (`linear-gradient(to bottom right, #1a1410, #0f0a07)`)
      - White text throughout for consistency with app theme
      - Responsive table design with mobile-friendly styles
-   
    - **Screenshot Generation System**
      - Canvas screenshot captured during save
      - Thumbnail generated (300x200px max) using Sharp library
      - Both stored in year/month directory structure
      - Paths: `/saved-designs/screenshots/{yyyy}/{mm}/design_{id}.png`
      - Thumbnails: `/saved-designs/thumbnails/{yyyy}/{mm}/design_{id}_thumb.png`
-   
    - **Database Integration**
      - Added `thumbnailPath` field to projects table
      - Updated `listProjectSummaries()` to SELECT thumbnailPath
      - Product name extracted from `designState.productId`
      - Price stored as `totalPriceCents` (integer cents)
-   
    - **Save Design Fixes**
      - Fixed variable scope bug: `tempSummary` declared outside try block
      - Removed duplicate saves by using `tempSummary.id` for update
      - Added safety check before using tempSummary
      - Console logging for debugging product name lookup
-   
    - **Performance Optimizations**
      - Removed `backdrop-blur-sm` from modals (causes slowness)
      - Modal backgrounds use simple `bg-black/90` instead
@@ -9281,6 +9823,7 @@ Comprehensive debugging of legacy saved design loading across both **forevershin
 ## Current Status (2026-02-26)
 
 ### ✅ Recent Changes (February 26, 2026)
+
 1. **Save Design Feature - Complete Implementation**
    - Added "Save Design" button in main menu (after My Account link)
    - Redirects to My Account login if user is not authenticated
@@ -9316,7 +9859,7 @@ Comprehensive debugging of legacy saved design loading across both **forevershin
      - Compact layout with 3 share buttons per row
      - Image preview at top (optimized size to avoid scrollbar)
    - **Delete Functionality**: Confirmation dialog before deleting design
-   - **Account Navigation**: 
+   - **Account Navigation**:
      - Saved Designs (default view)
      - Orders, Account Details, Invoices, Privacy
      - Back to Designer (returns to main designer)
@@ -9344,6 +9887,7 @@ Comprehensive debugging of legacy saved design loading across both **forevershin
    - Automatic directory creation with date structure
 
 ### ⚠️ Known Issues (February 26, 2026)
+
 - None currently reported.
 
 ---
@@ -9351,6 +9895,7 @@ Comprehensive debugging of legacy saved design loading across both **forevershin
 ## Current Status (2026-02-25)
 
 ### ✅ Recent Changes (February 25, 2026)
+
 1. **My Account Admin Hub Refresh**
    - Rebuilt `app/my-account/page.tsx` so the account dashboard matches the designer’s premium aesthetic: the content column now mirrors the main canvas styling (dark gradient backdrop, metric chips, saved-design grid) while the Saved Designs list focuses on proof details, created/updated timestamps, and primary call-to-actions without any status badges or hover affordances.
    - Tab-level navigation (New Design, Saved Designs, Orders, Account Details, Invoices, Privacy) moved into the global left rail using the same “01 Setup” card style, and the Saved Designs feed permanently filters out `awaiting-approval` cards so the page only highlights actionable work plus fallback cards for ready/in-production/completed concepts.
@@ -9364,11 +9909,13 @@ Comprehensive debugging of legacy saved design loading across both **forevershin
    - Hardened `app/layout.tsx` catalog calls by wrapping the materials/shapes/borders/motifs fetch Promise in a try/catch so local dev keeps running even when the Postgres catalog tables are empty or offline (logs the error and falls back to empty arrays).
 
 ### ⚠️ Known Issues (February 25, 2026)
+
 - My Account remains a statically rendered dashboard; logging in as admin does not yet unlock role-based controls or an actual project workflow beyond the saved-design summaries.
 
 ## Current Status (2026-02-24)
 
 ### ✅ Recent Changes (February 24, 2026)
+
 1. **Image Crop Overlay Alignment - COMPLETED**
    - `components/CropCanvas.tsx` now measures the rendered preview with `ResizeObserver`, converts the canonical percent-based crop into live pixel coordinates, and renders mask, fill, and handles inside a single SVG overlay so everything remains 1:1 aligned.
    - The mask renderer uses the precise mask bounds (`maskMetrics.bounds`) to compute translations/scales, ensuring Oval Landscape, Rectangle Landscape, Heart, Triangle, and freeform granite/YAG crops display the correct shape immediately on load (no more slider tap to fix aspect ratio).
@@ -9394,11 +9941,13 @@ Comprehensive debugging of legacy saved design loading across both **forevershin
    - Verified queries via `npm run drizzle:test` (catalog harness) and ensured `.env.local` points to `postgresql://postgres:postgres@localhost:5432/headstonesdesigner` for immediate local usage.
 
 ### ⚠️ Known Issues (February 24, 2026)
+
 - Legacy Three.js/image panel files still emit pre-existing TypeScript errors unrelated to the new catalog pipeline; they need a dedicated cleanup pass but do not block dev server usage.
 
 ## Current Status (2026-02-23)
 
 ### ✅ Recent Changes (February 23, 2026)
+
 1. **Mask-Aware Image Cropping Pipeline - COMPLETED**
    - Added `lib/mask-metrics.ts` to parse each SVG mask’s true bounds (width, height, offsets) and thread that data through `ImageSelector`, the store, and `CropCanvas`.
    - Crop UI now seeds aspect ratios directly from mask metrics (instead of hardcoded oval math), and on export the new pipeline crops to the exact mask footprint before compositing so triangle/heart masks match production references.
@@ -9410,11 +9959,13 @@ Comprehensive debugging of legacy saved design loading across both **forevershin
    - Updated thumbnail references to `/jpg/photos/m/granite-image.jpg` and ensured Check Price rows display "Product ID" plus human-readable size labels sourced from the XML tiers.
 
 ### ⚠️ Known Issues (February 23, 2026)
+
 - None currently reported.
 
 ## Current Status (2026-02-23)
 
 ### ✅ Recent Changes (February 23, 2026)
+
 1. **Granite Image Flexible Sizing UI**
    - Granite/YAG image products (IDs 21, 135, 136, 137) now detect their `min_height`, `max_height`, and `init_height` directly from `public/xml/*/images.xml` via the new `getFlexibleImageBounds()` helper.
    - `ImageSelector` switches from the discrete “Size 1-4” variant slider to a millimeter-based height slider/input when a flexible product is selected, clamping values to the XML bounds (30–1200 mm for Granite) and auto-deriving width from the stored aspect ratio.
@@ -9422,16 +9973,18 @@ Comprehensive debugging of legacy saved design loading across both **forevershin
    - Files: `lib/image-size-config.ts`, `components/ImageSelector.tsx`.
 
 ### ⚠️ Known Issues (February 23, 2026)
+
 - None currently reported.
 
 ## Current Status (2026-02-22)
 
 ### ✅ Recent Changes (February 22, 2026)
+
 1. **Image Crop Canvas Aspect Ratio Fix - COMPLETED**
    - **Root Cause Fixed**: Oval crop canvas was being scaled incorrectly (1.25× compensation made it square)
    - **Issue**: Canvas dimensions were `1.0` (square) instead of `0.8` for oval_vertical (portrait)
    - **Solution**: Removed incorrect `effectiveAspect = targetMaskAspect * 1.25` compensation
-   - **Result**: 
+   - **Result**:
      - Oval portrait now correctly: width 80mm, height 100mm (0.8 aspect ratio)
      - Heart maintains correct proportions
      - All mask shapes preserve their intended aspect ratios
@@ -9442,32 +9995,28 @@ Comprehensive debugging of legacy saved design loading across both **forevershin
      - Better lighting response (roughness 0.8, metalness 0)
      - More realistic appearance under scene lighting
      - Fixes oval photo visibility issues
-   
    - **Z-Positioning Refined**:
      - Photo positioned at `actualCeramicDepthInUnits + 0.5mm` above ceramic surface
      - Prevents z-fighting and ensures visibility from all camera angles
      - Photo stays clearly on top during orbit camera rotations
-   
    - **Ceramic Scaling Fix - Uses Crop Canvas Logic**:
      - Added `getMaskShapeBounds()` function (same as CropCanvas)
      - Scale based on actual mask bounds within 500×500 SVG viewBox
      - Example: Oval vertical uses 400×500 area, not full 500×500
      - Formula: `scaleX/Y = width/maskBounds.width * (1 + borderPercentage)`
-   
    - **Border Sizing**:
      - Heart: 7% border (looks perfect)
      - Oval: 3% border (smaller, more appropriate for oval shapes)
      - Ceramic shape now perfectly matches the masked photo outline
-   
    - **Transparency & Masking**:
      - Photo material: `transparent={true}` with `alphaTest={0.5}`
      - Black mask areas rendered transparent
      - Only visible photo content shows (heart/oval shaped)
      - No black rectangular remnants
-   
    - Files: `components/three/ImageModel.tsx`, `components/ImageSelector.tsx`
 
 ### ✅ Recent Changes (February 21, 2026)
+
 1. **3D Ceramic/Enamel Base Feature - COMPLETED**
    - Ceramic, Vitreous Enamel, and Premium Plana images render with 3D ceramic base
    - SVG mask shape loaded and extruded to create actual 3D geometry
@@ -9478,11 +10027,13 @@ Comprehensive debugging of legacy saved design loading across both **forevershin
    - Files: `components/three/ImageModel.tsx`, `components/three/headstone/ShapeSwapper.tsx`
 
 ### ⚠️ Known Issues (February 22, 2026)
+
 - None currently reported
 
 ## Previous Status (2026-02-20)
 
 ### ✅ Recent Changes (February 20, 2026)
+
 1. **Add Your Image Feature - Image Placement & Crop System (IN PROGRESS)**
    - **3D Image Rendering on Headstone**:
      - Cropped images now render as masked textures on 3D headstone model
@@ -9490,34 +10041,30 @@ Comprehensive debugging of legacy saved design loading across both **forevershin
      - Images positioned via `ImageModel.tsx` component (similar to MotifModel)
      - Draggable positioning on headstone surface with pointer interaction
      - Selection outline with corner handles (matching motif/inscription UX)
-   
    - **Image Panel & Controls**:
      - New "Images" panel in sidebar navigation (matches Motifs/Additions layout)
      - Shows selected image details: type, size options, duplicate/delete actions
      - Size selection via discrete variants from XML catalog (not continuous slider)
      - Fixed sizes per image type (e.g., Ceramic Oval: 40×60mm to 180×240mm in 9 sizes)
      - Granite images support free-form sizing (no fixed variants)
-   
    - **Aspect Ratio & Mask Alignment Fixes**:
      - Fixed oval mask SVG padding issue (10% internal padding on left/right)
      - Compensated for viewBox offset with `effectiveAspect = targetAspect × 1.25` for ovals
      - Final canvas dimensions now match visible mask area in crop screen
      - Image texture properly fills selection box width on headstone
      - Selection outline corners align with actual image edges
-   
    - **Crop Canvas Improvements**:
      - Removed "Duplicate" button from crop interface (per user request)
      - Mask overlay and drag handlers properly aligned
      - Size slider keeps crop centered during adjustments
      - Corner drag handlers visible and functional (50% outside crop area)
-   
    - **Known Issues**:
      - Initial crop handler positioning sometimes misaligned on first load (fixed after slider use)
      - Selection outline needs fine-tuning for all mask shapes (currently optimized for oval)
-   
    - Files: `components/ImageSelector.tsx`, `components/CropCanvas.tsx`, `components/three/ImageModel.tsx`, `components/ImagePanel.tsx` (new), `lib/headstone-store.ts`
 
 ### ⚠️ Known Issues (February 20, 2026)
+
 - **Image Drag Movement**: Images not yet draggable on headstone despite pointer handlers
 - **Crop Handler Initial Position**: Handlers occasionally misaligned on first render (fixed after slider interaction)
 - **Size Variant Loading**: Need to wire XML size variants into image panel controls
@@ -9525,6 +10072,7 @@ Comprehensive debugging of legacy saved design loading across both **forevershin
 ## Previous Status (2026-02-18)
 
 ### ✅ Recent Changes (February 18, 2026)
+
 1. **Add Your Image Feature (INITIAL IMPLEMENTATION)**
    - New "Add Your Image" section in left sidebar navigation (02 Design group)
    - Image type selection panel matching motif selector layout
@@ -9562,6 +10110,7 @@ Comprehensive debugging of legacy saved design loading across both **forevershin
    - Prevents oversized integrated rails like those shown in `screen.png` while keeping Border 1 (already tuned) untouched.
 
 ### ⚠️ Known Issues (February 18, 2026)
+
 - **Image Crop Handlers**: Mask + overlay alignment is corrected, but drag handles intermittently fail to resize the mask (especially on higher-DPI monitors). Slider-driven resizing works, yet dragging still needs a stable pointer math fix.
 - **Size Slider Recentering**: Although the new helper keeps crops centered during slider changes, QA still reports edge cases where the mask re-centers after repeated drags + slider adjustments; need additional state sync between CropCanvas and sidebar state.
 - **3D Placement**: Cropped image rendering on headstone not yet implemented.
@@ -9569,6 +10118,7 @@ Comprehensive debugging of legacy saved design loading across both **forevershin
 ## Current Status (2026-02-13)
 
 ### ✅ Recent Changes (February 13, 2026)
+
 1. **Canonical Loader Auto-Centering for Forevershining Layouts**
    - The loader now samples every headstone-target inscription and motif before applying the legacy HEADSTONE_HALF/2 vertical shift.
    - If a design's pre-shift coordinates are already centered within 5% of the headstone envelope (e.g., the forevershining multi-person memorial), the extra lift is skipped so motifs/inscriptions stop floating above the 2D reference.
@@ -9582,11 +10132,13 @@ Comprehensive debugging of legacy saved design loading across both **forevershin
    - This eliminates the plaque conversion collapse (elements piling near the center) and keeps duplicated items aligned because they all inherit the updated headstone-local offsets.
 
 ### ⚠️ Known Issues (February 13, 2026)
+
 - None currently reported.
 
 ## Current Status (2026-02-12)
 
 ### ✅ Recent Changes (February 12, 2026)
+
 1. **Bronze Border Scale Normalization**
    - `BronzeBorder.tsx` now lerps the aggressive `borderXa` scale overrides based on the plaque’s shortest dimension, so 300×300 mm plaques stick to a 1× scale while larger canvases gradually regain the extra amplification needed to fill wider rails.
    - Integrated rails inherit the same logic, preventing the 3D frame from ballooning relative to the legacy 2D reference in `screen.png` while preserving full-edge coverage on 400 mm+ products.
@@ -9603,16 +10155,19 @@ Comprehensive debugging of legacy saved design loading across both **forevershin
    - Files: `components/three/RotatingBoxOutline.tsx`.
 
 ### 🧪 Canonical Loader Investigation (Rolled Back on February 12, 2026)
+
 - Tried scoping stage-compensation heuristics (directory + thickness filters) to fix Load Design 2 but the variant caused Load Design 1 motifs to shrink/flip; reverted `lib/saved-design-loader-utils.ts` to the Feb 11 baseline for stability.
 - Tested direct flip flag passthrough and pixel-derived motif heights; both improved Design 2 but regressed Design 1, so they were also rolled back pending a more universal converter.
 - Reference snapshots (see `screen.png`, `design2.txt`) remain the source of truth while we design a single loader/converter that works for all 10 k+ designs.
 
 ### ⚠️ Known Issues (February 12, 2026)
-- **Load Design 2 canonical alignment:** Motifs/inscriptions from the forevershining source still sit higher than expected in 3D compared to the SVG/div reference despite the rollbacks; needs a universal stage-space vs physical-space detection strategy. *(Resolved February 13 via the auto-centering shift described above.)*
+
+- **Load Design 2 canonical alignment:** Motifs/inscriptions from the forevershining source still sit higher than expected in 3D compared to the SVG/div reference despite the rollbacks; needs a universal stage-space vs physical-space detection strategy. _(Resolved February 13 via the auto-centering shift described above.)_
 
 ## Current Status (2026-02-11)
 
 ### ✅ Recent Changes (February 11, 2026)
+
 1. **Addition Duplication Reliability & Metadata**
    - `lib/headstone-store.ts` now persists per-instance metadata (`additionType`, `assetFile`, `footprintWidth`, finalized `zPos`) when additions are added or duplicated, so clones keep their GLB paths and exact placement.
    - `components/three/AdditionModel.tsx` can fall back to stored metadata when the catalog lacks a `file`, preventing "has no file data" errors, and each addition reports its true footprint width so duplicates offset by their own size instead of a hardcoded value.
@@ -9633,21 +10188,25 @@ Comprehensive debugging of legacy saved design loading across both **forevershin
    - `canonicalOutOfBounds()` inside `loadCanonicalDesignIntoEditor` was converted to a hoisted function declaration so it exists before invocation, fixing the `ReferenceError: canonicalOutOfBounds is not defined` regression that blocked canonical design loading on February 10 builds.
 
 ### ⚠️ Known Issues (February 11, 2026)
+
 - None currently reported.
 
 ## Current Status (2026-02-10)
 
 ### ✅ Recent Changes (February 10, 2026)
+
 1. **Addition Placement Uses Real Units & Base-Aligned Anchors**
    - `components/three/AdditionModel.tsx` now defines a shared `MM` helper and converts every default offset, collision pad, and application lift from millimeters to meters before doing bounding-box math. This fixes the long-standing clamp bug that snapped statues to the base’s minX edge because offsets were previously interpreted as meters.
    - Statues and vases sample the base’s top-front plane in headstone space, then subtract half their scaled depth plus a 10 mm safety margin so they rest flush on the base without hanging over the front or disappearing behind it. Default statue (left pad) and vase (right pad) anchors now land 80 mm and 30 mm in from their respective edges and persist correctly when duplicating or reloading thanks to the stored `zPos`.
 
 ### ⚠️ Known Issues (February 10, 2026)
+
 - None currently reported.
 
 ## Current Status (2026-02-08)
 
 ### ✅ Recent Changes (February 8, 2026)
+
 1. **Cinematic Selection Outlines & Depth Masking**
    - `RotatingBoxOutline.tsx` gained a `bottomLift` prop plus an optional reveal animation. Headstone/base outlines now render with depth testing again so rear corners never leak through the stone, while downward corners lift 10‑25 mm to keep brackets visible above the base/ground without floating.
    - HeadstoneAssembly wires the new props for both the headstone and base, and extension models (statues/vases) opt into the reveal so every viewfinder indicator matches the premium “draw-on” look from `screen.png`.
@@ -9659,11 +10218,13 @@ Comprehensive debugging of legacy saved design loading across both **forevershin
    - Files: `components/SelectionBox.tsx`, `components/HeadstoneInscription.tsx`, `components/three/MotifModel.tsx`, `components/three/AdditionModel.tsx`, `lib/headstone-store.ts`.
 
 ### ⚠️ Known Issues (February 8, 2026)
+
 - None currently reported.
 
 ## Current Status (2026-02-07)
 
 ### ✅ Recent Changes (February 7, 2026)
+
 1. **Convert Design Panel & Button Refresh**
    - Replaced the legacy "3D Preview" shortcut with a persistent **Convert Design** button in the left sidebar; clicking it opens a dedicated panel that mirrors the Select Product layout but forces a single product per row for readability.
    - Selecting a product from this panel dispatches `setProductId()` immediately so catalog XML, pricing, and materials swap in-place without navigating away from the designer.
@@ -9693,11 +10254,13 @@ Comprehensive debugging of legacy saved design loading across both **forevershin
    - Front-facing logic now uses a real clipping plane derived from the active camera normal (via R3F local clipping) instead of heuristic dot products, which keeps bottom edges visible while allowing the renderer to trim any geometry physically behind the headstone.
 
 ### ⚠️ Known Issues (February 7, 2026)
+
 - None currently reported.
 
 ## Current Status (2026-02-06)
 
 ### ✅ Recent Changes (February 6, 2026)
+
 1. **Statue/Vase Depth Controls & Collision Guardrails**
    - Addition offsets now persist a `zPos` field so statues and vases remember their depth when saved, duplicated, or reloaded.
    - Z placement is clamped between the headstone front plane and the back half of the base with a 5 mm safety pad, preventing models from intersecting the upright.
@@ -9714,11 +10277,13 @@ Comprehensive debugging of legacy saved design loading across both **forevershin
    - Files: `components/three/AdditionModel.tsx`.
 
 ### ⚠️ Known Issues (2026-02-06)
+
 - None currently reported.
 
 ## Current Status (2026-02-03)
 
 ### ✅ Recent Changes (February 3, 2026)
+
 1. **Check Price Page Enhancements**: Improved motif and inscription detail modals
    - **Motif Images**: Changed from card backgrounds to clean white/grey-tinted images (2x larger)
    - **Color Column Simplified**: Removed duplicate empty "Color" column in motif details
@@ -9777,9 +10342,11 @@ Comprehensive debugging of legacy saved design loading across both **forevershin
    - Files: `components/three/headstone/HeadstoneBaseAuto.tsx`
 
 ### ⚠️ Known Issues (2026-02-04)
+
 - None currently reported.
 
 ### ✅ Recent Changes (February 2, 2026)
+
 1. **Check Price Interactive Details**: Added clickable detail modals for inscriptions, motifs, and additions
    - **Clickable Counts**: "8 motifs", "9 inscriptions", "2 items" are now clickable links (white with underline, hover → gold)
    - **Zero Items**: When count is 0, displays as plain text (not clickable) - e.g., "0 items"
@@ -9792,6 +10359,7 @@ Comprehensive debugging of legacy saved design loading across both **forevershin
    - **Files**: `app/check-price/_ui/CheckPriceGrid.tsx`
 
 ### ✅ Recent Changes (January 31, 2026)
+
 1. **Homepage Visual Refinements**: Comprehensive UI improvements across all sections
    - **Hero Section Text Colors**: Enhanced readability and visual hierarchy
      - Main headline: Warm white (#FFFEF8) with enhanced shadow for depth
@@ -9799,7 +10367,6 @@ Comprehensive debugging of legacy saved design loading across both **forevershin
      - Trust badge "Trusted by 5,000+ families": Gold (#F8D64F) to match CTA button
      - Bullet points: Pure white (#FFFFFF) with medium weight (was light gray)
      - All text now has professional shadows: `0 2px 8-12px rgba(0,0,0,0.5-0.6)`
-   
    - **How It Works Section Cards**: Updated Step 1, 2, 3 cards styling
      - Lighter gradient backgrounds: `from-[#2a1f15]/80 to-[#1a120c]/90`
      - Gold borders: `border-[#d4af37]/30` with hover brightening to `/60`
@@ -9807,27 +10374,23 @@ Comprehensive debugging of legacy saved design loading across both **forevershin
      - Enhanced spacing: `gap-6` between cards, better padding
      - Gold "STEP 01/02/03" labels with improved typography
      - Files: `app/_ui/HomeSplash.tsx`
-   
    - **Icon Highlights**: Three icon row (See every change..., Transparent pricing, Save drafts)
      - Removed card backgrounds, kept transparent for cleaner look
      - Enhanced icon boxes: Larger (w-14 h-14), gradient backgrounds, gold tints
      - Better hover effects with smooth transitions
      - Files: `app/_ui/HomeSplash.tsx`
-   
    - **Stat Cards** (5,284 families, 40 shapes, 5000+ accents):
      - Much lighter backgrounds: Gradient `from-[#2a1f15]/80 to-[#1a120c]/90`
      - Gold borders with subtle glow on hover
      - Larger text, better spacing, backdrop blur
      - Hover effects: scale, enhanced shadow with gold tint
      - Files: `app/_ui/HomeSplash.tsx`
-   
    - **Ready When You Are Section**:
      - Updated CTA button "Request a Designer's Help": Gold theme with enhanced visibility
      - Border: `border-[#d4af37]/60`, gradient background, shadow with gold tint
      - Testimonial card: Same elegant design as stat cards (lighter, gold border, glow)
      - Background: Hero gradient `radial-gradient(circle at 50% 100%, #3E3020 0%, #121212 60%)`
      - Files: `app/_ui/HomeSplash.tsx`
-   
    - **Design Possibilities Section** (Interactive Studio):
      - Step cards: Updated to match "How It Works" elegant styling
      - Enhanced icon boxes: Larger, gradient backgrounds with gold accents
@@ -9842,14 +10405,12 @@ Comprehensive debugging of legacy saved design loading across both **forevershin
      - API endpoint now serves motifs from correct public directory
      - Fixed "No motifs available" error on production
      - Files: `app/api/motifs/[category]/route.ts`, `public/motifs/*/files.txt`
-   
    - **Inscription Panel Sliders**: Updated Size and Rotation to match Select Size design
      - Added +/- buttons with icon SVGs for precise 1mm/1° adjustments
      - Number input fields between buttons (w-16, right-aligned)
      - Min/max labels below sliders (e.g., "18mm - 200mm", "-180° - 180°")
      - Gold gradient slider track with enhanced thumb styling
      - Files: `components/DesignerNav.tsx`
-   
    - **Motif Panel Sliders**: Updated Height and Rotation in Select Motifs panel
      - Same +/- button and input design as inscriptions
      - Consistent styling across all dimension controls
@@ -9869,6 +10430,7 @@ Comprehensive debugging of legacy saved design loading across both **forevershin
    - Icon boxes standardized: w-14 h-14, gradients, gold accents
 
 ### ✅ Recent Changes (January 30, 2026)
+
 1. **Default Color from XML**: Catalog default-color attribute now used for inscriptions and motifs
    - Added `defaultColor` field to catalog XML parser (`lib/xml-parser.ts`)
    - Bronze Plaques use `#ffb35a` (Texas Rose) from catalog-id-5.xml
@@ -9929,6 +10491,7 @@ Comprehensive debugging of legacy saved design loading across both **forevershin
    - Files: `components/MotifSelectorPanel.tsx`
 
 ### ✅ Recent Changes (January 29, 2026)
+
 1. **Canonical Loader Scaling Fix**: Reduced one canonical scaling issue, but did not fully solve Design 2
    - Removed dynamic scale factor calculation that compared old design dimensions with new ones
    - Set all scale factors to 1.0 for canonical designs (coordinates already in correct space)
@@ -9965,12 +10528,13 @@ Comprehensive debugging of legacy saved design loading across both **forevershin
    - Files: `components/LoadingOverlay.tsx`, `components/ThreeScene.tsx`
 
 ### ✅ Recent Changes (January 28, 2026)
+
 1. **Manual Design Loading**: Automatic design loading disabled. Headstone now starts completely empty.
    - `components/DefaultDesignLoader.tsx` converted to manual trigger via `useLoadDesign()` hook
    - New "Load Design" buttons in top-right corner
    - See `LOAD_DESIGN_BUTTON.md` for implementation details
 
-2. **Default 3D Additions Removed**: 
+2. **Default 3D Additions Removed**:
    - Removed `B2127` (Cross) and `B1134S` (Angel) from default state
    - `selectedAdditions: []` in `lib/headstone-store.ts`
    - Users start with clean empty headstone
@@ -9981,17 +10545,20 @@ Comprehensive debugging of legacy saved design loading across both **forevershin
    - Exception added: `item.slug !== 'check-price'` in disabled logic
 
 ### 🔧 Fixed Issues
+
 - ✅ **Canonical loader scaling bug**: Scale factors now set to 1.0, preventing dimension mismatch
 - ✅ **Texture mapping**: Numbered textures (17.jpg, 18.jpg) now properly mapped to named files
 - ✅ **Motif recoloring**: Color picker now works with rasterized SVG motifs
 - ✅ **Design switching**: Load buttons remain active, allowing free design switching
 
 ### ⚠️ Known Issues
+
 - None currently reported
 
 ## Project Overview
 
 A Next.js-based 3D headstone designer allowing users to:
+
 - Select headstone shapes, materials, and sizes
 - **Select headstone style** (Upright or Slant)
 - **Select base finish** (Polished or Rock Pitch)
@@ -10004,6 +10571,7 @@ A Next.js-based 3D headstone designer allowing users to:
 - Save and load designs
 
 ### Product Types
+
 - **Traditional Engraved Headstones**: Granite/marble with sandblasted and painted text (shadow effect, no outline)
 - **Laser Etched Black Granite**: High-detail laser etching (outlined text with 0.002 unit black outline)
 - **Bronze Plaques**: Metal plaques with decorative borders and emblems (no outline on inscriptions)
@@ -10015,18 +10583,22 @@ A Next.js-based 3D headstone designer allowing users to:
   - **Circle**: 400×400mm
 
 ### Headstone Style Options
+
 - **Upright**: Traditional vertical headstone (default)
 - **Slant**: Beveled headstone tilted at 30° angle with trapezoidal profile
 
 ### Base Finish Options
+
 - **Polished**: High-gloss polished granite with clearcoat (default)
 - **Rock Pitch**: Hand-chiseled turtle shell pattern with polished flat top (PFT)
 
 ### Plaque-Specific Features
+
 **Plaques** have a simplified UI compared to headstones:
+
 - **No Base Toggle**: Plaques don't show Headstone/Base tabs (single "Plaque" label)
 - **No Thickness Control**: Fixed 10mm depth (from XML catalog)
-- **Border Options**: 
+- **Border Options**:
   - "No Border" (maps to `headstoneStyle: 'upright'`)
   - "Border" (maps to `headstoneStyle: 'slant'`)
   - Convert Design automatically toggles a decorative border when the destination catalog exposes `border="1"`, and clears it for non-border products.
@@ -10039,7 +10611,9 @@ A Next.js-based 3D headstone designer allowing users to:
 - **Pricing**: Uses `quantity_type="Width + Height"` from catalog
 
 ### Load Design Feature (updated March 25, 2026)
+
 **Manual Design Loading** with modal tree picker:
+
 - Headstone starts **completely empty** (no inscriptions, motifs, or 3D additions)
 - Single **"Load Design" button** in the canvas opens a searchable modal
 - Modal presents hierarchical tree:
@@ -10049,6 +10623,7 @@ A Next.js-based 3D headstone designer allowing users to:
 - Each load clears existing design before loading new one
 
 **Components:**
+
 - `components/LoadDesignButton.tsx` - Canvas button + modal tree/search picker
 - `components/DefaultDesignLoader.tsx` - Exports shared `loadDesignById()` and `useLoadDesign(designId)` helpers
 - `components/ConditionalCanvas.tsx` - Renders the single load button in the canvas overlay
@@ -10117,6 +10692,7 @@ next-dyo/
 ```
 
 ### Conversion Scripts (2026-01-25)
+
 - `scripts/convert-legacy-design.js`: Rebuilds a canonical v2026 JSON snapshot from the original ML/legacy JSON, including sanitized inscription text, mm scaling, and motif metadata. As of 2026‑01‑25 the converter parses the `navigator` viewport string first (e.g., `1102x689`) so we know the exact canvas size that the legacy user worked within, preserves any desktop DPR > 1 if physical coordinates are detected, and mirrors the DesignPageClient math for mm-per-pixel + Y-down handling. Use it to regenerate `/public/canonical-designs/v2026/{designId}.json` before loading designs in the new 3D editor.
 - `scripts/convert-saved-design.js`: Batch helper for transforming multiple legacy saves; currently mirrors the legacy converter’s API and is kept for experimentation.
 
@@ -10125,11 +10701,13 @@ next-dyo/
 ## Coordinate System
 
 ### Units: **1 unit = 1mm**
+
 All positioning uses millimeters as the base unit in the bounding box coordinate system.
 
 #### Legacy vs Canonical Coordinate Systems (2026-01-23)
 
 **Legacy JSON Format** (`/public/ml/**/saved-designs/json/*.json`):
+
 - Stores `x/y` pixel offsets relative to **canvas center**
 - Coordinate system: **Y-down** (positive Y = below center)
 - Canvas represents the viewport at design time (e.g., 1102×689 pixels parsed from the `navigator` string)
@@ -10145,7 +10723,7 @@ pixelsPerMmY = designCanvasHeight / productHeightMm
 
 // Convert to 3D editor coordinates (mm from center):
 xPos = xPixels / pixelsPerMmX
-yPos = yPixels / pixelsPerMmY  // NO negation - both use same conversion
+yPos = yPixels / pixelsPerMmY // NO negation - both use same conversion
 ``
 
 **Key Insight:** Despite the legacy system using Y-down convention, the conversion to the 3D editor does NOT negate Y. Both inscriptions and motifs use identical conversion: `yPos = yPixels / pixelsPerMmY`.
@@ -10153,6 +10731,7 @@ yPos = yPixels / pixelsPerMmY  // NO negation - both use same conversion
 **Viewport Detection Update (2026-01-25):** The loader and converter now prefer the `navigator` string’s `width×height` dimensions over `init_width/height`. This keeps the pixel-to-mm ratio anchored to the actual design-time viewport and prevents the physical-coordinate heuristic from triggering when coordinates only appeared “too large” because we had defaulted to a smaller canvas.
 
 **Canonical JSON Format** (`/public/canonical-designs/v2026/*.json`):
+
 - Created by `scripts/convert-legacy-design.js`
 - Stores `position.x_px` and `position.y_px` in stage pixels (centre-origin); loaders convert to mm using the canonical viewport metadata
 - Values are pre-converted and ready to use directly in 3D editor
@@ -10161,11 +10740,13 @@ yPos = yPixels / pixelsPerMmY  // NO negation - both use same conversion
 - Both are loaded without additional transformations
 
 **Legacy Fallback Path:**
+
 - When canonical JSON includes `legacy.raw` array, the loader uses this for motifs
 - Recalculates positions from pixel data using same formula as legacy loader
 - Ensures backward compatibility with existing designs
 
 **Canonical Loader Guardrails (2026-01-25):**
+
 - `loadCanonicalDesignIntoEditor()` now sanity-checks the canonical millimeter coordinates before applying them.
 - If any inscription/motif exceeds the physical headstone+base envelope (or the spread suggests the data is still in stage-space pixels), the loader automatically swaps to the embedded legacy JSON and calls `loadSavedDesignIntoEditor()` so the design still renders correctly.
 - The legacy fallback path shares the same viewport/DPR inference as the converter (navigator-first sizing + preserved DPR for physical saves) so loading a regenerated canonical file produces the exact layout seen in the DesignPageClient 2D preview.
@@ -10173,6 +10754,7 @@ yPos = yPixels / pixelsPerMmY  // NO negation - both use same conversion
 - **March 16, 2026 correction:** a later audit found the fallback reason was being checked before the real out-of-bounds detector was assigned, so this safeguard was not actually firing in the broken path. That bug has now been fixed in `lib/saved-design-loader-utils.ts`.
 
 **Canonical Loader Behavior Update (2026-01-26):**
+
 - Canonical JSON already stores physical millimeter values, so `loadCanonicalDesignIntoEditor()` now treats `size_mm` (fonts) and `height_mm` (motifs) as absolute numbers. The previous SIZE_SCALE_FACTOR-based approach caused “double scaling” and oversized text; that multiplier has been removed.
 - Only positional coordinates use `X/Y_SCALE_FACTOR`, and that scaling exists solely to stretch layouts to the active stone dimensions—element dimensions themselves remain untouched.
 - All design-specific hacks (e.g., special offsets for the surname “KLEIN”, epitaph lines, or bird/ivy motifs) have been deleted. The loader now applies one data-driven path for every design, making it safe to ingest thousands of canonical files without bespoke tweaks.
@@ -10180,15 +10762,18 @@ yPos = yPixels / pixelsPerMmY  // NO negation - both use same conversion
 - ⚠️ **Known Regression (2026-01-28):** The current canonical loader still produces major Y-offset errors for the newly converted design `1578016189116` (forevershining ML set). Until the stage→component transform is normalized per design, expect motifs/inscriptions to land too high and, in some cases, mirrored vertically. Use `public/screenshots/1.png` as the visual reference when reworking this math.
 - **March 16, 2026 update:** the codebase now carries an explicit canonical `scene.coordinateSystem` contract (`positionMode`, `headstonePlacement`, `flipMode`) so future regenerated files no longer need to rely only on `mlDir` heuristics. This improved the loader architecture, but it did **not** fully fix `1578016189116`; that design still needs another pass.
 
-**Common Pitfall:** 
+**Common Pitfall:**
 The old comment "// OLD designs: saved in Y-down coordinates (entire group was Y-flipped)" was misleading. The legacy 3D renderer did NOT flip the entire scene. The conversion formula `yPos = yPixels / pixelsPerMm` works for both inscriptions and motifs without negation.
+
 ### Headstone Geometry
+
 - **SVG scale**: 0.01 (scaled down in world space)
 - **BBox units**: Direct mm values (e.g., 600mm width)
 - **unitsPerMeter**: ~667 (conversion factor from SVG to world space)
 - **`mmToLocalUnits`**: varies per surface — ~1.0 for standard headstones, ~1.739 for landscape plaques, 0.001 for base
 
 ### Base Surface Coordinate System (Updated 2026-04-08)
+
 - **Base mesh**: `BoxGeometry(1,1,1)` — unit cube, `unitsPerMeter = 1`
 - **Position/scale**: Set by `HeadstoneBaseAuto.useFrame()` via lerp, NOT React state
 - **`mmToLocalUnits = 0.001`** — converts mm to base local units (unit cube scaled in meters)
@@ -10196,6 +10781,7 @@ The old comment "// OLD designs: saved in Y-down coordinates (entire group was Y
 - **Drag conversion**: Unit-cube local coords → mm offsets via `localPoint * baseDim` (where baseDim comes from mesh scale × 1000)
 
 ### Legacy Position Conversion Chain (Updated 2026-04-08)
+
 1. Legacy px coordinates (center-origin, from CreateJS canvas at DPR-scaled resolution)
 2. → mm offsets via `uniformMmPerPx = maxMonumentDimensionMm / legacyMonumentDrawPx`
 3. → stored as `coordinateSpace: 'mm-center'` in Zustand store
@@ -10204,10 +10790,12 @@ The old comment "// OLD designs: saved in Y-down coordinates (entire group was Y
 6. → rendered via default `groupPosition` path: `[pos.x + xPos, pos.y + yPos, pos.z]`
 
 **Key Ratios:**
+
 - Position conversion: `mmPerPx = headstoneHeightMm / (init_height × DPR)` — DPR-scaled physical px
 - Font size conversion: viewport-based `HEADSTONE_MM_PER_PX_Y_CANONICAL` — CSS px (not DPR-scaled)
 
 ### Z-Positioning (Depth)
+
 - **Headstone surface**: `headstone.frontZ` (front face of stone)
 - **Inscriptions**: `frontZ + 0.05mm` (prevents z-fighting while keeping flush)
 - **Motifs**: `frontZ + 0.05mm`
@@ -10215,6 +10803,7 @@ The old comment "// OLD designs: saved in Y-down coordinates (entire group was Y
 - **Additions (statues/vases)**: `frontZ` (on base)
 
 ### Scaling
+
 - **Inscriptions**: `sizeMm` is directly in mm (e.g., 50mm height)
 - **Motifs**: `heightMm` target size in mm (e.g., 100mm)
 - **Additions**: Target heights in mm (statue: 150mm, vase: 120mm, application: 100mm)
@@ -10225,31 +10814,39 @@ The old comment "// OLD designs: saved in Y-down coordinates (entire group was Y
 ## Product Types & Rendering
 
 ### Traditional Engraved (Sandblasted & Painted)
+
 **Visual Effect:** Painted infill without outlines (shadow stack removed Jan 26 to match canonical reference art)
 
 **Implementation:**
+
 - **No outline** on text/motifs
 - **No faux shadow layers** – inscriptions now render flush at `frontZ + 0.05mm`, relying on fill color alone
 - Keeps surfaces readable in both 2D mockups and the 3D designer without the blurry halo we previously added
 
 **Detection:**
+
 ```typescript
-const isTraditionalEngraved = product?.name.includes('Traditional Engraved') ?? false;
+const isTraditionalEngraved =
+  product?.name.includes('Traditional Engraved') ?? false;
 ```
 
 ### Laser Etched
+
 **Visual Effect:** Surface etching with black outline
 
 **Implementation:**
+
 - **Black outline** (`outlineWidth: 0.002 * units`)
 - **Colored fill**
 - No shadow layers
 - Flat appearance
 
 ### Bronze Plaques
+
 **Visual Effect:** Clean metal surface without outlines
 
 **Implementation:**
+
 - **No outline** on text/motifs (same as Traditional Engraved)
 - Bronze material texture from XML catalog
 - Fixed 10mm depth
@@ -10258,22 +10855,26 @@ const isTraditionalEngraved = product?.name.includes('Traditional Engraved') ?? 
 - **No Additions**: Select Additions menu item hidden for plaques (not applicable)
 
 **Border Workflow (2026-01-17, updated 2026-02-07):**
+
 - Catalog products flagged with `border="1"` (all bronze plaques) automatically advance to **Select Border** after the user confirms a shape. The shape selector now pushes to `/select-border` and dispatches `openFullscreenPanel('select-border')` so the sidebar panel opens immediately.
 - `BronzeBorder.tsx` loads `/public/shapes/borders/{slug}.svg`, extrudes the supplier corner SVG once, scales it to ~25 % of the shorter plaque edge (70 % final size), mirrors it into each corner, and generates the connecting rails procedurally. All mirrored parts are converted to non‑indexed geometries and merged into a single mesh, eliminating the old floating box lines and ensuring a continuous bronze frame that sits flush on the plaque face.
 - **2026-01-19 update:** every catalog slug now maps to a dedicated `borderXa.svg` file that already contains the extended rail artwork. BronzeBorder scales the merged SVG to the plaque bounds, clamps it inside a four-plane mask (±width/2, 0→height), and disposes/rehydrates textures for each load so the rail artwork stretches perfectly to whatever width/height the user selects without overlapping neighboring corners. The legacy dual-line rail generator still runs for any slug that lacks a suffixed SVG.
 - **2026-01-20 rollback:** the experimental 9-slice border system from advice8/9 was reverted after a console error surfaced; BronzeBorder is presently back to the "single merged mesh" workflow with whole-group scaling plus the debounced rebuild/fast-path stretch described below. The 9-slice plan (per advice7‑9) remains documented for future reimplementation once the runtime error is understood, and the refreshed `border1a.svg` now ships at 4800×4800px so its engraved detail stays crisp even though the current code continues to scale the entire mesh uniformly.
-- **2026-02-07 update:** edge thickness, line gaps, and decorative rail spans now scale off the plaque’s shorter side with aggressive compression on near-square plaques, fallback inset anchors inherit the same scaling so the dual selection rails hug the plaque edges, and the bronze highlight color lightened to `#FFDFA3` for better contrast. *(Resolved 2026-02-14 — inset clamps now subtract an extra 12 mm per edge on ≤0.9 aspect plaques, matching the latest QA captures.)*
+- **2026-02-07 update:** edge thickness, line gaps, and decorative rail spans now scale off the plaque’s shorter side with aggressive compression on near-square plaques, fallback inset anchors inherit the same scaling so the dual selection rails hug the plaque edges, and the bronze highlight color lightened to `#FFDFA3` for better contrast. _(Resolved 2026-02-14 — inset clamps now subtract an extra 12 mm per edge on ≤0.9 aspect plaques, matching the latest QA captures.)_
 - **2026-04-08 fix:** border coverage targets increased from 78-90% to 97-99% and initial `uniformScale` multiplier from 2.5× to 5.0×. Small plaques (e.g., 306×200mm) now match legacy border sizing where ornaments fill nearly the entire plaque face.
 
 **Detection:**
+
 ```typescript
 const isPlaque = catalog?.product.type === 'plaque';
 ```
 
 ### Full Color Plaque (Product 32)
+
 **Visual Effect:** Photographic background image on a stainless steel frame
 
 **Implementation:**
+
 - **Ceramic plaque** with full-colour photographic backgrounds (40 options in `/jpg/backgrounds/forever/`)
 - **Stainless steel frame** — not bronze. Uses `generateStainlessSteelTexture()` in `BronzeBorder.tsx`
 - **Fixed sizes only** — 9 preset dimensions (110×150 to 280×380mm) with fixed prices ($350–$990)
@@ -10286,6 +10887,7 @@ const isPlaque = catalog?.product.type === 'plaque';
 - **No Gold/Silver Gilding**: Product uses `formula="Enamel"`, so gilding color shortcuts are hidden (only regular color palette shown)
 
 **Detection:**
+
 ```typescript
 const isFullColourPlaque = catalog?.product.id === '32';
 // productId is string|null — use === '32' not === 32
@@ -10294,11 +10896,13 @@ const isFullColourPlaque = catalog?.product.id === '32';
 **Config:** `public/xml/catalog-id-32.xml` — `material="backgrounds"`, `materialID="17"`, `border="1"`, `fixed="1"`, `sizes="9"`
 
 ### Motif Color Recoloring(2026-01-29)
+
 **Implementation:** Dynamic color changes on rasterized SVG motifs
 
 **Challenge:** SVGs are rasterized to high-quality bitmaps for sharp rendering. Original colors were baked into the texture, preventing color changes.
 
 **Solution:** Alpha mask extraction + material tinting
+
 ```typescript
 // Convert rasterized image to white shape with alpha channel
 const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
@@ -10315,6 +10919,7 @@ for (let i = 0; i < data.length; i += 4) {
 ```
 
 **Material Setup:**
+
 ```typescript
 <meshBasicMaterial
   color={color}  // User-selected color tints the white texture
@@ -10325,6 +10930,7 @@ for (let i = 0; i < data.length; i += 4) {
 ```
 
 **Result:**
+
 - SVG detail preserved in alpha channel
 - Color picker dynamically recolors motifs
 - High quality maintained (2048px textures)
@@ -10335,6 +10941,7 @@ for (let i = 0; i < data.length; i += 4) {
 ## Pricing System
 
 ### Shared Quantity Helper: `computeQuantity()`
+
 All pricing calculations go through `computeQuantity(priceModel, dims)` in `lib/xml-parser.ts`. This replaced duplicated switch/if logic across 7 files.
 
 ```typescript
@@ -10343,30 +10950,39 @@ export function computeQuantity(
   dims: { width: number; height: number; depth: number },
 ): number {
   switch (priceModel.quantityType) {
-    case 'Width * Height':  return dims.width * dims.height;
-    case 'Width + Height':  return dims.width + dims.height + dims.depth;
-    case 'Width':           return dims.width + dims.depth;
-    case 'Area':            return dims.width * dims.height;
-    default:                return dims.width + dims.height + dims.depth;
+    case 'Width * Height':
+      return dims.width * dims.height;
+    case 'Width + Height':
+      return dims.width + dims.height + dims.depth;
+    case 'Width':
+      return dims.width + dims.depth;
+    case 'Area':
+      return dims.width * dims.height;
+    default:
+      return dims.width + dims.height + dims.depth;
   }
 }
 ```
 
 ### Legacy 3D Volume-Based Pricing (Critical Reference)
+
 The legacy 3D system (`createJS/Quote.js:1476-1486`) overrides `quantityType` to `"Area"` for ALL products in 3D mode **except** IDs 4, 5, 30, 34. In legacy "Area" mode, pricing uses `MODEL_STONE_VOLUME_CUBIC_METERS` (actual 3D mesh volume) × material m³ price × retail multiplier — fundamentally different from XML formula pricing.
 
 Since we don't have m³ material pricing data, we adapted by including `depth` (thickness) in the formula-based quantity for `"Width + Height"`. This means headstone thickness always affects price, matching the legacy system's behavior where volume (which inherently includes depth) determines cost.
 
 ### Quantity Type Calculation
+
 Pricing is based on the `quantity_type` specified in the XML catalog for each product.
 
 **Headstone Pricing:**
+
 - **Quantity Type**: `"Width + Height"` (perimeter + depth)
 - **Formula**: `quantity = widthMm + heightMm + uprightThickness`
 - **Model**: `"600.00+1.32($q-600)"` (base price + rate per mm over threshold)
 - **Example**: 600mm wide × 900mm tall × 50mm thick = 1550mm quantity
 
 **Base Pricing:**
+
 - **Quantity Type**: `"Width"` (width + thickness)
 - **Formula**: `quantity = baseWidthMm + baseThickness`
 - **Model**: `"294.00+0.34($q-300)"` (base price + rate per mm over threshold)
@@ -10374,58 +10990,66 @@ Pricing is based on the `quantity_type` specified in the XML catalog for each pr
 - **IMPORTANT**: Base thickness affects price (changes when slider moves)
 
 **Plaque Pricing:**
+
 - **Quantity Type**: `"Width + Height"` (perimeter-based)
 - **Formula**: `quantity = widthMm + heightMm`
 - **Model**: `"143.00+0.4273($q-160)"` (base price + rate per mm over threshold)
 
 **Inscription Pricing** (`xml/en_EN/inscriptions.xml`):
+
 - **Quantity Type**: `"Height"` — uses `sizeMm` (font height in mm) as quantity
 - **Color-aware tiers**: Prices have `note` field (Gold Gilding, Silver Gilding, Paint Fill)
 - **Product examples**: Product 16 (Free/Black Granite), Product 41/42 (Steel), Product 78 (Bronze), Product 125 (Traditional Engraved), Product 1701 (Enamel/Free)
 - **Store field**: `inscriptionPriceModel` set during `setProductId()`, `inscriptionCost` recalculated via `calculateInscriptionCost()`
 
 **Motif Pricing** (`xml/en_EN/motifs.xml` via `lib/motif-pricing.ts`):
+
 - **Quantity Type**: Height-based — uses motif `heightMm`
 - **Color-aware**: Gold Gilding, Silver Gilding, Paint Fill tiers
 - **Laser exemption**: Laser-etched products have free motifs (`isLaser = true`)
 - **Store field**: `motifPriceModel` fetched on product load, `motifCost` recalculated via `calculateMotifCost()`
 
 **Image Pricing** (`xml/en_EN/images.xml` via `lib/image-pricing.ts`):
+
 - **Quantity Type**: `"Width + Height"` — image widthMm + heightMm
 - **Color mode**: BW vs Color tiers (note field matching)
 - **Size variants**: `getImageSizeOption(typeId, sizeVariant)` returns predefined widths/heights
 - **Store field**: `imageCost` recalculated via `calculateImageCost()` (async — fetches XML on first call)
 
 **Addition Pricing** (`xml/en_EN/motifs-biondan.xml` pre-computed in `_additions-loader.ts`):
+
 - **Pre-computed**: `FALLBACK_SIZES[sourceId][variant-1].retailPrice` — retail price per product + size variant
 - **Formula**: XML formula × retail_multiplier (e.g., `76.11+0($q-245)` × 2.6 = $197.89)
 - **Store field**: `additionCost` recalculated via `calculateAdditionCost()`
 
 ### Price Calculation
+
 ```typescript
 function calculatePrice(priceModel: PriceModel, quantity: number): number {
   // Find applicable price tier
   const applicablePrice = priceModel.prices.find(
-    (p) => quantity >= p.startQuantity && quantity <= p.endQuantity
+    (p) => quantity >= p.startQuantity && quantity <= p.endQuantity,
   );
-  
+
   // Parse model formula: "base+rate($q-offset)"
   const match = model.match(/(\d+(?:\.\d+)?)\+([\d.]+)\(\$q-(\d+)\)/);
   const base = parseFloat(match[1]);
   const rate = parseFloat(match[2]);
   const offset = parseInt(match[3]);
-  
+
   // Calculate
   const adjustedQuantity = Math.max(0, quantity - offset);
   const price = base + rate * adjustedQuantity;
-  
+
   // Apply retail multiplier
   return price * applicablePrice.retailMultiplier;
 }
 ```
 
 ### Total Price Composition (Price Pill)
+
 The floating price pill at the bottom of the 3D canvas (`ThreeScene.tsx`) shows:
+
 ```
 totalPrice = headstonePrice + basePrice + ledgerPrice + kerbsetPrice
            + inscriptionCost + motifCost + imageCost + additionCost
@@ -10438,28 +11062,33 @@ Each `*Cost` field is a reactive store value updated via `calculate*Cost()` when
 ## Core Components
 
 ### 1. **SvgHeadstone.tsx**
+
 **Purpose:** Main 3D headstone geometry generator  
 **Key Features:**
+
 - Loads SVG outline, extrudes to 3D
 - Applies texture mapping (face/side/top)
 - Auto-scales to target dimensions, but preserves fixed-scale silhouettes for any SVG named `headstone_*` so sculpted shapes (guitar, wolf, seahorse, etc.) keep their surrounding surface/outline.
 - Provides API for child positioning
 
 **API Exposed:**
+
 ```typescript
 type HeadstoneAPI = {
   group: RefObject<Group>;
   mesh: RefObject<Mesh>;
-  frontZ: number;          // Front face Z position (in mm coordinate system)
-  unitsPerMeter: number;   // Conversion factor (~667)
-  worldWidth: number;      // World space width
-  worldHeight: number;     // World space height
-}
+  frontZ: number; // Front face Z position (in mm coordinate system)
+  unitsPerMeter: number; // Conversion factor (~667)
+  worldWidth: number; // World space width
+  worldHeight: number; // World space height
+};
 ```
 
 ### 2. **HeadstoneInscription.tsx**
+
 **Purpose:** 3D text overlay on headstone  
 **Key Features:**
+
 - Uses `@react-three/drei` `<Text>` component
 - **Simple click-and-drag** positioning (elderly-friendly)
 - Bounds checking against headstone geometry
@@ -10467,13 +11096,16 @@ type HeadstoneAPI = {
 - Selection box with resize handles (Z-position: 0.01mm offset)
 
 **Drag System:**
+
 ```typescript
 onPointerDown → capture pointer → drag with raycasting → update position
 ```
 
 ### 3. **MotifModel.tsx**
+
 **Purpose:** SVG-based decorative overlays  
 **Key Features:**
+
 - Converts SVG paths to 3D shapes using SVGLoader
 - Supports color customization
 - Y-flipped scale for correct orientation
@@ -10482,8 +11114,10 @@ onPointerDown → capture pointer → drag with raycasting → update position
 - **Smooth drag plane fallback** keeps motifs attached to the headstone even when the pointer briefly leaves the mesh (raycasts fall back to a Z-aligned plane and pointer-move tracking listens on `window`).
 
 ### 4. **AdditionModel.tsx**
+
 **Purpose:** GLB 3D model loader (statues, vases, applications)  
 **Key Features:**
+
 - GLTF loader with texture support
 - Auto-scaling to target heights (in mm)
 - **Flattened Z-scale** for applications (0.1x depth)
@@ -10492,17 +11126,20 @@ onPointerDown → capture pointer → drag with raycasting → update position
 - **Shared drag smoothing** mirrors the motif logic: statues/vases stick to the base mesh, applications fall back to the headstone plane, and pointer tracking moves to `window` so fast drags never jump.
 
 **Target Heights:**
+
 ```typescript
 const TARGET_HEIGHTS = {
-  statue: 150,      // 150mm
-  vase: 120,        // 120mm  
+  statue: 150, // 150mm
+  vase: 120, // 120mm
   application: 100, // 100mm
 };
 ```
 
 ### 5. **SelectionBox.tsx**
+
 **Purpose:** Simple drag/resize handles for selected elements  
 **Key Features:**
+
 - **depthTest: true** (doesn't show through headstone)
 - Corner handles for resizing
 - Rotation handle (top center)
@@ -10514,10 +11151,13 @@ const TARGET_HEIGHTS = {
 ## Sidebar Navigation & Full-Screen Panels
 
 ### Overview
+
 The designer sidebar now doubles as a modal-style workspace: clicking any "deep" section (Select Size, Shape, Material, Inscriptions, Additions, Motifs) hides the grouped menu and opens a full-height overlay with a warm gradient background, "Guided Step" label, and a prominent **Back&nbsp;to&nbsp;Menu** pill button. This keeps seniors focused on one task at a time, mirrors the calm tone used across the site, and prevents menu scroll fatigue on smaller displays. The overlay is powered by `activeFullscreenPanel`/`dismissedPanelSlug` state inside `components/DesignerNav.tsx`, and it preserves the current URL instead of using modals or query params.
 
 ### Section Headers — Elegant Memorial Brand (2026-04-15)
+
 The three grouped sections (Setup / Design / Account) are styled to match the "Forever Shining" brand identity:
+
 - **Playfair Display serif font** for section titles and step labels
 - **Roman numerals** (I, II, III) in thin gold-stroked circles (`border-[#DEBD68]`)
 - **Italic step labels**: "Step I", "Step II", "Step III" in serif italic
@@ -10528,6 +11168,7 @@ The three grouped sections (Setup / Design / Account) are styled to match the "F
 - **Select Emblems**: Only visible for Bronze Plaque (product ID 5) — uses `requiresBronzePlaque` filter
 
 ### Panels Covered
+
 - **Select Size** – Shares the exact sliders/toggles documented earlier, but now consumes the entire sidebar height for effortless scrolling.
 - **Select Shape** and **Select Material** – Their grids sit inside `flex-1 overflow-hidden` containers so the selectors stretch to the bottom of the viewport; the previous `max-h-*` caps were removed to avoid double scroll bars. **Note:** For Product 32 (Full Color Plaque), "Select Material" is relabeled "Background" in the sidebar, fullscreen panel header, and loading text. The `select-material` slug is excluded from the generic `fullscreenPanelSlugs` handler so the special-handling block with the conditional label runs instead.
 - **Inscriptions** – Embeds `InscriptionEditPanel` so editing text or fonts feels identical whether opened from the menu or a canvas selection.
@@ -10537,6 +11178,7 @@ The three grouped sections (Setup / Design / Account) are styled to match the "F
 - **Convert Design** – Replaces the old 3D Preview link with a fullscreen product picker; it mirrors Select Product but enforces a single column list, so seniors can quickly audition alternate catalogs without leaving the designer.
 
 ### Layout & UX Notes
+
 - The header button uses non-breaking spaces so "Back to Menu" never wraps (we no longer need a fixed 147px width).
 - When the canvas is visible (select-size/material/etc.), clicking **Select Shape** now exclusively opens this fullscreen sidebar panel so the main column continues to host the Canvas instead of swapping in the gallery.
 - Each panel runs inside `flex flex-col h-full -> flex-1 overflow-y-auto` stacks, giving ScrollViews predictably smooth momentum on tablets.
@@ -10546,11 +11188,13 @@ The three grouped sections (Setup / Design / Account) are styled to match the "F
 - **Mobile header visibility (Jan 2026)**: `MobileHeader` now renders only on routes where the canvas is present (`/select-size`, `/inscriptions`, `/select-material`, `/select-additions`, `/select-motifs`). Homepage/marketing surfaces skip the header entirely so the larger hero logo and hamburger never overlap when the canvas is hidden.
 
 ### Context-Aware Editing
+
 - Canvas selections still set `activePanel` (`'addition'`, `'motif'`, `'inscription'`), and the fullscreen overlays simply respect that state so users can tweak a piece the moment they click it in 3D.
 - Addition and motif panels hide their detail cards when nothing is selected, reducing confusion and reinforcing the "select first, then adjust" mental model.
 - Material and shape selectors keep the headstone/base toggle in view so seniors always know which part they are updating.
 
 ### Implementation Highlights
+
 - `fullscreenPanelSlugs` defines which menu items should open over the nav. Current slugs: `select-size`, `select-shape`, `select-material`, `select-border`, `inscriptions`, `select-images`, `select-additions`, `select-emblems`, `select-motifs`.
 - **Navigation from non-canvas routes** (e.g., `/select-product` → `/select-size`): `handleMenuClick` only calls `router.push()` and lets the route-sync `useEffect` open the panel once the page settles on a canvas-visible route. Opening the panel eagerly causes a bounce — the effect clears it (old route isn't canvas-visible) then re-opens after navigation.
 - **Navigation from canvas routes** (e.g., `/inscriptions` → `/select-size`): `handleMenuClick` calls `openFullscreenPanel()` immediately (no route change needed or route already matches).
@@ -10559,6 +11203,7 @@ The three grouped sections (Setup / Design / Account) are styled to match the "F
 - See `FULLSCREEN_PANEL_SYSTEM.md` for wireframes, state diagrams, and future enhancement ideas (e.g., ESC shortcuts, slide animations).
 
 ### Testing Checklist
+
 1. Click each fullscreen section → menu hides, overlay appears.
 2. Press **Back to Menu** → overlay closes, navigates to `/design-menu`, menu restores with no item highlighted, canvas remains visible.
 3. Select additions/motifs on the headstone → detail card appears with sliders and duplicate/delete buttons.
@@ -10567,7 +11212,9 @@ The three grouped sections (Setup / Design / Account) are styled to match the "F
 6. Navigate to `/select-additions` on desktop → additions grid should NOT flash over the canvas.
 
 ### Menu Item Enabled States (2026-01-28)
+
 **Check Price Always Enabled:**
+
 - Modified `components/DesignerNav.tsx` to enable "Check Price" menu item even with empty headstone
 - Logic change: `const needsProduct = index >= 2 && item.slug !== 'check-price'`
 - **Reason:** Users can view base price before adding any content (inscriptions, motifs, additions)
@@ -10581,6 +11228,7 @@ The three grouped sections (Setup / Design / Account) are styled to match the "F
 ### Zustand Store (`lib/headstone-store.ts`)
 
 **Global State:**
+
 ```typescript
 {
   // Product Configuration
@@ -10593,7 +11241,7 @@ The three grouped sections (Setup / Design / Account) are styled to match the "F
   slantThickness: number;                // Slant depth in mm (100-300mm)
   baseFinish: 'default' | 'rock-pitch';  // Base finish selector
   borderName: string | null;      // Bronze plaque borders
-  
+
   // Dimensions
   widthMm: number;
   heightMm: number;
@@ -10601,7 +11249,7 @@ The three grouped sections (Setup / Design / Account) are styled to match the "F
   slantThickness: number;        // Slant headstone thickness (catalog-driven, e.g., 100-300mm)
   baseWidthMm: number;           // Independent base width (loaded from catalog XML)
   baseHeightMm: number;          // Independent base height (loaded from catalog XML)
-  
+
   // Selections
   selected: 'headstone' | 'base' | null;
   editingObject: 'headstone' | 'base';
@@ -10609,19 +11257,19 @@ The three grouped sections (Setup / Design / Account) are styled to match the "F
   selectedAdditionId: string | null;
   selectedMotifId: string | null;
   selectedEmblemId: string | null;  // Plaque emblems
-  
+
   // Content (2026-01-28: Now starts empty by default)
   inscriptions: Line[];            // Text overlays (empty array on init)
   selectedAdditions: string[];     // 3D models (empty array on init - no default angel/cross)
   selectedMotifs: Motif[];         // SVG motifs (empty array on init)
   selectedEmblems: Array<{ id: string; emblemId: string; imageUrl: string }>;  // Emblem PNGs (plaque-only)
   emblemOffsets: Record<string, EmblemOffset>;  // Per-emblem position/size/rotation/flip
-  
+
   // UI
   activePanel: PanelName | null;
   is2DMode: boolean;
   loading: boolean;
-  
+
   // Catalog
   catalog: CatalogData | null;     // Parsed XML (see lib/xml-parser.ts)
   // CatalogData.product fields: id, name, type, laser, formula, border, color, defaultColor, shapes, additions, priceModel
@@ -10632,9 +11280,10 @@ The three grouped sections (Setup / Design / Account) are styled to match the "F
 ```
 
 **Key Actions:**
+
 - `setProductId()` - Load product catalog and initialize dimensions from XML (including base dimensions from stand element)
 - `setShapeUrl()` - Change headstone shape
-- `setMaterialUrl()` - Change texture  
+- `setMaterialUrl()` - Change texture
 - `setHeadstoneStyle()` - Toggle between upright/slant
 - `setUprightThickness()` - Adjust upright depth (catalog-driven min/max, e.g., 50-50mm for Mini Headstone, 100-300mm for Traditional)
 - `setSlantThickness()` - Adjust slant depth (catalog-driven min/max)
@@ -10649,6 +11298,7 @@ The three grouped sections (Setup / Design / Account) are styled to match the "F
 - `loadDesignFromXML()` - Import saved design
 
 **Default State (2026-01-28):**
+
 - Headstone starts **completely empty**: `inscriptions: []`, `selectedAdditions: []`, `selectedMotifs: []`
 - Previous defaults removed: `B2127` (Cross) and `B1134S` (Angel) no longer auto-loaded
 - Users can load any design via the canvas "Load Design" modal (uses shared `loadDesignById()` / `useLoadDesign(designId)` helpers)
@@ -10661,8 +11311,11 @@ The three grouped sections (Setup / Design / Account) are styled to match the "F
 ## 3D Rendering Pipeline
 
 ### Scene Setup (ThreeScene.tsx)
+
 ```tsx
-<div className={`w-full h-full transition-opacity duration-500 ${sceneReady ? 'opacity-100' : 'opacity-0'}`}>
+<div
+  className={`h-full w-full transition-opacity duration-500 ${sceneReady ? 'opacity-100' : 'opacity-0'}`}
+>
   <Canvas
     key="main-canvas"
     shadows
@@ -10694,12 +11347,14 @@ The three grouped sections (Setup / Design / Account) are styled to match the "F
   </Canvas>
 </div>
 ```
+
 - A dedicated `sceneReady` flag now gates the entire `<Canvas>` behind a CSS opacity transition so `/select-size` regains its original fade-in. The flag resets whenever the shape/material changes **and** when `/select-size` mounts, ensuring the marketing handoff (“canvas should always fade in fresh on the size step”) stays true even when the user revisits the page with cached assets.
 - To avoid unnecessary flashes, the fade sequence only retriggers when the user comes to `/select-size` from a non-canvas route (e.g., `select-product` or marketing pages); hopping between designer steps that already show the canvas keeps the preview visible instantly.
 - `CameraController` was rewritten as a hook-based helper that taps directly into `useThree()`. It force-resets both the R3F camera and OrbitControls whenever the shape or material URL changes, so we no longer rely on a declarative `<PerspectiveCamera />` tree that the App Router might recycle between transitions.
 - `Scene` still mounts `<AdaptiveDpr pixelated />`, so whenever the user rotates/zooms the memorial the renderer temporarily lowers DPR for smoother interaction, then restores full resolution when idle.
 
 ### Lighting (Scene.tsx)
+
 - **Ambient Light**: Intensity `1.0` white fill so dark granite never disappears on tablets.
 - **Hemisphere Light**: Sky `#fff8e7`, ground `#dcdcdc`, intensity `0.8` for warm upward bounce without adding blue.
 - **Key Spot**: Warm sun (`#fffce6`) at `[-10, 12, 12]`, intensity `1.8`, angle `0.6`, penumbra `1`, casts the only dynamic shadow (ContactShadows handle ground contact).
@@ -10711,11 +11366,13 @@ The three grouped sections (Setup / Design / Account) are styled to match the "F
 ## Rock Pitch Base Feature
 
 ### Overview
+
 **Rock Pitch** is a hand-chiseled finish applied to the sides of the base, creating a turtle shell pattern with distinct faceted chips. The top surface remains **polished flat** (PFT - Polished Flat Top).
 
 ### Implementation (`HeadstoneBaseAuto.tsx`)
 
 #### Visual Characteristics
+
 - **Sides**: Chiseled turtle shell pattern with deep cracks
 - **Top/Bottom**: Polished high-gloss finish with clearcoat
 - **Chips**: Fist-sized (2-3 inches) faceted geometric shapes
@@ -10724,6 +11381,7 @@ The three grouped sections (Setup / Design / Account) are styled to match the "F
 #### Technical Implementation
 
 **1. Voronoi Normal Map Generation:**
+
 ```typescript
 // Faceted Voronoi algorithm creates cellular pattern
 const getHeight = (u: number, v: number) => {
@@ -10739,65 +11397,70 @@ const dY = (h0 - hDown) * strength;
 ```
 
 **2. Multi-Material Setup:**
+
 ```typescript
 // RoundedBoxGeometry with 6 materials (one per face)
 const materials = [
-  matShort,         // Right (rock pitch)
-  matShort,         // Left (rock pitch)  
+  matShort, // Right (rock pitch)
+  matShort, // Left (rock pitch)
   polishedMaterial, // Top (polished)
   polishedMaterial, // Bottom (polished)
-  matLong,          // Front (rock pitch)
-  matLong,          // Back (rock pitch)
+  matLong, // Front (rock pitch)
+  matLong, // Back (rock pitch)
 ];
 
 // fixRoundedBoxUVs() assigns materials based on face normals
 ```
 
 **3. Material Settings:**
+
 ```typescript
 // Rock Pitch (Sides)
 MeshStandardMaterial({
   map: baseTexture,
   normalMap: rockNormalTexture,
-  normalScale: (3.0, 3.0),      // Deep bumps
-  color: 0x444444,               // Dark for contrast
-  roughness: 0.65,               // Granite sparkle
+  normalScale: (3.0, 3.0), // Deep bumps
+  color: 0x444444, // Dark for contrast
+  roughness: 0.65, // Granite sparkle
   metalness: 0.0,
   envMapIntensity: 1.0,
-  colorSpace: NoColorSpace,      // Linear (critical!)
+  colorSpace: NoColorSpace, // Linear (critical!)
 });
 
 // Polished (Top/Bottom)
 MeshPhysicalMaterial({
   map: baseTexture,
   color: 0x888888,
-  roughness: 0.15,               // High gloss
+  roughness: 0.15, // High gloss
   metalness: 0.0,
-  clearcoat: 1.0,                // Wet look
+  clearcoat: 1.0, // Wet look
   clearcoatRoughness: 0.1,
   envMapIntensity: 1.5,
 });
 ```
 
 **4. Anti-Stretch Correction:**
+
 ```typescript
 // Baked density prevents stretched chips
 const density = 0.5; // 6 chips per meter (adjustable)
 normalMap.repeat.set(
-  dimensions.width * density * 4,  // *4 correction factor
-  dimensions.height * 2
+  dimensions.width * density * 4, // *4 correction factor
+  dimensions.height * 2,
 );
 ```
 
 #### Key Features
+
 ✅ **Perfectly square chips** (no stretching)  
 ✅ **Baked 12x12 grid** in source texture  
 ✅ **Aspect ratio correction** for any base size  
 ✅ **Polished flat top** (PFT) with clearcoat  
 ✅ **Memory optimized** (no leaks)  
-✅ **60 FPS performance** (memoized)  
+✅ **60 FPS performance** (memoized)
 
 #### Critical Requirements
+
 1. **Directional lighting** - Must have side light for normal map visibility
 2. **NoColorSpace** - Normal maps must be Linear (not sRGB)
 3. **fixRoundedBoxUVs()** - Required for multi-material support
@@ -10807,26 +11470,30 @@ normalMap.repeat.set(
 ---
 
 ### Material Configuration (PBR)
+
 **Updated to MeshPhysicalMaterial for polished granite effect:**
+
 ```typescript
 MeshPhysicalMaterial({
   map: texture,
-  color: 0x888888,           // Darker tint for better reflections
-  roughness: 0.15,           // Low = high gloss (polished stone)
-  metalness: 0.0,            // Stone is dielectric (non-metal)
-  envMapIntensity: 1.5,      // Strong environment reflections
-  clearcoat: 1.0,            // Maximum polish layer
-  clearcoatRoughness: 0.1    // Very smooth coating ("wet" look)
-})
+  color: 0x888888, // Darker tint for better reflections
+  roughness: 0.15, // Low = high gloss (polished stone)
+  metalness: 0.0, // Stone is dielectric (non-metal)
+  envMapIntensity: 1.5, // Strong environment reflections
+  clearcoat: 1.0, // Maximum polish layer
+  clearcoatRoughness: 0.1, // Very smooth coating ("wet" look)
+});
 ```
 
 **Key Improvements:**
+
 - Switched from `MeshStandardMaterial` to `MeshPhysicalMaterial`
 - Added clearcoat for polished granite "wet" appearance
 - Optimized roughness/metalness for realistic stone
 - Enhanced environment reflections
 
 ### Camera Setup
+
 - **Type**: PerspectiveCamera
 - **FOV**: 30 degrees
 - **Position**: `[0, 4.8, 10]`
@@ -10837,30 +11504,36 @@ MeshPhysicalMaterial({
 ## 3D Scene Environment & Atmosphere
 
 ### Gradient Sky & Volumetric Accents (`Scene.tsx` + `SunRays.tsx` + `AtmosphericSky.tsx`)
+
 **Purpose:** Keep the lightweight gradient dome for guaranteed horizon control while layering back art-directed volumetric clouds and a localized sunburst.
 
 **GradientBackground:**
+
 - Big sphere (`scale={[100, 100, 100]}`) rendered with a simple shader that keeps the lower 45% locked to fog color `#dcebf5` before easing into richer blue `#5ca0e5`.
 - Positioned slightly below the world origin (`y = -10`) so the horizon line always sits behind the headstone base.
 - Renders with `depthWrite={false}` and `renderOrder={-1}` so nothing clips against it.
 
 **Volumetric Clouds:**
+
 - `AtmosphericSky` now renders only the Drei `<Clouds>` layer (`showDome={false}`) so the gradient dome stays active while clouds float in front of it.
 - Custom `MeshStandardMaterial` props (opaque white, emissive tint, disabled depthWrite/test) keep the clouds bright even against the sunburst.
 - Five staggered cloud banks (different seeds/bounds) span `[ -12…+10 ]` on X and heights 9–13.5 to fill the horizon without obscuring the memorial.
 
 **SunRays overlay:**
+
 - Custom shader plane (`components/three/SunRays.tsx`) now sits at `[0, 4, -6]`, scaled to `[20, 9, 1]`, and `renderOrder={10}` so the animated rays glow **above** the cloud layer.
 - Uses additive blending plus inner (`#fff8dc`) and outer (`#f2cf95`) colors with tunable opacity (0.65) and faster time-based pulsing for a shimmering sunrise effect.
 - Ray density increased (`cos(angle * 14.0)`) so there are more individual beams, but each beam still eases off via cubic falloff to stay soft.
 - Rendering is wrapped inside the same `<Suspense>` block as `HeadstoneAssembly` and additionally gated by `!is2DMode && !loading && !baseSwapping`, so the rays no longer appear on their own while the stone geometry or base swap is still loading.
 
 **Sparkle Dust:**
+
 - Drei `<Sparkles>` adds ~30 slow-moving particles around `[0, 2, 0]` for a subtle floating-dust effect. Opacity 0.4 and warm color tie into the gold UI accents.
 
 ### Grass Floor System (`Scene.tsx`)
 
 **Grass Configuration:**
+
 - **Color**: `#5a7f3c` (warmer green tuned to the new blue fog).
 - **Plane Size**: `105×105` world units (down from 120) so more of the horizon and sun rays stay visible on ultrawide screens.
 - **Texture Repeat**: `80×80` for long shots without clear tiling.
@@ -10870,6 +11543,7 @@ MeshPhysicalMaterial({
 - **Fog**: Still enabled on the material so it fades into the gradient horizon.
 
 **Texture Loading Snippet:**
+
 ```typescript
 const props = useTexture({
   map: '/textures/three/grass/grass_color.webp',
@@ -10877,14 +11551,17 @@ const props = useTexture({
   aoMap: '/textures/three/grass/grass_ao.webp',
 });
 ```
+
 - All textures switch to `THREE.RepeatWrapping`, share the same repeat, and clamp anisotropy to `Math.min(maxAnisotropy, 16)`.
 
 **Grounding:**
+
 - `ContactShadows` now bake in one frame (`frames={1}`) with `resolution={256}` so OrbitControls interactions stay smooth while keeping an anchored shadow oval under the base.
 
 ### Fog System
 
 **Configuration:**
+
 - **Color**: `#A8C9E6` (matches the new background color assigned via `<color attach="background" />`).
 - **Range**: Start `1`, end `4` world units because the scene uses millimeter-scaled meshes — the short range keeps the fade tight to the subject.
 - **Backplate Color:** Even though fog is short-range, the GradientBackground bottom color remains `#dcebf5`, so distant pixels still match.
@@ -10894,6 +11571,7 @@ const props = useTexture({
 **Purpose:** Allows clicking empty space to deselect inscriptions/motifs.
 
 **Implementation:**
+
 - Horizontal plane at world origin (`planeGeometry[200, 200]`) rotated -90° on X.
 - Transparent `meshBasicMaterial` with `opacity={0}` and `DoubleSide` so it never blocks the sunburst.
 - Still critical to keep it horizontal; any tilt intrudes on the gradient + ray stack.
@@ -10901,6 +11579,7 @@ const props = useTexture({
 ### Environment Map
 
 **Current Setup:**
+
 ```tsx
 <Environment
   files="/hdri/spring.hdr"
@@ -10910,6 +11589,7 @@ const props = useTexture({
   environmentIntensity={0.5}
 />
 ```
+
 - Swapped from the remote `preset="forest"` to a local HDRI to avoid Vercel build stalls.
 - Materials still tune their own `envMapIntensity` (grass stays at 0 to prevent blue spill) while the granite benefits from the warmer reflections.
 
@@ -10918,9 +11598,11 @@ const props = useTexture({
 ## Slant Headstone Feature
 
 ### Overview
+
 **Slant Headstones** are beveled markers that sit at an angle, commonly used in cemeteries. Unlike upright headstones that stand vertically, slant headstones have a **trapezoidal profile** with a slanted front face for inscriptions.
 
 ### User Controls
+
 - **Headstone Style Selector**: Toggle between "Upright" and "Slant" styles
 - **Thickness Slider**: Adjustable depth control (100-300mm) for slant headstones
   - **100mm**: Steep angle (~45°)
@@ -10931,6 +11613,7 @@ const props = useTexture({
 ### Implementation (`SvgHeadstone.tsx`)
 
 #### Visual Characteristics
+
 - **Front Face**: Slanted backward (angle varies with thickness slider)
 - **Profile**: Trapezoidal shape (wider at bottom, narrower at top)
 - **Texture**: Rock pitch texture on left/right sides with pop-out bumps
@@ -10940,6 +11623,7 @@ const props = useTexture({
 #### Technical Implementation
 
 **1. Thickness Control (100-300mm):**
+
 ```typescript
 // User-controlled thickness in millimeters (via slider in DesignerNav)
 const baseThickness = slantThickness / 10; // Convert mm to cm for Three.js
@@ -10950,6 +11634,7 @@ const frontTopZOffset = baseThickness - topThickness;
 ```
 
 **2. Trapezoidal Geometry:**
+
 ```typescript
 // Use thickness ratios instead of fixed angle for proper trapezoid
 const baseThickness = depth;
@@ -10970,36 +11655,39 @@ const worldSlantH = Math.sqrt(worldHeight ** 2 + worldRun ** 2);
 ```
 
 **2. Vertex Positioning:**
+
 ```typescript
 // 8 vertices for trapezoidal box
 // Front Face: Bottom at Z=0, Top pushed back to Z=-frontTopZOffset
-const P_FBL = new THREE.Vector3(minX, minY, 0);                 // Front Bottom Left
-const P_FBR = new THREE.Vector3(maxX, minY, 0);                 // Front Bottom Right
-const P_FTL = new THREE.Vector3(minX, maxY, -frontTopZOffset);  // Front Top Left (pushed back)
-const P_FTR = new THREE.Vector3(maxX, maxY, -frontTopZOffset);  // Front Top Right (pushed back)
+const P_FBL = new THREE.Vector3(minX, minY, 0); // Front Bottom Left
+const P_FBR = new THREE.Vector3(maxX, minY, 0); // Front Bottom Right
+const P_FTL = new THREE.Vector3(minX, maxY, -frontTopZOffset); // Front Top Left (pushed back)
+const P_FTR = new THREE.Vector3(maxX, maxY, -frontTopZOffset); // Front Top Right (pushed back)
 
 // Back Face: Vertical back at Z=-baseThickness
-const P_BBL = new THREE.Vector3(minX, minY, -baseThickness);    // Back Bottom Left
-const P_BBR = new THREE.Vector3(maxX, minY, -baseThickness);    // Back Bottom Right
-const P_BTL = new THREE.Vector3(minX, maxY, -baseThickness);    // Back Top Left
-const P_BTR = new THREE.Vector3(maxX, maxY, -baseThickness);    // Back Top Right
+const P_BBL = new THREE.Vector3(minX, minY, -baseThickness); // Back Bottom Left
+const P_BBR = new THREE.Vector3(maxX, minY, -baseThickness); // Back Bottom Right
+const P_BTL = new THREE.Vector3(minX, maxY, -baseThickness); // Back Top Left
+const P_BTR = new THREE.Vector3(maxX, maxY, -baseThickness); // Back Top Right
 ```
 
 **3. Back Alignment with Base:**
+
 ```typescript
 // CRITICAL: Align back edge with upright headstone back at -depth/2
 // Translate by (baseThickness - depth/2) so back moves from -baseThickness to -depth/2
 slantGeometry.translate(
-  -(minX + maxX) / 2,              // Center X
-  -minY,                            // Bottom at Y=0
-  baseThickness - depth / 2         // Align back edge
+  -(minX + maxX) / 2, // Center X
+  -minY, // Bottom at Y=0
+  baseThickness - depth / 2, // Align back edge
 );
 
 // Wrapper position matches translation
-childWrapperPos: [0, 0, (baseThickness - depth / 2) * scale]
+childWrapperPos: [0, 0, (baseThickness - depth / 2) * scale];
 ```
 
 **4. Rock Pitch Texture on Sides:**
+
 ```typescript
 // Left/Right faces get rock pitch normal map
 const sideUVScale = 20.0; // Baked into geometry UVs
@@ -11015,6 +11703,7 @@ MeshPhysicalMaterial({
 ```
 
 **4. Rock Pitch Texture on Sides:**
+
 ```typescript
 // Left/Right faces get rock pitch normal map
 const sideUVScale = 20.0; // Baked into geometry UVs
@@ -11030,13 +11719,14 @@ MeshPhysicalMaterial({
 ```
 
 **5. UV Mapping:**
+
 ```typescript
 // Coordinate-driven approach for left/right sides
 for (let i = 0; i < posCount; i++) {
   const x = pos.getX(i);
   const y = pos.getY(i);
   const z = pos.getZ(i);
-  
+
   if (Math.abs(x - localLeft) < EPS) {
     // Left face: map (z, y) to (u, v)
     uv.setXY(i, (z - localBackZ) * uvScale, y * uvScale);
@@ -11048,6 +11738,7 @@ for (let i = 0; i < posCount; i++) {
 ```
 
 **6. Child Wrapper Rotation:**
+
 ```typescript
 // Build quaternion that aligns wrapper's local +Z to the front face normal
 // CRITICAL: Y component must be POSITIVE for backward-leaning slant
@@ -11066,6 +11757,7 @@ apiData: {
 ```
 
 **7. Real-Time Updates:**
+
 ```typescript
 // CRITICAL: Add slantThickness to useMemo dependencies
 }, [shapeParams, outline, depth, bevel, scale, headstoneStyle, slantThickness]);
@@ -11074,6 +11766,7 @@ apiData: {
 ```
 
 #### Key Features
+
 ✅ **Adjustable thickness** (100-300mm via slider in DesignerNav)  
 ✅ **Back edge alignment** with base at `-depth/2` regardless of thickness  
 ✅ **Real-time geometry updates** when slider changes  
@@ -11086,9 +11779,10 @@ apiData: {
 ✅ **Proper UV mapping** (no stretching)  
 ✅ **MeshPhysicalMaterial** (no clearcoat errors)  
 ✅ **No z-fighting** (polygonOffset on materials)  
-✅ **Production-ready** (TypeScript build passes)  
+✅ **Production-ready** (TypeScript build passes)
 
 #### Critical Requirements
+
 1. **World-space angle calculation** - Use `worldScaleY * svgHeight` and `worldScaleZ * frontTopZOffset` in atan2
 2. **Positive Y normal** - `frontNormal = (0, Math.sin(slantAngleRad), Math.cos(slantAngleRad))`
 3. **THREE.Quaternion object** - Not array! R3F `quaternion` prop requires object
@@ -11101,17 +11795,18 @@ apiData: {
 10. **polygonOffset** - On granite materials (factor: 1, units: 1)
 11. **Force-apply quaternion** - useLayoutEffect to copy quaternion (R3F prop diffing workaround)
 12. **worldSlantH** - Report diagonal height (not vertical) for proper inscription scaling
-  -(minX + maxX) / 2,  // Center X
-  -minY,                // Bottom at Y=0
-  depth / 2             // Center Z at origin (CRITICAL for alignment)
-);
-```
+    -(minX + maxX) / 2, // Center X
+    -minY, // Bottom at Y=0
+    depth / 2 // Center Z at origin (CRITICAL for alignment)
+    );
+
+````
 
 **7. Simplified Hierarchy (No FaceSpace):**
 ```typescript
 // FaceSpace component removed for simplicity and natural rotation inheritance
 // Children now inherit rotation directly from scaledWrapperRef
-<group 
+<group
   ref={scaledWrapperRef}
   position={childWrapperPos}
   quaternion={childWrapperRotation}
@@ -11130,9 +11825,10 @@ apiData: {
     </group>
   )}
 </group>
-```
+````
 
 #### Key Features
+
 ✅ **World-space angle calculation** (accounts for non-uniform scaling)  
 ✅ **Trapezoidal profile** (20% thickness ratio)  
 ✅ **Rock pitch sides** with pop-out bumps  
@@ -11142,9 +11838,10 @@ apiData: {
 ✅ **Proper UV mapping** (no stretching)  
 ✅ **MeshPhysicalMaterial** (no clearcoat errors)  
 ✅ **No z-fighting** (polygonOffset on materials)  
-✅ **Production-ready** (TypeScript build passes)  
+✅ **Production-ready** (TypeScript build passes)
 
 #### Critical Requirements
+
 1. **World-space angle calculation** - Use `worldScaleY * svgHeight` and `worldScaleZ * frontTopZOffset` in atan2
 2. **Positive Y normal** - `frontNormal = (0, Math.sin(slantAngleRad), Math.cos(slantAngleRad))`
 3. **THREE.Quaternion object** - Not array! R3F `quaternion` prop requires object
@@ -11157,22 +11854,24 @@ apiData: {
 10. **worldSlantH** - Report diagonal height (not vertical) for proper inscription scaling
 
 #### FaceSpace Component (REMOVED)
+
 **Note:** The FaceSpace component was removed in the December 2025 refactor for simplicity and to avoid `onBeforeRender` conflicts with React Three Fiber's natural rotation propagation. Children now inherit rotation directly from the parent `scaledWrapperRef` group, which is already positioned and rotated correctly for the slanted surface.
 
 #### Differences from Upright Headstones
 
-| Feature | Upright | Slant |
-|---------|---------|-------|
-| **Angle** | Vertical (90°) | Tilted (30°) |
-| **Profile** | Rectangular | Trapezoidal |
-| **Front Face** | Flat vertical | Slanted backward |
-| **Wrapper Rotation** | None `[0,0,0]` | Tilted `[-30°,0,0]` |
-| **Side Texture** | Polished | Rock pitch |
-| **Geometry** | ExtrudeGeometry | Custom BufferGeometry |
+| Feature              | Upright         | Slant                 |
+| -------------------- | --------------- | --------------------- |
+| **Angle**            | Vertical (90°)  | Tilted (30°)          |
+| **Profile**          | Rectangular     | Trapezoidal           |
+| **Front Face**       | Flat vertical   | Slanted backward      |
+| **Wrapper Rotation** | None `[0,0,0]`  | Tilted `[-30°,0,0]`   |
+| **Side Texture**     | Polished        | Rock pitch            |
+| **Geometry**         | ExtrudeGeometry | Custom BufferGeometry |
 
 #### Common Issues & Solutions
 
 **Issue: Canonical motifs float far above the stone**
+
 - **Cause**: Many canonical v2026 files still store raw CreateJS stage coordinates (positive Y down, origin at the headstone+base midpoint). When `loadCanonicalDesignIntoEditor()` trusts those `position.y_mm` values, motifs are offset by the base height and appear in the sky.
 - **Workarounds**:
   1. Prefer the legacy JSON fallback loader (it still divides by stage px-per-mm and shifts by ±half base/headstone heights).
@@ -11180,8 +11879,10 @@ apiData: {
   3. If the canonical loader must be used, add a detection flag (e.g., `meta.coordinates = 'stage'`) and only call the stage→mm shim when that flag is present.
 
 **Issue: Inscriptions not rotating with slant (appear upright)**
+
 - **Cause**: Unit mismatch in angle calculation or wrong normal sign
-- **Solution**: 
+- **Solution**:
+
   ```typescript
   // CRITICAL: Calculate angle in world space
   const worldScaleY = Math.abs(scale) * sCore;
@@ -11189,39 +11890,54 @@ apiData: {
   const worldHeight = svgHeight * worldScaleY;
   const worldRun = frontTopZOffset * worldScaleZ;
   const slantAngleRad = Math.atan2(worldRun, worldHeight);
-  
+
   // CRITICAL: Y component must be POSITIVE
-  const frontNormal = new THREE.Vector3(0, Math.sin(slantAngleRad), Math.cos(slantAngleRad));
-  const quaternion = new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0,0,1), frontNormal);
+  const frontNormal = new THREE.Vector3(
+    0,
+    Math.sin(slantAngleRad),
+    Math.cos(slantAngleRad),
+  );
+  const quaternion = new THREE.Quaternion().setFromUnitVectors(
+    new THREE.Vector3(0, 0, 1),
+    frontNormal,
+  );
   ```
 
 **Issue: Inscriptions at wrong angle or scale**
+
 - **Cause**: Using SVG dimensions instead of world-space dimensions
 - **Solution**: Always use `worldHeight` and `worldRun` (scaled by `sCore` and `scale`) before atan2
 
 **Issue: Double rotation**
+
 - **Cause**: Passing parent rotation to child wrapper again
 - **Solution**: Remove FaceSpace or pass identity quaternion; let children inherit from parent naturally
 
 **Issue: Inscriptions floating in front of headstone (both upright and slant)**
+
 - **Cause**: Double Z-offset - wrapper at origin, frontZ includes full depth
 - **Solution**:
   ```typescript
   // Position wrapper AT the face
-  childWrapperPos: [0, 0, (depth / 2) * scale]
+  childWrapperPos: [0, 0, (depth / 2) * scale];
   // frontZ is epsilon only
-  apiData: { frontZ: 0.0005 }
+  apiData: {
+    frontZ: 0.0005;
+  }
   ```
 
 **Issue: Z-fighting shimmer between stacked text lines**
+
 - **Cause**: Multiple texts writing to depth buffer (Note: `depthWrite` is not a valid Text prop)
 - **Solution**: Use `renderOrder={10}` on parent group and `polygonOffset` on materials
 
 **Issue: TypeScript build errors on Text components**
+
 - **Cause**: `depthWrite` is not a valid prop on `@react-three/drei` Text component
 - **Solution**: Remove `depthWrite` props; drei Text handles materials internally
 
 **Issue: Rotation not applying (R3F prop diffing)**
+
 - **Cause**: R3F doesn't detect quaternion object changes
 - **Solution**:
   ```typescript
@@ -11233,36 +11949,44 @@ apiData: {
   ```
 
 **Issue: Child components "standing up" (ignoring parent rotation)**
+
 - **Cause**: Complex FaceSpace logic interfering with React Three Fiber updates
 - **Solution**: Remove FaceSpace; use simple group hierarchy for natural rotation inheritance
 
 **Issue: Wrapper too far forward (z-position incorrect)**
+
 - **Cause**: Using `(depth/2) * scale * sCore` but mesh Z-scale is only `scale`
 - **Solution**: Match meshScale[2]: `(depth / 2) * scale` (no sCore on Z axis)
 
 **Issue: Inscriptions floating far away (z=-1000)**
+
 - **Cause**: `childWrapperPos` incorrectly set to `[0, 0, depth/2]` (double offset)
 - **Solution**: Keep wrapper at origin `[0, 0, 0]` since geometry is already Z-centered
 
 **Issue: Texture stretching on sides**
+
 - **Cause**: UV mapping using normals instead of coordinates
 - **Solution**: Map UVs based on vertex (x,y,z) positions directly
 
 **Issue: Material clearcoat errors**
+
 - **Cause**: Using MeshStandardMaterial with clearcoat properties
 - **Solution**: Use MeshPhysicalMaterial for all materials
 
 **Issue: Inscriptions at wrong angle**
+
 - **Cause**: Positive rotation instead of negative
 - **Solution**: Use `-slantAngleRad` (tilt backward, not forward)
 
 **Issue: Wedge shape instead of trapezoid**
+
 - **Cause**: Fixed 15° angle causes top to meet at sharp point
 - **Solution**: Use thickness ratio approach: `topThickness = baseThickness * 0.2`
 
 **Issue: Statue Z-Position on Base (Resolved - 2026-02-14)**
+
 - **Problem**: Statues position at front edge of base instead of centered in base depth
-- **Symptoms**: 
+- **Symptoms**:
   - X position: ✅ Correctly centered in left pad
   - Y position: ✅ Correctly on top surface
   - Z position: ❌ At front edge (near viewer) instead of centered
@@ -11286,6 +12010,7 @@ apiData: {
 For the current category indexing exceptions, metadata changes, and GSC evidence, see [September 9 GSC Audit and Design Gallery SEO](#current-status-2026-09-09--gsc-audit-and-design-gallery-seo). The historical five-design cutoff is now a default with explicit search-validated exceptions; use `isIndexableCategoryDesignSet()` rather than duplicating the cutoff.
 
 ### Overview
+
 The design gallery system (`/designs/*`) provides a three-level hierarchy for browsing saved memorial designs with comprehensive SEO optimization:
 
 ```
@@ -11297,30 +12022,35 @@ The design gallery system (`/designs/*`) provides a three-level hierarchy for br
 ### URL Structure & Metadata
 
 #### Level 1: Product Pages (`/designs/traditional-headstone`)
+
 **Purpose:** Browse design categories for a specific product type
 
 **SEO Features:**
+
 - **Dynamic Metadata**: Title, description, keywords based on product + design counts
 - **Canonical URLs**: With language alternates (en-GB, en-US, en-AU)
 - **OpenGraph Tags**: For social media sharing
 - **Product Information Map**: Detailed descriptions for each product type
 
 **Example Metadata:**
+
 ```typescript
 {
   title: "Traditional Engraved Headstone Designs | Forever Shining",
-  description: "Browse 847 traditional engraved designs across 42 categories. 
+  description: "Browse 847 traditional engraved designs across 42 categories.
     Timeless granite memorials with sandblasted inscriptions...",
-  keywords: "traditional engraved headstone, memorial designs, granite headstone, 
+  keywords: "traditional engraved headstone, memorial designs, granite headstone,
     biblical memorial, mother memorial, father memorial..."
 }
 ```
 
 **Files:**
+
 - `app/designs/[productType]/page.tsx` - Server component with metadata generation
 - `app/designs/[productType]/ProductPageClient.tsx` - Client component for UI
 
 **Product Metadata Map:**
+
 ```typescript
 const productMap = {
   'traditional-headstone': {
@@ -11336,47 +12066,57 @@ const productMap = {
 ```
 
 #### Level 2: Category Pages (`/designs/traditional-headstone/biblical-memorial`)
+
 **Purpose:** Browse individual designs within a category
 
 **SEO Features:**
+
 - **Dynamic Metadata**: Category + product specific titles/descriptions
 - **Design Specs Display**: Dimensions, granite name, and thumbnails for each design
 - **Price Display**: Extracts total price from saved HTML quotes
 - **Design Cards**: Grid layout with specs, descriptions, motif badges
 
 **Design Specifications (`lib/extract-design-specs.ts`):**
+
 - **Dimensions**: Width × Height in mm, rounded up with `Math.ceil()`
 - **Granite Name**: Mapped from texture ID (e.g., "18" → "Glory Gold Spots")
 - **Thumbnail**: 3D screenshot at `/screenshots/v2026-3d/{designId}_small.png` (300px wide, transparent PNG)
 
 **Price Extraction:**
+
 - Reads from: `/ml/{mlDir}/saved-designs/html/{designId}-desktop.html`
 - Falls back to: `/ml/{mlDir}/saved-designs/html/{designId}.html`
 - Displays: "From $X,XXX.XX" under each design card
 - Implementation: `lib/extract-price.ts` utility
 
 **Files:**
+
 - `app/designs/[productType]/[category]/page.tsx` - Server component with metadata
 - `app/designs/[productType]/[category]/CategoryPageClient.tsx` - Client with price display
 
 **Example Price Display:**
+
 ```tsx
-{designPrices[design.id] ? (
-  <p className="text-lg font-serif text-slate-900">
-    <span className="font-light text-sm text-slate-500">From </span>
-    {designPrices[design.id]}
-  </p>
-) : (
-  <p className="text-xs text-slate-500 font-light">
-    View detailed pricing on design page
-  </p>
-)}
+{
+  designPrices[design.id] ? (
+    <p className="font-serif text-lg text-slate-900">
+      <span className="text-sm font-light text-slate-500">From </span>
+      {designPrices[design.id]}
+    </p>
+  ) : (
+    <p className="text-xs font-light text-slate-500">
+      View detailed pricing on design page
+    </p>
+  );
+}
 ```
 
 #### Level 3: Design Pages (`/designs/.../curved-gable-may-heavens-eternal...`)
+
 **Purpose:** View individual design with full 3D preview and price quote
 
 **SEO Features:**
+
 - **Comprehensive Metadata**: Design-specific titles with shape names
 - **Structured Data**: Product schema, BreadcrumbList, FAQ schema
 - **Price Quote Modal**: Full HTML quote with clickable materials/motifs/shapes
@@ -11384,6 +12124,7 @@ const productMap = {
 - **Dynamic ML Directory**: Uses design's `mlDir` to load resources (supports all directories)
 
 **Price Quote Loading:**
+
 - **Dynamic Path**: Uses `mlDir` from design metadata (forevershining, headstonesdesigner, bronze-plaque)
 - **Mobile/Desktop**: Loads different HTML based on viewport
   - Desktop: `/ml/{mlDir}/saved-designs/html/{designId}-desktop.html`
@@ -11392,10 +12133,12 @@ const productMap = {
 - **Implementation**: `DetailedPriceQuote` component in `DesignPageClient.tsx`
 
 **Files:**
+
 - `app/designs/[productType]/[category]/[slug]/page.tsx` - Server component
 - `app/designs/[productType]/[category]/[slug]/DesignPageClient.tsx` - Full viewer
 
 **Design Viewer Features (April 2026):**
+
 - 3D screenshot display (`/screenshots/v2026-3d/{designId}.png`) — replaced old 2D SVG/inscription preview
 - "Personalize Design" CTA button — loads design into 3D editor (gated on canonical load state)
 - Full-screen loading overlay on navigation (dark bg + spinner)
@@ -11405,6 +12148,7 @@ const productMap = {
 ### Design Data Storage
 
 **Directory Structure:**
+
 ```
 public/ml/{mlDir}/saved-designs/
 ├── html/
@@ -11428,11 +12172,13 @@ public/screenshots/v2026-3d/          # NEW 3D screenshots (1 GB, 9,124 files)
 > **Note (April 2026):** The old 2D screenshots under `public/ml/*/saved-designs/screenshots/` are no longer used by any display code. All design pages, category pages, SEO metadata, and the Load Design popup now use `/screenshots/v2026-3d/` paths. The old directories (~4.3 GB, 95K files) are excluded from Vercel deploys via `.vercelignore` to prevent build timeouts.
 
 **Supported ML Directories:**
+
 - `forevershining` - Main design collection
 - `headstonesdesigner` - Secondary collection
 - `bronze-plaque` - Bronze plaque designs
 
 ### Canonical v2026 Saved Design Pipeline
+
 - Canonical millimetre snapshots live under `public/canonical-designs/v2026/{designId}.json`, safely outside the `/designs/*` route tree.
 - **P3D-converted designs** live under `public/designs/v2026-p3d/{designId}.json` — these come from the haxe 3D designer's binary `.p3d` format.
 - **Rollout designs** live under `public/designs/v2026-rollout-full-*/` — batch-converted from companion JSON via `scripts/batch-convert-saved-designs.js`.
@@ -11444,62 +12190,66 @@ public/screenshots/v2026-3d/          # NEW 3D screenshots (1 GB, 9,124 files)
 - **Bronze-plaque rollout designs**: Positions stored as `x_mm`/`y_mm` (not `_px`), font sizes as `size_mm`. Companion JSON uses mm units with Y-DOWN convention; converter negates Y for canonical Y-UP.
 
 **Design Metadata** (`lib/saved-designs-data.ts`):
+
 ```typescript
 interface SavedDesignMetadata {
-  id: string;                    // Design ID (timestamp)
-  slug: string;                  // SEO-friendly URL slug
-  title: string;                 // Display title
-  category: DesignCategory;      // Category slug
-  productId: string;             // Product ID from catalog
-  productSlug: string;           // Product URL slug
+  id: string; // Design ID (timestamp)
+  slug: string; // SEO-friendly URL slug
+  title: string; // Display title
+  category: DesignCategory; // Category slug
+  productId: string; // Product ID from catalog
+  productSlug: string; // Product URL slug
   productType: 'headstone' | 'plaque';
-  productName: string;           // Full product name
-  shapeName?: string;            // Shape display name
-  preview: string;               // Legacy screenshot URL (no longer rendered — all display uses /screenshots/v2026-3d/)
-  mlDir: string;                 // ML directory (e.g., 'forevershining')
-  inscriptionCount: number;      // Number of inscriptions
-  hasMotifs: boolean;            // Has motif decorations
-  motifNames: string[];          // Motif display names
-  hasPhoto: boolean;             // Has photo addition
-  hasAdditions: boolean;         // Has 3D additions
+  productName: string; // Full product name
+  shapeName?: string; // Shape display name
+  preview: string; // Legacy screenshot URL (no longer rendered — all display uses /screenshots/v2026-3d/)
+  mlDir: string; // ML directory (e.g., 'forevershining')
+  inscriptionCount: number; // Number of inscriptions
+  hasMotifs: boolean; // Has motif decorations
+  motifNames: string[]; // Motif display names
+  hasPhoto: boolean; // Has photo addition
+  hasAdditions: boolean; // Has 3D additions
 }
 ```
 
 ### Price Extraction System
 
 **Implementation** (`lib/extract-price.ts`):
+
 ```typescript
 export async function extractTotalPrice(
-  designId: string, 
-  mlDir: string = 'forevershining'
+  designId: string,
+  mlDir: string = 'forevershining',
 ): Promise<string | null> {
   // Try desktop HTML first
   let htmlPath = `/ml/${mlDir}/saved-designs/html/${designId}-desktop.html`;
   let response = await fetch(htmlPath);
-  
+
   // Fall back to mobile HTML
   if (!response.ok) {
     htmlPath = `/ml/${mlDir}/saved-designs/html/${designId}.html`;
     response = await fetch(htmlPath);
   }
-  
+
   if (!response.ok) return null;
-  
+
   const htmlText = await response.text();
-  
+
   // Extract price from HTML table
-  const totalRegex = /<td[^>]*class="total-title"[^>]*>\s*Total:?\s*<\/td>\s*<td[^>]*>\s*\$?([\d,]+\.?\d*)\s*<\/td>/i;
+  const totalRegex =
+    /<td[^>]*class="total-title"[^>]*>\s*Total:?\s*<\/td>\s*<td[^>]*>\s*\$?([\d,]+\.?\d*)\s*<\/td>/i;
   const match = htmlText.match(totalRegex);
-  
+
   if (match && match[1]) {
-    return `$${match[1]}`;  // Returns: "$3,791.75"
+    return `$${match[1]}`; // Returns: "$3,791.75"
   }
-  
+
   return null;
 }
 ```
 
 **HTML Structure:**
+
 ```html
 <tr class="total-flex">
   <td class="empty-cell"></td>
@@ -11512,6 +12262,7 @@ export async function extractTotalPrice(
 ### SEO Best Practices
 
 **Metadata Generation:**
+
 1. **Unique Titles** - Each page has distinct, descriptive title
 2. **Rich Descriptions** - Include counts, features, materials
 3. **Relevant Keywords** - Product terms + actual category names
@@ -11520,11 +12271,13 @@ export async function extractTotalPrice(
 6. **Structured Data** - JSON-LD for Google rich results
 
 **URL Structure:**
+
 - Clean, descriptive slugs (kebab-case)
 - Hierarchical paths matching content structure
 - No unnecessary parameters or IDs in URLs
 
 **Performance:**
+
 - Server components for metadata (no client-side JS needed)
 - ISR revalidation: 24 hours (86400 seconds)
 - Static generation at build time where possible
@@ -11578,32 +12331,37 @@ Each result card loads `/screenshots/v2026-3d/{id}_small.png` (transparent 3D PN
 
 ### Hero Layout
 
-| Property | Value |
-|----------|-------|
-| Canvas height | `h-[45vh] sm:h-[49.5vh] min-h-[360px]` (−10% vs original) |
-| Content padding | `pt-[100px] sm:pt-16` (shifted up) |
-| Content alignment | `justify-start` (top-anchored) |
+| Property          | Value                                                     |
+| ----------------- | --------------------------------------------------------- |
+| Canvas height     | `h-[45vh] sm:h-[49.5vh] min-h-[360px]` (−10% vs original) |
+| Content padding   | `pt-[100px] sm:pt-16` (shifted up)                        |
+| Content alignment | `justify-start` (top-anchored)                            |
 
 ---
 
 ## Check Price Feature
 
 ### Overview
+
 The Check Price page (`/check-price`) provides an interactive pricing breakdown with detailed item inspection.
 
 ### Main Layout
+
 **Two-Column Design:**
+
 - **Left Column**: "Your Design" - Summary of all selections
 - **Right Column**: "Price Summary" - Subtotal, tax, and total
 
 ### Interactive Item Details (February 2, 2026)
 
 **Clickable Counts:**
+
 - Item counts are clickable links that open detail modals
 - **Zero items** display as plain text (not clickable)
 - **1+ items** display as white underlined text (hover → gold)
 
 **Examples:**
+
 ```
 Additions: 0 items (plain text)
 Decorative Motifs: 8 motifs (clickable)
@@ -11613,7 +12371,9 @@ Custom Inscriptions: 9 inscriptions (clickable)
 ### Detail Modals
 
 #### Inscription Details Modal
+
 **Columns:**
+
 1. **Name**: Inscription text + font name (below in small gray)
 2. **Qty**: Character count (e.g., "15 chars" or "1 char")
 3. **Size**: Font size in mm
@@ -11621,7 +12381,9 @@ Custom Inscriptions: 9 inscriptions (clickable)
 5. **Price**: Individual inscription price
 
 #### Motif Details Modal
+
 **Columns:**
+
 1. **Name**: Thumbnail image (48×48px) + motif filename
    - Entire row links to SVG file (opens in new tab)
    - Border changes to gold on hover
@@ -11632,7 +12394,9 @@ Custom Inscriptions: 9 inscriptions (clickable)
 5. **Price**: Individual motif price
 
 #### Addition Details Modal
+
 **Columns:**
+
 1. **Name**: Addition name + ID (below in small gray)
 2. **Size**: Type (statue, vase, application)
 3. **Color**: "-" (not applicable)
@@ -11640,6 +12404,7 @@ Custom Inscriptions: 9 inscriptions (clickable)
 5. **Price**: Individual addition price (from `FALLBACK_SIZES[sourceId][sizeVariant-1].retailPrice`)
 
 ### Modal Styling
+
 - **Dark luxury theme** (April 2026): Matches HomeSplash modal from home page — `rounded-3xl` container, `border-[#d4af37]/35` gold border, gold gradient glow overlay, eyebrow pill badge, serif title
 - **Native dark classes**: All dark-theme styling via Tailwind classes (no CSS override hacks)
 - **Gold accents**: Headers with gold gradient, `#d4af37` border accents, `#f3d48f` light gold text
@@ -11648,6 +12413,7 @@ Custom Inscriptions: 9 inscriptions (clickable)
 - **Close button**: `rounded-full border border-white/25 bg-black/25` matching HomeSplash style
 
 ### Implementation Files
+
 - **Component**: `app/check-price/_ui/CheckPriceGrid.tsx`
 - **State**: Uses `useState` for `detailModal` ('inscriptions' | 'motifs' | 'additions' | null)
 - **Data**: Pulls from Zustand store (inscriptions, selectedMotifs, selectedAdditions)
@@ -11655,24 +12421,26 @@ Custom Inscriptions: 9 inscriptions (clickable)
 ### Technical Details
 
 **Item Processing:**
+
 ```typescript
 // Motif items with color display names
 const motifItems = useMemo(() => {
   return selectedMotifs.map((motif) => {
     const offset = motifOffsets[motif.id];
     const heightMm = offset?.heightMm ?? 100;
-    
+
     let colorDisplay = 'Standard';
     if (motif.color === '#c99d44') colorDisplay = 'Gold Gilding';
     else if (motif.color === '#eeeeee') colorDisplay = 'Silver Gilding';
     // ... etc
-    
+
     return { id, name, svgPath, heightMm, color, colorDisplay, price };
   });
 }, [selectedMotifs, motifOffsets, motifPriceModel, catalog]);
 ```
 
 **Conditional Rendering:**
+
 ```typescript
 {selectedMotifs.length > 0 ? (
   <button onClick={() => setDetailModal('motifs')}>
@@ -11692,6 +12460,7 @@ const motifItems = useMemo(() => {
 The application uses PostgreSQL with Drizzle ORM for type-safe database access.
 
 **Core Tables:**
+
 ```typescript
 // Accounts & Authentication
 accounts { id, email, passwordHash, role, status }
@@ -11719,9 +12488,11 @@ payments { id, orderId, method, status, amountCents }
 ### Database Seeding Scripts
 
 **Materials Seeding:**
+
 ```bash
 npm run db:seed-materials
 ```
+
 - Seeds 29 granite materials from `app/_internal/_data.ts`
 - Texture paths: `/textures/forever/l/*.webp`
 - Categories: granite, finish: polished
@@ -11729,9 +12500,11 @@ npm run db:seed-materials
 - Documentation: `MATERIALS_DATABASE_FIX.md`
 
 **Shapes Seeding:**
+
 ```bash
 npm run db:seed-shapes
 ```
+
 - Seeds 55 headstone shapes from `app/_internal/_data.ts`
 - Traditional (11): Cropped Peak, Curved Gable, etc.
 - Modern (44): Headstone 1-39, Guitar 1-5
@@ -11740,9 +12513,11 @@ npm run db:seed-shapes
 - Documentation: `SHAPES_DATABASE_FIX.md`
 
 **Additions Seeding:**
+
 ```bash
 npm run db:seed-additions
 ```
+
 - Seeds 82 additions from XML parser
 - Categories: Biondan Bronze, Crosses, Roses, Statues, Vases
 - Includes size variants with dimensions and pricing
@@ -11750,18 +12525,22 @@ npm run db:seed-additions
 - Documentation: `ADDITIONS_MIGRATION_COMPLETE.md`
 
 **Sizes Seeding:**
+
 ```bash
 npm run db:seed-sizes
 ```
+
 - Seeds 9 fixed sizes for product 32 (Full Color Plaque)
 - Source: `public/xml/au_EN/sizes.xml` (product 201)
 - Dimensions in mm, prices in cents
 - Script: `scripts/seed-sizes.ts`
 
 **Backgrounds Seeding:**
+
 ```bash
 npm run db:seed-backgrounds
 ```
+
 - Seeds 40 background textures from `public/xml/au_EN/backgrounds.xml` (category: `background`)
 - Seeds 35 color textures discovered from `public/jpg/backgrounds/colors/s/*.jpg` (category: `color`)
 - Full-size textures: `/jpg/backgrounds/forever/l/{1-40}.jpg`, `/jpg/backgrounds/colors/l/{01-35}.jpg`
@@ -11772,6 +12551,7 @@ npm run db:seed-backgrounds
 ### Catalog Mappers
 
 **Material Mapper** (`lib/catalog-mappers.ts`):
+
 ```typescript
 function mapMaterialFromDB(dbMaterial) {
   return {
@@ -11784,6 +12564,7 @@ function mapMaterialFromDB(dbMaterial) {
 ```
 
 **Shape Mapper**:
+
 ```typescript
 function mapShapeFromDB(dbShape) {
   return {
@@ -11798,12 +12579,14 @@ function mapShapeFromDB(dbShape) {
 ### Database Configuration
 
 **Local Development:**
+
 ```bash
 # .env.local
 DATABASE_URL=postgresql://postgres:postgres@localhost:5432/headstonesdesigner
 ```
 
 **Drizzle Commands:**
+
 ```bash
 npm run db:generate  # Generate migrations
 npm run db:push      # Push schema to database
@@ -11818,13 +12601,14 @@ npm run db:studio    # Open Drizzle Studio (GUI)
 4. **Components**: Selectors render materials/shapes from store
 
 **Example:**
+
 ```typescript
 // app/layout.tsx
 const materials = await getMaterials();
 const mappedMaterials = materials.map(mapMaterialFromDB);
 
 // components/MaterialSelector.tsx
-const materials = useHeadstoneStore(state => state.materials);
+const materials = useHeadstoneStore((state) => state.materials);
 ```
 
 ---
@@ -11832,15 +12616,18 @@ const materials = useHeadstoneStore(state => state.materials);
 ## ML Smart Search
 
 ### Overview
+
 The ML smart search system provides intelligent filtering and ranking for the `/designs` gallery and the Load Design modal. It combines text search, category filtering, and TF.js model-based ranking.
 
 ### Data Sources
+
 - **`public/ml/forevershining/ml.json`** — 3,021 design entries with classification labels
 - **`public/ml/headstonesdesigner/ml.json`** — 1,100 design entries
 - Each entry contains: `ml_style`, `ml_type`, `ml_motif`, `ml_tags` (comma-separated keywords)
 - Categories: 6 types (Headstone, Plaque, Mini Headstone, Urn, Pet Headstone, Pet Plaque), 5 styles (Laser Etched, Traditional Engraved, Bronze, Stainless Steel, Full Color), 40+ motif categories
 
 ### TF.js Model
+
 - **Topology**: `public/ml/forevershining/my-model.json`
 - **Weights**: `public/ml/forevershining/my-model.weights.bin` (626,672 bytes)
 - **Architecture**: Sequential — Dense(3→50, L2 0.01) → LeakyReLU → Dropout(0.3) → Dense(50→50) → LeakyReLU → Dropout(0.3) → Dense(50→3018, softmax)
@@ -11849,12 +12636,14 @@ The ML smart search system provides intelligent filtering and ranking for the `/
 - **Usage**: Lazy-loaded via `@tensorflow/tfjs` when user enables ML ranking
 
 ### Key Files
+
 - **`lib/ml-search-service.ts`** — Data loading, caching, text search (tokenized multi-word scoring), category filtering, TF.js model inference
 - **`components/DesignSmartSearch.tsx`** — Search bar + Type/Style/Motif filter dropdowns + feature toggles (Has Photo, Has Motifs, Has Additions)
 - **`app/designs/DesignsPageClient.tsx`** — Gallery page with integrated smart search, ML tag badges, AI Recommended markers
 - **`components/LoadDesignButton.tsx`** — Load Design modal with ML filter dropdowns and tag display
 
 ### Search Pipeline
+
 1. **Text search**: Splits query into tokens, scores each design against title, description, and `ml_tags`
 2. **Category filters**: Narrows results by `ml_type`, `ml_style`, `ml_motif` dropdowns
 3. **Feature toggles**: Boolean filters for designs with photos, motifs, or additions
@@ -11865,6 +12654,7 @@ The ML smart search system provides intelligent filtering and ranking for the `/
 ## Load Design Popup
 
 ### Overview
+
 The Load Design modal (`components/LoadDesignButton.tsx`) is a searchable category-first browser for saved designs. It allows loading any selected design into the 3D editor via `loadDesignById()` and then routes to `/design-menu`.
 
 Current entry points:
@@ -11885,7 +12675,9 @@ Current entry points:
 - Non-`/designs` routes retain the dark HomeSplash/canvas-style modal: dark panel, gold accents, and dark cards.
 
 ### Tree Structure (Category-First — April 2026)
+
 Designs are organized in a **single-level collapsible tree** grouped by content category (not product type):
+
 1. **Category** (top-level): Groups by `category` (e.g., "Pet Memorial", "Mother Memorial", "Biblical Memorial")
 2. **Design** (leaf): Individual designs shown as visual grid cards with thumbnail, title, and date
 
@@ -11904,105 +12696,121 @@ Designs are organized in a **single-level collapsible tree** grouped by content 
 **Note:** The `/designs/` SEO catalog pages remain product-first for navigation and crawlability. The Load Design popup itself stays category-first; product scope is applied from the route before category grouping.
 
 ### Design Categories (DesignCategory type)
+
 Defined in `lib/saved-designs-data.ts` as a union type. Current categories:
 
-| Category Slug | Description |
-|--------------|-------------|
-| `memorial` | General memorial designs |
-| `biblical-memorial` | Designs with scripture/bible verses |
-| `mother-memorial` | Dedicated to mothers |
-| `father-memorial` | Dedicated to fathers |
-| `wife-memorial` | Dedicated to wives |
-| `husband-memorial` | Dedicated to husbands |
-| `son-memorial` | Dedicated to sons |
-| `daughter-memorial` | Dedicated to daughters |
-| `brother-memorial` | Dedicated to brothers |
-| `sister-memorial` | Dedicated to sisters |
-| `baby-memorial` | Baby/infant memorials |
-| `child-memorial` | Child memorials |
-| `pet-memorial` | **All pet types merged** (dogs, cats, horses, etc.) |
-| `dove-memorial` | Designs featuring doves |
-| `butterfly-memorial` | Designs featuring butterflies |
-| `floral-memorial` | Floral/garden themed |
-| `garden-memorial` | Garden themed |
-| `religious-memorial` | Religious symbols (crosses, etc.) |
-| `islamic-memorial` | Islamic themed |
-| `jewish-memorial` | Jewish themed |
-| `military-veteran` | Military/veteran themed |
-| `rest-in-peace` | RIP themed designs |
-| `in-loving-memory` | ILM themed designs |
-| `commemorative` | Commemorative plaques |
-| `dedication` | Dedication plaques |
-| And more... | fishing, music, maori, nurse, doctor, teacher, etc. |
+| Category Slug        | Description                                         |
+| -------------------- | --------------------------------------------------- |
+| `memorial`           | General memorial designs                            |
+| `biblical-memorial`  | Designs with scripture/bible verses                 |
+| `mother-memorial`    | Dedicated to mothers                                |
+| `father-memorial`    | Dedicated to fathers                                |
+| `wife-memorial`      | Dedicated to wives                                  |
+| `husband-memorial`   | Dedicated to husbands                               |
+| `son-memorial`       | Dedicated to sons                                   |
+| `daughter-memorial`  | Dedicated to daughters                              |
+| `brother-memorial`   | Dedicated to brothers                               |
+| `sister-memorial`    | Dedicated to sisters                                |
+| `baby-memorial`      | Baby/infant memorials                               |
+| `child-memorial`     | Child memorials                                     |
+| `pet-memorial`       | **All pet types merged** (dogs, cats, horses, etc.) |
+| `dove-memorial`      | Designs featuring doves                             |
+| `butterfly-memorial` | Designs featuring butterflies                       |
+| `floral-memorial`    | Floral/garden themed                                |
+| `garden-memorial`    | Garden themed                                       |
+| `religious-memorial` | Religious symbols (crosses, etc.)                   |
+| `islamic-memorial`   | Islamic themed                                      |
+| `jewish-memorial`    | Jewish themed                                       |
+| `military-veteran`   | Military/veteran themed                             |
+| `rest-in-peace`      | RIP themed designs                                  |
+| `in-loving-memory`   | ILM themed designs                                  |
+| `commemorative`      | Commemorative plaques                               |
+| `dedication`         | Dedication plaques                                  |
+| And more...          | fishing, music, maori, nurse, doctor, teacher, etc. |
 
 **Note:** `dog-memorial`, `cat-memorial`, and `horse-memorial` were merged into `pet-memorial` (April 2026). The "Legacy Memorial" product was renamed to "Pets" (`productSlug: "pets"`).
 
 ### Product: Pets
+
 The "Pets" product (`productSlug: "pets"`, `productId: "135"`) contains **111 designs** (cleaned from 254 in April 2026) with verified animal content (dog, cat, horse motifs or pet-related inscriptions). Designs with family relationship words (wife, mother, father, etc.) are excluded even if they have animal motifs as decoration — those remain in their original product/category.
 
 ### Features
 
 #### Visual Grid Cards (April 2026)
+
 Each category expands into a responsive thumbnail grid (`grid-cols-2 sm:grid-cols-3`). Cards use `aspect-[4/3]` containers with `object-contain`. On `/designs*`, cards use the gallery's white/stone styling and radial thumbnail backgrounds. On non-gallery designer routes, cards retain the darker modal styling. Date is shown below each title (derived from the 13-digit timestamp ID).
 
 #### Thumbnails (April 2026)
+
 Thumbnails use `_small.png` files (300px wide, transparent, ~19KB avg, generated by `scripts/generate-png-thumbnails.js`). The `#cccccc` background provides contrast for transparent PNGs. Fallback chain on `<img>` `onError`:
+
 1. Try `/screenshots/v2026-3d/{id}_small.png` (3D transparent PNG)
 2. Try legacy `_small.jpg` path (ML screenshot)
 3. Try full-size legacy preview
 4. Hide image element
 
 #### ML Category Filters
+
 Three filter dropdowns at the top (Type, Style, Motif). On `/designs*`, filter controls use light stone/white styling with gold-brown active accents. On non-gallery routes, they retain dark backgrounds and gold active state styling.
 
 #### Popular Drawer
+
 A collapsible "Popular" drawer at the top of the scroll area displays favorited designs. **Auto-expands by default** when favorites exist (via `useEffect`). Uses the **same thumbnail grid layout** as regular categories (2-3 column responsive grid, aspect-4/3 cards, hover zoom, "Open Design" button). Styled with gold star icon and `primary` color accents.
 
 #### Localhost-Only Actions
+
 Three action icons appear per design card **only on localhost** (`window.location.hostname === 'localhost'`), revealed on hover:
+
 1. **⭐ Star** — Toggle favorite status (top-right of card, persisted to `data/favorite-designs.json` via API)
 2. **↗ Preview** — Open full-size design image in new tab (top-right of card)
 3. **🗑️ Trash** — Hide design from list (bottom-left of card, isolated to prevent accidental clicks, persisted to `data/hidden-designs.json` via API)
 
 #### Hidden Designs
+
 Hidden designs are filtered from both the Load Design popup and the `/designs/` page on localhost. The hidden list is stored in `data/hidden-designs.json` and managed via `app/api/hidden-designs/route.ts` (GET/POST/DELETE).
 
 #### Favorite Designs
+
 Favorite designs are toggled via `app/api/favorite-designs/route.ts` (GET/POST) and stored in `data/favorite-designs.json`. The favorites list is fetched on all environments (not just localhost) so the Popular drawer works in production.
 
 #### Loading Overlay (April 2026)
+
 After clicking "Open Design" on a card, the popup modal closes and a full-screen loading overlay appears (`loading && !isOpen` state). Uses `createPortal(…, document.body)` at `z-[99999]` with `bg-black/80 backdrop-blur-sm`, centered white spinner, and "Loading design…" text. Same visual pattern as the design page's Personalize Design overlay and SEO panel overlays.
 
 ### Key Files
-| File | Purpose |
-|------|---------|
-| `components/LoadDesignButton.tsx` | Main popup component with tree, search, filters, icons, 3D screenshot fallback chain |
-| `components/DesignsTreeNav.tsx` | `/designs` left nav; renders the compact `Load Design` header button and navigates product selections to `/designs/{productSlug}` |
-| `lib/useHiddenDesigns.ts` | Shared hook for hidden + favorite design state |
-| `lib/saved-designs-data.ts` | 2.6MB design catalog with `SAVED_DESIGNS`, `DesignCategory`, `DESIGN_CATEGORIES`, `CATEGORY_STATS`, `PRODUCT_STATS` |
-| `app/api/hidden-designs/route.ts` | REST API for hidden design list |
-| `app/api/favorite-designs/route.ts` | REST API for favorite design list |
-| `data/hidden-designs.json` | Persistent hidden design IDs (793 entries as of April 2026) |
-| `data/favorite-designs.json` | Persistent favorite design IDs |
+
+| File                                | Purpose                                                                                                                           |
+| ----------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| `components/LoadDesignButton.tsx`   | Main popup component with tree, search, filters, icons, 3D screenshot fallback chain                                              |
+| `components/DesignsTreeNav.tsx`     | `/designs` left nav; renders the compact `Load Design` header button and navigates product selections to `/designs/{productSlug}` |
+| `lib/useHiddenDesigns.ts`           | Shared hook for hidden + favorite design state                                                                                    |
+| `lib/saved-designs-data.ts`         | 2.6MB design catalog with `SAVED_DESIGNS`, `DesignCategory`, `DESIGN_CATEGORIES`, `CATEGORY_STATS`, `PRODUCT_STATS`               |
+| `app/api/hidden-designs/route.ts`   | REST API for hidden design list                                                                                                   |
+| `app/api/favorite-designs/route.ts` | REST API for favorite design list                                                                                                 |
+| `data/hidden-designs.json`          | Persistent hidden design IDs (793 entries as of April 2026)                                                                       |
+| `data/favorite-designs.json`        | Persistent favorite design IDs                                                                                                    |
 
 ---
 
 ## P3D Format & Converter
 
 ### Overview
+
 The `.p3d` format is a binary file used by the legacy haxe 3D designer (code in `haxe/` directory). Full Monuments (product IDs 100, 101) and occasionally Headstones (IDs 4, 124) have p3d files containing the 3D scene tree with embedded textures and motif PNGs.
 
 ### File Locations
-| Path | Contents |
-|------|----------|
-| `public/ml/forevershining/saved-designs/p3d/` | 635 p3d files |
-| `public/ml/headstonesdesigner/saved-designs/p3d/` | 234 p3d files |
-| `public/ml/*/saved-designs/json/` | Companion JSON (text data, motif SVG refs) |
-| `public/designs/v2026-p3d/` | Converted canonical JSON output |
-| `public/designs/p3d-assets/` | Extracted PNG motif images |
-| `scripts/convert-p3d-design.js` | Converter script (~1030 lines) |
+
+| Path                                              | Contents                                   |
+| ------------------------------------------------- | ------------------------------------------ |
+| `public/ml/forevershining/saved-designs/p3d/`     | 635 p3d files                              |
+| `public/ml/headstonesdesigner/saved-designs/p3d/` | 234 p3d files                              |
+| `public/ml/*/saved-designs/json/`                 | Companion JSON (text data, motif SVG refs) |
+| `public/designs/v2026-p3d/`                       | Converted canonical JSON output            |
+| `public/designs/p3d-assets/`                      | Extracted PNG motif images                 |
+| `scripts/convert-p3d-design.js`                   | Converter script (~1030 lines)             |
 
 ### Binary Format Details
+
 ```
 Offset  Size  Description
 0-3     4B    Magic: FF FF 00 00
@@ -12016,7 +12824,9 @@ Offset  Size  Description
 After decompression: 3 skip bytes + UTF-8 XML scene tree. Binary section follows XML (embedded PNGs found by scanning for PNG magic `89 50 4E 47`).
 
 ### Companion JSON Cross-Reference
+
 The companion JSON (`ml/*/saved-designs/json/{id}.json`) is an array of items with:
+
 - `itemID` — matches p3d `<extra type="json">{"id": N}</extra>`
 - `type` — `"Inscription"`, `"Motif"`, or `"Photo"`
 - `label` — text content (for inscriptions)
@@ -12028,18 +12838,19 @@ The companion JSON (`ml/*/saved-designs/json/{id}.json`) is an array of items wi
 
 ### Coordinate Systems (Critical Knowledge)
 
-| Source | Origin | Y Convention | X Convention | Units | Negation Needed |
-|--------|--------|-------------|-------------|-------|----------------|
-| **Canonical JSON** | center | Y-UP (+Y = top) | X-RIGHT (+X = right) | mm | — (target format) |
-| **Forevershining companion JSON** | center | Y-DOWN (-Y = top) | X-RIGHT | mm | Negate Y only |
-| **Forevershining P3D regionPosition** | center | Y-DOWN (-Y = top) | X-LEFT (-X = right) | mm | Negate both X and Y |
-| **Headstonesdesigner companion JSON** | center | Y-UP (+Y = top) | X-RIGHT | mm | None |
-| **Headstonesdesigner legacy stage** | center | Y-DOWN | X-RIGHT | canvas-px | Loader negates Y in px→mm |
-| **Bronze-plaque companion JSON** | center | Y-DOWN (-Y = top) | X-RIGHT | mm | Negate Y only |
+| Source                                | Origin | Y Convention      | X Convention         | Units     | Negation Needed           |
+| ------------------------------------- | ------ | ----------------- | -------------------- | --------- | ------------------------- |
+| **Canonical JSON**                    | center | Y-UP (+Y = top)   | X-RIGHT (+X = right) | mm        | — (target format)         |
+| **Forevershining companion JSON**     | center | Y-DOWN (-Y = top) | X-RIGHT              | mm        | Negate Y only             |
+| **Forevershining P3D regionPosition** | center | Y-DOWN (-Y = top) | X-LEFT (-X = right)  | mm        | Negate both X and Y       |
+| **Headstonesdesigner companion JSON** | center | Y-UP (+Y = top)   | X-RIGHT              | mm        | None                      |
+| **Headstonesdesigner legacy stage**   | center | Y-DOWN            | X-RIGHT              | canvas-px | Loader negates Y in px→mm |
+| **Bronze-plaque companion JSON**      | center | Y-DOWN (-Y = top) | X-RIGHT              | mm        | Negate Y only             |
 
 **Verified:** P3D regionPosition values exactly match companion JSON values when both exist (design 1595787261483, motif 2 at y=104.9 in both sources).
 
 ### Auto-Layout Algorithm (Updated 2026-04-02)
+
 The converter handles motifs with lost positions (~80% of headstone motifs at (0,0)):
 
 1. **Positioned items**: Use companion JSON / P3D positions with coordinate negation per mlDir
@@ -12050,6 +12861,7 @@ The converter handles motifs with lost positions (~80% of headstone motifs at (0
 6. **Photo handling**: Companion `type='Photo'` → `vitreous-enamel-image.jpg` placeholder, uses companion dimensions
 
 ### Key Coordinate Facts
+
 - Font sizes in companion JSON are in **mm** (not px) for ALL mlDirs
 - Positions are in **mm from headstone center**
 - Layer values: inscriptions ≥9000, decorative motifs <9000
@@ -12060,7 +12872,9 @@ The converter handles motifs with lost positions (~80% of headstone motifs at (0
 ## Performance Considerations
 
 ### Texture Optimization
+
 ✅ **Good:**
+
 - WebP format (smaller file size)
 - Mipmap generation enabled
 - **Anisotropic filtering (16x)** - Prevents blurriness at angles
@@ -12069,39 +12883,48 @@ The converter handles motifs with lost positions (~80% of headstone motifs at (0
 - Proper texture scale based on physical dimensions
 
 **Texture Tiling Settings:**
+
 - **Base**: `textureScale = 0.15` meters per tile
 - **Headstone**: `tileSize = 0.35` meters per tile
 - **Side/Top**: Same scale for consistency
 
 ❌ **Avoid:**
+
 - Loading unnecessary texture variants
 - Not disposing old textures
 - Excessive texture resolution (> 4K)
 - Single stretched texture (causes distortion)
 
 ### Geometry Management
+
 ✅ **Good:**
+
 - `useMemo` for expensive calculations
 - Geometry disposal on unmount
 - Indexed geometries when possible
 
 ❌ **Avoid:**
+
 - Recreating geometry on every render
 - Not calling `dispose()` on old geometries
 
 ### Re-render Prevention
+
 ```typescript
 // Good - memoized
-const materials = useMemo(() => [
-  new MeshStandardMaterial({ map: tex })
-], [tex]);
+const materials = useMemo(
+  () => [new MeshStandardMaterial({ map: tex })],
+  [tex],
+);
 
 // Bad - recreated every render
 const materials = [new MeshStandardMaterial({ map: tex })];
 ```
 
 ### Animation Frame Management
+
 ✅ **Proper Cleanup:**
+
 ```typescript
 useEffect(() => {
   const id = requestAnimationFrame(() => {...});
@@ -12116,6 +12939,7 @@ useEffect(() => {
 ### Component Cleanup Checklist
 
 #### Textures
+
 ```typescript
 useEffect(() => {
   return () => {
@@ -12125,24 +12949,27 @@ useEffect(() => {
 ```
 
 #### Geometries
+
 ```typescript
 useEffect(() => {
   return () => {
-    geometries.forEach(g => g.dispose());
+    geometries.forEach((g) => g.dispose());
   };
 }, [geometries]);
 ```
 
 #### Materials
+
 ```typescript
 useEffect(() => {
   return () => {
-    materials.forEach(m => m.dispose());
+    materials.forEach((m) => m.dispose());
   };
 }, [materials]);
 ```
 
 #### Event Listeners
+
 ```typescript
 useEffect(() => {
   const handler = () => {...};
@@ -12152,6 +12979,7 @@ useEffect(() => {
 ```
 
 #### Animation Frames
+
 ```typescript
 useEffect(() => {
   let rafId: number;
@@ -12164,13 +12992,16 @@ useEffect(() => {
 ```
 
 ### Known Memory Leak Sources
+
 ✅ **Fixed:**
+
 - Texture disposal in SvgHeadstone
 - Geometry disposal in SvgHeadstone
 - Event listener cleanup in ThreeScene
 - Animation frame cleanup in drag handlers
 
 ⚠️ **Watch For:**
+
 - Large inscription counts (> 20)
 - Many motifs (> 30)
 - Frequent shape/material changes
@@ -12181,15 +13012,18 @@ useEffect(() => {
 ## Common Issues & Solutions
 
 ### Issue: Base Inscriptions Not Rendering (Fixed 2026-04-08)
+
 **Symptom:** Inscriptions on the base surface (e.g., "CICERO") are invisible when loading full monument designs.
 
 **Root Cause (4 layers):**
+
 1. `INSCRIPTION_SIZE_SCALE = 0.85` was declared but never applied → fonts 15% too large
 2. `baseAPI.unitsPerMeter = 1000` was wrong for unit cube → changed to `1`
 3. `useEffect` for `surfaceBounds` perpetually cancelled by sibling inscription re-renders
 4. `baseMesh.position` is `(0,0,0)` at React render time (set by `useFrame`, not React state)
 
 **Solution:**
+
 - `useFrame` hook in `HeadstoneInscription.tsx` imperatively tracks base mesh position every frame
 - Visibility guard bypasses `surfaceBounds` requirement for base inscriptions
 - Separate mm-center coordinate branch for base surface
@@ -12197,15 +13031,18 @@ useEffect(() => {
 **Commits:** `3e52214687`, `4a0cad30a5`, `fbaa40ee35`
 
 ### Issue: Headstone/Base Alignment Issues on Init
+
 **Symptom:** Headstone back edge and base back edge not aligned on initial load for Traditional Engraved Headstone
 
 **Root Cause:**
+
 - Using variable thickness for depth prop causes misalignment
 - Upright headstone centered at Z=0 with back at `-depth/2`
 - Base positioned with back at `-FIXED_REFERENCE_DEPTH/2 = -10cm`
 - If depth varies (e.g., 15cm for 150mm thickness), backs don't align
 
 **Solution:**
+
 - Use FIXED depth = 20cm (200mm) for ALL non-plaque headstones
 - depth prop is ALIGNMENT REFERENCE, not visual thickness
 - Visual thickness comes from SVG shape width, not depth prop
@@ -12214,14 +13051,17 @@ useEffect(() => {
 **Commit:** `ac9e065d56`
 
 ### Issue: Thickness Slider Showing Wrong Range
+
 **Symptom:** Mini Headstone shows 100-300mm range but catalog has 50mm thickness, value shows with red validation border
 
 **Root Cause:**
+
 - Thickness slider hard-coded to `min={100} max={300}`
 - Validation also hard-coded to 100-300mm range
 - Ignored catalog XML `min_depth` and `max_depth` values
 
 **Solution:**
+
 ```typescript
 // Extract min/max from catalog (like width/height already do)
 const minThickness = firstShape?.table?.minDepth ?? 100;
@@ -12233,6 +13073,7 @@ const maxThickness = firstShape?.table?.maxDepth ?? 300;
 ```
 
 **Result:**
+
 - Mini Headstone: 50-50mm (effectively fixed)
 - Traditional: 100-300mm (adjustable)
 - Any product uses XML-defined range
@@ -12241,15 +13082,18 @@ const maxThickness = firstShape?.table?.maxDepth ?? 300;
 **Commit:** `6473bde412`
 
 ### Issue: Base Dimensions Not Loading from Catalog
+
 **Symptom:** Mini Headstone base dimensions incorrect on init, not matching XML configuration
 
 **Root Cause:**
+
 - Base dimensions were hard-coded in store
 - `baseWidthMm: Math.round(shape.table.initWidth * 1.4)` - calculated, not loaded
 - `baseHeightMm` had default 100mm, never loaded from catalog
 - XML `<file type="stand">` element was completely ignored
 
 **Solution:**
+
 ```typescript
 // Load from catalog XML stand element
 set({
@@ -12266,6 +13110,7 @@ set({
 ```
 
 **Result:**
+
 - Mini Headstone base: 280mm × 50mm × 100mm (40% wider than headstone)
 - All dimensions from catalog XML
 - No hard-coded calculations
@@ -12274,14 +13119,17 @@ set({
 **Commit:** `1cfc86068f`
 
 ### Issue: Headstone Disappearing During Material Changes
+
 **Symptom:** Headstone briefly disappears (flash/blink) when selecting a new material texture
 
 **Root Cause** (Fixed Dec 17, 2025):
+
 - `SvgHeadstone` component uses `useTexture` hook which suspends during loading
 - When new texture URL passed as prop, component suspends and React hides it during Suspense boundary
 - Original approach passed `requestedTex` directly, causing component to suspend immediately
 
 **Solution (Jan 6, 2026):** Manual preload staging + shared loader flag.
+
 ```tsx
 // ShapeSwapper.tsx
 const [visibleUrl, setVisibleUrl] = useState<string | null>(null);
@@ -12296,40 +13144,45 @@ useEffect(() => {
   setLoading(shouldLoad);
 }, [shapeSwapping, textureTransitioning, fontLoading, setLoading]);
 
-{!shapeSwapping && !isMaterialChange && textureTransitioning && (
-  <Suspense fallback={null}>
-    <PreloadTexture
-      url={requestedTex}
-      onReady={() => {
-        setVisibleTex(requestedTex);
-        invalidate();
-      }}
-    />
-  </Suspense>
-)}
+{
+  !shapeSwapping && !isMaterialChange && textureTransitioning && (
+    <Suspense fallback={null}>
+      <PreloadTexture
+        url={requestedTex}
+        onReady={() => {
+          setVisibleTex(requestedTex);
+          invalidate();
+        }}
+      />
+    </Suspense>
+  );
+}
 
-{shapeSwapping && (
-  <Suspense fallback={null}>
-    <PreloadShape
-      url={requestedUrl}
-      onReady={() => {
-        setVisibleUrl(requestedUrl);
-        requestAnimationFrame(() => setFitTick((n) => n + 1));
-        invalidate();
-      }}
-    />
-  </Suspense>
-)}
+{
+  shapeSwapping && (
+    <Suspense fallback={null}>
+      <PreloadShape
+        url={requestedUrl}
+        onReady={() => {
+          setVisibleUrl(requestedUrl);
+          requestAnimationFrame(() => setFitTick((n) => n + 1));
+          invalidate();
+        }}
+      />
+    </Suspense>
+  );
+}
 
 <SvgHeadstone
   key={resolvedUrl}
   url={resolvedUrl}
   faceTexture={resolvedTex}
   sideTexture={resolvedTex}
-/>
+/>;
 ```
 
 **Key Points**:
+
 - Assets now start as `null`, so the first paint waits for the preload callbacks before drawing anything (no more “floating sunrays + loader” while the stone is absent).
 - Manual `PreloadShape` / `PreloadTexture` gates keep the previous mesh/texture visible until the new resource resolves, matching the “never flash empty canvas” requirement without relying on `useTransition`.
 - A single `setLoading()` call powers both the global overlay and the inline canvas spinner (`shapeSwapping || fontLoading || textureTransitioning`), which also hides SunRays/background chrome until the headstone is truly ready.
@@ -12338,9 +13191,11 @@ useEffect(() => {
 **Commits**: `88a06c5270`, `3c9d7b47c1`
 
 ### Issue: Designer UI Showing on Design Gallery Pages
+
 **Symptom:** Product header (e.g., "Traditional Engraved Headstone 600x600mm $1434.94") visible on `/designs` routes
 
 **Root Causes** (Fixed Dec 14, 2025):
+
 1. **MobileHeader**: Pathname check was `/designs/` (with slash) not `/designs`
    - Fix: Changed to `pathname?.startsWith('/designs')` to match all routes
 2. **DesignsTreeNav**: Product header shown whenever catalog loaded in store
@@ -12351,20 +13206,24 @@ useEffect(() => {
 **Commits**: `b5df4cf0dc`, `e9c4387284`, `29eb8a1643`
 
 ### Issue: Build Time Suddenly Increased (15+ minutes)
+
 **Symptom:** Build taking 16-19 minutes instead of 3-6 minutes (Nov 3, 2025)
 
 **Diagnosis Steps**:
+
 1. Check for large TypeScript files: `Get-ChildItem -Recurse -Filter "*.ts" | Where { $_.Length -gt 1MB }`
 2. Look for auto-generated data files imported at build time
 3. Check `git log` for when slowdown started
 
 **Root Cause**: Large SEO template files (29.6 MB) in `lib/`
+
 - `seo-templates-unified.ts` (24 MB, 577k lines, 4,118 designs)
 - `seo-templates-ml.ts` (5.5 MB, 100k+ lines)
 - TypeScript had to parse/compile massive arrays at every build
 - Files were auto-generated but never imported/used
 
 **Solution** (Fixed Dec 14, 2025):
+
 - Moved to `lib/.backup/*.bak` (excluded from build)
 - Result: **16-19 min → 53 sec (95% improvement)** ✅
 - Alternative: Use JSON in `public/` + fetch() at runtime
@@ -12421,6 +13280,7 @@ pnpm test:e2e:report    # Open last HTML report
 ### Setup Required
 
 Create `.env.test.local` (gitignored):
+
 ```
 TEST_USER_EMAIL=your-test-account@example.com
 TEST_USER_PASSWORD=your-test-password
@@ -12456,6 +13316,7 @@ tests/e2e/
 ## Saved Designs & Canonical Format (Updated Jan 26, 2026)
 
 ### Design Storage Overview
+
 The application supports three design storage formats:
 
 1. **Legacy ML Format**: Pixel-based coordinates from the original 2D designer
@@ -12535,14 +13396,15 @@ The application supports three design storage formats:
 - **Example**: For 609.6mm headstone, Y bounds are ±304.8mm
 
 **Legacy Conversion:**
+
 ```javascript
 // Legacy used stage center (headstone + base combined)
 // Canonical uses component center (headstone separate from base)
 
 // Conversion formula:
-yMm = -(canvasY * mmPerPxY);  // Convert pixels to mm, flip Y axis
+yMm = -(canvasY * mmPerPxY); // Convert pixels to mm, flip Y axis
 if (!surfaceIsBase && baseHeightMm > 0) {
-  yMm = yMm - (baseHeightMm / 2);  // Adjust for base offset
+  yMm = yMm - baseHeightMm / 2; // Adjust for base offset
 }
 ```
 
@@ -12553,6 +13415,7 @@ if (!surfaceIsBase && baseHeightMm > 0) {
 The `loadCanonicalDesignIntoEditor()` function loads designs from all three formats:
 
 ✅ **All Working (as of April 1, 2026):**
+
 - Inscriptions load with correct positions (legacy px, surface mm, and p3d mm-center)
 - Motifs load with correct positions (SVG motifs from catalog + embedded PNGs from p3d)
 - Sizes and colors correct
@@ -12575,29 +13438,34 @@ The `loadCanonicalDesignIntoEditor()` function loads designs from all three form
 The conversion script applies intelligent transformations:
 
 **1. Base Offset Compensation:**
+
 ```javascript
 // Headstone elements adjusted for base height
-yMm = yMm - (baseHeight / 2);
+yMm = yMm - baseHeight / 2;
 ```
 
 **2. Intelligent Text Sizing:**
+
 - Titles >80mm → Cap at 90mm
 - Subtitles 30-80mm → Scale to ~24mm (0.7x)
 - Names 20-30mm → Keep at ~20-24mm (0.95x)
 - Dates <20mm → Minimum 18mm (1.1x)
 
 **3. Intelligent Motif Sizing:**
+
 - Large figures >120mm → Scale to ~140mm (0.85x)
 - Medium 60-120mm → Scale to ~50mm (0.65x)
 - Small 30-60mm → Scale to ~35mm (0.8x)
 
 **4. Position Optimization:**
+
 - Horizontal centering: Person info → ±100mm
 - Vertical compression: Person blocks moved UP 130mm
 - Center figures: Large motifs moved UP 100mm
 - Bottom motifs: Moved UP 100mm for visibility
 
 **Usage:**
+
 ```bash
 # Regenerate single design
 node scripts/convert-legacy-design.js 1725769905504
@@ -12609,6 +13477,7 @@ node scripts/convert-legacy-design.js 1725769905504 --mlDir=headstonesdesigner
 ### Asset Management
 
 **SVG Motif Assets:**
+
 - Location: `public/shapes/motifs/`
 - Naming: Asset ID + `.svg` (e.g., `1_184_13.svg`)
 - **Important**: Local files must match production server content
@@ -12616,6 +13485,7 @@ node scripts/convert-legacy-design.js 1725769905504 --mlDir=headstonesdesigner
   - Sync from production before converting designs
 
 **Common Issue:**
+
 ```
 ❌ Problem: Motif renders different artwork than expected
 ✅ Solution: Download correct SVG from production server
@@ -12646,25 +13516,27 @@ const shapeSlug = shapeName.toLowerCase().replace(/\s+/g, '_'); // ✅ Correct
 function getRatio() {
   let px = headstoneCanvasHeightPx + baseCanvasHeightPx;
   let mm = headstoneHeightMm + baseHeightMm;
-  let ratio = px / mm;  // pixels per millimeter
+  let ratio = px / mm; // pixels per millimeter
   return ratio;
 }
 ```
 
 **Example Calculation:**
+
 - Headstone: 609.6mm displayed in 476px canvas
-- Base: 100mm displayed in ~78.1px canvas  
+- Base: 100mm displayed in ~78.1px canvas
 - Total: 709.6mm in 554.1px
 - **Ratio: 554.1px / 709.6mm = 0.781 px/mm**
 
 **Usage in Legacy:**
+
 ```javascript
 // Inscription sizing
-this.text.font = this.font_size * ratio + "px " + this.font_family;
+this.text.font = this.font_size * ratio + 'px ' + this.font_family;
 // font_size is in mm (e.g., 76mm)
 // Display: 76mm × 0.781 = 59.3px
 
-// Motif sizing  
+// Motif sizing
 let displayRatio = getRatio() * this.ratio;
 this.bitmap.scaleX = this.bitmap.scaleY = displayRatio;
 ```
@@ -12674,61 +13546,73 @@ this.bitmap.scaleX = this.bitmap.scaleY = displayRatio;
 **Converter (`scripts/convert-legacy-design.js`):**
 
 1. **Store Original Physical Values:**
+
    ```javascript
    // Inscriptions: Use font_size (in mm) directly
-   sizeMm = item.font_size || 10;  // Don't calculate from pixels!
-   
+   sizeMm = item.font_size || 10; // Don't calculate from pixels!
+
    // Motifs: Use height (in pixels) from legacy, convert to mm
-   const canvasHeight = usesPhysicalCoords ? motif.height / designDpr : motif.height;
+   const canvasHeight = usesPhysicalCoords
+     ? motif.height / designDpr
+     : motif.height;
    heightMm = round(canvasHeight * mmPerPxY);
    ```
 
 2. **Calculate Total Canvas Ratio:**
+
    ```javascript
    // CRITICAL: Include base in calculation
-   const pxPerMmY = initH / headstoneHeightMm;  // 476 / 609.6
-   const baseCanvasHeightPx = baseHeightMm * pxPerMmY;  // 100 × 0.781
-   const totalCanvasHeightPx = initH + baseCanvasHeightPx;  // 476 + 78.1
-   const totalHeightMm = headstoneHeightMm + baseHeightMm;  // 709.6
-   const mmPerPxY = totalHeightMm / totalCanvasHeightPx;  // 1.281 mm/px
+   const pxPerMmY = initH / headstoneHeightMm; // 476 / 609.6
+   const baseCanvasHeightPx = baseHeightMm * pxPerMmY; // 100 × 0.781
+   const totalCanvasHeightPx = initH + baseCanvasHeightPx; // 476 + 78.1
+   const totalHeightMm = headstoneHeightMm + baseHeightMm; // 709.6
+   const mmPerPxY = totalHeightMm / totalCanvasHeightPx; // 1.281 mm/px
    ```
 
 3. **Output Format:**
    ```json
    {
-     "inscriptions": [{
-       "font": {
-         "size_mm": 76,      // Original physical size
-         "size_px": 59.3     // For legacy fallback
+     "inscriptions": [
+       {
+         "font": {
+           "size_mm": 76, // Original physical size
+           "size_px": 59.3 // For legacy fallback
+         }
        }
-     }],
-     "motifs": [{
-       "height_mm": 231.8,   // Converted to mm
-       "height_px": 181      // Original canvas pixels
-     }]
+     ],
+     "motifs": [
+       {
+         "height_mm": 231.8, // Converted to mm
+         "height_px": 181 // Original canvas pixels
+       }
+     ]
    }
    ```
 
 **Canonical Loader (`lib/saved-design-loader-utils.ts`):**
 
 1. **Calculate Display Ratio:**
+
    ```typescript
    // Matches legacy getRatio() logic
-   const headstoneCanvasRatio = canonicalViewportHeightCssPx / canonicalHeadstoneHeightMm;
+   const headstoneCanvasRatio =
+     canonicalViewportHeightCssPx / canonicalHeadstoneHeightMm;
    const baseCanvasHeightPx = canonicalBaseHeightMm * headstoneCanvasRatio;
-   const totalCanvasHeightPx = canonicalViewportHeightCssPx + baseCanvasHeightPx;
-   const DISPLAY_RATIO = totalCanvasHeightPx / totalHeightMm;  // px/mm
+   const totalCanvasHeightPx =
+     canonicalViewportHeightCssPx + baseCanvasHeightPx;
+   const DISPLAY_RATIO = totalCanvasHeightPx / totalHeightMm; // px/mm
    ```
 
 2. **Store Physical MM in State (no ratio scaling):**
+
    ```typescript
-   const baseSize = resolveFontSizeMm(inscription.font);  // Gets size_mm
+   const baseSize = resolveFontSizeMm(inscription.font); // Gets size_mm
    const scaledSize = baseSize; // Remains mm; renderer converts via unitsPerMeter
    ```
 
 3. **Same for Motifs:**
    ```typescript
-   const canonicalHeight = resolveMotifHeightMm(motif);  // Gets height_mm
+   const canonicalHeight = resolveMotifHeightMm(motif); // Gets height_mm
    const scaledHeight = canonicalHeight; // mm stored in Zustand/state
    ```
 
@@ -12743,28 +13627,33 @@ this.bitmap.scaleX = this.bitmap.scaleY = displayRatio;
 #### Common Pitfalls
 
 ❌ **Wrong:** Using headstone height only
+
 ```javascript
-const ratio = canvasHeight / headstoneHeightMm;  // Missing base!
+const ratio = canvasHeight / headstoneHeightMm; // Missing base!
 ```
 
 ✅ **Correct:** Including total canvas height
+
 ```javascript
 const ratio = totalCanvasHeight / (headstoneHeightMm + baseHeightMm);
 ```
 
 ❌ **Wrong:** Using physical pixels (with DPR)
+
 ```javascript
-const px = viewportHeight * dpr;  // 476 × 2.325 = 1106px
+const px = viewportHeight * dpr; // 476 × 2.325 = 1106px
 ```
 
 ✅ **Correct:** Using CSS/canvas pixels
+
 ```javascript
-const px = viewportHeight;  // 476px (canvas size)
+const px = viewportHeight; // 476px (canvas size)
 ```
 
 ### Current Status (Jan 27, 2026)
 
 ✅ **Working:**
+
 - Complete coordinate system fix (base offset)
 - Legacy getRatio() scaling system implemented
 - Correct mm-to-pixel conversion for sizing
@@ -12774,15 +13663,18 @@ const px = viewportHeight;  // 476px (canvas size)
 - No arbitrary scaling factors needed
 
 🔧 **In Progress:**
+
 - Monitor canonical loader after removing display-ratio scaling to ensure other designs stay aligned
 - Continue spot-checking Y positioning versus base canvas offsets on newly converted files
 
 📋 **Known Limitations:**
+
 - Asset content mismatch (local vs production SVGs)
 - Name sanitization (privacy - intentional)
 - Font rendering differences (2D vs 3D - acceptable)
 
 ### Latest Findings (Jan 27, 2026 @ 19:42 UTC)
+
 - Hard-refreshing the browser (Ctrl+Shift+R) now reliably pulls fresh canonical JSON; logs.log shows `canonicalViewportHeightCssPx≈476`, `baseCanvasHeightPx≈78`, `totalCanvasHeightPx≈554`, and `displayRatio≈0.781`, matching the reference design math.
 - The oversized text/motif issue was caused by double scaling: the loader multiplied `size_mm`/`height_mm` by `DISPLAY_RATIO` and the renderer then scaled again via `unitsPerMeter`. The loader now stores the raw mm values and relies on render-time conversion.
 - `HeadstoneInscription.tsx` and `MotifModel.tsx` convert mm to local units via `headstone.unitsPerMeter / 1000`, so physical measurements map directly to the mesh scale with no arbitrary multipliers.
@@ -12805,8 +13697,10 @@ const px = viewportHeight;  // 476px (canvas size)
 ---
 
 ### Issue: Blurry Textures (Resolved - 2026-02-14)
+
 **Cause:** Missing mipmap or anisotropic filtering  
 **Solution:**
+
 ```typescript
 texture.generateMipmaps = true;
 texture.minFilter = THREE.LinearMipmapLinearFilter;
@@ -12814,11 +13708,14 @@ texture.anisotropy = 16;
 texture.wrapS = THREE.RepeatWrapping;
 texture.wrapT = THREE.RepeatWrapping;
 ```
+
 All production materials now load with these sampler settings inside `SvgHeadstone`, `HeadstoneBaseAuto`, and `BronzeBorder`, eliminating the blur on angled granite shots.
 
 ### Issue: Stretched Textures on Base/Headstone (Resolved - 2026-02-14)
+
 **Cause:** Single texture stretched across large surface  
 **Solution:**
+
 ```typescript
 // Calculate proper repeat based on dimensions
 const textureScale = 0.15; // meters per tile
@@ -12826,43 +13723,54 @@ const repeatX = width / textureScale;
 const repeatY = height / textureScale;
 texture.repeat.set(repeatX, repeatY);
 ```
+
 `SvgHeadstone` and `HeadstoneBaseAuto` now derive repeat values from live mm dimensions before converting to world units, so granite veining tiles evenly on every product size.
 
 ### Issue: UV Stretching on Curved/Side Surfaces
+
 **Cause:** Improper UV mapping in 3D geometry  
 **Known Limitations:**
+
 - Curved top edges show "zebra stripes" (UV stretching)
 - Base top surface appears washed out (texture magnified 100x)
 - Side faces have horizontal streaking
 
 **Solutions:**
+
 1. **Fix in Blender** (Recommended): Re-unwrap UVs using Smart UV Project
 2. **Triplanar Mapping**: Shader-based solution that ignores UVs (complex)
 3. **Current Workaround**: Texture repeat helps front/back faces but doesn't fully solve sides
 
-*See TEXTURE_IMPROVEMENTS_SUMMARY.md for detailed analysis*
+_See TEXTURE_IMPROVEMENTS_SUMMARY.md for detailed analysis_
 
 ### Issue: Inscriptions Not Visible
+
 **Cause:** Z-fighting or incorrect positioning  
 **Solution:**
+
 - Add `lift` prop (default 0.002m)
 - Use `zBump` for layering multiple texts
 
 ### Issue: Slow Performance
+
 **Causes:**
+
 1. Too many geometries
 2. High poly count
 3. Texture thrashing
 4. No memoization
 
 **Solutions:**
+
 - Reduce `curveSegments` in extrude settings
 - Use texture atlases
 - Memoize expensive calculations
 - Implement LOD (Level of Detail)
 
 ### Issue: WebGL Context Lost
+
 **Handled in ThreeScene.tsx:**
+
 ```typescript
 gl.domElement.addEventListener('webglcontextlost', handler);
 gl.domElement.addEventListener('webglcontextrestored', handler);
@@ -12873,24 +13781,28 @@ gl.domElement.addEventListener('webglcontextrestored', handler);
 ## Authentication System
 
 ### Overview
+
 JWT-based authentication using the `jose` library (edge-compatible, v6.2.0). Session stored as an httpOnly cookie named `session`.
 
 ### Environment Variable
+
 ```
 SESSION_SECRET=<random-64-char-string>   # required in .env.local
 ```
 
 ### Session API
-| Endpoint | Method | Purpose |
-|---|---|---|
-| `/api/auth/login` | POST | Verify credentials, set JWT cookie |
-| `/api/auth/logout` | POST | Clear session cookie |
-| `/api/auth/session` | GET | Return `{ session }` or 401 |
-| `/api/auth/register` | POST | Create account, set JWT cookie, send welcome email |
-| `/api/auth/forgot-password` | POST | Generate reset token, send reset email (anti-enumeration) |
-| `/api/auth/reset-password` | POST | Validate token, update password hash, consume token |
+
+| Endpoint                    | Method | Purpose                                                   |
+| --------------------------- | ------ | --------------------------------------------------------- |
+| `/api/auth/login`           | POST   | Verify credentials, set JWT cookie                        |
+| `/api/auth/logout`          | POST   | Clear session cookie                                      |
+| `/api/auth/session`         | GET    | Return `{ session }` or 401                               |
+| `/api/auth/register`        | POST   | Create account, set JWT cookie, send welcome email        |
+| `/api/auth/forgot-password` | POST   | Generate reset token, send reset email (anti-enumeration) |
+| `/api/auth/reset-password`  | POST   | Validate token, update password hash, consume token       |
 
 ### Auth Flow
+
 1. User visits `/my-account` — page fetches `/api/auth/session` on mount
 2. **Not logged in** (`session = null`): `AuthGate` component renders login/register tabs inline; sidebar shows `DesignerNav`
 3. **Logged in** (`session = { email, role, ... }`): Saved Designs content renders; sidebar shows `AccountNav`
@@ -12898,24 +13810,29 @@ SESSION_SECRET=<random-64-char-string>   # required in .env.local
 5. **Logout**: `AccountNav` POSTs to `/api/auth/logout` → dispatches `session-changed` → page shows gate again, sidebar shows DesignerNav
 
 ### `session-changed` Event
+
 Custom DOM event (`window.dispatchEvent(new Event('session-changed'))`) fired on login and logout. Both `app/my-account/page.tsx` and `components/ConditionalNav.tsx` listen for it to update without a page reload.
 
 ### Save Design Auth Check
+
 `DesignerNav.tsx` checks `/api/auth/session` before opening the Save Design modal. If not logged in, redirects to `/my-account`.
 
 ### Middleware
+
 `middleware.ts` only protects `/api/account/*` and `/api/orders/*` with JWT verification. All page routes and `/my-account/*` are public — pages handle auth inline to show the gate UI rather than a hard redirect.
 
 ### Core Auth Module (`lib/auth/session.ts`)
+
 ```typescript
-createSessionToken(payload)       // Signs JWT
-setSessionCookie(res, token)      // Sets httpOnly cookie
-clearSessionCookie(res)           // Expires cookie
-verifySessionFromRequest(req)     // For middleware/API routes (uses req.cookies)
-getServerSession()                // For Server Components (uses next/headers cookies())
+createSessionToken(payload); // Signs JWT
+setSessionCookie(res, token); // Sets httpOnly cookie
+clearSessionCookie(res); // Expires cookie
+verifySessionFromRequest(req); // For middleware/API routes (uses req.cookies)
+getServerSession(); // For Server Components (uses next/headers cookies())
 ```
 
 ### Test Credentials
+
 - Email: `admin@forevershining.com`
 - Password: `admin123`
 - Role: `admin`
@@ -12923,10 +13840,13 @@ getServerSession()                // For Server Components (uses next/headers co
 - Seed on Neon (after every `db:sync`): Run a script using direct pg client with `SET search_path TO public` before INSERT. The Neon pooler endpoint requires explicit search_path — without it, `INSERT INTO accounts` fails even though the table exists.
 
 ### ⚠️ Neon Pooler Search Path Gotcha
+
 When connecting to Neon via the pooler (`*-pooler.*.neon.tech`), always run:
+
 ```sql
 SET search_path TO public;
 ```
+
 before any DML. Otherwise tables appear in `information_schema` but fail on direct access. This does NOT affect the app at runtime because Drizzle/postgres.js handle it automatically.
 
 ---
@@ -12934,9 +13854,11 @@ before any DML. Otherwise tables appear in `information_schema` but fail on dire
 ## Email System
 
 ### Overview
+
 Complete transactional email system migrated from legacy PHP/PHPMailer to modern Next.js. Uses Nodemailer for SMTP transport, React Email for type-safe JSX templates, and parsed XML translations from existing `countries24.xml` and `languages24.xml`.
 
 ### Architecture
+
 ```
 lib/email/
 ├── types.ts                          # TypeScript types (EmailData union, configs)
@@ -12961,17 +13883,19 @@ lib/email/
 ```
 
 ### Email Types
+
 Five email types as a discriminated union on `type` field in `lib/email/types.ts`:
 
-| Type | Required Fields | PDF | Triggered By |
-|------|----------------|-----|-------------|
-| `saved-design` | designId, designName, quoteItems, totalCents, currency | ✅ | `POST /api/projects` |
-| `order` | orderId, invoiceNumber, designName, quoteItems, subtotalCents, taxCents, totalCents, currency | ✅ | Buy page → `POST /api/email` |
-| `enquiry` | designName, message | ❌ | `POST /api/share/email` |
-| `registration` | (none beyond base) | ❌ | `POST /api/auth/register` |
-| `password-reset` | resetUrl | ❌ | `POST /api/auth/forgot-password` |
+| Type             | Required Fields                                                                               | PDF | Triggered By                     |
+| ---------------- | --------------------------------------------------------------------------------------------- | --- | -------------------------------- |
+| `saved-design`   | designId, designName, quoteItems, totalCents, currency                                        | ✅  | `POST /api/projects`             |
+| `order`          | orderId, invoiceNumber, designName, quoteItems, subtotalCents, taxCents, totalCents, currency | ✅  | Buy page → `POST /api/email`     |
+| `enquiry`        | designName, message                                                                           | ❌  | `POST /api/share/email`          |
+| `registration`   | (none beyond base)                                                                            | ❌  | `POST /api/auth/register`        |
+| `password-reset` | resetUrl                                                                                      | ❌  | `POST /api/auth/forgot-password` |
 
 ### SMTP Configuration
+
 ```bash
 # Generic fallback (required)
 SMTP_HOST=smtp.example.com
@@ -12987,7 +13911,9 @@ SMTP_AU_PASS=password
 ```
 
 ### Integration Points
+
 All email triggers are fire-and-forget (`.catch()` logged, don't block the response):
+
 - **Save Design**: `app/api/projects/route.ts` — after `saveProjectRecord()` completes
 - **Registration**: `app/api/auth/register/route.ts` — after account + profile transaction
 - **Enquiry**: `app/api/share/email/route.ts` — sends to admin email from country config
@@ -12995,6 +13921,7 @@ All email triggers are fire-and-forget (`.catch()` logged, don't block the respo
 - **Password Reset**: `app/api/auth/forgot-password/route.ts` — after token generation
 
 ### Dependencies
+
 - `nodemailer@8.0.5` — SMTP transport
 - `@react-email/components@1.0.12` — JSX email templates (deprecated but functional)
 - `@types/nodemailer@8.0.0` — TypeScript types
@@ -13005,6 +13932,7 @@ All email triggers are fire-and-forget (`.catch()` logged, don't block the respo
 ## File Storage System
 
 ### Overview
+
 All binary file uploads (background images, portrait photos, screenshots, PDFs) are stored as physical files on the external wiecznapamiec.pl server. Design state (JSON) stays in PostgreSQL. This keeps the database lean and ensures files persist beyond Vercel's ephemeral filesystem.
 
 ### Architecture
@@ -13013,45 +13941,52 @@ All binary file uploads (background images, portrait photos, screenshots, PDFs) 
 Client  →  Next.js API route  →  lib/upload/proxy.ts  →  PHP / local FS
 ```
 
-| Environment | Storage Target | URL Pattern |
-|-------------|---------------|-------------|
-| Development (`NODE_ENV=development`) | `public/uploads/{subdir}/` | `/uploads/{subdir}/{uuid}.ext` |
-| Production (Vercel) | wiecznapamiec.pl via PHP | `https://www.wiecznapamiec.pl/forevershining/uploads/{subdir}/{uuid}.ext` |
+| Environment                          | Storage Target             | URL Pattern                                                               |
+| ------------------------------------ | -------------------------- | ------------------------------------------------------------------------- |
+| Development (`NODE_ENV=development`) | `public/uploads/{subdir}/` | `/uploads/{subdir}/{uuid}.ext`                                            |
+| Production (Vercel)                  | wiecznapamiec.pl via PHP   | `https://www.wiecznapamiec.pl/forevershining/uploads/{subdir}/{uuid}.ext` |
 
 ### Subdirectories
-| Subdir | File Types | Max Size | Used For |
-|--------|-----------|----------|----------|
-| `backgrounds` | JPEG, PNG, WebP, GIF | 10 MB | Uploaded background images for product 32 / urns |
-| `images` | JPEG, PNG, WebP, GIF | 10 MB | Portrait photos (Add Your Image) |
-| `screenshots` | JPEG, PNG | 5 MB | Design thumbnails on save |
-| `pdfs` | PDF | 20 MB | Quote / invoice PDFs |
+
+| Subdir        | File Types           | Max Size | Used For                                         |
+| ------------- | -------------------- | -------- | ------------------------------------------------ |
+| `backgrounds` | JPEG, PNG, WebP, GIF | 10 MB    | Uploaded background images for product 32 / urns |
+| `images`      | JPEG, PNG, WebP, GIF | 10 MB    | Portrait photos (Add Your Image)                 |
+| `screenshots` | JPEG, PNG            | 5 MB     | Design thumbnails on save                        |
+| `pdfs`        | PDF                  | 20 MB    | Quote / invoice PDFs                             |
 
 ### Key Files
-| File | Purpose |
-|------|---------|
-| `lib/upload/proxy.ts` | Shared helper: `proxyUpload(file, subdir)`, `extractFile(request)` |
-| `legacy/upload.php` | PHP endpoint on wiecznapamiec.pl — deploy to `public_html/forevershining/upload.php` |
-| `legacy/.htaccess` | Apache CORS headers — deploy to `public_html/forevershining/uploads/.htaccess` |
-| `app/api/upload-background/route.ts` | 7-line proxy for `subdir=backgrounds` |
-| `app/api/upload-image/route.ts` | 7-line proxy for `subdir=images` |
+
+| File                                 | Purpose                                                                              |
+| ------------------------------------ | ------------------------------------------------------------------------------------ |
+| `lib/upload/proxy.ts`                | Shared helper: `proxyUpload(file, subdir)`, `extractFile(request)`                   |
+| `legacy/upload.php`                  | PHP endpoint on wiecznapamiec.pl — deploy to `public_html/forevershining/upload.php` |
+| `legacy/.htaccess`                   | Apache CORS headers — deploy to `public_html/forevershining/uploads/.htaccess`       |
+| `app/api/upload-background/route.ts` | 7-line proxy for `subdir=backgrounds`                                                |
+| `app/api/upload-image/route.ts`      | 7-line proxy for `subdir=images`                                                     |
 
 ### Vercel Environment Variables
+
 ```bash
 UPLOAD_REMOTE_URL=https://www.wiecznapamiec.pl/forevershining/upload.php
 UPLOAD_REMOTE_SECRET=<strong random secret — must match $secret in upload.php>
 ```
 
 ### crossOrigin Requirement for WebGL
+
 Uploading an image to wiecznapamiec.pl and then loading it as a Three.js texture requires:
+
 1. The server's `.htaccess` to return `Access-Control-Allow-Origin: *` on `uploads/`
 2. `loader.crossOrigin = 'anonymous'` on the `THREE.TextureLoader` instance
 
 Both conditions are already in place: `ImageModel.tsx` and `UrnEnamelInlay.tsx` have `crossOrigin` set.
 
 ### Why Not data: URLs
+
 Large base64 data URLs (1–5 MB per image) would be embedded in the `designState` jsonb column, bloating PostgreSQL and making `cleanDesignState()` mandatory for every save. With real server URLs, the DB stores a short string reference and the binary lives separately on the file server.
 
 ### Design State (PostgreSQL)
+
 `app/api/projects/route.ts` stores the complete design state JSON in the `projects.designState` jsonb column. `cleanDesignState()` strips `metadata.screenshot` (ephemeral Vercel path) and resets `selectedImages[].data` before saving. All other fields (shape, material, inscriptions, motifs, etc.) are preserved.
 
 ---
@@ -13063,6 +13998,7 @@ Large base64 data URLs (1–5 MB per image) would be embedded in the `designStat
 See **Current Status (2026-05-28)** above for the full implementation details.
 
 **Quick reference:**
+
 - Variant: `@custom-variant day (&:where([data-theme=day], [data-theme=day] *))` in `styles/globals.css`
 - Default: `data-theme="dark"` on `<html>`, persisted in `localStorage`
 - Toggle: `components/ThemeToggle.tsx` — fixed circle button top-left, 20px margin
@@ -13072,6 +14008,7 @@ See **Current Status (2026-05-28)** above for the full implementation details.
 ---
 
 ### Primary Color: #DEBD68
+
 The application uses a gold/amber primary color `#DEBD68` for all CTAs, selection highlights, and UI accents. This is defined as a full Tailwind color scale in `tailwind.config.js`:
 
 ```javascript
@@ -13092,6 +14029,7 @@ primary: {
 ```
 
 ### Usage Patterns
+
 - **Selection/Active state**: `border-primary/50 bg-primary/10 text-primary`
 - **Focus rings**: `focus:ring-primary/40`
 - **Headers/Accents**: `text-primary`
@@ -13100,6 +14038,7 @@ primary: {
 - **Hover effects**: `hover:text-primary` on interactive elements
 
 ### Key Files
+
 - `tailwind.config.js` — Primary color scale definition
 - `components/LoadDesignButton.tsx` — Primary color usage in ML filters, Popular drawer, action buttons
 
@@ -13108,9 +14047,11 @@ primary: {
 ## Design Management Scripts
 
 ### Smart Dedup Script (`scripts/dedup-designs.ts`)
+
 Finds duplicate/draft designs using content-evolution analysis and hides them, keeping only the final version.
 
 **Algorithm:**
+
 1. Groups designs by `shapeName + mlDir`
 2. Compares pairs using word overlap in inscriptions, motif containment, and feature growth
 3. Thresholds: 70% word overlap + motif subset + growth, or 85% words alone, or 100% words + richer score
@@ -13118,6 +14059,7 @@ Finds duplicate/draft designs using content-evolution analysis and hides them, k
 5. Also flags designs containing "test" in inscriptions
 
 **Usage:**
+
 ```bash
 npx tsx scripts/dedup-designs.ts          # Apply (writes to data/hidden-designs.json)
 npx tsx scripts/dedup-designs.ts --dry-run # Preview only
@@ -13126,9 +14068,11 @@ npx tsx scripts/dedup-designs.ts --dry-run # Preview only
 **Results (April 2026):** 592 evolution drafts + 148 sibling duplicates + 1 slug dupe + 34 test designs = 793 hidden, ~2,321 remaining visible.
 
 ### Pet Design Scanner (`scripts/scan-pet-designs.py`)
+
 Scans all saved designs for pet-related content and reassigns matching designs to the "Pets" product.
 
 **Detection methods:**
+
 - `motifNames` containing: dog, cat, horse, paw, parrot, rabbit, etc.
 - `inscriptions` containing pet-related keywords (dog, cat, horse, pet, paw, puppy, kitten, etc.)
 - `slug` or `shapeName` containing pet keywords
@@ -13137,12 +14081,14 @@ Scans all saved designs for pet-related content and reassigns matching designs t
 **Exclusion rule:** Designs with family relationship words (wife, husband, mother, father, son, daughter, etc.) in inscriptions are **excluded** — these are human memorials with decorative animal motifs.
 
 **Usage:**
+
 ```bash
 python scripts/scan-pet-designs.py          # Apply changes
 python scripts/scan-pet-designs.py --dry-run # Preview only
 ```
 
 **Fix false positives:**
+
 ```bash
 python scripts/fix-pet-false-positives.py          # Revert family-word designs
 python scripts/fix-pet-false-positives.py --dry-run # Preview
@@ -13151,15 +14097,18 @@ python scripts/fix-pet-false-positives.py --dry-run # Preview
 **Results (April 2026):** ~~254~~ → 111 genuine pet designs after audit cleanup (see below).
 
 ### Pets Category Audit (`scripts/audit-pets-category.js`)
+
 Text-based classifier that separates human memorials from genuine pet designs in the Pets category.
 
 **Classification signals:**
+
 - Name detection (common first/last name databases)
 - Lifespan analysis (short lifespans typical for pets vs human lifespans)
 - Pet-specific keywords ("paw", "furry friend") vs human-specific ("wife", "mother")
 - Inscription structure patterns
 
 **Usage:**
+
 ```bash
 node scripts/audit-pets-category.js
 ```
@@ -13167,15 +14116,18 @@ node scripts/audit-pets-category.js
 **Results:** 140 automatic + 4 manual reclassifications. Output: `database-exports/pets-audit-report.json`.
 
 ### Batch 3D Screenshot Generator (`scripts/batch-screenshot.js`)
+
 Playwright-based automation that loads each design into the 3D editor, anonymizes inscriptions, strips the 3D environment, and captures clean auto-cropped transparent PNG screenshots.
 
 **Requirements:**
+
 - `playwright` and `@playwright/test` in devDependencies
 - Dev server running: `npx next dev --turbopack` (NOT `pnpm dev` — see Turbopack note)
 - Chromium installed: `npx playwright install chromium`
 - Default dev server port: 3001 (configurable via `BASE_URL` env var)
 
 **Usage:**
+
 ```bash
 # Full batch (overwrites existing screenshots)
 node scripts/batch-screenshot.js
@@ -13196,11 +14148,13 @@ node scripts/batch-screenshot.js --dry-run
 **Key flags:** `--category`, `--ids`, `--limit`, `--concurrency`, `--out`, `--width`, `--height`, `--render-wait`, `--timeout`, `--skip-existing`, `--dry-run`
 
 **Output:**
+
 - `public/screenshots/v2026-3d/{id}.png` — Transparent RGBA PNGs, auto-cropped to monument bounds
 - `public/screenshots/v2026-3d/{id}_small.png` — 300px-wide transparent PNG thumbnails (generated by `scripts/generate-png-thumbnails.js`, ~19KB avg)
 - `public/screenshots/v2026-3d/{id}_small.jpg` — 400px-wide JPEG thumbnails with `#1a1a1a` dark background (legacy, no longer used in popup)
 
 **Pipeline (April 2026 overhaul):**
+
 1. Chromium with SwiftShader (`--use-angle=swiftshader`) for headless WebGL
 2. Route interception: `page.route()` intercepts design JSON, applies `sanitizeInscription()`
 3. Load design via `window.__loadDesignById(id)`
@@ -13220,14 +14174,17 @@ node scripts/batch-screenshot.js --dry-run
 **Results (April 2026):** First batch: 221/223 success (original P3D designs), runtime ~2h. Second batch: 3,092 total designs (after mass conversion of 22,226 legacy designs to canonical JSON), in progress. All PNGs have RGBA transparency (color type 6). Process may hang on problematic designs — use `--skip-existing` to resume after manual restart.
 
 ### PNG Thumbnail Generator (`scripts/generate-png-thumbnails.js`)
+
 Generates `_small.png` thumbnails from full-size transparent PNGs using Sharp. Used by the Load Design popup for fast, transparent thumbnail display.
 
 **Usage:**
+
 ```bash
 node scripts/generate-png-thumbnails.js
 ```
 
 **Behavior:**
+
 - Resizes to 300px wide, preserves aspect ratio and transparency
 - Concurrency: 8 parallel jobs
 - Skips existing `_small.png` files
@@ -13235,20 +14192,23 @@ node scripts/generate-png-thumbnails.js
 - Results (April 2026): 3,041 thumbnails, 56.7 MB total (~19KB avg)
 
 ### Design Analyzer (`scripts/analyze-saved-designs.js`)
+
 Generates `lib/saved-designs-data.ts` from raw design JSON files. Contains the `determineCategory()` function that assigns categories based on inscription keywords and motif types.
 
 **Key product mapping (line 10-31):**
+
 - Product `135` → `Pets` (slug: `pets`) — formerly "Legacy Memorial"
 - All animal-related inscriptions (dog, cat, horse) → category `pet-memorial`
 
 ### Hidden/Favorite API
-| Endpoint | Method | Purpose |
-|----------|--------|---------|
-| `/api/hidden-designs` | GET | List all hidden design IDs |
-| `/api/hidden-designs` | POST | Add design ID to hidden list |
-| `/api/hidden-designs` | DELETE | Remove design ID from hidden list |
-| `/api/favorite-designs` | GET | List all favorite design IDs |
-| `/api/favorite-designs` | POST | Toggle design ID in favorites |
+
+| Endpoint                | Method | Purpose                           |
+| ----------------------- | ------ | --------------------------------- |
+| `/api/hidden-designs`   | GET    | List all hidden design IDs        |
+| `/api/hidden-designs`   | POST   | Add design ID to hidden list      |
+| `/api/hidden-designs`   | DELETE | Remove design ID from hidden list |
+| `/api/favorite-designs` | GET    | List all favorite design IDs      |
+| `/api/favorite-designs` | POST   | Toggle design ID in favorites     |
 
 Data stored in `data/hidden-designs.json` and `data/favorite-designs.json` (file-based, no database needed).
 
@@ -13257,6 +14217,7 @@ Data stored in `data/hidden-designs.json` and `data/favorite-designs.json` (file
 ## Development Workflow
 
 ### Starting Development
+
 ```bash
 npm install
 npx next dev --turbopack    # ⚠️ MUST use Turbopack (see below)
@@ -13265,6 +14226,7 @@ npx next dev --turbopack    # ⚠️ MUST use Turbopack (see below)
 **⚠️ Turbopack Required:** `pnpm dev` / `npm run dev` (webpack) causes `EvalError: Code generation from strings disallowed for this context` in Edge Runtime middleware. Webpack uses `eval()` in compiled middleware.js — disallowed in Edge Runtime. Always use `npx next dev --turbopack` for local development. The `turbopack` config already exists in `next.config.ts`.
 
 ### Database Setup
+
 ```bash
 # Push schema to local PostgreSQL
 npm run db:push
@@ -13287,12 +14249,14 @@ npm run db:studio
 ```
 
 ### Remote PostgreSQL / Production Notes
+
 - **`SESSION_SECRET`** must be set as a Vercel environment variable (JWT signing fails without it → login returns 500)
 - **`DATABASE_URL`** on Vercel must point to the intended production PostgreSQL connection string
 - **Current `home.pl` caveat**: remote PostgreSQL works only with SSL disabled (`sslmode=disable`)
 - **After `db:sync`**: The remote `accounts` table mirrors whatever existed locally at sync time. Always verify/seed required users after environment switches.
 
 ### Build Notes
+
 - Build script: `NODE_OPTIONS='--max-old-space-size=4096' next build` — caps heap at 4 GB (Vercel container has 8 GB)
 - `webpack.parallelism = 2` — limits concurrent module compilation to prevent OOM
 - `ConditionalCanvas` dynamically imports `ThreeScene`/`CropCanvas` with `ssr: false` so static generation does not render the heavy 3D canvas on the server
@@ -13300,23 +14264,27 @@ npm run db:studio
 - **`outputFileTracingExcludes`** in `next.config.ts` excludes `public/screenshots/**/*` (~245 MB) from serverless function bundling. Without this, the function exceeds Vercel's 300 MB limit.
 
 ### Building for Production
+
 ```bash
 npm run build
 npm start
 ```
 
 ### File Organization Rules
+
 1. **Components**: One component per file
 2. **Hooks**: Extract to `/hooks` if reusable
 3. **Utils**: Pure functions in `/lib`
 4. **Types**: Colocated or in `global.d.ts`
 
 ### Code Quality
+
 - **TypeScript**: Strict mode enabled
 - **ESLint**: Next.js recommended
 - **Formatting**: Prettier (if configured)
 
 ### Performance Testing
+
 1. Open Chrome DevTools
 2. Performance tab
 3. Record while interacting with 3D
@@ -13326,19 +14294,23 @@ npm start
    - Excessive re-renders
 
 ### Build Time Optimization
+
 **Critical Performance Issue (Fixed Dec 14, 2025)**:
+
 - Build time increased from 3-6 min to 16-19 min on Nov 3, 2025
 - Root cause: Large TypeScript files in `lib/seo-templates-*.ts` (29.6 MB total)
 - Solution: Moved to `lib/.backup/*.bak` (excluded from build)
 - Result: **Build time: 16-19 min → ~53 sec (95% improvement)** ✅
 
 **Key Lessons**:
+
 - Never bundle large data as TypeScript arrays (use JSON + fetch)
 - Auto-generated files should be in `public/` or external DB
 - TypeScript compilation overhead is significant for large files
 - Check build time after adding/importing new large files
 
 ### Memory Profiling
+
 1. Chrome DevTools → Memory
 2. Take heap snapshot
 3. Interact with app
@@ -13350,6 +14322,7 @@ npm start
 ## Critical Files to Understand
 
 ### Must Read First
+
 1. `lib/headstone-store.ts` - Global state
 2. `components/SvgHeadstone.tsx` - Core 3D logic
 3. `components/ThreeScene.tsx` - Canvas setup
@@ -13361,6 +14334,7 @@ npm start
 9. `SLANT_COMPLETE_SUMMARY.md` - Slant rotation implementation (production-ready)
 
 ### For Adding Features
+
 - **New Shape**: Add SVG to `/public/shapes/`, update data
 - **New Texture**: Add WebP to `/public/textures/`, update catalog
 - **New Font**: Add to `/public/fonts/`, update `_data/fonts.ts`
@@ -13368,6 +14342,7 @@ npm start
 - **New P3D support**: Extend `convert-p3d-design.js` parser, re-run batch
 
 ### For Debugging
+
 - **Performance**: Check `SvgHeadstone.tsx` memoization
 - **Positioning**: Check `HeadstoneInscription.tsx` raycasting
 - **Materials**: Check texture loading in `ShapeSwapper.tsx`
@@ -13381,12 +14356,14 @@ npm start
 ## Unnecessary Files (Safe to Delete)
 
 ### Documentation Clutter
+
 - `rev1.txt` through `rev34.txt` (34 files) - Old revision notes
 - `audit1.txt` through `audit7.txt` - Texture improvement audit files (info captured in TEXTURE_IMPROVEMENTS_SUMMARY.md)
 - `motif.txt`, `shape.txt`, `text.txt`, `style1.txt`, `style2.txt`, `shapeData.txt`
 - Most `*.md` files in root (except readme.md, license.md, changelog.md, STARTER.md, TEXTURE_IMPROVEMENTS_SUMMARY.md)
 
 ### Backup Files
+
 - `components/SvgHeadstone.v9.backup`
 - `components/SvgHeadstone.tsx.backup`
 - `app/designs/[productType]/[category]/[slug]/DesignPageClient.tsx.backup`
@@ -13395,6 +14372,7 @@ npm start
 - `lib/.backup/*.bak` - Large SEO template files (excluded from build for performance)
 
 ### Large Data Files (Moved to Backup)
+
 - `lib/.backup/seo-templates-unified.ts.bak` - 24 MB (4,118 ML design templates as TypeScript)
 - `lib/.backup/seo-templates-ml.ts.bak` - 5.5 MB (ML metadata)
 - **Why moved**: Caused 16-19 min build times, never imported/used, actual data in `public/ml/*/json/`
@@ -13405,12 +14383,14 @@ npm start
 - `app/select-shape/ShapePanelWrapper-old.tsx`
 
 ### Temporary Files
+
 - `logs.log`
 - `temp_design.xml`
 - `design-1721009360757.json`
 - `original-screen.jpg`, `screen.jpg`, `screen.png`, `screen2.png`
 
 ### Build Artifacts
+
 - `tsconfig.tsbuildinfo` (regenerated)
 - `.next/` directory (gitignored, rebuilt)
 
@@ -13419,6 +14399,7 @@ npm start
 ## Best Practices
 
 ### ✅ Do This
+
 - Always dispose Three.js objects
 - Use `useMemo` for expensive calculations
 - Memoize child render functions
@@ -13429,6 +14410,7 @@ npm start
 - Optimize images to WebP
 
 ### ❌ Don't Do This
+
 - Create Three.js objects in render
 - Forget to dispose textures/geometries
 - Use inline functions in props unnecessarily
@@ -13612,7 +14594,7 @@ git log --oneline -10   # Recent commits
   - **Files Modified**:
     - `scripts/convert-legacy-design.js`: Complete rewrite with intelligent algorithms
     - All canonical designs can now be regenerated with consistent quality
-  - **Documentation**: 
+  - **Documentation**:
     - `CONVERSION_SCRIPT_ENHANCED.md`: Technical details of all algorithms
     - `CANONICAL_POSITIONING_FIX_SUMMARY.md`: Initial coordinate fix
     - `CANONICAL_DESIGN_PRODUCTION_FINAL.md`: Manual testing session results
@@ -13876,7 +14858,7 @@ git log --oneline -10   # Recent commits
     - **Increased font size**: text-sm → text-base font-medium
     - **Better color**: text-gray-300 → text-white (stronger contrast)
     - **Raised positioning**: Added mt-1 to container
-    - **Updated copy**: 
+    - **Updated copy**:
       - "Trusted by 5,000+ families" on same line as stars
       - "No credit card required • Free to try" → "No obligation · No credit card required"
   - **3D Canvas Enhancements**:
@@ -13887,7 +14869,7 @@ git log --oneline -10   # Recent commits
       - Point lights: 0.6/0.4 → 0.7/0.5 intensity
       - Rim lights: 0.8 → 1.0 intensity
       - Added back rim light (0.8 intensity, warm color #e8d5b7)
-    - **Focused vignette**: 
+    - **Focused vignette**:
       - Dark vignette (500px, from-black/60 via-black/30 to-transparent)
       - Warm spotlight (400px, from-amber-900/25)
       - Heavy blur (blur-3xl) for soft edges
@@ -14060,7 +15042,7 @@ git log --oneline -10   # Recent commits
     - Added divider line after Base radio buttons matching Headstone tab
     - "No Base" option disables sliders/inputs without switching tabs
     - Commits: Multiple incremental improvements
-  - **Debugging**: Added console.log to headstone onClick to diagnose SelectionBox outline issue *(Resolved 2026-02-14)*
+  - **Debugging**: Added console.log to headstone onClick to diagnose SelectionBox outline issue _(Resolved 2026-02-14)_
     - Issue: Clicking headstone didn't show the select box outline because the transparent deselect plane was intercepting pointer events before the headstone mesh.
     - Resolution: `HeadstoneAssembly` now registers its mesh with `onPointerDownCapture` and stops propagation so `setSelected('headstone')` always fires; the deselect plane ignores clicks when the pointer hits the stone first. Selection outlines now appear immediately on headstone clicks.
     - Commit: `09dbd9c02a`
@@ -14069,7 +15051,7 @@ git log --oneline -10   # Recent commits
     - Simplified navigation flow: `/select-product` → `/select-shape` → `/select-size`
     - Canvas now controlled solely by `ConditionalCanvas.tsx` based on pathname
     - Removed duplicate route complexity
-  - **Product Selection Flow**: 
+  - **Product Selection Flow**:
     - `/select-product` (no canvas) → select product → `/select-shape` (also no canvas, dedicated grid)
     - `/select-shape` shows the shape gallery in the main content area; `/select-size` and beyond re-enable the canvas
     - When the canvas is visible (size/material/etc.), the sidebar mirrors the Select Shape grid for quick swaps
@@ -14282,7 +15264,7 @@ git log --oneline -10   # Recent commits
     - Updated both selection grid thumbnails and actual shape loading paths
   - **Bronze Plaque XML Shapes**: Added missing oval and circle shapes to catalog-id-5.xml
     - Oval (Landscape): 400×275mm (init), range 100-560mm width, 60-400mm height
-    - Oval (Portrait): 275×400mm (init), range 100-560mm width, 60-400mm height  
+    - Oval (Portrait): 275×400mm (init), range 100-560mm width, 60-400mm height
     - Circle: 400×400mm (init), range 100-560mm width/height
     - All shapes: 10mm fixed depth, Bronze material texture
   - **Plaque UI Customization**: Simplified Select Size panel for plaques
@@ -14295,7 +15277,7 @@ git log --oneline -10   # Recent commits
     - Backend value (`headstoneStyle`) unchanged for compatibility
   - **Inscription Outline Control**: Disabled black outlines for plaques
     - Traditional Engraved: No outline (sandblasted shadow effect)
-    - Laser Etched Headstones: Black outline (0.002 * units)
+    - Laser Etched Headstones: Black outline (0.002 \* units)
     - All Plaques: No outline (clean bronze appearance)
     - Check: `isTraditionalEngraved || isPlaque ? 0 : 0.002 * units`
   - Files modified: `ShapeSelectionGrid.tsx`, `catalog-id-5.xml`, `DesignerNav.tsx`, `HeadstoneInscription.tsx`
@@ -14317,7 +15299,7 @@ git log --oneline -10   # Recent commits
     - Thickness slider now updates visual depth on canvas in real-time
     - Units: mm in store → cm for SvgHeadstone (divide by 10)
     - ExtrudeGeometry depth directly uses this value for 3D extrusion
-  - **Base Thickness Control**: Enabled visual thickness updates  
+  - **Base Thickness Control**: Enabled visual thickness updates
     - Changed from hardcoded `0.2 * BASE_DEPTH_MULTIPLIER` (300mm) to `baseThickness / 1000`
     - Thickness slider now updates visual depth on canvas in real-time
     - Units: mm in store → meters for RoundedBoxGeometry (divide by 1000)
@@ -14364,7 +15346,7 @@ git log --oneline -10   # Recent commits
   - Optimized for 60 FPS with proper memoization and texture cleanup
   - Polished Flat Top (PFT) with clearcoat on top/bottom surfaces
   - Rock pitch sides: normalScale (3.0, 3.0), roughness 0.65, color 0x444444
-  - Baked 12x12 chip density with *4 correction factor
+  - Baked 12x12 chip density with \*4 correction factor
   - Added directional lighting for normal map visibility
   - Memory leak prevention and proper disposal patterns
   - TypeScript build fixes for production deployment
@@ -14385,6 +15367,7 @@ git log --oneline -10   # Recent commits
 **Happy Coding! 🚀**
 
 For questions or issues:
+
 - Check `STARTER.md` for comprehensive documentation
 - Check `CHECK_PRICE_REDESIGN.md` for Check Price feature details (if exists)
 - Check `TEXTURE_IMPROVEMENTS_SUMMARY.md` for material/texture optimization details
@@ -14412,7 +15395,7 @@ For questions or issues:
     - Changed `rotation={[0, 0, rotationZ]}` → `rotation={[0, rotationZ, 0]}`
     - Statues now spin vertically (left/right) instead of tipping (forward/back)
   - **Store Updates**: Added `zPos?: number` to `additionOffsets` type
-  - **Files Modified**: 
+  - **Files Modified**:
     - `components/three/AdditionModel.tsx` (lines 230-350, 675-710, 750)
     - `lib/headstone-store.ts` (line 208)
   - **Status**: X and Y positioning working, Z positioning and rotation axis fixed but Z still incorrect
@@ -14445,40 +15428,44 @@ For questions or issues:
 ### Quick Reference
 
 | Command | What it does | Count | Status |
-|---------|-------------|-------|--------|
-| 
+| ------- | ------------ | ----- | ------ |
+
+|
 pm run db:seed-materials | Seeds granite materials | 29 | ✅ Complete |
-| 
+|
 pm run db:seed-shapes | Seeds headstone shapes | 55 | ✅ Complete |
-| 
+|
 pm run db:seed-additions | Seeds additions (vases, statues) | 82 | ✅ Complete |
-| 
+|
 pm run db:seed-sizes | Seeds fixed sizes (product 32) | 9 | ✅ Complete |
-| 
+|
 pm run db:seed-backgrounds | Seeds backgrounds + color textures | 77 | ✅ Complete |
 
 ### Materials (29 total)
-- **Source**: pp/_internal/_data.ts
-- **Path**: /textures/forever/l/*.webp
+
+- **Source**: pp/\_internal/\_data.ts
+- **Path**: /textures/forever/l/\*.webp
 - **Script**: scripts/seed-materials.ts
 - **Docs**: MATERIALS_DATABASE_FIX.md
 - **Categories**: All granite, polished finish
 - **Examples**: African Black, Blue Pearl, Imperial Red, Noble Black, Paradiso
 
 ### Shapes (55 total)
-- **Source**: pp/_internal/_data.ts
-- **Path**: /shapes/headstones/*.svg
+
+- **Source**: pp/\_internal/\_data.ts
+- **Path**: /shapes/headstones/\*.svg
 - **Script**: scripts/seed-shapes.ts
 - **Docs**: SHAPES_DATABASE_FIX.md
 - **Traditional (11)**: Cropped Peak, Curved Gable, Curved Peak, Curved Top, Half Round, Gable, Left Wave, Peak, Right Wave, Serpentine, Square
 - **Modern (44)**: Headstone 1-39, Guitar 1-5
 
 ### Additions (82 total)
+
 - **Source**: public/xml/en_EN/motifs-biondan.xml
-- **Path**: /models/*.glb, /images/*.webp
+- **Path**: /models/_.glb, /images/_.webp
 - **Script**: scripts/seed-additions.ts
 - **Docs**: ADDITIONS_MIGRATION_COMPLETE.md
-- **Categories**: 
+- **Categories**:
   - Biondan Bronze (24)
   - Crosses (13)
   - Roses (24)
@@ -14487,6 +15474,7 @@ pm run db:seed-backgrounds | Seeds backgrounds + color textures | 77 | ✅ Compl
 - **Size Variants**: 60 single-size (73%), 22 multi-size (27%)
 
 ### Sizes (9 total)
+
 - **Source**: public/xml/au_EN/sizes.xml (product 201)
 - **Product**: Full Color Plaque (product 32)
 - **Script**: scripts/seed-sizes.ts
@@ -14494,6 +15482,7 @@ pm run db:seed-backgrounds | Seeds backgrounds + color textures | 77 | ✅ Compl
 - **API**: GET /api/catalog/sizes/?productType=full-colour-plaque
 
 ### Backgrounds (77 total)
+
 - **Source**: public/xml/au_EN/backgrounds.xml + filesystem discovery
 - **Script**: scripts/seed-backgrounds.ts
 - **Categories**:
@@ -14511,7 +15500,7 @@ npm run db:studio            # Open Drizzle Studio (GUI)
 
 # Seeding (re-run as needed)
 npm run db:seed-materials    # Replace all materials
-npm run db:seed-shapes       # Replace all shapes  
+npm run db:seed-shapes       # Replace all shapes
 npm run db:seed-additions    # Replace all additions
 npm run db:seed-sizes        # Replace all sizes
 npm run db:seed-backgrounds  # Replace all backgrounds + colors
@@ -14565,6 +15554,6 @@ Both commands pass. Browser rendering still needs to be checked after the next l
 
 ---
 
-*End of STARTER.md - Last updated: 2026-08-21*
+_End of STARTER.md - Last updated: 2026-08-21_
 
 ---

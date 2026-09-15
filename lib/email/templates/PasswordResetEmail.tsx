@@ -1,9 +1,6 @@
 import { Button, Text } from '@react-email/components';
 import * as React from 'react';
-import type {
-  CountryEmailConfig,
-  PasswordResetEmailData,
-} from '../types';
+import type { CountryEmailConfig, PasswordResetEmailData } from '../types';
 import { EmailLayout } from './components/EmailLayout';
 
 interface PasswordResetEmailProps {
@@ -28,13 +25,13 @@ export function PasswordResetEmail({
       </Text>
 
       <Text style={paragraph}>
-        We received a request to reset the password for your account
-        associated with <strong>{data.recipientEmail}</strong>.
+        We received a request to reset the password for your account associated
+        with <strong>{data.recipientEmail}</strong>.
       </Text>
 
       <Text style={paragraph}>
-        Click the button below to set a new password. This link will
-        expire in 1 hour.
+        Click the button below to set a new password. This link will expire in
+        24 hours.
       </Text>
 
       <Button href={data.resetUrl} style={button}>
@@ -42,8 +39,8 @@ export function PasswordResetEmail({
       </Button>
 
       <Text style={disclaimer}>
-        If you did not request a password reset, you can safely ignore
-        this email. Your password will not be changed.
+        If you did not request a password reset, you can safely ignore this
+        email. Your password will not be changed.
       </Text>
 
       <Text style={regards}>

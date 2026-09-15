@@ -60,6 +60,7 @@ Do not commit `.env.local` or production credentials. Use `.env.local.example` a
 | `NEXT_PUBLIC_BASE_URL`                                          | Canonical and share URLs          | Normally `https://forevershining.org`.              |
 | `STRIPE_SECRET_KEY`                                             | Stripe checkout                   | Server-only Stripe secret key.                      |
 | `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`                            | Stripe checkout UI                | Public Stripe key.                                  |
+| `STRIPE_WEBHOOK_SECRET`                                         | Stripe webhook                    | Signing secret for `/api/webhooks/stripe`.          |
 | `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `SMTP_FROM` | Transactional email               | Country-specific SMTP variables are also supported. |
 | `UPLOAD_REMOTE_URL`, `UPLOAD_REMOTE_SECRET`                     | Remote upload proxy               | Optional production integration.                    |
 

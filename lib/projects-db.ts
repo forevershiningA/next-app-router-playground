@@ -106,7 +106,7 @@ export async function saveProjectRecord(
     try {
       const [updated] = await database
         .update(projects)
-        .set({ ...withJsonPath, updatedAt: new Date() })
+        .set({ ...withJsonPath, pricingBreakdown, updatedAt: new Date() })
         .where(
           and(
             eq(projects.id, input.projectId),
@@ -123,7 +123,7 @@ export async function saveProjectRecord(
       );
       const [updated] = await database
         .update(projects)
-        .set({ ...baseValues, updatedAt: new Date() })
+        .set({ ...baseValues, pricingBreakdown, updatedAt: new Date() })
         .where(
           and(
             eq(projects.id, input.projectId),
@@ -153,6 +153,66 @@ export async function saveProjectRecord(
       .values({ ...baseValues, pricingBreakdown })
       .returning();
     return toSummary(created, true);
+  }
+}
+
+type ProjectAssetPaths = {
+  screenshotPath?: string | null;
+  thumbnailPath?: string | null;
+  jsonPath?: string | null;
+};
+
+/**
+ * Stores asynchronously uploaded assets without replaying an earlier design.
+ * The optimistic timestamp check prevents a late upload from changing a project
+ * that has since been saved again by its owner.
+ */
+export async function updateProjectAssetPaths(
+  projectId: string,
+  accountId: string,
+  expectedUpdatedAt: string,
+  paths: ProjectAssetPaths,
+): Promise<ProjectSummary | null> {
+  const database = ensureDb();
+  const originalUpdatedAt = new Date(expectedUpdatedAt);
+  const basePaths = {
+    ...(paths.screenshotPath !== undefined
+      ? { screenshotPath: normalizePublicPath(paths.screenshotPath) }
+      : {}),
+    ...(paths.thumbnailPath !== undefined
+      ? { thumbnailPath: normalizePublicPath(paths.thumbnailPath) }
+      : {}),
+  };
+  const withJsonPath = {
+    ...basePaths,
+    ...(paths.jsonPath !== undefined
+      ? { jsonPath: normalizePublicPath(paths.jsonPath) }
+      : {}),
+  };
+
+  const update = async (values: typeof withJsonPath, skipJsonPath = false) => {
+    const [updated] = await database
+      .update(projects)
+      .set({ ...values, updatedAt: new Date() })
+      .where(
+        and(
+          eq(projects.id, projectId),
+          eq(projects.accountId, accountId),
+          eq(projects.updatedAt, originalUpdatedAt),
+        ),
+      )
+      .returning();
+    return updated ? toSummary(updated, skipJsonPath) : null;
+  };
+
+  try {
+    return await update(withJsonPath);
+  } catch (err) {
+    if (!isJsonPathColumnMissing(err)) throw err;
+    console.warn(
+      '[projects-db] json_path column missing, updating assets without it.',
+    );
+    return update(basePaths, true);
   }
 }
 

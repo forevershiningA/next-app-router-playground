@@ -1,5 +1,10 @@
 import { NextRequest, NextResponse, after } from 'next/server';
-import { listProjectSummaries, saveProjectRecord, deleteProjectRecord } from '#/lib/projects-db';
+import {
+  listProjectSummaries,
+  saveProjectRecord,
+  deleteProjectRecord,
+  updateProjectAssetPaths,
+} from '#/lib/projects-db';
 import type { DesignerSnapshot, PricingBreakdown } from '#/lib/project-schemas';
 import { getServerSession } from '#/lib/auth/session';
 import { sendEmail } from '#/lib/email';
@@ -13,15 +18,12 @@ const MAX_LIST_LIMIT = 50;
 // Helper function to remove base64 encoded images from design state
 function cleanDesignState(designState: DesignerSnapshot): DesignerSnapshot {
   const cleaned = { ...designState };
-  
+
   // Remove screenshot from metadata
   if (cleaned.metadata?.screenshot) {
-    cleaned.metadata = {
-      ...cleaned.metadata,
-      screenshot: undefined,
-    };
+    cleaned.metadata = { ...cleaned.metadata, screenshot: undefined };
   }
-  
+
   // Remove base64 data from selected images if they exist
   if (cleaned.selectedImages && Array.isArray(cleaned.selectedImages)) {
     cleaned.selectedImages = cleaned.selectedImages.map((img: any) => ({
@@ -29,7 +31,7 @@ function cleanDesignState(designState: DesignerSnapshot): DesignerSnapshot {
       data: img.url || img.data, // Keep URL, remove base64 data
     }));
   }
-  
+
   return cleaned;
 }
 
@@ -65,7 +67,9 @@ type SaveProjectBody = {
 function decodeScreenshotDataUrl(raw: string | undefined): Buffer {
   if (!raw) return Buffer.alloc(0);
   const normalized = raw.trim();
-  const match = normalized.match(/^data:image\/[a-zA-Z0-9.+-]+;base64,([A-Za-z0-9+/=]+)$/);
+  const match = normalized.match(
+    /^data:image\/[a-zA-Z0-9.+-]+;base64,([A-Za-z0-9+/=]+)$/,
+  );
   if (!match?.[1]) {
     return Buffer.alloc(0);
   }
@@ -88,18 +92,23 @@ export async function POST(request: NextRequest) {
     const body = (await request.json()) as SaveProjectBody;
 
     if (!body.designState) {
-      return NextResponse.json({ message: 'designState is required' }, { status: 400 });
+      return NextResponse.json(
+        { message: 'designState is required' },
+        { status: 400 },
+      );
     }
 
-    const totalPriceCents = typeof body.totalPriceCents === 'number'
-      ? Math.round(body.totalPriceCents)
-      : null;
+    const totalPriceCents =
+      typeof body.totalPriceCents === 'number'
+        ? Math.round(body.totalPriceCents)
+        : null;
     const cleanedDesignState = cleanDesignState(body.designState);
 
     // Capture screenshot data URL before it's stripped from the design state.
     // Store it directly in screenshotPath/thumbnailPath so the thumbnail is
     // immediately visible even if the background file upload never runs.
-    const screenshotDataUrl = body.designState.metadata?.screenshot ?? undefined;
+    const screenshotDataUrl =
+      body.designState.metadata?.screenshot ?? undefined;
     const screenshotBuffer = decodeScreenshotDataUrl(screenshotDataUrl);
     const initialScreenshotPath = screenshotDataUrl || null;
 
@@ -134,7 +143,11 @@ export async function POST(request: NextRequest) {
 
         if (screenshotBuffer.length > 0) {
           screenshotPath = await uploadToStorage(
-            new File([new Uint8Array(screenshotBuffer)], `design_${savedProjectId}.jpg`, { type: 'image/jpeg' }),
+            new File(
+              [new Uint8Array(screenshotBuffer)],
+              `design_${savedProjectId}.jpg`,
+              { type: 'image/jpeg' },
+            ),
             'screenshots',
           );
           try {
@@ -144,7 +157,11 @@ export async function POST(request: NextRequest) {
               .jpeg({ quality: 80 })
               .toBuffer();
             thumbnailPath = await uploadToStorage(
-              new File([new Uint8Array(thumbBuffer)], `thumb_${savedProjectId}.jpg`, { type: 'image/jpeg' }),
+              new File(
+                [new Uint8Array(thumbBuffer)],
+                `thumb_${savedProjectId}.jpg`,
+                { type: 'image/jpeg' },
+              ),
               'screenshots',
             );
           } catch {
@@ -152,26 +169,27 @@ export async function POST(request: NextRequest) {
           }
         }
 
-        const jsonBuffer = Buffer.from(JSON.stringify(cleanedDesignState, null, 2));
+        const jsonBuffer = Buffer.from(
+          JSON.stringify(cleanedDesignState, null, 2),
+        );
         jsonPath = await uploadToStorage(
-          new File([jsonBuffer], `design_${savedProjectId}.json`, { type: 'application/json' }),
+          new File([jsonBuffer], `design_${savedProjectId}.json`, {
+            type: 'application/json',
+          }),
           'designs',
         );
 
         if (screenshotPath || jsonPath) {
-          await saveProjectRecord({
-            accountId: savedAccountId,
-            projectId: savedProjectId,
-            title: summary.title,
-            status: summary.status,
-            totalPriceCents: summary.totalPriceCents,
-            currency: summary.currency,
-            screenshotPath,
-            thumbnailPath,
-            jsonPath,
-            designState: cleanedDesignState,
-            pricingBreakdown: body.pricingBreakdown ?? null,
-          });
+          await updateProjectAssetPaths(
+            savedProjectId,
+            savedAccountId,
+            summary.updatedAt,
+            {
+              ...(screenshotPath ? { screenshotPath } : {}),
+              ...(thumbnailPath ? { thumbnailPath } : {}),
+              ...(jsonPath ? { jsonPath } : {}),
+            },
+          );
         }
       } catch (uploadErr) {
         console.error('[api/projects] Background upload failed:', uploadErr);
@@ -205,14 +223,20 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ project: summary });
   } catch (error) {
     if (error instanceof Error && error.message === 'PROJECT_NOT_FOUND') {
-      return NextResponse.json({ message: 'Project not found' }, { status: 404 });
+      return NextResponse.json(
+        { message: 'Project not found' },
+        { status: 404 },
+      );
     }
 
     console.error('[api/projects] Failed to save project', error);
-    return NextResponse.json({
-      message: 'Unable to save project',
-      detail: error instanceof Error ? error.message : String(error),
-    }, { status: 500 });
+    return NextResponse.json(
+      {
+        message: 'Unable to save project',
+        detail: error instanceof Error ? error.message : String(error),
+      },
+      { status: 500 },
+    );
   }
 }
 
@@ -227,18 +251,27 @@ export async function DELETE(request: NextRequest) {
     const projectId = searchParams.get('id');
 
     if (!projectId) {
-      return NextResponse.json({ message: 'Project ID is required' }, { status: 400 });
+      return NextResponse.json(
+        { message: 'Project ID is required' },
+        { status: 400 },
+      );
     }
 
     const deleted = await deleteProjectRecord(projectId, session.accountId);
 
     if (!deleted) {
-      return NextResponse.json({ message: 'Project not found' }, { status: 404 });
+      return NextResponse.json(
+        { message: 'Project not found' },
+        { status: 404 },
+      );
     }
 
     return NextResponse.json({ message: 'Project deleted successfully' });
   } catch (error) {
     console.error('[api/projects] Failed to delete project', error);
-    return NextResponse.json({ message: 'Unable to delete project' }, { status: 500 });
+    return NextResponse.json(
+      { message: 'Unable to delete project' },
+      { status: 500 },
+    );
   }
 }

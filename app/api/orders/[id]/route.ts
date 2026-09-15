@@ -6,7 +6,7 @@ import { eq, and } from 'drizzle-orm';
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
     const session = await getServerSession();
@@ -15,19 +15,18 @@ export async function PATCH(
     }
 
     const { id } = await params;
-    const body = (await request.json()) as {
-      status: 'pending' | 'paid' | 'cancelled';
-      paymentRef?: string;
-    };
+    const body = (await request.json()) as { status: 'cancelled' };
 
-    const { status, paymentRef } = body;
+    if (body.status !== 'cancelled') {
+      return NextResponse.json(
+        { error: 'Payment status is managed by the payment provider' },
+        { status: 403 },
+      );
+    }
 
     const [updated] = await db
       .update(orders)
-      .set({
-        status,
-        updatedAt: new Date(),
-      })
+      .set({ status: 'cancelled', updatedAt: new Date() })
       .where(and(eq(orders.id, id), eq(orders.accountId, session.accountId)))
       .returning();
 
@@ -38,16 +37,15 @@ export async function PATCH(
     // Update related payment record too
     await db
       .update(payments)
-      .set({
-        status: status === 'paid' ? 'completed' : status,
-        ...(paymentRef ? { providerRef: paymentRef } : {}),
-        ...(status === 'paid' ? { receivedAt: new Date() } : {}),
-      })
+      .set({ status: 'cancelled' })
       .where(eq(payments.orderId, id));
 
     return NextResponse.json({ success: true, orderId: id });
   } catch (error) {
     console.error('Error updating order:', error);
-    return NextResponse.json({ error: 'Failed to update order' }, { status: 500 });
+    return NextResponse.json(
+      { error: 'Failed to update order' },
+      { status: 500 },
+    );
   }
 }

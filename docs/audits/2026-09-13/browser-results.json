@@ -1,0 +1,194 @@
+[
+  {
+    "type": "auth-boundary",
+    "method": "GET",
+    "path": "/api/projects",
+    "status": 401
+  },
+  {
+    "type": "auth-boundary",
+    "method": "POST",
+    "path": "/api/projects",
+    "status": 401
+  },
+  {
+    "type": "auth-boundary",
+    "method": "DELETE",
+    "path": "/api/projects?id=audit-nonexistent",
+    "status": 401
+  },
+  {
+    "type": "auth-boundary",
+    "method": "POST",
+    "path": "/api/orders",
+    "status": 401
+  },
+  {
+    "type": "auth-boundary",
+    "method": "PATCH",
+    "path": "/api/orders/audit-nonexistent",
+    "status": 401
+  },
+  {
+    "type": "auth-boundary",
+    "method": "POST",
+    "path": "/api/checkout/stripe",
+    "status": 401
+  },
+  {
+    "type": "auth-boundary",
+    "method": "POST",
+    "path": "/api/share/create",
+    "status": 401
+  },
+  {
+    "type": "render-smoke",
+    "mobile": false,
+    "path": "/",
+    "errors": [],
+    "failed": [],
+    "status": 200,
+    "metrics": {
+      "viewport": 1440,
+      "documentWidth": 1440,
+      "canvases": [
+        {
+          "width": 1192,
+          "height": 503,
+          "cssWidth": 1193,
+          "cssHeight": 503
+        }
+      ],
+      "resources": 3293329,
+      "render": null,
+      "gpuMemory": null
+    },
+    "screenshot": "desktop-home.png"
+  },
+  {
+    "type": "render-smoke",
+    "mobile": false,
+    "path": "/select-material",
+    "errors": [],
+    "failed": [],
+    "status": 200,
+    "metrics": {
+      "viewport": 1440,
+      "documentWidth": 1440,
+      "canvases": [
+        {
+          "width": 1040,
+          "height": 900,
+          "cssWidth": 1040,
+          "cssHeight": 900
+        }
+      ],
+      "resources": 6105682,
+      "render": {
+        "frame": 88,
+        "calls": 16,
+        "triangles": 1644,
+        "points": 0,
+        "lines": 16
+      },
+      "gpuMemory": {
+        "geometries": 19,
+        "textures": 22
+      }
+    },
+    "screenshot": "desktop-designer.png"
+  },
+  {
+    "type": "render-smoke",
+    "mobile": true,
+    "path": "/",
+    "errors": [],
+    "failed": [],
+    "status": 200,
+    "metrics": {
+      "viewport": 390,
+      "documentWidth": 390,
+      "canvases": [
+        {
+          "width": 702,
+          "height": 662,
+          "cssWidth": 351,
+          "cssHeight": 331
+        }
+      ],
+      "resources": 3326597,
+      "render": null,
+      "gpuMemory": null
+    },
+    "screenshot": "mobile-home.png"
+  },
+  {
+    "type": "render-smoke",
+    "mobile": true,
+    "path": "/select-material",
+    "errors": [],
+    "failed": [],
+    "status": 200,
+    "metrics": {
+      "viewport": 390,
+      "documentWidth": 390,
+      "canvases": [
+        {
+          "width": 487,
+          "height": 1055,
+          "cssWidth": 390,
+          "cssHeight": 844
+        }
+      ],
+      "resources": 2394839,
+      "render": {
+        "frame": 66,
+        "calls": 16,
+        "triangles": 1644,
+        "points": 0,
+        "lines": 16
+      },
+      "gpuMemory": {
+        "geometries": 19,
+        "textures": 22
+      }
+    },
+    "screenshot": "mobile-designer.png"
+  },
+  {
+    "type": "A09-checkout-failure",
+    "confirmed": true,
+    "writes": [
+      {
+        "path": "/api/orders",
+        "data": {
+          "projectId": "audit-project",
+          "paymentMethod": "other",
+          "status": "pending"
+        }
+      },
+      {
+        "path": "/api/email",
+        "data": {
+          "type": "order",
+          "recipientEmail": "audit@example.invalid",
+          "recipientName": "Audit Example",
+          "countryCode": "au",
+          "orderId": "audit-project",
+          "invoiceNumber": "INV-AUDIT-PR",
+          "designName": "Audit sample",
+          "quoteItems": [],
+          "subtotalCents": 110000,
+          "taxCents": 11000,
+          "totalCents": 121000,
+          "currency": "AUD",
+          "customerAddress": "1 Sample Street, Perth, 6000, Australia"
+        }
+      }
+    ]
+  },
+  {
+    "type": "A01-checkout-query",
+    "confirmed": true
+  }
+]

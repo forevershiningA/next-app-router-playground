@@ -9,7 +9,8 @@ import type { EmailData } from '#/lib/email/types';
  * Body is a type-discriminated EmailData object with a `type` field:
  *   'saved-design' | 'order' | 'enquiry' | 'registration' | 'password-reset'
  *
- * All types except 'password-reset' require authentication.
+ * All supported types require authentication. Password resets must use
+ * /api/auth/forgot-password, which generates the token and URL on the server.
  */
 export async function POST(request: Request) {
   try {
@@ -23,22 +24,20 @@ export async function POST(request: Request) {
       );
     }
 
-    // Auth check (skip for password reset — user is not logged in)
-    if (body.type !== 'password-reset') {
-      const session = await getServerSession();
-      if (!session) {
-        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-      }
+    if (body.type === 'password-reset') {
+      return NextResponse.json(
+        { error: 'Use the forgot-password endpoint to request a reset' },
+        { status: 403 },
+      );
+    }
+
+    const session = await getServerSession();
+    if (!session?.accountId) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     // Validate email type
-    const validTypes = [
-      'saved-design',
-      'order',
-      'enquiry',
-      'registration',
-      'password-reset',
-    ];
+    const validTypes = ['saved-design', 'order', 'enquiry', 'registration'];
     if (!validTypes.includes(body.type)) {
       return NextResponse.json(
         { error: `Invalid email type: ${body.type}` },
@@ -49,10 +48,7 @@ export async function POST(request: Request) {
     const result = await sendEmail(body);
 
     if (result.success) {
-      return NextResponse.json({
-        success: true,
-        messageId: result.messageId,
-      });
+      return NextResponse.json({ success: true, messageId: result.messageId });
     }
 
     return NextResponse.json(

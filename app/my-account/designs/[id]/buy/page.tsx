@@ -41,9 +41,7 @@ type PayPalNamespace = {
     onApprove(data: unknown, actions: PayPalActions): Promise<unknown>;
     onError(): void;
     onCancel(): void;
-  }): {
-    render(target: HTMLElement): void;
-  };
+  }): { render(target: HTMLElement): void };
 };
 
 type StripeNamespace = {
@@ -61,23 +59,17 @@ export default function BuyDesignPage() {
   const _router = useRouter();
   const searchParams = useSearchParams();
 
-  // Handle Stripe redirect-back — mark the pending order as paid
+  // A return URL is not payment confirmation. The payment provider must confirm
+  // the order server-side before this page can show a successful purchase.
   useEffect(() => {
     const payment = searchParams.get('payment');
     if (payment === 'success') {
-      const pendingOrderId = sessionStorage.getItem('pendingOrderId');
-      if (pendingOrderId) {
-        sessionStorage.removeItem('pendingOrderId');
-        const stripeSessionId = searchParams.get('session_id') ?? undefined;
-        fetch(`/api/orders/${pendingOrderId}`, {
-          method: 'PATCH',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ status: 'paid', paymentRef: stripeSessionId }),
-        }).catch((err) => console.error('Order update failed:', err));
-      }
-      setPlaced(true);
+      setError(
+        'Payment is being verified. We will confirm your order once payment has been received.',
+      );
     }
-    if (payment === 'cancel') setError('Payment was cancelled. You can try again.');
+    if (payment === 'cancel')
+      setError('Payment was cancelled. You can try again.');
   }, [searchParams]);
 
   const [project, setProject] = useState<Project | null>(null);
@@ -118,7 +110,9 @@ export default function BuyDesignPage() {
         if (profileRes.ok) {
           const { profile, account } = await profileRes.json();
           if (profile?.firstName || profile?.lastName)
-            profilePrefill.fullName = [profile.firstName, profile.lastName].filter(Boolean).join(' ');
+            profilePrefill.fullName = [profile.firstName, profile.lastName]
+              .filter(Boolean)
+              .join(' ');
           if (account?.email) profilePrefill.email = account.email;
           if (profile?.phone) profilePrefill.phone = profile.phone;
         }
@@ -126,11 +120,15 @@ export default function BuyDesignPage() {
         const invoicePrefill: Partial<ShippingForm> = {};
         if (invoiceRes.ok) {
           const { invoiceDetails } = await invoiceRes.json();
-          if (invoiceDetails?.address) invoicePrefill.address = invoiceDetails.address;
+          if (invoiceDetails?.address)
+            invoicePrefill.address = invoiceDetails.address;
           if (invoiceDetails?.city) invoicePrefill.city = invoiceDetails.city;
-          if (invoiceDetails?.state) invoicePrefill.state = invoiceDetails.state;
-          if (invoiceDetails?.postcode) invoicePrefill.postcode = invoiceDetails.postcode;
-          if (invoiceDetails?.country) invoicePrefill.country = invoiceDetails.country;
+          if (invoiceDetails?.state)
+            invoicePrefill.state = invoiceDetails.state;
+          if (invoiceDetails?.postcode)
+            invoicePrefill.postcode = invoiceDetails.postcode;
+          if (invoiceDetails?.country)
+            invoicePrefill.country = invoiceDetails.country;
         }
 
         setForm((f) => ({ ...f, ...profilePrefill, ...invoicePrefill }));
@@ -168,15 +166,36 @@ export default function BuyDesignPage() {
         taxCents: Math.round((project?.totalPriceCents ?? 0) * 0.1),
         totalCents: Math.round((project?.totalPriceCents ?? 0) * 1.1),
         currency: 'AUD',
-        customerAddress: [form.address, form.city, form.state, form.postcode, form.country]
+        customerAddress: [
+          form.address,
+          form.city,
+          form.state,
+          form.postcode,
+          form.country,
+        ]
           .filter(Boolean)
           .join(', '),
       }),
     }).catch((err) => console.error('Order email failed:', err));
-  }, [form.address, form.city, form.country, form.email, form.fullName, form.postcode, form.state, id, project]);
+  }, [
+    form.address,
+    form.city,
+    form.country,
+    form.email,
+    form.fullName,
+    form.postcode,
+    form.state,
+    id,
+    project,
+  ]);
 
   useEffect(() => {
-    if (form.paymentType !== 'paypal' || !paypalReady || !paypalContainerRef.current) return;
+    if (
+      form.paymentType !== 'paypal' ||
+      !paypalReady ||
+      !paypalContainerRef.current
+    )
+      return;
     if (paypalRendered.current) return;
     paypalRendered.current = true;
 
@@ -194,7 +213,9 @@ export default function BuyDesignPage() {
                 amount: {
                   currency_code: 'AUD',
                   value: amountStr,
-                  breakdown: { item_total: { currency_code: 'AUD', value: amountStr } },
+                  breakdown: {
+                    item_total: { currency_code: 'AUD', value: amountStr },
+                  },
                 },
                 items: [
                   {
@@ -209,28 +230,47 @@ export default function BuyDesignPage() {
             ],
           });
         },
-        onApprove: (_data: unknown, actions: PayPalActions) => {
-          return actions.order.capture().then((details) => {
+        onApprove: async (_data: unknown, actions: PayPalActions) => {
+          try {
+            const details = await actions.order.capture();
             const paypalRef = details?.id ?? undefined;
-            fetch('/api/orders', {
+            const response = await fetch('/api/orders', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            projectId: id,
-            paymentMethod: 'paypal',
-            paymentRef: paypalRef,
-            status: 'paid',
-          }),
-            }).catch((err) => console.error('Order save failed:', err));
+              body: JSON.stringify({
+                projectId: id,
+                paymentMethod: 'paypal',
+                paymentRef: paypalRef,
+                status: 'paid',
+              }),
+            });
+            const result = (await response.json()) as { error?: string };
+            if (!response.ok) {
+              setError(
+                result.error ?? 'Could not save your order. Please contact us.',
+              );
+              return;
+            }
             sendOrderEmail();
             setPlaced(true);
-          });
+          } catch {
+            setError(
+              'PayPal payment could not be completed. Please contact us if you were charged.',
+            );
+          }
         },
         onError: () => setError('PayPal payment failed. Please try again.'),
         onCancel: () => setError('PayPal payment was cancelled.'),
       })
       .render(paypalContainerRef.current);
-  }, [form.paymentType, paypalReady, project, id, effectiveAmountCents, sendOrderEmail]);
+  }, [
+    form.paymentType,
+    paypalReady,
+    project,
+    id,
+    effectiveAmountCents,
+    sendOrderEmail,
+  ]);
 
   // Reset PayPal render flag when switching away from PayPal or test mode changes
   useEffect(() => {
@@ -243,7 +283,13 @@ export default function BuyDesignPage() {
 
   async function handlePlaceOrder(e: React.FormEvent) {
     e.preventDefault();
-    if (!form.fullName || !form.email || !form.address || !form.city || !form.postcode) {
+    if (
+      !form.fullName ||
+      !form.email ||
+      !form.address ||
+      !form.city ||
+      !form.postcode
+    ) {
       setError('Please fill in all required fields.');
       return;
     }
@@ -256,16 +302,17 @@ export default function BuyDesignPage() {
         const orderRes = await fetch('/api/orders', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            projectId: id,
-            paymentMethod: 'stripe',
-            status: 'pending',
-          }),
+          body: JSON.stringify({ projectId: id, paymentMethod: 'stripe' }),
         });
-        const orderData = (await orderRes.json()) as { orderId?: string; error?: string };
-        if (orderRes.ok && orderData.orderId) {
-          sessionStorage.setItem('pendingOrderId', orderData.orderId);
+        const orderData = (await orderRes.json()) as {
+          orderId?: string;
+          error?: string;
+        };
+        if (!orderRes.ok || !orderData.orderId) {
+          setError(orderData.error ?? 'Could not create your order');
+          return;
         }
+        sessionStorage.setItem('pendingOrderId', orderData.orderId);
 
         // Create Stripe Checkout session
         const res = await fetch('/api/checkout/stripe', {
@@ -273,37 +320,49 @@ export default function BuyDesignPage() {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             projectId: id,
+            orderId: orderData.orderId,
             customerEmail: form.email,
           }),
         });
-        const data = (await res.json()) as { sessionId?: string; error?: string };
+        const data = (await res.json()) as {
+          sessionId?: string;
+          error?: string;
+        };
         if (!res.ok || !data.sessionId) {
           setError(data.error ?? 'Could not create payment session');
           return;
         }
-        const stripeFactory = (window as Window & {
-          Stripe?: (publishableKey: string | undefined) => StripeNamespace;
-        }).Stripe;
+        const stripeFactory = (
+          window as Window & {
+            Stripe?: (publishableKey: string | undefined) => StripeNamespace;
+          }
+        ).Stripe;
         if (!stripeFactory) {
           setError('Payment system is unavailable. Please try again later.');
           return;
         }
-        const stripe = stripeFactory(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
+        const stripe = stripeFactory(
+          process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,
+        );
         await stripe.redirectToCheckout({ sessionId: data.sessionId });
         return;
       }
 
       if (form.paymentType === 'other') {
         // Save order to DB then show confirmation
-        await fetch('/api/orders', {
+        const orderRes = await fetch('/api/orders', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            projectId: id,
-            paymentMethod: 'other',
-            status: 'pending',
-          }),
+          body: JSON.stringify({ projectId: id, paymentMethod: 'other' }),
         });
+        const orderData = (await orderRes.json()) as {
+          orderId?: string;
+          error?: string;
+        };
+        if (!orderRes.ok || !orderData.orderId) {
+          setError(orderData.error ?? 'Could not create your order');
+          return;
+        }
         sendOrderEmail();
         setPlaced(true);
         return;
@@ -321,10 +380,7 @@ export default function BuyDesignPage() {
     ? currencyFormatter.format(effectiveAmountCents / 100)
     : null;
 
-  const preview =
-    project?.thumbnailPath ||
-    project?.screenshotPath ||
-    null;
+  const preview = project?.thumbnailPath || project?.screenshotPath || null;
 
   const inputClass =
     'w-full rounded-lg border border-white/20 bg-white/5 px-3 py-2 text-sm text-white placeholder-white/30 focus:border-[#D4A84F]/60 focus:outline-none focus:ring-1 focus:ring-[#D4A84F]/40';
@@ -334,16 +390,20 @@ export default function BuyDesignPage() {
   if (placed) {
     return (
       <div className="relative min-h-screen bg-[#050301] text-white">
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(244,160,80,0.18),_transparent_45%)]" aria-hidden />
+        <div
+          className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(244,160,80,0.18),_transparent_45%)]"
+          aria-hidden
+        />
         <div className="relative mx-auto flex min-h-screen max-w-xl flex-col items-center justify-center px-10 text-center">
           <CheckCircleIcon className="mb-6 h-16 w-16 text-[#D4A84F]" />
           <h1 className="mb-3 text-3xl font-semibold">Order Received!</h1>
           <p className="mb-8 text-white/60">
-            Thank you for your order. Our team will review your design and be in touch shortly to confirm production details.
+            Thank you for your order. Our team will review your design and be in
+            touch shortly to confirm production details.
           </p>
           <Link
             href="/my-account"
-            className="rounded-lg bg-[#D4A84F] px-6 py-2.5 text-sm font-semibold text-black hover:bg-[#e0b86a] transition"
+            className="rounded-lg bg-[#D4A84F] px-6 py-2.5 text-sm font-semibold text-black transition hover:bg-[#e0b86a]"
           >
             Back to Saved Designs
           </Link>
@@ -367,7 +427,7 @@ export default function BuyDesignPage() {
       <div className="relative mx-auto w-full max-w-3xl px-4 py-6 sm:px-6 sm:py-10 lg:px-10">
         <Link
           href={`/my-account/designs/${id}`}
-          className="mb-6 inline-flex items-center gap-2 text-sm text-white/70 hover:text-white transition"
+          className="mb-6 inline-flex items-center gap-2 text-sm text-white/70 transition hover:text-white"
         >
           <ArrowLeftIcon className="h-4 w-4" />
           Back to Design
@@ -375,17 +435,20 @@ export default function BuyDesignPage() {
 
         <div className="rounded-2xl border border-white/10 bg-[#0c0805]/85 px-4 py-6 shadow-[0_25px_65px_rgba(0,0,0,0.6)] backdrop-blur-2xl sm:rounded-[32px] sm:px-10 sm:py-8">
           <header className="mb-0 pb-6">
-            <h1 className="py-[10px] text-3xl font-semibold tracking-tight">Place Order</h1>
+            <h1 className="py-[10px] text-3xl font-semibold tracking-tight">
+              Place Order
+            </h1>
           </header>
 
           {loadingProject ? (
             <p className="text-sm text-white/40">Loading…</p>
           ) : (
             <form onSubmit={handlePlaceOrder} className="space-y-6">
-
               {/* Design Summary */}
               <section className="rounded-2xl border border-white/10 bg-white/5 p-5">
-                <h2 className="mb-4 text-base font-semibold text-white/90">Summary</h2>
+                <h2 className="mb-4 text-base font-semibold text-white/90">
+                  Summary
+                </h2>
                 <div className="flex items-start gap-3 sm:gap-5">
                   {preview && (
                     <div className="h-16 w-16 shrink-0 overflow-hidden rounded-xl bg-black/50 sm:h-20 sm:w-20">
@@ -399,7 +462,9 @@ export default function BuyDesignPage() {
                   )}
                   <div className="min-w-0 flex-1">
                     <div className="flex items-start justify-between gap-3">
-                      <p className="min-w-0 break-words text-base font-medium leading-snug text-white">{project?.title || 'Untitled Design'}</p>
+                      <p className="min-w-0 text-base leading-snug font-medium break-words text-white">
+                        {project?.title || 'Untitled Design'}
+                      </p>
                       {price && (
                         <p className="shrink-0 text-right text-lg font-bold text-[#D4A84F] sm:text-xl">
                           {price}
@@ -407,7 +472,9 @@ export default function BuyDesignPage() {
                       )}
                     </div>
                     {project?.description && (
-                      <p className="mt-0.5 break-words text-sm text-white/50">{project.description}</p>
+                      <p className="mt-0.5 text-sm break-words text-white/50">
+                        {project.description}
+                      </p>
                     )}
                   </div>
                 </div>
@@ -429,11 +496,15 @@ export default function BuyDesignPage() {
 
               {/* Shipping Details */}
               <section className="rounded-2xl border border-white/10 bg-white/5 p-5 sm:p-6">
-                <h2 className="mb-4 text-base font-semibold text-white/90">Shipping Details</h2>
+                <h2 className="mb-4 text-base font-semibold text-white/90">
+                  Shipping Details
+                </h2>
                 <div className="space-y-4">
                   <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                     <div className="min-w-0">
-                      <label className={labelClass}>Full Name {requiredMark}</label>
+                      <label className={labelClass}>
+                        Full Name {requiredMark}
+                      </label>
                       <input
                         className={inputClass}
                         autoComplete="name"
@@ -468,7 +539,9 @@ export default function BuyDesignPage() {
                     />
                   </div>
                   <div>
-                    <label className={labelClass}>Street Address {requiredMark}</label>
+                    <label className={labelClass}>
+                      Street Address {requiredMark}
+                    </label>
                     <input
                       className={inputClass}
                       autoComplete="street-address"
@@ -501,7 +574,9 @@ export default function BuyDesignPage() {
                       />
                     </div>
                     <div className="min-w-0">
-                      <label className={`${labelClass} whitespace-nowrap`}>Postcode {requiredMark}</label>
+                      <label className={`${labelClass} whitespace-nowrap`}>
+                        Postcode {requiredMark}
+                      </label>
                       <input
                         className={inputClass}
                         autoComplete="postal-code"
@@ -531,9 +606,11 @@ export default function BuyDesignPage() {
 
               {/* Payment Type */}
               <section className="rounded-2xl border border-white/10 bg-white/5 p-6">
-                <h2 className="mb-4 text-base font-semibold text-white/90">Payment Type</h2>
+                <h2 className="mb-4 text-base font-semibold text-white/90">
+                  Payment Type
+                </h2>
                 <div className="flex flex-wrap gap-3">
-                  {(['credit-card', 'paypal', 'other'] as const).map((type) => {
+                  {(['credit-card', 'other'] as const).map((type) => {
                     const active = form.paymentType === type;
                     return (
                       <button
@@ -548,17 +625,29 @@ export default function BuyDesignPage() {
                       >
                         {type === 'credit-card' ? (
                           <>
-                            <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                            <svg
+                              className="h-4 w-4"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth={2}
+                            >
+                              <rect x="1" y="4" width="22" height="16" rx="2" />
+                              <line x1="1" y1="10" x2="23" y2="10" />
+                            </svg>
                             Credit Card
-                          </>
-                        ) : type === 'paypal' ? (
-                          <>
-                            <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M7 11C7 11 6 17 12 17H16C18 17 19 16 19.5 14L21 7H8L7 11Z"/><path d="M7 11H5C3.5 11 3 10 3.5 8L5 3H16"/></svg>
-                            PayPal
                           </>
                         ) : (
                           <>
-                            <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M3 5h18M3 12h18M3 19h18"/></svg>
+                            <svg
+                              className="h-4 w-4"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth={2}
+                            >
+                              <path d="M3 5h18M3 12h18M3 19h18" />
+                            </svg>
                             Pay by Phone / BPAY / Cheque
                           </>
                         )}
@@ -567,44 +656,87 @@ export default function BuyDesignPage() {
                   })}
                 </div>
                 {form.paymentType === 'other' && (
-                  <div className="mt-4 rounded-xl border border-white/10 bg-white/5 p-5 text-sm text-white/70 space-y-3">
-                    <p className="font-semibold text-white/90 text-base">Alternative payment options:</p>
+                  <div className="mt-4 space-y-3 rounded-xl border border-white/10 bg-white/5 p-5 text-sm text-white/70">
+                    <p className="text-base font-semibold text-white/90">
+                      Alternative payment options:
+                    </p>
 
                     <div>
-                      <p className="font-medium text-white/80">📞 Credit Card by Phone</p>
-                      <p className="ml-6 text-white/60">(08) 6191 0396 &nbsp;/&nbsp; 0419 945 950 &nbsp;/&nbsp; 1300 851 181 (local rate)<br/>International: +61 8 6191 0396</p>
+                      <p className="font-medium text-white/80">
+                        📞 Credit Card by Phone
+                      </p>
+                      <p className="ml-6 text-white/60">
+                        (08) 6191 0396 &nbsp;/&nbsp; 0419 945 950 &nbsp;/&nbsp;
+                        1300 851 181 (local rate)
+                        <br />
+                        International: +61 8 6191 0396
+                      </p>
                     </div>
 
                     <div>
                       <p className="font-medium text-white/80">🏦 BPAY</p>
-                      <p className="ml-6 text-white/60">Biller Code: <strong className="text-white/80">566380</strong><br/>Your BPAY Reference: <strong className="text-white/80">provided in your invoice</strong></p>
+                      <p className="ml-6 text-white/60">
+                        Biller Code:{' '}
+                        <strong className="text-white/80">566380</strong>
+                        <br />
+                        Your BPAY Reference:{' '}
+                        <strong className="text-white/80">
+                          provided in your invoice
+                        </strong>
+                      </p>
                     </div>
 
                     <div>
-                      <p className="font-medium text-white/80">💳 Direct Deposit</p>
-                      <p className="ml-6 text-white/60">The Stainless Steel Monument Company Pty Ltd<br/>BSB: <strong className="text-white/80">034-604</strong> &nbsp; Account: <strong className="text-white/80">192-715</strong></p>
+                      <p className="font-medium text-white/80">
+                        💳 Direct Deposit
+                      </p>
+                      <p className="ml-6 text-white/60">
+                        The Stainless Steel Monument Company Pty Ltd
+                        <br />
+                        BSB: <strong className="text-white/80">
+                          034-604
+                        </strong>{' '}
+                        &nbsp; Account:{' '}
+                        <strong className="text-white/80">192-715</strong>
+                      </p>
                     </div>
 
                     <div>
                       <p className="font-medium text-white/80">✉️ Cheque</p>
-                      <p className="ml-6 text-white/60">Payable to: <em>The Stainless Steel Monument Company</em><br/>PO Box 1268, Bibra Lake, WA 6965</p>
+                      <p className="ml-6 text-white/60">
+                        Payable to:{' '}
+                        <em>The Stainless Steel Monument Company</em>
+                        <br />
+                        PO Box 1268, Bibra Lake, WA 6965
+                      </p>
                     </div>
 
-                    <p className="pt-1 text-white/40 text-xs border-t border-white/10">
-                      We will commence with your order once we have confirmation of payment.
-                      Questions? Call us or use the{' '}
-                      <a href="https://www.forevershining.com.au/contact/" target="_blank" rel="noopener noreferrer" className="text-[#D4A84F] hover:underline">
+                    <p className="border-t border-white/10 pt-1 text-xs text-white/40">
+                      We will commence with your order once we have confirmation
+                      of payment. Questions? Call us or use the{' '}
+                      <a
+                        href="https://www.forevershining.com.au/contact/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-[#D4A84F] hover:underline"
+                      >
                         contact form
-                      </a>.
+                      </a>
+                      .
                     </p>
                   </div>
                 )}
 
                 {form.paymentType === 'paypal' && (
                   <div className="mt-4">
-                    <div ref={paypalContainerRef} id="paypal-button-container" />
+                    <div
+                      ref={paypalContainerRef}
+                      id="paypal-button-container"
+                    />
                     {!paypalReady && (
-                      <p className="text-sm text-white/40 mt-2">Loading PayPal…</p>
+                      <p className="mt-2 text-sm text-white/40">
+                        Loading PayPal…
+                      </p>
                     )}
                   </div>
                 )}
@@ -612,9 +744,13 @@ export default function BuyDesignPage() {
 
               {/* Order Notes */}
               <section className="rounded-2xl border border-white/10 bg-white/5 p-6">
-                <h2 className="mb-4 text-base font-semibold text-white/90">Order Notes</h2>
+                <h2 className="mb-4 text-base font-semibold text-white/90">
+                  Order Notes
+                </h2>
                 <div>
-                  <label className={labelClass}>Special instructions or comments</label>
+                  <label className={labelClass}>
+                    Special instructions or comments
+                  </label>
                   <textarea
                     className={`${inputClass} resize-none`}
                     rows={4}
@@ -647,12 +783,11 @@ export default function BuyDesignPage() {
                 )}
                 <Link
                   href={`/my-account/designs/${id}`}
-                  className="text-sm text-white/50 hover:text-white transition"
+                  className="text-sm text-white/50 transition hover:text-white"
                 >
                   Cancel
                 </Link>
               </div>
-
             </form>
           )}
         </div>

@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { getServerSession } from '#/lib/auth/session';
 import { getProjectRecord } from '#/lib/projects-db';
+import { db } from '#/lib/db/index';
+import { orders } from '#/lib/db/schema';
+import { and, eq } from 'drizzle-orm';
 
 export async function POST(request: NextRequest) {
   const session = await getServerSession();
@@ -12,7 +15,10 @@ export async function POST(request: NextRequest) {
   const stripeKey = process.env.STRIPE_SECRET_KEY;
   if (!stripeKey) {
     console.error('STRIPE_SECRET_KEY is not set');
-    return NextResponse.json({ error: 'Payment not configured' }, { status: 500 });
+    return NextResponse.json(
+      { error: 'Payment not configured' },
+      { status: 500 },
+    );
   }
 
   const stripe = new Stripe(stripeKey);
@@ -20,24 +26,39 @@ export async function POST(request: NextRequest) {
   try {
     const body = (await request.json()) as {
       projectId: string;
+      orderId: string;
       customerEmail: string;
     };
 
-    const { projectId, customerEmail } = body;
+    const { projectId, orderId, customerEmail } = body;
     const project = await getProjectRecord(projectId, session.accountId);
+    const order = await db.query.orders.findFirst({
+      where: and(
+        eq(orders.id, orderId),
+        eq(orders.projectId, projectId),
+        eq(orders.accountId, session.accountId),
+        eq(orders.status, 'pending'),
+      ),
+    });
 
-    if (!project) {
-      return NextResponse.json({ error: 'Project not found' }, { status: 404 });
+    if (!project || !order) {
+      return NextResponse.json(
+        { error: 'Pending order not found' },
+        { status: 404 },
+      );
     }
 
-    const amountCents = project.totalPriceCents ?? 0;
-    const currency = project.currency ?? 'AUD';
+    const amountCents = order.totalCents;
+    const currency = order.currency;
 
     if (amountCents <= 0) {
       return NextResponse.json({ error: 'Invalid amount' }, { status: 400 });
     }
 
-    const origin = request.headers.get('origin') ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'https://forevershining.org';
+    const origin =
+      request.headers.get('origin') ??
+      process.env.NEXT_PUBLIC_SITE_URL ??
+      'https://forevershining.org';
 
     // Only pass image URLs that are absolute (Stripe requires full URLs)
     const images =
@@ -64,12 +85,15 @@ export async function POST(request: NextRequest) {
       mode: 'payment',
       success_url: `${origin}/my-account/designs/${projectId}/buy?payment=success&session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${origin}/my-account/designs/${projectId}/buy?payment=cancel`,
-      metadata: { projectId, accountId: session.accountId },
+      metadata: { orderId, projectId, accountId: session.accountId },
     });
 
     return NextResponse.json({ sessionId: checkoutSession.id });
   } catch (err) {
     console.error('Stripe session error:', err);
-    return NextResponse.json({ error: 'Failed to create payment session' }, { status: 500 });
+    return NextResponse.json(
+      { error: 'Failed to create payment session' },
+      { status: 500 },
+    );
   }
 }

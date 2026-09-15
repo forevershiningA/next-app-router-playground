@@ -4,6 +4,7 @@ import { db } from '#/lib/db/index';
 import { orders, orderItems, payments } from '#/lib/db/schema';
 import { eq, desc } from 'drizzle-orm';
 import { getProjectRecord } from '#/lib/projects-db';
+import { calculateAuthoritativeQuote } from '#/lib/server/design-pricing';
 
 function generateInvoiceNumber(): string {
   const now = new Date();
@@ -22,15 +23,16 @@ export async function POST(request: NextRequest) {
 
     const body = (await request.json()) as {
       projectId: string;
-      paymentMethod: 'stripe' | 'paypal' | 'other';
-      paymentRef?: string;
-      status?: 'pending' | 'paid';
+      paymentMethod: 'stripe' | 'other';
     };
 
-    const { projectId, paymentMethod, paymentRef, status = 'pending' } = body;
+    const { projectId, paymentMethod } = body;
 
-    if (!projectId) {
-      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
+    if (!projectId || !['stripe', 'other'].includes(paymentMethod)) {
+      return NextResponse.json(
+        { error: 'Missing required fields' },
+        { status: 400 },
+      );
     }
 
     const project = await getProjectRecord(projectId, session.accountId);
@@ -38,58 +40,73 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Project not found' }, { status: 404 });
     }
 
-    const amountCents = project.totalPriceCents ?? 0;
-    const currency = project.currency ?? 'AUD';
-
-    if (amountCents <= 0) {
-      return NextResponse.json({ error: 'Invalid amount' }, { status: 400 });
+    let quote;
+    try {
+      quote = await calculateAuthoritativeQuote(project.designState);
+    } catch (error) {
+      return NextResponse.json(
+        {
+          error:
+            error instanceof Error
+              ? error.message
+              : 'Could not calculate order price',
+        },
+        { status: 422 },
+      );
     }
-
-    const taxCents = Math.round(amountCents * 0.1);
-    const subtotalCents = amountCents - taxCents;
 
     const [order] = await db
       .insert(orders)
       .values({
         projectId,
         accountId: session.accountId,
-        status: status === 'paid' ? 'paid' : 'pending',
-        subtotalCents,
-        taxCents,
-        totalCents: amountCents,
-        currency,
+        status: 'pending',
+        subtotalCents: Math.round(quote.breakdown.subtotal! * 100),
+        taxCents: Math.round(quote.breakdown.tax! * 100),
+        totalCents: quote.totalCents,
+        currency: quote.currency,
         invoiceNumber: generateInvoiceNumber(),
       })
       .returning();
 
-    await db.insert(orderItems).values({
-      orderId: order.id,
-      description: project.title,
-      quantity: 1,
-      unitPriceCents: amountCents,
-    });
+    await db
+      .insert(orderItems)
+      .values({
+        orderId: order.id,
+        description: project.title,
+        quantity: 1,
+        unitPriceCents: quote.totalCents,
+      });
 
-    await db.insert(payments).values({
-      orderId: order.id,
-      provider: paymentMethod,
-      providerRef: paymentRef ?? null,
-      amountCents,
-      currency,
-      status: status === 'paid' ? 'completed' : 'pending',
-      receivedAt: status === 'paid' ? new Date() : null,
-    });
+    await db
+      .insert(payments)
+      .values({
+        orderId: order.id,
+        provider: paymentMethod,
+        providerRef: null,
+        amountCents: quote.totalCents,
+        currency: quote.currency,
+        status: 'pending',
+        receivedAt: null,
+      });
 
-    return NextResponse.json({ orderId: order.id, invoiceNumber: order.invoiceNumber });
+    return NextResponse.json({
+      orderId: order.id,
+      invoiceNumber: order.invoiceNumber,
+    });
   } catch (error) {
     console.error('Error creating order:', error);
-    return NextResponse.json({ error: 'Failed to create order' }, { status: 500 });
+    return NextResponse.json(
+      { error: 'Failed to create order' },
+      { status: 500 },
+    );
   }
 }
 
 export async function GET(_request: NextRequest) {
   try {
     const session = await getServerSession();
-    
+
     if (!session?.accountId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
@@ -115,12 +132,8 @@ export async function GET(_request: NextRequest) {
           where: eq(payments.orderId, order.id),
         });
 
-        return {
-          ...order,
-          items,
-          payments: orderPayments,
-        };
-      })
+        return { ...order, items, payments: orderPayments };
+      }),
     );
 
     return NextResponse.json({ orders: ordersWithDetails });
@@ -128,7 +141,7 @@ export async function GET(_request: NextRequest) {
     console.error('Error fetching orders:', error);
     return NextResponse.json(
       { error: 'Failed to fetch orders' },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

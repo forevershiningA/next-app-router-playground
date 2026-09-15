@@ -64,7 +64,8 @@ function CameraController() {
       wasSelectSizeStep.current = true;
       return;
     }
-    if (!controls || !camera || !productType || productType === 'full-monument') return;
+    if (!controls || !camera || !productType || productType === 'full-monument')
+      return;
     if (hasInitialized.current && !wasSelectSizeStep.current) return;
 
     if ((controls as any).reset) {
@@ -347,7 +348,11 @@ function ProductNameHeader() {
           heightMm: kerbHeightMm,
         };
       default:
-        return { label: isPlaqueProduct ? 'Plaque' : 'Headstone', widthMm, heightMm };
+        return {
+          label: isPlaqueProduct ? 'Plaque' : 'Headstone',
+          widthMm,
+          heightMm,
+        };
     }
   }, [
     editingObject,
@@ -361,11 +366,6 @@ function ProductNameHeader() {
     heightMm,
     isPlaqueProduct,
   ]);
-  const sizeLabel = useMemo(
-    () =>
-      `${activeDimension.label} · ${formatDimensionPair(activeDimension.widthMm, activeDimension.heightMm, unitSystem).replace(/\s*×\s*/g, '×')}`,
-    [activeDimension, unitSystem],
-  );
   const displayShapeName = useMemo(() => {
     if (selectedShape?.name) {
       return selectedShape.name;
@@ -386,16 +386,24 @@ function ProductNameHeader() {
       .replace(/[_-]+/g, ' ')
       .replace(/\b\w/g, (char) => char.toUpperCase());
   }, [selectedShape, shapeUrl]);
+  const sizeLabel = useMemo(() => {
+    const dimensionLabel =
+      activeDimension.label === 'Headstone' && displayShapeName
+        ? displayShapeName
+        : activeDimension.label;
+
+    return `${dimensionLabel} · ${formatDimensionPair(activeDimension.widthMm, activeDimension.heightMm, unitSystem).replace(/\s*×\s*/g, '×')}`;
+  }, [activeDimension, displayShapeName, unitSystem]);
   const priceLabel = `$${totalPrice.toFixed(2)}`;
 
   return (
     <>
       <UnitSystemToggle />
 
-      {/* Product name + Quick Enquiry — top left stack */}
-      <div className="absolute top-6 left-6 z-10 hidden flex-col items-start gap-2 lg:flex">
+      {/* Product context and quote action share one studio toolbar. */}
+      <div className="absolute top-6 left-1/2 z-10 hidden h-12 max-w-[min(38rem,calc(100vw-470px))] -translate-x-1/2 items-stretch rounded-full border border-white/10 bg-black/80 p-1 shadow-xl backdrop-blur-md lg:flex">
         {displayProductName && (
-          <div className="pointer-events-none flex min-h-8 max-w-[min(34rem,calc(100vw-460px))] items-center gap-2 rounded-full border border-white/10 bg-black/55 py-1.5 pr-3.5 pl-2.5 shadow-lg backdrop-blur-md">
+          <div className="pointer-events-none flex min-w-0 items-center gap-2 px-2.5 py-1.5 pr-3">
             <svg
               className="h-3.5 w-3.5 shrink-0 text-[#DEBD68]"
               fill="none"
@@ -413,21 +421,19 @@ function ProductNameHeader() {
               <span className="block truncate text-sm font-semibold tracking-wide text-white">
                 {displayProductName}
               </span>
-              {displayShapeName && (
-                <span className="mt-1 block truncate text-[11px] font-medium tracking-[0.14em] text-white/55 uppercase">
-                  {displayShapeName}
-                </span>
-              )}
             </span>
           </div>
+        )}
+        {displayProductName && (
+          <div className="my-1 h-4 w-px self-center bg-white/20" />
         )}
         <button
           type="button"
           onClick={() => setShowQuickEnquiry(true)}
-          className="border-primary/40 hover:bg-primary/20 pointer-events-auto flex h-8 items-center gap-2 rounded-full border bg-black/55 pr-3.5 pl-2.5 text-sm font-semibold tracking-wide text-white shadow-lg backdrop-blur-md transition-colors"
+          className="pointer-events-auto flex items-center gap-2 rounded-full px-3 text-sm font-semibold tracking-wide text-white transition-colors hover:bg-white/10"
         >
           <svg
-            className="h-3.5 w-3.5 shrink-0"
+            className="h-3.5 w-3.5 shrink-0 text-[#DEBD68]"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -451,41 +457,41 @@ function ProductNameHeader() {
       {/* On mobile keep the quote action below the fixed header. The bottom
           sheet otherwise covers it while editing a design step. */}
       {activeDimension.widthMm > 0 && activeDimension.heightMm > 0 && (
-          <div
-            className={`pointer-events-auto absolute top-[4.75rem] left-1/2 z-40 w-[calc(100vw-2rem)] -translate-x-1/2 md:top-auto md:bottom-8 md:w-auto ${
-              isSelectSizeStep ? 'hidden md:block' : ''
-            }`}
+        <div
+          className={`pointer-events-auto absolute top-[4.75rem] left-1/2 z-40 w-[calc(100vw-2rem)] -translate-x-1/2 md:top-auto md:bottom-8 md:w-auto ${
+            isSelectSizeStep ? 'hidden md:block' : ''
+          }`}
+        >
+          <button
+            type="button"
+            onClick={() => setActivePanel('checkprice')}
+            aria-label="Open check price breakdown"
+            className="flex h-12 w-full cursor-pointer items-center justify-between gap-1.5 rounded-full border border-white/10 bg-black/80 px-4 py-3 font-mono text-base text-white shadow-xl backdrop-blur-md transition-colors hover:bg-black/90 sm:gap-4 md:px-5"
           >
-            <button
-              type="button"
-              onClick={() => setActivePanel('checkprice')}
-              aria-label="Open check price breakdown"
-              className="flex w-full cursor-pointer items-center justify-between gap-1.5 rounded-full border border-white/10 bg-black/80 px-4 py-3 font-mono text-base text-white shadow-xl backdrop-blur-md transition-colors hover:bg-black/90 sm:gap-4 md:px-5"
-            >
-              <span className="flex min-w-0 flex-1 items-center gap-1 text-sm leading-none text-white/80 md:gap-1.5">
-                <span className="truncate">{sizeLabel}</span>
-                <svg
-                  className="h-3.5 w-3.5 shrink-0 text-white/45"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  aria-hidden="true"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="m6 9 6 6 6-6"
-                  />
-                </svg>
-              </span>
-              <div className="h-4 w-px shrink-0 bg-white/20"></div>
-              <span className="shrink-0 whitespace-nowrap font-bold text-[#f3d48f]">
-                {priceLabel}
-              </span>
-            </button>
-          </div>
-        )}
+            <span className="flex min-w-0 flex-1 items-center gap-1 text-sm leading-none text-white/80 md:gap-1.5">
+              <span className="truncate">{sizeLabel}</span>
+              <svg
+                className="h-3.5 w-3.5 shrink-0 text-white/45"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="m6 9 6 6 6-6"
+                />
+              </svg>
+            </span>
+            <div className="h-4 w-px shrink-0 bg-white/20"></div>
+            <span className="shrink-0 font-bold whitespace-nowrap text-[#f3d48f]">
+              {priceLabel}
+            </span>
+          </button>
+        </div>
+      )}
     </>
   );
 }
@@ -497,8 +503,9 @@ export default function ThreeScene() {
   const shapeUrl = useHeadstoneStore((s) => s.shapeUrl);
   const hideScenery = useHeadstoneStore((s) => s.hideScenery);
   const solidBgColor = useHeadstoneStore((s) => s.solidBgColor);
-  const studioBackdropPath = STUDIO_BACKDROP_PATHS[solidBgColor]
-    ?? '/visuals/designer-studio-cyclorama-warm-stone.webp';
+  const studioBackdropPath =
+    STUDIO_BACKDROP_PATHS[solidBgColor] ??
+    '/visuals/designer-studio-cyclorama-warm-stone.webp';
   const pathname = usePathname();
   const isSelectSizeStep = getDesignerStepSlug(pathname) === 'select-size';
   const isMaterialStep = getDesignerStepSlug(pathname) === 'select-material';
@@ -668,12 +675,16 @@ export default function ThreeScene() {
         <div
           ref={containerRef}
           className="relative h-dvh w-full"
-          style={hideScenery ? {
-            backgroundColor: solidBgColor,
-            backgroundImage: `url('${studioBackdropPath}')`,
-            backgroundPosition: 'center',
-            backgroundSize: 'cover',
-          } : undefined}
+          style={
+            hideScenery
+              ? {
+                  backgroundColor: solidBgColor,
+                  backgroundImage: `url('${studioBackdropPath}')`,
+                  backgroundPosition: 'center',
+                  backgroundSize: 'cover',
+                }
+              : undefined
+          }
         >
           {/* Product Name Overlay (above canvas) */}
           <ProductNameHeader />
@@ -686,7 +697,10 @@ export default function ThreeScene() {
               aria-label="Loading material preview"
             >
               <div className="flex items-center gap-3 rounded-full border border-white/15 bg-black/65 px-4 py-3 text-sm font-medium text-white shadow-xl backdrop-blur-md">
-                <span className="h-5 w-5 animate-spin rounded-full border-2 border-white/25 border-t-[#cfac6c]" aria-hidden="true" />
+                <span
+                  className="h-5 w-5 animate-spin rounded-full border-2 border-white/25 border-t-[#cfac6c]"
+                  aria-hidden="true"
+                />
                 Loading material…
               </div>
             </div>
