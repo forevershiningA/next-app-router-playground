@@ -20,6 +20,7 @@ import {
   mapShapeRecord,
   mapBorderRecord,
 } from '#/lib/catalog-mappers';
+import type { ShapeOption } from '#/lib/headstone-store';
 
 const geistSans = Geist({ variable: '--font-geist-sans', subsets: ['latin'] });
 const geistMono = Geist_Mono({
@@ -33,7 +34,10 @@ const playfairDisplay = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: { default: 'Design Your Own Headstone', template: '%s | DYO Headstones' },
+  title: {
+    default: 'Design Your Own Headstone',
+    template: '%s | DYO Headstones',
+  },
   metadataBase: new URL('https://forevershining.org'),
   description:
     'Design custom memorial headstones online with real-time 3D visualization. Choose from 30+ premium materials, personalize inscriptions, add laser-etched photos and decorative elements.',
@@ -74,13 +78,36 @@ export default async function RootLayout({
   }
 
   // Map database records or use fallbacks from _data.ts
-  const materials = rawMaterials.length > 0 
-    ? rawMaterials.map(mapMaterialRecord)
-    : internalData.materials.map(m => ({ id: m.id, name: m.name, category: m.category, image: m.image }));
-  
-  const shapes = rawShapes.length > 0
-    ? rawShapes.map(mapShapeRecord)
-    : internalData.shapes.map(s => ({ id: s.id, name: s.name, category: s.category, image: s.image }));
+  const materials =
+    rawMaterials.length > 0
+      ? rawMaterials.map(mapMaterialRecord)
+      : internalData.materials.map((m) => ({
+          id: m.id,
+          name: m.name,
+          category: m.category,
+          image: m.image,
+        }));
+
+  const fallbackShapes = internalData.shapes.map((shape) => ({
+    id: shape.id,
+    name: shape.name,
+    category: shape.category,
+    image: shape.image,
+  }));
+  const shapes =
+    rawShapes.length > 0
+      ? (() => {
+          // The catalog can contain only the core shape set. Keep its records
+          // authoritative while retaining locally shipped category-only shapes.
+          const shapesByAsset = new Map<string, ShapeOption>(
+            fallbackShapes.map((shape) => [shape.image ?? shape.id, shape]),
+          );
+          for (const shape of rawShapes.map(mapShapeRecord)) {
+            shapesByAsset.set(shape.image ?? shape.id, shape);
+          }
+          return [...shapesByAsset.values()];
+        })()
+      : fallbackShapes;
 
   // Use borders from _data.ts (bronze borders for Bronze Plaque)
   const borders = internalData.borders.map((border) => ({
@@ -89,9 +116,14 @@ export default async function RootLayout({
     category: border.category,
     image: border.image,
   }));
-  
+
   return (
-    <html lang="en" data-theme="dark" className="[color-scheme:dark]" suppressHydrationWarning>
+    <html
+      lang="en"
+      data-theme="dark"
+      className="[color-scheme:dark]"
+      suppressHydrationWarning
+    >
       {/* Prevent flash-of-unstyled-content: read theme from localStorage before first paint */}
       <head>
         <script
@@ -112,9 +144,7 @@ export default async function RootLayout({
             <BordersLoader borders={borders} />
             <MobileHeader />
             <ConditionalNav items={demos} />
-            <MainContent>
-              {children}
-            </MainContent>
+            <MainContent>{children}</MainContent>
             <ThemeToggle />
           </ErrorBoundary>
         </ThemeProvider>

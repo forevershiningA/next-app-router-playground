@@ -16,6 +16,10 @@ const LINE_Z_OFFSET = 0.001;
 /** Line width in pixels (fat-line rendering, works on all platforms) */
 const LINE_WIDTH_PX = 6;
 
+// Bump when changing contour construction so Fast Refresh cannot retain an
+// already memoized Three.js object in an open designer canvas.
+const CONTOUR_BUILD_VERSION = 2;
+
 /** Shapes that support the inset contour border (simple traditional shapes). */
 const CONTOUR_SHAPE_FILES = new Set([
   'cropped_peak.svg',
@@ -32,15 +36,15 @@ const CONTOUR_SHAPE_FILES = new Set([
 ]);
 
 /** Check whether the current shape supports inset contour. */
-export function isContourSupported(shapeUrl: string | null | undefined): boolean {
+export function isContourSupported(
+  shapeUrl: string | null | undefined,
+): boolean {
   if (!shapeUrl) return false;
   const filename = shapeUrl.split('/').pop() ?? '';
   return CONTOUR_SHAPE_FILES.has(filename);
 }
 
-type InsetContourLineProps = {
-  headstone: HeadstoneAPI;
-};
+type InsetContourLineProps = { headstone: HeadstoneAPI };
 
 /**
  * Extract the upper arc of the outline (excluding the flat bottom edge).
@@ -91,18 +95,22 @@ function offsetOpenPathInward(
       const edge = new THREE.Vector2().subVectors(points[1], points[0]);
       if (edge.lengthSq() < 1e-10) continue;
       const norm = new THREE.Vector2(edge.y, -edge.x).normalize();
-      result.push(new THREE.Vector2(
-        points[0].x + norm.x * distance,
-        points[0].y + norm.y * distance,
-      ));
+      result.push(
+        new THREE.Vector2(
+          points[0].x + norm.x * distance,
+          points[0].y + norm.y * distance,
+        ),
+      );
     } else if (i === n - 1) {
       const edge = new THREE.Vector2().subVectors(points[n - 1], points[n - 2]);
       if (edge.lengthSq() < 1e-10) continue;
       const norm = new THREE.Vector2(edge.y, -edge.x).normalize();
-      result.push(new THREE.Vector2(
-        points[n - 1].x + norm.x * distance,
-        points[n - 1].y + norm.y * distance,
-      ));
+      result.push(
+        new THREE.Vector2(
+          points[n - 1].x + norm.x * distance,
+          points[n - 1].y + norm.y * distance,
+        ),
+      );
     } else {
       const edge1 = new THREE.Vector2().subVectors(points[i], points[i - 1]);
       const edge2 = new THREE.Vector2().subVectors(points[i + 1], points[i]);
@@ -113,19 +121,23 @@ function offsetOpenPathInward(
 
       const avg = new THREE.Vector2().addVectors(n1, n2);
       if (avg.lengthSq() < 1e-10) {
-        result.push(new THREE.Vector2(
-          points[i].x + n1.x * distance,
-          points[i].y + n1.y * distance,
-        ));
+        result.push(
+          new THREE.Vector2(
+            points[i].x + n1.x * distance,
+            points[i].y + n1.y * distance,
+          ),
+        );
         continue;
       }
       avg.normalize();
       const cosHalf = Math.max(0.5, n1.dot(avg));
       const miterDist = Math.min(distance / cosHalf, distance * 1.42);
-      result.push(new THREE.Vector2(
-        points[i].x + avg.x * miterDist,
-        points[i].y + avg.y * miterDist,
-      ));
+      result.push(
+        new THREE.Vector2(
+          points[i].x + avg.x * miterDist,
+          points[i].y + avg.y * miterDist,
+        ),
+      );
     }
   }
 
@@ -155,7 +167,9 @@ export default function InsetContourLine({ headstone }: InsetContourLineProps) {
     if (upperArc.length < 3) return null;
 
     // Bounding box of the upper arc
-    let minX = Infinity, maxX = -Infinity, maxY = -Infinity;
+    let minX = Infinity,
+      maxX = -Infinity,
+      maxY = -Infinity;
     for (const p of upperArc) {
       minX = Math.min(minX, p.x);
       maxX = Math.max(maxX, p.x);
@@ -173,12 +187,18 @@ export default function InsetContourLine({ headstone }: InsetContourLineProps) {
 
     let curveStart = 0;
     for (let i = 0; i < upperArc.length; i++) {
-      if (upperArc[i].x > minX + xThresh) { curveStart = i; break; }
+      if (upperArc[i].x > minX + xThresh) {
+        curveStart = i;
+        break;
+      }
     }
 
     let curveEnd = upperArc.length - 1;
     for (let i = upperArc.length - 1; i >= 0; i--) {
-      if (upperArc[i].x < maxX - xThresh) { curveEnd = i; break; }
+      if (upperArc[i].x < maxX - xThresh) {
+        curveEnd = i;
+        break;
+      }
     }
 
     const mat = new LineMaterial({
@@ -190,23 +210,43 @@ export default function InsetContourLine({ headstone }: InsetContourLineProps) {
       opacity: 0.85,
       resolution: new THREE.Vector2(1920, 1080),
     });
+    // `Line2` normally renders a rounded cap beyond each endpoint. Treat the
+    // contour as one very long, gap-free dash to discard those caps, so the
+    // Serpentine curve ends flush with the inset side lines.
+    mat.dashed = true;
+    mat.dashSize = 1_000_000;
+    mat.gapSize = 0;
+
+    const createLine = (positions: number[]) => {
+      const geometry = new LineGeometry();
+      geometry.setPositions(positions);
+      const line = new Line2(geometry, mat);
+      line.computeLineDistances();
+      line.renderOrder = 20;
+      return line;
+    };
 
     if (curveEnd <= curveStart + 1) {
       // No distinct curve (rectangular shape) — draw a simple inset rectangle
       const topY = maxY - insetLocal;
       const positions = [
-        leftX, bottomY, 0,
-        leftX, topY, 0,
-        rightX, topY, 0,
-        rightX, bottomY, 0,
-        leftX, bottomY, 0,
+        leftX,
+        bottomY,
+        0,
+        leftX,
+        topY,
+        0,
+        rightX,
+        topY,
+        0,
+        rightX,
+        bottomY,
+        0,
+        leftX,
+        bottomY,
+        0,
       ];
-      const geom = new LineGeometry();
-      geom.setPositions(positions);
-      const line = new Line2(geom, mat);
-      line.computeLineDistances();
-      line.renderOrder = 20;
-      return line;
+      return createLine(positions);
     }
 
     // Offset only the curved top portion inward
@@ -218,35 +258,36 @@ export default function InsetContourLine({ headstone }: InsetContourLineProps) {
     offsetCurve[0].x = leftX;
     offsetCurve[offsetCurve.length - 1].x = rightX;
 
-    // Build path: bottom-left → left vertical → curve → right vertical → bottom → close
-    const positions: number[] = [];
-
-    // Bottom-left corner
-    positions.push(leftX, bottomY, 0);
-
-    // Curve (first point at leftX connects from left vertical,
-    //        last point at rightX connects to right vertical)
+    // Keep the top curve separate from the side/bottom frame. A single fat-line
+    // path creates a large miter at each acute curve-to-vertical transition,
+    // visibly extending the Serpentine arc beyond the vertical contour.
+    const curvePositions: number[] = [];
     for (const p of offsetCurve) {
-      positions.push(p.x, p.y, 0);
+      curvePositions.push(p.x, p.y, 0);
     }
 
-    // Bottom-right corner
-    positions.push(rightX, bottomY, 0);
-
-    // Close: bottom line back to start
-    positions.push(leftX, bottomY, 0);
-
-    const geom = new LineGeometry();
-    geom.setPositions(positions);
-    const line = new Line2(geom, mat);
-    line.computeLineDistances();
-    line.renderOrder = 20;
-    return line;
-  }, [outlinePoints, unitsPerMeter]);
+    const contour = new THREE.Group();
+    contour.add(
+      createLine([leftX, bottomY, 0, leftX, offsetCurve[0].y, 0]),
+      createLine(curvePositions),
+      createLine([
+        rightX,
+        offsetCurve[offsetCurve.length - 1].y,
+        0,
+        rightX,
+        bottomY,
+        0,
+        leftX,
+        bottomY,
+        0,
+      ]),
+    );
+    return contour;
+    // `CONTOUR_BUILD_VERSION` intentionally invalidates this object after a
+    // Fast Refresh that changes the contour-construction code.
+  }, [outlinePoints, unitsPerMeter, CONTOUR_BUILD_VERSION]); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (!lineObject) return null;
 
-  return (
-    <primitive object={lineObject} position-z={LINE_Z_OFFSET} />
-  );
+  return <primitive object={lineObject} position-z={LINE_Z_OFFSET} />;
 }

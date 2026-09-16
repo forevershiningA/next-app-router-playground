@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-09-15
+**Last Updated:** 2026-09-16
 
 **Status entry order:** Add new dated status entries immediately after the table of contents, before the existing status entries. Keep status entries in reverse chronological order (newest first); do not append them to the end of this file.
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots), **Vitest 4.1.8** (unit tests), **Playwright 1.59.1** (E2E tests)
@@ -104,14 +104,24 @@
 93. [September 13 Regression Audit and Local Payment Test Status](#current-status-2026-09-13--regression-audit-and-local-payment-test-status)
 94. [September 14 Initial Audit Remediation](#current-status-2026-09-14--initial-audit-remediation)
 95. [September 15 Designer Material and Scene-Chip Polish](#current-status-2026-09-15--designer-material-and-scene-chip-polish)
+96. [September 16 Bronze Plaque Fastening and Perimeter-Wall Corrections](#current-status-2026-09-16--bronze-plaque-fastening-and-perimeter-wall-corrections)
 
 ---
+
+## Current Status (2026-09-16) — Bronze Plaque Fastening and Perimeter-Wall Corrections
+
+- **Separate depth-axis conversion:** `SvgHeadstone` now exposes `depthUnitsPerMeter`, because its X/Y scale follows the requested plaque dimensions while the extrusion axis uses the unmodified SVG scale. Physical parts that extend along Z must use the latter scale.
+- **Bronze plaque fixing preview:** `PlaqueFixings` uses the depth conversion for lugs and studs, preventing the default **Lugs with Studs** option from rendering as long rods. The **Screws** option now uses short, solid bronze cylinder heads with dark diagonal slots, and its offsets/thicknesses no longer float ahead of the plaque in side views.
+- **Rectangular plaque perimeter:** when a rectangular source SVG is shortened to a requested height (for example its native 4:3 silhouette rendered at 300×200 mm), the perimeter wall now clamps to the same bottom edge as the cap. This removes the dangling polygon previously visible below the lower-right edge.
+- **Validation:** `pnpm exec tsc --noEmit`, Prettier, and `git diff --check` pass. `components/SvgHeadstone.tsx` retains 10 pre-existing ESLint warnings but no errors.
 
 ## Current Status (2026-09-15) — Designer Material and Scene-Chip Polish
 
 - **Client/server import boundary fixed:** `lib/motif-pricing.ts` is again safe for UI and browser imports. Its browser-only `fetchAndParseMotifPricing` uses `fetch` and the native `DOMParser`; the server implementation is isolated in `lib/server/motif-pricing.ts`, which imports `server-only`, `fs/promises`, and `dom-parser-polyfill`. Server callers must import from `#/lib/server/motif-pricing`, never from the shared module. This prevents Pages Router/client dependency graphs from resolving `server-only` through the shared pricing module.
 - **Material selector day-mode polish:** `components/MaterialSelector.tsx` improves contrast for the option counter and selection state, uses lighter material-card footers in the day theme, and keeps the selected material visible inline without consuming additional vertical space. `components/DesignerNav.tsx` also shortens the desktop guided-step header slightly so material choices begin higher in the sidebar.
 - **Unified scene overlay chips:** `components/ThreeScene.tsx` combines product context and Quick Enquiry into a horizontally centred top chip. It now shares the bottom price chip's dark pill language, 48 px height, translucent common border, and divider; Quick Enquiry no longer has its own border. The selected shape name is shown in the bottom dimension/price chip instead of below the product name; non-headstone selections retain their part label (Base, Ledger, or Kerbset).
+- **Shape navigation reliability:** `app/layout.tsx` merges active catalog shapes over the local shape list by asset, so a partial database catalogue cannot hide Modern, Military, or First Responders. `ShapeSelector.tsx` declares horizontal touch scrolling and snap points for its category rail. `ThreeScene.tsx` resolves the displayed shape from the active `shapeUrl` and store list rather than falling back to the catalog's first shape; the default `serpentine.svg` therefore displays as **Serpentine**, not Cropped Peak.
+- **Inset contour — unresolved visual defect:** On **Serpentine**, the white Inset Contour Border's upper curve still visibly reaches beyond the two inset vertical sides (confirmed again from `screen.png` after the changes below). The desired result is for the upper curve to terminate exactly at those vertical lines. The current implementation in `components/three/InsetContourLine.tsx` has been changed to render the curve separately from the side/bottom frame, use continuous dashed `Line2` rendering to discard endpoint caps, and include `CONTOUR_BUILD_VERSION` in its memoization dependencies. Those changes compile, but they have **not** produced the requested visual result and must not be treated as a fix. The next investigation should verify the actual `outlinePoints` and object rendered in the active scene, then calculate the curve endpoints by intersecting the inset verticals rather than inferring them from the outline's bounding-box threshold.
 - **Validation:** `pnpm type-check` and `git diff --check` pass. Targeted ESLint runs report only existing warnings in `DesignerNav.tsx`, `MaterialSelector.tsx`, and `ThreeScene.tsx`; no ESLint errors were introduced. A production build reached the module bundling stage without the previous `server-only` import error, then stalled without further output and was stopped.
 
 ## Current Status (2026-09-14) — Initial Audit Remediation

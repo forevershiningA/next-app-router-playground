@@ -854,6 +854,7 @@ export default function ShapeSwapper({
                   worldHeight={api.worldHeight}
                   depth={headstoneDepth}
                   unitsPerMeter={api.unitsPerMeter}
+                  depthUnitsPerMeter={api.depthUnitsPerMeter}
                 />
               )}
 

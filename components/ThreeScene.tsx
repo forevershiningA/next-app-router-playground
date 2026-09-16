@@ -147,6 +147,7 @@ function ProductNameHeader() {
   const additionCost = useHeadstoneStore((s) => s.additionCost);
   const emblemCost = useHeadstoneStore((s) => s.emblemCost);
   const fixedSizes = useHeadstoneStore((s) => s.fixedSizes);
+  const shapes = useHeadstoneStore((s) => s.shapes);
   const setActivePanel = useHeadstoneStore((s) => s.setActivePanel);
   const unitSystem = useUnitSystem();
   const [resolvedCatalog, setResolvedCatalog] = useState<CatalogData | null>(
@@ -367,14 +368,12 @@ function ProductNameHeader() {
     isPlaqueProduct,
   ]);
   const displayShapeName = useMemo(() => {
-    if (selectedShape?.name) {
-      return selectedShape.name;
-    }
     if (!shapeUrl || shapeUrl.startsWith('data:')) {
       return shapeUrl ? 'Custom Shape' : null;
     }
 
     const filename = shapeUrl
+      .split('?')[0]
       .split('/')
       .pop()
       ?.replace(/\.svg$/i, '');
@@ -382,10 +381,21 @@ function ProductNameHeader() {
       return null;
     }
 
+    const storedShape = shapes.find(
+      (shape) =>
+        shape.image
+          ?.split('/')
+          .pop()
+          ?.replace(/\.svg$/i, '') === filename,
+    );
+    if (storedShape) {
+      return storedShape.name;
+    }
+
     return filename
       .replace(/[_-]+/g, ' ')
       .replace(/\b\w/g, (char) => char.toUpperCase());
-  }, [selectedShape, shapeUrl]);
+  }, [shapeUrl, shapes]);
   const sizeLabel = useMemo(() => {
     const dimensionLabel =
       activeDimension.label === 'Headstone' && displayShapeName

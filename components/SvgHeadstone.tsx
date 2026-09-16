@@ -2,7 +2,14 @@
 'use client';
 
 import * as React from 'react';
-import { useMemo, useLayoutEffect, useImperativeHandle, useRef, useState, useEffect } from 'react';
+import {
+  useMemo,
+  useLayoutEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+  useEffect,
+} from 'react';
 import * as THREE from 'three';
 import { useLoader } from '@react-three/fiber';
 import type { ThreeElements } from '@react-three/fiber';
@@ -10,18 +17,16 @@ import { SVGLoader } from 'three/examples/jsm/loaders/SVGLoader.js';
 import * as BufferGeometryUtils from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import { Edges, Line as DreiLine, useTexture } from '@react-three/drei';
 import { Line } from '#/lib/headstone-store';
-import { createStainlessTextureSet, type StainlessFinish } from '#/lib/stainless-texture';
+import {
+  createStainlessTextureSet,
+  type StainlessFinish,
+} from '#/lib/stainless-texture';
 import { POLISHED_GRANITE_TINT } from '#/lib/granite-material';
 
 const DEFAULT_FACE_FALLBACK = '/textures/forever/l/Imperial-Red.webp';
 
 type SvgLineOverlay = {
-  bounds: {
-    left: number;
-    top: number;
-    width: number;
-    height: number;
-  };
+  bounds: { left: number; top: number; width: number; height: number };
   lines: THREE.Vector3[][];
 };
 
@@ -163,6 +168,8 @@ export type HeadstoneAPI = {
   mesh: React.RefObject<THREE.Mesh>;
   frontZ: number;
   unitsPerMeter: number;
+  /** Local units per world metre along the extrusion/depth axis. */
+  depthUnitsPerMeter?: number;
   version: number;
   worldWidth: number;
   worldHeight: number;
@@ -250,13 +257,22 @@ type Props = {
   headstoneStyle?: 'upright' | 'slant';
   slantThickness?: number; // Absolute thickness in mm (100-300mm)
   meshProps?: ThreeElements['mesh'];
-  children?: (api: HeadstoneAPI, selectedAdditions: string[]) => React.ReactNode;
+  children?: (
+    api: HeadstoneAPI,
+    selectedAdditions: string[],
+  ) => React.ReactNode;
   selectedAdditions?: string[];
 };
 
 /* ---------------- helpers ---------------- */
 
-function roundedRectShape(minX: number, maxX: number, minY: number, maxY: number, r: number): THREE.Shape {
+function roundedRectShape(
+  minX: number,
+  maxX: number,
+  minY: number,
+  maxY: number,
+  r: number,
+): THREE.Shape {
   const shape = new THREE.Shape();
   shape.moveTo(minX + r, minY);
   shape.lineTo(maxX - r, minY);
@@ -273,7 +289,10 @@ function roundedRectShape(minX: number, maxX: number, minY: number, maxY: number
 
 function shapeBounds(shape: THREE.Shape) {
   const pts = shape.getPoints(256);
-  let minX = +Infinity, maxX = -Infinity, minY = +Infinity, maxY = -Infinity;
+  let minX = +Infinity,
+    maxX = -Infinity,
+    minY = +Infinity,
+    maxY = -Infinity;
   for (const p of pts) {
     if (p.x < minX) minX = p.x;
     if (p.x > maxX) maxX = p.x;
@@ -281,7 +300,10 @@ function shapeBounds(shape: THREE.Shape) {
     if (p.y > maxY) maxY = p.y;
   }
   return {
-    minX, maxX, minY, maxY,
+    minX,
+    maxX,
+    minY,
+    maxY,
     dx: Math.max(EPS, maxX - minX),
     dy: Math.max(EPS, maxY - minY),
   };
@@ -289,7 +311,9 @@ function shapeBounds(shape: THREE.Shape) {
 
 function spacedOutline(shape: THREE.Shape, segments = 2048) {
   // Get spaced points to ensure uniform density along the curve
-  const pts = shape.getSpacedPoints(segments).map((p) => new THREE.Vector2(p.x, p.y));
+  const pts = shape
+    .getSpacedPoints(segments)
+    .map((p) => new THREE.Vector2(p.x, p.y));
   const cum = new Array<number>(pts.length).fill(0);
   let L = 0;
   for (let i = 1; i < pts.length; i++) {
@@ -300,7 +324,10 @@ function spacedOutline(shape: THREE.Shape, segments = 2048) {
   return { pts, cum, total: L };
 }
 
-function isLargeCircularOverlayLine(points: THREE.Vector3[], bounds: SvgLineOverlay['bounds']) {
+function isLargeCircularOverlayLine(
+  points: THREE.Vector3[],
+  bounds: SvgLineOverlay['bounds'],
+) {
   if (points.length < 2) return true;
 
   let minX = Infinity;
@@ -358,7 +385,10 @@ function extractSvgLinesFromDom(svg: string, bounds: SvgLineOverlay['bounds']) {
     if (!d) continue;
 
     for (const pathData of splitSvgPathDataByMove(d)) {
-      const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      const path = document.createElementNS(
+        'http://www.w3.org/2000/svg',
+        'path',
+      );
       path.setAttribute('d', pathData);
 
       let length = 0;
@@ -370,7 +400,10 @@ function extractSvgLinesFromDom(svg: string, bounds: SvgLineOverlay['bounds']) {
 
       if (!Number.isFinite(length) || length <= 0) continue;
 
-      const sampleCount = Math.min(maxSamplesPerPath, Math.max(24, Math.ceil(length / 8)));
+      const sampleCount = Math.min(
+        maxSamplesPerPath,
+        Math.max(24, Math.ceil(length / 8)),
+      );
       const currentLine: THREE.Vector3[] = [];
 
       for (let i = 0; i <= sampleCount; i++) {
@@ -378,7 +411,10 @@ function extractSvgLinesFromDom(svg: string, bounds: SvgLineOverlay['bounds']) {
         currentLine.push(new THREE.Vector3(rawPoint.x, rawPoint.y, 0));
       }
 
-      if (currentLine.length > 1 && !isLargeCircularOverlayLine(currentLine, bounds)) {
+      if (
+        currentLine.length > 1 &&
+        !isLargeCircularOverlayLine(currentLine, bounds)
+      ) {
         lines.push(simplifyOverlayLine(currentLine));
         if (lines.length >= maxLines) return lines;
       }
@@ -414,7 +450,12 @@ function useSvgLineOverlay(url: string | null): SvgLineOverlay | null {
           .map(Number);
         const bounds =
           viewBox && viewBox.length === 4 && viewBox.every(Number.isFinite)
-            ? { left: viewBox[0], top: viewBox[1], width: viewBox[2], height: viewBox[3] }
+            ? {
+                left: viewBox[0],
+                top: viewBox[1],
+                width: viewBox[2],
+                height: viewBox[3],
+              }
             : null;
         if (!bounds || bounds.width <= 0 || bounds.height <= 0) {
           throw new Error('Missing valid SVG viewBox');
@@ -426,8 +467,13 @@ function useSvgLineOverlay(url: string | null): SvgLineOverlay | null {
           const parsed = new SVGLoader().parse(svg);
           for (const path of parsed.paths) {
             for (const subPath of path.subPaths) {
-              const points = subPath.getPoints(48).map((point) => new THREE.Vector3(point.x, point.y, 0));
-              if (points.length > 1 && !isLargeCircularOverlayLine(points, bounds)) {
+              const points = subPath
+                .getPoints(48)
+                .map((point) => new THREE.Vector3(point.x, point.y, 0));
+              if (
+                points.length > 1 &&
+                !isLargeCircularOverlayLine(points, bounds)
+              ) {
                 lines.push(simplifyOverlayLine(points));
                 if (lines.length >= 220) break;
               }
@@ -512,7 +558,10 @@ function StainlessHeadstoneRim({
     );
 
     const rimMaterial = new THREE.MeshPhysicalMaterial({
-      color: finish === 'polished' ? new THREE.Color('#f6f8f8') : new THREE.Color('#dfe5e5'),
+      color:
+        finish === 'polished'
+          ? new THREE.Color('#f6f8f8')
+          : new THREE.Color('#dfe5e5'),
       metalness: 0.92,
       roughness: finish === 'polished' ? 0.12 : 0.24,
       clearcoat: 0.9,
@@ -548,1706 +597,2111 @@ function StainlessHeadstoneRim({
 
   return (
     <group renderOrder={9}>
-      <mesh geometry={rim.rimGeometry} material={rim.rimMaterial} renderOrder={9} />
-      <mesh geometry={rim.grooveGeometry} material={rim.grooveMaterial} renderOrder={9} />
+      <mesh
+        geometry={rim.rimGeometry}
+        material={rim.rimMaterial}
+        renderOrder={9}
+      />
+      <mesh
+        geometry={rim.grooveGeometry}
+        material={rim.grooveMaterial}
+        renderOrder={9}
+      />
     </group>
   );
 }
 
-const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
-  url,
-  depth,
-  scale = 0.01,
-  faceTexture,
-  sideTexture,
-  autoRepeat = false,
-  tileSize = 0.1,
-  sideTileSize,
-  faceRepeatX = 6,
-  faceRepeatY = 6,
-  stretchFace = false,
-  sideRepeatX = 8,
-  sideRepeatY = 1,
-  targetHeight,
-  targetWidth,
-  sourceSvgOverlayUrl = null,
-  showSvgEngraving = false,
-  engravingColor = '#e8e2d6',
-  engravingStrokeWidthMm,
-  preserveTop = true,
-  bevel = false,
-  doubleSided = false,
-  showEdges = false,
-  isFullColourPlaque = false,
-  isUrn = false,
-  isStainlessSteel = false,
-  showStainlessRim = false,
-  ssFinish = 'brushed' as StainlessFinish,
-  cornerRadius = 0,
-  headstoneStyle = 'upright',
-  slantThickness = 150, // Default 150mm
-  meshProps,
-  children,
-  selectedAdditions = [],
-}, ref) => {
-  
-  // 1. Load SVG and Textures
-  const svgData = useLoader(SVGLoader, url);
-  const sourceSvgCanvasOverlayTexture = useSvgCanvasOverlayTexture(sourceSvgOverlayUrl);
-  const sourceSvgBlobOverlayTexture = useBlobTexture(
-    isSvgLikeUrl(sourceSvgOverlayUrl) ? null : sourceSvgOverlayUrl,
-  );
-  const sourceSvgOverlayTexture = sourceSvgCanvasOverlayTexture ?? sourceSvgBlobOverlayTexture;
-  const sourceSvgLineOverlay = useSvgLineOverlay(null);
-  const hasSideTexture = sideTexture !== null;
-  const sideTextureSrc = sideTexture ?? faceTexture;
-
-  // Detect blob:/data: face textures — bypass drei's useTexture pipeline
-  const isBlobFace = faceTexture.startsWith('blob:') || faceTexture.startsWith('data:');
-  const blobFaceTexture = useBlobTexture(isBlobFace ? faceTexture : null);
-  const safeFaceTexture = isBlobFace ? DEFAULT_FACE_FALLBACK : faceTexture;
-  const safeSideTexture = isBlobFace ? DEFAULT_FACE_FALLBACK : sideTextureSrc;
-
-  const textures = useTexture({
-    face: safeFaceTexture,
-    ...(hasSideTexture ? { side: safeSideTexture } : {}),
-  });
-
-  // 2. Clone Textures (FIX: Enable Mipmaps and correct Filtering)
-  const activeFace = blobFaceTexture ?? textures.face;
-  const [clonedFaceMap, clonedSideMap, clonedBackMap, faceDetailMap, sideDetailMap, backDetailMap] = useMemo(() => {
-    const f = activeFace.clone();
-    const s = ('side' in textures) ? (textures as { face: THREE.Texture; side: THREE.Texture }).side.clone() : null;
-    // The back is a cap (width × height), not part of the side perimeter.
-    // It needs independent repeat values from the continuous side strip.
-    const b = s?.clone() ?? null;
-    const fd = activeFace.clone();
-    const sd = ('side' in textures) ? (textures as { face: THREE.Texture; side: THREE.Texture }).side.clone() : null;
-    const bd = sd?.clone() ?? null;
-    
-    [f, s, b, fd, sd, bd].forEach(t => {
-      if (!t) return;
-      t.wrapS = t.wrapT = THREE.RepeatWrapping;
-      t.minFilter = THREE.LinearMipmapLinearFilter; 
-      t.magFilter = THREE.LinearFilter;
-      (t as any).anisotropy = 16;
-      t.generateMipmaps = true;
-      t.needsUpdate = true;
-    });
-
-    // Match the base material: granite photographs are colour maps and must
-    // be decoded as sRGB. Leaving the clone in the loader default makes the
-    // same swatch appear brighter and less saturated on the headstone.
-    [f, s, b].forEach((texture) => {
-      if (texture) texture.colorSpace = THREE.SRGBColorSpace;
-    });
-
-    [fd, sd, bd].forEach((texture) => {
-      if (texture) texture.colorSpace = THREE.NoColorSpace;
-    });
-    
-    return [f, s, b, fd, sd, bd] as const;
-  }, [activeFace, 'side' in textures ? textures.side : null]);
-
-  // 2a. Dispose cloned textures on cleanup
-  React.useEffect(() => {
-    return () => {
-      clonedFaceMap.dispose();
-      clonedSideMap?.dispose();
-      clonedBackMap?.dispose();
-      faceDetailMap.dispose();
-      sideDetailMap?.dispose();
-      backDetailMap?.dispose();
-    };
-  }, [clonedFaceMap, clonedSideMap, clonedBackMap, faceDetailMap, sideDetailMap, backDetailMap]);
-
-  // 2b. Generate Rock Pitch Normal Map for Slant Headstones
-  const rockNormalCanvas = useMemo(() => {
-    if (headstoneStyle !== 'slant') return null;
-
-    const size = 1024; // Increased resolution for better detail
-    const canvas = document.createElement('canvas');
-    canvas.width = size;
-    canvas.height = size;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return null;
-
-    const imageData = ctx.getImageData(0, 0, size, size);
-    const data = imageData.data;
-
-    // Pseudo-random deterministic noise
-    const fract = (x: number) => x - Math.floor(x);
-    const random2 = (x: number, y: number) => {
-      return {
-        x: fract(Math.sin(x * 12.9898 + y * 78.233) * 43758.5453),
-        y: fract(Math.sin(x * 26.345 + y * 42.123) * 31421.3551)
-      };
-    };
-
-    // Voronoi-based faceted height map - increased scale for smaller chips
-    const getHeight = (u: number, v: number) => {
-      const scale = 20.0; // Reduced from 24.0 for balance
-      const su = u * scale;
-      const sv = v * scale;
-
-      let minDist = 999;
-      for (let dy = -1; dy <= 1; dy++) {
-        for (let dx = -1; dx <= 1; dx++) {
-          const cellX = Math.floor(su) + dx;
-          const cellY = Math.floor(sv) + dy;
-          const rand = random2(cellX, cellY);
-          const pointX = cellX + rand.x;
-          const pointY = cellY + rand.y;
-          const dist = Math.sqrt((su - pointX) ** 2 + (sv - pointY) ** 2);
-          if (dist < minDist) minDist = dist;
-        }
-      }
-
-      return Math.pow(1.0 - Math.min(minDist, 1.0), 0.5);
-    };
-
-    // Generate height map and convert to normal map
-    const heights: number[][] = [];
-    for (let y = 0; y < size; y++) {
-      heights[y] = [];
-      for (let x = 0; x < size; x++) {
-        heights[y][x] = getHeight(x / size, y / size);
-      }
-    }
-
-    // Negative strength for "pop-out" bumps
-    const strength = -15.0;
-    for (let y = 0; y < size; y++) {
-      for (let x = 0; x < size; x++) {
-        const xRight = (x + 1) % size;
-        const yDown = (y + 1) % size;
-
-        const h0 = heights[y][x];
-        const hRight = heights[y][xRight];
-        const hDown = heights[yDown][x];
-
-        const dX = (h0 - hRight) * strength;
-        const dY = (h0 - hDown) * strength;
-
-        const norm = Math.sqrt(dX * dX + dY * dY + 1);
-        const nx = dX / norm;
-        const ny = dY / norm;
-        const nz = 1 / norm;
-
-        const idx = (y * size + x) * 4;
-        data[idx] = ((nx * 0.5 + 0.5) * 255) | 0;
-        data[idx + 1] = ((ny * 0.5 + 0.5) * 255) | 0;
-        data[idx + 2] = ((nz * 0.5 + 0.5) * 255) | 0;
-        data[idx + 3] = 255;
-      }
-    }
-
-    ctx.putImageData(imageData, 0, 0);
-    return canvas;
-  }, [headstoneStyle]);
-
-  // 2c. Create normal map texture from canvas
-  const rockNormalTexture = useMemo(() => {
-    if (!rockNormalCanvas) return null;
-    
-    const tex = new THREE.CanvasTexture(rockNormalCanvas);
-    tex.wrapS = THREE.RepeatWrapping;
-    tex.wrapT = THREE.RepeatWrapping;
-    tex.colorSpace = THREE.NoColorSpace;
-    tex.needsUpdate = true;
-    
-    return tex;
-  }, [rockNormalCanvas]);
-
-  // 2d. Cleanup rock normal texture
-  React.useEffect(() => {
-    return () => {
-      if (rockNormalTexture) {
-        rockNormalTexture.dispose();
-      }
-    };
-  }, [rockNormalTexture]);
-
-  // 3. Pre-calculate shape bounds and parameters
-  const shapeParams = useMemo(() => {
-    const shapes: Array<{ shape: THREE.Shape; pathIndex: number }> = [];
-    svgData.paths.forEach((path: any, pathIndex: number) => {
-      // SVG catalogue files commonly include a second path solely for the
-      // 2D outline (`fill="none"`, `stroke=...`). Extruding that path turns
-      // the outline into a duplicate solid, which overlays the front/back
-      // caps and corrupts their planar granite texture mapping.
-      if (path.userData?.style?.fill === 'none') return;
-      shapes.push(
-        ...SVGLoader.createShapes(path).map((shape) => ({ shape, pathIndex })),
-      );
-    });
-    
-    if (!shapes.length) {
-      return null;
-    }
-
-    const shapesWithBounds = shapes.map(({ shape, pathIndex }) => ({
-      shape,
-      pathIndex,
-      bounds: shapeBounds(shape),
-    }));
-    const primary = shapesWithBounds.reduce((best, entry) => {
-      if (!best) return entry;
-      const bestArea = best.bounds.dx * best.bounds.dy;
-      const area = entry.bounds.dx * entry.bounds.dy;
-      return area > bestArea ? entry : best;
-    }, null as {
-      shape: THREE.Shape;
-      pathIndex: number;
-      bounds: ReturnType<typeof shapeBounds>;
-    } | null);
-
-    if (!primary) {
-      return null;
-    }
-
-    const cloneSolid = (shape: THREE.Shape) => {
-      const cloned = shape.clone();
-      cloned.holes = [];
-      return cloned;
-    };
-
-    const holeShapeEntries = shapesWithBounds.flatMap(({ shape }) => {
-      if (!shape.holes?.length) return [];
-      return shape.holes.map((holePath) => {
-        const pts = holePath.getPoints(64).map((pt) => pt.clone());
-        const holeShape = new THREE.Shape(pts);
-        holeShape.autoClose = true;
-        holeShape.holes = [];
-        return { shape: holeShape, isRelief: true };
-      });
-    });
-
-    const base = cloneSolid(primary.shape);
-    // Preserve detached filled pieces too (for example, a soldier's head
-    // above the body). They are separate contours in the SVG, not decorative
-    // strokes, so they need their own caps and perimeter walls.
-    const additionalSolidShapes = shapesWithBounds
-      // A single SVG path can contain nested subpaths for decorative cut-outs.
-      // Only independent SVG paths are separate stone components.
-      .filter(({ pathIndex }) => pathIndex !== primary.pathIndex)
-      .map(({ shape }) => cloneSolid(shape));
-    // The primary shape supplies the editable face outline, while detached
-    // filled paths still belong to the same physical headstone. Normalize all
-    // pieces against their shared bounds so a lower component cannot sink
-    // below the base (as happened with the paratrooper's body).
-    const minX = Math.min(...shapesWithBounds.map(({ bounds }) => bounds.minX));
-    const maxX = Math.max(...shapesWithBounds.map(({ bounds }) => bounds.maxX));
-    const minY = Math.min(...shapesWithBounds.map(({ bounds }) => bounds.minY));
-    const maxY = Math.max(...shapesWithBounds.map(({ bounds }) => bounds.maxY));
-    const dx = Math.max(EPS, maxX - minX);
-    const dy = Math.max(EPS, maxY - minY);
-
-    const widthW = dx * Math.abs(scale);
-    const heightW = dy * Math.abs(scale);
-    const wantW = targetWidth ?? widthW;
-    const wantH = targetHeight ?? heightW;
-    const sCore = wantW / Math.max(EPS, widthW);
-    const coreH_world = heightW * sCore;
-    const toSV = (w: number) => w / Math.max(EPS, Math.abs(scale) * sCore);
-    const targetH_SV = preserveTop ? toSV(wantH) : dy;
-    const bottomTarget_SV = minY + targetH_SV;
-
-    // When rounding corners, build the shape to exactly the target height in both
-    // the expanding (wantH > coreH_world) and shrinking (wantH < coreH_world) cases.
-    // Using bottomTarget_SV directly avoids both the rectangle band AND the vertex-clamp
-    // path from cutting off the bottom rounded corners.
-    const effectiveBottom = cornerRadius > 0 && preserveTop
-      ? bottomTarget_SV
-      : maxY;
-    const baseShape = cornerRadius > 0
-      ? roundedRectShape(minX, maxX, minY, effectiveBottom, Math.min(cornerRadius, dx / 2, dy / 2))
-      : base;
-
-    // Headstone catalogue SVGs contain one silhouette plus drawing-outline
-    // paths (often nested through <use>). Those outlines are not separate
-    // stone pieces and must never be extruded over the front/back cap.
-    // Explicit holes remain meaningful geometry, so retain only those.
-    const additionalShapes = [
-      ...additionalSolidShapes.map((shape) => ({ shape, isRelief: false })),
-      ...holeShapeEntries,
-    ];
-
-    return { base: baseShape, additionalShapes, additionalSolidShapes, minX, maxX, minY, maxY, dx, dy, widthW, heightW, wantW, wantH, sCore, coreH_world, bottomTarget_SV, targetH_SV, cornerRadius };
-  }, [svgData, scale, targetWidth, targetHeight, preserveTop, cornerRadius]);
-
-  const engravingLineGeometries = useMemo(() => {
-    if (!showSvgEngraving || !shapeParams) return [];
-
-    const centerX = (shapeParams.minX + shapeParams.maxX) / 2;
-    const strokeWidth = engravingStrokeWidthMm
-      ? (engravingStrokeWidthMm / 1000) / Math.max(EPS, Math.abs(scale) * shapeParams.sCore)
-      : null;
-    return svgData.paths.flatMap((path) =>
-      path.subPaths
-        .map((subPath) => {
-          const sourcePoints = subPath.getPoints(160);
-          if (sourcePoints.length < 2) return null;
-          const points = sourcePoints.map(
-            (point) => new THREE.Vector2(
-              point.x - centerX,
-              shapeParams.bottomTarget_SV - point.y,
-            ),
-          );
-          if (strokeWidth) {
-            return SVGLoader.pointsToStroke(points, {
-              strokeColor: '#ffffff',
-              strokeWidth,
-              strokeLineJoin: 'round',
-              strokeLineCap: 'round',
-              strokeMiterLimit: 4,
-            });
-          }
-          return new THREE.BufferGeometry().setFromPoints(
-            points.map((point) => new THREE.Vector3(point.x, point.y, 0)),
-          );
-        })
-        .filter((geometry): geometry is THREE.BufferGeometry => geometry !== null),
+const SvgHeadstone = React.forwardRef<THREE.Group, Props>(
+  (
+    {
+      url,
+      depth,
+      scale = 0.01,
+      faceTexture,
+      sideTexture,
+      autoRepeat = false,
+      tileSize = 0.1,
+      sideTileSize,
+      faceRepeatX = 6,
+      faceRepeatY = 6,
+      stretchFace = false,
+      sideRepeatX = 8,
+      sideRepeatY = 1,
+      targetHeight,
+      targetWidth,
+      sourceSvgOverlayUrl = null,
+      showSvgEngraving = false,
+      engravingColor = '#e8e2d6',
+      engravingStrokeWidthMm,
+      preserveTop = true,
+      bevel = false,
+      doubleSided = false,
+      showEdges = false,
+      isFullColourPlaque = false,
+      isUrn = false,
+      isStainlessSteel = false,
+      showStainlessRim = false,
+      ssFinish = 'brushed' as StainlessFinish,
+      cornerRadius = 0,
+      headstoneStyle = 'upright',
+      slantThickness = 150, // Default 150mm
+      meshProps,
+      children,
+      selectedAdditions = [],
+    },
+    ref,
+  ) => {
+    // 1. Load SVG and Textures
+    const svgData = useLoader(SVGLoader, url);
+    const sourceSvgCanvasOverlayTexture =
+      useSvgCanvasOverlayTexture(sourceSvgOverlayUrl);
+    const sourceSvgBlobOverlayTexture = useBlobTexture(
+      isSvgLikeUrl(sourceSvgOverlayUrl) ? null : sourceSvgOverlayUrl,
     );
-  }, [showSvgEngraving, shapeParams, svgData, engravingStrokeWidthMm, scale]);
+    const sourceSvgOverlayTexture =
+      sourceSvgCanvasOverlayTexture ?? sourceSvgBlobOverlayTexture;
+    const sourceSvgLineOverlay = useSvgLineOverlay(null);
+    const hasSideTexture = sideTexture !== null;
+    const sideTextureSrc = sideTexture ?? faceTexture;
 
-  React.useEffect(
-    () => () => engravingLineGeometries.forEach((geometry) => geometry.dispose()),
-    [engravingLineGeometries],
-  );
+    // Detect blob:/data: face textures — bypass drei's useTexture pipeline
+    const isBlobFace =
+      faceTexture.startsWith('blob:') || faceTexture.startsWith('data:');
+    const blobFaceTexture = useBlobTexture(isBlobFace ? faceTexture : null);
+    const safeFaceTexture = isBlobFace ? DEFAULT_FACE_FALLBACK : faceTexture;
+    const safeSideTexture = isBlobFace ? DEFAULT_FACE_FALLBACK : sideTextureSrc;
 
-  // 3a. Calculate outline (now at top level)
-  const outline = useMemo(() => {
-    if (!shapeParams) return null;
+    const textures = useTexture({
+      face: safeFaceTexture,
+      ...(hasSideTexture ? { side: safeSideTexture } : {}),
+    });
 
-    const { base, minX, maxX, maxY, dx, dy, wantH, coreH_world, bottomTarget_SV } = shapeParams;
-    const isExpanded = preserveTop && wantH > coreH_world + 1e-4 && !shapeParams.cornerRadius;
-    
-    const ptsForOutline = base.getPoints(12);
-    
-    if (isExpanded) {
-      let idxL = -1, idxR = -1;
-      let minDiffL = Infinity, minDiffR = Infinity;
-      const tol = Math.max(dx, dy) * 0.05;
+    // 2. Clone Textures (FIX: Enable Mipmaps and correct Filtering)
+    const activeFace = blobFaceTexture ?? textures.face;
+    const [
+      clonedFaceMap,
+      clonedSideMap,
+      clonedBackMap,
+      faceDetailMap,
+      sideDetailMap,
+      backDetailMap,
+    ] = useMemo(() => {
+      const f = activeFace.clone();
+      const s =
+        'side' in textures
+          ? (
+              textures as { face: THREE.Texture; side: THREE.Texture }
+            ).side.clone()
+          : null;
+      // The back is a cap (width × height), not part of the side perimeter.
+      // It needs independent repeat values from the continuous side strip.
+      const b = s?.clone() ?? null;
+      const fd = activeFace.clone();
+      const sd =
+        'side' in textures
+          ? (
+              textures as { face: THREE.Texture; side: THREE.Texture }
+            ).side.clone()
+          : null;
+      const bd = sd?.clone() ?? null;
 
-      ptsForOutline.forEach((p, i) => {
-        const distL = Math.hypot(p.x - minX, p.y - maxY);
-        const distR = Math.hypot(p.x - maxX, p.y - maxY);
-        if (distL < minDiffL) { minDiffL = distL; idxL = i; }
-        if (distR < minDiffR) { minDiffR = distR; idxR = i; }
+      [f, s, b, fd, sd, bd].forEach((t) => {
+        if (!t) return;
+        t.wrapS = t.wrapT = THREE.RepeatWrapping;
+        t.minFilter = THREE.LinearMipmapLinearFilter;
+        t.magFilter = THREE.LinearFilter;
+        (t as any).anisotropy = 16;
+        t.generateMipmaps = true;
+        t.needsUpdate = true;
       });
 
-      if (minDiffL < tol && minDiffR < tol && idxL !== idxR) {
-        const newPts: THREE.Vector2[] = [];
-        const len = ptsForOutline.length;
-        const fwdDist = (idxR - idxL + len) % len;
-        const revDist = (idxL - idxR + len) % len;
-        const pL = ptsForOutline[idxL];
-        const pR = ptsForOutline[idxR];
-        const pL_new = new THREE.Vector2(pL.x, bottomTarget_SV);
-        const pR_new = new THREE.Vector2(pR.x, bottomTarget_SV);
+      // Match the base material: granite photographs are colour maps and must
+      // be decoded as sRGB. Leaving the clone in the loader default makes the
+      // same swatch appear brighter and less saturated on the headstone.
+      [f, s, b].forEach((texture) => {
+        if (texture) texture.colorSpace = THREE.SRGBColorSpace;
+      });
 
-        if (fwdDist < revDist) {
-          let curr = idxR;
-          while (curr !== idxL) {
-            newPts.push(ptsForOutline[curr]);
-            curr = (curr + 1) % len;
-          }
-          newPts.push(ptsForOutline[idxL]);
-          newPts.push(pL_new);
-          newPts.push(pR_new);
-          newPts.push(ptsForOutline[idxR]);
-        } else {
-          let curr = idxL;
-          while (curr !== idxR) {
-            newPts.push(ptsForOutline[curr]);
-            curr = (curr + 1) % len;
-          }
-          newPts.push(ptsForOutline[idxR]);
-          newPts.push(pR_new);
-          newPts.push(pL_new);
-          newPts.push(ptsForOutline[idxL]);
-        }
-        
-        const shape = new THREE.Shape(newPts);
-        // Use high segment count for smooth lookup
-        return spacedOutline(shape, 4096); 
-      }
-    }
-    
-    return spacedOutline(base, 4096);
-  }, [shapeParams, preserveTop]);
+      [fd, sd, bd].forEach((texture) => {
+        if (texture) texture.colorSpace = THREE.NoColorSpace;
+      });
 
-  // 3b. Generate Geometry (with disposal cleanup)
-  const { geometries, dims, meshScale, apiData, childWrapperPos, childWrapperRotation } = useMemo(() => {
-    if (!shapeParams || !outline) {
-      return { 
-        geometries: [], 
-        dims: null, 
-        meshScale: [1, 1, 1] as [number, number, number],
-        apiData: { frontZ: 0, unitsPerMeter: 1, version: 0, worldWidth: 1, worldHeight: 1 },
-        childWrapperPos: [0, 0, 0] as [number, number, number],
-        childWrapperRotation: new THREE.Quaternion() // Identity quaternion
+      return [f, s, b, fd, sd, bd] as const;
+    }, [activeFace, 'side' in textures ? textures.side : null]);
+
+    // 2a. Dispose cloned textures on cleanup
+    React.useEffect(() => {
+      return () => {
+        clonedFaceMap.dispose();
+        clonedSideMap?.dispose();
+        clonedBackMap?.dispose();
+        faceDetailMap.dispose();
+        sideDetailMap?.dispose();
+        backDetailMap?.dispose();
       };
-    }
+    }, [
+      clonedFaceMap,
+      clonedSideMap,
+      clonedBackMap,
+      faceDetailMap,
+      sideDetailMap,
+      backDetailMap,
+    ]);
 
-    const { base, additionalShapes, additionalSolidShapes, minX, maxX, minY, maxY, dx, dy, sCore, bottomTarget_SV, wantH, coreH_world } = shapeParams;
+    // 2b. Generate Rock Pitch Normal Map for Slant Headstones
+    const rockNormalCanvas = useMemo(() => {
+      if (headstoneStyle !== 'slant') return null;
 
-    // FOR SLANT: Create trapezoidal prism geometry
-    if (headstoneStyle === 'slant') {
-      const slantGeometry = new THREE.BufferGeometry();
-      
-      // FIX: Use absolute thickness in mm instead of ratios
-      // The slantThickness parameter is now in mm (100-200mm)
-      const baseThickness = slantThickness / 10; // Convert mm to cm for Three.js units
-      const topThickness = baseThickness * 0.2; // 20% ratio for top (standard cemetery slant)
-      
-      // Calculate how far back the top-front edge starts
-      const frontTopZOffset = baseThickness - topThickness;
-      
-      // Calculate the slant angle for rotating inscriptions/motifs in WORLD SPACE
-      // We must scale the dimensions to world units before calculating atan2 
-      // because sCore affects height(Y) but not depth(Z)
-      const worldScaleY = Math.abs(scale) * sCore;
-      const worldScaleZ = Math.abs(scale);
-      
-      const svgHeight = maxY - minY;
-      const worldHeight = svgHeight * worldScaleY;
-      
-      const svgRun = frontTopZOffset;
-      const worldRun = svgRun * worldScaleZ;
+      const size = 1024; // Increased resolution for better detail
+      const canvas = document.createElement('canvas');
+      canvas.width = size;
+      canvas.height = size;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return null;
 
-      const slantAngleRad = Math.atan2(worldRun, worldHeight);
-      
-      // Calculate the SLANT HEIGHT (diagonal length of the front face)
-      // This is the actual surface length that inscriptions should span
-      const worldSlantH = Math.sqrt(worldHeight ** 2 + worldRun ** 2);
-      
-      // Define all vertices (duplicated per face for proper UVs and normals)
-      const positions: number[] = [];
-      const uvs: number[] = [];
-      
-      // Helper to add a quad (2 triangles)
-      // IMPORTANT: Ensure consistent winding order (counter-clockwise when looking from outside)
-      const addQuad = (
-        v0: [number, number, number], v1: [number, number, number],
-        v2: [number, number, number], v3: [number, number, number],
-        uv0: [number, number], uv1: [number, number],
-        uv2: [number, number], uv3: [number, number]
-      ) => {
-        // Triangle 1: v0, v1, v2 (Counter-clockwise)
-        positions.push(...v0, ...v1, ...v2);
-        uvs.push(...uv0, ...uv1, ...uv2);
-        
-        // Triangle 2: v0, v2, v3 (Counter-clockwise)
-        positions.push(...v0, ...v2, ...v3);
-        uvs.push(...uv0, ...uv2, ...uv3);
+      const imageData = ctx.getImageData(0, 0, size, size);
+      const data = imageData.data;
+
+      // Pseudo-random deterministic noise
+      const fract = (x: number) => x - Math.floor(x);
+      const random2 = (x: number, y: number) => {
+        return {
+          x: fract(Math.sin(x * 12.9898 + y * 78.233) * 43758.5453),
+          y: fract(Math.sin(x * 26.345 + y * 42.123) * 31421.3551),
+        };
       };
-      
-      // Define the 8 unique corner points of the trapezoidal prism
-      // Naming: P_[Front/Back]_[Bottom/Top]_[Left/Right]
-      // Z-axis: 0 is front, -depth is back.
-      // Y-axis: minY is bottom, maxY is top.
-      // X-axis: minX is left, maxX is right.
 
-      // Front Face Corners (z=0 at bottom, z=-frontTopZOffset at top)
-      const P_FBL = new THREE.Vector3(minX, minY, 0);                 // Front Bottom Left
-      const P_FBR = new THREE.Vector3(maxX, minY, 0);                 // Front Bottom Right
-      const P_FTL = new THREE.Vector3(minX, maxY, -frontTopZOffset);  // Front Top Left
-      const P_FTR = new THREE.Vector3(maxX, maxY, -frontTopZOffset);  // Front Top Right
+      // Voronoi-based faceted height map - increased scale for smaller chips
+      const getHeight = (u: number, v: number) => {
+        const scale = 20.0; // Reduced from 24.0 for balance
+        const su = u * scale;
+        const sv = v * scale;
 
-      // Back Face Corners (z=-baseThickness for both bottom and top)
-      const P_BBL = new THREE.Vector3(minX, minY, -baseThickness);            // Back Bottom Left
-      const P_BBR = new THREE.Vector3(maxX, minY, -baseThickness);            // Back Bottom Right
-      const P_BTL = new THREE.Vector3(minX, maxY, -baseThickness);            // Back Top Left
-      const P_BTR = new THREE.Vector3(maxX, maxY, -baseThickness);            // Back Top Right
-      
-      // --- Faces ---
-
-      // 1. FRONT FACE (polished) - Group 0
-      // Vertices: P_FBL, P_FBR, P_FTR, P_FTL (viewed from front, counter-clockwise)
-      const frontFaceStartIdx = positions.length / 3; // Record start index for material group
-      addQuad(
-        P_FBL.toArray() as [number, number, number],   // V0 (Bottom Left)
-        P_FBR.toArray() as [number, number, number],  // V1 (Bottom Right)
-        P_FTR.toArray() as [number, number, number],  // V2 (Top Right)
-        P_FTL.toArray() as [number, number, number],  // V3 (Top Left)
-        [0, 0], [1, 0], [1, 1], [0, 1] // UVs (normalized for this face)
-      );
-      const frontFaceEndIdx = positions.length / 3;
-
-      // 2. BACK FACE (rock pitch) - Group 1
-      // Vertices: P_BBR, P_BBL, P_BTL, P_BTR (viewed from back, counter-clockwise)
-      addQuad(
-        P_BBR.toArray() as [number, number, number],   // V0 (Bottom Right)
-        P_BBL.toArray() as [number, number, number],  // V1 (Bottom Left)
-        P_BTL.toArray() as [number, number, number],  // V2 (Top Left)
-        P_BTR.toArray() as [number, number, number],  // V3 (Top Right)
-        [0, 0], [1, 0], [1, 1], [0, 1] // UVs (normalized for this face)
-      );
-      
-      // 3. TOP FACE (rock pitch) - Group 1
-      // Vertices: P_FTL, P_FTR, P_BTR, P_BTL (viewed from top, counter-clockwise)
-      addQuad(
-        P_FTL.toArray() as [number, number, number],  // V0 (Front Top Left)
-        P_FTR.toArray() as [number, number, number],  // V1 (Front Top Right)
-        P_BTR.toArray() as [number, number, number],  // V2 (Back Top Right)
-        P_BTL.toArray() as [number, number, number],  // V3 (Back Top Left)
-        [0, 0], [1, 0], [1, 1], [0, 1] // UVs (normalized for this face)
-      );
-      
-      // 4. BOTTOM FACE (rock pitch) - Group 1
-      // Vertices: P_FBR, P_FBL, P_BBL, P_BBR (viewed from bottom, counter-clockwise)
-      addQuad(
-        P_FBR.toArray() as [number, number, number],  // V0 (Front Bottom Right)
-        P_FBL.toArray() as [number, number, number],  // V1 (Front Bottom Left)
-        P_BBL.toArray() as [number, number, number],  // V2 (Back Bottom Left)
-        P_BBR.toArray() as [number, number, number],  // V3 (Back Bottom Right)
-        [0, 0], [1, 0], [1, 1], [0, 1] // UVs (normalized for this face)
-      );
-      
-      // 5. LEFT SIDE FACE (rock pitch) - Group 1
-      // Vertices: P_FBL, P_FTL, P_BTL, P_BBL (viewed from left, counter-clockwise)
-      addQuad(
-        P_FBL.toArray() as [number, number, number],  // V0 (Front Bottom Left)
-        P_FTL.toArray() as [number, number, number],  // V1 (Front Top Left)
-        P_BTL.toArray() as [number, number, number],  // V2 (Back Top Left)
-        P_BBL.toArray() as [number, number, number],  // V3 (Back Bottom Left)
-        [0, 0], [1, 0], [1, 1], [0, 1] // UVs (normalized for this face)
-      );
-      
-      // 6. RIGHT SIDE FACE (rock pitch) - Group 1
-      // Vertices: P_FBR, P_BBR, P_BTR, P_FTR (viewed from right, counter-clockwise)
-      addQuad(
-        P_FBR.toArray() as [number, number, number],  // V0 (Front Bottom Right)
-        P_BBR.toArray() as [number, number, number],  // V1 (Back Bottom Right)
-        P_BTR.toArray() as [number, number, number],  // V2 (Back Top Right)
-        P_FTR.toArray() as [number, number, number],  // V3 (Front Top Right)
-        [0, 0], [1, 0], [1, 1], [0, 1] // UVs (normalized for this face)
-      );
-      
-      slantGeometry.setAttribute('position', new THREE.BufferAttribute(new Float32Array(positions), 3));
-      slantGeometry.setAttribute('uv', new THREE.BufferAttribute(new Float32Array(uvs), 2));
-      slantGeometry.computeVertexNormals();
-      
-      // =========================================================
-      // GEOMETRY NORMALIZATION (BAKE TO Y-UP) for SLANT
-      // =========================================================
-      // Translate geometry so:
-      // 1. X is centered
-      // 2. Bottom (minY) is at Y=0
-      // 3. Z translation: Align back edge with BASE back edge
-      //    
-      //    CRITICAL ISSUE: 'depth' prop is for UPRIGHT headstones (fixed, e.g., 20cm)
-      //    But SLANT thickness varies (100mm to 300mm = 10cm to 30cm)
-      //    We can't use 'depth' for slant alignment!
-      //    
-      //    SOLUTION: Align slant back to SAME position as upright back
-      //    - Upright back is at: -depth/2 (e.g., -10cm)
-      //    - Slant back should ALSO be at: -depth/2 (FIXED, regardless of slant thickness)
-      //    - Current slant back is at: -baseThickness (varies with thickness)
-      //    - Translation needed: -depth/2 - (-baseThickness) = baseThickness - depth/2
-      //    
-      //    When thickness increases from 100mm (10cm) to 300mm (30cm):
-      //    - Back starts at -10cm → -30cm
-      //    - Translation1 = 10 - 10 = 0
-      //    - Translation2 = 30 - 10 = 20
-      //    - Final back position1 = -10 + 0 = -10 ✓
-      //    - Final back position2 = -30 + 20 = -10 ✓ (Still at -10, CORRECT!)
-      //    
-      //    Math is CORRECT! But maybe the issue is the base back position isn't actually at -depth/2?
-      //    Or the depth prop value is wrong?
-      const zTranslation = baseThickness - depth / 2;
-      
-      slantGeometry.translate(-(minX + maxX) / 2, -minY, zTranslation);
-      slantGeometry.computeVertexNormals();
-      
-      // Material groups: 0 = front, 1 = everything else
-      slantGeometry.clearGroups();
-      slantGeometry.addGroup(0, (frontFaceEndIdx - frontFaceStartIdx), 0); // Front face
-      slantGeometry.addGroup((frontFaceEndIdx - frontFaceStartIdx), (positions.length / 3) - (frontFaceEndIdx - frontFaceStartIdx), 1); // All other faces
-      
-      // =========================================================
-      // Calculate world dimensions BEFORE UV mapping
-      const worldW = dx * Math.abs(scale) * sCore;
-      const worldH = (maxY - minY) * Math.abs(scale) * sCore;
-      const worldDepth = depth * Math.abs(scale);
-      
-      // UV MAPPING (Recalculate based on normalized geometry)
-      // =========================================================
-      slantGeometry.computeBoundingBox();
-      const bb = slantGeometry.boundingBox!;
-      const bb_dx = bb.max.x - bb.min.x;
-      const bb_dy = bb.max.y - bb.min.y;
-      
-      const posAttr = slantGeometry.getAttribute('position') as THREE.BufferAttribute;
-      const uvAttr = slantGeometry.getAttribute('uv') as THREE.BufferAttribute;
-      const localFrontZ = bb.max.z;
-      const localBackZ = bb.min.z;
-      
-      // Texture density for rock pitch - baked into UVs
-      const textureDensity = 20.0;
-      
-      for (let triIdx = 0; triIdx < posAttr.count / 3; triIdx++) {
-        const i = triIdx * 3;
-        let isFrontFace = false;
-        
-        for (let g = 0; g < slantGeometry.groups.length; g++) {
-          const group = slantGeometry.groups[g];
-          if (i >= group.start && i < group.start + group.count) {
-            isFrontFace = (group.materialIndex === 0);
-            break;
+        let minDist = 999;
+        for (let dy = -1; dy <= 1; dy++) {
+          for (let dx = -1; dx <= 1; dx++) {
+            const cellX = Math.floor(su) + dx;
+            const cellY = Math.floor(sv) + dy;
+            const rand = random2(cellX, cellY);
+            const pointX = cellX + rand.x;
+            const pointY = cellY + rand.y;
+            const dist = Math.sqrt((su - pointX) ** 2 + (sv - pointY) ** 2);
+            if (dist < minDist) minDist = dist;
           }
         }
-        
-        if (isFrontFace) {
-          // Front face: Standard UV mapping for text texture (0-1 range)
-          for (let j = 0; j < 3; j++) {
-            const x = posAttr.getX(i + j);
-            const y = posAttr.getY(i + j);
-            uvAttr.setXY(i + j,
-              (x - bb.min.x) / bb_dx,  // U: 0-1 across width
-              (y - bb.min.y) / bb_dy   // V: 0-1 across height
-            );
-          }
-        } else {
-          // Other faces: BAKE density into UVs for uniform rock pitch without distortion
-          const v0 = new THREE.Vector3(posAttr.getX(i), posAttr.getY(i), posAttr.getZ(i));
-          const v1 = new THREE.Vector3(posAttr.getX(i + 1), posAttr.getY(i + 1), posAttr.getZ(i + 1));
-          const v2 = new THREE.Vector3(posAttr.getX(i + 2), posAttr.getY(i + 2), posAttr.getZ(i + 2));
-          
-          const edge1 = new THREE.Vector3().subVectors(v1, v0);
-          const edge2 = new THREE.Vector3().subVectors(v2, v0);
-          const normal = new THREE.Vector3().crossVectors(edge1, edge2).normalize();
-          
-          for (let j = 0; j < 3; j++) {
-            const x = posAttr.getX(i + j);
-            const y = posAttr.getY(i + j);
-            const z = posAttr.getZ(i + j);
-            
-            // Determine UV orientation based on dominant normal direction
-            if (Math.abs(normal.x) > Math.abs(normal.y) && Math.abs(normal.x) > Math.abs(normal.z)) {
-              // Side face: U=Depth(Z), V=Height(Y) MULTIPLIED by world dimensions * density
-              // Use (localFrontZ - z) to flip direction so texture flows front-to-back
-              uvAttr.setXY(i + j,
-                ((localFrontZ - z) / (localFrontZ - localBackZ)) * worldDepth * textureDensity,
-                ((y - bb.min.y) / bb_dy) * worldH * textureDensity
-              );
-            } else if (Math.abs(normal.y) > Math.abs(normal.x) && Math.abs(normal.y) > Math.abs(normal.z)) {
-              // Top/Bottom face: U=Width(X), V=Depth(Z) MULTIPLIED by world dimensions * density
-              // Use (localFrontZ - z) to flip direction
-              uvAttr.setXY(i + j,
-                ((x - bb.min.x) / bb_dx) * worldW * textureDensity,
-                ((localFrontZ - z) / (localFrontZ - localBackZ)) * worldDepth * textureDensity
-              );
-            } else {
-              // Back face: U=Width(X), V=Height(Y) MULTIPLIED by world dimensions * density
-              uvAttr.setXY(i + j,
-                ((x - bb.min.x) / bb_dx) * worldW * textureDensity,
-                ((y - bb.min.y) / bb_dy) * worldH * textureDensity
-              );
-            }
-          }
+
+        return Math.pow(1.0 - Math.min(minDist, 1.0), 0.5);
+      };
+
+      // Generate height map and convert to normal map
+      const heights: number[][] = [];
+      for (let y = 0; y < size; y++) {
+        heights[y] = [];
+        for (let x = 0; x < size; x++) {
+          heights[y][x] = getHeight(x / size, y / size);
         }
       }
-      uvAttr.needsUpdate = true;
-      
-      // World dimensions and final values (already calculated above before UV mapping)
-      const perim = 2 * (worldW + worldH);
-      const finalScale: [number, number, number] = [scale * sCore, scale * sCore, scale];
-      
-      // Scale-aware epsilon for z-offset (~0.5mm in world space)
-      const worldUnit = Math.abs(scale) * sCore;
-      const frontZEps = Math.max(0.0005, 0.5e-3);
-      
-      // Build quaternion that aligns wrapper's local +Z to the front face normal
-      // Top of face recedes in -Z as Y increases → outward normal has +Z and +Y (faces up/out)
-      // FIX: Y component should be positive for a face leaning back
-      const frontNormal = new THREE.Vector3(0, Math.sin(slantAngleRad), Math.cos(slantAngleRad)).normalize();
-      const wrapperQuaternion = new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 0, 1), frontNormal);
-      
-      // Outline points for slant headstone (rectangular contour in child coords)
-      const slantCenterX = (minX + maxX) / 2;
-      const slantOutlinePoints = [
-        new THREE.Vector2(minX - slantCenterX, 0),
-        new THREE.Vector2(maxX - slantCenterX, 0),
-        new THREE.Vector2(maxX - slantCenterX, maxY - minY),
-        new THREE.Vector2(minX - slantCenterX, maxY - minY),
+
+      // Negative strength for "pop-out" bumps
+      const strength = -15.0;
+      for (let y = 0; y < size; y++) {
+        for (let x = 0; x < size; x++) {
+          const xRight = (x + 1) % size;
+          const yDown = (y + 1) % size;
+
+          const h0 = heights[y][x];
+          const hRight = heights[y][xRight];
+          const hDown = heights[yDown][x];
+
+          const dX = (h0 - hRight) * strength;
+          const dY = (h0 - hDown) * strength;
+
+          const norm = Math.sqrt(dX * dX + dY * dY + 1);
+          const nx = dX / norm;
+          const ny = dY / norm;
+          const nz = 1 / norm;
+
+          const idx = (y * size + x) * 4;
+          data[idx] = ((nx * 0.5 + 0.5) * 255) | 0;
+          data[idx + 1] = ((ny * 0.5 + 0.5) * 255) | 0;
+          data[idx + 2] = ((nz * 0.5 + 0.5) * 255) | 0;
+          data[idx + 3] = 255;
+        }
+      }
+
+      ctx.putImageData(imageData, 0, 0);
+      return canvas;
+    }, [headstoneStyle]);
+
+    // 2c. Create normal map texture from canvas
+    const rockNormalTexture = useMemo(() => {
+      if (!rockNormalCanvas) return null;
+
+      const tex = new THREE.CanvasTexture(rockNormalCanvas);
+      tex.wrapS = THREE.RepeatWrapping;
+      tex.wrapT = THREE.RepeatWrapping;
+      tex.colorSpace = THREE.NoColorSpace;
+      tex.needsUpdate = true;
+
+      return tex;
+    }, [rockNormalCanvas]);
+
+    // 2d. Cleanup rock normal texture
+    React.useEffect(() => {
+      return () => {
+        if (rockNormalTexture) {
+          rockNormalTexture.dispose();
+        }
+      };
+    }, [rockNormalTexture]);
+
+    // 3. Pre-calculate shape bounds and parameters
+    const shapeParams = useMemo(() => {
+      const shapes: Array<{ shape: THREE.Shape; pathIndex: number }> = [];
+      svgData.paths.forEach((path: any, pathIndex: number) => {
+        // SVG catalogue files commonly include a second path solely for the
+        // 2D outline (`fill="none"`, `stroke=...`). Extruding that path turns
+        // the outline into a duplicate solid, which overlays the front/back
+        // caps and corrupts their planar granite texture mapping.
+        if (path.userData?.style?.fill === 'none') return;
+        shapes.push(
+          ...SVGLoader.createShapes(path).map((shape) => ({
+            shape,
+            pathIndex,
+          })),
+        );
+      });
+
+      if (!shapes.length) {
+        return null;
+      }
+
+      const shapesWithBounds = shapes.map(({ shape, pathIndex }) => ({
+        shape,
+        pathIndex,
+        bounds: shapeBounds(shape),
+      }));
+      const primary = shapesWithBounds.reduce(
+        (best, entry) => {
+          if (!best) return entry;
+          const bestArea = best.bounds.dx * best.bounds.dy;
+          const area = entry.bounds.dx * entry.bounds.dy;
+          return area > bestArea ? entry : best;
+        },
+        null as {
+          shape: THREE.Shape;
+          pathIndex: number;
+          bounds: ReturnType<typeof shapeBounds>;
+        } | null,
+      );
+
+      if (!primary) {
+        return null;
+      }
+
+      const cloneSolid = (shape: THREE.Shape) => {
+        const cloned = shape.clone();
+        cloned.holes = [];
+        return cloned;
+      };
+
+      const holeShapeEntries = shapesWithBounds.flatMap(({ shape }) => {
+        if (!shape.holes?.length) return [];
+        return shape.holes.map((holePath) => {
+          const pts = holePath.getPoints(64).map((pt) => pt.clone());
+          const holeShape = new THREE.Shape(pts);
+          holeShape.autoClose = true;
+          holeShape.holes = [];
+          return { shape: holeShape, isRelief: true };
+        });
+      });
+
+      const base = cloneSolid(primary.shape);
+      // Preserve detached filled pieces too (for example, a soldier's head
+      // above the body). They are separate contours in the SVG, not decorative
+      // strokes, so they need their own caps and perimeter walls.
+      const additionalSolidShapes = shapesWithBounds
+        // A single SVG path can contain nested subpaths for decorative cut-outs.
+        // Only independent SVG paths are separate stone components.
+        .filter(({ pathIndex }) => pathIndex !== primary.pathIndex)
+        .map(({ shape }) => cloneSolid(shape));
+      // The primary shape supplies the editable face outline, while detached
+      // filled paths still belong to the same physical headstone. Normalize all
+      // pieces against their shared bounds so a lower component cannot sink
+      // below the base (as happened with the paratrooper's body).
+      const minX = Math.min(
+        ...shapesWithBounds.map(({ bounds }) => bounds.minX),
+      );
+      const maxX = Math.max(
+        ...shapesWithBounds.map(({ bounds }) => bounds.maxX),
+      );
+      const minY = Math.min(
+        ...shapesWithBounds.map(({ bounds }) => bounds.minY),
+      );
+      const maxY = Math.max(
+        ...shapesWithBounds.map(({ bounds }) => bounds.maxY),
+      );
+      const dx = Math.max(EPS, maxX - minX);
+      const dy = Math.max(EPS, maxY - minY);
+
+      const widthW = dx * Math.abs(scale);
+      const heightW = dy * Math.abs(scale);
+      const wantW = targetWidth ?? widthW;
+      const wantH = targetHeight ?? heightW;
+      const sCore = wantW / Math.max(EPS, widthW);
+      const coreH_world = heightW * sCore;
+      const toSV = (w: number) => w / Math.max(EPS, Math.abs(scale) * sCore);
+      const targetH_SV = preserveTop ? toSV(wantH) : dy;
+      const bottomTarget_SV = minY + targetH_SV;
+
+      // When rounding corners, build the shape to exactly the target height in both
+      // the expanding (wantH > coreH_world) and shrinking (wantH < coreH_world) cases.
+      // Using bottomTarget_SV directly avoids both the rectangle band AND the vertex-clamp
+      // path from cutting off the bottom rounded corners.
+      const effectiveBottom =
+        cornerRadius > 0 && preserveTop ? bottomTarget_SV : maxY;
+      const baseShape =
+        cornerRadius > 0
+          ? roundedRectShape(
+              minX,
+              maxX,
+              minY,
+              effectiveBottom,
+              Math.min(cornerRadius, dx / 2, dy / 2),
+            )
+          : base;
+
+      // Headstone catalogue SVGs contain one silhouette plus drawing-outline
+      // paths (often nested through <use>). Those outlines are not separate
+      // stone pieces and must never be extruded over the front/back cap.
+      // Explicit holes remain meaningful geometry, so retain only those.
+      const additionalShapes = [
+        ...additionalSolidShapes.map((shape) => ({ shape, isRelief: false })),
+        ...holeShapeEntries,
       ];
 
       return {
-        geometries: [slantGeometry],
-        dims: { worldW, worldH, worldPerim: perim, worldDepth },
+        base: baseShape,
+        additionalShapes,
+        additionalSolidShapes,
+        minX,
+        maxX,
+        minY,
+        maxY,
+        dx,
+        dy,
+        widthW,
+        heightW,
+        wantW,
+        wantH,
+        sCore,
+        coreH_world,
+        bottomTarget_SV,
+        targetH_SV,
+        cornerRadius,
+      };
+    }, [svgData, scale, targetWidth, targetHeight, preserveTop, cornerRadius]);
+
+    const engravingLineGeometries = useMemo(() => {
+      if (!showSvgEngraving || !shapeParams) return [];
+
+      const centerX = (shapeParams.minX + shapeParams.maxX) / 2;
+      const strokeWidth = engravingStrokeWidthMm
+        ? engravingStrokeWidthMm /
+          1000 /
+          Math.max(EPS, Math.abs(scale) * shapeParams.sCore)
+        : null;
+      return svgData.paths.flatMap((path) =>
+        path.subPaths
+          .map((subPath) => {
+            const sourcePoints = subPath.getPoints(160);
+            if (sourcePoints.length < 2) return null;
+            const points = sourcePoints.map(
+              (point) =>
+                new THREE.Vector2(
+                  point.x - centerX,
+                  shapeParams.bottomTarget_SV - point.y,
+                ),
+            );
+            if (strokeWidth) {
+              return SVGLoader.pointsToStroke(points, {
+                strokeColor: '#ffffff',
+                strokeWidth,
+                strokeLineJoin: 'round',
+                strokeLineCap: 'round',
+                strokeMiterLimit: 4,
+              });
+            }
+            return new THREE.BufferGeometry().setFromPoints(
+              points.map((point) => new THREE.Vector3(point.x, point.y, 0)),
+            );
+          })
+          .filter(
+            (geometry): geometry is THREE.BufferGeometry => geometry !== null,
+          ),
+      );
+    }, [showSvgEngraving, shapeParams, svgData, engravingStrokeWidthMm, scale]);
+
+    React.useEffect(
+      () => () =>
+        engravingLineGeometries.forEach((geometry) => geometry.dispose()),
+      [engravingLineGeometries],
+    );
+
+    // 3a. Calculate outline (now at top level)
+    const outline = useMemo(() => {
+      if (!shapeParams) return null;
+
+      const {
+        base,
+        minX,
+        maxX,
+        maxY,
+        dx,
+        dy,
+        wantH,
+        coreH_world,
+        bottomTarget_SV,
+      } = shapeParams;
+      const isExpanded =
+        preserveTop && wantH > coreH_world + 1e-4 && !shapeParams.cornerRadius;
+
+      const ptsForOutline = base.getPoints(12);
+
+      if (isExpanded) {
+        let idxL = -1,
+          idxR = -1;
+        let minDiffL = Infinity,
+          minDiffR = Infinity;
+        const tol = Math.max(dx, dy) * 0.05;
+
+        ptsForOutline.forEach((p, i) => {
+          const distL = Math.hypot(p.x - minX, p.y - maxY);
+          const distR = Math.hypot(p.x - maxX, p.y - maxY);
+          if (distL < minDiffL) {
+            minDiffL = distL;
+            idxL = i;
+          }
+          if (distR < minDiffR) {
+            minDiffR = distR;
+            idxR = i;
+          }
+        });
+
+        if (minDiffL < tol && minDiffR < tol && idxL !== idxR) {
+          const newPts: THREE.Vector2[] = [];
+          const len = ptsForOutline.length;
+          const fwdDist = (idxR - idxL + len) % len;
+          const revDist = (idxL - idxR + len) % len;
+          const pL = ptsForOutline[idxL];
+          const pR = ptsForOutline[idxR];
+          const pL_new = new THREE.Vector2(pL.x, bottomTarget_SV);
+          const pR_new = new THREE.Vector2(pR.x, bottomTarget_SV);
+
+          if (fwdDist < revDist) {
+            let curr = idxR;
+            while (curr !== idxL) {
+              newPts.push(ptsForOutline[curr]);
+              curr = (curr + 1) % len;
+            }
+            newPts.push(ptsForOutline[idxL]);
+            newPts.push(pL_new);
+            newPts.push(pR_new);
+            newPts.push(ptsForOutline[idxR]);
+          } else {
+            let curr = idxL;
+            while (curr !== idxR) {
+              newPts.push(ptsForOutline[curr]);
+              curr = (curr + 1) % len;
+            }
+            newPts.push(ptsForOutline[idxR]);
+            newPts.push(pR_new);
+            newPts.push(pL_new);
+            newPts.push(ptsForOutline[idxL]);
+          }
+
+          const shape = new THREE.Shape(newPts);
+          // Use high segment count for smooth lookup
+          return spacedOutline(shape, 4096);
+        }
+      }
+
+      // Keep the perimeter wall aligned with the cap when a rectangular SVG is
+      // shortened to a smaller requested height. The cap's vertices are clamped
+      // below, so reusing the original outline here used to leave a dangling
+      // wall segment below the plaque's lower-right corner.
+      const isShrunk =
+        preserveTop && wantH < coreH_world - 1e-4 && !shapeParams.cornerRadius;
+      if (isShrunk) {
+        const clampedPoints = ptsForOutline.map(
+          (point) =>
+            new THREE.Vector2(point.x, Math.min(point.y, bottomTarget_SV)),
+        );
+        return spacedOutline(new THREE.Shape(clampedPoints), 4096);
+      }
+
+      return spacedOutline(base, 4096);
+    }, [shapeParams, preserveTop]);
+
+    // 3b. Generate Geometry (with disposal cleanup)
+    const {
+      geometries,
+      dims,
+      meshScale,
+      apiData,
+      childWrapperPos,
+      childWrapperRotation,
+    } = useMemo(() => {
+      if (!shapeParams || !outline) {
+        return {
+          geometries: [],
+          dims: null,
+          meshScale: [1, 1, 1] as [number, number, number],
+          apiData: {
+            frontZ: 0,
+            unitsPerMeter: 1,
+            depthUnitsPerMeter: 1,
+            version: 0,
+            worldWidth: 1,
+            worldHeight: 1,
+          },
+          childWrapperPos: [0, 0, 0] as [number, number, number],
+          childWrapperRotation: new THREE.Quaternion(), // Identity quaternion
+        };
+      }
+
+      const {
+        base,
+        additionalShapes,
+        additionalSolidShapes,
+        minX,
+        maxX,
+        minY,
+        maxY,
+        dx,
+        dy,
+        sCore,
+        bottomTarget_SV,
+        wantH,
+        coreH_world,
+      } = shapeParams;
+
+      // FOR SLANT: Create trapezoidal prism geometry
+      if (headstoneStyle === 'slant') {
+        const slantGeometry = new THREE.BufferGeometry();
+
+        // FIX: Use absolute thickness in mm instead of ratios
+        // The slantThickness parameter is now in mm (100-200mm)
+        const baseThickness = slantThickness / 10; // Convert mm to cm for Three.js units
+        const topThickness = baseThickness * 0.2; // 20% ratio for top (standard cemetery slant)
+
+        // Calculate how far back the top-front edge starts
+        const frontTopZOffset = baseThickness - topThickness;
+
+        // Calculate the slant angle for rotating inscriptions/motifs in WORLD SPACE
+        // We must scale the dimensions to world units before calculating atan2
+        // because sCore affects height(Y) but not depth(Z)
+        const worldScaleY = Math.abs(scale) * sCore;
+        const worldScaleZ = Math.abs(scale);
+
+        const svgHeight = maxY - minY;
+        const worldHeight = svgHeight * worldScaleY;
+
+        const svgRun = frontTopZOffset;
+        const worldRun = svgRun * worldScaleZ;
+
+        const slantAngleRad = Math.atan2(worldRun, worldHeight);
+
+        // Calculate the SLANT HEIGHT (diagonal length of the front face)
+        // This is the actual surface length that inscriptions should span
+        const worldSlantH = Math.sqrt(worldHeight ** 2 + worldRun ** 2);
+
+        // Define all vertices (duplicated per face for proper UVs and normals)
+        const positions: number[] = [];
+        const uvs: number[] = [];
+
+        // Helper to add a quad (2 triangles)
+        // IMPORTANT: Ensure consistent winding order (counter-clockwise when looking from outside)
+        const addQuad = (
+          v0: [number, number, number],
+          v1: [number, number, number],
+          v2: [number, number, number],
+          v3: [number, number, number],
+          uv0: [number, number],
+          uv1: [number, number],
+          uv2: [number, number],
+          uv3: [number, number],
+        ) => {
+          // Triangle 1: v0, v1, v2 (Counter-clockwise)
+          positions.push(...v0, ...v1, ...v2);
+          uvs.push(...uv0, ...uv1, ...uv2);
+
+          // Triangle 2: v0, v2, v3 (Counter-clockwise)
+          positions.push(...v0, ...v2, ...v3);
+          uvs.push(...uv0, ...uv2, ...uv3);
+        };
+
+        // Define the 8 unique corner points of the trapezoidal prism
+        // Naming: P_[Front/Back]_[Bottom/Top]_[Left/Right]
+        // Z-axis: 0 is front, -depth is back.
+        // Y-axis: minY is bottom, maxY is top.
+        // X-axis: minX is left, maxX is right.
+
+        // Front Face Corners (z=0 at bottom, z=-frontTopZOffset at top)
+        const P_FBL = new THREE.Vector3(minX, minY, 0); // Front Bottom Left
+        const P_FBR = new THREE.Vector3(maxX, minY, 0); // Front Bottom Right
+        const P_FTL = new THREE.Vector3(minX, maxY, -frontTopZOffset); // Front Top Left
+        const P_FTR = new THREE.Vector3(maxX, maxY, -frontTopZOffset); // Front Top Right
+
+        // Back Face Corners (z=-baseThickness for both bottom and top)
+        const P_BBL = new THREE.Vector3(minX, minY, -baseThickness); // Back Bottom Left
+        const P_BBR = new THREE.Vector3(maxX, minY, -baseThickness); // Back Bottom Right
+        const P_BTL = new THREE.Vector3(minX, maxY, -baseThickness); // Back Top Left
+        const P_BTR = new THREE.Vector3(maxX, maxY, -baseThickness); // Back Top Right
+
+        // --- Faces ---
+
+        // 1. FRONT FACE (polished) - Group 0
+        // Vertices: P_FBL, P_FBR, P_FTR, P_FTL (viewed from front, counter-clockwise)
+        const frontFaceStartIdx = positions.length / 3; // Record start index for material group
+        addQuad(
+          P_FBL.toArray() as [number, number, number], // V0 (Bottom Left)
+          P_FBR.toArray() as [number, number, number], // V1 (Bottom Right)
+          P_FTR.toArray() as [number, number, number], // V2 (Top Right)
+          P_FTL.toArray() as [number, number, number], // V3 (Top Left)
+          [0, 0],
+          [1, 0],
+          [1, 1],
+          [0, 1], // UVs (normalized for this face)
+        );
+        const frontFaceEndIdx = positions.length / 3;
+
+        // 2. BACK FACE (rock pitch) - Group 1
+        // Vertices: P_BBR, P_BBL, P_BTL, P_BTR (viewed from back, counter-clockwise)
+        addQuad(
+          P_BBR.toArray() as [number, number, number], // V0 (Bottom Right)
+          P_BBL.toArray() as [number, number, number], // V1 (Bottom Left)
+          P_BTL.toArray() as [number, number, number], // V2 (Top Left)
+          P_BTR.toArray() as [number, number, number], // V3 (Top Right)
+          [0, 0],
+          [1, 0],
+          [1, 1],
+          [0, 1], // UVs (normalized for this face)
+        );
+
+        // 3. TOP FACE (rock pitch) - Group 1
+        // Vertices: P_FTL, P_FTR, P_BTR, P_BTL (viewed from top, counter-clockwise)
+        addQuad(
+          P_FTL.toArray() as [number, number, number], // V0 (Front Top Left)
+          P_FTR.toArray() as [number, number, number], // V1 (Front Top Right)
+          P_BTR.toArray() as [number, number, number], // V2 (Back Top Right)
+          P_BTL.toArray() as [number, number, number], // V3 (Back Top Left)
+          [0, 0],
+          [1, 0],
+          [1, 1],
+          [0, 1], // UVs (normalized for this face)
+        );
+
+        // 4. BOTTOM FACE (rock pitch) - Group 1
+        // Vertices: P_FBR, P_FBL, P_BBL, P_BBR (viewed from bottom, counter-clockwise)
+        addQuad(
+          P_FBR.toArray() as [number, number, number], // V0 (Front Bottom Right)
+          P_FBL.toArray() as [number, number, number], // V1 (Front Bottom Left)
+          P_BBL.toArray() as [number, number, number], // V2 (Back Bottom Left)
+          P_BBR.toArray() as [number, number, number], // V3 (Back Bottom Right)
+          [0, 0],
+          [1, 0],
+          [1, 1],
+          [0, 1], // UVs (normalized for this face)
+        );
+
+        // 5. LEFT SIDE FACE (rock pitch) - Group 1
+        // Vertices: P_FBL, P_FTL, P_BTL, P_BBL (viewed from left, counter-clockwise)
+        addQuad(
+          P_FBL.toArray() as [number, number, number], // V0 (Front Bottom Left)
+          P_FTL.toArray() as [number, number, number], // V1 (Front Top Left)
+          P_BTL.toArray() as [number, number, number], // V2 (Back Top Left)
+          P_BBL.toArray() as [number, number, number], // V3 (Back Bottom Left)
+          [0, 0],
+          [1, 0],
+          [1, 1],
+          [0, 1], // UVs (normalized for this face)
+        );
+
+        // 6. RIGHT SIDE FACE (rock pitch) - Group 1
+        // Vertices: P_FBR, P_BBR, P_BTR, P_FTR (viewed from right, counter-clockwise)
+        addQuad(
+          P_FBR.toArray() as [number, number, number], // V0 (Front Bottom Right)
+          P_BBR.toArray() as [number, number, number], // V1 (Back Bottom Right)
+          P_BTR.toArray() as [number, number, number], // V2 (Back Top Right)
+          P_FTR.toArray() as [number, number, number], // V3 (Front Top Right)
+          [0, 0],
+          [1, 0],
+          [1, 1],
+          [0, 1], // UVs (normalized for this face)
+        );
+
+        slantGeometry.setAttribute(
+          'position',
+          new THREE.BufferAttribute(new Float32Array(positions), 3),
+        );
+        slantGeometry.setAttribute(
+          'uv',
+          new THREE.BufferAttribute(new Float32Array(uvs), 2),
+        );
+        slantGeometry.computeVertexNormals();
+
+        // =========================================================
+        // GEOMETRY NORMALIZATION (BAKE TO Y-UP) for SLANT
+        // =========================================================
+        // Translate geometry so:
+        // 1. X is centered
+        // 2. Bottom (minY) is at Y=0
+        // 3. Z translation: Align back edge with BASE back edge
+        //
+        //    CRITICAL ISSUE: 'depth' prop is for UPRIGHT headstones (fixed, e.g., 20cm)
+        //    But SLANT thickness varies (100mm to 300mm = 10cm to 30cm)
+        //    We can't use 'depth' for slant alignment!
+        //
+        //    SOLUTION: Align slant back to SAME position as upright back
+        //    - Upright back is at: -depth/2 (e.g., -10cm)
+        //    - Slant back should ALSO be at: -depth/2 (FIXED, regardless of slant thickness)
+        //    - Current slant back is at: -baseThickness (varies with thickness)
+        //    - Translation needed: -depth/2 - (-baseThickness) = baseThickness - depth/2
+        //
+        //    When thickness increases from 100mm (10cm) to 300mm (30cm):
+        //    - Back starts at -10cm → -30cm
+        //    - Translation1 = 10 - 10 = 0
+        //    - Translation2 = 30 - 10 = 20
+        //    - Final back position1 = -10 + 0 = -10 ✓
+        //    - Final back position2 = -30 + 20 = -10 ✓ (Still at -10, CORRECT!)
+        //
+        //    Math is CORRECT! But maybe the issue is the base back position isn't actually at -depth/2?
+        //    Or the depth prop value is wrong?
+        const zTranslation = baseThickness - depth / 2;
+
+        slantGeometry.translate(-(minX + maxX) / 2, -minY, zTranslation);
+        slantGeometry.computeVertexNormals();
+
+        // Material groups: 0 = front, 1 = everything else
+        slantGeometry.clearGroups();
+        slantGeometry.addGroup(0, frontFaceEndIdx - frontFaceStartIdx, 0); // Front face
+        slantGeometry.addGroup(
+          frontFaceEndIdx - frontFaceStartIdx,
+          positions.length / 3 - (frontFaceEndIdx - frontFaceStartIdx),
+          1,
+        ); // All other faces
+
+        // =========================================================
+        // Calculate world dimensions BEFORE UV mapping
+        const worldW = dx * Math.abs(scale) * sCore;
+        const worldH = (maxY - minY) * Math.abs(scale) * sCore;
+        const worldDepth = depth * Math.abs(scale);
+
+        // UV MAPPING (Recalculate based on normalized geometry)
+        // =========================================================
+        slantGeometry.computeBoundingBox();
+        const bb = slantGeometry.boundingBox!;
+        const bb_dx = bb.max.x - bb.min.x;
+        const bb_dy = bb.max.y - bb.min.y;
+
+        const posAttr = slantGeometry.getAttribute(
+          'position',
+        ) as THREE.BufferAttribute;
+        const uvAttr = slantGeometry.getAttribute(
+          'uv',
+        ) as THREE.BufferAttribute;
+        const localFrontZ = bb.max.z;
+        const localBackZ = bb.min.z;
+
+        // Texture density for rock pitch - baked into UVs
+        const textureDensity = 20.0;
+
+        for (let triIdx = 0; triIdx < posAttr.count / 3; triIdx++) {
+          const i = triIdx * 3;
+          let isFrontFace = false;
+
+          for (let g = 0; g < slantGeometry.groups.length; g++) {
+            const group = slantGeometry.groups[g];
+            if (i >= group.start && i < group.start + group.count) {
+              isFrontFace = group.materialIndex === 0;
+              break;
+            }
+          }
+
+          if (isFrontFace) {
+            // Front face: Standard UV mapping for text texture (0-1 range)
+            for (let j = 0; j < 3; j++) {
+              const x = posAttr.getX(i + j);
+              const y = posAttr.getY(i + j);
+              uvAttr.setXY(
+                i + j,
+                (x - bb.min.x) / bb_dx, // U: 0-1 across width
+                (y - bb.min.y) / bb_dy, // V: 0-1 across height
+              );
+            }
+          } else {
+            // Other faces: BAKE density into UVs for uniform rock pitch without distortion
+            const v0 = new THREE.Vector3(
+              posAttr.getX(i),
+              posAttr.getY(i),
+              posAttr.getZ(i),
+            );
+            const v1 = new THREE.Vector3(
+              posAttr.getX(i + 1),
+              posAttr.getY(i + 1),
+              posAttr.getZ(i + 1),
+            );
+            const v2 = new THREE.Vector3(
+              posAttr.getX(i + 2),
+              posAttr.getY(i + 2),
+              posAttr.getZ(i + 2),
+            );
+
+            const edge1 = new THREE.Vector3().subVectors(v1, v0);
+            const edge2 = new THREE.Vector3().subVectors(v2, v0);
+            const normal = new THREE.Vector3()
+              .crossVectors(edge1, edge2)
+              .normalize();
+
+            for (let j = 0; j < 3; j++) {
+              const x = posAttr.getX(i + j);
+              const y = posAttr.getY(i + j);
+              const z = posAttr.getZ(i + j);
+
+              // Determine UV orientation based on dominant normal direction
+              if (
+                Math.abs(normal.x) > Math.abs(normal.y) &&
+                Math.abs(normal.x) > Math.abs(normal.z)
+              ) {
+                // Side face: U=Depth(Z), V=Height(Y) MULTIPLIED by world dimensions * density
+                // Use (localFrontZ - z) to flip direction so texture flows front-to-back
+                uvAttr.setXY(
+                  i + j,
+                  ((localFrontZ - z) / (localFrontZ - localBackZ)) *
+                    worldDepth *
+                    textureDensity,
+                  ((y - bb.min.y) / bb_dy) * worldH * textureDensity,
+                );
+              } else if (
+                Math.abs(normal.y) > Math.abs(normal.x) &&
+                Math.abs(normal.y) > Math.abs(normal.z)
+              ) {
+                // Top/Bottom face: U=Width(X), V=Depth(Z) MULTIPLIED by world dimensions * density
+                // Use (localFrontZ - z) to flip direction
+                uvAttr.setXY(
+                  i + j,
+                  ((x - bb.min.x) / bb_dx) * worldW * textureDensity,
+                  ((localFrontZ - z) / (localFrontZ - localBackZ)) *
+                    worldDepth *
+                    textureDensity,
+                );
+              } else {
+                // Back face: U=Width(X), V=Height(Y) MULTIPLIED by world dimensions * density
+                uvAttr.setXY(
+                  i + j,
+                  ((x - bb.min.x) / bb_dx) * worldW * textureDensity,
+                  ((y - bb.min.y) / bb_dy) * worldH * textureDensity,
+                );
+              }
+            }
+          }
+        }
+        uvAttr.needsUpdate = true;
+
+        // World dimensions and final values (already calculated above before UV mapping)
+        const perim = 2 * (worldW + worldH);
+        const finalScale: [number, number, number] = [
+          scale * sCore,
+          scale * sCore,
+          scale,
+        ];
+
+        // Scale-aware epsilon for z-offset (~0.5mm in world space)
+        const worldUnit = Math.abs(scale) * sCore;
+        const frontZEps = Math.max(0.0005, 0.5e-3);
+
+        // Build quaternion that aligns wrapper's local +Z to the front face normal
+        // Top of face recedes in -Z as Y increases → outward normal has +Z and +Y (faces up/out)
+        // FIX: Y component should be positive for a face leaning back
+        const frontNormal = new THREE.Vector3(
+          0,
+          Math.sin(slantAngleRad),
+          Math.cos(slantAngleRad),
+        ).normalize();
+        const wrapperQuaternion = new THREE.Quaternion().setFromUnitVectors(
+          new THREE.Vector3(0, 0, 1),
+          frontNormal,
+        );
+
+        // Outline points for slant headstone (rectangular contour in child coords)
+        const slantCenterX = (minX + maxX) / 2;
+        const slantOutlinePoints = [
+          new THREE.Vector2(minX - slantCenterX, 0),
+          new THREE.Vector2(maxX - slantCenterX, 0),
+          new THREE.Vector2(maxX - slantCenterX, maxY - minY),
+          new THREE.Vector2(minX - slantCenterX, maxY - minY),
+        ];
+
+        return {
+          geometries: [slantGeometry],
+          dims: { worldW, worldH, worldPerim: perim, worldDepth },
+          meshScale: finalScale,
+          apiData: {
+            frontZ: frontZEps, // Scale-aware offset to prevent z-fighting
+            unitsPerMeter: 1 / Math.max(EPS, scale * sCore),
+            depthUnitsPerMeter: 1 / Math.max(EPS, scale),
+            version: Math.random(),
+            worldWidth: worldW,
+            worldHeight: worldSlantH, // CRITICAL: Report slant height so children fit the slanted surface
+            outlinePoints: slantOutlinePoints,
+          },
+          childWrapperPos: [0, 0, zTranslation * scale] as [
+            number,
+            number,
+            number,
+          ], // Match geometry translation
+          childWrapperRotation: wrapperQuaternion, // Return THREE.Quaternion object, not array
+        };
+      }
+
+      // NORMAL UPRIGHT HEADSTONE (existing code)
+
+      // Build extrudes
+      const extrudeSettings = {
+        depth,
+        steps: 1,
+        bevelEnabled: bevel,
+        bevelSegments: bevel ? 2 : 0,
+        bevelSize: bevel ? 0.8 : 0,
+        bevelThickness: bevel ? 0.8 : 0,
+        curveSegments: 32, // Ensure smooth geometry curve
+      };
+
+      const coreGeom = new THREE.ExtrudeGeometry(base, extrudeSettings);
+      const geoms: THREE.BufferGeometry[] = [coreGeom];
+
+      // Preserve top logic — skip the band when corners are rounded (shape already covers full height)
+      if (preserveTop && wantH > coreH_world + 1e-9 && !cornerRadius) {
+        const s = new THREE.Shape();
+        s.moveTo(minX, maxY);
+        s.lineTo(maxX, maxY);
+        s.lineTo(maxX, bottomTarget_SV);
+        s.lineTo(minX, bottomTarget_SV);
+        s.closePath();
+        const band = new THREE.ExtrudeGeometry(s, extrudeSettings);
+        geoms.push(band);
+      } else if (preserveTop && wantH < coreH_world - 1e-9 && !cornerRadius) {
+        // Vertex-clamp only when no rounded corners (rounded rect is already sized to bottomTarget_SV)
+        const pos = coreGeom.getAttribute('position') as THREE.BufferAttribute;
+        const P = pos.array as Float32Array;
+        for (let i = 0; i < P.length; i += 3)
+          if (P[i + 1] > bottomTarget_SV) P[i + 1] = bottomTarget_SV;
+        pos.needsUpdate = true;
+      }
+
+      const reliefDepth = Math.max(
+        0.001,
+        Math.min(depth - 0.001, Math.max(0.5, depth * 0.2)),
+      );
+      const reliefOffset = depth - reliefDepth - 0.0005;
+
+      additionalShapes.forEach(({ shape, isRelief }) => {
+        const settings = { ...extrudeSettings };
+        let extraGeom: THREE.ExtrudeGeometry;
+
+        if (isRelief) {
+          settings.depth = reliefDepth;
+          extraGeom = new THREE.ExtrudeGeometry(shape, settings);
+          extraGeom.translate(0, 0, Math.max(0, reliefOffset));
+        } else {
+          extraGeom = new THREE.ExtrudeGeometry(shape, settings);
+        }
+
+        geoms.push(extraGeom);
+      });
+
+      // Merge geometries if needed
+      let merged: THREE.BufferGeometry;
+      if (geoms.length > 1) {
+        // Preserve ExtrudeGeometry's cap/wall groups when a height extension
+        // adds a second geometry. Without this, its front cap was later
+        // indistinguishable from the perimeter wall.
+        merged = BufferGeometryUtils.mergeGeometries(geoms, true);
+      } else {
+        merged = geoms[0];
+      }
+
+      // Convert to non-indexed for material groups
+      if (merged.index) merged = merged.toNonIndexed();
+
+      // =========================================================
+      // GEOMETRY NORMALIZATION (BAKE TO Y-UP)
+      // =========================================================
+
+      // 1. Center X.
+      //    Align "SVG Bottom" (maxY in most cases, but we use calculated bottomTarget_SV) to Y=0.
+      //    This temporarily puts the shape upside down sitting on 0 (range 0 to -Height).
+      //    Center Z to 0.
+      merged.translate(-(minX + maxX) / 2, -bottomTarget_SV, -depth / 2);
+
+      // 2. Flip Y.
+      //    The shape flips vertically.
+      //    Previously: Base at 0, Top at -Height.
+      //    Now: Base at 0, Top at +Height.
+      //    This creates the correct Upright orientation.
+      merged.scale(1, -1, 1);
+
+      // 3. FIX WINDING ORDER.
+      //    Scaling by -1 on one axis (Y) inverts the winding order (Inside-Out).
+      //    We swap vertices 1 and 2 to restore correct Outward facing normals.
+      const posAttr = merged.getAttribute('position');
+      for (let i = 0; i < posAttr.count; i += 3) {
+        const x1 = posAttr.getX(i + 1),
+          y1 = posAttr.getY(i + 1),
+          z1 = posAttr.getZ(i + 1);
+        const x2 = posAttr.getX(i + 2),
+          y2 = posAttr.getY(i + 2),
+          z2 = posAttr.getZ(i + 2);
+        // Swap
+        posAttr.setXYZ(i + 1, x2, y2, z2);
+        posAttr.setXYZ(i + 2, x1, y1, z1);
+      }
+
+      // FINAL ALIGNMENT: ensure headstone always rests on the ground plane (Y = 0)
+      merged.computeBoundingBox();
+      const finalBB = merged.boundingBox;
+      if (finalBB && Math.abs(finalBB.min.y) > 1e-5) {
+        merged.translate(0, -finalBB.min.y, 0);
+      }
+
+      // =========================================================
+      // MATERIAL GROUPS
+      // =========================================================
+      merged.clearGroups();
+      const pos = merged.getAttribute('position') as THREE.BufferAttribute;
+      const triCount = Math.floor(pos.count / 3);
+      let currentMat = -1,
+        start = 0,
+        count = 0;
+
+      // Bevelled ExtrudeGeometry extends beyond the nominal 0..depth range.
+      // Read the actual outer cap planes after every transform; using
+      // +/-depth/2 discarded both caps for modern (bevelled) SVG headstones.
+      merged.computeBoundingBox();
+      const capBounds = merged.boundingBox;
+      const capFrontZ = capBounds?.max.z ?? depth / 2;
+      const capBackZ = capBounds?.min.z ?? -depth / 2;
+      const capPlaneEpsilon = Math.max(EPS, Math.abs(depth) * 1e-6);
+      const getCapMaterialIndex = (vertexIndex: number) => {
+        const z0 = pos.getZ(vertexIndex);
+        const z1 = pos.getZ(vertexIndex + 1);
+        const z2 = pos.getZ(vertexIndex + 2);
+        const liesOnPlane = (planeZ: number) =>
+          Math.abs(z0 - planeZ) <= capPlaneEpsilon &&
+          Math.abs(z1 - planeZ) <= capPlaneEpsilon &&
+          Math.abs(z2 - planeZ) <= capPlaneEpsilon;
+
+        if (liesOnPlane(capFrontZ)) return 0;
+        if (liesOnPlane(capBackZ)) return 2;
+        return 1;
+      };
+
+      const flush = () => {
+        if (count > 0) {
+          merged.addGroup(start, count, currentMat);
+          start += count;
+          count = 0;
+        }
+      };
+
+      for (let t = 0; t < triCount; t++) {
+        const i0 = t * 3;
+        // Material 0 = front, 1 = continuous sides, 2 = back cap.
+        const matIndex = getCapMaterialIndex(i0);
+        if (currentMat === -1) currentMat = matIndex;
+        if (matIndex !== currentMat) {
+          flush();
+          currentMat = matIndex;
+        }
+        count += 3;
+      }
+      flush();
+
+      // `toNonIndexed()` disconnects the triangles along a curved extrusion.
+      // Restore smooth wall normals by welding side vertices logically by their
+      // position, while retaining exact flat normals for the front and back caps.
+      const normal = merged.getAttribute('normal') as THREE.BufferAttribute;
+      const sideNormalSums = new Map<string, THREE.Vector3>();
+      const sideVertexKeys = new Array<string | null>(pos.count).fill(null);
+
+      for (let t = 0; t < triCount; t++) {
+        const i0 = t * 3;
+        if (getCapMaterialIndex(i0) !== 1) continue;
+
+        const a = new THREE.Vector3(pos.getX(i0), pos.getY(i0), pos.getZ(i0));
+        const b = new THREE.Vector3(
+          pos.getX(i0 + 1),
+          pos.getY(i0 + 1),
+          pos.getZ(i0 + 1),
+        );
+        const c = new THREE.Vector3(
+          pos.getX(i0 + 2),
+          pos.getY(i0 + 2),
+          pos.getZ(i0 + 2),
+        );
+        const faceNormal = new THREE.Vector3()
+          .subVectors(b, a)
+          .cross(new THREE.Vector3().subVectors(c, a))
+          .normalize();
+
+        for (let vertexIndex = i0; vertexIndex < i0 + 3; vertexIndex++) {
+          const key = `${pos.getX(vertexIndex).toFixed(6)}:${pos
+            .getY(vertexIndex)
+            .toFixed(6)}:${pos.getZ(vertexIndex).toFixed(6)}`;
+          sideVertexKeys[vertexIndex] = key;
+          const sum = sideNormalSums.get(key);
+          if (sum) {
+            sum.add(faceNormal);
+          } else {
+            sideNormalSums.set(key, faceNormal.clone());
+          }
+        }
+      }
+
+      for (let vertexIndex = 0; vertexIndex < pos.count; vertexIndex++) {
+        const key = sideVertexKeys[vertexIndex];
+        if (!key) continue;
+        const smoothedNormal = sideNormalSums.get(key)?.normalize();
+        if (smoothedNormal) {
+          normal.setXYZ(
+            vertexIndex,
+            smoothedNormal.x,
+            smoothedNormal.y,
+            smoothedNormal.z,
+          );
+        }
+      }
+
+      for (let t = 0; t < triCount; t++) {
+        const i0 = t * 3;
+        const capMaterialIndex = getCapMaterialIndex(i0);
+        if (capMaterialIndex === 1) continue;
+
+        const normalZ = capMaterialIndex === 0 ? 1 : -1;
+        normal.setXYZ(i0, 0, 0, normalZ);
+        normal.setXYZ(i0 + 1, 0, 0, normalZ);
+        normal.setXYZ(i0 + 2, 0, 0, normalZ);
+      }
+      normal.needsUpdate = true;
+
+      // =========================================================
+      // UV MAPPING (Normalized 0..1 Strategy)
+      // =========================================================
+      merged.computeBoundingBox();
+      const bb = merged.boundingBox!;
+      const x0 = bb.min.x,
+        dxU = bb.max.x - bb.min.x;
+      const y0 = bb.min.y,
+        dyU = bb.max.y - bb.min.y;
+      const centerX = (minX + maxX) / 2;
+      const zBack = capBackZ;
+      const zFront = capFrontZ;
+
+      const uvArr = new Float32Array(pos.count * 2);
+      // Calculate Physical World Dimensions (Used for Repeats, not UV baking)
+      const worldW = (maxX - minX) * Math.abs(scale) * sCore;
+      const worldH = (bottomTarget_SV - minY) * Math.abs(scale) * sCore;
+      const worldPerimeterLen = outline.total * Math.abs(scale) * sCore;
+      // Important: worldDepth is physical thickness
+      const worldZDepth = Math.abs((capFrontZ - capBackZ) * scale);
+      const usePhysicalCapRepeat =
+        autoRepeat || tileSize != null || sideTileSize != null;
+      const faceTileSize = Math.max(0.001, tileSize ?? 0.1);
+      const backTileSize = Math.max(0.001, sideTileSize ?? tileSize ?? 0.1);
+      const faceUvRepeatX = stretchFace
+        ? 1
+        : usePhysicalCapRepeat
+          ? Math.max(1, worldW / faceTileSize)
+          : (faceRepeatX ?? 6);
+      const faceUvRepeatY = stretchFace
+        ? 1
+        : usePhysicalCapRepeat
+          ? Math.max(1, worldH / faceTileSize)
+          : (faceRepeatY ?? 6);
+      const backUvRepeatX = usePhysicalCapRepeat
+        ? Math.max(1, worldW / backTileSize)
+        : (sideRepeatX ?? 8);
+      const backUvRepeatY = usePhysicalCapRepeat
+        ? Math.max(1, worldH / backTileSize)
+        : (sideRepeatY ?? 1);
+
+      for (let i = 0; i < pos.count; i += 3) {
+        const capMaterialIndex = getCapMaterialIndex(i);
+        const isFrontCap = capMaterialIndex === 0;
+        const isCap = capMaterialIndex !== 1;
+
+        if (isCap) {
+          // Front/back cap texture density is baked directly into the planar
+          // UVs. Complex modern SVG contours otherwise expose a discontinuity
+          // when a repeated texture matrix is applied after triangulation.
+          const repeatX = isFrontCap ? faceUvRepeatX : backUvRepeatX;
+          const repeatY = isFrontCap ? faceUvRepeatY : backUvRepeatY;
+          for (let j = 0; j < 3; j++) {
+            const u = ((pos.getX(i + j) - x0) / dxU) * repeatX;
+            const v = ((pos.getY(i + j) - y0) / dyU) * repeatY;
+            uvArr[2 * (i + j)] = u;
+            uvArr[2 * (i + j) + 1] = v;
+          }
+        } else {
+          // A wall needs one coordinate along its outline and the other through
+          // its Z depth. X/Y-only UVs collapse the front and back vertices onto
+          // each other, causing mip-map noise while OrbitControls moves.
+          const edgeX = pos.getX(i + 1) - pos.getX(i);
+          const edgeY = pos.getY(i + 1) - pos.getY(i);
+          const alternateEdgeX = pos.getX(i + 2) - pos.getX(i);
+          const alternateEdgeY = pos.getY(i + 2) - pos.getY(i);
+          const useXAxis =
+            Math.abs(edgeX) + Math.abs(alternateEdgeX) >=
+            Math.abs(edgeY) + Math.abs(alternateEdgeY);
+          const sideDepthRepeat = usePhysicalCapRepeat
+            ? Math.max(1, worldZDepth / backTileSize)
+            : (sideRepeatY ?? 1);
+
+          for (let j = 0; j < 3; j++) {
+            const u = useXAxis
+              ? ((pos.getX(i + j) - x0) / dxU) * faceUvRepeatX
+              : ((pos.getY(i + j) - y0) / dyU) * faceUvRepeatY;
+            const v =
+              ((pos.getZ(i + j) - zBack) / (zFront - zBack)) * sideDepthRepeat;
+            uvArr[2 * (i + j)] = u;
+            uvArr[2 * (i + j) + 1] = v;
+          }
+        }
+      }
+      merged.setAttribute('uv', new THREE.BufferAttribute(uvArr, 2));
+
+      // Keep the two planar caps separate from the extrusion wall. In particular,
+      // do not render ExtrudeGeometry's wall triangles: curved outlines could
+      // leave overlapping bevel/wall faces that flickered during camera orbit.
+      const capPositions: number[] = [];
+      const capNormals: number[] = [];
+      const capUvs: number[] = [];
+      const capGroups: Array<{
+        start: number;
+        count: number;
+        materialIndex: number;
+      }> = [];
+      let capGroupStart = 0;
+      let capGroupCount = 0;
+      let activeCapMaterial = -1;
+
+      const appendCapGroup = () => {
+        if (capGroupCount > 0) {
+          capGroups.push({
+            start: capGroupStart,
+            count: capGroupCount,
+            materialIndex: activeCapMaterial,
+          });
+          capGroupStart += capGroupCount;
+          capGroupCount = 0;
+        }
+      };
+
+      for (
+        let triangleStart = 0;
+        triangleStart < pos.count;
+        triangleStart += 3
+      ) {
+        const capMaterialIndex = getCapMaterialIndex(triangleStart);
+        if (capMaterialIndex === 1) continue;
+        if (
+          activeCapMaterial !== -1 &&
+          capMaterialIndex !== activeCapMaterial
+        ) {
+          appendCapGroup();
+        }
+        activeCapMaterial = capMaterialIndex;
+
+        for (
+          let vertexIndex = triangleStart;
+          vertexIndex < triangleStart + 3;
+          vertexIndex++
+        ) {
+          capPositions.push(
+            pos.getX(vertexIndex),
+            pos.getY(vertexIndex),
+            pos.getZ(vertexIndex),
+          );
+          capNormals.push(
+            normal.getX(vertexIndex),
+            normal.getY(vertexIndex),
+            normal.getZ(vertexIndex),
+          );
+          capUvs.push(uvArr[vertexIndex * 2], uvArr[vertexIndex * 2 + 1]);
+        }
+        capGroupCount += 3;
+      }
+      appendCapGroup();
+
+      const capGeometry = new THREE.BufferGeometry();
+      capGeometry.setAttribute(
+        'position',
+        new THREE.Float32BufferAttribute(capPositions, 3),
+      );
+      capGeometry.setAttribute(
+        'normal',
+        new THREE.Float32BufferAttribute(capNormals, 3),
+      );
+      capGeometry.setAttribute(
+        'uv',
+        new THREE.Float32BufferAttribute(capUvs, 2),
+      );
+      capGroups.forEach((group) =>
+        capGeometry.addGroup(group.start, group.count, group.materialIndex),
+      );
+      capGeometry.computeBoundingBox();
+
+      // Generate one indexed, non-overlapping wall from the same contour. Shared
+      // front/back vertices give a continuous normal around curves, while U is
+      // measured along the contour and V across the physical stone depth.
+      const wallPositions: number[] = [];
+      const wallUvs: number[] = [];
+      const wallIndices: number[] = [];
+      const wallDepthRepeat = usePhysicalCapRepeat
+        ? Math.max(1, worldZDepth / backTileSize)
+        : (sideRepeatY ?? 1);
+      const wallPointLimit = 320;
+      const wallOutlines = [
+        outline.pts,
+        ...additionalSolidShapes.map((shape) => spacedOutline(shape, 1024).pts),
+      ];
+
+      wallOutlines.forEach((sourcePoints) => {
+        const wallPointStep = Math.max(
+          1,
+          Math.ceil(sourcePoints.length / wallPointLimit),
+        );
+        const wallPoints = sourcePoints.filter(
+          (_, index) => index % wallPointStep === 0,
+        );
+        if (
+          wallPoints.length > 2 &&
+          wallPoints[0].distanceToSquared(wallPoints[wallPoints.length - 1]) <
+            EPS
+        ) {
+          wallPoints.pop();
+        }
+        if (wallPoints.length <= 2) return;
+
+        const vertexOffset = wallPositions.length / 3;
+        let wallLength = 0;
+        wallPoints.forEach((point, index) => {
+          if (index > 0) wallLength += point.distanceTo(wallPoints[index - 1]);
+          const x = point.x - centerX;
+          const y = bottomTarget_SV - point.y;
+          const u =
+            (wallLength * Math.abs(scale) * sCore) /
+            Math.max(EPS, sideTileSize ?? tileSize ?? 0.1);
+          wallPositions.push(x, y, zFront, x, y, zBack);
+          wallUvs.push(u, 0, u, wallDepthRepeat);
+        });
+
+        let transformedSignedArea = 0;
+        for (let index = 0; index < wallPoints.length; index++) {
+          const point = wallPoints[index];
+          const nextPoint = wallPoints[(index + 1) % wallPoints.length];
+          const x = point.x - centerX;
+          const y = bottomTarget_SV - point.y;
+          const nextX = nextPoint.x - centerX;
+          const nextY = bottomTarget_SV - nextPoint.y;
+          transformedSignedArea += x * nextY - nextX * y;
+        }
+        const wallOutlineIsCounterClockwise = transformedSignedArea > 0;
+
+        for (let index = 0; index < wallPoints.length; index++) {
+          const nextIndex = (index + 1) % wallPoints.length;
+          const front = vertexOffset + index * 2;
+          const back = front + 1;
+          const nextFront = vertexOffset + nextIndex * 2;
+          const nextBack = nextFront + 1;
+          if (wallOutlineIsCounterClockwise) {
+            wallIndices.push(front, back, nextFront, nextFront, back, nextBack);
+          } else {
+            wallIndices.push(front, nextFront, back, nextFront, nextBack, back);
+          }
+        }
+      });
+
+      const wallGeometry = new THREE.BufferGeometry();
+      wallGeometry.setAttribute(
+        'position',
+        new THREE.Float32BufferAttribute(wallPositions, 3),
+      );
+      wallGeometry.setAttribute(
+        'uv',
+        new THREE.Float32BufferAttribute(wallUvs, 2),
+      );
+      wallGeometry.setIndex(wallIndices);
+      wallGeometry.computeVertexNormals();
+      wallGeometry.addGroup(0, wallIndices.length, 1);
+      wallGeometry.computeBoundingBox();
+
+      merged.dispose();
+
+      // Stats & Output
+      const worldPerim = worldPerimeterLen;
+      const worldDepth = worldZDepth;
+
+      // Standard Scale (1,1,1) because geometry is normalized
+      const finalScale: [number, number, number] = [
+        scale * sCore,
+        scale * sCore,
+        scale,
+      ];
+
+      // =========================================================
+      // CHILD WRAPPER POSITION
+      // =========================================================
+      // Move wrapper to front face surface (prevent double Z-offset)
+      // Wrapper positioned at face, children use small epsilon
+
+      const wrapperX = 0;
+      const wrapperY = 0;
+      const wrapperZ = capFrontZ * scale; // Position wrapper at the actual front cap
+
+      // Compute outline points in child coordinate space (centered X, Y-flipped, bottom at 0)
+      const outlinePoints = outline.pts.map(
+        (p) => new THREE.Vector2(p.x - centerX, bottomTarget_SV - p.y),
+      );
+
+      return {
+        geometries: [capGeometry, wallGeometry],
+        dims: { worldW, worldH, worldPerim, worldDepth },
         meshScale: finalScale,
         apiData: {
-          frontZ: frontZEps, // Scale-aware offset to prevent z-fighting
+          frontZ: 0.0005, // Epsilon only - wrapper is already at the face
           unitsPerMeter: 1 / Math.max(EPS, scale * sCore),
+          depthUnitsPerMeter: 1 / Math.max(EPS, scale),
           version: Math.random(),
           worldWidth: worldW,
-          worldHeight: worldSlantH, // CRITICAL: Report slant height so children fit the slanted surface
-          outlinePoints: slantOutlinePoints,
+          worldHeight: worldH,
+          outlinePoints,
         },
-        childWrapperPos: [0, 0, zTranslation * scale] as [number, number, number], // Match geometry translation
-        childWrapperRotation: wrapperQuaternion // Return THREE.Quaternion object, not array
+        childWrapperPos: [wrapperX, wrapperY, wrapperZ] as [
+          number,
+          number,
+          number,
+        ],
+        childWrapperRotation: new THREE.Quaternion(), // Identity quaternion for upright
       };
-    }
-
-    // NORMAL UPRIGHT HEADSTONE (existing code)
-
-    // Build extrudes
-    const extrudeSettings = {
+    }, [
+      shapeParams,
+      outline,
       depth,
-      steps: 1,
-      bevelEnabled: bevel,
-      bevelSegments: bevel ? 2 : 0,
-      bevelSize: bevel ? 0.8 : 0,
-      bevelThickness: bevel ? 0.8 : 0,
-      curveSegments: 32 // Ensure smooth geometry curve
-    };
+      bevel,
+      scale,
+      headstoneStyle,
+      slantThickness,
+      autoRepeat,
+      tileSize,
+      sideTileSize,
+      faceRepeatX,
+      faceRepeatY,
+      stretchFace,
+      sideRepeatX,
+      sideRepeatY,
+      GEOMETRY_BUILD_VERSION,
+    ]);
 
-    const coreGeom = new THREE.ExtrudeGeometry(base, extrudeSettings);
-    const geoms: THREE.BufferGeometry[] = [coreGeom];
+    // 4. Handle Repeats via Texture Matrix (Just like the old version)
+    useLayoutEffect(() => {
+      if (!dims) return;
 
-    // Preserve top logic — skip the band when corners are rounded (shape already covers full height)
-    if (preserveTop && wantH > coreH_world + 1e-9 && !cornerRadius) {
-      const s = new THREE.Shape();
-      s.moveTo(minX, maxY);
-      s.lineTo(maxX, maxY);
-      s.lineTo(maxX, bottomTarget_SV);
-      s.lineTo(minX, bottomTarget_SV);
-      s.closePath();
-      const band = new THREE.ExtrudeGeometry(s, extrudeSettings);
-      geoms.push(band);
-    } else if (preserveTop && wantH < coreH_world - 1e-9 && !cornerRadius) {
-      // Vertex-clamp only when no rounded corners (rounded rect is already sized to bottomTarget_SV)
-      const pos = coreGeom.getAttribute('position') as THREE.BufferAttribute;
-      const P = pos.array as Float32Array;
-      for (let i = 0; i < P.length; i += 3)
-        if (P[i + 1] > bottomTarget_SV) P[i + 1] = bottomTarget_SV;
-      pos.needsUpdate = true;
-    }
+      const usePhysical =
+        autoRepeat || tileSize != null || sideTileSize != null;
+      const sideTile = Math.max(0.001, sideTileSize ?? tileSize ?? 0.1);
 
-    const reliefDepth = Math.max(0.001, Math.min(depth - 0.001, Math.max(0.5, depth * 0.2)));
-    const reliefOffset = depth - reliefDepth - 0.0005;
+      const repSideX = usePhysical
+        ? Math.max(
+            1,
+            (headstoneStyle === 'slant' ? dims.worldW : dims.worldPerim) /
+              sideTile,
+          )
+        : (sideRepeatX ?? 8);
+      const repSideY = usePhysical
+        ? Math.max(1, dims.worldDepth / sideTile)
+        : (sideRepeatY ?? 1);
 
-    additionalShapes.forEach(({ shape, isRelief }) => {
-      const settings = { ...extrudeSettings };
-      let extraGeom: THREE.ExtrudeGeometry;
+      // Cap repeats are baked into geometry UVs. Keeping these maps at 1:1
+      // avoids cap seams on complex modern headstone contours.
+      clonedFaceMap.repeat.set(1, 1);
+      clonedFaceMap.needsUpdate = true;
+      faceDetailMap.repeat.set(1, 1);
+      faceDetailMap.needsUpdate = true;
 
-      if (isRelief) {
-        settings.depth = reliefDepth;
-        extraGeom = new THREE.ExtrudeGeometry(shape, settings);
-        extraGeom.translate(0, 0, Math.max(0, reliefOffset));
-      } else {
-        extraGeom = new THREE.ExtrudeGeometry(shape, settings);
-      }
-
-      geoms.push(extraGeom);
-    });
-
-    // Merge geometries if needed
-    let merged: THREE.BufferGeometry;
-    if (geoms.length > 1) {
-      // Preserve ExtrudeGeometry's cap/wall groups when a height extension
-      // adds a second geometry. Without this, its front cap was later
-      // indistinguishable from the perimeter wall.
-      merged = BufferGeometryUtils.mergeGeometries(geoms, true);
-    } else {
-      merged = geoms[0];
-    }
-
-    // Convert to non-indexed for material groups
-    if (merged.index) merged = merged.toNonIndexed();
-
-    // =========================================================
-    // GEOMETRY NORMALIZATION (BAKE TO Y-UP)
-    // =========================================================
-    
-    // 1. Center X. 
-    //    Align "SVG Bottom" (maxY in most cases, but we use calculated bottomTarget_SV) to Y=0.
-    //    This temporarily puts the shape upside down sitting on 0 (range 0 to -Height).
-    //    Center Z to 0.
-    merged.translate(-(minX + maxX) / 2, -bottomTarget_SV, -depth / 2);
-
-    // 2. Flip Y.
-    //    The shape flips vertically. 
-    //    Previously: Base at 0, Top at -Height.
-    //    Now: Base at 0, Top at +Height.
-    //    This creates the correct Upright orientation.
-    merged.scale(1, -1, 1);
-
-    // 3. FIX WINDING ORDER.
-    //    Scaling by -1 on one axis (Y) inverts the winding order (Inside-Out).
-    //    We swap vertices 1 and 2 to restore correct Outward facing normals.
-    const posAttr = merged.getAttribute('position');
-    for (let i = 0; i < posAttr.count; i += 3) {
-       const x1 = posAttr.getX(i + 1), y1 = posAttr.getY(i + 1), z1 = posAttr.getZ(i + 1);
-       const x2 = posAttr.getX(i + 2), y2 = posAttr.getY(i + 2), z2 = posAttr.getZ(i + 2);
-       // Swap
-       posAttr.setXYZ(i + 1, x2, y2, z2);
-       posAttr.setXYZ(i + 2, x1, y1, z1);
-    }
-    
-    // FINAL ALIGNMENT: ensure headstone always rests on the ground plane (Y = 0)
-    merged.computeBoundingBox();
-    const finalBB = merged.boundingBox;
-    if (finalBB && Math.abs(finalBB.min.y) > 1e-5) {
-      merged.translate(0, -finalBB.min.y, 0);
-    }
-
-    // =========================================================
-    // MATERIAL GROUPS
-    // =========================================================
-    merged.clearGroups();
-    const pos = merged.getAttribute('position') as THREE.BufferAttribute;
-    const triCount = Math.floor(pos.count / 3);
-    let currentMat = -1, start = 0, count = 0;
-
-    // Bevelled ExtrudeGeometry extends beyond the nominal 0..depth range.
-    // Read the actual outer cap planes after every transform; using
-    // +/-depth/2 discarded both caps for modern (bevelled) SVG headstones.
-    merged.computeBoundingBox();
-    const capBounds = merged.boundingBox;
-    const capFrontZ = capBounds?.max.z ?? depth / 2;
-    const capBackZ = capBounds?.min.z ?? -depth / 2;
-    const capPlaneEpsilon = Math.max(EPS, Math.abs(depth) * 1e-6);
-    const getCapMaterialIndex = (vertexIndex: number) => {
-      const z0 = pos.getZ(vertexIndex);
-      const z1 = pos.getZ(vertexIndex + 1);
-      const z2 = pos.getZ(vertexIndex + 2);
-      const liesOnPlane = (planeZ: number) =>
-        Math.abs(z0 - planeZ) <= capPlaneEpsilon &&
-        Math.abs(z1 - planeZ) <= capPlaneEpsilon &&
-        Math.abs(z2 - planeZ) <= capPlaneEpsilon;
-
-      if (liesOnPlane(capFrontZ)) return 0;
-      if (liesOnPlane(capBackZ)) return 2;
-      return 1;
-    };
-
-    const flush = () => {
-      if (count > 0) {
-        merged.addGroup(start, count, currentMat);
-        start += count;
-        count = 0;
-      }
-    };
-
-    for (let t = 0; t < triCount; t++) {
-      const i0 = t * 3;
-      // Material 0 = front, 1 = continuous sides, 2 = back cap.
-      const matIndex = getCapMaterialIndex(i0);
-      if (currentMat === -1) currentMat = matIndex;
-      if (matIndex !== currentMat) { flush(); currentMat = matIndex; }
-      count += 3;
-    }
-    flush();
-
-    // `toNonIndexed()` disconnects the triangles along a curved extrusion.
-    // Restore smooth wall normals by welding side vertices logically by their
-    // position, while retaining exact flat normals for the front and back caps.
-    const normal = merged.getAttribute('normal') as THREE.BufferAttribute;
-    const sideNormalSums = new Map<string, THREE.Vector3>();
-    const sideVertexKeys = new Array<string | null>(pos.count).fill(null);
-
-    for (let t = 0; t < triCount; t++) {
-      const i0 = t * 3;
-      if (getCapMaterialIndex(i0) !== 1) continue;
-
-      const a = new THREE.Vector3(pos.getX(i0), pos.getY(i0), pos.getZ(i0));
-      const b = new THREE.Vector3(
-        pos.getX(i0 + 1),
-        pos.getY(i0 + 1),
-        pos.getZ(i0 + 1),
-      );
-      const c = new THREE.Vector3(
-        pos.getX(i0 + 2),
-        pos.getY(i0 + 2),
-        pos.getZ(i0 + 2),
-      );
-      const faceNormal = new THREE.Vector3()
-        .subVectors(b, a)
-        .cross(new THREE.Vector3().subVectors(c, a))
-        .normalize();
-
-      for (let vertexIndex = i0; vertexIndex < i0 + 3; vertexIndex++) {
-        const key = `${pos.getX(vertexIndex).toFixed(6)}:${pos
-          .getY(vertexIndex)
-          .toFixed(6)}:${pos.getZ(vertexIndex).toFixed(6)}`;
-        sideVertexKeys[vertexIndex] = key;
-        const sum = sideNormalSums.get(key);
-        if (sum) {
-          sum.add(faceNormal);
-        } else {
-          sideNormalSums.set(key, faceNormal.clone());
-        }
-      }
-    }
-
-    for (let vertexIndex = 0; vertexIndex < pos.count; vertexIndex++) {
-      const key = sideVertexKeys[vertexIndex];
-      if (!key) continue;
-      const smoothedNormal = sideNormalSums.get(key)?.normalize();
-      if (smoothedNormal) {
-        normal.setXYZ(
-          vertexIndex,
-          smoothedNormal.x,
-          smoothedNormal.y,
-          smoothedNormal.z,
+      if (clonedSideMap) {
+        clonedSideMap.repeat.set(
+          headstoneStyle === 'slant' ? repSideX : 1,
+          headstoneStyle === 'slant' ? repSideY : 1,
         );
+        clonedSideMap.needsUpdate = true;
       }
-    }
-
-    for (let t = 0; t < triCount; t++) {
-      const i0 = t * 3;
-      const capMaterialIndex = getCapMaterialIndex(i0);
-      if (capMaterialIndex === 1) continue;
-
-      const normalZ = capMaterialIndex === 0 ? 1 : -1;
-      normal.setXYZ(i0, 0, 0, normalZ);
-      normal.setXYZ(i0 + 1, 0, 0, normalZ);
-      normal.setXYZ(i0 + 2, 0, 0, normalZ);
-    }
-    normal.needsUpdate = true;
-
-    // =========================================================
-    // UV MAPPING (Normalized 0..1 Strategy)
-    // =========================================================
-    merged.computeBoundingBox();
-    const bb = merged.boundingBox!;
-    const x0 = bb.min.x, dxU = bb.max.x - bb.min.x;
-    const y0 = bb.min.y, dyU = bb.max.y - bb.min.y;
-    const centerX = (minX + maxX) / 2;
-    const zBack = capBackZ;
-    const zFront = capFrontZ;
-    
-    const uvArr = new Float32Array(pos.count * 2);
-    // Calculate Physical World Dimensions (Used for Repeats, not UV baking)
-    const worldW = (maxX - minX) * Math.abs(scale) * sCore;
-    const worldH = (bottomTarget_SV - minY) * Math.abs(scale) * sCore;
-    const worldPerimeterLen = outline.total * Math.abs(scale) * sCore;
-    // Important: worldDepth is physical thickness
-    const worldZDepth = Math.abs((capFrontZ - capBackZ) * scale);
-    const usePhysicalCapRepeat = autoRepeat || tileSize != null || sideTileSize != null;
-    const faceTileSize = Math.max(0.001, tileSize ?? 0.1);
-    const backTileSize = Math.max(0.001, sideTileSize ?? tileSize ?? 0.1);
-    const faceUvRepeatX = stretchFace
-      ? 1
-      : (usePhysicalCapRepeat ? Math.max(1, worldW / faceTileSize) : (faceRepeatX ?? 6));
-    const faceUvRepeatY = stretchFace
-      ? 1
-      : (usePhysicalCapRepeat ? Math.max(1, worldH / faceTileSize) : (faceRepeatY ?? 6));
-    const backUvRepeatX = usePhysicalCapRepeat
-      ? Math.max(1, worldW / backTileSize)
-      : (sideRepeatX ?? 8);
-    const backUvRepeatY = usePhysicalCapRepeat
-      ? Math.max(1, worldH / backTileSize)
-      : (sideRepeatY ?? 1);
-
-    for (let i = 0; i < pos.count; i += 3) {
-      const capMaterialIndex = getCapMaterialIndex(i);
-      const isFrontCap = capMaterialIndex === 0;
-      const isCap = capMaterialIndex !== 1;
-      
-      if (isCap) {
-        // Front/back cap texture density is baked directly into the planar
-        // UVs. Complex modern SVG contours otherwise expose a discontinuity
-        // when a repeated texture matrix is applied after triangulation.
-        const repeatX = isFrontCap ? faceUvRepeatX : backUvRepeatX;
-        const repeatY = isFrontCap ? faceUvRepeatY : backUvRepeatY;
-        for (let j = 0; j < 3; j++) {
-          const u = ((pos.getX(i + j) - x0) / dxU) * repeatX;
-          const v = ((pos.getY(i + j) - y0) / dyU) * repeatY;
-          uvArr[2 * (i + j)] = u;
-          uvArr[2 * (i + j) + 1] = v;
-        }
-      } else {
-        // A wall needs one coordinate along its outline and the other through
-        // its Z depth. X/Y-only UVs collapse the front and back vertices onto
-        // each other, causing mip-map noise while OrbitControls moves.
-        const edgeX = pos.getX(i + 1) - pos.getX(i);
-        const edgeY = pos.getY(i + 1) - pos.getY(i);
-        const alternateEdgeX = pos.getX(i + 2) - pos.getX(i);
-        const alternateEdgeY = pos.getY(i + 2) - pos.getY(i);
-        const useXAxis =
-          Math.abs(edgeX) + Math.abs(alternateEdgeX) >=
-          Math.abs(edgeY) + Math.abs(alternateEdgeY);
-        const sideDepthRepeat = usePhysicalCapRepeat
-          ? Math.max(1, worldZDepth / backTileSize)
-          : (sideRepeatY ?? 1);
-
-        for (let j = 0; j < 3; j++) {
-          const u = useXAxis
-            ? ((pos.getX(i + j) - x0) / dxU) * faceUvRepeatX
-            : ((pos.getY(i + j) - y0) / dyU) * faceUvRepeatY;
-          const v =
-            ((pos.getZ(i + j) - zBack) / (zFront - zBack)) *
-            sideDepthRepeat;
-          uvArr[2 * (i + j)] = u;
-          uvArr[2 * (i + j) + 1] = v;
-        }
-      }
-    }
-    merged.setAttribute('uv', new THREE.BufferAttribute(uvArr, 2));
-
-    // Keep the two planar caps separate from the extrusion wall. In particular,
-    // do not render ExtrudeGeometry's wall triangles: curved outlines could
-    // leave overlapping bevel/wall faces that flickered during camera orbit.
-    const capPositions: number[] = [];
-    const capNormals: number[] = [];
-    const capUvs: number[] = [];
-    const capGroups: Array<{ start: number; count: number; materialIndex: number }> = [];
-    let capGroupStart = 0;
-    let capGroupCount = 0;
-    let activeCapMaterial = -1;
-
-    const appendCapGroup = () => {
-      if (capGroupCount > 0) {
-        capGroups.push({
-          start: capGroupStart,
-          count: capGroupCount,
-          materialIndex: activeCapMaterial,
-        });
-        capGroupStart += capGroupCount;
-        capGroupCount = 0;
-      }
-    };
-
-    for (let triangleStart = 0; triangleStart < pos.count; triangleStart += 3) {
-      const capMaterialIndex = getCapMaterialIndex(triangleStart);
-      if (capMaterialIndex === 1) continue;
-      if (
-        activeCapMaterial !== -1 &&
-        capMaterialIndex !== activeCapMaterial
-      ) {
-        appendCapGroup();
-      }
-      activeCapMaterial = capMaterialIndex;
-
-      for (let vertexIndex = triangleStart; vertexIndex < triangleStart + 3; vertexIndex++) {
-        capPositions.push(
-          pos.getX(vertexIndex),
-          pos.getY(vertexIndex),
-          pos.getZ(vertexIndex),
+      if (sideDetailMap) {
+        sideDetailMap.repeat.set(
+          headstoneStyle === 'slant' ? repSideX : 1,
+          headstoneStyle === 'slant' ? repSideY : 1,
         );
-        capNormals.push(
-          normal.getX(vertexIndex),
-          normal.getY(vertexIndex),
-          normal.getZ(vertexIndex),
-        );
-        capUvs.push(uvArr[vertexIndex * 2], uvArr[vertexIndex * 2 + 1]);
+        sideDetailMap.needsUpdate = true;
       }
-      capGroupCount += 3;
-    }
-    appendCapGroup();
 
-    const capGeometry = new THREE.BufferGeometry();
-    capGeometry.setAttribute(
-      'position',
-      new THREE.Float32BufferAttribute(capPositions, 3),
-    );
-    capGeometry.setAttribute(
-      'normal',
-      new THREE.Float32BufferAttribute(capNormals, 3),
-    );
-    capGeometry.setAttribute('uv', new THREE.Float32BufferAttribute(capUvs, 2));
-    capGroups.forEach((group) =>
-      capGeometry.addGroup(group.start, group.count, group.materialIndex),
-    );
-    capGeometry.computeBoundingBox();
-
-    // Generate one indexed, non-overlapping wall from the same contour. Shared
-    // front/back vertices give a continuous normal around curves, while U is
-    // measured along the contour and V across the physical stone depth.
-    const wallPositions: number[] = [];
-    const wallUvs: number[] = [];
-    const wallIndices: number[] = [];
-    const wallDepthRepeat = usePhysicalCapRepeat
-      ? Math.max(1, worldZDepth / backTileSize)
-      : (sideRepeatY ?? 1);
-    const wallPointLimit = 320;
-    const wallOutlines = [
-      outline.pts,
-      ...additionalSolidShapes.map((shape) => spacedOutline(shape, 1024).pts),
-    ];
-
-    wallOutlines.forEach((sourcePoints) => {
-      const wallPointStep = Math.max(1, Math.ceil(sourcePoints.length / wallPointLimit));
-      const wallPoints = sourcePoints.filter(
-        (_, index) => index % wallPointStep === 0,
-      );
-      if (
-        wallPoints.length > 2 &&
-        wallPoints[0].distanceToSquared(wallPoints[wallPoints.length - 1]) < EPS
-      ) {
-        wallPoints.pop();
+      if (clonedBackMap) {
+        clonedBackMap.repeat.set(1, 1);
+        clonedBackMap.needsUpdate = true;
       }
-      if (wallPoints.length <= 2) return;
-
-      const vertexOffset = wallPositions.length / 3;
-      let wallLength = 0;
-      wallPoints.forEach((point, index) => {
-        if (index > 0) wallLength += point.distanceTo(wallPoints[index - 1]);
-        const x = point.x - centerX;
-        const y = bottomTarget_SV - point.y;
-        const u =
-          (wallLength * Math.abs(scale) * sCore) /
-          Math.max(EPS, sideTileSize ?? tileSize ?? 0.1);
-        wallPositions.push(x, y, zFront, x, y, zBack);
-        wallUvs.push(u, 0, u, wallDepthRepeat);
-      });
-
-      let transformedSignedArea = 0;
-      for (let index = 0; index < wallPoints.length; index++) {
-        const point = wallPoints[index];
-        const nextPoint = wallPoints[(index + 1) % wallPoints.length];
-        const x = point.x - centerX;
-        const y = bottomTarget_SV - point.y;
-        const nextX = nextPoint.x - centerX;
-        const nextY = bottomTarget_SV - nextPoint.y;
-        transformedSignedArea += x * nextY - nextX * y;
+      if (backDetailMap) {
+        backDetailMap.repeat.set(1, 1);
+        backDetailMap.needsUpdate = true;
       }
-      const wallOutlineIsCounterClockwise = transformedSignedArea > 0;
 
-      for (let index = 0; index < wallPoints.length; index++) {
-        const nextIndex = (index + 1) % wallPoints.length;
-        const front = vertexOffset + index * 2;
-        const back = front + 1;
-        const nextFront = vertexOffset + nextIndex * 2;
-        const nextBack = nextFront + 1;
-        if (wallOutlineIsCounterClockwise) {
-          wallIndices.push(front, back, nextFront, nextFront, back, nextBack);
-        } else {
-          wallIndices.push(front, nextFront, back, nextFront, nextBack, back);
-        }
+      if (headstoneStyle === 'slant' && rockNormalTexture) {
+        rockNormalTexture.repeat.set(1, 1);
+        rockNormalTexture.needsUpdate = true;
       }
-    });
+    }, [
+      dims,
+      autoRepeat,
+      tileSize,
+      sideTileSize,
+      faceRepeatX,
+      faceRepeatY,
+      stretchFace,
+      sideRepeatX,
+      sideRepeatY,
+      clonedFaceMap,
+      clonedSideMap,
+      clonedBackMap,
+      faceDetailMap,
+      sideDetailMap,
+      backDetailMap,
+      headstoneStyle,
+      rockNormalTexture,
+    ]);
 
-    const wallGeometry = new THREE.BufferGeometry();
-    wallGeometry.setAttribute(
-      'position',
-      new THREE.Float32BufferAttribute(wallPositions, 3),
-    );
-    wallGeometry.setAttribute('uv', new THREE.Float32BufferAttribute(wallUvs, 2));
-    wallGeometry.setIndex(wallIndices);
-    wallGeometry.computeVertexNormals();
-    wallGeometry.addGroup(0, wallIndices.length, 1);
-    wallGeometry.computeBoundingBox();
-
-    merged.dispose();
-
-    // Stats & Output
-    const worldPerim = worldPerimeterLen;
-    const worldDepth = worldZDepth;
-
-    // Standard Scale (1,1,1) because geometry is normalized
-    const finalScale: [number, number, number] = [scale * sCore, scale * sCore, scale];
-
-    // =========================================================
-    // CHILD WRAPPER POSITION
-    // =========================================================
-    // Move wrapper to front face surface (prevent double Z-offset)
-    // Wrapper positioned at face, children use small epsilon
-    
-    const wrapperX = 0;  
-    const wrapperY = 0;  
-    const wrapperZ = capFrontZ * scale; // Position wrapper at the actual front cap
-
-    // Compute outline points in child coordinate space (centered X, Y-flipped, bottom at 0)
-    const outlinePoints = outline.pts.map((p) =>
-      new THREE.Vector2(p.x - centerX, bottomTarget_SV - p.y)
+    const stainlessFinishForMaps = isUrn ? 'brushed' : ssFinish;
+    const stainlessMaps = useMemo(
+      () =>
+        isStainlessSteel || isUrn
+          ? createStainlessTextureSet(stainlessFinishForMaps)
+          : null,
+      [isStainlessSteel, isUrn, stainlessFinishForMaps],
     );
 
-    return {
-      geometries: [capGeometry, wallGeometry],
-      dims: { worldW, worldH, worldPerim, worldDepth },
-      meshScale: finalScale,
-      apiData: {
-        frontZ: 0.0005, // Epsilon only - wrapper is already at the face
-        unitsPerMeter: 1 / Math.max(EPS, scale * sCore),
-        version: Math.random(),
-        worldWidth: worldW,
-        worldHeight: worldH,
-        outlinePoints,
-      },
-      childWrapperPos: [wrapperX, wrapperY, wrapperZ] as [number, number, number],
-      childWrapperRotation: new THREE.Quaternion() // Identity quaternion for upright
-    };
-  }, [shapeParams, outline, depth, bevel, scale, headstoneStyle, slantThickness, autoRepeat, tileSize, sideTileSize, faceRepeatX, faceRepeatY, stretchFace, sideRepeatX, sideRepeatY, GEOMETRY_BUILD_VERSION]);
+    // 5. Create Materials (FIX: Return data from useMemo, not JSX)
+    const materials = useMemo(() => {
+      const isSlant = headstoneStyle === 'slant';
+      const capBounds = geometries[0]?.boundingBox ?? null;
+      const capWorldWidth = dims?.worldW ?? 1;
+      const capWorldHeight = dims?.worldH ?? 1;
+      const usePhysicalCapRepeat =
+        autoRepeat || tileSize != null || sideTileSize != null;
+      const faceTileSize = Math.max(0.001, tileSize ?? 0.1);
+      const backTileSize = Math.max(0.001, sideTileSize ?? tileSize ?? 0.1);
+      const faceCapRepeatX = stretchFace
+        ? 1
+        : usePhysicalCapRepeat
+          ? Math.max(1, capWorldWidth / faceTileSize)
+          : (faceRepeatX ?? 6);
+      const faceCapRepeatY = stretchFace
+        ? 1
+        : usePhysicalCapRepeat
+          ? Math.max(1, capWorldHeight / faceTileSize)
+          : (faceRepeatY ?? 6);
+      const backCapRepeatX = usePhysicalCapRepeat
+        ? Math.max(1, capWorldWidth / backTileSize)
+        : (sideRepeatX ?? 8);
+      const backCapRepeatY = usePhysicalCapRepeat
+        ? Math.max(1, capWorldHeight / backTileSize)
+        : (sideRepeatY ?? 1);
 
-  // 4. Handle Repeats via Texture Matrix (Just like the old version)
-  useLayoutEffect(() => {
-    if (!dims) return;
-    
-    const usePhysical = autoRepeat || tileSize != null || sideTileSize != null;
-    const sideTile = Math.max(0.001, sideTileSize ?? tileSize ?? 0.1);
-
-    const repSideX = usePhysical 
-      ? Math.max(1, (headstoneStyle === 'slant' ? dims.worldW : dims.worldPerim) / sideTile) 
-      : (sideRepeatX ?? 8);
-    const repSideY = usePhysical ? Math.max(1, dims.worldDepth / sideTile) : (sideRepeatY ?? 1);
-
-    // Cap repeats are baked into geometry UVs. Keeping these maps at 1:1
-    // avoids cap seams on complex modern headstone contours.
-    clonedFaceMap.repeat.set(1, 1);
-    clonedFaceMap.needsUpdate = true;
-    faceDetailMap.repeat.set(1, 1);
-    faceDetailMap.needsUpdate = true;
-
-    if (clonedSideMap) {
-      clonedSideMap.repeat.set(
-        headstoneStyle === 'slant' ? repSideX : 1,
-        headstoneStyle === 'slant' ? repSideY : 1,
-      );
-      clonedSideMap.needsUpdate = true;
-    }
-    if (sideDetailMap) {
-      sideDetailMap.repeat.set(
-        headstoneStyle === 'slant' ? repSideX : 1,
-        headstoneStyle === 'slant' ? repSideY : 1,
-      );
-      sideDetailMap.needsUpdate = true;
-    }
-
-    if (clonedBackMap) {
-      clonedBackMap.repeat.set(1, 1);
-      clonedBackMap.needsUpdate = true;
-    }
-    if (backDetailMap) {
-      backDetailMap.repeat.set(1, 1);
-      backDetailMap.needsUpdate = true;
-    }
-    
-    if (headstoneStyle === 'slant' && rockNormalTexture) {
-      rockNormalTexture.repeat.set(1, 1);
-      rockNormalTexture.needsUpdate = true;
-    }
-  }, [dims, autoRepeat, tileSize, sideTileSize, faceRepeatX, faceRepeatY, stretchFace, sideRepeatX, sideRepeatY, clonedFaceMap, clonedSideMap, clonedBackMap, faceDetailMap, sideDetailMap, backDetailMap, headstoneStyle, rockNormalTexture]);
-
-  const stainlessFinishForMaps = isUrn ? 'brushed' : ssFinish;
-  const stainlessMaps = useMemo(
-    () => (isStainlessSteel || isUrn ? createStainlessTextureSet(stainlessFinishForMaps) : null),
-    [isStainlessSteel, isUrn, stainlessFinishForMaps],
-  );
-
-  // 5. Create Materials (FIX: Return data from useMemo, not JSX)
-  const materials = useMemo(() => {
-    const isSlant = headstoneStyle === 'slant';
-    const capBounds = geometries[0]?.boundingBox ?? null;
-    const capWorldWidth = dims?.worldW ?? 1;
-    const capWorldHeight = dims?.worldH ?? 1;
-    const usePhysicalCapRepeat = autoRepeat || tileSize != null || sideTileSize != null;
-    const faceTileSize = Math.max(0.001, tileSize ?? 0.1);
-    const backTileSize = Math.max(0.001, sideTileSize ?? tileSize ?? 0.1);
-    const faceCapRepeatX = stretchFace
-      ? 1
-      : (usePhysicalCapRepeat ? Math.max(1, capWorldWidth / faceTileSize) : (faceRepeatX ?? 6));
-    const faceCapRepeatY = stretchFace
-      ? 1
-      : (usePhysicalCapRepeat ? Math.max(1, capWorldHeight / faceTileSize) : (faceRepeatY ?? 6));
-    const backCapRepeatX = usePhysicalCapRepeat
-      ? Math.max(1, capWorldWidth / backTileSize)
-      : (sideRepeatX ?? 8);
-    const backCapRepeatY = usePhysicalCapRepeat
-      ? Math.max(1, capWorldHeight / backTileSize)
-      : (sideRepeatY ?? 1);
-
-    // Full Colour Plaque: unlit face so the background image renders without
-    // lighting influence. The color multiplier tames brightness so highlights
-    // don't wash out to white.
-    if (isFullColourPlaque) {
-      const faceMat = new THREE.MeshBasicMaterial({
-        map: clonedFaceMap,
-        color: new THREE.Color(0.82, 0.82, 0.82),
-        toneMapped: false,
-        side: doubleSided ? THREE.DoubleSide : THREE.FrontSide,
-        polygonOffset: true,
-        polygonOffsetFactor: 1,
-        polygonOffsetUnits: 1,
-      });
-
-      const sideMat = new THREE.MeshPhysicalMaterial({
-        color: new THREE.Color(0xeeeeee),
-        roughness: 0.4,
-        metalness: 0.0,
-        side: doubleSided ? THREE.DoubleSide : THREE.FrontSide,
-        clearcoat: 0.3,
-        clearcoatRoughness: 0.3,
-        polygonOffset: true,
-        polygonOffsetFactor: 1,
-        polygonOffsetUnits: 1,
-      });
-
-      return [faceMat, sideMat, sideMat];
-    }
-
-    // Stainless Steel Headstone: match the clean raised border material so
-    // the face and rim read as the same polished/brushed steel family.
-    if (isStainlessSteel) {
-      if (showStainlessRim) {
-        const headstoneSteelMat = new THREE.MeshPhysicalMaterial({
-          color: ssFinish === 'polished' ? new THREE.Color('#f6f8f8') : new THREE.Color('#dfe5e5'),
-          metalness: 0.92,
-          roughness: ssFinish === 'polished' ? 0.12 : 0.24,
-          clearcoat: 0.9,
-          clearcoatRoughness: 0.18,
-          envMapIntensity: ssFinish === 'polished' ? 2.4 : 1.7,
+      // Full Colour Plaque: unlit face so the background image renders without
+      // lighting influence. The color multiplier tames brightness so highlights
+      // don't wash out to white.
+      if (isFullColourPlaque) {
+        const faceMat = new THREE.MeshBasicMaterial({
+          map: clonedFaceMap,
+          color: new THREE.Color(0.82, 0.82, 0.82),
+          toneMapped: false,
           side: doubleSided ? THREE.DoubleSide : THREE.FrontSide,
           polygonOffset: true,
           polygonOffsetFactor: 1,
           polygonOffsetUnits: 1,
         });
 
-        return [headstoneSteelMat, headstoneSteelMat, headstoneSteelMat];
+        const sideMat = new THREE.MeshPhysicalMaterial({
+          color: new THREE.Color(0xeeeeee),
+          roughness: 0.4,
+          metalness: 0.0,
+          side: doubleSided ? THREE.DoubleSide : THREE.FrontSide,
+          clearcoat: 0.3,
+          clearcoatRoughness: 0.3,
+          polygonOffset: true,
+          polygonOffsetFactor: 1,
+          polygonOffsetUnits: 1,
+        });
+
+        return [faceMat, sideMat, sideMat];
       }
 
-      // Stainless Steel Plaque (product 52): PBR metal material per finish.
-      if (ssFinish === 'polished') {
-        const mat = new THREE.MeshPhysicalMaterial({
-          color: new THREE.Color(0xffffff),
+      // Stainless Steel Headstone: match the clean raised border material so
+      // the face and rim read as the same polished/brushed steel family.
+      if (isStainlessSteel) {
+        if (showStainlessRim) {
+          const headstoneSteelMat = new THREE.MeshPhysicalMaterial({
+            color:
+              ssFinish === 'polished'
+                ? new THREE.Color('#f6f8f8')
+                : new THREE.Color('#dfe5e5'),
+            metalness: 0.92,
+            roughness: ssFinish === 'polished' ? 0.12 : 0.24,
+            clearcoat: 0.9,
+            clearcoatRoughness: 0.18,
+            envMapIntensity: ssFinish === 'polished' ? 2.4 : 1.7,
+            side: doubleSided ? THREE.DoubleSide : THREE.FrontSide,
+            polygonOffset: true,
+            polygonOffsetFactor: 1,
+            polygonOffsetUnits: 1,
+          });
+
+          return [headstoneSteelMat, headstoneSteelMat, headstoneSteelMat];
+        }
+
+        // Stainless Steel Plaque (product 52): PBR metal material per finish.
+        if (ssFinish === 'polished') {
+          const mat = new THREE.MeshPhysicalMaterial({
+            color: new THREE.Color(0xffffff),
+            map: stainlessMaps?.colorMap,
+            roughnessMap: stainlessMaps?.roughnessMap,
+            normalMap: stainlessMaps?.normalMap,
+            normalScale: new THREE.Vector2(0.05, 0.012),
+            roughness: 0.16,
+            metalness: 0.72,
+            clearcoat: 1.0,
+            clearcoatRoughness: 0.06,
+            envMapIntensity: 2.9,
+            side: doubleSided ? THREE.DoubleSide : THREE.FrontSide,
+            polygonOffset: true,
+            polygonOffsetFactor: 1,
+            polygonOffsetUnits: 1,
+          });
+          return [mat, mat, mat];
+        }
+
+        const brushedMat = new THREE.MeshPhysicalMaterial({
+          color: new THREE.Color(0xf7f7f3),
           map: stainlessMaps?.colorMap,
           roughnessMap: stainlessMaps?.roughnessMap,
           normalMap: stainlessMaps?.normalMap,
-          normalScale: new THREE.Vector2(0.05, 0.012),
-          roughness: 0.16,
-          metalness: 0.72,
-          clearcoat: 1.0,
-          clearcoatRoughness: 0.06,
-          envMapIntensity: 2.9,
+          normalScale: new THREE.Vector2(0.13, 0.035),
+          roughness: 0.42,
+          metalness: 0.62,
+          clearcoat: 0.48,
+          clearcoatRoughness: 0.32,
+          envMapIntensity: 2.6,
           side: doubleSided ? THREE.DoubleSide : THREE.FrontSide,
           polygonOffset: true,
           polygonOffsetFactor: 1,
           polygonOffsetUnits: 1,
         });
-        return [mat, mat, mat];
+        return [brushedMat, brushedMat, brushedMat];
       }
 
-      const brushedMat = new THREE.MeshPhysicalMaterial({
-        color: new THREE.Color(0xf7f7f3),
-        map: stainlessMaps?.colorMap,
-        roughnessMap: stainlessMaps?.roughnessMap,
-        normalMap: stainlessMaps?.normalMap,
-        normalScale: new THREE.Vector2(0.13, 0.035),
-        roughness: 0.42,
-        metalness: 0.62,
-        clearcoat: 0.48,
-        clearcoatRoughness: 0.32,
-        envMapIntensity: 2.6,
-        side: doubleSided ? THREE.DoubleSide : THREE.FrontSide,
-        polygonOffset: true,
-        polygonOffsetFactor: 1,
-        polygonOffsetUnits: 1,
-      });
-      return [brushedMat, brushedMat, brushedMat];
-    }
-
-    // Urn: entire body (face + sides) is brushed stainless steel.
-    // The vitreous enamel inlay (with background texture) is rendered as a
-    // separate UrnEnamelInlay mesh slightly in front of this surface.
-    if (isUrn) {
-      const steelMat = new THREE.MeshPhysicalMaterial({
-        color: new THREE.Color(0xf7f7f3),
-        map: stainlessMaps?.colorMap,
-        roughnessMap: stainlessMaps?.roughnessMap,
-        normalMap: stainlessMaps?.normalMap,
-        normalScale: new THREE.Vector2(0.11, 0.03),
-        roughness: 0.42,
-        metalness: 0.62,
-        clearcoat: 0.48,
-        clearcoatRoughness: 0.32,
-        envMapIntensity: 2.6,
-        side: doubleSided ? THREE.DoubleSide : THREE.FrontSide,
-        polygonOffset: true,
-        polygonOffsetFactor: 1,
-        polygonOffsetUnits: 1,
-      });
-
-      return [steelMat, steelMat, steelMat];
-    }
-
-    // Match the calibrated polished granite response used across the monument parts.
-    const common = {
-      color: new THREE.Color(isSlant ? 0x444444 : POLISHED_GRANITE_TINT),
-      roughness: isSlant ? 0.08 : 0.18,
-      metalness: 0.0,
-      side: doubleSided ? THREE.DoubleSide : THREE.FrontSide,
-      envMapIntensity: isSlant ? 2.0 : 1.1,
-    };
-
-    const faceMat = new THREE.MeshPhysicalMaterial({ 
-      ...common, 
-      map: clonedFaceMap,
-      // Let the granite grain affect the surface response instead of reading
-      // as a flat print. Reusing the colour map avoids another texture fetch.
-      bumpMap: faceDetailMap,
-      bumpScale: isSlant ? 0.05 : 0.16,
-      roughnessMap: faceDetailMap,
-      emissive: new THREE.Color(0xffffff),
-      emissiveMap: clonedFaceMap,
-      // A restrained fill retains the grain of black granite on smaller
-      // screens, where the mobile scene intentionally omits the desktop rim
-      // light for performance.
-      emissiveIntensity: isSlant ? 0.04 : 0.055,
-      clearcoat: 1.0,
-      clearcoatRoughness: isSlant ? 0.05 : 0.08,
-      polygonOffset: true,
-      polygonOffsetFactor: 1,
-      polygonOffsetUnits: 1,
-    });
-
-    // Side material: use the continuous perimeter texture strip. Upright
-    // headstones now have their own indexed wall geometry, so the selected
-    // granite map can be restored without sharing triangles with the caps.
-    // Keep detail maps off this narrow surface: using the colour raster as a
-    // bump/roughness source caused temporal noise while orbiting.
-    const useTexturedSideMaterial = Boolean(clonedSideMap);
-    const sideMat = useTexturedSideMaterial
-      ? new THREE.MeshPhysicalMaterial({ 
-          ...common, 
-          map: clonedSideMap ?? undefined,
-          roughness: isSlant ? 0.1 : 0.24,
-          envMapIntensity: isSlant ? 1.7 : 0.85,
-          ...(isSlant && rockNormalTexture ? {
-            normalMap: rockNormalTexture,
-            normalScale: new THREE.Vector2(2.5, 2.5),
-          } : {}),
-          clearcoat: 1.0,
-          clearcoatRoughness: isSlant ? 0.05 : 0.08,
-          polygonOffset: true,
-          polygonOffsetFactor: 1,
-          polygonOffsetUnits: 1,
-        })
-      : new THREE.MeshPhysicalMaterial({
-          color: new THREE.Color('#16202c'),
-          roughness: 0.28,
-          metalness: 0.0,
+      // Urn: entire body (face + sides) is brushed stainless steel.
+      // The vitreous enamel inlay (with background texture) is rendered as a
+      // separate UrnEnamelInlay mesh slightly in front of this surface.
+      if (isUrn) {
+        const steelMat = new THREE.MeshPhysicalMaterial({
+          color: new THREE.Color(0xf7f7f3),
+          map: stainlessMaps?.colorMap,
+          roughnessMap: stainlessMaps?.roughnessMap,
+          normalMap: stainlessMaps?.normalMap,
+          normalScale: new THREE.Vector2(0.11, 0.03),
+          roughness: 0.42,
+          metalness: 0.62,
+          clearcoat: 0.48,
+          clearcoatRoughness: 0.32,
+          envMapIntensity: 2.6,
           side: doubleSided ? THREE.DoubleSide : THREE.FrontSide,
-          envMapIntensity: 0.85,
-          clearcoat: 0.75,
-          clearcoatRoughness: 0.16,
           polygonOffset: true,
           polygonOffsetFactor: 1,
           polygonOffsetUnits: 1,
         });
 
-    // Back is a width × height cap. Keep its map independent from the side
-    // strip so it does not inherit the perimeter repeat count.
-    const backMat = clonedBackMap
-      ? new THREE.MeshPhysicalMaterial({
-          ...common,
-          map: clonedBackMap,
-          bumpMap: isSlant ? undefined : backDetailMap,
-          bumpScale: isSlant ? undefined : 0.16,
-          roughnessMap: isSlant ? undefined : backDetailMap,
-          roughness: isSlant ? 0.1 : 0.22,
-          envMapIntensity: isSlant ? 1.7 : 0.9,
-          clearcoat: 1.0,
-          clearcoatRoughness: isSlant ? 0.05 : 0.08,
-          polygonOffset: true,
-          polygonOffsetFactor: 1,
-          polygonOffsetUnits: 1,
-        })
-      : sideMat;
+        return [steelMat, steelMat, steelMat];
+      }
 
-    // Ignore the SVG cap UVs for upright granite headstones. The shader uses
-    // local X/Y projection, so complex concave outlines cannot split the
-    // face or back texture along their triangulation seams.
-    if (!isSlant && capBounds) {
-      applyPlanarCapProjection(faceMat, capBounds, faceCapRepeatX, faceCapRepeatY);
-      applyPlanarCapProjection(backMat, capBounds, backCapRepeatX, backCapRepeatY);
-    }
+      // Match the calibrated polished granite response used across the monument parts.
+      const common = {
+        color: new THREE.Color(isSlant ? 0x444444 : POLISHED_GRANITE_TINT),
+        roughness: isSlant ? 0.08 : 0.18,
+        metalness: 0.0,
+        side: doubleSided ? THREE.DoubleSide : THREE.FrontSide,
+        envMapIntensity: isSlant ? 2.0 : 1.1,
+      };
 
-    return [faceMat, sideMat, backMat];
-  }, [clonedFaceMap, clonedSideMap, clonedBackMap, faceDetailMap, backDetailMap, doubleSided, headstoneStyle, rockNormalTexture, isFullColourPlaque, isUrn, isStainlessSteel, showStainlessRim, ssFinish, stainlessMaps, geometries, dims, autoRepeat, tileSize, sideTileSize, faceRepeatX, faceRepeatY, stretchFace, sideRepeatX, sideRepeatY, CAP_PROJECTION_VERSION]);
+      const faceMat = new THREE.MeshPhysicalMaterial({
+        ...common,
+        map: clonedFaceMap,
+        // Let the granite grain affect the surface response instead of reading
+        // as a flat print. Reusing the colour map avoids another texture fetch.
+        bumpMap: faceDetailMap,
+        bumpScale: isSlant ? 0.05 : 0.16,
+        roughnessMap: faceDetailMap,
+        emissive: new THREE.Color(0xffffff),
+        emissiveMap: clonedFaceMap,
+        // A restrained fill retains the grain of black granite on smaller
+        // screens, where the mobile scene intentionally omits the desktop rim
+        // light for performance.
+        emissiveIntensity: isSlant ? 0.04 : 0.055,
+        clearcoat: 1.0,
+        clearcoatRoughness: isSlant ? 0.05 : 0.08,
+        polygonOffset: true,
+        polygonOffsetFactor: 1,
+        polygonOffsetUnits: 1,
+      });
 
-  // 5a. Dispose geometries and materials on cleanup
-  React.useEffect(() => {
-    return () => {
-      geometries.forEach(geom => geom.dispose());
-      materials.forEach(mat => mat.dispose());
-    };
-  }, [geometries, materials]);
+      // Side material: use the continuous perimeter texture strip. Upright
+      // headstones now have their own indexed wall geometry, so the selected
+      // granite map can be restored without sharing triangles with the caps.
+      // Keep detail maps off this narrow surface: using the colour raster as a
+      // bump/roughness source caused temporal noise while orbiting.
+      const useTexturedSideMaterial = Boolean(clonedSideMap);
+      const sideMat = useTexturedSideMaterial
+        ? new THREE.MeshPhysicalMaterial({
+            ...common,
+            map: clonedSideMap ?? undefined,
+            roughness: isSlant ? 0.1 : 0.24,
+            envMapIntensity: isSlant ? 1.7 : 0.85,
+            ...(isSlant && rockNormalTexture
+              ? {
+                  normalMap: rockNormalTexture,
+                  normalScale: new THREE.Vector2(2.5, 2.5),
+                }
+              : {}),
+            clearcoat: 1.0,
+            clearcoatRoughness: isSlant ? 0.05 : 0.08,
+            polygonOffset: true,
+            polygonOffsetFactor: 1,
+            polygonOffsetUnits: 1,
+          })
+        : new THREE.MeshPhysicalMaterial({
+            color: new THREE.Color('#16202c'),
+            roughness: 0.28,
+            metalness: 0.0,
+            side: doubleSided ? THREE.DoubleSide : THREE.FrontSide,
+            envMapIntensity: 0.85,
+            clearcoat: 0.75,
+            clearcoatRoughness: 0.16,
+            polygonOffset: true,
+            polygonOffsetFactor: 1,
+            polygonOffsetUnits: 1,
+          });
 
-  const meshRef = useRef<THREE.Mesh>(null!);
-  const groupRef = useRef<THREE.Group>(null!);
-  const scaledWrapperRef = useRef<THREE.Group>(null!);
-  
-  // Force-apply quaternion to ensure it sticks (R3F prop diffing issue workaround)
-  useLayoutEffect(() => {
-    if (scaledWrapperRef.current && childWrapperRotation) {
-      scaledWrapperRef.current.quaternion.copy(childWrapperRotation);
-    }
-  }, [childWrapperRotation]);
-  
-  // Force re-render after mount to ensure children can access populated meshRef
-  const [isReady, setIsReady] = useState(false);
-  useLayoutEffect(() => {
-    setIsReady(true);
-  }, []);
+      // Back is a width × height cap. Keep its map independent from the side
+      // strip so it does not inherit the perimeter repeat count.
+      const backMat = clonedBackMap
+        ? new THREE.MeshPhysicalMaterial({
+            ...common,
+            map: clonedBackMap,
+            bumpMap: isSlant ? undefined : backDetailMap,
+            bumpScale: isSlant ? undefined : 0.16,
+            roughnessMap: isSlant ? undefined : backDetailMap,
+            roughness: isSlant ? 0.1 : 0.22,
+            envMapIntensity: isSlant ? 1.7 : 0.9,
+            clearcoat: 1.0,
+            clearcoatRoughness: isSlant ? 0.05 : 0.08,
+            polygonOffset: true,
+            polygonOffsetFactor: 1,
+            polygonOffsetUnits: 1,
+          })
+        : sideMat;
 
-  useImperativeHandle(ref, () => groupRef.current);
+      // Ignore the SVG cap UVs for upright granite headstones. The shader uses
+      // local X/Y projection, so complex concave outlines cannot split the
+      // face or back texture along their triangulation seams.
+      if (!isSlant && capBounds) {
+        applyPlanarCapProjection(
+          faceMat,
+          capBounds,
+          faceCapRepeatX,
+          faceCapRepeatY,
+        );
+        applyPlanarCapProjection(
+          backMat,
+          capBounds,
+          backCapRepeatX,
+          backCapRepeatY,
+        );
+      }
 
-  // Stable API for children
-  // Note: api.group points to the scaled wrapper for proper child alignment
-  const childApi = useMemo(() => ({
-    group: scaledWrapperRef,
-    mesh: meshRef,
-    frontZ: apiData?.frontZ ?? 0,
-    unitsPerMeter: apiData?.unitsPerMeter ?? 100,
-    version: apiData?.version ?? 0,
-    worldWidth: apiData?.worldWidth ?? 1,
-    worldHeight: apiData?.worldHeight ?? 1,
-    outlinePoints: apiData?.outlinePoints,
-  }), [apiData]);
+      return [faceMat, sideMat, backMat];
+    }, [
+      clonedFaceMap,
+      clonedSideMap,
+      clonedBackMap,
+      faceDetailMap,
+      backDetailMap,
+      doubleSided,
+      headstoneStyle,
+      rockNormalTexture,
+      isFullColourPlaque,
+      isUrn,
+      isStainlessSteel,
+      showStainlessRim,
+      ssFinish,
+      stainlessMaps,
+      geometries,
+      dims,
+      autoRepeat,
+      tileSize,
+      sideTileSize,
+      faceRepeatX,
+      faceRepeatY,
+      stretchFace,
+      sideRepeatX,
+      sideRepeatY,
+      CAP_PROJECTION_VERSION,
+    ]);
 
-  if (!geometries.length || !dims) return null;
+    // 5a. Dispose geometries and materials on cleanup
+    React.useEffect(() => {
+      return () => {
+        geometries.forEach((geom) => geom.dispose());
+        materials.forEach((mat) => mat.dispose());
+      };
+    }, [geometries, materials]);
 
-  // Fixed: Position at origin as geometry is already normalized to ground
-  // The slantGeometry.translate(-(minX + maxX) / 2, -minY, 0) already positions base at Y=0
-  const groupPosition: [number, number, number] = [0, 0, 0];
-  const overlayHeight =
-    shapeParams ? Math.max(EPS, shapeParams.bottomTarget_SV - shapeParams.minY) : 0;
-  const sourceSvgLineOverlayMesh =
-    sourceSvgLineOverlay && shapeParams && overlayHeight > 0 ? (
-      <group
-        position={[0, overlayHeight / 2, (apiData?.frontZ ?? 0.0005) + 0.0012]}
-        scale={[
-          shapeParams.dx / Math.max(EPS, sourceSvgLineOverlay.bounds.width),
-          -overlayHeight / Math.max(EPS, sourceSvgLineOverlay.bounds.height),
-          1,
-        ]}
-        renderOrder={12}
-      >
+    const meshRef = useRef<THREE.Mesh>(null!);
+    const groupRef = useRef<THREE.Group>(null!);
+    const scaledWrapperRef = useRef<THREE.Group>(null!);
+
+    // Force-apply quaternion to ensure it sticks (R3F prop diffing issue workaround)
+    useLayoutEffect(() => {
+      if (scaledWrapperRef.current && childWrapperRotation) {
+        scaledWrapperRef.current.quaternion.copy(childWrapperRotation);
+      }
+    }, [childWrapperRotation]);
+
+    // Force re-render after mount to ensure children can access populated meshRef
+    const [isReady, setIsReady] = useState(false);
+    useLayoutEffect(() => {
+      setIsReady(true);
+    }, []);
+
+    useImperativeHandle(ref, () => groupRef.current);
+
+    // Stable API for children
+    // Note: api.group points to the scaled wrapper for proper child alignment
+    const childApi = useMemo(
+      () => ({
+        group: scaledWrapperRef,
+        mesh: meshRef,
+        frontZ: apiData?.frontZ ?? 0,
+        unitsPerMeter: apiData?.unitsPerMeter ?? 100,
+        depthUnitsPerMeter: apiData?.depthUnitsPerMeter ?? 100,
+        version: apiData?.version ?? 0,
+        worldWidth: apiData?.worldWidth ?? 1,
+        worldHeight: apiData?.worldHeight ?? 1,
+        outlinePoints: apiData?.outlinePoints,
+      }),
+      [apiData],
+    );
+
+    if (!geometries.length || !dims) return null;
+
+    // Fixed: Position at origin as geometry is already normalized to ground
+    // The slantGeometry.translate(-(minX + maxX) / 2, -minY, 0) already positions base at Y=0
+    const groupPosition: [number, number, number] = [0, 0, 0];
+    const overlayHeight = shapeParams
+      ? Math.max(EPS, shapeParams.bottomTarget_SV - shapeParams.minY)
+      : 0;
+    const sourceSvgLineOverlayMesh =
+      sourceSvgLineOverlay && shapeParams && overlayHeight > 0 ? (
         <group
           position={[
-            -(sourceSvgLineOverlay.bounds.left + sourceSvgLineOverlay.bounds.width / 2),
-            -(sourceSvgLineOverlay.bounds.top + sourceSvgLineOverlay.bounds.height / 2),
             0,
+            overlayHeight / 2,
+            (apiData?.frontZ ?? 0.0005) + 0.0012,
           ]}
+          scale={[
+            shapeParams.dx / Math.max(EPS, sourceSvgLineOverlay.bounds.width),
+            -overlayHeight / Math.max(EPS, sourceSvgLineOverlay.bounds.height),
+            1,
+          ]}
+          renderOrder={12}
         >
-          {sourceSvgLineOverlay.lines.map((points, index) => (
-            <DreiLine
-              key={`svg-overlay-line-${index}`}
-              points={points}
-              color="#ffffff"
-              lineWidth={2.5}
-              transparent
-              opacity={0.96}
-              depthTest={false}
-              depthWrite={false}
-              renderOrder={12}
-            />
-          ))}
+          <group
+            position={[
+              -(
+                sourceSvgLineOverlay.bounds.left +
+                sourceSvgLineOverlay.bounds.width / 2
+              ),
+              -(
+                sourceSvgLineOverlay.bounds.top +
+                sourceSvgLineOverlay.bounds.height / 2
+              ),
+              0,
+            ]}
+          >
+            {sourceSvgLineOverlay.lines.map((points, index) => (
+              <DreiLine
+                key={`svg-overlay-line-${index}`}
+                points={points}
+                color="#ffffff"
+                lineWidth={2.5}
+                transparent
+                opacity={0.96}
+                depthTest={false}
+                depthWrite={false}
+                renderOrder={12}
+              />
+            ))}
+          </group>
         </group>
-      </group>
-    ) : null;
-  const svgEngraving = engravingLineGeometries.length > 0 ? (
-    <group renderOrder={12}>
-      {engravingLineGeometries.map((geometry, index) => (
-        engravingStrokeWidthMm ? (
-          <mesh key={`svg-engraving-${index}`} geometry={geometry} renderOrder={12}>
-            <meshBasicMaterial
-              color={engravingColor}
-              transparent
-              opacity={0.9}
-              depthTest={false}
-              depthWrite={false}
-              toneMapped={false}
-              side={THREE.DoubleSide}
-            />
-          </mesh>
-        ) : (
-          <lineLoop key={`svg-engraving-${index}`} geometry={geometry} renderOrder={12}>
-            <lineBasicMaterial
-              color={engravingColor}
-              transparent
-              opacity={0.9}
-              depthTest={false}
-              depthWrite={false}
-              toneMapped={false}
-            />
-          </lineLoop>
-        )
-      ))}
-    </group>
-  ) : null;
-  const sourceSvgOverlay =
-    !sourceSvgLineOverlayMesh && sourceSvgOverlayTexture && shapeParams && overlayHeight > 0 ? (
-      <mesh
-        position={[0, overlayHeight / 2, (apiData?.frontZ ?? 0.0005) + 0.0008]}
-        renderOrder={9}
-      >
-        <planeGeometry args={[shapeParams.dx, overlayHeight]} />
-        <meshBasicMaterial
-          map={sourceSvgOverlayTexture}
-          transparent
-          alphaTest={0.05}
-          opacity={0.9}
-          depthTest={false}
-          depthWrite={false}
-          toneMapped={false}
-          side={THREE.DoubleSide}
-        />
-      </mesh>
-    ) : null;
-  const sourceOverlay = svgEngraving ?? sourceSvgLineOverlayMesh ?? sourceSvgOverlay;
-
-  // 6. Return JSX (FIX: JSX in return, not useMemo)
-  // CRITICAL FIX: Move scale from group to individual meshes to prevent base inheritance
-  return (
-    <group ref={groupRef} position={groupPosition}>
-      {/* Apply SVG scale only to headstone mesh */}
-      {geometries.map((geom, i) => (
+      ) : null;
+    const svgEngraving =
+      engravingLineGeometries.length > 0 ? (
+        <group renderOrder={12}>
+          {engravingLineGeometries.map((geometry, index) =>
+            engravingStrokeWidthMm ? (
+              <mesh
+                key={`svg-engraving-${index}`}
+                geometry={geometry}
+                renderOrder={12}
+              >
+                <meshBasicMaterial
+                  color={engravingColor}
+                  transparent
+                  opacity={0.9}
+                  depthTest={false}
+                  depthWrite={false}
+                  toneMapped={false}
+                  side={THREE.DoubleSide}
+                />
+              </mesh>
+            ) : (
+              <lineLoop
+                key={`svg-engraving-${index}`}
+                geometry={geometry}
+                renderOrder={12}
+              >
+                <lineBasicMaterial
+                  color={engravingColor}
+                  transparent
+                  opacity={0.9}
+                  depthTest={false}
+                  depthWrite={false}
+                  toneMapped={false}
+                />
+              </lineLoop>
+            ),
+          )}
+        </group>
+      ) : null;
+    const sourceSvgOverlay =
+      !sourceSvgLineOverlayMesh &&
+      sourceSvgOverlayTexture &&
+      shapeParams &&
+      overlayHeight > 0 ? (
         <mesh
-          key={`hs-${i}`}
-          ref={i === 0 ? meshRef : undefined}
-          geometry={geom}
-          material={materials}
-          scale={meshScale}
-          castShadow
-          receiveShadow
-          {...meshProps}
+          position={[
+            0,
+            overlayHeight / 2,
+            (apiData?.frontZ ?? 0.0005) + 0.0008,
+          ]}
+          renderOrder={9}
         >
-          {showEdges && <Edges scale={1.002} threshold={15} color="white" />}
+          <planeGeometry args={[shapeParams.dx, overlayHeight]} />
+          <meshBasicMaterial
+            map={sourceSvgOverlayTexture}
+            transparent
+            alphaTest={0.05}
+            opacity={0.9}
+            depthTest={false}
+            depthWrite={false}
+            toneMapped={false}
+            side={THREE.DoubleSide}
+          />
         </mesh>
-      ))}
+      ) : null;
+    const sourceOverlay =
+      svgEngraving ?? sourceSvgLineOverlayMesh ?? sourceSvgOverlay;
 
-      {/* 
+    // 6. Return JSX (FIX: JSX in return, not useMemo)
+    // CRITICAL FIX: Move scale from group to individual meshes to prevent base inheritance
+    return (
+      <group ref={groupRef} position={groupPosition}>
+        {/* Apply SVG scale only to headstone mesh */}
+        {geometries.map((geom, i) => (
+          <mesh
+            key={`hs-${i}`}
+            ref={i === 0 ? meshRef : undefined}
+            geometry={geom}
+            material={materials}
+            scale={meshScale}
+            castShadow
+            receiveShadow
+            {...meshProps}
+          >
+            {showEdges && <Edges scale={1.002} threshold={15} color="white" />}
+          </mesh>
+        ))}
+
+        {/*
          CHILDREN WRAPPER:
          For slant: Uses quaternion to align local +Z to face normal
          Outer group handles position and quaternion, inner group handles scale
       */}
-      <group 
-        ref={scaledWrapperRef}
-        position={childWrapperPos}
-        quaternion={childWrapperRotation}
-      >
-        {/* Lock children to slant face (prevents billboard/lookAt from standing them up) */}
-        {headstoneStyle === 'slant' ? (
-          <group position-z={apiData?.frontZ || 0.001}>
-            <group renderOrder={10} scale={meshScale}>
-               {sourceOverlay}
-               {showStainlessRim && (
-                 <StainlessHeadstoneRim outlinePoints={apiData?.outlinePoints} finish={ssFinish} />
-               )}
-               {typeof children === 'function' && children(childApi, selectedAdditions)}
+        <group
+          ref={scaledWrapperRef}
+          position={childWrapperPos}
+          quaternion={childWrapperRotation}
+        >
+          {/* Lock children to slant face (prevents billboard/lookAt from standing them up) */}
+          {headstoneStyle === 'slant' ? (
+            <group position-z={apiData?.frontZ || 0.001}>
+              <group renderOrder={10} scale={meshScale}>
+                {sourceOverlay}
+                {showStainlessRim && (
+                  <StainlessHeadstoneRim
+                    outlinePoints={apiData?.outlinePoints}
+                    finish={ssFinish}
+                  />
+                )}
+                {typeof children === 'function' &&
+                  children(childApi, selectedAdditions)}
+              </group>
             </group>
-          </group>
-        ) : (
-          <group position-z={apiData?.frontZ || 0}>
-            <group renderOrder={10} scale={meshScale}>
-               {sourceOverlay}
-               {showStainlessRim && (
-                 <StainlessHeadstoneRim outlinePoints={apiData?.outlinePoints} finish={ssFinish} />
-               )}
-               {typeof children === 'function' && children(childApi, selectedAdditions)}
+          ) : (
+            <group position-z={apiData?.frontZ || 0}>
+              <group renderOrder={10} scale={meshScale}>
+                {sourceOverlay}
+                {showStainlessRim && (
+                  <StainlessHeadstoneRim
+                    outlinePoints={apiData?.outlinePoints}
+                    finish={ssFinish}
+                  />
+                )}
+                {typeof children === 'function' &&
+                  children(childApi, selectedAdditions)}
+              </group>
             </group>
-          </group>
-        )}
+          )}
+        </group>
       </group>
-    </group>
-  );
-});
+    );
+  },
+);
 
 SvgHeadstone.displayName = 'SvgHeadstone';
 

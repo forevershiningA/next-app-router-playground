@@ -26,16 +26,10 @@ const filenameFromCatalogUrl = (url?: string) => url?.split('/').pop() ?? '';
 
 const getPetRockPreviewSrc = (code?: string, url?: string) => {
   const filename = filenameFromCatalogUrl(url);
-  if (
-    code === 'Bowl-Cat' ||
-    filename === 'pet_bowl_cat.jpg'
-  ) {
+  if (code === 'Bowl-Cat' || filename === 'pet_bowl_cat.jpg') {
     return '/shapes/headstones/cat_bowl_a.svg';
   }
-  if (
-    code === 'Bowl' ||
-    filename === 'bowl.jpg'
-  ) {
+  if (code === 'Bowl' || filename === 'bowl.jpg') {
     return '/shapes/headstones/pet_bowl_a.svg';
   }
   return filename
@@ -45,16 +39,10 @@ const getPetRockPreviewSrc = (code?: string, url?: string) => {
 
 const getPetRockShapeUrl = (code?: string, url?: string) => {
   const filename = filenameFromCatalogUrl(url);
-  if (
-    code === 'Bowl-Cat' ||
-    filename === 'pet_bowl_cat.jpg'
-  ) {
+  if (code === 'Bowl-Cat' || filename === 'pet_bowl_cat.jpg') {
     return '/shapes/headstones/pet_bowl_outline.svg?petRock=cat';
   }
-  if (
-    code === 'Bowl' ||
-    filename === 'bowl.jpg'
-  ) {
+  if (code === 'Bowl' || filename === 'bowl.jpg') {
     return '/shapes/headstones/pet_bowl_outline.svg?petRock=dog';
   }
   return filename
@@ -92,8 +80,7 @@ export default function ShapeSelector({
   const productId = useHeadstoneStore((s) => s.productId);
   const isPetRock = productId === '135';
   const isTraditionalEngravedHeadstone =
-    productId === '124' ||
-    catalogProductId === '124';
+    productId === '124' || catalogProductId === '124';
   const designerHref = (
     stepSlug: Parameters<typeof getDesignerProductStepHref>[0],
   ) => getDesignerProductStepHref(stepSlug, productId);
@@ -256,13 +243,13 @@ export default function ShapeSelector({
   return (
     <div className="space-y-3">
       {!isPlaque && (
-        <div className="flex gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <div className="flex touch-pan-x snap-x snap-mandatory gap-2 overflow-x-auto overscroll-x-contain scroll-smooth pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {headstoneShapeCategories.map((category) => (
             <button
               key={category.id}
               type="button"
               onClick={() => setSelectedCategory(category.id)}
-              className={`shrink-0 rounded-full border px-3 py-1.5 text-xs font-medium transition-colors ${
+              className={`shrink-0 snap-start rounded-full border px-3 py-1.5 text-xs font-medium transition-colors ${
                 selectedCategory === category.id
                   ? 'border-[#D7B356] bg-[#D7B356] text-slate-950'
                   : 'border-white/15 text-slate-300 hover:border-[#D7B356]/60 hover:text-white'
