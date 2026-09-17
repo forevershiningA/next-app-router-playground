@@ -15,7 +15,7 @@ export function ThemeToggle() {
   if (pathname?.startsWith('/designs')) return null;
 
   // On designer steps the day/night toggle lives inside the left sidebar on
-  // mobile, so hide the floating toggle below md there (keep it on md+).
+  // mobile/tablet, so hide the floating toggle below lg there (keep it on lg+).
   const insideDesignerSidebarOnMobile =
     isDesignerRoutePath(pathname) && pathname !== '/';
   const accountRoutePrefixes = [
@@ -37,18 +37,7 @@ export function ThemeToggle() {
       onClick={toggleTheme}
       aria-label={isDay ? 'Switch to night mode' : 'Switch to day mode'}
       title={isDay ? 'Night mode' : 'Day mode'}
-      className={`
-        fixed top-5 z-[9999]
-        ${insideMemorialsOnMobile ? 'right-5 left-auto md:left-5 md:right-auto' : 'left-5'}
-        h-9 w-9 items-center justify-center
-        rounded-full border shadow-md
-        transition-all duration-200
-        border-white/20 bg-[#1a1208]/80 text-white/60 backdrop-blur-sm
-        hover:border-white/40 hover:bg-[#1a1208]/95 hover:text-white
-        day:border-[#D7B356]/50 day:bg-white/90 day:text-amber-700
-        day:hover:border-[#D7B356]/80 day:hover:bg-white day:hover:text-amber-800
-        ${insideDesignerSidebarOnMobile || insideAccountSidebarOnMobile || insideHomeSectionOnMobile || insideMemorialsOnMobile ? 'hidden md:flex' : 'flex'}
-      `}
+      className={`fixed top-5 z-[9999] ${insideMemorialsOnMobile ? 'right-5 left-auto lg:right-auto lg:left-5' : 'left-5'} day:border-[#D7B356]/50 day:bg-white/90 day:text-amber-700 day:hover:border-[#D7B356]/80 day:hover:bg-white day:hover:text-amber-800 h-9 w-9 items-center justify-center rounded-full border border-white/20 bg-[#1a1208]/80 text-white/60 shadow-md backdrop-blur-sm transition-all duration-200 hover:border-white/40 hover:bg-[#1a1208]/95 hover:text-white ${insideDesignerSidebarOnMobile || insideAccountSidebarOnMobile || insideHomeSectionOnMobile || insideMemorialsOnMobile ? 'hidden lg:flex' : 'flex'} `}
     >
       {isDay ? (
         <MoonIcon className="h-4 w-4" />

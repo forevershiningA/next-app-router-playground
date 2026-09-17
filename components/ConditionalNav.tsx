@@ -97,9 +97,9 @@ export default function ConditionalNav({ items }: { items: DemoCategory[] }) {
       ? 'Image Crop Section'
       : designerStepSlug === 'select-material' && productId === '5'
         ? 'Select Background'
-      : designerStepSlug != null
-        ? (DRAWER_PANEL_TITLES[designerStepSlug] ?? 'Designer')
-        : 'Designer';
+        : designerStepSlug != null
+          ? (DRAWER_PANEL_TITLES[designerStepSlug] ?? 'Designer')
+          : 'Designer';
   const isFixedSizeSheet = designerStepSlug === 'select-size';
   useEffect(() => {
     if (designerStepSlug !== 'select-size') {
@@ -291,25 +291,26 @@ function renderDesignerSidebar(
   // Main menu / non-step routes open as a full-height drawer (no canvas to
   // reveal). Editing sub-panels use a compact, canvas-revealing bottom sheet
   // so the product stays visible while controls scroll inside the sheet.
-  const sheetHeightClass = useBottomSheet && isBottomSheetCollapsed
-    ? 'h-[52px] max-h-[52px]'
-    : isFixedSizeSheet && isSizeAdjustmentCompact
-    ? 'h-40 max-h-40'
-    : useBottomSheet
-    ? 'h-[44dvh] max-h-[44dvh]'
-    : 'h-[100dvh]';
+  const sheetHeightClass =
+    useBottomSheet && isBottomSheetCollapsed
+      ? 'h-[52px] max-h-[52px]'
+      : isFixedSizeSheet && isSizeAdjustmentCompact
+        ? 'h-40 max-h-40'
+        : useBottomSheet
+          ? 'h-[44dvh] max-h-[44dvh]'
+          : 'h-[100dvh]';
   return (
     <>
       {/* Mobile hamburger — always available to open the designer sidebar on
           mobile, regardless of the current step or catalog-load state.
-          Hidden at md+ where the sidebar is permanently visible. */}
+          Hidden at lg+ where the sidebar is permanently visible. */}
       {!isMobileMenuOpen && (
         <button
           type="button"
           onClick={() => setIsMobileMenuOpen(true)}
           aria-label="Open navigation"
           aria-expanded={false}
-          className="day:border-[#cdbb9f] day:bg-[#fbf9f5] day:text-[#302719] day:hover:bg-[#eee6d9] fixed top-7 left-4 z-[10000] flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-[#3a2a1c] bg-[#1a1208] text-white shadow-none ring-0 transition-colors outline-none hover:border-[#D4A84F]/55 hover:bg-[#21160d] focus-visible:border-[#D4A84F] focus-visible:ring-2 focus-visible:ring-[#D4A84F]/35 md:hidden"
+          className="day:border-[#cdbb9f] day:bg-[#fbf9f5] day:text-[#302719] day:hover:bg-[#eee6d9] fixed top-7 left-4 z-[10000] flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-[#3a2a1c] bg-[#1a1208] text-white shadow-none ring-0 transition-colors outline-none hover:border-[#D4A84F]/55 hover:bg-[#21160d] focus-visible:border-[#D4A84F] focus-visible:ring-2 focus-visible:ring-[#D4A84F]/35 lg:hidden"
         >
           <Bars3Icon className="h-5 w-5" aria-hidden="true" />
         </button>
@@ -321,8 +322,8 @@ function renderDesignerSidebar(
         className={clsx(
           // Mobile: bottom sheet docked to the bottom edge so the 3D product
           // stays visible above it (editing sub-panels), or a full-height drawer
-          // for the main menu. Desktop (md+): permanent left column.
-          'day:border-[#ddd2c2] day:bg-[#f4f1eb] fixed inset-x-0 bottom-0 z-40 flex w-full flex-col overflow-hidden rounded-t-3xl bg-[#1b1511] shadow-2xl transition-all duration-300 md:pointer-events-auto md:inset-auto md:top-0 md:left-0 md:z-10 md:h-full md:max-h-none md:w-[400px] md:translate-y-0 md:rounded-none md:border-r md:border-slate-200 md:bg-white md:shadow-none',
+          // for the main menu. Desktop (lg+): permanent left column.
+          'day:border-[#ddd2c2] day:bg-[#f4f1eb] fixed inset-x-0 bottom-0 z-40 flex w-full flex-col overflow-hidden rounded-t-3xl bg-[#1b1511] shadow-2xl transition-all duration-300 lg:pointer-events-auto lg:inset-auto lg:top-0 lg:left-0 lg:z-10 lg:h-full lg:max-h-none lg:w-[400px] lg:translate-y-0 lg:rounded-none lg:border-r lg:border-slate-200 lg:bg-white lg:shadow-none',
           isMobileMenuOpen
             ? 'pointer-events-auto translate-y-0'
             : 'pointer-events-none translate-y-full',
@@ -336,12 +337,12 @@ function renderDesignerSidebar(
             type="button"
             onClick={() => setSizeAdjustmentCompact(false)}
             aria-label="Expand size controls"
-            className="mx-auto mt-2 mb-1 block h-4 w-16 flex-none rounded-full p-1.5 md:hidden"
+            className="mx-auto mt-2 mb-1 block h-4 w-16 flex-none rounded-full p-1.5 lg:hidden"
           >
             <span className="day:bg-[#8c7657] block h-1 w-full rounded-full bg-white/35" />
           </button>
         ) : (
-          <div className="day:bg-[#f4f1eb] flex-none rounded-t-lg bg-[#1b1511] md:hidden">
+          <div className="day:bg-[#f4f1eb] flex-none rounded-t-lg bg-[#1b1511] lg:hidden">
             {isFixedSizeSheet ? (
               <button
                 type="button"
@@ -362,7 +363,9 @@ function renderDesignerSidebar(
               <button
                 type="button"
                 className="block w-full cursor-pointer text-left"
-                aria-expanded={useBottomSheet ? !isBottomSheetCollapsed : undefined}
+                aria-expanded={
+                  useBottomSheet ? !isBottomSheetCollapsed : undefined
+                }
                 aria-label={
                   useBottomSheet
                     ? `${isBottomSheetCollapsed ? 'Expand' : 'Collapse'} ${mobileSheetTitle} panel`
@@ -392,7 +395,7 @@ function renderDesignerSidebar(
         <div
           className={clsx(
             'relative min-h-0 flex-1 overflow-hidden',
-            useBottomSheet && isBottomSheetCollapsed && 'hidden md:block',
+            useBottomSheet && isBottomSheetCollapsed && 'hidden lg:block',
           )}
         >
           <DesignerNav />

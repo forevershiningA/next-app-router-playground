@@ -101,16 +101,32 @@ export default function ProductSelectionGrid({
   descriptionMap,
 }: ProductGridProps) {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [isProductLoading, setIsProductLoading] = useState(false);
   const router = useRouter();
   const unitSystem = useUnitSystem();
   const setUnitSystem = useSetUnitSystem();
   const setProductId = useHeadstoneStore((s) => s.setProductId);
   const currentProductId = useHeadstoneStore((s) => s.productId);
 
-  const handleProductSelect = async (product: Product) => {
-    await setProductId(product.id);
-    const productSlug = getDesignerProductSlug(product.id);
+  const handleContinue = () => {
+    if (!currentProductId) return;
+
+    const productSlug = getDesignerProductSlug(currentProductId);
     router.push(productSlug ? `/${productSlug}/select-shape` : '/select-shape');
+  };
+
+  const handleProductSelect = async (product: Product) => {
+    if (currentProductId === product.id && !isProductLoading) {
+      handleContinue();
+      return;
+    }
+
+    setIsProductLoading(true);
+    try {
+      await setProductId(product.id);
+    } finally {
+      setIsProductLoading(false);
+    }
   };
 
   const filteredProducts = products.filter((product) => {
@@ -129,24 +145,13 @@ export default function ProductSelectionGrid({
     })
     .filter((group) => group.products.length > 0);
 
-  const selectedCategoryDetails = productCategories.find(
-    (category) => category.id === selectedCategory,
-  );
-  const productCountLabel = `${filteredProducts.length} product${
-    filteredProducts.length !== 1 ? 's' : ''
-  }`;
-  const resultsHeading =
-    selectedCategory === 'all'
-      ? `All Products · ${productCountLabel}`
-      : `${selectedCategoryDetails?.name ?? 'Products'} · ${productCountLabel}`;
-
   return (
     <div className="day:bg-stone-100 day:bg-none min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950">
       {/* Header Section */}
       <div className="day:border-gray-200 day:bg-white day:bg-none relative overflow-hidden border-b border-white/10 bg-gradient-to-r from-gray-900/50 to-gray-800/50 backdrop-blur-sm">
         <div className="day:hidden absolute inset-0 bg-gradient-to-br from-[#cfac6c]/5 via-transparent to-transparent" />
-        <div className="relative mx-auto max-w-7xl px-6 py-6 lg:px-8">
-          <div className="absolute top-4 right-6 flex rounded-full border border-white/10 bg-black/55 p-1 shadow-lg backdrop-blur-md day:border-gray-200 day:bg-white/90 lg:right-8">
+        <div className="relative mx-auto max-w-7xl px-6 py-4 lg:px-8">
+          <div className="day:border-gray-200 day:bg-white/90 absolute top-4 right-6 flex rounded-full border border-white/10 bg-black/55 p-1 shadow-lg backdrop-blur-md lg:right-8">
             {[
               { value: 'metric' as const, label: 'MM' },
               { value: 'imperial' as const, label: 'IN' },
@@ -157,11 +162,13 @@ export default function ProductSelectionGrid({
                   key={option.value}
                   type="button"
                   onClick={() => setUnitSystem(option.value)}
+                  aria-label={`Use ${option.value} units`}
                   aria-pressed={isActive}
+                  title={`Use ${option.value} units`}
                   className={`h-7 min-w-10 rounded-full px-3 text-xs font-semibold tracking-wide transition-colors ${
                     isActive
                       ? 'bg-[#cfac6c] text-slate-950'
-                      : 'text-white/70 hover:bg-white/10 hover:text-white day:text-gray-600 day:hover:bg-gray-100'
+                      : 'day:text-gray-600 day:hover:bg-gray-100 text-white/70 hover:bg-white/10 hover:text-white'
                   }`}
                 >
                   {option.label}
@@ -170,14 +177,12 @@ export default function ProductSelectionGrid({
             })}
           </div>
           <div className="text-left sm:text-center">
-            <h1 className="day:text-gray-900 font-serif text-3xl font-light tracking-tight text-white sm:text-4xl lg:text-[2.75rem]">
+            <h1 className="day:text-gray-900 font-serif text-3xl font-light tracking-tight text-white sm:text-4xl lg:text-[2.5rem]">
               Select Your Memorial Product
             </h1>
-            <p className="day:text-gray-600 mt-3 max-w-3xl text-base leading-6 text-gray-100 sm:mx-auto">
-              Choose from our range of memorial products including headstones,
-              plaques, urns and full monuments. Each product is crafted with
-              care and precision. Browse our exemplar designs for inspiration,
-              and view transparent pricing at every step.
+            <p className="day:text-gray-600 mt-2 text-sm leading-6 text-gray-100 sm:mx-auto lg:whitespace-nowrap">
+              Choose a memorial product to begin — then refine its shape,
+              material and dimensions with transparent pricing.
             </p>
           </div>
         </div>
@@ -209,6 +214,15 @@ export default function ProductSelectionGrid({
                 }`}
               >
                 <span>{category.name}</span>
+                <span className="ml-1 text-xs opacity-70">
+                  (
+                  {
+                    products.filter(
+                      (product) => product.category === category.id,
+                    ).length
+                  }
+                  )
+                </span>
               </button>
             ))}
           </div>
@@ -216,7 +230,7 @@ export default function ProductSelectionGrid({
       </div>
 
       {/* Products Grid */}
-      <div className="mx-auto max-w-7xl px-6 py-6 lg:px-8">
+      <div className="mx-auto max-w-7xl px-6 pt-5 pb-28 lg:px-8 lg:pb-5">
         {filteredProducts.length === 0 ? (
           <div className="py-20 text-center">
             <h3 className="day:text-gray-900 text-xl font-medium text-white">
@@ -228,15 +242,11 @@ export default function ProductSelectionGrid({
           </div>
         ) : (
           <>
-            <div className="mb-6 flex items-center justify-between gap-4">
-              <h2 className="day:text-gray-600 text-sm font-medium text-gray-300">
-                {resultsHeading}
-              </h2>
-              <div className="day:text-gray-400 hidden text-xs tracking-[0.16em] text-gray-500 uppercase sm:block">
-                Select one to continue
-              </div>
-            </div>
-            <div className="space-y-8">
+            <div
+              className={`grid gap-8 ${
+                selectedCategory === 'all' ? 'lg:grid-cols-2' : 'lg:grid-cols-1'
+              }`}
+            >
               {groupedProducts.map((group) => (
                 <section
                   key={group.id}
@@ -260,7 +270,13 @@ export default function ProductSelectionGrid({
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 items-stretch gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+                  <div
+                    className={`grid grid-cols-1 items-stretch gap-4 sm:grid-cols-2 ${
+                      selectedCategory === 'all'
+                        ? ''
+                        : 'lg:grid-cols-3 xl:grid-cols-5'
+                    }`}
+                  >
                     {group.products.map((product) => {
                       const isSelected = currentProductId === product.id;
                       const priceRange = priceMap[product.id];
@@ -304,24 +320,29 @@ export default function ProductSelectionGrid({
                             </p>
 
                             {priceRange ? (
-                              <div className="day:border-gray-200 day:bg-gray-50 rounded-lg border border-white/10 bg-white/[0.03] px-2.5 py-2">
-                                <p className="day:text-gray-500 text-[11px] font-medium tracking-[0.14em] text-gray-400 uppercase">
+                              <div className="day:border-gray-200 day:bg-gray-50 flex items-baseline gap-2 rounded-lg border border-white/10 bg-white/[0.03] px-2.5 py-2 whitespace-nowrap">
+                                <span className="day:text-gray-500 text-[11px] font-medium tracking-[0.12em] text-gray-400 uppercase">
                                   Sample price
-                                </p>
-                                <p className="day:text-gray-900 mt-0.5 text-lg font-semibold text-white">
-                                  {formatPrice(priceRange.price, priceRange.currency)}
-                                </p>
-                                <p className="day:text-gray-500 mt-0.5 text-xs text-gray-400">
+                                </span>
+                                <span className="day:text-gray-900 text-base font-semibold text-white">
+                                  {formatPrice(
+                                    priceRange.price,
+                                    priceRange.currency,
+                                  )}
+                                </span>
+                                <span className="text-gray-500">·</span>
+                                <span className="day:text-gray-500 text-xs text-gray-400">
                                   {formatDimensionPair(
                                     priceRange.width,
                                     priceRange.height,
                                     unitSystem,
                                   )}
-                                </p>
+                                </span>
                               </div>
                             ) : (
                               <p className="day:border-gray-200 day:bg-gray-50 day:text-gray-600 rounded-lg border border-white/10 bg-white/[0.03] px-3 py-2.5 text-sm text-gray-300">
-                                Select product to configure options and view pricing
+                                Select product to configure options and view
+                                pricing
                               </p>
                             )}
 
@@ -334,9 +355,7 @@ export default function ProductSelectionGrid({
                                 }`}
                               >
                                 <span>
-                                  {isSelected
-                                    ? 'Continue'
-                                    : 'Select product'}
+                                  {isSelected ? 'Continue' : 'Select product'}
                                 </span>
                                 <ArrowRightIcon className="h-4 w-4" />
                               </span>
@@ -353,6 +372,32 @@ export default function ProductSelectionGrid({
         )}
       </div>
 
+      {currentProductId && (
+        <div className="day:border-gray-200 day:bg-white/95 fixed right-0 bottom-0 left-0 z-30 border-t border-[#cfac6c]/30 bg-[#121212]/95 px-6 py-3 shadow-2xl shadow-black/40 backdrop-blur-md lg:hidden">
+          <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-3 sm:flex-row sm:items-center">
+            <div>
+              <p className="day:text-gray-900 text-sm font-semibold text-white">
+                {products.find((product) => product.id === currentProductId)
+                  ?.name ?? 'Product selected'}
+              </p>
+              <p className="day:text-gray-600 mt-0.5 text-xs text-gray-300">
+                Next: choose a shape for your memorial.
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={handleContinue}
+              disabled={isProductLoading}
+              className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-lg bg-[#cfac6c] px-5 py-2.5 text-sm font-semibold text-slate-950 shadow-lg shadow-[#cfac6c]/20 transition-colors hover:bg-[#dfc17e] disabled:cursor-wait disabled:opacity-70 sm:w-auto"
+            >
+              {isProductLoading
+                ? 'Loading product…'
+                : 'Continue to Select Shape'}
+              <ArrowRightIcon className="h-4 w-4" />
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-09-16
+**Last Updated:** 2026-09-17
 
 **Status entry order:** Add new dated status entries immediately after the table of contents, before the existing status entries. Keep status entries in reverse chronological order (newest first); do not append them to the end of this file.
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots), **Vitest 4.1.8** (unit tests), **Playwright 1.59.1** (E2E tests)
@@ -105,8 +105,19 @@
 94. [September 14 Initial Audit Remediation](#current-status-2026-09-14--initial-audit-remediation)
 95. [September 15 Designer Material and Scene-Chip Polish](#current-status-2026-09-15--designer-material-and-scene-chip-polish)
 96. [September 16 Bronze Plaque Fastening and Perimeter-Wall Corrections](#current-status-2026-09-16--bronze-plaque-fastening-and-perimeter-wall-corrections)
+97. [September 17 Product Selection Catalogue Layout](#current-status-2026-09-17--product-selection-catalogue-layout)
 
 ---
+
+## Current Status (2026-09-17) — Product Selection Catalogue Layout
+
+- **File and responsibility:** `app/select-product/_ui/ProductSelectionGrid.tsx` owns the client-side catalogue browsing state, unit toggle, product choice, and the transition to the selected product's `select-shape` route.
+- **Compact product header:** the `/select-product` header uses reduced vertical padding and a single-line desktop instruction: “Choose a memorial product to begin — then refine its shape, material and dimensions with transparent pricing.” The metric/imperial control has explicit accessible labels and native tooltips.
+- **Category-specific desktop layout:** only the **All Products** tab uses a 50/50 desktop grid of category sections (for example Plaques beside Headstones). Its cards remain two columns within each half. Selecting an individual category makes its section full width and uses three desktop card columns, increasing to five at `xl`; do not apply the two-card 50/50 arrangement to a filtered category.
+- **Catalogue controls and product cards:** category pills show their live product count. The former aggregate “All Products · N products” heading is intentionally removed. Product-card price metadata is a single compact line in the form `Sample price $916 · 12″ × 8″` (with the current unit system applied).
+- **Selection and continuation:** clicking a card selects it and loads its catalogue data without navigating immediately. On desktop, clicking the selected card again (its label becomes **Continue**) moves to `select-shape`; no fixed bottom bar is rendered. On mobile, a fixed bottom confirmation bar names the selected product and offers **Continue to Select Shape**. The mobile button is disabled and reads **Loading product…** until `setProductId` has completed, preserving the old guarantee that the next step receives a loaded catalogue.
+- **Tablet breakpoint correction:** the permanent 400 px designer sidebar now starts at `lg` (1024 px), matching `MainContent`'s existing `lg:pl-[400px]` offset. At 768–1023 px the full-width catalogue remains unobscured and navigation is a drawer opened with the hamburger. `MobileHeader` and the theme-toggle visibility use the same `lg` threshold so tablet canvas routes keep their mobile/tablet controls without overlapping the hamburger.
+- **Validation:** Prettier and targeted ESLint pass for `ProductSelectionGrid.tsx`, `ConditionalNav.tsx`, `MobileHeader.tsx`, and `ThemeToggle.tsx`; `git diff --check` also passes. Local screenshots confirm the All Products desktop layout at 1536×900 and the unobscured tablet catalogue at 820×1180. When changing grid classes or navigation breakpoints, re-check both those sizes plus a filtered category.
 
 ## Current Status (2026-09-16) — Bronze Plaque Fastening and Perimeter-Wall Corrections
 

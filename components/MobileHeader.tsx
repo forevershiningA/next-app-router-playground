@@ -15,16 +15,24 @@ export default function MobileHeader() {
   const isMobileMenuOpen = useMobileNavStore((s) => s.isOpen);
   const unitSystem = useUnitSystem();
   const setUnitSystem = useSetUnitSystem();
-  
+
   // Check if we're on a design list page (product or category level)
-  const segments = pathname?.split('/').filter(s => s) || [];
-  const isDesignListPage = pathname?.startsWith('/designs') && segments.length >= 1;
+  const segments = pathname?.split('/').filter((s) => s) || [];
+  const isDesignListPage =
+    pathname?.startsWith('/designs') && segments.length >= 1;
   const designerStepSlug = getDesignerStepSlug(pathname);
   const isCanvasVisible = Boolean(
     designerStepSlug &&
-      ['design-menu', 'select-size', 'inscriptions', 'select-images', 'select-motifs', 'select-material', 'select-additions', 'select-emblems'].includes(
-        designerStepSlug,
-      ),
+      [
+        'design-menu',
+        'select-size',
+        'inscriptions',
+        'select-images',
+        'select-motifs',
+        'select-material',
+        'select-additions',
+        'select-emblems',
+      ].includes(designerStepSlug),
   );
 
   const displayProductName = useMemo(() => {
@@ -36,7 +44,10 @@ export default function MobileHeader() {
     if (!productId) {
       return 'Design Your Own Headstone';
     }
-    return data.products.find((p) => p.id === productId)?.name ?? 'Design Your Own Headstone';
+    return (
+      data.products.find((p) => p.id === productId)?.name ??
+      'Design Your Own Headstone'
+    );
   }, [catalog, productId]);
 
   // Don't render header on design list pages, when catalog isn't ready, when
@@ -47,12 +58,10 @@ export default function MobileHeader() {
   }
 
   return (
-    <header
-      className="day:border-[#ddd2c2] day:bg-[#f4f1eb]/95 fixed top-0 right-0 left-0 z-[9999] block h-14 border-b border-[#3a2a1c] bg-[#120c08]/95 px-3.5 shadow-xl shadow-black/25 backdrop-blur-md md:hidden"
-    >
+    <header className="day:border-[#ddd2c2] day:bg-[#f4f1eb]/95 fixed top-0 right-0 left-0 z-[9999] block h-14 border-b border-[#3a2a1c] bg-[#120c08]/95 px-3.5 shadow-xl shadow-black/25 backdrop-blur-md lg:hidden">
       {/* Left padding leaves room for the floating hamburger (see ConditionalNav) */}
       <div className="grid h-full grid-cols-[minmax(0,1fr)_auto] items-center gap-2 pl-12">
-        <h1 className="day:text-[#1d1a17] truncate text-sm font-semibold leading-tight text-white !m-0 !p-0">
+        <h1 className="day:text-[#1d1a17] !m-0 truncate !p-0 text-sm leading-tight font-semibold text-white">
           {displayProductName}
         </h1>
         <div className="day:border-[#ddd2c2] day:bg-[#eee6d9] flex rounded-full border border-white/10 bg-black/35 p-0.5">

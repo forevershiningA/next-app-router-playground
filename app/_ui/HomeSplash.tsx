@@ -451,7 +451,7 @@ export default function HomeSplash() {
                 textShadow: '0 1px 1px rgba(0,0,0,0.2), 0 4px 20px rgba(0,0,0,0)'
               }}
             >
-              You Can Design Online a lasting memorial.
+              You can Design Online a lasting memorial.
               <br />
               See every detail in 3D before we craft it.
             </p>
