@@ -123,9 +123,13 @@ function LedgerMesh({
     return () => {
       [...new Set(materialSet.materials)].forEach((material) => material.dispose());
       materialSet.textures.forEach((materialTexture) => materialTexture.dispose());
-      geometry.dispose();
     };
-  }, [geometry, materialSet]);
+  }, [materialSet]);
+
+  // Geometry is dimension-independent: the mesh is resized through scale.
+  // Dispose it only when this ledger mesh unmounts, not every time a texture
+  // repeat/material set is recreated for a new dimension.
+  useEffect(() => () => geometry.dispose(), [geometry]);
 
   // Start at base front face: -(uprightThickness/2) + baseThickness (all in metres)
   const standBackZ = -(uprightThickness / 1000) / 2 + baseThickness / 1000;

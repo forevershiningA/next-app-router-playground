@@ -81,6 +81,22 @@ type MotifOffset = HeadstoneState['motifOffsets'][string];
 type EmblemOffset = HeadstoneState['emblemOffsets'][string];
 
 const MIN_SURFACE_DIMENSION_MM = 1;
+const FULL_MONUMENT_LEDGER_HEIGHT_MIN_MM = 30;
+const FULL_MONUMENT_LEDGER_HEIGHT_MAX_MM = 150;
+const FULL_MONUMENT_LEDGER_DEPTH_MIN_MM = 400;
+const FULL_MONUMENT_LEDGER_DEPTH_MAX_MM = 2900;
+const FULL_MONUMENT_KERB_DEPTH_MIN_MM = 500;
+const FULL_MONUMENT_KERB_DEPTH_MAX_MM = 3000;
+
+const clampRoundedFinite = (
+  value: number,
+  min: number,
+  max: number,
+  fallback = min,
+) => {
+  if (!Number.isFinite(value)) return fallback;
+  return Math.max(min, Math.min(max, Math.round(value)));
+};
 
 const resolveSurfaceDimensions = (
   state: Pick<
@@ -1164,17 +1180,28 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
     const state = get();
     const minAllowed = Math.max(state.minBaseWidthMm, state.widthMm);
     const maxAllowed = Math.max(minAllowed, state.maxBaseWidthMm);
-    const clampedLedger = Math.max(minAllowed, Math.min(maxAllowed, Math.round(v)));
+    const clampedLedger = clampRoundedFinite(v, minAllowed, maxAllowed);
     const clampedBaseKerb = Math.min(maxAllowed, clampedLedger + FULL_MONUMENT_WIDTH_DIFF);
     set({ ledgerWidthMm: clampedLedger, baseWidthMm: clampedBaseKerb, kerbWidthMm: clampedBaseKerb });
   },
 
   ledgerHeightMm: 60,
-  setLedgerHeightMm: (v) => set({ ledgerHeightMm: v }),
+  setLedgerHeightMm: (v) =>
+    set({
+      ledgerHeightMm: clampRoundedFinite(
+        v,
+        FULL_MONUMENT_LEDGER_HEIGHT_MIN_MM,
+        FULL_MONUMENT_LEDGER_HEIGHT_MAX_MM,
+      ),
+    }),
 
   ledgerDepthMm: 2030,
   setLedgerDepthMm: (v) => {
-    const clampedDepth = Math.max(0, Math.round(v));
+    const clampedDepth = clampRoundedFinite(
+      v,
+      FULL_MONUMENT_LEDGER_DEPTH_MIN_MM,
+      FULL_MONUMENT_LEDGER_DEPTH_MAX_MM,
+    );
     set({
       ledgerDepthMm: clampedDepth,
       kerbDepthMm: clampedDepth + FULL_MONUMENT_DEPTH_DIFF,
@@ -1187,7 +1214,7 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
     const state = get();
     const minAllowed = Math.max(state.minBaseWidthMm, state.widthMm);
     const maxAllowed = Math.max(minAllowed, state.maxBaseWidthMm);
-    const clamped = Math.max(minAllowed, Math.min(maxAllowed, Math.round(v)));
+    const clamped = clampRoundedFinite(v, minAllowed, maxAllowed);
     set({ kerbWidthMm: clamped, baseWidthMm: clamped, ledgerWidthMm: Math.max(minAllowed, clamped - FULL_MONUMENT_WIDTH_DIFF) });
   },
 
@@ -1195,7 +1222,8 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
   setKerbHeightMm: (v) => {
     // kerbset changes → base = kerbset + 100 (clamped to base constraints)
     const state = get();
-    const desiredBase = Math.round(v) + FULL_MONUMENT_HEIGHT_DIFF;
+    const safeKerbHeight = clampRoundedFinite(v, 50, Number.MAX_SAFE_INTEGER);
+    const desiredBase = safeKerbHeight + FULL_MONUMENT_HEIGHT_DIFF;
     const clampedBase = Math.max(state.minBaseHeightMm, Math.min(state.maxBaseHeightMm, desiredBase));
     const kerbHeight = Math.max(50, clampedBase - FULL_MONUMENT_HEIGHT_DIFF);
     set({ kerbHeightMm: kerbHeight, baseHeightMm: clampedBase });
@@ -1203,7 +1231,11 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
 
   kerbDepthMm: 2150,
   setKerbDepthMm: (v) => {
-    const clampedDepth = Math.max(0, Math.round(v));
+    const clampedDepth = clampRoundedFinite(
+      v,
+      FULL_MONUMENT_KERB_DEPTH_MIN_MM,
+      FULL_MONUMENT_KERB_DEPTH_MAX_MM,
+    );
     set({
       kerbDepthMm: clampedDepth,
       ledgerDepthMm: Math.max(0, clampedDepth - FULL_MONUMENT_DEPTH_DIFF),
@@ -1314,7 +1346,7 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
   widthMm: 900,
   setWidthMm(v) {
     const { minWidthMm, maxWidthMm } = get();
-    const clamped = Math.max(minWidthMm, Math.min(maxWidthMm, Math.round(v)));
+    const clamped = clampRoundedFinite(v, minWidthMm, maxWidthMm);
     set({ widthMm: clamped });
     
     // Ensure base/kerbset/ledger are at least as wide as headstone (full monument rule)
@@ -1329,7 +1361,7 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
   heightMm: 900,
   setHeightMm(v) {
     const { minHeightMm, maxHeightMm } = get();
-    const clamped = Math.max(minHeightMm, Math.min(maxHeightMm, Math.round(v)));
+    const clamped = clampRoundedFinite(v, minHeightMm, maxHeightMm);
     set({ heightMm: clamped });
   },
   
@@ -1339,14 +1371,14 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
     const state = get();
     const minAllowed = Math.max(state.minBaseWidthMm, state.widthMm);
     const maxAllowed = Math.max(minAllowed, state.maxBaseWidthMm);
-    const clampedWidth = Math.max(minAllowed, Math.min(maxAllowed, Math.round(v)));
+    const clampedWidth = clampRoundedFinite(v, minAllowed, maxAllowed);
     set({ baseWidthMm: clampedWidth, kerbWidthMm: clampedWidth, ledgerWidthMm: Math.max(minAllowed, clampedWidth - FULL_MONUMENT_WIDTH_DIFF) });
   },
   
   baseHeightMm: 100, // Base height is 100mm
   setBaseHeightMm(v) {
     const { minBaseHeightMm, maxBaseHeightMm } = get();
-    const clamped = Math.max(minBaseHeightMm, Math.min(maxBaseHeightMm, Math.round(v)));
+    const clamped = clampRoundedFinite(v, minBaseHeightMm, maxBaseHeightMm);
     // base changes → kerbset = base − 100
     const kerbHeight = Math.max(50, clamped - FULL_MONUMENT_HEIGHT_DIFF);
     set({ baseHeightMm: clamped, kerbHeightMm: kerbHeight });
@@ -1355,7 +1387,7 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
   baseThickness: 250, // Default base thickness 250mm (will be overwritten by catalog)
   setBaseThickness(thickness) {
     const { minThicknessMm, maxThicknessMm } = get();
-    const clamped = Math.max(minThicknessMm, Math.min(maxThicknessMm, Math.round(thickness)));
+    const clamped = clampRoundedFinite(thickness, minThicknessMm, maxThicknessMm);
     set({ baseThickness: clamped });
   },
   

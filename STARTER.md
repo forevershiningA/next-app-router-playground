@@ -286,6 +286,35 @@ Use the user-supplied `screen.png` for visual acceptance and do not overwrite it
 
 ---
 
+## Current Status (2026-09-18) — SVG Details and Dimension Safety
+
+### SVG headstones and front-only engraving
+
+- `sandblastedBorders: true` enables the SVG-derived engraving layer only for catalogue shapes that opt in. Its material now keeps depth testing enabled: the front detail is occluded by the stone when the model is viewed from the rear. Do not set `depthTest={false}` for this layer, or it will visibly render through the back cap.
+- A Custom Headstone upload is a `data:image/svg+xml` or `blob:` URL. `ShapeSwapper` treats it as physical SVG geometry, not as a source-image overlay. It must therefore not pass the uploaded SVG into `sourceSvgOverlayUrl`: doing so duplicates filled source artwork as an opaque, often black plane over the granite.
+- Custom uploads also disable `preserveTop`, matching fixed pictorial catalogue silhouettes. This prevents a rectangular extension being added below an intentionally non-rectangular SVG such as `public/shapes/headstones/vehicles/truck.svg`.
+- `SvgHeadstone` supports multiple independent filled paths as stone pieces; nested subpaths remain holes/relief. Upload a valid SVG with filled, closed silhouette paths when the desired result is a physical stone shape. Decorative artwork intended only as a front image is a different feature and should not be overloaded onto Custom Headstone geometry.
+
+### Dimension lifecycle and full monuments
+
+- Store values remain canonical millimetres; renderers convert them to metres at their boundary. All main headstone/base setters now round and clamp finite input centrally, so a transient empty numeric input cannot put `NaN` into Zustand state.
+- Full-monument setters additionally clamp ledger height to `30–150 mm`, ledger length to `400–2900 mm`, and kerbset length to `500–3000 mm`. Ledger and kerbset lengths preserve their `100 mm` relationship.
+- `LedgerSlab` uses a unit geometry and scales it to dimensions. Dispose that geometry only on component unmount. Its texture/material set may be rebuilt to update physical granite repeats when dimensions change; disposing the still-mounted geometry in that cleanup causes unnecessary GPU work and risks render glitches.
+- `FullMonumentFit` must subscribe to and include in its fit key every dimension that can change the structural bounding box: ledger width/height/depth, base width/height/thickness, kerb width/height/depth, upright height/thickness. The camera fit intentionally uses the live structural mesh bounds rather than duplicate dimensional formulae.
+- Camera interpolation runs only while animating and reuses one target `Vector3` per animation rather than allocating a new one per frame.
+
+### Verification
+
+```bash
+pnpm exec eslint components/three/headstone/LedgerSlab.tsx components/three/FullMonumentFit.tsx lib/headstone-store.ts
+pnpm exec tsc --noEmit --pretty false
+git diff --check
+```
+
+The targeted setter smoke test should confirm: invalid ledger height falls back to `30`, ledger length clamps to `400` with kerbset length `500`, and kerbset length clamps to `3000` with ledger length `2900`.
+
+---
+
 ## Current Status (2026-09-07) — Military and First Responders Shape Catalogues
 
 Primary implementation files are `app/_internal/_data.ts`, `app/select-shape/_ui/ShapeSelectionGrid.tsx`, `components/ShapeSelector.tsx`, `components/three/headstone/ShapeSwapper.tsx`, and `components/SvgHeadstone.tsx`. Source assets are in `public/shapes/headstones/military/` and `public/shapes/headstones/first-responders/`.

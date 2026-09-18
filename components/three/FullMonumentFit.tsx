@@ -61,12 +61,16 @@ export default function FullMonumentFit({ trigger }: FullMonumentFitProps) {
     setFrameloop: (mode: 'always' | 'demand' | 'never') => void;
   };
 
+  const ledgerWidthMm   = useHeadstoneStore((s) => s.ledgerWidthMm);
+  const ledgerHeightMm  = useHeadstoneStore((s) => s.ledgerHeightMm);
   const ledgerDepthMm   = useHeadstoneStore((s) => s.ledgerDepthMm);
+  const baseWidthMm     = useHeadstoneStore((s) => s.baseWidthMm);
   const kerbWidthMm     = useHeadstoneStore((s) => s.kerbWidthMm);
   const kerbHeightMm    = useHeadstoneStore((s) => s.kerbHeightMm);
   const kerbDepthMm     = useHeadstoneStore((s) => s.kerbDepthMm);
   const heightMm        = useHeadstoneStore((s) => s.heightMm);
   const baseHeightMm    = useHeadstoneStore((s) => s.baseHeightMm);
+  const baseThickness   = useHeadstoneStore((s) => s.baseThickness);
   const uprightThickness = useHeadstoneStore((s) => s.uprightThickness);
   const productId       = useHeadstoneStore((s) => s.productId);
   const shapeUrl        = useHeadstoneStore((s) => s.shapeUrl);
@@ -132,12 +136,16 @@ export default function FullMonumentFit({ trigger }: FullMonumentFitProps) {
   const lastAppliedBoxRef = React.useRef<THREE.Box3 | null>(null);
   const lastZoomModeRef = React.useRef<boolean | null>(null);
   const fitKey = [
+    ledgerWidthMm,
+    ledgerHeightMm,
     ledgerDepthMm,
+    baseWidthMm,
     kerbWidthMm,
     kerbHeightMm,
     kerbDepthMm,
     heightMm,
     baseHeightMm,
+    baseThickness,
     uprightThickness,
     productId ?? '',
     shapeUrl ?? '',
@@ -321,6 +329,7 @@ export default function FullMonumentFit({ trigger }: FullMonumentFitProps) {
       const startNear = camera.near;
       const startFar = camera.far;
       const startTime = performance.now();
+      const animationTarget = new THREE.Vector3();
 
       // The canvas normally renders on demand. Keep it live just while the
       // camera is interpolating; relying on one invalidate per manual RAF can
@@ -332,7 +341,7 @@ export default function FullMonumentFit({ trigger }: FullMonumentFitProps) {
         const eased = easeInOutCubic(progress);
 
         camera.position.lerpVectors(startPosition, pose.position, eased);
-        const nextTarget = new THREE.Vector3().lerpVectors(
+        const nextTarget = animationTarget.lerpVectors(
           startTarget,
           pose.target,
           eased,
@@ -486,8 +495,9 @@ export default function FullMonumentFit({ trigger }: FullMonumentFitProps) {
       setFrameloop('demand');
     };
   }, [
-    ledgerDepthMm, kerbDepthMm, kerbWidthMm, kerbHeightMm,
-    heightMm, baseHeightMm, uprightThickness,
+    ledgerWidthMm, ledgerHeightMm, ledgerDepthMm, baseWidthMm,
+    kerbDepthMm, kerbWidthMm, kerbHeightMm,
+    heightMm, baseHeightMm, baseThickness, uprightThickness,
     productId, shapeUrl, showLedger, showKerbset, selected, editingObject, activePanel, trigger,
     selectedInscriptionId, selectedAdditionId, selectedMotifId, selectedImageId,
     selectedInscriptionSurface, selectedAdditionSurface, selectedMotifSurface, selectedImageSurface,

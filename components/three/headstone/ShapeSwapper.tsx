@@ -509,6 +509,7 @@ export default function ShapeSwapper({
     ? catalog?.product.additions.find((addition) => addition.type === 'inscription')?.minHeight
     : undefined;
   const preserveTopForShape =
+    !isCustomUploadedShape &&
     !isFixedHeadstoneAsset &&
     !isUrn &&
     !isNonRectangularPlaque &&
@@ -649,7 +650,10 @@ export default function ShapeSwapper({
             topTileSize={0.35}
             targetHeight={targetHeightForShape}
             targetWidth={targetWidthForShape}
-            sourceSvgOverlayUrl={bowlArtworkOverlayUrl ?? (isCustomUploadedShape ? resolvedUrl : null)}
+            // Uploaded SVGs are converted into the physical stone geometry by
+            // SvgHeadstone. Repainting the source on top duplicated it as a
+            // black, flat image.
+            sourceSvgOverlayUrl={bowlArtworkOverlayUrl}
             showSvgEngraving={showSvgEngraving}
             engravingStrokeWidthMm={engravingStrokeWidthMm}
             preserveTop={preserveTopForShape}

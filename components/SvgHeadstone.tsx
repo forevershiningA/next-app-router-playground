@@ -2583,7 +2583,9 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(
                   color={engravingColor}
                   transparent
                   opacity={0.9}
-                  depthTest={false}
+                  // This is a front-face sandblasting detail. Keep the depth
+                  // test enabled so the stone occludes it in rear views.
+                  depthTest
                   depthWrite={false}
                   toneMapped={false}
                   side={THREE.DoubleSide}
