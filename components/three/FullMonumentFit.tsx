@@ -10,9 +10,7 @@ import { useHeadstoneStore } from '#/lib/headstone-store';
 import { useMobileNavStore } from '#/lib/mobile-nav-store';
 import { FULL_MONUMENT_GROUP_NAME, UPRIGHT_ASSEMBLY_NAME } from './constants';
 
-type FullMonumentFitProps = {
-  trigger?: number;
-};
+type FullMonumentFitProps = { trigger?: number };
 
 const HEADSTONE_OBJECT_NAME = 'headstone';
 const CAMERA_ANIMATION_MS = 630;
@@ -52,40 +50,47 @@ type CameraPose = {
 };
 
 export default function FullMonumentFit({ trigger }: FullMonumentFitProps) {
-  const { camera, controls, size, invalidate, scene, setFrameloop } = useThree() as {
-    camera: THREE.PerspectiveCamera;
-    controls?: any;
-    size: { width: number; height: number };
-    invalidate: () => void;
-    scene: THREE.Scene;
-    setFrameloop: (mode: 'always' | 'demand' | 'never') => void;
-  };
+  const { camera, controls, size, invalidate, scene, setFrameloop } =
+    useThree() as {
+      camera: THREE.PerspectiveCamera;
+      controls?: any;
+      size: { width: number; height: number };
+      invalidate: () => void;
+      scene: THREE.Scene;
+      setFrameloop: (mode: 'always' | 'demand' | 'never') => void;
+    };
 
-  const ledgerWidthMm   = useHeadstoneStore((s) => s.ledgerWidthMm);
-  const ledgerHeightMm  = useHeadstoneStore((s) => s.ledgerHeightMm);
-  const ledgerDepthMm   = useHeadstoneStore((s) => s.ledgerDepthMm);
-  const baseWidthMm     = useHeadstoneStore((s) => s.baseWidthMm);
-  const kerbWidthMm     = useHeadstoneStore((s) => s.kerbWidthMm);
-  const kerbHeightMm    = useHeadstoneStore((s) => s.kerbHeightMm);
-  const kerbDepthMm     = useHeadstoneStore((s) => s.kerbDepthMm);
-  const heightMm        = useHeadstoneStore((s) => s.heightMm);
-  const baseHeightMm    = useHeadstoneStore((s) => s.baseHeightMm);
-  const baseThickness   = useHeadstoneStore((s) => s.baseThickness);
+  const ledgerWidthMm = useHeadstoneStore((s) => s.ledgerWidthMm);
+  const ledgerHeightMm = useHeadstoneStore((s) => s.ledgerHeightMm);
+  const ledgerDepthMm = useHeadstoneStore((s) => s.ledgerDepthMm);
+  const baseWidthMm = useHeadstoneStore((s) => s.baseWidthMm);
+  const kerbWidthMm = useHeadstoneStore((s) => s.kerbWidthMm);
+  const kerbHeightMm = useHeadstoneStore((s) => s.kerbHeightMm);
+  const kerbDepthMm = useHeadstoneStore((s) => s.kerbDepthMm);
+  const widthMm = useHeadstoneStore((s) => s.widthMm);
+  const heightMm = useHeadstoneStore((s) => s.heightMm);
+  const baseHeightMm = useHeadstoneStore((s) => s.baseHeightMm);
+  const baseThickness = useHeadstoneStore((s) => s.baseThickness);
   const uprightThickness = useHeadstoneStore((s) => s.uprightThickness);
-  const productId       = useHeadstoneStore((s) => s.productId);
-  const shapeUrl        = useHeadstoneStore((s) => s.shapeUrl);
-  const showLedger      = useHeadstoneStore((s) => s.showLedger);
-  const showKerbset     = useHeadstoneStore((s) => s.showKerbset);
-  const selected        = useHeadstoneStore((s) => s.selected);
-  const editingObject   = useHeadstoneStore((s) => s.editingObject);
-  const activePanel     = useHeadstoneStore((s) => s.activePanel);
-  const selectedInscriptionId = useHeadstoneStore((s) => s.selectedInscriptionId);
+  const productId = useHeadstoneStore((s) => s.productId);
+  const shapeUrl = useHeadstoneStore((s) => s.shapeUrl);
+  const showLedger = useHeadstoneStore((s) => s.showLedger);
+  const showKerbset = useHeadstoneStore((s) => s.showKerbset);
+  const selected = useHeadstoneStore((s) => s.selected);
+  const editingObject = useHeadstoneStore((s) => s.editingObject);
+  const activePanel = useHeadstoneStore((s) => s.activePanel);
+  const selectedInscriptionId = useHeadstoneStore(
+    (s) => s.selectedInscriptionId,
+  );
   const selectedAdditionId = useHeadstoneStore((s) => s.selectedAdditionId);
   const selectedMotifId = useHeadstoneStore((s) => s.selectedMotifId);
   const selectedImageId = useHeadstoneStore((s) => s.selectedImageId);
   const isMobileNavOpen = useMobileNavStore((s) => s.isOpen);
   const isSizeAdjustmentCompact = useMobileNavStore(
     (s) => s.isSizeAdjustmentCompact,
+  );
+  const isSizeAdjustmentActive = useMobileNavStore(
+    (s) => s.isSizeAdjustmentActive,
   );
   const isBottomSheetCollapsed = useMobileNavStore(
     (s) => s.isBottomSheetCollapsed,
@@ -94,7 +99,8 @@ export default function FullMonumentFit({ trigger }: FullMonumentFitProps) {
     isSizeAdjustmentCompact || isBottomSheetCollapsed;
   const selectedInscriptionSurface = useHeadstoneStore((s) =>
     selectedInscriptionId
-      ? (s.inscriptions.find((line) => line.id === selectedInscriptionId)?.target ?? 'headstone')
+      ? (s.inscriptions.find((line) => line.id === selectedInscriptionId)
+          ?.target ?? 'headstone')
       : null,
   );
   const selectedAdditionSurface = useHeadstoneStore((s) =>
@@ -109,7 +115,8 @@ export default function FullMonumentFit({ trigger }: FullMonumentFitProps) {
   );
   const selectedImageSurface = useHeadstoneStore((s) =>
     selectedImageId
-      ? (s.selectedImages.find((image) => image.id === selectedImageId)?.target ?? 'headstone')
+      ? (s.selectedImages.find((image) => image.id === selectedImageId)
+          ?.target ?? 'headstone')
       : null,
   );
   const isMaterialChange = useHeadstoneStore((s) => s.isMaterialChange);
@@ -143,6 +150,7 @@ export default function FullMonumentFit({ trigger }: FullMonumentFitProps) {
     kerbWidthMm,
     kerbHeightMm,
     kerbDepthMm,
+    widthMm,
     heightMm,
     baseHeightMm,
     baseThickness,
@@ -156,12 +164,18 @@ export default function FullMonumentFit({ trigger }: FullMonumentFitProps) {
   ].join('|');
 
   React.useLayoutEffect(() => {
+    // Re-fitting the camera for every slider event fights the live geometry
+    // interpolation. Hold the current view during the drag and fit once after
+    // the interaction finishes.
+    if (isSizeAdjustmentActive) return;
+
     let retryRafId: number | null = null;
     const previousZoomIn = lastSelectedRef.current;
     const previousFitKey = lastFitKeyRef.current;
     const selectionChanged = previousZoomIn !== shouldZoomIn;
     const fitInputsChanged = previousFitKey !== fitKey;
-    const materialChangeJustEnded = materialChangeActiveRef.current && !isMaterialChange;
+    const materialChangeJustEnded =
+      materialChangeActiveRef.current && !isMaterialChange;
 
     if (isMaterialChange) {
       materialChangeActiveRef.current = true;
@@ -211,14 +225,20 @@ export default function FullMonumentFit({ trigger }: FullMonumentFitProps) {
       // Leave enough vertical room to fit the entire upright, base and statue
       // in the uncovered portion of a mobile viewport.
       const margin = mobileSheetVisible
-        ? (isMobileSheetCompact
-          ? (zoomToHeadstone ? 1.02 : 1.15)
-          : (zoomToHeadstone ? 1.32 : 1.5))
-        // Ledger and kerbset are edited in the context of the full plot.
-        // Reserve a generous border around the complete monument so its
-        // front kerb never falls outside the camera after coming from the
-        // close headstone framing.
-        : (zoomToHeadstone ? 1.02 : 1.3);
+        ? isMobileSheetCompact
+          ? zoomToHeadstone
+            ? 1.02
+            : 1.15
+          : zoomToHeadstone
+            ? 1.32
+            : 1.5
+        : // Ledger and kerbset are edited in the context of the full plot.
+          // Reserve a generous border around the complete monument so its
+          // front kerb never falls outside the camera after coming from the
+          // close headstone framing.
+          zoomToHeadstone
+          ? 1.02
+          : 1.3;
       const vFov = THREE.MathUtils.degToRad(camera.fov);
       const aspect = Math.max(1e-6, size.width / Math.max(1, size.height));
       const hFov = 2 * Math.atan(Math.tan(vFov / 2) * aspect);
@@ -230,14 +250,19 @@ export default function FullMonumentFit({ trigger }: FullMonumentFitProps) {
       const distance = Math.max(distX, distY) + depthPad;
 
       const elevation = THREE.MathUtils.degToRad(zoomToHeadstone ? 10 : 12);
-      const fallbackDirection = new THREE.Vector3(0, Math.sin(elevation), Math.cos(elevation));
-      const dir = preferredDirection && preferredDirection.lengthSq() > 1e-6
-        ? preferredDirection.clone().normalize()
-        : fallbackDirection;
-
-      const minTargetY = box.min.y + sizeVec.y * (
-        mobileSheetVisible ? 0.04 : (zoomToHeadstone ? 0.3 : 0.35)
+      const fallbackDirection = new THREE.Vector3(
+        0,
+        Math.sin(elevation),
+        Math.cos(elevation),
       );
+      const dir =
+        preferredDirection && preferredDirection.lengthSq() > 1e-6
+          ? preferredDirection.clone().normalize()
+          : fallbackDirection;
+
+      const minTargetY =
+        box.min.y +
+        sizeVec.y * (mobileSheetVisible ? 0.04 : zoomToHeadstone ? 0.3 : 0.35);
       const maxTargetY = box.min.y + sizeVec.y * (zoomToHeadstone ? 0.6 : 0.65);
       const targetY = THREE.MathUtils.clamp(
         box.min.y + sizeVec.y * (zoomToHeadstone ? 0.45 : 0.48),
@@ -248,9 +273,14 @@ export default function FullMonumentFit({ trigger }: FullMonumentFitProps) {
       // framing target down in world space so the monument appears centred in
       // the uncovered upper portion instead of behind the bottom sheet.
       const mobileVerticalBias = mobileSheetVisible
-        ? sizeVec.y * (isMobileSheetCompact
-          ? (zoomToHeadstone ? 0.24 : 0.2)
-          : (zoomToHeadstone ? 0.46 : 0.4))
+        ? sizeVec.y *
+          (isMobileSheetCompact
+            ? zoomToHeadstone
+              ? 0.24
+              : 0.2
+            : zoomToHeadstone
+              ? 0.46
+              : 0.4)
         : size.width < 768
           ? sizeVec.y * (zoomToHeadstone ? 0.08 : 0.04)
           : 0;
@@ -275,7 +305,9 @@ export default function FullMonumentFit({ trigger }: FullMonumentFitProps) {
       const worldQuaternion = new THREE.Quaternion();
       targetObj.getWorldQuaternion(worldQuaternion);
 
-      const frontDirection = new THREE.Vector3(0, 0, 1).applyQuaternion(worldQuaternion);
+      const frontDirection = new THREE.Vector3(0, 0, 1).applyQuaternion(
+        worldQuaternion,
+      );
       frontDirection.y = 0;
 
       if (frontDirection.lengthSq() <= 1e-6) {
@@ -418,7 +450,8 @@ export default function FullMonumentFit({ trigger }: FullMonumentFitProps) {
       const targetObj = shouldFocusHeadstone
         ? scene.getObjectByName(HEADSTONE_OBJECT_NAME)
         : shouldFocusBase
-          ? (scene.getObjectByName(UPRIGHT_ASSEMBLY_NAME) ?? scene.getObjectByName(HEADSTONE_OBJECT_NAME))
+          ? (scene.getObjectByName(UPRIGHT_ASSEMBLY_NAME) ??
+            scene.getObjectByName(HEADSTONE_OBJECT_NAME))
           : scene.getObjectByName(FULL_MONUMENT_GROUP_NAME);
 
       if (!targetObj) {
@@ -471,7 +504,8 @@ export default function FullMonumentFit({ trigger }: FullMonumentFitProps) {
       // The upright assembly can have a different local rotation than the
       // headstone mesh. Always take the viewing direction from the headstone
       // itself, otherwise base-mounted statues can be framed from the side.
-      const frontReference = scene.getObjectByName(HEADSTONE_OBJECT_NAME) ?? targetObj;
+      const frontReference =
+        scene.getObjectByName(HEADSTONE_OBJECT_NAME) ?? targetObj;
       const preferredDirection = zoomIn
         ? getHeadstoneFrontDirection(frontReference)
         : shouldAnimateFromZoomOut
@@ -495,14 +529,49 @@ export default function FullMonumentFit({ trigger }: FullMonumentFitProps) {
       setFrameloop('demand');
     };
   }, [
-    ledgerWidthMm, ledgerHeightMm, ledgerDepthMm, baseWidthMm,
-    kerbDepthMm, kerbWidthMm, kerbHeightMm,
-    heightMm, baseHeightMm, baseThickness, uprightThickness,
-    productId, shapeUrl, showLedger, showKerbset, selected, editingObject, activePanel, trigger,
-    selectedInscriptionId, selectedAdditionId, selectedMotifId, selectedImageId,
-    selectedInscriptionSurface, selectedAdditionSurface, selectedMotifSurface, selectedImageSurface,
-    isMaterialChange, isMobileNavOpen, isMobileSheetCompact, camera, size.width, size.height, controls, invalidate, scene, setFrameloop, fitKey,
-    shouldFocusHeadstone, shouldFocusBase, shouldZoomIn,
+    ledgerWidthMm,
+    ledgerHeightMm,
+    ledgerDepthMm,
+    baseWidthMm,
+    kerbDepthMm,
+    kerbWidthMm,
+    kerbHeightMm,
+    widthMm,
+    heightMm,
+    baseHeightMm,
+    baseThickness,
+    uprightThickness,
+    productId,
+    shapeUrl,
+    showLedger,
+    showKerbset,
+    selected,
+    editingObject,
+    activePanel,
+    trigger,
+    selectedInscriptionId,
+    selectedAdditionId,
+    selectedMotifId,
+    selectedImageId,
+    selectedInscriptionSurface,
+    selectedAdditionSurface,
+    selectedMotifSurface,
+    selectedImageSurface,
+    isMaterialChange,
+    isMobileNavOpen,
+    isMobileSheetCompact,
+    isSizeAdjustmentActive,
+    camera,
+    size.width,
+    size.height,
+    controls,
+    invalidate,
+    scene,
+    setFrameloop,
+    fitKey,
+    shouldFocusHeadstone,
+    shouldFocusBase,
+    shouldZoomIn,
   ]);
 
   return null;

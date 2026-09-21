@@ -1,18 +1,26 @@
 // components/three/headstone/KerbsetBorder.tsx
 'use client';
 
-import React, { useRef, useMemo, useEffect, forwardRef, useImperativeHandle, Suspense } from 'react';
+import React, {
+  useRef,
+  useMemo,
+  useEffect,
+  forwardRef,
+  useImperativeHandle,
+  Suspense,
+} from 'react';
 import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
 import { useTexture } from '@react-three/drei';
 import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry.js';
 import { useHeadstoneStore } from '#/lib/headstone-store';
-import { TEX_BASE, DEFAULT_TEX, LERP_FACTOR, EPSILON } from '#/lib/headstone-constants';
-import { createPolishedGraniteMaterial, GRANITE_TILE_SIZE_M } from '#/lib/granite-material';
+import { TEX_BASE, DEFAULT_TEX, EPSILON } from '#/lib/headstone-constants';
+import {
+  createPolishedGraniteMaterial,
+  GRANITE_TILE_SIZE_M,
+} from '#/lib/granite-material';
 
-type KerbsetBorderProps = {
-  onClick?: (e: any) => void;
-};
+type KerbsetBorderProps = { onClick?: (e: any) => void };
 
 const WALL_MM = 100;
 
@@ -28,11 +36,18 @@ function assignBoxFaceGroups(geometry: THREE.BufferGeometry) {
     const nx = normal.getX(vertex);
     const ny = normal.getY(vertex);
     const nz = normal.getZ(vertex);
-    const materialIndex = Math.abs(nx) > Math.abs(ny) && Math.abs(nx) > Math.abs(nz)
-      ? (nx > 0 ? 0 : 1)
-      : Math.abs(ny) > Math.abs(nx) && Math.abs(ny) > Math.abs(nz)
-        ? (ny > 0 ? 2 : 3)
-        : (nz > 0 ? 4 : 5);
+    const materialIndex =
+      Math.abs(nx) > Math.abs(ny) && Math.abs(nx) > Math.abs(nz)
+        ? nx > 0
+          ? 0
+          : 1
+        : Math.abs(ny) > Math.abs(nx) && Math.abs(ny) > Math.abs(nz)
+          ? ny > 0
+            ? 2
+            : 3
+          : nz > 0
+            ? 4
+            : 5;
     geometry.addGroup(i, 3, materialIndex);
   }
 }
@@ -45,7 +60,12 @@ function createKerbBarGeometry(width: number, height: number, depth: number) {
   return geometry;
 }
 
-function createKerbBoxMaterials(texture: THREE.Texture, width: number, height: number, depth: number) {
+function createKerbBoxMaterials(
+  texture: THREE.Texture,
+  width: number,
+  height: number,
+  depth: number,
+) {
   const createTexture = (repeatX: number, repeatY: number) => {
     const next = texture.clone();
     next.colorSpace = THREE.SRGBColorSpace;
@@ -56,9 +76,18 @@ function createKerbBoxMaterials(texture: THREE.Texture, width: number, height: n
     return next;
   };
 
-  const sideTexture = createTexture(depth / GRANITE_TILE_SIZE_M, height / GRANITE_TILE_SIZE_M);
-  const topTexture = createTexture(width / GRANITE_TILE_SIZE_M, depth / GRANITE_TILE_SIZE_M);
-  const faceTexture = createTexture(width / GRANITE_TILE_SIZE_M, height / GRANITE_TILE_SIZE_M);
+  const sideTexture = createTexture(
+    depth / GRANITE_TILE_SIZE_M,
+    height / GRANITE_TILE_SIZE_M,
+  );
+  const topTexture = createTexture(
+    width / GRANITE_TILE_SIZE_M,
+    depth / GRANITE_TILE_SIZE_M,
+  );
+  const faceTexture = createTexture(
+    width / GRANITE_TILE_SIZE_M,
+    height / GRANITE_TILE_SIZE_M,
+  );
 
   const horizontal = createPolishedGraniteMaterial({
     texture: topTexture,
@@ -145,8 +174,12 @@ function KerbMesh({
 
   useEffect(() => {
     return () => {
-      [...new Set([...endBar.materials, ...sideBar.materials])].forEach((material) => material.dispose());
-      [...endBar.textures, ...sideBar.textures].forEach((materialTexture) => materialTexture.dispose());
+      [...new Set([...endBar.materials, ...sideBar.materials])].forEach(
+        (material) => material.dispose(),
+      );
+      [...endBar.textures, ...sideBar.textures].forEach((materialTexture) =>
+        materialTexture.dispose(),
+      );
       endBarGeometry.dispose();
       sideBarGeometry.dispose();
     };
@@ -155,17 +188,51 @@ function KerbMesh({
   const targetGroupY = useRef(centerY);
   const targetGroupZ = useRef(kerbCenterZ);
   const targetPosition = useRef(new THREE.Vector3(0, centerY, kerbCenterZ));
+  const visualScaleRef = useRef<THREE.Group>(null);
+  const unitScaleRef = useRef(new THREE.Vector3(1, 1, 1));
+  const previousDimensionsRef = useRef<THREE.Vector3 | null>(null);
+  const initializedRef = useRef(false);
 
-  useFrame((state) => {
-    if (!groupRef.current) return;
+  React.useLayoutEffect(() => {
+    const group = groupRef.current;
+    const visual = visualScaleRef.current;
+    if (!group || !visual) return;
+
+    const nextDimensions = new THREE.Vector3(kW, kH, kD);
+    if (!initializedRef.current) {
+      group.position.set(0, centerY, kerbCenterZ);
+      visual.scale.set(1, 1, 1);
+      initializedRef.current = true;
+    } else if (previousDimensionsRef.current) {
+      const previous = previousDimensionsRef.current;
+      visual.scale.multiply(
+        new THREE.Vector3(
+          previous.x / Math.max(1e-6, nextDimensions.x),
+          previous.y / Math.max(1e-6, nextDimensions.y),
+          previous.z / Math.max(1e-6, nextDimensions.z),
+        ),
+      );
+    }
+    previousDimensionsRef.current = nextDimensions;
+  }, [centerY, groupRef, kD, kH, kW, kerbCenterZ]);
+
+  useFrame((state, delta) => {
+    if (!groupRef.current || !visualScaleRef.current) return;
     const newKD = kerbDepthMm / 1000;
     const newKH = kerbHeightMm / 1000;
     const newStandBackZ = -(uprightThickness / 1000) / 2 + baseThickness / 1000;
     targetGroupY.current = newKH / 2 + EPSILON;
     targetGroupZ.current = newStandBackZ + newKD / 2;
     targetPosition.current.set(0, targetGroupY.current, targetGroupZ.current);
-    if (groupRef.current.position.distanceToSquared(targetPosition.current) > 1e-10) {
-      groupRef.current.position.lerp(targetPosition.current, LERP_FACTOR);
+    const alpha = 1 - Math.exp(-14 * delta);
+    const stillMoving =
+      groupRef.current.position.distanceToSquared(targetPosition.current) >
+        1e-10 ||
+      visualScaleRef.current.scale.distanceToSquared(unitScaleRef.current) >
+        1e-10;
+    if (stillMoving) {
+      groupRef.current.position.lerp(targetPosition.current, alpha);
+      visualScaleRef.current.scale.lerp(unitScaleRef.current, alpha);
       state.gl.shadowMap.needsUpdate = true;
       state.invalidate();
     }
@@ -174,34 +241,35 @@ function KerbMesh({
   return (
     <group
       ref={groupRef as React.RefObject<THREE.Group>}
-      position={[0, centerY, kerbCenterZ]}
       onClick={onClick}
       name="kerbset"
     >
-      {/* Back bar (head end) */}
-      <mesh
-        geometry={endBarGeometry}
-        material={endBar.materials}
-        position={[0, 0, -(kD / 2 - wall / 2)]}
-      />
-      {/* Front bar (foot end) */}
-      <mesh
-        geometry={endBarGeometry}
-        material={endBar.materials}
-        position={[0, 0, kD / 2 - wall / 2]}
-      />
-      {/* Left side bar */}
-      <mesh
-        geometry={sideBarGeometry}
-        material={sideBar.materials}
-        position={[-(kW / 2 - wall / 2), 0, 0]}
-      />
-      {/* Right side bar */}
-      <mesh
-        geometry={sideBarGeometry}
-        material={sideBar.materials}
-        position={[kW / 2 - wall / 2, 0, 0]}
-      />
+      <group ref={visualScaleRef}>
+        {/* Back bar (head end) */}
+        <mesh
+          geometry={endBarGeometry}
+          material={endBar.materials}
+          position={[0, 0, -(kD / 2 - wall / 2)]}
+        />
+        {/* Front bar (foot end) */}
+        <mesh
+          geometry={endBarGeometry}
+          material={endBar.materials}
+          position={[0, 0, kD / 2 - wall / 2]}
+        />
+        {/* Left side bar */}
+        <mesh
+          geometry={sideBarGeometry}
+          material={sideBar.materials}
+          position={[-(kW / 2 - wall / 2), 0, 0]}
+        />
+        {/* Right side bar */}
+        <mesh
+          geometry={sideBarGeometry}
+          material={sideBar.materials}
+          position={[kW / 2 - wall / 2, 0, 0]}
+        />
+      </group>
     </group>
   );
 }
@@ -222,64 +290,70 @@ function PreloadTexture({
   return null;
 }
 
-const KerbsetBorder = forwardRef<THREE.Group, KerbsetBorderProps>(function KerbsetBorder(
-  { onClick },
-  ref,
-) {
-  const internalRef = useRef<THREE.Group>(null!);
-  useImperativeHandle(ref, () => internalRef.current as unknown as THREE.Group);
+const KerbsetBorder = forwardRef<THREE.Group, KerbsetBorderProps>(
+  function KerbsetBorder({ onClick }, ref) {
+    const internalRef = useRef<THREE.Group>(null!);
+    useImperativeHandle(
+      ref,
+      () => internalRef.current as unknown as THREE.Group,
+    );
 
-  const kerbWidthMm = useHeadstoneStore((s) => s.kerbWidthMm);
-  const kerbHeightMm = useHeadstoneStore((s) => s.kerbHeightMm);
-  const kerbDepthMm = useHeadstoneStore((s) => s.kerbDepthMm);
-  const uprightThickness = useHeadstoneStore((s) => s.uprightThickness);
-  const baseThickness = useHeadstoneStore((s) => s.baseThickness);
-  const kerbsetMaterialUrl = useHeadstoneStore((s) => s.kerbsetMaterialUrl);
+    const kerbWidthMm = useHeadstoneStore((s) => s.kerbWidthMm);
+    const kerbHeightMm = useHeadstoneStore((s) => s.kerbHeightMm);
+    const kerbDepthMm = useHeadstoneStore((s) => s.kerbDepthMm);
+    const uprightThickness = useHeadstoneStore((s) => s.uprightThickness);
+    const baseThickness = useHeadstoneStore((s) => s.baseThickness);
+    const kerbsetMaterialUrl = useHeadstoneStore((s) => s.kerbsetMaterialUrl);
 
-  const texUrl = kerbsetMaterialUrl
-    ? kerbsetMaterialUrl.startsWith('/')
-      ? kerbsetMaterialUrl
-      : `/${kerbsetMaterialUrl}`
-    : `${TEX_BASE}${DEFAULT_TEX}`;
-  const [visibleTexUrl, setVisibleTexUrl] = React.useState(texUrl);
-  const pendingTextureSwap = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const texUrl = kerbsetMaterialUrl
+      ? kerbsetMaterialUrl.startsWith('/')
+        ? kerbsetMaterialUrl
+        : `/${kerbsetMaterialUrl}`
+      : `${TEX_BASE}${DEFAULT_TEX}`;
+    const [visibleTexUrl, setVisibleTexUrl] = React.useState(texUrl);
+    const pendingTextureSwap = useRef<ReturnType<typeof setTimeout> | null>(
+      null,
+    );
 
-  useEffect(() => {
-    return () => {
-      if (pendingTextureSwap.current) clearTimeout(pendingTextureSwap.current);
-    };
-  }, []);
+    useEffect(() => {
+      return () => {
+        if (pendingTextureSwap.current)
+          clearTimeout(pendingTextureSwap.current);
+      };
+    }, []);
 
-  return (
-    <>
-      <Suspense fallback={null}>
-        <KerbMesh
-          texUrl={visibleTexUrl}
-          kerbWidthMm={kerbWidthMm}
-          kerbHeightMm={kerbHeightMm}
-          kerbDepthMm={kerbDepthMm}
-          uprightThickness={uprightThickness}
-          baseThickness={baseThickness}
-          onClick={onClick}
-          groupRef={internalRef}
-        />
-      </Suspense>
-      {texUrl !== visibleTexUrl && (
+    return (
+      <>
         <Suspense fallback={null}>
-          <PreloadTexture
-            url={texUrl}
-            onReady={() => {
-              if (pendingTextureSwap.current) clearTimeout(pendingTextureSwap.current);
-              pendingTextureSwap.current = setTimeout(() => {
-                setVisibleTexUrl(texUrl);
-                pendingTextureSwap.current = null;
-              }, 300);
-            }}
+          <KerbMesh
+            texUrl={visibleTexUrl}
+            kerbWidthMm={kerbWidthMm}
+            kerbHeightMm={kerbHeightMm}
+            kerbDepthMm={kerbDepthMm}
+            uprightThickness={uprightThickness}
+            baseThickness={baseThickness}
+            onClick={onClick}
+            groupRef={internalRef}
           />
         </Suspense>
-      )}
-    </>
-  );
-});
+        {texUrl !== visibleTexUrl && (
+          <Suspense fallback={null}>
+            <PreloadTexture
+              url={texUrl}
+              onReady={() => {
+                if (pendingTextureSwap.current)
+                  clearTimeout(pendingTextureSwap.current);
+                pendingTextureSwap.current = setTimeout(() => {
+                  setVisibleTexUrl(texUrl);
+                  pendingTextureSwap.current = null;
+                }, 300);
+              }}
+            />
+          </Suspense>
+        )}
+      </>
+    );
+  },
+);
 
 export default KerbsetBorder;

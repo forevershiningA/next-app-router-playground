@@ -55,6 +55,7 @@ import ConfirmModal from './ConfirmModal';
 import {
   displayLengthValueFromMm,
   formatDimensionPair,
+  formatDimensionTriplet,
   formatImperialFractionFromMm,
   getLengthUnitLabel,
   lengthValueToMm,
@@ -149,7 +150,10 @@ const guidedQuickNavSlugs = [
   'check-price',
   'save-design',
 ] as const;
-const guidedQuickNavLabels: Record<(typeof guidedQuickNavSlugs)[number], string> = {
+const guidedQuickNavLabels: Record<
+  (typeof guidedQuickNavSlugs)[number],
+  string
+> = {
   'select-material': 'Material',
   'select-size': 'Size',
   inscriptions: 'Inscription',
@@ -552,6 +556,14 @@ export default function DesignerNav() {
   const setSizeAdjustmentCompact = useMobileNavStore(
     (s) => s.setSizeAdjustmentCompact,
   );
+  const setSizeAdjustmentActive = useMobileNavStore(
+    (s) => s.setSizeAdjustmentActive,
+  );
+
+  React.useEffect(
+    () => () => setSizeAdjustmentActive(false),
+    [setSizeAdjustmentActive],
+  );
 
   // Accordion section groups — only one open at a time
   const activeGroupIndex = React.useMemo(() => {
@@ -654,8 +666,7 @@ export default function DesignerNav() {
   const [isSizeExpanded, setIsSizeExpanded] = React.useState(false);
   const [showCanvas, setShowCanvas] = React.useState(false);
   const [isLoadingPanel, setIsLoadingPanel] = React.useState(false);
-  const [isMobileQuickNavOpen, setIsMobileQuickNavOpen] =
-    React.useState(false);
+  const [isMobileQuickNavOpen, setIsMobileQuickNavOpen] = React.useState(false);
   const [lastMotifCategoryId, setLastMotifCategoryId] = React.useState<
     string | null
   >(null);
@@ -1096,272 +1107,174 @@ export default function DesignerNav() {
         {hasActiveAddition ? (
           <div className="flex min-h-[calc(44dvh-128px)] flex-1 flex-col gap-3 md:min-h-0">
             <div className="custom-scrollbar flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto pr-1">
-            {activeAddition && (
-              <div className="px-1 pt-1 text-sm font-semibold text-white day:text-gray-900">
-                {activeAdditionDisplayName}
-              </div>
-            )}
+              {activeAddition && (
+                <div className="day:text-gray-900 px-1 pt-1 text-sm font-semibold text-white">
+                  {activeAdditionDisplayName}
+                </div>
+              )}
 
-            {maxSize > 1 && (
-              <div className="space-y-3">
-                <div className="px-1 pt-1">
-                  <div className="flex items-center justify-between gap-2">
-                    <label className={additionLabelClass}>Size</label>
-                    <div className="flex items-center justify-end gap-2">
-                      <button
-                        type="button"
-                        onClick={() => {
-                          if (!selectedAdditionId || !activeAdditionOffset)
-                            return;
-                          const newVal = Math.max(1, selectedSizeVariant - 1);
-                          setAdditionOffset(selectedAdditionId, {
-                            ...activeAdditionOffset,
-                            sizeVariant: newVal,
-                          });
-                        }}
-                        className={additionControlButtonClass}
-                        aria-label="Decrease size variant"
+              {maxSize > 1 && (
+                <div className="flex items-center gap-3 px-1 pt-1">
+                  <label className={`${additionLabelClass} shrink-0`}>
+                    Size
+                  </label>
+                  <select
+                    value={selectedSizeVariant}
+                    onChange={(e) => {
+                      if (!selectedAdditionId || !activeAdditionOffset) return;
+                      setAdditionOffset(selectedAdditionId, {
+                        ...activeAdditionOffset,
+                        sizeVariant: Number(e.target.value),
+                      });
+                    }}
+                    className="day:border-gray-300 day:bg-gray-100 day:text-gray-900 min-w-0 flex-1 rounded-md border border-white/10 bg-[#121212] px-3 py-2 text-sm font-semibold text-white outline-none focus:border-[#D7B356]"
+                  >
+                    {additionSizes.map((size, index) => (
+                      <option
+                        key={`${size.width}-${size.height}-${size.depth}-${index}`}
+                        value={index + 1}
                       >
-                        <svg
-                          className="h-4 w-4"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M20 12H4"
-                          />
-                        </svg>
-                      </button>
-                      <input
-                        type="number"
-                        min={1}
-                        max={maxSize}
-                        step={1}
-                        value={selectedSizeVariant}
-                        onChange={(e) => {
-                          if (!selectedAdditionId || !activeAdditionOffset)
-                            return;
-                          const val = parseInt(e.target.value, 10);
-                          if (!Number.isNaN(val)) {
+                        {formatDimensionTriplet(
+                          size.width,
+                          size.height,
+                          size.depth,
+                          unitSystem,
+                        )}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
+
+              <div className="space-y-3">
+                {/* Rotation Slider - Only shown for applications, not for statues/vases */}
+                {!isStatueOrVase && (
+                  <div className="px-1 pt-1">
+                    <div className="flex items-center justify-between gap-2">
+                      <label className={additionLabelClass}>Rotation</label>
+                      <div className="flex items-center justify-end gap-2">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            if (!selectedAdditionId || !activeAdditionOffset)
+                              return;
+                            const newVal = Math.max(-180, additionRotation - 1);
                             setAdditionOffset(selectedAdditionId, {
                               ...activeAdditionOffset,
-                              sizeVariant: val,
+                              rotationZ: (newVal * Math.PI) / 180,
                             });
-                          }
-                        }}
-                        onBlur={(e) => {
-                          if (!selectedAdditionId || !activeAdditionOffset)
-                            return;
-                          const val = parseInt(e.target.value, 10);
-                          setAdditionOffset(selectedAdditionId, {
-                            ...activeAdditionOffset,
-                            sizeVariant:
-                              Number.isNaN(val) || val < 1
-                                ? 1
-                                : Math.min(maxSize, val),
-                          });
-                        }}
-                        className={additionNumberInputClass}
-                      />
-                      <button
-                        type="button"
-                        onClick={() => {
-                          if (!selectedAdditionId || !activeAdditionOffset)
-                            return;
-                          const newVal = Math.min(
-                            maxSize,
-                            selectedSizeVariant + 1,
-                          );
-                          setAdditionOffset(selectedAdditionId, {
-                            ...activeAdditionOffset,
-                            sizeVariant: newVal,
-                          });
-                        }}
-                        className={additionControlButtonClass}
-                        aria-label="Increase size variant"
-                      >
-                        <svg
-                          className="h-4 w-4"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
+                          }}
+                          className={additionControlButtonClass}
+                          aria-label="Decrease rotation by 1 degree"
                         >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M12 4v16m8-8H4"
-                          />
-                        </svg>
-                      </button>
-                    </div>
-                  </div>
-                  <div className="relative mt-3">
-                    <input
-                      type="range"
-                      min={1}
-                      max={maxSize}
-                      step={1}
-                      value={selectedSizeVariant}
-                      onChange={(e) => {
-                        if (!selectedAdditionId || !activeAdditionOffset)
-                          return;
-                        setAdditionOffset(selectedAdditionId, {
-                          ...activeAdditionOffset,
-                          sizeVariant: parseInt(e.target.value, 10),
-                        });
-                      }}
-                      className={additionRangeInputClass}
-                    />
-                    <div className={additionRangeBoundsClass}>
-                      <span>
-                        {additionSizes[0]
-                          ? `${additionSizes[0].width}×${additionSizes[0].height}mm`
-                          : 'Size 1'}
-                      </span>
-                      <span>
-                        {additionSizes[maxSize - 1]
-                          ? `${additionSizes[maxSize - 1].width}×${additionSizes[maxSize - 1].height}mm`
-                          : `Size ${maxSize}`}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            <div className="space-y-3">
-              {/* Rotation Slider - Only shown for applications, not for statues/vases */}
-              {!isStatueOrVase && (
-                <div className="px-1 pt-1">
-                  <div className="flex items-center justify-between gap-2">
-                    <label className={additionLabelClass}>Rotation</label>
-                    <div className="flex items-center justify-end gap-2">
-                      <button
-                        type="button"
-                        onClick={() => {
-                          if (!selectedAdditionId || !activeAdditionOffset)
-                            return;
-                          const newVal = Math.max(-180, additionRotation - 1);
-                          setAdditionOffset(selectedAdditionId, {
-                            ...activeAdditionOffset,
-                            rotationZ: (newVal * Math.PI) / 180,
-                          });
-                        }}
-                        className={additionControlButtonClass}
-                        aria-label="Decrease rotation by 1 degree"
-                      >
-                        <svg
-                          className="h-4 w-4"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
+                          <svg
+                            className="h-4 w-4"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M20 12H4"
+                            />
+                          </svg>
+                        </button>
+                        <input
+                          type="number"
+                          min={-180}
+                          max={180}
+                          step={1}
+                          value={Math.round(additionRotation)}
+                          onChange={(e) => {
+                            if (!selectedAdditionId || !activeAdditionOffset)
+                              return;
+                            setAdditionOffset(selectedAdditionId, {
+                              ...activeAdditionOffset,
+                              rotationZ:
+                                (Number(e.target.value) * Math.PI) / 180,
+                            });
+                          }}
+                          onBlur={(e) => {
+                            if (!selectedAdditionId || !activeAdditionOffset)
+                              return;
+                            const val = Number(e.target.value);
+                            if (val < -180) {
+                              setAdditionOffset(selectedAdditionId, {
+                                ...activeAdditionOffset,
+                                rotationZ: (-180 * Math.PI) / 180,
+                              });
+                            } else if (val > 180) {
+                              setAdditionOffset(selectedAdditionId, {
+                                ...activeAdditionOffset,
+                                rotationZ: (180 * Math.PI) / 180,
+                              });
+                            }
+                          }}
+                          className={additionNumberInputClass}
+                        />
+                        <button
+                          type="button"
+                          onClick={() => {
+                            if (!selectedAdditionId || !activeAdditionOffset)
+                              return;
+                            const newVal = Math.min(180, additionRotation + 1);
+                            setAdditionOffset(selectedAdditionId, {
+                              ...activeAdditionOffset,
+                              rotationZ: (newVal * Math.PI) / 180,
+                            });
+                          }}
+                          className={additionControlButtonClass}
+                          aria-label="Increase rotation by 1 degree"
                         >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M20 12H4"
-                          />
-                        </svg>
-                      </button>
+                          <svg
+                            className="h-4 w-4"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M12 4v16m8-8H4"
+                            />
+                          </svg>
+                        </button>
+                        <span className="day:text-gray-600 text-sm font-semibold text-white/70">
+                          °
+                        </span>
+                      </div>
+                    </div>
+                    <div className="relative mt-3">
                       <input
-                        type="number"
+                        type="range"
                         min={-180}
                         max={180}
                         step={1}
-                        value={Math.round(additionRotation)}
+                        value={additionRotation}
                         onChange={(e) => {
-                          if (!selectedAdditionId || !activeAdditionOffset)
-                            return;
-                          setAdditionOffset(selectedAdditionId, {
-                            ...activeAdditionOffset,
-                            rotationZ: (Number(e.target.value) * Math.PI) / 180,
-                          });
-                        }}
-                        onBlur={(e) => {
-                          if (!selectedAdditionId || !activeAdditionOffset)
-                            return;
-                          const val = Number(e.target.value);
-                          if (val < -180) {
+                          if (selectedAdditionId && activeAdditionOffset) {
                             setAdditionOffset(selectedAdditionId, {
                               ...activeAdditionOffset,
-                              rotationZ: (-180 * Math.PI) / 180,
-                            });
-                          } else if (val > 180) {
-                            setAdditionOffset(selectedAdditionId, {
-                              ...activeAdditionOffset,
-                              rotationZ: (180 * Math.PI) / 180,
+                              rotationZ:
+                                (Number(e.target.value) * Math.PI) / 180,
                             });
                           }
                         }}
-                        className={additionNumberInputClass}
+                        className={additionRangeInputClass}
                       />
-                      <button
-                        type="button"
-                        onClick={() => {
-                          if (!selectedAdditionId || !activeAdditionOffset)
-                            return;
-                          const newVal = Math.min(180, additionRotation + 1);
-                          setAdditionOffset(selectedAdditionId, {
-                            ...activeAdditionOffset,
-                            rotationZ: (newVal * Math.PI) / 180,
-                          });
-                        }}
-                        className={additionControlButtonClass}
-                        aria-label="Increase rotation by 1 degree"
-                      >
-                        <svg
-                          className="h-4 w-4"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M12 4v16m8-8H4"
-                          />
-                        </svg>
-                      </button>
-                      <span className="day:text-gray-600 text-sm font-semibold text-white/70">
-                        °
-                      </span>
+                      <div className={additionRangeBoundsClass}>
+                        <span>-180°</span>
+                        <span>180°</span>
+                      </div>
                     </div>
                   </div>
-                  <div className="relative mt-3">
-                    <input
-                      type="range"
-                      min={-180}
-                      max={180}
-                      step={1}
-                      value={additionRotation}
-                      onChange={(e) => {
-                        if (selectedAdditionId && activeAdditionOffset) {
-                          setAdditionOffset(selectedAdditionId, {
-                            ...activeAdditionOffset,
-                            rotationZ: (Number(e.target.value) * Math.PI) / 180,
-                          });
-                        }
-                      }}
-                      className={additionRangeInputClass}
-                    />
-                    <div className={additionRangeBoundsClass}>
-                      <span>-180°</span>
-                      <span>180°</span>
-                    </div>
-                  </div>
-                </div>
-              )}
+                )}
+              </div>
             </div>
-
-            </div>
-            <div className="day:border-gray-200 shrink-0 grid grid-cols-2 gap-2 border-t border-white/10 pt-3">
+            <div className="day:border-gray-200 grid shrink-0 grid-cols-2 gap-2 border-t border-white/10 pt-3">
               <button
                 type="button"
                 className="day:bg-white day:text-[#8a6a12] cursor-pointer rounded-lg border border-[#D7B356]/60 bg-[#171717] px-3 py-2 text-sm font-semibold text-[#F2D58B] transition-colors hover:bg-[#D7B356]/15"
@@ -1479,8 +1392,10 @@ export default function DesignerNav() {
       <div className="flex h-full flex-col gap-4">
         {hasActiveMotif ? (
           <div className="flex min-h-[calc(44dvh-128px)] flex-1 flex-col gap-3 md:min-h-0">
-            <div className="px-1 pt-1 text-sm font-semibold text-white day:text-gray-900">
-              {motifPriceModel?.priceModel.name ?? motifPriceModel?.name ?? 'Motif'}
+            <div className="day:text-gray-900 px-1 pt-1 text-sm font-semibold text-white">
+              {motifPriceModel?.priceModel.name ??
+                motifPriceModel?.name ??
+                'Motif'}
             </div>
             <div className="custom-scrollbar flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto pr-1">
               <div className="order-3 space-y-2 px-1 pt-1">
@@ -2543,6 +2458,7 @@ export default function DesignerNav() {
     const rangeBoundsClass =
       'mt-1 flex h-4 w-full justify-between text-xs leading-4 text-white/35 day:text-gray-400';
     const startCompactSizeAdjustment = () => {
+      setSizeAdjustmentActive(true);
       // Plaques only expose the dimension tabs and one active slider. Keeping
       // the full sheet visible preserves the Width/Height switch; compact mode
       // is useful only for the richer headstone/base sizing panels.
@@ -2558,6 +2474,7 @@ export default function DesignerNav() {
       if (typeof window !== 'undefined' && window.innerWidth < 768) {
         setSizeAdjustmentCompact(false);
       }
+      setSizeAdjustmentActive(false);
     };
     const compactSizeRangeProps = {
       onFocus: startCompactSizeAdjustment,
@@ -3665,7 +3582,9 @@ export default function DesignerNav() {
               aria-label="Design sections"
             >
               {guidedQuickNavSlugs.map((slug) => {
-                const item = menuItems.find((menuItem) => menuItem.slug === slug);
+                const item = menuItems.find(
+                  (menuItem) => menuItem.slug === slug,
+                );
                 if (!item) return null;
 
                 const Icon = item.icon;
@@ -3733,11 +3652,14 @@ export default function DesignerNav() {
                       aria-expanded={isMobileQuickNavOpen}
                       className={`inline-flex h-7 w-7 items-center justify-center rounded-md border transition-colors hover:border-[#D7B356]/45 hover:bg-[#24170f] ${
                         isMobileQuickNavOpen
-                          ? 'border-[#D7B356] bg-[#D7B356] text-slate-950 day:bg-[#D7B356] day:text-slate-950'
-                          : 'border-[#3a2a1c] bg-[#1b120c]/80 text-white day:border-[#ddd2c2] day:bg-[#fbf9f5] day:text-[#302719] day:hover:bg-[#eee6d9]'
+                          ? 'day:bg-[#D7B356] day:text-slate-950 border-[#D7B356] bg-[#D7B356] text-slate-950'
+                          : 'day:border-[#ddd2c2] day:bg-[#fbf9f5] day:text-[#302719] day:hover:bg-[#eee6d9] border-[#3a2a1c] bg-[#1b120c]/80 text-white'
                       }`}
                     >
-                      <Squares2X2Icon className="h-3.5 w-3.5" aria-hidden="true" />
+                      <Squares2X2Icon
+                        className="h-3.5 w-3.5"
+                        aria-hidden="true"
+                      />
                     </button>
                   </div>
                   <div className="min-w-0 px-1">

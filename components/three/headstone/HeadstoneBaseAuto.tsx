@@ -22,7 +22,10 @@ import { data } from '#/app/_internal/_data';
 import { getThreeTextFontUrl } from '#/lib/font-utils';
 
 const FONT_MAP: Record<string, string> = data.fonts.reduce(
-  (map, font) => { map[font.name] = getThreeTextFontUrl(font); return map; },
+  (map, font) => {
+    map[font.name] = getThreeTextFontUrl(font);
+    return map;
+  },
   {} as Record<string, string>,
 );
 import {
@@ -31,7 +34,6 @@ import {
   BASE_WIDTH_MULTIPLIER,
   BASE_DEPTH_MULTIPLIER,
   BASE_MIN_DEPTH,
-  LERP_FACTOR,
   EPSILON,
 } from '#/lib/headstone-constants';
 import {
@@ -135,7 +137,7 @@ function BaseMesh({
     const random2 = (x: number, y: number) => {
       return {
         x: fract(Math.sin(x * 12.9898 + y * 78.233) * 43758.5453),
-        y: fract(Math.sin(x * 26.345 + y * 42.123) * 31421.3551)
+        y: fract(Math.sin(x * 26.345 + y * 42.123) * 31421.3551),
       };
     };
 
@@ -192,7 +194,7 @@ function BaseMesh({
         data[idx + 3] = 255;
       }
     }
-    
+
     ctx.putImageData(imageData, 0, 0);
     return canvas;
   }, [finish]);
@@ -213,8 +215,14 @@ function BaseMesh({
   // BoxGeometry uses different physical dimensions for its cap and side UVs.
   // Keep their repeat transforms independent so narrow sides do not inherit
   // the base width's repeat count.
-  const sideMaterialTexture = useMemo(() => materialTexture.clone(), [materialTexture]);
-  const topMaterialTexture = useMemo(() => materialTexture.clone(), [materialTexture]);
+  const sideMaterialTexture = useMemo(
+    () => materialTexture.clone(),
+    [materialTexture],
+  );
+  const topMaterialTexture = useMemo(
+    () => materialTexture.clone(),
+    [materialTexture],
+  );
   const faceDetailTexture = useMemo(() => {
     const texture = materialTexture.clone();
     texture.colorSpace = THREE.NoColorSpace;
@@ -240,7 +248,14 @@ function BaseMesh({
       sideDetailTexture.dispose();
       topDetailTexture.dispose();
     };
-  }, [materialTexture, sideMaterialTexture, topMaterialTexture, faceDetailTexture, sideDetailTexture, topDetailTexture]);
+  }, [
+    materialTexture,
+    sideMaterialTexture,
+    topMaterialTexture,
+    faceDetailTexture,
+    sideDetailTexture,
+    topDetailTexture,
+  ]);
 
   // 2. Manage the base texture's independent repeat settings.
   useLayoutEffect(() => {
@@ -267,7 +282,17 @@ function BaseMesh({
       sideDetailTexture.needsUpdate = true;
       topDetailTexture.needsUpdate = true;
     }
-  }, [materialTexture, sideMaterialTexture, topMaterialTexture, faceDetailTexture, sideDetailTexture, topDetailTexture, dimensions.width, dimensions.height, dimensions.depth]);
+  }, [
+    materialTexture,
+    sideMaterialTexture,
+    topMaterialTexture,
+    faceDetailTexture,
+    sideDetailTexture,
+    topDetailTexture,
+    dimensions.width,
+    dimensions.height,
+    dimensions.depth,
+  ]);
 
   // 3. Create Materials
   const materials = useMemo(() => {
@@ -306,7 +331,7 @@ function BaseMesh({
       [texShort, texLong].forEach((tex) => {
         tex.wrapS = THREE.RepeatWrapping;
         tex.wrapT = THREE.RepeatWrapping;
-        tex.colorSpace = THREE.NoColorSpace; 
+        tex.colorSpace = THREE.NoColorSpace;
         tex.needsUpdate = true;
       });
 
@@ -314,7 +339,7 @@ function BaseMesh({
       // polished headstone. The normal map supplies the rough-cut detail;
       // tinting it #444444 made the identical swatch appear almost black.
       const rockColor = 0xa6a6a6;
-      
+
       const matShort = createPolishedGraniteMaterial({
         texture: materialTexture,
         color: rockColor,
@@ -382,7 +407,18 @@ function BaseMesh({
       facePolishedMaterial,
       facePolishedMaterial,
     ];
-  }, [finish, isStainlessSteel, materialTexture, sideMaterialTexture, topMaterialTexture, faceDetailTexture, sideDetailTexture, topDetailTexture, rockNormalCanvas, stainlessFinish]);
+  }, [
+    finish,
+    isStainlessSteel,
+    materialTexture,
+    sideMaterialTexture,
+    topMaterialTexture,
+    faceDetailTexture,
+    sideDetailTexture,
+    topDetailTexture,
+    rockNormalCanvas,
+    stainlessFinish,
+  ]);
 
   // 4. Update Material Repeats - matching slant headstone quality
   useLayoutEffect(() => {
@@ -390,7 +426,7 @@ function BaseMesh({
       // Increased density from 0.5 to 20.0 to match slant headstone
       // Creates much smaller, sharper chips matching the 24x24 Voronoi grid
       const density = 20.0;
-      
+
       const matRight = materials[0] as THREE.MeshStandardMaterial;
       const matFront = materials[4] as THREE.MeshStandardMaterial;
 
@@ -398,7 +434,7 @@ function BaseMesh({
         // Right/Left sides (shorter dimension = depth)
         matRight.normalMap.repeat.set(
           Math.max(1, dimensions.depth * density),
-          Math.max(1, dimensions.height * density)
+          Math.max(1, dimensions.height * density),
         );
       }
 
@@ -406,7 +442,7 @@ function BaseMesh({
         // Front/Back sides (longer dimension = width)
         matFront.normalMap.repeat.set(
           Math.max(1, dimensions.width * density),
-          Math.max(1, dimensions.height * density)
+          Math.max(1, dimensions.height * density),
         );
       }
     }
@@ -464,7 +500,16 @@ function BaseMesh({
 }
 
 const HeadstoneBaseAuto = forwardRef<THREE.Mesh, HeadstoneBaseAutoProps>(
-  ({ headstoneObject: _headstoneObject, wrapper: _wrapper, onClick, height = 0.1, name }, ref) => {
+  (
+    {
+      headstoneObject: _headstoneObject,
+      wrapper: _wrapper,
+      onClick,
+      height = 0.1,
+      name,
+    },
+    ref,
+  ) => {
     const baseRef = useRef<THREE.Mesh>(null);
     useImperativeHandle(ref, () => baseRef.current!);
 
@@ -475,7 +520,6 @@ const HeadstoneBaseAuto = forwardRef<THREE.Mesh, HeadstoneBaseAutoProps>(
     const setBaseSwapping = useHeadstoneStore((s) => s.setBaseSwapping);
     const hasStatue = useHeadstoneStore((s) => s.hasStatue);
     const widthMm = useHeadstoneStore((s) => s.widthMm);
-    const heightMm = useHeadstoneStore((s) => s.heightMm);
     const baseWidthMm = useHeadstoneStore((s) => s.baseWidthMm);
     const baseHeightMm = useHeadstoneStore((s) => s.baseHeightMm);
     const baseThickness = useHeadstoneStore((s) => s.baseThickness);
@@ -491,16 +535,18 @@ const HeadstoneBaseAuto = forwardRef<THREE.Mesh, HeadstoneBaseAutoProps>(
     const selectedImages = useHeadstoneStore((s) => s.selectedImages);
     const selectedAdditions = useHeadstoneStore((s) => s.selectedAdditions);
     const additionOffsets = useHeadstoneStore((s) => s.additionOffsets);
-    
+
     const baseHeightMeters = baseHeightMm / 1000;
-    const selectedInscriptionId = useHeadstoneStore((s) => s.selectedInscriptionId);
+    const selectedInscriptionId = useHeadstoneStore(
+      (s) => s.selectedInscriptionId,
+    );
     const setSelectedInscriptionId = useHeadstoneStore(
-      (s) => s.setSelectedInscriptionId
+      (s) => s.setSelectedInscriptionId,
     );
     const setSelectedMotifId = useHeadstoneStore((s) => s.setSelectedMotifId);
     const setSelected = useHeadstoneStore((s) => s.setSelected);
     const setSelectedAdditionId = useHeadstoneStore(
-      (s) => s.setSelectedAdditionId
+      (s) => s.setSelectedAdditionId,
     );
     const setActivePanel = useHeadstoneStore((s) => s.setActivePanel);
     const setBaseMeshRef = useHeadstoneStore((s) => s.setBaseMeshRef);
@@ -546,7 +592,8 @@ const HeadstoneBaseAuto = forwardRef<THREE.Mesh, HeadstoneBaseAutoProps>(
       return `/${baseMaterialUrl.replace(/^\/+/, '')}`;
     }, [baseMaterialUrl]);
 
-    const [visibleBaseTex, setVisibleBaseTex] = React.useState(requestedBaseTex);
+    const [visibleBaseTex, setVisibleBaseTex] =
+      React.useState(requestedBaseTex);
 
     const baseSwapping = requestedBaseTex !== visibleBaseTex;
 
@@ -556,35 +603,32 @@ const HeadstoneBaseAuto = forwardRef<THREE.Mesh, HeadstoneBaseAutoProps>(
 
     const baseTexture = useTexture(visibleBaseTex);
     const isStainlessSteelBase = requestedBaseTex.includes('ss-swatch');
-    const stainlessBaseFinish: 'brushed' | 'polished' = requestedBaseTex.includes('high-polished-ss-swatch')
-      ? 'polished'
-      : 'brushed';
+    const stainlessBaseFinish: 'brushed' | 'polished' =
+      requestedBaseTex.includes('high-polished-ss-swatch')
+        ? 'polished'
+        : 'brushed';
 
     const hasTx = useRef(false);
     const targetPos = useRef(new THREE.Vector3());
     const targetScale = useRef(new THREE.Vector3(1, height, 1));
-    const [baseDimensions, setBaseDimensions] = React.useState({
-      width: 1,
-      height: height,
-      depth: 1,
-    });
+    const statuePresent = hasStatue();
+    const needsWideBase = statuePresent || baseOption === 'flower-pots';
+    const baseDimensions = {
+      width: (baseWidthMm / 1000) * (needsWideBase ? 1.3 : 1),
+      height: baseHeightMeters,
+      depth: (baseThickness / 1000) * (needsWideBase ? 1.5 : 1),
+    };
 
-    useFrame((state) => {
+    useFrame((state, delta) => {
       const b = baseRef.current;
       if (!b) return;
 
-      const hsH = heightMm / 1000;
       // CRITICAL: Base back should align with UPRIGHT thickness reference
       // Both upright and slant headstones align their backs to -uprightThickness/2
       // So base should also align to the same position
       const alignmentDepth = uprightThickness / 1000; // Use upright thickness as alignment reference
-      const baseW = baseWidthMm / 1000;
-      const baseD = baseThickness / 1000; // Convert mm to meters
-
-      const statuePresent = hasStatue();
-      const needsWideBase = statuePresent || baseOption === 'flower-pots';
-      const baseWTotal = needsWideBase ? baseW * 1.3 : baseW; // widen by 30%
-      const baseDTotal = needsWideBase ? baseD * 1.5 : baseD; // 75% of previous doubling
+      const baseWTotal = baseDimensions.width;
+      const baseDTotal = baseDimensions.depth;
 
       // CRITICAL: Align base back edge with headstone back edge
       // Both upright and slant headstones have their backs at: -(uprightThickness / 2 / 1000)
@@ -592,24 +636,8 @@ const HeadstoneBaseAuto = forwardRef<THREE.Mesh, HeadstoneBaseAutoProps>(
       // Therefore: baseZCenter = -(alignmentDepth / 2) + baseD / 2
       const baseZCenter = -(alignmentDepth / 2) + baseDTotal / 2;
 
-      targetPos.current.set(
-        0,
-        -baseHeightMeters * 0.5 + EPSILON,
-        baseZCenter
-      );
+      targetPos.current.set(0, -baseHeightMeters * 0.5 + EPSILON, baseZCenter);
       targetScale.current.set(baseWTotal, baseHeightMeters, baseDTotal);
-
-      if (
-        baseDimensions.width !== baseWTotal ||
-        baseDimensions.height !== baseHeightMeters ||
-        baseDimensions.depth !== baseDTotal
-      ) {
-        setBaseDimensions({
-          width: baseWTotal,
-          height: baseHeightMeters,
-          depth: baseDTotal,
-        });
-      }
 
       if (!hasTx.current) {
         b.position.copy(targetPos.current);
@@ -629,8 +657,9 @@ const HeadstoneBaseAuto = forwardRef<THREE.Mesh, HeadstoneBaseAutoProps>(
           b.scale.distanceToSquared(targetScale.current) > 1e-10;
 
         if (stillMoving) {
-          b.position.lerp(targetPos.current, LERP_FACTOR);
-          b.scale.lerp(targetScale.current, LERP_FACTOR);
+          const alpha = 1 - Math.exp(-14 * delta);
+          b.position.lerp(targetPos.current, alpha);
+          b.scale.lerp(targetScale.current, alpha);
           state.gl.shadowMap.needsUpdate = true;
           state.invalidate();
         }
@@ -672,22 +701,36 @@ const HeadstoneBaseAuto = forwardRef<THREE.Mesh, HeadstoneBaseAutoProps>(
                     : '#151515';
               const x = side * baseDimensions.width * 0.36;
               const z =
-                -(uprightThickness / 1000) / 2 +
-                baseDimensions.depth * 0.62;
+                -(uprightThickness / 1000) / 2 + baseDimensions.depth * 0.62;
               return (
                 <group key={side} position={[x, 0.011, z]}>
                   <mesh castShadow receiveShadow>
                     <cylinderGeometry args={[0.068, 0.068, 0.014, 32]} />
-                    <meshStandardMaterial color={lidColor} metalness={0.8} roughness={0.25} />
+                    <meshStandardMaterial
+                      color={lidColor}
+                      metalness={0.8}
+                      roughness={0.25}
+                    />
                   </mesh>
                   <mesh position={[0, 0.008, 0]}>
                     <cylinderGeometry args={[0.053, 0.053, 0.003, 32]} />
-                    <meshStandardMaterial color={lidColor} metalness={0.75} roughness={0.28} />
+                    <meshStandardMaterial
+                      color={lidColor}
+                      metalness={0.75}
+                      roughness={0.28}
+                    />
                   </mesh>
                   {Array.from({ length: 8 }, (_, index) => {
                     const angle = (index / 8) * Math.PI * 2;
                     return (
-                      <mesh key={index} position={[Math.cos(angle) * 0.032, 0.011, Math.sin(angle) * 0.032]}>
+                      <mesh
+                        key={index}
+                        position={[
+                          Math.cos(angle) * 0.032,
+                          0.011,
+                          Math.sin(angle) * 0.032,
+                        ]}
+                      >
                         <cylinderGeometry args={[0.009, 0.009, 0.004, 12]} />
                         <meshStandardMaterial color="#050505" roughness={0.8} />
                       </mesh>
@@ -721,7 +764,11 @@ const HeadstoneBaseAuto = forwardRef<THREE.Mesh, HeadstoneBaseAutoProps>(
                     setSelectedInscriptionId(line.id);
                     setActivePanel('inscription');
                     // Open inscriptions fullscreen panel
-                    window.dispatchEvent(new CustomEvent('openFullscreenPanel', { detail: { panel: 'inscriptions' } }));
+                    window.dispatchEvent(
+                      new CustomEvent('openFullscreenPanel', {
+                        detail: { panel: 'inscriptions' },
+                      }),
+                    );
                   }}
                   color={line.color}
                   lift={0.002}
@@ -785,7 +832,10 @@ const HeadstoneBaseAuto = forwardRef<THREE.Mesh, HeadstoneBaseAutoProps>(
 
         {/* Render additions that belong to the base */}
         {selectedAdditions
-          .filter((id) => (additionOffsets[id]?.targetSurface ?? 'headstone') === 'base')
+          .filter(
+            (id) =>
+              (additionOffsets[id]?.targetSurface ?? 'headstone') === 'base',
+          )
           .map((additionId, i) => (
             <Suspense key={`${additionId}-${i}`} fallback={null}>
               <AdditionModel

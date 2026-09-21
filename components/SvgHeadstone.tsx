@@ -2488,7 +2488,11 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(
     const surfaceScaleRef = useRef<THREE.Group>(null!);
     const visualScaleTargetRef = useRef(new THREE.Vector3());
     const wrapperPositionTargetRef = useRef(new THREE.Vector3());
-    const previousRawDepthRef = useRef<number | null>(null);
+    const previousRawDimensionsRef = useRef<{
+      width: number;
+      height: number;
+      depth: number;
+    } | null>(null);
     const visualScaleInitializedRef = useRef(false);
 
     // Force-apply quaternion to ensure it sticks (R3F prop diffing issue workaround)
@@ -2504,7 +2508,6 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(
     useLayoutEffect(() => {
       visualScaleTargetRef.current.set(...meshScale);
       wrapperPositionTargetRef.current.set(...childWrapperPos);
-      const rawDepth = headstoneStyle === 'slant' ? slantThickness / 10 : depth;
       if (!visualScaleInitializedRef.current) {
         stoneScaleRef.current?.scale.copy(visualScaleTargetRef.current);
         surfaceScaleRef.current?.scale.copy(visualScaleTargetRef.current);
@@ -2512,17 +2515,35 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(
           wrapperPositionTargetRef.current,
         );
         visualScaleInitializedRef.current = true;
-      } else if (previousRawDepthRef.current !== null && rawDepth > EPS) {
-        // The replacement geometry already has the new raw depth. Compensate
-        // its Z scale with the old/new ratio before easing to the target so a
-        // Thickness slider change keeps the visible depth continuous.
-        stoneScaleRef.current?.scale.setZ(
-          stoneScaleRef.current.scale.z *
-            (previousRawDepthRef.current / rawDepth),
+      } else if (previousRawDimensionsRef.current && dims) {
+        // React has already attached geometry built for the new dimensions.
+        // Counter-scale it by the old/new raw geometry size so the visible
+        // model stays continuous, then ease to the new physical target.
+        const previous = previousRawDimensionsRef.current;
+        const nextRawWidth =
+          dims.worldW / Math.max(EPS, Math.abs(meshScale[0]));
+        const nextRawHeight =
+          dims.worldH / Math.max(EPS, Math.abs(meshScale[1]));
+        const nextRawDepth =
+          dims.worldDepth / Math.max(EPS, Math.abs(meshScale[2]));
+        const ratioX = previous.width / Math.max(EPS, nextRawWidth);
+        const ratioY = previous.height / Math.max(EPS, nextRawHeight);
+        const ratioZ = previous.depth / Math.max(EPS, nextRawDepth);
+        stoneScaleRef.current?.scale.multiply(
+          new THREE.Vector3(ratioX, ratioY, ratioZ),
+        );
+        surfaceScaleRef.current?.scale.multiply(
+          new THREE.Vector3(ratioX, ratioY, 1),
         );
       }
-      previousRawDepthRef.current = rawDepth;
-    }, [meshScale, childWrapperPos, depth, headstoneStyle, slantThickness]);
+      if (dims) {
+        previousRawDimensionsRef.current = {
+          width: dims.worldW / Math.max(EPS, Math.abs(meshScale[0])),
+          height: dims.worldH / Math.max(EPS, Math.abs(meshScale[1])),
+          depth: dims.worldDepth / Math.max(EPS, Math.abs(meshScale[2])),
+        };
+      }
+    }, [meshScale, childWrapperPos, dims]);
 
     useFrame((state, delta) => {
       const stoneScale = stoneScaleRef.current;

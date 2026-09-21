@@ -52,8 +52,7 @@ export default function AutoFit({
   const pathname = usePathname();
   const designerStepSlug = getDesignerStepSlug(pathname);
   const isPlaque = productType === 'plaque' || productType === 'bronze_plaque';
-  const isMobileDesignerStep =
-    designerStepSlug !== null && size.width < 768;
+  const isMobileDesignerStep = designerStepSlug !== null && size.width < 768;
   const isMobileUprightOrBaseSizeSelection =
     isMobileDesignerStep &&
     !isPlaque &&
@@ -62,6 +61,9 @@ export default function AutoFit({
     isMobileDesignerStep && isPlaque && editingObject === 'headstone';
   const isSizeAdjustmentCompact = useMobileNavStore(
     (s) => s.isSizeAdjustmentCompact,
+  );
+  const isSizeAdjustmentActive = useMobileNavStore(
+    (s) => s.isSizeAdjustmentActive,
   );
   const isBottomSheetCollapsed = useMobileNavStore(
     (s) => s.isBottomSheetCollapsed,
@@ -121,13 +123,19 @@ export default function AutoFit({
     // point slightly down so the memorial is composed in the remaining area,
     // and leave extra room around it so the base stays above the sheet.
     if (isMobileDesignerStep) {
-      toTgt.y -= sphere.radius * (
-        isMobileUprightOrBaseSizeSelection
-          ? (isMobileSheetCompact ? 0.42 : 0.74)
+      toTgt.y -=
+        sphere.radius *
+        (isMobileUprightOrBaseSizeSelection
+          ? isMobileSheetCompact
+            ? 0.42
+            : 0.74
           : isMobilePlaqueSizeSelection
-            ? (isMobileSheetCompact ? 0.2 : 0.44)
-          : (isMobileSheetCompact ? 0.26 : 0.52)
-      );
+            ? isMobileSheetCompact
+              ? 0.2
+              : 0.44
+            : isMobileSheetCompact
+              ? 0.26
+              : 0.52);
     }
 
     const vFov = THREE.MathUtils.degToRad(camera.fov);
@@ -140,13 +148,19 @@ export default function AutoFit({
     // otherwise empty side space without changing ledger or base framing.
     const sheetMargin = isMobileDesignerStep
       ? isMobileUprightOrBaseSizeSelection
-        ? (isMobileSheetCompact ? 0.88 : 0.82)
+        ? isMobileSheetCompact
+          ? 0.88
+          : 0.82
         : isMobilePlaqueSizeSelection
-          // A plaque is wide and shallow. Its size must not be framed using
-          // the tight upright-headstone margin, otherwise a width change can
-          // consume the whole viewport and hide the grass behind it.
-          ? (isMobileSheetCompact ? 1.04 : 1.08)
-        : (isMobileSheetCompact ? 1.2 : 1.85)
+          ? // A plaque is wide and shallow. Its size must not be framed using
+            // the tight upright-headstone margin, otherwise a width change can
+            // consume the whole viewport and hide the grass behind it.
+            isMobileSheetCompact
+            ? 1.04
+            : 1.08
+          : isMobileSheetCompact
+            ? 1.2
+            : 1.85
       : 1;
     const dist = Math.max(dX, dY) * Math.max(1, margin) * sheetMargin + pad;
 
@@ -259,6 +273,10 @@ export default function AutoFit({
 
   /** Compute a deterministic pose given current camera view direction. */
   React.useLayoutEffect(() => {
+    // Keep the camera stable while a dimension slider is being dragged. The
+    // model supplies the live visual feedback; one final fit runs on release.
+    if (isSizeAdjustmentActive) return;
+
     // Clear any pending retry
     if (retryTimer.current) {
       clearTimeout(retryTimer.current);
@@ -304,6 +322,7 @@ export default function AutoFit({
     slantThickness,
     headstoneStyle,
     showBase,
+    isSizeAdjustmentActive,
   ]);
 
   return null;
