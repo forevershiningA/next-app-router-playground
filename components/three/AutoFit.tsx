@@ -43,6 +43,9 @@ export default function AutoFit({
   const baseWidthMm = useHeadstoneStore((s: any) => s.baseWidthMm);
   const baseHeightMm = useHeadstoneStore((s: any) => s.baseHeightMm);
   const baseThickness = useHeadstoneStore((s: any) => s.baseThickness);
+  const uprightThickness = useHeadstoneStore((s: any) => s.uprightThickness);
+  const slantThickness = useHeadstoneStore((s: any) => s.slantThickness);
+  const headstoneStyle = useHeadstoneStore((s: any) => s.headstoneStyle);
   const showBase = useHeadstoneStore((s: any) => s.showBase);
   const editingObject = useHeadstoneStore((s: any) => s.editingObject);
   const productType = useHeadstoneStore((s: any) => s.catalog?.product.type);
@@ -161,29 +164,79 @@ export default function AutoFit({
     }
 
     const toPos = toTgt.clone().addScaledVector(dir, dist);
-
-    camera.position.copy(toPos);
-    camera.lookAt(toTgt);
-
-    camera.rotation.z = 0;
-    camera.up.set(0, 1, 0);
-
-    if (controls?.target) {
-      controls.target.copy(toTgt);
-      // Keep the user within a useful inspection range relative to the
-      // automatically fitted view: 40% closer or 100% farther away.
-      controls.minDistance = dist * 0.6;
-      // Permit only half of the previous zoom-out headroom (2× → 1.5×).
-      controls.maxDistance = dist * 1.5;
-      controls.update?.();
-    }
-
     const near = Math.max(0.01, dist * 0.01);
     const far = Math.max(dist * 10, camera.far);
-    camera.near = near;
-    camera.far = far;
-    camera.updateProjectionMatrix();
-    invalidate();
+    const applyPose = (
+      position: THREE.Vector3,
+      target: THREE.Vector3,
+      nextNear: number,
+      nextFar: number,
+    ) => {
+      camera.position.copy(position);
+      camera.lookAt(target);
+      camera.rotation.z = 0;
+      camera.up.set(0, 1, 0);
+      camera.near = nextNear;
+      camera.far = nextFar;
+      camera.updateProjectionMatrix();
+      if (controls?.target) {
+        controls.target.copy(target);
+        controls.update?.();
+      }
+      invalidate();
+    };
+
+    const setControlDistanceLimits = () => {
+      if (!controls?.target) return;
+      controls.minDistance = dist * 0.6;
+      controls.maxDistance = dist * 1.5;
+    };
+
+    if (animId.current !== null) {
+      cancelAnimationFrame(animId.current);
+      animId.current = null;
+    }
+
+    // The initial pose should be ready immediately. Subsequent size changes
+    // retarget the in-flight animation, preventing a Width slider from making
+    // the camera jump between independently fitted distances.
+    if (!didFirst.current || duration <= 0) {
+      applyPose(toPos, toTgt, near, far);
+      setControlDistanceLimits();
+    } else {
+      const fromPos = camera.position.clone();
+      const fromTarget = controls?.target.clone() ?? toTgt.clone();
+      const fromNear = camera.near;
+      const fromFar = camera.far;
+      const animationTarget = new THREE.Vector3();
+      const animationPosition = new THREE.Vector3();
+      const startTime = performance.now();
+      const durationMs = duration * 1000;
+
+      const step = (now: number) => {
+        const progress = Math.min(1, (now - startTime) / durationMs);
+        const eased = easeInOutCubic(progress);
+        animationPosition.lerpVectors(fromPos, toPos, eased);
+        animationTarget.lerpVectors(fromTarget, toTgt, eased);
+        applyPose(
+          animationPosition,
+          animationTarget,
+          THREE.MathUtils.lerp(fromNear, near, eased),
+          THREE.MathUtils.lerp(fromFar, far, eased),
+        );
+
+        if (progress < 1) {
+          animId.current = requestAnimationFrame(step);
+          return;
+        }
+
+        animId.current = null;
+        setControlDistanceLimits();
+      };
+
+      animId.current = requestAnimationFrame(step);
+    }
+
     didFirst.current = true;
     return true;
   }, [
@@ -194,6 +247,7 @@ export default function AutoFit({
     size.height,
     margin,
     pad,
+    duration,
     controls,
     showBase,
     invalidate,
@@ -229,6 +283,10 @@ export default function AutoFit({
     }
 
     return () => {
+      if (animId.current !== null) {
+        cancelAnimationFrame(animId.current);
+        animId.current = null;
+      }
       if (retryTimer.current) {
         clearTimeout(retryTimer.current);
         retryTimer.current = null;
@@ -242,6 +300,9 @@ export default function AutoFit({
     baseWidthMm,
     baseHeightMm,
     baseThickness,
+    uprightThickness,
+    slantThickness,
+    headstoneStyle,
     showBase,
   ]);
 

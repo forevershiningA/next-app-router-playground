@@ -17,15 +17,15 @@ import {
   fetchAndParseInscriptionDetails,
 } from '#/lib/xml-parser';
 import { data } from '#/app/_internal/_data';
-import { EMBLEM_SIZES, DEFAULT_EMBLEM_SIZE_VARIANT } from '#/app/_internal/_emblems-loader';
+import {
+  EMBLEM_SIZES,
+  DEFAULT_EMBLEM_SIZE_VARIANT,
+} from '#/app/_internal/_emblems-loader';
 import {
   fetchAndParseMotifPricing,
   calculateMotifPrice,
 } from '#/lib/motif-pricing';
-import {
-  fetchImagePricing,
-  calculateImagePrice,
-} from '#/lib/image-pricing';
+import { fetchImagePricing, calculateImagePrice } from '#/lib/image-pricing';
 import { getImageSizeOption } from '#/lib/image-size-config';
 import {
   DEFAULT_TEX,
@@ -71,7 +71,9 @@ const isDesktopViewport = () => {
 const stainlessSteelHeadstoneProductIds = new Set(['1', '23']);
 const LASER_ETCHED_BLACK_GRANITE_TEXTURE =
   '/textures/forever/l/Glory-Black-2.webp';
-const isStainlessSteelHeadstone = (state: Pick<HeadstoneState, 'productId' | 'catalog'>) =>
+const isStainlessSteelHeadstone = (
+  state: Pick<HeadstoneState, 'productId' | 'catalog'>,
+) =>
   stainlessSteelHeadstoneProductIds.has(state.productId ?? '') ||
   (state.catalog?.product?.type === 'headstone' &&
     state.catalog.product.name.toLowerCase().includes('stainless steel'));
@@ -101,13 +103,20 @@ const clampRoundedFinite = (
 const resolveSurfaceDimensions = (
   state: Pick<
     HeadstoneState,
-    'widthMm' | 'heightMm' | 'baseWidthMm' | 'baseHeightMm' | 'ledgerWidthMm' | 'ledgerDepthMm'
+    | 'widthMm'
+    | 'heightMm'
+    | 'baseWidthMm'
+    | 'baseHeightMm'
+    | 'ledgerWidthMm'
+    | 'ledgerDepthMm'
   >,
   surface: 'headstone' | 'base' | 'ledger',
 ) => {
   if (surface === 'base') {
-    const widthMm = state.baseWidthMm || state.widthMm || MIN_SURFACE_DIMENSION_MM;
-    const heightMm = state.baseHeightMm || state.heightMm || MIN_SURFACE_DIMENSION_MM;
+    const widthMm =
+      state.baseWidthMm || state.widthMm || MIN_SURFACE_DIMENSION_MM;
+    const heightMm =
+      state.baseHeightMm || state.heightMm || MIN_SURFACE_DIMENSION_MM;
     return { widthMm, heightMm };
   }
   if (surface === 'ledger') {
@@ -161,13 +170,14 @@ const withOffsetSurfaceDimensions = <T extends OffsetWithDimensions>(
   force = false,
 ): T & { baseWidthMm: number; baseHeightMm: number } => {
   const dims = resolveSurfaceDimensions(state, surface);
-  const baseWidthMm = force || !offset.baseWidthMm ? dims.widthMm : offset.baseWidthMm;
-  const baseHeightMm = force || !offset.baseHeightMm ? dims.heightMm : offset.baseHeightMm;
-  return {
-    ...offset,
-    baseWidthMm,
-    baseHeightMm,
-  } as T & { baseWidthMm: number; baseHeightMm: number };
+  const baseWidthMm =
+    force || !offset.baseWidthMm ? dims.widthMm : offset.baseWidthMm;
+  const baseHeightMm =
+    force || !offset.baseHeightMm ? dims.heightMm : offset.baseHeightMm;
+  return { ...offset, baseWidthMm, baseHeightMm } as T & {
+    baseWidthMm: number;
+    baseHeightMm: number;
+  };
 };
 
 const clampEditingObject = (
@@ -200,9 +210,21 @@ const normalizeThreeColorValue = (color: string) => {
 const getNextDesignLayer = (state: HeadstoneState) => {
   const inscriptionLayers = state.inscriptions.map((line) => line.layer ?? 0);
   const imageLayers = state.selectedImages.map((image) => image.layer ?? 0);
-  const motifLayers = Object.values(state.motifOffsets).map((offset) => offset.layer ?? 0);
-  const emblemLayers = Object.values(state.emblemOffsets).map((offset) => offset.layer ?? 0);
-  return Math.max(0, ...inscriptionLayers, ...imageLayers, ...motifLayers, ...emblemLayers) + 1;
+  const motifLayers = Object.values(state.motifOffsets).map(
+    (offset) => offset.layer ?? 0,
+  );
+  const emblemLayers = Object.values(state.emblemOffsets).map(
+    (offset) => offset.layer ?? 0,
+  );
+  return (
+    Math.max(
+      0,
+      ...inscriptionLayers,
+      ...imageLayers,
+      ...motifLayers,
+      ...emblemLayers,
+    ) + 1
+  );
 };
 
 export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
@@ -261,7 +283,8 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
   selectedAdditions: [],
   addAddition: (id) => {
     const additionData = data.additions.find((a) => a.id === id);
-    const additionType: AdditionKind = (additionData?.type as AdditionKind) ?? 'application';
+    const additionType: AdditionKind =
+      (additionData?.type as AdditionKind) ?? 'application';
     // Create a unique instance ID with timestamp
     const instanceId = `${id}_${Date.now()}`;
     set((s) => {
@@ -272,7 +295,8 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
       const wantsLedger = editTarget === 'ledger' || s.selected === 'ledger';
       const baseAvailable = s.showBase;
       const ledgerAvailable = s.showLedger;
-      const prefersBaseSurface = additionType === 'statue' || additionType === 'vase';
+      const prefersBaseSurface =
+        additionType === 'statue' || additionType === 'vase';
 
       const fallbackSurface: 'headstone' | 'base' | 'ledger' =
         prefersBaseSurface && baseAvailable
@@ -316,10 +340,7 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
         selectedEmblemId: null,
         selected: null,
         activePanel: 'addition',
-        additionOffsets: {
-          ...s.additionOffsets,
-          [instanceId]: defaultOffset,
-        },
+        additionOffsets: { ...s.additionOffsets, [instanceId]: defaultOffset },
       };
     });
     setTimeout(() => get().calculateAdditionCost(), 0);
@@ -331,12 +352,13 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
       delete newRefs[id];
       const newOffsets = { ...s.additionOffsets };
       delete newOffsets[id];
-      
+
       return {
         selectedAdditions: newAdditions,
         additionRefs: newRefs,
         additionOffsets: newOffsets,
-        selectedAdditionId: s.selectedAdditionId === id ? null : s.selectedAdditionId,
+        selectedAdditionId:
+          s.selectedAdditionId === id ? null : s.selectedAdditionId,
       };
     });
     setTimeout(() => get().calculateAdditionCost(), 0);
@@ -345,7 +367,9 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
     const { selectedAdditions, additionOffsets } = get();
     // Check if any selected addition is a statue or vase
     return selectedAdditions.some((instanceId) => {
-      if ((additionOffsets[instanceId]?.targetSurface ?? 'headstone') !== 'base') {
+      if (
+        (additionOffsets[instanceId]?.targetSurface ?? 'headstone') !== 'base'
+      ) {
         return false;
       }
       const baseId = normalizeAdditionBaseId(instanceId);
@@ -360,10 +384,10 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
 
   // Sample template: Add dove motif
   // selectedMotifs: [
-  //   { 
-  //     id: 'motif_dove_1', 
-  //     svgPath: '/shapes/motifs/dove_002.svg', 
-  //     color: '#c99d44' 
+  //   {
+  //     id: 'motif_dove_1',
+  //     svgPath: '/shapes/motifs/dove_002.svg',
+  //     color: '#c99d44'
   //   },
   // ],
   selectedMotifs: [],
@@ -378,13 +402,20 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
     );
     const defaultHeightMm =
       state.motifInitHeight ?? state.motifPriceModel?.initHeight ?? 100;
-    
+
     // Set target based on currently selected object (headstone or base)
     const target: 'base' | 'headstone' | 'ledger' =
-      selected === 'base' ? 'base' : selected === 'ledger' ? 'ledger' : 'headstone';
-    
+      selected === 'base'
+        ? 'base'
+        : selected === 'ledger'
+          ? 'ledger'
+          : 'headstone';
+
     set((s) => {
-      const newMotifs = [...s.selectedMotifs, { id, svgPath, color: defaultColor }];
+      const newMotifs = [
+        ...s.selectedMotifs,
+        { id, svgPath, color: defaultColor },
+      ];
       const defaultOffset = withOffsetSurfaceDimensions<MotifOffset>(
         {
           xPos: 0,
@@ -402,10 +433,7 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
         s,
         true,
       );
-      const newOffsets = {
-        ...s.motifOffsets,
-        [id]: defaultOffset,
-      };
+      const newOffsets = { ...s.motifOffsets, [id]: defaultOffset };
       return {
         selectedMotifs: newMotifs,
         motifOffsets: newOffsets,
@@ -439,7 +467,7 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
   setMotifColor: (id, color) => {
     set((s) => ({
       selectedMotifs: s.selectedMotifs.map((m) =>
-        m.id === id ? { ...m, color } : m
+        m.id === id ? { ...m, color } : m,
       ),
     }));
     // Recalculate cost when color changes
@@ -463,15 +491,22 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
     }
   },
   emblemRefs: {},
-  setEmblemRef: (id, ref) => set((s) => ({ emblemRefs: { ...s.emblemRefs, [id]: ref } })),
+  setEmblemRef: (id, ref) =>
+    set((s) => ({ emblemRefs: { ...s.emblemRefs, [id]: ref } })),
   emblemOffsets: {},
   addEmblem: (emblemId, imageUrl) => {
     const id = genEmblemId();
     const state = get();
     const { selected } = state;
     const target: 'headstone' | 'base' | 'ledger' =
-      selected === 'base' ? 'base' : selected === 'ledger' ? 'ledger' : 'headstone';
-    const sizeEntry = EMBLEM_SIZES.find((s) => s.variant === DEFAULT_EMBLEM_SIZE_VARIANT) ?? EMBLEM_SIZES[2];
+      selected === 'base'
+        ? 'base'
+        : selected === 'ledger'
+          ? 'ledger'
+          : 'headstone';
+    const sizeEntry =
+      EMBLEM_SIZES.find((s) => s.variant === DEFAULT_EMBLEM_SIZE_VARIANT) ??
+      EMBLEM_SIZES[2];
     set((s) => {
       const defaultOffset = withOffsetSurfaceDimensions<EmblemOffset>(
         {
@@ -540,7 +575,10 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
         s,
       );
       return {
-        selectedEmblems: [...s.selectedEmblems, { id: newId, emblemId: emblem.emblemId, imageUrl: emblem.imageUrl }],
+        selectedEmblems: [
+          ...s.selectedEmblems,
+          { id: newId, emblemId: emblem.emblemId, imageUrl: emblem.imageUrl },
+        ],
         emblemOffsets: { ...s.emblemOffsets, [newId]: duplicatedOffset },
         selectedEmblemId: newId,
         selectedInscriptionId: null,
@@ -558,7 +596,8 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
       const previous = s.emblemOffsets[id];
       if (!previous) return {};
       const surface = offset.target ?? previous.target ?? 'headstone';
-      const shouldRefreshDims = offset.target !== undefined && offset.target !== previous.target;
+      const shouldRefreshDims =
+        offset.target !== undefined && offset.target !== previous.target;
       const nextOffset = withOffsetSurfaceDimensions<EmblemOffset>(
         { ...previous, ...offset, target: surface },
         surface,
@@ -584,9 +623,7 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
     const resolvedTarget = image.target ?? defaultTarget;
     // For ledger surface, xPos/yPos are fractional (±0.5 range on unit-cube mesh).
     // Reset to 0 so the image starts at the ledger centre rather than ~90 m off-slab.
-    const ledgerPos = resolvedTarget === 'ledger'
-      ? { xPos: 0, yPos: 0 }
-      : {};
+    const ledgerPos = resolvedTarget === 'ledger' ? { xPos: 0, yPos: 0 } : {};
     set((s) => ({
       selectedImages: [
         ...s.selectedImages,
@@ -604,7 +641,7 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
       selectedMotifId: null,
       selectedEmblemId: null,
       selected: null,
-      activePanel: 'image',      // Open the edit panel
+      activePanel: 'image', // Open the edit panel
     }));
     setTimeout(() => get().calculateImageCost(), 0);
   },
@@ -621,8 +658,14 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
       if (!original) return s;
 
       const targetSurface = original.target ?? 'headstone';
-      const ledgerShiftX = Math.max(Math.min(((s.ledgerWidthMm ?? 1000) / 1000) * 0.1, 0.15), 0.02);
-      const ledgerShiftZ = Math.max(Math.min(((s.ledgerDepthMm ?? 2000) / 1000) * 0.1, 0.15), 0.02);
+      const ledgerShiftX = Math.max(
+        Math.min(((s.ledgerWidthMm ?? 1000) / 1000) * 0.1, 0.15),
+        0.02,
+      );
+      const ledgerShiftZ = Math.max(
+        Math.min(((s.ledgerDepthMm ?? 2000) / 1000) * 0.1, 0.15),
+        0.02,
+      );
       const deltaX = targetSurface === 'ledger' ? ledgerShiftX : 20;
       const deltaY = targetSurface === 'ledger' ? ledgerShiftZ : 20;
       const newImage = {
@@ -648,7 +691,9 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
   updateImageData: (id, imageUrl, croppedAspectRatio, colorMode) => {
     set((s) => ({
       selectedImages: s.selectedImages.map((img) =>
-        img.id === id ? { ...img, imageUrl, croppedAspectRatio, colorMode } : img
+        img.id === id
+          ? { ...img, imageUrl, croppedAspectRatio, colorMode }
+          : img,
       ),
       cropCanvasData: null,
     }));
@@ -656,14 +701,24 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
   updateImagePosition: (id, xPos, yPos) => {
     set((s) => ({
       selectedImages: s.selectedImages.map((img) =>
-        img.id === id ? { ...img, xPos, yPos, coordinateSpace: undefined } : img
+        img.id === id
+          ? { ...img, xPos, yPos, coordinateSpace: undefined }
+          : img,
       ),
     }));
   },
   updateImageTarget: (id, target, xPos, yPos, coordinateSpace) => {
     set((s) => ({
       selectedImages: s.selectedImages.map((img) =>
-        img.id === id ? { ...img, target, xPos, yPos, coordinateSpace: coordinateSpace ?? undefined } : img
+        img.id === id
+          ? {
+              ...img,
+              target,
+              xPos,
+              yPos,
+              coordinateSpace: coordinateSpace ?? undefined,
+            }
+          : img,
       ),
     }));
     setTimeout(() => get().calculateImageCost(), 0);
@@ -671,7 +726,7 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
   updateImageSize: (id, widthMm, heightMm) => {
     set((s) => ({
       selectedImages: s.selectedImages.map((img) =>
-        img.id === id ? { ...img, widthMm, heightMm } : img
+        img.id === id ? { ...img, widthMm, heightMm } : img,
       ),
     }));
     setTimeout(() => get().calculateImageCost(), 0);
@@ -679,7 +734,7 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
   updateImageSizeVariant: (id, sizeVariant) => {
     set((s) => ({
       selectedImages: s.selectedImages.map((img) =>
-        img.id === id ? { ...img, sizeVariant } : img
+        img.id === id ? { ...img, sizeVariant } : img,
       ),
     }));
     setTimeout(() => get().calculateImageCost(), 0);
@@ -687,14 +742,13 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
   updateImageRotation: (id, rotationZ) => {
     set((s) => ({
       selectedImages: s.selectedImages.map((img) =>
-        img.id === id ? { ...img, rotationZ } : img
+        img.id === id ? { ...img, rotationZ } : img,
       ),
     }));
   },
 
   productId: null,
   setProductId: async (id) => {
-
     const prevSnapshot = get();
     const prevHeadstoneHeight = Math.max(prevSnapshot.heightMm || 0, 1);
     const prevBaseHeight = Math.max(
@@ -714,25 +768,27 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
     set({ productId: id, catalog: null, fixingType: 'flat-back' });
 
     try {
-
       const response = await fetch(`/xml/catalog-id-${id}.xml`);
       const xmlText = await response.text();
       const catalog = await parseCatalogXML(xmlText, id);
 
       if (get().productId !== id) {
         if (process.env.NODE_ENV !== 'production') {
-          console.warn('[Store] Ignoring stale catalog response for product', id);
+          console.warn(
+            '[Store] Ignoring stale catalog response for product',
+            id,
+          );
         }
         return;
       }
 
       set({ catalog, productId: id });
-      
+
       if (process.env.NODE_ENV !== 'production') {
         logger.log('[Store] Catalog set for product', id, ':', {
           catalogName: catalog.product.name,
           catalogId: catalog.product.id,
-          catalogType: catalog.product.type
+          catalogType: catalog.product.type,
         });
       }
 
@@ -740,9 +796,14 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
       const isPlaque = productType === 'plaque';
       const isHeadstoneLike =
         productType === 'headstone' || productType === 'mini-headstone';
-      const showBase = isHeadstoneLike || productType === 'monument' || productType === 'full-monument' || productType === 'urn';
+      const showBase =
+        isHeadstoneLike ||
+        productType === 'monument' ||
+        productType === 'full-monument' ||
+        productType === 'urn';
       const isFullMonument = productType === 'full-monument';
-      const showInscriptionColor = catalog.product.laser !== '1' && catalog.product.color !== '0';
+      const showInscriptionColor =
+        catalog.product.laser !== '1' && catalog.product.color !== '0';
       const productDefaultColor =
         catalog.product.defaultColor ||
         (catalog.product.laser === '1' ? '#ffffff' : '#c99d44');
@@ -752,7 +813,10 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
           showLedger: isFullMonument,
           showKerbset: isFullMonument,
         };
-        const nextEditingObject = clampEditingObject(s.editingObject, visibility);
+        const nextEditingObject = clampEditingObject(
+          s.editingObject,
+          visibility,
+        );
         const patch: Partial<HeadstoneState> = {
           ...visibility,
           showInscriptionColor,
@@ -778,7 +842,10 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
         : data.borders;
       if (supportsBorder) {
         set({ borders: borderSet });
-        if (!currentBorderName || currentBorderName.toLowerCase().includes('no border')) {
+        if (
+          !currentBorderName ||
+          currentBorderName.toLowerCase().includes('no border')
+        ) {
           const defaultBorder = borderSet.find((border) => border.id !== '0');
           if (defaultBorder) {
             set({ borderName: defaultBorder.name });
@@ -826,7 +893,9 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
         if (isFullColourPlaque) {
           // Fetch fixed sizes from DB via API (only for Full Colour Plaque)
           try {
-            const szRes = await fetch('/api/catalog/sizes?productCode=full-colour-plaque');
+            const szRes = await fetch(
+              '/api/catalog/sizes?productCode=full-colour-plaque',
+            );
             const fixedSizes: FixedSize[] = szRes.ok ? await szRes.json() : [];
             set({ fixedSizes });
           } catch {
@@ -863,8 +932,7 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
         inscriptionAddition?.minHeight ?? MIN_INSCRIPTION_SIZE_MM;
       const maxHeight =
         inscriptionAddition?.maxHeight ?? MAX_INSCRIPTION_SIZE_MM;
-      const initHeight =
-        inscriptionAddition?.initHeight ?? minHeight;
+      const initHeight = inscriptionAddition?.initHeight ?? minHeight;
       set({
         inscriptionMinHeight: minHeight,
         inscriptionMaxHeight: maxHeight,
@@ -896,11 +964,19 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
         const heightMin = shape.table.minHeight || MIN_HEADSTONE_DIM;
         const heightMax = shape.table.maxHeight || MAX_HEADSTONE_DIM;
         const baseWidthMin = shape.stand?.minWidth || widthMin;
-        const baseWidthMax = shape.stand?.maxWidth || Math.max(baseWidthMin, MAX_HEADSTONE_DIM * 1.5);
+        const baseWidthMax =
+          shape.stand?.maxWidth ||
+          Math.max(baseWidthMin, MAX_HEADSTONE_DIM * 1.5);
         const baseHeightMin = shape.stand?.minHeight || 50;
         const baseHeightMax = shape.stand?.maxHeight || 200;
-        const thicknessMin = Math.min(shape.table.minDepth || 40, shape.stand?.minDepth || 40);
-        const thicknessMax = Math.max(shape.table.maxDepth || 300, shape.stand?.maxDepth || 300);
+        const thicknessMin = Math.min(
+          shape.table.minDepth || 40,
+          shape.stand?.minDepth || 40,
+        );
+        const thicknessMax = Math.max(
+          shape.table.maxDepth || 300,
+          shape.stand?.maxDepth || 300,
+        );
 
         set({
           minWidthMm: widthMin,
@@ -915,8 +991,20 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
           maxThicknessMm: Math.max(thicknessMin, thicknessMax),
         });
 
-        const clampedWidth = Math.max(widthMin, Math.min(Math.max(widthMin, widthMax), shape.table.initWidth || currentState.widthMm));
-        const clampedHeight = Math.max(heightMin, Math.min(Math.max(heightMin, heightMax), shape.table.initHeight || currentState.heightMm));
+        const clampedWidth = Math.max(
+          widthMin,
+          Math.min(
+            Math.max(widthMin, widthMax),
+            shape.table.initWidth || currentState.widthMm,
+          ),
+        );
+        const clampedHeight = Math.max(
+          heightMin,
+          Math.min(
+            Math.max(heightMin, heightMax),
+            shape.table.initHeight || currentState.heightMm,
+          ),
+        );
         let targetWidth = clampedWidth;
         let targetHeight = clampedHeight;
         if (shouldForceSquarePlaque) {
@@ -924,13 +1012,43 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
           const desiredHeight = 200;
           const maxAllowedWidth = Math.max(widthMin, widthMax);
           const maxAllowedHeight = Math.max(heightMin, heightMax);
-          targetWidth = Math.max(widthMin, Math.min(maxAllowedWidth, desiredWidth));
-          targetHeight = Math.max(heightMin, Math.min(maxAllowedHeight, desiredHeight));
+          targetWidth = Math.max(
+            widthMin,
+            Math.min(maxAllowedWidth, desiredWidth),
+          );
+          targetHeight = Math.max(
+            heightMin,
+            Math.min(maxAllowedHeight, desiredHeight),
+          );
         }
-        const clampedStandWidth = Math.max(targetWidth, Math.min(Math.max(baseWidthMin, baseWidthMax), shape.stand?.initWidth || currentState.baseWidthMm));
-        const clampedStandHeight = Math.max(baseHeightMin, Math.min(Math.max(baseHeightMin, baseHeightMax), shape.stand?.initHeight || currentState.baseHeightMm));
-        const clampedStandDepth = Math.max(thicknessMin, Math.min(Math.max(thicknessMin, thicknessMax), shape.stand?.initDepth || currentState.baseThickness));
-        const clampedTabletThickness = Math.max(thicknessMin, Math.min(Math.max(thicknessMin, thicknessMax), shape.table.initDepth || currentState.uprightThickness));
+        const clampedStandWidth = Math.max(
+          targetWidth,
+          Math.min(
+            Math.max(baseWidthMin, baseWidthMax),
+            shape.stand?.initWidth || currentState.baseWidthMm,
+          ),
+        );
+        const clampedStandHeight = Math.max(
+          baseHeightMin,
+          Math.min(
+            Math.max(baseHeightMin, baseHeightMax),
+            shape.stand?.initHeight || currentState.baseHeightMm,
+          ),
+        );
+        const clampedStandDepth = Math.max(
+          thicknessMin,
+          Math.min(
+            Math.max(thicknessMin, thicknessMax),
+            shape.stand?.initDepth || currentState.baseThickness,
+          ),
+        );
+        const clampedTabletThickness = Math.max(
+          thicknessMin,
+          Math.min(
+            Math.max(thicknessMin, thicknessMax),
+            shape.table.initDepth || currentState.uprightThickness,
+          ),
+        );
         const effectiveStandHeight = hasBase ? clampedStandHeight : 0;
 
         const headstoneScaleFactor = Math.min(
@@ -938,10 +1056,7 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
           targetHeight / prevHeadstoneHeight,
         );
         const baseScaleFactor = hasBase
-          ? Math.min(
-              1,
-              effectiveStandHeight / prevBaseHeight,
-            )
+          ? Math.min(1, effectiveStandHeight / prevBaseHeight)
           : headstoneScaleFactor;
 
         set({
@@ -990,7 +1105,10 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
 
         const headstoneHeightLimit = Math.max(10, targetHeight);
         const baseHeightLimit = hasBase
-          ? Math.max(10, effectiveStandHeight > 0 ? effectiveStandHeight : targetHeight)
+          ? Math.max(
+              10,
+              effectiveStandHeight > 0 ? effectiveStandHeight : targetHeight,
+            )
           : headstoneHeightLimit;
 
         const existingState = get();
@@ -1019,17 +1137,30 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
                 ? (Object.fromEntries(
                     motifEntries.map(([key, offset]) => {
                       const originalTarget = offset.target ?? 'headstone';
-                      const normalizedTarget = !hasBase && originalTarget === 'base'
-                        ? 'headstone'
-                        : originalTarget;
-                      const limit = normalizedTarget === 'base' ? baseHeightLimit : headstoneHeightLimit;
-                      const baseScale = normalizedTarget === 'base' ? baseScaleFactor : headstoneScaleFactor;
+                      const normalizedTarget =
+                        !hasBase && originalTarget === 'base'
+                          ? 'headstone'
+                          : originalTarget;
+                      const limit =
+                        normalizedTarget === 'base'
+                          ? baseHeightLimit
+                          : headstoneHeightLimit;
+                      const baseScale =
+                        normalizedTarget === 'base'
+                          ? baseScaleFactor
+                          : headstoneScaleFactor;
                       const originalHeight = offset.heightMm ?? limit;
-                      const minHeightRatio = originalHeight > 0
-                        ? Math.min(1, MIN_MOTIF_HEIGHT_MM / originalHeight)
-                        : 1;
-                      const effectiveScale = Math.min(1, Math.max(baseScale, minHeightRatio));
-                      const scaledHeight = Math.round(originalHeight * effectiveScale);
+                      const minHeightRatio =
+                        originalHeight > 0
+                          ? Math.min(1, MIN_MOTIF_HEIGHT_MM / originalHeight)
+                          : 1;
+                      const effectiveScale = Math.min(
+                        1,
+                        Math.max(baseScale, minHeightRatio),
+                      );
+                      const scaledHeight = Math.round(
+                        originalHeight * effectiveScale,
+                      );
                       const boundedHeight = Math.max(
                         MIN_MOTIF_HEIGHT_MM,
                         Math.min(limit, scaledHeight),
@@ -1048,14 +1179,26 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
                 : s.motifOffsets;
 
             const scaledLines = s.inscriptions.map((line) => {
-              const originalTarget = line.target === 'base' ? 'base' : 'headstone';
-              const normalizedTarget = !hasBase && originalTarget === 'base' ? 'headstone' : originalTarget;
-              const limit = normalizedTarget === 'base' ? baseHeightLimit : headstoneHeightLimit;
-              const baseScale = normalizedTarget === 'base' ? baseScaleFactor : headstoneScaleFactor;
-              const minScaleRatio = line.sizeMm > 0
-                ? Math.min(1, minFontSize / line.sizeMm)
-                : 1;
-              const effectiveScale = Math.min(1, Math.max(baseScale, minScaleRatio));
+              const originalTarget =
+                line.target === 'base' ? 'base' : 'headstone';
+              const normalizedTarget =
+                !hasBase && originalTarget === 'base'
+                  ? 'headstone'
+                  : originalTarget;
+              const limit =
+                normalizedTarget === 'base'
+                  ? baseHeightLimit
+                  : headstoneHeightLimit;
+              const baseScale =
+                normalizedTarget === 'base'
+                  ? baseScaleFactor
+                  : headstoneScaleFactor;
+              const minScaleRatio =
+                line.sizeMm > 0 ? Math.min(1, minFontSize / line.sizeMm) : 1;
+              const effectiveScale = Math.min(
+                1,
+                Math.max(baseScale, minScaleRatio),
+              );
               const scaledSize = Math.round(line.sizeMm * effectiveScale);
               const boundedSize = Math.max(
                 minFontSize,
@@ -1071,24 +1214,29 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
             });
 
             const entries = Object.entries(updatedMotifOffsets);
-            const scaledOffsets = entries.length > 0
-              ? (Object.fromEntries(
-                  entries.map(([key, offset]) => {
-                    const normalizedTarget = !hasBase && offset.target === 'base'
-                      ? 'headstone'
-                      : offset.target ?? 'headstone';
-                    const limit = normalizedTarget === 'base' ? baseHeightLimit : headstoneHeightLimit;
-                    return [
-                      key,
-                      {
-                        ...offset,
-                        target: normalizedTarget,
-                        yPos: offset.yPos ?? 0,
-                      },
-                    ];
-                  }),
-                ) as typeof s.motifOffsets)
-              : updatedMotifOffsets;
+            const scaledOffsets =
+              entries.length > 0
+                ? (Object.fromEntries(
+                    entries.map(([key, offset]) => {
+                      const normalizedTarget =
+                        !hasBase && offset.target === 'base'
+                          ? 'headstone'
+                          : (offset.target ?? 'headstone');
+                      const limit =
+                        normalizedTarget === 'base'
+                          ? baseHeightLimit
+                          : headstoneHeightLimit;
+                      return [
+                        key,
+                        {
+                          ...offset,
+                          target: normalizedTarget,
+                          yPos: offset.yPos ?? 0,
+                        },
+                      ];
+                    }),
+                  ) as typeof s.motifOffsets)
+                : updatedMotifOffsets;
 
             return {
               inscriptions: scaledLines,
@@ -1106,11 +1254,19 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
       // Load motif pricing based on product type
       const isBronze = catalog.product.id === '5';
       const isLaser = catalog.product.laser === '1';
-      const motifAddition = catalog.product.additions.find((a) => a.type === 'motif');
+      const motifAddition = catalog.product.additions.find(
+        (a) => a.type === 'motif',
+      );
       const isEnamel = motifAddition?.formula?.toLowerCase() === 'enamel';
-      const motifType = isBronze ? 'bronze' : isEnamel ? 'enamel' : isLaser ? 'laser' : 'engraved';
+      const motifType = isBronze
+        ? 'bronze'
+        : isEnamel
+          ? 'enamel'
+          : isLaser
+            ? 'laser'
+            : 'engraved';
       set({ motifInitHeight: 100 });
-      
+
       const motifPricing = await fetchAndParseMotifPricing(motifType);
       if (motifPricing) {
         set({
@@ -1125,7 +1281,10 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
 
   currentProjectId: null,
   currentProjectTitle: null,
-  setProjectMeta: (meta: { projectId?: string | null; title?: string | null }) => {
+  setProjectMeta: (meta: {
+    projectId?: string | null;
+    title?: string | null;
+  }) => {
     set({
       currentProjectId: meta.projectId ?? null,
       currentProjectTitle: meta.title ?? null,
@@ -1181,8 +1340,15 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
     const minAllowed = Math.max(state.minBaseWidthMm, state.widthMm);
     const maxAllowed = Math.max(minAllowed, state.maxBaseWidthMm);
     const clampedLedger = clampRoundedFinite(v, minAllowed, maxAllowed);
-    const clampedBaseKerb = Math.min(maxAllowed, clampedLedger + FULL_MONUMENT_WIDTH_DIFF);
-    set({ ledgerWidthMm: clampedLedger, baseWidthMm: clampedBaseKerb, kerbWidthMm: clampedBaseKerb });
+    const clampedBaseKerb = Math.min(
+      maxAllowed,
+      clampedLedger + FULL_MONUMENT_WIDTH_DIFF,
+    );
+    set({
+      ledgerWidthMm: clampedLedger,
+      baseWidthMm: clampedBaseKerb,
+      kerbWidthMm: clampedBaseKerb,
+    });
   },
 
   ledgerHeightMm: 60,
@@ -1215,7 +1381,11 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
     const minAllowed = Math.max(state.minBaseWidthMm, state.widthMm);
     const maxAllowed = Math.max(minAllowed, state.maxBaseWidthMm);
     const clamped = clampRoundedFinite(v, minAllowed, maxAllowed);
-    set({ kerbWidthMm: clamped, baseWidthMm: clamped, ledgerWidthMm: Math.max(minAllowed, clamped - FULL_MONUMENT_WIDTH_DIFF) });
+    set({
+      kerbWidthMm: clamped,
+      baseWidthMm: clamped,
+      ledgerWidthMm: Math.max(minAllowed, clamped - FULL_MONUMENT_WIDTH_DIFF),
+    });
   },
 
   kerbHeightMm: 300,
@@ -1224,7 +1394,10 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
     const state = get();
     const safeKerbHeight = clampRoundedFinite(v, 50, Number.MAX_SAFE_INTEGER);
     const desiredBase = safeKerbHeight + FULL_MONUMENT_HEIGHT_DIFF;
-    const clampedBase = Math.max(state.minBaseHeightMm, Math.min(state.maxBaseHeightMm, desiredBase));
+    const clampedBase = Math.max(
+      state.minBaseHeightMm,
+      Math.min(state.maxBaseHeightMm, desiredBase),
+    );
     const kerbHeight = Math.max(50, clampedBase - FULL_MONUMENT_HEIGHT_DIFF);
     set({ kerbHeightMm: kerbHeight, baseHeightMm: clampedBase });
   },
@@ -1251,31 +1424,40 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
   shapeUrl: DEFAULT_SHAPE_URL,
   setShapeUrl(shapeUrl) {
     set({ shapeUrl });
-    
+
     // When shape changes, update dimensions from catalog if available
     const state = get();
     const catalog = state.catalog;
-    
+
     if (catalog && catalog.product.shapes.length > 0) {
       // Try to find matching shape by comparing URL
       // Extract shape filename from URL (e.g., "oval_horizontal.svg" from "/shapes/masks/oval_horizontal.svg")
       const shapeFileName = shapeUrl.split('/').pop();
-      
+
       // Find shape in catalog that matches
       // Check both the shape URL and code to find the right shape
-      const matchingShape = catalog.product.shapes.find(shape => {
-        const catalogFileName = shape.name.toLowerCase().replace(/\s+/g, '_') + '.svg';
-        const shapeFileNameNoExt = shapeFileName ? shapeFileName.replace('.svg', '') : '';
-        return shapeFileName === catalogFileName || 
-               (shape.url && shapeFileNameNoExt && shape.url.includes(shapeFileNameNoExt)) ||
-               (shapeFileName === 'oval_horizontal.svg' && shape.code === 'Oval Landscape') ||
-               (shapeFileName === 'oval_vertical.svg' && shape.code === 'Oval Portrait') ||
-               (shapeFileName === 'circle.svg' && shape.code === 'Circle') ||
-               (shapeFileName === 'landscape.svg' && shape.code === 'Landscape') ||
-               (shapeFileName === 'portrait.svg' && shape.code === 'Portrait') ||
-               (shapeFileName === 'square.svg' && shape.code === 'Square');
+      const matchingShape = catalog.product.shapes.find((shape) => {
+        const catalogFileName =
+          shape.name.toLowerCase().replace(/\s+/g, '_') + '.svg';
+        const shapeFileNameNoExt = shapeFileName
+          ? shapeFileName.replace('.svg', '')
+          : '';
+        return (
+          shapeFileName === catalogFileName ||
+          (shape.url &&
+            shapeFileNameNoExt &&
+            shape.url.includes(shapeFileNameNoExt)) ||
+          (shapeFileName === 'oval_horizontal.svg' &&
+            shape.code === 'Oval Landscape') ||
+          (shapeFileName === 'oval_vertical.svg' &&
+            shape.code === 'Oval Portrait') ||
+          (shapeFileName === 'circle.svg' && shape.code === 'Circle') ||
+          (shapeFileName === 'landscape.svg' && shape.code === 'Landscape') ||
+          (shapeFileName === 'portrait.svg' && shape.code === 'Portrait') ||
+          (shapeFileName === 'square.svg' && shape.code === 'Square')
+        );
       });
-      
+
       if (matchingShape) {
         set({
           widthMm: matchingShape.table.initWidth,
@@ -1312,7 +1494,8 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
 
   materialUrl: `${TEX_BASE}${DEFAULT_TEX}`,
   setMaterialUrl(materialUrl) {
-    const normalized = normalizeTextureUrl(materialUrl) ?? `${TEX_BASE}${DEFAULT_TEX}`;
+    const normalized =
+      normalizeTextureUrl(materialUrl) ?? `${TEX_BASE}${DEFAULT_TEX}`;
     set({ materialUrl: normalized });
   },
 
@@ -1348,13 +1531,17 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
     const { minWidthMm, maxWidthMm } = get();
     const clamped = clampRoundedFinite(v, minWidthMm, maxWidthMm);
     set({ widthMm: clamped });
-    
+
     // Ensure base/kerbset/ledger are at least as wide as headstone (full monument rule)
     const state = get();
     if (state.baseWidthMm < clamped) {
       // headstone grew past base: base = headstone + 200, kerb = headstone + 200, ledger = headstone
       const newBaseKerb = clamped + FULL_MONUMENT_WIDTH_DIFF;
-      set({ baseWidthMm: newBaseKerb, kerbWidthMm: newBaseKerb, ledgerWidthMm: clamped });
+      set({
+        baseWidthMm: newBaseKerb,
+        kerbWidthMm: newBaseKerb,
+        ledgerWidthMm: clamped,
+      });
     }
   },
 
@@ -1364,7 +1551,7 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
     const clamped = clampRoundedFinite(v, minHeightMm, maxHeightMm);
     set({ heightMm: clamped });
   },
-  
+
   baseWidthMm: 1260, // Default: 900 * 1.4
   setBaseWidthMm(v) {
     // base changes → kerbset = base, ledger = base − 200
@@ -1372,9 +1559,16 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
     const minAllowed = Math.max(state.minBaseWidthMm, state.widthMm);
     const maxAllowed = Math.max(minAllowed, state.maxBaseWidthMm);
     const clampedWidth = clampRoundedFinite(v, minAllowed, maxAllowed);
-    set({ baseWidthMm: clampedWidth, kerbWidthMm: clampedWidth, ledgerWidthMm: Math.max(minAllowed, clampedWidth - FULL_MONUMENT_WIDTH_DIFF) });
+    set({
+      baseWidthMm: clampedWidth,
+      kerbWidthMm: clampedWidth,
+      ledgerWidthMm: Math.max(
+        minAllowed,
+        clampedWidth - FULL_MONUMENT_WIDTH_DIFF,
+      ),
+    });
   },
-  
+
   baseHeightMm: 100, // Base height is 100mm
   setBaseHeightMm(v) {
     const { minBaseHeightMm, maxBaseHeightMm } = get();
@@ -1383,14 +1577,18 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
     const kerbHeight = Math.max(50, clamped - FULL_MONUMENT_HEIGHT_DIFF);
     set({ baseHeightMm: clamped, kerbHeightMm: kerbHeight });
   },
-  
+
   baseThickness: 250, // Default base thickness 250mm (will be overwritten by catalog)
   setBaseThickness(thickness) {
     const { minThicknessMm, maxThicknessMm } = get();
-    const clamped = clampRoundedFinite(thickness, minThicknessMm, maxThicknessMm);
+    const clamped = clampRoundedFinite(
+      thickness,
+      minThicknessMm,
+      maxThicknessMm,
+    );
     set({ baseThickness: clamped });
   },
-  
+
   baseFinish: 'default',
   setBaseFinish(finish) {
     set({ baseFinish: finish });
@@ -1414,14 +1612,22 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
   uprightThickness: 150, // Default 150mm thickness
   setUprightThickness(thickness) {
     const { minThicknessMm, maxThicknessMm } = get();
-    const clamped = Math.max(minThicknessMm, Math.min(maxThicknessMm, Math.round(thickness)));
+    const clamped = clampRoundedFinite(
+      thickness,
+      minThicknessMm,
+      maxThicknessMm,
+    );
     set({ uprightThickness: clamped });
   },
 
   slantThickness: 150, // Default 150mm thickness
   setSlantThickness(thickness) {
     const { minThicknessMm, maxThicknessMm } = get();
-    const clamped = Math.max(minThicknessMm, Math.min(maxThicknessMm, Math.round(thickness)));
+    const clamped = clampRoundedFinite(
+      thickness,
+      minThicknessMm,
+      maxThicknessMm,
+    );
     set({ slantThickness: clamped });
   },
 
@@ -1550,24 +1756,27 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
     const state = get();
 
     const text = patch.text ?? 'New line';
-    const font = patch.font ?? getDefaultInscriptionFont(state.productId, state.catalog);
+    const font =
+      patch.font ?? getDefaultInscriptionFont(state.productId, state.catalog);
     const sizeMm = clampInscriptionSize(
       patch.sizeMm ?? state.inscriptionInitHeight ?? state.inscriptionMinHeight,
     );
     const rotationDeg = clampInscriptionRotation(patch.rotationDeg ?? 0);
     const xPos = patch.xPos ?? 0;
     const yPos = patch.yPos ?? 0;
-    
+
     // Determine color: use catalog defaultColor if available, otherwise use hardcoded defaults
     let color: string;
     if (state.showInscriptionColor === false) {
-      color = normalizeThreeColorValue(state.catalog?.product.defaultColor ?? '#ffffff');
+      color = normalizeThreeColorValue(
+        state.catalog?.product.defaultColor ?? '#ffffff',
+      );
     } else {
       color = normalizeThreeColorValue(
         patch.color ?? state.catalog?.product.defaultColor ?? '#c99d44',
       );
     }
-    
+
     // Set target based on currently selected object (headstone or base)
     const target: 'headstone' | 'base' | 'ledger' =
       state.selected === 'base'
@@ -1590,7 +1799,12 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
       layer: getNextDesignLayer(state),
       ref: React.createRef<Group>(),
     };
-    const normalizedLine = withLineSurfaceDimensions(newLine, target, state, true);
+    const normalizedLine = withLineSurfaceDimensions(
+      newLine,
+      target,
+      state,
+      true,
+    );
 
     set((s) => ({
       inscriptions: [...s.inscriptions, normalizedLine],
@@ -1630,7 +1844,12 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
           patch.yPos !== undefined ||
           !updatedLine.baseWidthMm ||
           !updatedLine.baseHeightMm;
-        return withLineSurfaceDimensions(updatedLine, nextTarget, s, needsDimensions);
+        return withLineSurfaceDimensions(
+          updatedLine,
+          nextTarget,
+          s,
+          needsDimensions,
+        );
       }),
     }));
     get().calculateInscriptionCost();
@@ -1654,8 +1873,13 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
       // measured world-space height back into that local space before applying it.
       const fallbackGapMm = Math.max(2, Math.round(src.sizeMm * 0.08));
       const fallbackGapLocal =
-        src.target === 'base' ? fallbackGapMm : Math.max(1, Math.round(fallbackGapMm / 10));
-      offset = src.target === 'base' ? src.sizeMm + fallbackGapMm : src.sizeMm / 10 + 5;
+        src.target === 'base'
+          ? fallbackGapMm
+          : Math.max(1, Math.round(fallbackGapMm / 10));
+      offset =
+        src.target === 'base'
+          ? src.sizeMm + fallbackGapMm
+          : src.sizeMm / 10 + 5;
 
       const rendered = src.ref.current;
       if (rendered) {
@@ -1664,7 +1888,10 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
         const renderedWorldHeight = bounds.max.y - bounds.min.y;
         const renderedWorldScale = new Vector3();
         rendered.getWorldScale(renderedWorldScale);
-        const localScaleY = Math.abs(renderedWorldScale.y) > 1e-6 ? Math.abs(renderedWorldScale.y) : 1;
+        const localScaleY =
+          Math.abs(renderedWorldScale.y) > 1e-6
+            ? Math.abs(renderedWorldScale.y)
+            : 1;
         const renderedLocalHeight = renderedWorldHeight / localScaleY;
 
         if (Number.isFinite(renderedLocalHeight) && renderedLocalHeight > 0) {
@@ -1716,8 +1943,8 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
 
     const line = get().inscriptions.find((l) => l.id === id);
     if (line) {
-      set({ 
-        selectedInscriptionId: id, 
+      set({
+        selectedInscriptionId: id,
         activeInscriptionText: line.text,
         selectedMotifId: null, // Deselect any motif
         selectedAdditionId: null, // Deselect any addition
@@ -1727,8 +1954,8 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
         activePanel: 'inscription', // Set active panel to inscription
       });
     } else {
-      set({ 
-        selectedInscriptionId: id, 
+      set({
+        selectedInscriptionId: id,
         activeInscriptionText: '',
         selectedMotifId: null, // Deselect any motif
         selectedAdditionId: null, // Deselect any addition
@@ -1753,7 +1980,7 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
     set({ selectedAdditionId: id });
     if (id) {
       // Close other panels when opening addition panel
-      set({ 
+      set({
         activePanel: 'addition',
         selectedInscriptionId: null, // Deselect any inscription
         selectedMotifId: null, // Deselect any motif
@@ -1764,7 +1991,8 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
       // Navigate to select-additions page only when we're in mobile/compact layout
       const { navTo } = get();
       if (navTo && !isDesktopViewport()) {
-        const currentPath = typeof window !== 'undefined' ? window.location.pathname : '';
+        const currentPath =
+          typeof window !== 'undefined' ? window.location.pathname : '';
         if (currentPath !== '/select-additions') {
           navTo('/select-additions');
         }
@@ -1795,7 +2023,8 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
   ) => {
     set((s) => {
       const previous = s.additionOffsets[id] ?? {};
-      const surface = offset.targetSurface ?? previous.targetSurface ?? 'headstone';
+      const surface =
+        offset.targetSurface ?? previous.targetSurface ?? 'headstone';
       const shouldRefreshDims =
         offset.targetSurface !== undefined ||
         offset.xPos !== undefined ||
@@ -1803,21 +2032,12 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
         !previous.baseWidthMm ||
         !previous.baseHeightMm;
       const nextOffset = withOffsetSurfaceDimensions<AdditionOffset>(
-        {
-          ...previous,
-          ...offset,
-          targetSurface: surface,
-        },
+        { ...previous, ...offset, targetSurface: surface },
         surface,
         s,
         shouldRefreshDims,
       );
-      return {
-        additionOffsets: {
-          ...s.additionOffsets,
-          [id]: nextOffset,
-        },
-      };
+      return { additionOffsets: { ...s.additionOffsets, [id]: nextOffset } };
     });
     setTimeout(() => get().calculateAdditionCost(), 0);
   },
@@ -1836,12 +2056,24 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
     // footprintWidth is measured in world metres. Base addition offsets live
     // in the base mesh's local unit-cube space, so convert the desired
     // physical separation before applying it.
-    const widthDelta = footprintWidth && footprintWidth > 0 ? footprintWidth : isBase ? 0.12 : 30;
+    const widthDelta =
+      footprintWidth && footprintWidth > 0
+        ? footprintWidth
+        : isBase
+          ? 0.12
+          : 30;
     const margin = isBase ? Math.max(widthDelta * 0.25, 0.02) : 0;
-    const ledgerShiftX = Math.max(Math.min(((get().ledgerWidthMm ?? 1000) / 1000) * 0.1, 0.2), 0.02);
-    const ledgerShiftZ = Math.max(Math.min(((get().ledgerDepthMm ?? 2000) / 1000) * 0.1, 0.2), 0.02);
+    const ledgerShiftX = Math.max(
+      Math.min(((get().ledgerWidthMm ?? 1000) / 1000) * 0.1, 0.2),
+      0.02,
+    );
+    const ledgerShiftZ = Math.max(
+      Math.min(((get().ledgerDepthMm ?? 2000) / 1000) * 0.1, 0.2),
+      0.02,
+    );
     const expandedBaseWidth = (get().baseWidthMm / 1000) * 1.3;
-    const baseLocalShift = (widthDelta + margin) / Math.max(expandedBaseWidth, 1e-6);
+    const baseLocalShift =
+      (widthDelta + margin) / Math.max(expandedBaseWidth, 1e-6);
     const deltaX = isLedger
       ? ledgerShiftX
       : isBase
@@ -1877,7 +2109,7 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
     set({ selectedMotifId: id });
     if (id) {
       // Close other panels when opening motif panel
-      set({ 
+      set({
         activePanel: 'motif',
         selectedInscriptionId: null, // Deselect any inscription
         selectedAdditionId: null, // Deselect any addition
@@ -1888,7 +2120,8 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
       // Navigate to select-motifs page only on mobile to keep canvas visible on desktop
       const { navTo } = get();
       if (navTo && !isDesktopViewport()) {
-        const currentPath = typeof window !== 'undefined' ? window.location.pathname : '';
+        const currentPath =
+          typeof window !== 'undefined' ? window.location.pathname : '';
         if (currentPath !== '/select-motifs') {
           navTo('/select-motifs');
         }
@@ -1918,10 +2151,7 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
   },
   setMotifRef: (id, ref) =>
     set((s) => ({ motifRefs: { ...s.motifRefs, [id]: ref } })),
-  setMotifOffset: (
-    id: string,
-    offset: Partial<MotifOffset>,
-  ) => {
+  setMotifOffset: (id: string, offset: Partial<MotifOffset>) => {
     set((s) => {
       const previous = s.motifOffsets[id];
       const surface = offset.target ?? previous?.target ?? 'headstone';
@@ -1932,11 +2162,7 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
         !previous?.baseWidthMm ||
         !previous?.baseHeightMm;
       const nextOffset = withOffsetSurfaceDimensions<MotifOffset>(
-        {
-          ...previous,
-          ...offset,
-          target: surface,
-        },
+        { ...previous, ...offset, target: surface },
         surface,
         s,
         shouldRefreshDims,
@@ -1948,27 +2174,36 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
   },
   duplicateMotif: (id: string) => {
     const { selectedMotifs, motifOffsets } = get();
-    
+
     // Find the motif with this ID
     const motif = selectedMotifs.find((m) => m.id === id);
     if (!motif) return;
-    
+
     // Generate a unique instance ID for the duplicate
     const newId = genMotifId();
-    
+
     // Add the duplicate
-    set((s) => ({ 
-      selectedMotifs: [...s.selectedMotifs, { id: newId, svgPath: motif.svgPath, color: motif.color }] 
+    set((s) => ({
+      selectedMotifs: [
+        ...s.selectedMotifs,
+        { id: newId, svgPath: motif.svgPath, color: motif.color },
+      ],
     }));
-    
+
     // Get the current offset for the original
     const currentOffset = motifOffsets[id];
-    
+
     if (currentOffset) {
       set((s) => {
         const surface = currentOffset.target ?? 'headstone';
-        const ledgerShiftX = Math.max(Math.min(((s.ledgerWidthMm ?? 1000) / 1000) * 0.1, 0.15), 0.02);
-        const ledgerShiftZ = Math.max(Math.min(((s.ledgerDepthMm ?? 2000) / 1000) * 0.1, 0.15), 0.02);
+        const ledgerShiftX = Math.max(
+          Math.min(((s.ledgerWidthMm ?? 1000) / 1000) * 0.1, 0.15),
+          0.02,
+        );
+        const ledgerShiftZ = Math.max(
+          Math.min(((s.ledgerDepthMm ?? 2000) / 1000) * 0.1, 0.15),
+          0.02,
+        );
         const deltaX = surface === 'ledger' ? ledgerShiftX : 30;
         const deltaY = surface === 'ledger' ? ledgerShiftZ : 30;
         const duplicatedOffset = withOffsetSurfaceDimensions<MotifOffset>(
@@ -1996,7 +2231,12 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
   },
 
   calculateInscriptionCost: () => {
-    const { inscriptions, inscriptionPriceModel, showInscriptionColor, productId } = get();
+    const {
+      inscriptions,
+      inscriptionPriceModel,
+      showInscriptionColor,
+      productId,
+    } = get();
     // Full Colour Plaque (product 32): inscriptions are free
     if (productId === '32' || !inscriptionPriceModel || !showInscriptionColor) {
       set({ inscriptionCost: 0 });
@@ -2036,7 +2276,13 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
   },
 
   calculateMotifCost: () => {
-    const { selectedMotifs, motifOffsets, motifPriceModel, catalog, productId } = get();
+    const {
+      selectedMotifs,
+      motifOffsets,
+      motifPriceModel,
+      catalog,
+      productId,
+    } = get();
     // Full Colour Plaque (product 32): motifs are free
     if (productId === '32' || !motifPriceModel) {
       set({ motifCost: 0 });
@@ -2054,7 +2300,7 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
         heightMm,
         color,
         motifPriceModel.priceModel,
-        isLaser
+        isLaser,
       );
 
       totalCost += motifPrice;
@@ -2107,7 +2353,10 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
       const baseId = addId.split('_')[0];
       const addition = (data.additions || []).find((a) => a.id === baseId);
       if (addition?.sizes?.length) {
-        const variant = Math.max(1, Math.min(addition.sizes.length, Math.round(offset?.sizeVariant ?? 1)));
+        const variant = Math.max(
+          1,
+          Math.min(addition.sizes.length, Math.round(offset?.sizeVariant ?? 1)),
+        );
         const sizeData = addition.sizes[variant - 1] ?? addition.sizes[0];
         totalCost += sizeData?.retailPrice ?? 0;
       }
@@ -2157,9 +2406,12 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
       get().setSelectedInscriptionId(id);
     }
     get().setActivePanel('inscription');
-    
+
     // Don't navigate if we're on a /designs/ page
-    if (typeof window !== 'undefined' && !window.location.pathname.startsWith('/designs/')) {
+    if (
+      typeof window !== 'undefined' &&
+      !window.location.pathname.startsWith('/designs/')
+    ) {
       get().navTo?.('/inscriptions');
     }
   },
@@ -2168,9 +2420,12 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
     // Close addition panel when opening size panel
     set({ selectedAdditionId: null });
     get().setActivePanel('size');
-    
+
     // Don't navigate if we're on a /designs/ page
-    if (typeof window !== 'undefined' && !window.location.pathname.startsWith('/designs/')) {
+    if (
+      typeof window !== 'undefined' &&
+      !window.location.pathname.startsWith('/designs/')
+    ) {
       get().navTo?.('/select-size');
     }
   },
@@ -2184,9 +2439,12 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
     // Close addition panel when opening additions panel
     set({ selectedAdditionId: null });
     get().setActivePanel('additions');
-    
+
     // Don't navigate if we're on a /designs/ page
-    if (typeof window !== 'undefined' && !window.location.pathname.startsWith('/designs/')) {
+    if (
+      typeof window !== 'undefined' &&
+      !window.location.pathname.startsWith('/designs/')
+    ) {
       get().navTo?.('/select-additions');
     }
   },
@@ -2202,7 +2460,12 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
       const catalog = s.catalog;
       const productType = catalog?.product?.type;
       const defaultVisibility = {
-        showBase: productType === 'headstone' || productType === 'mini-headstone' || productType === 'monument' || productType === 'full-monument' || productType === 'urn',
+        showBase:
+          productType === 'headstone' ||
+          productType === 'mini-headstone' ||
+          productType === 'monument' ||
+          productType === 'full-monument' ||
+          productType === 'urn',
         showLedger: productType === 'full-monument',
         showKerbset: productType === 'full-monument',
       };

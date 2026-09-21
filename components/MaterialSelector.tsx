@@ -22,6 +22,7 @@ import SegmentedControl from './ui/SegmentedControl';
 import { getDesignerProductStepHref } from '#/lib/designer-product-routes';
 import { bronzes } from '#/app/_internal/_data';
 import { resolveMaterialAssetPath } from '#/lib/material-utils';
+import { preloadSceneTexture } from '#/lib/preload-texture';
 import { useImageCropState } from './useImageCropState';
 import type { MaskShape } from '#/lib/image-mask';
 
@@ -379,13 +380,14 @@ export default function MaterialSelector({
     return options;
   }, [isFullMonument, isPlaque, showBase, showKerbset, showLedger]);
 
-  const handleMaterialSelect = (material: MaterialOption) => {
+  const handleMaterialSelect = async (material: MaterialOption) => {
     const materialUrl = buildTextureUrl(material);
     if (!materialUrl) {
       return;
     }
 
     setIsMaterialChange(true);
+    await preloadSceneTexture(materialUrl);
     const targetObject = isPlaque
       ? 'headstone'
       : (forceTarget ?? editingObject);

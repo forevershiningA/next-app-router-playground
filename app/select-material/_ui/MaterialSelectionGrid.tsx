@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 import { useHeadstoneStore, type Material as MaterialOption } from '#/lib/headstone-store';
 import { bronzes } from '#/app/_internal/_data';
 import { resolveMaterialAssetPath } from '#/lib/material-utils';
+import { preloadSceneTexture } from '#/lib/preload-texture';
 import SegmentedControl from '#/components/ui/SegmentedControl';
 import { getDesignerProductStepHref } from '#/lib/designer-product-routes';
 
@@ -212,13 +213,17 @@ export default function MaterialSelectionGrid({ materials }: { materials: Materi
     );
   }
 
-  const handleMaterialSelect = (material: MaterialOption) => {
+  const handleMaterialSelect = async (material: MaterialOption) => {
     const materialUrl = buildTextureUrl(material);
     if (!materialUrl) {
       return;
     }
 
     setIsMaterialChange(true);
+    // Keep the currently rendered granite until this image has decoded. The
+    // new URL is written only afterwards, including when moving to the next
+    // designer route immediately after selection.
+    await preloadSceneTexture(materialUrl);
     const targetSelection = isPlaque ? 'headstone' : (selected ?? editingObject ?? 'headstone');
 
     if (targetSelection === 'base') {

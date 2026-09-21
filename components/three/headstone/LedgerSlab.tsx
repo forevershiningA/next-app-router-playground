@@ -169,6 +169,22 @@ function LedgerMesh({
   );
 }
 
+function PreloadTexture({
+  url,
+  onReady,
+}: {
+  url: string;
+  onReady: () => void;
+}) {
+  useTexture.preload(url);
+  useTexture(url);
+  useEffect(() => {
+    const frame = requestAnimationFrame(onReady);
+    return () => cancelAnimationFrame(frame);
+  }, [onReady]);
+  return null;
+}
+
 const LedgerSlab = forwardRef<THREE.Mesh, LedgerSlabProps>(function LedgerSlab({ onClick }, ref) {
   const internalRef = useRef<THREE.Mesh>(null!);
   useImperativeHandle(ref, () => internalRef.current);
@@ -186,21 +202,45 @@ const LedgerSlab = forwardRef<THREE.Mesh, LedgerSlabProps>(function LedgerSlab({
       ? ledgerMaterialUrl
       : `/${ledgerMaterialUrl}`
     : `${TEX_BASE}${DEFAULT_TEX}`;
+  const [visibleTexUrl, setVisibleTexUrl] = React.useState(texUrl);
+  const pendingTextureSwap = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (pendingTextureSwap.current) clearTimeout(pendingTextureSwap.current);
+    };
+  }, []);
 
   return (
-    <Suspense fallback={null}>
-      <LedgerMesh
-        texUrl={texUrl}
-        ledgerWidthMm={ledgerWidthMm}
-        ledgerHeightMm={ledgerHeightMm}
-        ledgerDepthMm={ledgerDepthMm}
-        uprightThickness={uprightThickness}
-        baseThickness={baseThickness}
-        kerbHeightMm={kerbHeightMm}
-        onClick={onClick}
-        meshRef={internalRef}
-      />
-    </Suspense>
+    <>
+      <Suspense fallback={null}>
+        <LedgerMesh
+          texUrl={visibleTexUrl}
+          ledgerWidthMm={ledgerWidthMm}
+          ledgerHeightMm={ledgerHeightMm}
+          ledgerDepthMm={ledgerDepthMm}
+          uprightThickness={uprightThickness}
+          baseThickness={baseThickness}
+          kerbHeightMm={kerbHeightMm}
+          onClick={onClick}
+          meshRef={internalRef}
+        />
+      </Suspense>
+      {texUrl !== visibleTexUrl && (
+        <Suspense fallback={null}>
+          <PreloadTexture
+            url={texUrl}
+            onReady={() => {
+              if (pendingTextureSwap.current) clearTimeout(pendingTextureSwap.current);
+              pendingTextureSwap.current = setTimeout(() => {
+                setVisibleTexUrl(texUrl);
+                pendingTextureSwap.current = null;
+              }, 300);
+            }}
+          />
+        </Suspense>
+      )}
+    </>
   );
 });
 

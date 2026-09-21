@@ -14,15 +14,9 @@ import { fetchMaskMetrics } from '#/lib/mask-metrics';
 import {
   getFlexibleImageBounds,
   getImageSizeOptions,
-  getImageSizeOption,
 } from '#/lib/image-size-config';
 import { MASK_OPTIONS, getMaskAspectRatio, getMaskUrl } from '#/lib/image-mask';
 import { useImageCropState } from './useImageCropState';
-import {
-  calculateImagePrice,
-  fetchImagePricing,
-  type ImagePricingMap,
-} from '#/lib/image-pricing';
 import { logger } from '#/lib/logger';
 import { CheckCircleIcon } from '@heroicons/react/24/outline';
 import {
@@ -187,15 +181,7 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
   const updateImageData = useHeadstoneStore((s) => s.updateImageData);
   const setCropCanvasData = useHeadstoneStore((s) => s.setCropCanvasData);
 
-  // Image pricing state
-  const [imagePricingData, setImagePricingData] =
-    useState<ImagePricingMap | null>(null);
   const [isCropping, setIsCropping] = useState(false);
-  useEffect(() => {
-    fetchImagePricing()
-      .then(setImagePricingData)
-      .catch(() => {});
-  }, []);
 
   useEffect(() => {
     const normalizedRotation = normalizeSignedRotation(cropRotation);
@@ -785,19 +771,6 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
     (img) => img.id === selectedImageId,
   );
 
-  // Debug logging
-  useEffect(() => {
-    logger.log('[ImageSelector] State:', {
-      selectedImageId,
-      activePanel,
-      hasSelectedImage: !!selectedImage,
-      selectedImagesCount: selectedImages.length,
-      selectedImageData: selectedImage
-        ? { id: selectedImage.id, typeName: selectedImage.typeName }
-        : null,
-    });
-  }, [selectedImageId, activePanel, selectedImage, selectedImages]);
-
   // Show message if no image types available
   if (imageTypes.length === 0) {
     return (
@@ -884,17 +857,6 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
       updateImageSizeVariant(selectedImageId, newSize);
       updateImageSize(selectedImageId, dims.height * sizeAspectRatio, dims.height);
     };
-    const selectedSizeOption = getImageSizeOption(selectedImage.typeId, currentSizeVariant);
-    const pricingProduct = imagePricingData?.[String(selectedImage.typeId)];
-    const imagePrice = pricingProduct
-      ? calculateImagePrice(
-          pricingProduct,
-          selectedSizeOption?.width ?? Math.round(selectedImage.widthMm || 0),
-          selectedSizeOption?.height ?? Math.round(selectedImage.heightMm || 0),
-          selectedImage.colorMode,
-        )
-      : null;
-
     return (
       <div className="space-y-3">
         {/* Hidden file input for image update flow */}
@@ -905,35 +867,28 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
           onChange={handleUpdateUpload}
           className="hidden"
         />
-        <div className={sectionCardClass}>
-          <div className="flex items-center justify-between gap-3">
-            <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-md bg-black/20">
-              <Image src={selectedImage.imageUrl} alt="" fill sizes="48px" className="object-cover" unoptimized />
-            </div>
-            <div className="min-w-0 flex-1">
-              <div className="day:text-gray-400 text-[10px] font-semibold tracking-[0.18em] text-white/45 uppercase">Selected Image</div>
-              <div className="day:text-gray-900 mt-0.5 truncate text-sm font-semibold text-white">{selectedImage.typeName}</div>
-            </div>
-            {imagePrice !== null && <div className="shrink-0 text-sm font-semibold text-[#D7B356]">${imagePrice.toFixed(2)}</div>}
-          </div>
-          <div className="day:border-gray-200 mt-3 flex items-center gap-2 border-t border-white/10 pt-3">
-            {hasFixedSizes ? (
-              <select value={currentSizeVariant} onChange={(e) => applyFixedSizeVariant(Number(e.target.value))} className="day:border-gray-300 day:bg-gray-100 day:text-gray-900 min-w-0 flex-1 rounded-md border border-white/10 bg-[#121212] px-3 py-2 text-sm font-semibold text-white outline-none focus:border-[#D7B356]">
-                {sizeOptions.map((size, index) => (
-                  <option key={size.label} value={index + 1}>
-                    {formatImageSize(size.height * aspectRatio, size.height)}
-                  </option>
-                ))}
-              </select>
-            ) : <span className="day:text-gray-600 min-w-0 flex-1 text-sm font-medium text-white/65">{formatImageSize(selectedImage.widthMm, selectedImage.heightMm)}</span>}
-            <button type="button" onClick={() => { removeImage(selectedImageId); setSelectedImageId(null); setActivePanel(null); }} aria-label="Remove image" className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-red-400/35 text-red-200 transition-colors hover:bg-red-500/15">
-              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.9 12.1A2 2 0 0116.1 21H7.9a2 2 0 01-2-1.9L5 7m4 4v6m6-6v6m-7-10V4h8v3M4 7h16" /></svg>
-            </button>
-          </div>
+        <div className="px-1 pt-1 text-sm font-semibold text-white day:text-gray-900">
+          {selectedImage.typeName}
+        </div>
+        <div className="flex items-center gap-3 px-1 pt-1">
+          <label className={`${labelClass} shrink-0`}>Size</label>
+          {hasFixedSizes ? (
+            <select value={currentSizeVariant} onChange={(e) => applyFixedSizeVariant(Number(e.target.value))} className="day:border-gray-300 day:bg-gray-100 day:text-gray-900 min-w-0 flex-1 rounded-md border border-white/10 bg-[#121212] px-3 py-2 text-sm font-semibold text-white outline-none focus:border-[#D7B356]">
+              {sizeOptions.map((size, index) => (
+                <option key={size.label} value={index + 1}>
+                  {formatImageSize(size.height * aspectRatio, size.height)}
+                </option>
+              ))}
+            </select>
+          ) : (
+            <span className="day:text-gray-600 min-w-0 flex-1 text-right text-sm font-medium text-white/65">
+              {formatImageSize(selectedImage.widthMm, selectedImage.heightMm)}
+            </span>
+          )}
         </div>
         <div className="space-y-3">
           {/* Size Slider */}
-          <div className={hasFixedSizes ? 'hidden' : sectionCardClass}>
+          <div className={hasFixedSizes ? 'hidden' : 'px-1 pt-1'}>
             {hasFixedSizes ? (
               <>
                 <div className="flex items-center justify-between gap-2">
@@ -1260,7 +1215,7 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
           </div>
 
           {/* Rotation Slider */}
-          <div className={`${sectionCardClass} hidden md:block`}>
+          <div className="hidden px-1 pt-1 md:block">
             <div className="flex items-center justify-between gap-2">
               <div className="flex items-center gap-2">
                 <label className={labelClass}>Rotation</label>
@@ -1278,8 +1233,7 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                 <button
                   type="button"
                   onClick={() => {
-                    const newVal = snapImageRotation(Math.max(-180, imageRotationDeg - 1));
-                    updateImageRotationDegrees(newVal);
+                    updateImageRotationDegrees(Math.max(-180, imageRotationDeg - 1));
                   }}
                   className={controlButtonClass}
                   aria-label="Decrease rotation by 1 degree"
@@ -1322,8 +1276,7 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                 <button
                   type="button"
                   onClick={() => {
-                    const newVal = snapImageRotation(Math.min(180, imageRotationDeg + 1));
-                    updateImageRotationDegrees(newVal);
+                    updateImageRotationDegrees(Math.min(180, imageRotationDeg + 1));
                   }}
                   className={controlButtonClass}
                   aria-label="Increase rotation by 1 degree"

@@ -285,6 +285,21 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
   ) => {
     const threeContext = useThree() as ThreeContextValue;
     const { camera, gl, controls, scene } = threeContext;
+    // Keep the rendered typeface stable while Troika generates the glyph atlas
+    // for the newly selected font. Otherwise Text suspends and vanishes for a
+    // frame before the replacement font is ready.
+    const [visibleFont, setVisibleFont] = React.useState(font);
+    const requestedFontRef = React.useRef(font);
+
+    React.useEffect(() => {
+      requestedFontRef.current = font;
+    }, [font]);
+
+    const commitPreloadedFont = React.useCallback((loadedFont: string | undefined) => {
+      if (requestedFontRef.current === loadedFont) {
+        setVisibleFont(loadedFont);
+      }
+    }, []);
 
     // Check if this is a Traditional Engraved product (sandblasted effect)
     const productId = useHeadstoneStore((s) => s.productId);
@@ -922,7 +937,7 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
       >
         {/* Main text */}
         <Text
-          font={font}
+          font={visibleFont}
           color={renderedTextColor}
           anchorX="center"
           anchorY="middle"
@@ -1014,6 +1029,18 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
         >
           {text}
         </Text>
+
+        {font !== visibleFont && (
+          <React.Suspense fallback={null}>
+            <Text
+              font={font}
+              visible={false}
+              onSync={() => commitPreloadedFont(font)}
+            >
+              {text}
+            </Text>
+          </React.Suspense>
+        )}
         
         {/* Selection box with resize and rotation handles */}
         {selected && textBounds.width > 0 && (

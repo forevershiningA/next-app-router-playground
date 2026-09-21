@@ -76,7 +76,7 @@ function CameraController() {
     // little higher in the visible viewport instead of letting its base meet
     // the sheet edge.
     const targetY = window.innerWidth < 768 ? 3.55 : 3.8;
-    camera.position.set(0, 4.2, CAMERA_3D_POSITION_Z);
+    camera.position.set(0, 4.13, CAMERA_3D_POSITION_Z);
     camera.lookAt(0, targetY, 0);
     camera.updateProjectionMatrix();
 
@@ -767,7 +767,7 @@ export default function ThreeScene() {
                 );
               }}
               camera={{
-                position: [0, 4.2, CAMERA_3D_POSITION_Z],
+                position: [0, 4.13, CAMERA_3D_POSITION_Z],
                 fov: CAMERA_FOV,
                 near: CAMERA_NEAR,
                 far: CAMERA_FAR,

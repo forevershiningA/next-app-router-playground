@@ -11,7 +11,7 @@ import {
   useEffect,
 } from 'react';
 import * as THREE from 'three';
-import { useLoader } from '@react-three/fiber';
+import { useFrame, useLoader } from '@react-three/fiber';
 import type { ThreeElements } from '@react-three/fiber';
 import { SVGLoader } from 'three/examples/jsm/loaders/SVGLoader.js';
 import * as BufferGeometryUtils from 'three/examples/jsm/utils/BufferGeometryUtils.js';
@@ -2484,6 +2484,12 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(
     const meshRef = useRef<THREE.Mesh>(null!);
     const groupRef = useRef<THREE.Group>(null!);
     const scaledWrapperRef = useRef<THREE.Group>(null!);
+    const stoneScaleRef = useRef<THREE.Group>(null!);
+    const surfaceScaleRef = useRef<THREE.Group>(null!);
+    const visualScaleTargetRef = useRef(new THREE.Vector3());
+    const wrapperPositionTargetRef = useRef(new THREE.Vector3());
+    const previousRawDepthRef = useRef<number | null>(null);
+    const visualScaleInitializedRef = useRef(false);
 
     // Force-apply quaternion to ensure it sticks (R3F prop diffing issue workaround)
     useLayoutEffect(() => {
@@ -2491,6 +2497,65 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(
         scaledWrapperRef.current.quaternion.copy(childWrapperRotation);
       }
     }, [childWrapperRotation]);
+
+    // Dimension changes rebuild the SVG geometry to keep its physical
+    // dimensions and UVs correct. Apply the result through scene groups so the
+    // visual transition is smooth rather than stepping at every slider event.
+    useLayoutEffect(() => {
+      visualScaleTargetRef.current.set(...meshScale);
+      wrapperPositionTargetRef.current.set(...childWrapperPos);
+      const rawDepth = headstoneStyle === 'slant' ? slantThickness / 10 : depth;
+      if (!visualScaleInitializedRef.current) {
+        stoneScaleRef.current?.scale.copy(visualScaleTargetRef.current);
+        surfaceScaleRef.current?.scale.copy(visualScaleTargetRef.current);
+        scaledWrapperRef.current?.position.copy(
+          wrapperPositionTargetRef.current,
+        );
+        visualScaleInitializedRef.current = true;
+      } else if (previousRawDepthRef.current !== null && rawDepth > EPS) {
+        // The replacement geometry already has the new raw depth. Compensate
+        // its Z scale with the old/new ratio before easing to the target so a
+        // Thickness slider change keeps the visible depth continuous.
+        stoneScaleRef.current?.scale.setZ(
+          stoneScaleRef.current.scale.z *
+            (previousRawDepthRef.current / rawDepth),
+        );
+      }
+      previousRawDepthRef.current = rawDepth;
+    }, [meshScale, childWrapperPos, depth, headstoneStyle, slantThickness]);
+
+    useFrame((state, delta) => {
+      const stoneScale = stoneScaleRef.current;
+      const surfaceScale = surfaceScaleRef.current;
+      const wrapper = scaledWrapperRef.current;
+      if (
+        !stoneScale ||
+        !surfaceScale ||
+        !wrapper ||
+        !visualScaleInitializedRef.current
+      ) {
+        return;
+      }
+
+      const targetScale = visualScaleTargetRef.current;
+      const alpha = 1 - Math.exp(-14 * delta);
+      stoneScale.scale.lerp(targetScale, alpha);
+      surfaceScale.scale.lerp(targetScale, alpha);
+      wrapper.position.lerp(wrapperPositionTargetRef.current, alpha);
+
+      const stillAnimating =
+        stoneScale.scale.distanceToSquared(targetScale) > 1e-8 ||
+        surfaceScale.scale.distanceToSquared(targetScale) > 1e-8 ||
+        wrapper.position.distanceToSquared(wrapperPositionTargetRef.current) >
+          1e-8;
+      if (stillAnimating) {
+        state.invalidate();
+      } else {
+        stoneScale.scale.copy(targetScale);
+        surfaceScale.scale.copy(targetScale);
+        wrapper.position.copy(wrapperPositionTargetRef.current);
+      }
+    });
 
     // Force re-render after mount to ensure children can access populated meshRef
     const [isReady, setIsReady] = useState(false);
@@ -2644,35 +2709,34 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(
     return (
       <group ref={groupRef} position={groupPosition}>
         {/* Apply SVG scale only to headstone mesh */}
-        {geometries.map((geom, i) => (
-          <mesh
-            key={`hs-${i}`}
-            ref={i === 0 ? meshRef : undefined}
-            geometry={geom}
-            material={materials}
-            scale={meshScale}
-            castShadow
-            receiveShadow
-            {...meshProps}
-          >
-            {showEdges && <Edges scale={1.002} threshold={15} color="white" />}
-          </mesh>
-        ))}
+        <group ref={stoneScaleRef}>
+          {geometries.map((geom, i) => (
+            <mesh
+              key={`hs-${i}`}
+              ref={i === 0 ? meshRef : undefined}
+              geometry={geom}
+              material={materials}
+              castShadow
+              receiveShadow
+              {...meshProps}
+            >
+              {showEdges && (
+                <Edges scale={1.002} threshold={15} color="white" />
+              )}
+            </mesh>
+          ))}
+        </group>
 
         {/*
          CHILDREN WRAPPER:
          For slant: Uses quaternion to align local +Z to face normal
          Outer group handles position and quaternion, inner group handles scale
       */}
-        <group
-          ref={scaledWrapperRef}
-          position={childWrapperPos}
-          quaternion={childWrapperRotation}
-        >
+        <group ref={scaledWrapperRef} quaternion={childWrapperRotation}>
           {/* Lock children to slant face (prevents billboard/lookAt from standing them up) */}
           {headstoneStyle === 'slant' ? (
             <group position-z={apiData?.frontZ || 0.001}>
-              <group renderOrder={10} scale={meshScale}>
+              <group ref={surfaceScaleRef} renderOrder={10}>
                 {sourceOverlay}
                 {showStainlessRim && (
                   <StainlessHeadstoneRim
@@ -2686,7 +2750,7 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(
             </group>
           ) : (
             <group position-z={apiData?.frontZ || 0}>
-              <group renderOrder={10} scale={meshScale}>
+              <group ref={surfaceScaleRef} renderOrder={10}>
                 {sourceOverlay}
                 {showStainlessRim && (
                   <StainlessHeadstoneRim

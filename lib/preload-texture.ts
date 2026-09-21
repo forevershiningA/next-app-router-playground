@@ -7,6 +7,9 @@ let loader: THREE.TextureLoader | null = null;
 
 function getLoader() {
   if (typeof window === 'undefined') return null;
+  // Share the decoded image with the TextureLoader used by drei. This avoids
+  // a second load/decode pass when the selected material reaches the canvas.
+  THREE.Cache.enabled = true;
   if (!loader) {
     loader = new THREE.TextureLoader();
     loader.setCrossOrigin('anonymous');

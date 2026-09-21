@@ -127,13 +127,21 @@ function PreloadShape({ url, onReady }: { url: string; onReady?: () => void }) {
 
 function PreloadTexture({
   url,
+  hasSideTexture,
   onReady,
 }: {
   url: string;
+  hasSideTexture: boolean;
   onReady?: () => void;
 }) {
   useTexture.preload(url);
-  useTexture(url);
+  // Match SvgHeadstone's loader request exactly. Preloading only the face
+  // leaves its face-and-side request uncached, which can still suspend and
+  // briefly remove the headstone when a material changes.
+  useTexture({
+    face: url,
+    ...(hasSideTexture ? { side: url } : {}),
+  });
   React.useEffect(() => {
     const id = requestAnimationFrame(() => onReady?.());
     return () => cancelAnimationFrame(id);
@@ -442,7 +450,9 @@ export default function ShapeSwapper({
 
   const [visibleUrl, setVisibleUrl] = React.useState<string | null>(null);
   // Re-introduce visibleTex state to decouple loading from display
-  const [visibleTex, setVisibleTex] = React.useState<string | null>(null);
+  const [visibleTex, setVisibleTex] = React.useState<string | null>(
+    () => requestedTex,
+  );
   const pendingTextureSwap = React.useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const [fitTick, setFitTick] = React.useState(0);
@@ -541,16 +551,16 @@ export default function ShapeSwapper({
     setLoading(shouldLoad);
   }, [shapeSwapping, textureTransitioning, fontLoading, setLoading]);
 
-  // Handle Texture Updates via Transition
-  // When shape is swapping we can update immediately (full-screen loader visible)
-  // For material changes, also update immediately to avoid suspense delays
-  // For blob/data URLs, always update immediately (no preloading needed)
+  // Handle Texture Updates via Transition. Keep the current material on screen
+  // until the next texture has resolved; changing a granite must never suspend
+  // the whole headstone subtree for a frame.
+  // Blob/data URLs are local and can be applied immediately.
   React.useEffect(() => {
-    if ((shapeSwapping || isMaterialChange || isBlobOrDataTex) && requestedTex !== visibleTex) {
+    if ((shapeSwapping || isBlobOrDataTex) && requestedTex !== visibleTex) {
       setVisibleTex(requestedTex);
       invalidate();
     }
-  }, [requestedTex, visibleTex, shapeSwapping, isMaterialChange, isBlobOrDataTex, invalidate]);
+  }, [requestedTex, visibleTex, shapeSwapping, isBlobOrDataTex, invalidate]);
 
   // Trigger fit when switching view modes and assets are ready
   React.useEffect(() => {
@@ -907,10 +917,11 @@ export default function ShapeSwapper({
         )}
       </group>
 
-      {!shapeSwapping && !isMaterialChange && !isBlobOrDataTex && textureTransitioning && (
+      {!shapeSwapping && !isBlobOrDataTex && textureTransitioning && (
         <React.Suspense fallback={null}>
           <PreloadTexture
             url={requestedTex}
+            hasSideTexture={!isFullColourPlaque && !isUrn && !isStainlessSteel}
             onReady={() => {
               if (pendingTextureSwap.current) {
                 clearTimeout(pendingTextureSwap.current);

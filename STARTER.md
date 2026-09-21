@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-09-17
+**Last Updated:** 2026-09-21
 
 **Status entry order:** Add new dated status entries immediately after the table of contents, before the existing status entries. Keep status entries in reverse chronological order (newest first); do not append them to the end of this file.
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots), **Vitest 4.1.8** (unit tests), **Playwright 1.59.1** (E2E tests)
@@ -106,8 +106,29 @@
 95. [September 15 Designer Material and Scene-Chip Polish](#current-status-2026-09-15--designer-material-and-scene-chip-polish)
 96. [September 16 Bronze Plaque Fastening and Perimeter-Wall Corrections](#current-status-2026-09-16--bronze-plaque-fastening-and-perimeter-wall-corrections)
 97. [September 17 Product Selection Catalogue Layout](#current-status-2026-09-17--product-selection-catalogue-layout)
+98. [September 19 Designer Sidebar and Inscription Editor Clarity](#current-status-2026-09-19--designer-sidebar-and-inscription-editor-clarity)
+99. [September 21 Guided Designer Panel Simplification](#current-status-2026-09-21--guided-designer-panel-simplification)
 
 ---
+
+## Current Status (2026-09-21) — Guided Designer Panel Simplification
+
+- **Guided navigation:** `components/DesignerNav.tsx` now exposes the main workflow as seven icon shortcuts: Material/Background, Size, Inscription, Image, Motif, Price, and Save. Desktop shows them beneath the guided header. Mobile keeps the header compact and reveals the same icons only when the small grid button beside **Menu** is tapped; a chosen section closes the temporary icon tray. The normal mobile **Previous / Next** footer remains unchanged. **Price** opens the existing `CheckPricePanel` modal, matching the canvas price chip, rather than navigating to a separate route.
+- **Flat editing-panel hierarchy:** Inscriptions, motifs, images, and additions now follow one visual system: the selected XML/configuration product name is a plain line at the top; parameter controls use the panel background rather than nested cards; and destructive/duplication actions sit at the bottom. Do not reintroduce a `Selected …` thumbnail/price card without a clear new need. Relevant files are `components/InscriptionEditPanel.tsx`, `components/ImageSelector.tsx`, and the motif/addition renderers in `components/DesignerNav.tsx`.
+- **Names from XML:** `InscriptionEditPanel` displays `inscriptionPriceModel.name` (for example **Traditional Engraved Inscription**). The motif editor uses `motifPriceModel.priceModel.name` (for example **Traditional Engraved Motif**). Image selections use their configured `typeName`; additions use the selected addition's XML `name`. These names are intentionally left-aligned without redundant labels such as “Image”, “Motif”, or “Inscription”.
+- **Control ordering and behavior:** Motifs show Height and Rotation before Color; their bottom actions include Duplicate, Delete, Flip X, and Flip Y. Additions retain their applicable Size and Rotation controls plus Duplicate/Delete. Images retain Size, flexible Height where applicable, Rotation, and Update/Duplicate/Delete. The rotation +/- controls in `ImageSelector` change exactly one degree; only slider/direct-entry paths retain snap behavior around 0° and ±90°.
+- **Select Size:** Keep the Headstone/Base and Upright/Slant selectors visually grouped, because they select a mode. The Width, Height, Thickness (or Length) controls in `renderSelectSizePanel` are deliberately flat rows with subtle separators rather than individual dark cards; retain the minus/number/plus controls and sliders.
+- **No visual disappearance during asset changes:** `components/HeadstoneInscription.tsx` keeps the previously ready font visible while a hidden Drei/Troika `<Text>` preloads the requested font, then swaps only when it is ready. `components/three/headstone/ShapeSwapper.tsx` preloads face and side texture URLs using the exact `useTexture` request shape used by `SvgHeadstone`, preserving the current material while the replacement texture is loading.
+- **Product sample metadata:** `app/select-product/_ui/ProductSelectionGrid.tsx` presents **Sample size** with the dimensions on one line and the sample price below it.
+- **Validation:** targeted ESLint and `git diff --check` completed without errors for the modified panel components. Existing repository ESLint warnings remain and are not introduced by this work.
+
+## Current Status (2026-09-19) — Designer Sidebar and Inscription Editor Clarity
+
+- **Desktop sidebar hierarchy:** `components/DesignerNav.tsx` constrains the desktop logo header to a compact 176 px height and centres its logo, leaving more room for the configuration workflow. Future stages no longer show a redundant **Available** label; only meaningful **Current** (gold) and **Complete** (green) statuses appear. **Check Price** is a dedicated gold CTA with `View estimate`, rather than another visually equal navigation row.
+- **Inscription colour tab:** `components/InscriptionEditPanel.tsx` now treats **Select Font** and **Select Color** as exclusive tab views. Choosing **Select Color** displays the colour palette immediately instead of continuing to show the Garamond/font control and placing colour choices below it. Before an inscription exists or is selected, the same palette remains visible but disabled, with the instruction: “Add or select an inscription to choose its colour.” Selecting an inscription enables the swatches; engraved products retain the Gold and Silver Gilding choices.
+- **No empty inscriptions:** the editor no longer creates an empty line from **Add Inscription**. A blank draft disables that action until non-whitespace text is entered. When an existing inscription is selected, the action is labelled **New Inscription** and only prepares an empty draft; it does not create a blank inscription object. The user must enter text and then use **Add Inscription** to persist it.
+- **Navigation limitation recorded:** the desktop guided-panel header still uses generic `Menu`, `Prev`, and `Next` labels. User feedback shows this does not make the next task (for example adding an image after inscriptions) discoverable. The planned follow-up is to rename them contextually (`All design steps`, `Back: …`, `Next: Add your image`) and provide a clickable step list. This follow-up has not yet been implemented.
+- **Validation:** Prettier, targeted ESLint, and `git diff --check` passed for the updated inscription editor. The sidebar change had previously passed Prettier and `git diff --check`.
 
 ## Current Status (2026-09-17) — Product Selection Catalogue Layout
 
@@ -302,6 +323,9 @@ Use the user-supplied `screen.png` for visual acceptance and do not overwrite it
 - `LedgerSlab` uses a unit geometry and scales it to dimensions. Dispose that geometry only on component unmount. Its texture/material set may be rebuilt to update physical granite repeats when dimensions change; disposing the still-mounted geometry in that cleanup causes unnecessary GPU work and risks render glitches.
 - `FullMonumentFit` must subscribe to and include in its fit key every dimension that can change the structural bounding box: ledger width/height/depth, base width/height/thickness, kerb width/height/depth, upright height/thickness. The camera fit intentionally uses the live structural mesh bounds rather than duplicate dimensional formulae.
 - Camera interpolation runs only while animating and reuses one target `Vector3` per animation rather than allocating a new one per frame.
+- `SvgHeadstone` smooths Width, Height, and Thickness changes by interpolating the shared stone scale and front-surface position. `AutoFit` uses its `duration` prop for a cancellable camera interpolation after the initial fit; a new dimension-slider event retargets from the current camera pose rather than snapping to a new fitted distance.
+- Material changes preload and decode the replacement before its URL is committed to Zustand, then preserve the currently rendered texture until the replacement is ready. This applies to Headstone, Base, Ledger, and Kerbset, including full monuments and both material-selector UIs. `lib/preload-texture.ts` enables `THREE.Cache` so Drei can reuse that decoded image. Never reintroduce `isMaterialChange` as a bypass around the texture hand-off, or the `Suspense` fallback will briefly hide the part.
+- The standard non-full-monument initial camera pose is intentionally five OrbitControls wheel-in steps closer than the prior 10 m pose: Z is `8.15 m` and Y is `4.13 m` toward the normal `3.8 m` target. Full monuments remain owned by `FullMonumentFit`.
 
 ### Verification
 

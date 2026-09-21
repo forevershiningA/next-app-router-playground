@@ -206,6 +206,22 @@ function KerbMesh({
   );
 }
 
+function PreloadTexture({
+  url,
+  onReady,
+}: {
+  url: string;
+  onReady: () => void;
+}) {
+  useTexture.preload(url);
+  useTexture(url);
+  useEffect(() => {
+    const frame = requestAnimationFrame(onReady);
+    return () => cancelAnimationFrame(frame);
+  }, [onReady]);
+  return null;
+}
+
 const KerbsetBorder = forwardRef<THREE.Group, KerbsetBorderProps>(function KerbsetBorder(
   { onClick },
   ref,
@@ -225,20 +241,44 @@ const KerbsetBorder = forwardRef<THREE.Group, KerbsetBorderProps>(function Kerbs
       ? kerbsetMaterialUrl
       : `/${kerbsetMaterialUrl}`
     : `${TEX_BASE}${DEFAULT_TEX}`;
+  const [visibleTexUrl, setVisibleTexUrl] = React.useState(texUrl);
+  const pendingTextureSwap = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (pendingTextureSwap.current) clearTimeout(pendingTextureSwap.current);
+    };
+  }, []);
 
   return (
-    <Suspense fallback={null}>
-      <KerbMesh
-        texUrl={texUrl}
-        kerbWidthMm={kerbWidthMm}
-        kerbHeightMm={kerbHeightMm}
-        kerbDepthMm={kerbDepthMm}
-        uprightThickness={uprightThickness}
-        baseThickness={baseThickness}
-        onClick={onClick}
-        groupRef={internalRef}
-      />
-    </Suspense>
+    <>
+      <Suspense fallback={null}>
+        <KerbMesh
+          texUrl={visibleTexUrl}
+          kerbWidthMm={kerbWidthMm}
+          kerbHeightMm={kerbHeightMm}
+          kerbDepthMm={kerbDepthMm}
+          uprightThickness={uprightThickness}
+          baseThickness={baseThickness}
+          onClick={onClick}
+          groupRef={internalRef}
+        />
+      </Suspense>
+      {texUrl !== visibleTexUrl && (
+        <Suspense fallback={null}>
+          <PreloadTexture
+            url={texUrl}
+            onReady={() => {
+              if (pendingTextureSwap.current) clearTimeout(pendingTextureSwap.current);
+              pendingTextureSwap.current = setTimeout(() => {
+                setVisibleTexUrl(texUrl);
+                pendingTextureSwap.current = null;
+              }, 300);
+            }}
+          />
+        </Suspense>
+      )}
+    </>
   );
 });
 

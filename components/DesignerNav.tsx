@@ -4,7 +4,6 @@ import React, { useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import * as THREE from 'three';
 import Link from 'next/link';
-import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
 import {
   CubeIcon,
@@ -56,7 +55,6 @@ import ConfirmModal from './ConfirmModal';
 import {
   displayLengthValueFromMm,
   formatDimensionPair,
-  formatDimensionTriplet,
   formatImperialFractionFromMm,
   getLengthUnitLabel,
   lengthValueToMm,
@@ -142,6 +140,24 @@ const menuGroups = [
 
 // Flatten for compatibility with existing code
 const menuItems = menuGroups.flatMap((group) => group.items);
+const guidedQuickNavSlugs = [
+  'select-material',
+  'select-size',
+  'inscriptions',
+  'select-images',
+  'select-motifs',
+  'check-price',
+  'save-design',
+] as const;
+const guidedQuickNavLabels: Record<(typeof guidedQuickNavSlugs)[number], string> = {
+  'select-material': 'Material',
+  'select-size': 'Size',
+  inscriptions: 'Inscription',
+  'select-images': 'Image',
+  'select-motifs': 'Motif',
+  'check-price': 'Price',
+  'save-design': 'Save',
+};
 const fullscreenPanelSlugs = new Set([
   'select-size',
   'select-shape',
@@ -470,7 +486,6 @@ export default function DesignerNav() {
     (s) => s.setSelectedInscriptionId,
   );
   const selectedAdditionId = useHeadstoneStore((s) => s.selectedAdditionId);
-  const additionCost = useHeadstoneStore((s) => s.additionCost);
   const setSelectedAdditionId = useHeadstoneStore(
     (s) => s.setSelectedAdditionId,
   );
@@ -639,10 +654,17 @@ export default function DesignerNav() {
   const [isSizeExpanded, setIsSizeExpanded] = React.useState(false);
   const [showCanvas, setShowCanvas] = React.useState(false);
   const [isLoadingPanel, setIsLoadingPanel] = React.useState(false);
-  const [motifHeightStepIndex, setMotifHeightStepIndex] = React.useState(0);
+  const [isMobileQuickNavOpen, setIsMobileQuickNavOpen] =
+    React.useState(false);
   const [lastMotifCategoryId, setLastMotifCategoryId] = React.useState<
     string | null
   >(null);
+
+  useEffect(() => {
+    if (!isMobileNavOpen) {
+      setIsMobileQuickNavOpen(false);
+    }
+  }, [isMobileNavOpen]);
 
   const motifOffsets = useHeadstoneStore((s) => s.motifOffsets);
   const setMotifOffset = useHeadstoneStore((s) => s.setMotifOffset);
@@ -778,7 +800,7 @@ export default function DesignerNav() {
         }
         setShowSaveDesignModal(true);
       } else if (slug === 'check-price') {
-        router.push(designerHref('check-price'));
+        setActivePanel('checkprice');
       } else if (
         slug === 'select-shape' &&
         isCanvasVisible &&
@@ -816,6 +838,7 @@ export default function DesignerNav() {
       router,
       setEditingObject,
       setSelected,
+      setActivePanel,
       setShowSaveDesignModal,
     ],
   );
@@ -1043,16 +1066,6 @@ export default function DesignerNav() {
         Math.round(activeAdditionOffset?.sizeVariant ?? 1),
       ),
     );
-    const activeAdditionSize =
-      additionSizes[selectedSizeVariant - 1] ?? additionSizes[0] ?? null;
-    const activeAdditionDimensions = activeAdditionSize
-      ? formatDimensionTriplet(
-          activeAdditionSize.width,
-          activeAdditionSize.height,
-          activeAdditionSize.depth,
-          unitSystem,
-        )
-      : null;
     const isStatueOrVase =
       activeAddition?.type === 'statue' || activeAddition?.type === 'vase';
     const activeAdditionDisplayName =
@@ -1060,12 +1073,6 @@ export default function DesignerNav() {
         /^Applicazione\s+Preghiera/i,
         'Praying Hands Motif',
       ) ?? '';
-    const activeAdditionPrice =
-      activeAdditionSize?.retailPrice ??
-      (selectedAdditions.length === 1 ? additionCost : null);
-    const activeAdditionImagePath = activeAddition
-      ? `/additions/${activeAddition.file?.split('/')[0] ?? ''}/${activeAddition.image}`
-      : null;
 
     const additionRotation =
       ((activeAdditionOffset?.rotationZ ?? 0) * 180) / Math.PI;
@@ -1073,8 +1080,6 @@ export default function DesignerNav() {
       forceAdditionCatalog ||
       panelSource === 'menu' ||
       (panelSource === null && isSelectAdditionsPage);
-    const additionSectionCardClass =
-      'rounded-lg border border-white/10 bg-[#171717] p-3.5 shadow-lg shadow-black/15 day:border-gray-200 day:bg-white';
     const additionLabelClass =
       'text-sm font-semibold text-slate-100 day:text-gray-800';
     const additionControlButtonClass =
@@ -1089,49 +1094,17 @@ export default function DesignerNav() {
     return (
       <div className="flex h-full min-h-0 flex-col gap-3">
         {hasActiveAddition ? (
-          <div className="space-y-3">
+          <div className="flex min-h-[calc(44dvh-128px)] flex-1 flex-col gap-3 md:min-h-0">
+            <div className="custom-scrollbar flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto pr-1">
             {activeAddition && (
-              <div className={additionSectionCardClass}>
-                <div className="flex items-center gap-3">
-                  {activeAdditionImagePath && (
-                    <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-md bg-white">
-                      <Image
-                        src={activeAdditionImagePath}
-                        alt=""
-                        fill
-                        sizes="56px"
-                        className="object-contain p-1"
-                      />
-                    </div>
-                  )}
-                  <div className="min-w-0 flex-1">
-                    <div className="day:text-gray-400 text-[10px] font-semibold tracking-[0.18em] text-white/45 uppercase">
-                      Selected Addition
-                    </div>
-                    <div className="day:text-gray-900 mt-0.5 truncate text-sm font-semibold text-white">
-                      {activeAdditionDisplayName}
-                    </div>
-                    {activeAdditionDimensions && (
-                      <div className="day:text-gray-500 mt-0.5 text-[11px] font-medium text-white/45">
-                        {activeAdditionDimensions}
-                      </div>
-                    )}
-                    <div className="day:text-gray-500 mt-1 text-xs font-medium text-white/45">
-                      <span className="capitalize">{activeAddition.type}</span>
-                    </div>
-                  </div>
-                  <div className="shrink-0 text-sm font-semibold text-[#D7B356]">
-                    {activeAdditionPrice === null
-                      ? 'Included'
-                      : `+$${activeAdditionPrice.toFixed(2)}`}
-                  </div>
-                </div>
+              <div className="px-1 pt-1 text-sm font-semibold text-white day:text-gray-900">
+                {activeAdditionDisplayName}
               </div>
             )}
 
             {maxSize > 1 && (
               <div className="space-y-3">
-                <div className={additionSectionCardClass}>
+                <div className="px-1 pt-1">
                   <div className="flex items-center justify-between gap-2">
                     <label className={additionLabelClass}>Size</label>
                     <div className="flex items-center justify-end gap-2">
@@ -1264,7 +1237,7 @@ export default function DesignerNav() {
             <div className="space-y-3">
               {/* Rotation Slider - Only shown for applications, not for statues/vases */}
               {!isStatueOrVase && (
-                <div className={additionSectionCardClass}>
+                <div className="px-1 pt-1">
                   <div className="flex items-center justify-between gap-2">
                     <label className={additionLabelClass}>Rotation</label>
                     <div className="flex items-center justify-end gap-2">
@@ -1387,7 +1360,8 @@ export default function DesignerNav() {
               )}
             </div>
 
-            <div className="day:border-gray-200 grid grid-cols-2 gap-2 border-t border-white/10 pt-3">
+            </div>
+            <div className="day:border-gray-200 shrink-0 grid grid-cols-2 gap-2 border-t border-white/10 pt-3">
               <button
                 type="button"
                 className="day:bg-white day:text-[#8a6a12] cursor-pointer rounded-lg border border-[#D7B356]/60 bg-[#171717] px-3 py-2 text-sm font-semibold text-[#F2D58B] transition-colors hover:bg-[#D7B356]/15"
@@ -1458,15 +1432,6 @@ export default function DesignerNav() {
       !!activeMotif &&
       activePanel === 'motif';
     const rotationDegrees = ((activeOffset?.rotationZ ?? 0) * 180) / Math.PI;
-    const motifPriceValue =
-      hasActiveMotif && motifPriceModel && !isLaser && productId !== '32'
-        ? calculateMotifPrice(
-            activeOffset?.heightMm ?? initHeight,
-            activeMotif?.color ?? '#c99d44',
-            motifPriceModel.priceModel,
-            isLaser,
-          )
-        : null;
     const clampHeight = (value: number) =>
       Math.min(maxHeight, Math.max(minHeight, value));
     const formatMotifHeight = (valueMm: number) =>
@@ -1493,42 +1458,15 @@ export default function DesignerNav() {
       const inches = Number(normalized);
       return Number.isFinite(inches) ? inches * 25.4 : null;
     };
-    const motifHeightSteps =
-      unitSystem === 'imperial'
-        ? [
-            { label: '1/8 in', mm: 25.4 / 8 },
-            { label: '1/4 in', mm: 25.4 / 4 },
-            { label: '1/2 in', mm: 25.4 / 2 },
-          ]
-        : [
-            { label: '1 mm', mm: 1 },
-            { label: '5 mm', mm: 5 },
-            { label: '10 mm', mm: 10 },
-          ];
     const motifHeightStep =
-      motifHeightSteps[motifHeightStepIndex] ?? motifHeightSteps[0];
+      unitSystem === 'imperial'
+        ? { label: '1/8 in', mm: 25.4 / 8 }
+        : { label: '1 mm', mm: 1 };
     const showMotifCatalog =
       activeFullscreenPanel === 'select-motifs' &&
       (forceMotifCatalog || !hasActiveMotif);
-    const motifName =
-      activeMotif?.svgPath
-        ?.split('/')
-        .pop()
-        ?.replace(/\.svg$/i, '')
-        .replace(/[_-]+/g, ' ') || 'Motif';
-    const motifSurface =
-      activeOffset?.target === 'ledger'
-        ? 'Ledger'
-        : activeOffset?.target === 'base'
-          ? 'Base'
-          : 'Headstone';
-    const motifPreviewPath = activeMotif?.svgPath ?? null;
-    const motifPreviewColor =
-      activeMotif?.color ?? catalog?.product?.defaultColor ?? '#c99d44';
     const showMotifColorControls =
       !isLaser && !isStainlessSteelHeadstone && catalog?.product?.color !== '0';
-    const sectionCardClass =
-      'rounded-lg border border-white/10 bg-[#171717] p-3.5 shadow-lg shadow-black/15 day:border-gray-200 day:bg-white';
     const controlButtonClass =
       'flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-white/10 bg-white/[0.08] text-white transition-colors hover:border-[#D7B356]/50 hover:bg-white/[0.13] day:border-gray-200 day:bg-gray-100 day:text-gray-700 day:hover:bg-gray-200';
     const numberInputClass =
@@ -1541,101 +1479,11 @@ export default function DesignerNav() {
       <div className="flex h-full flex-col gap-4">
         {hasActiveMotif ? (
           <div className="flex min-h-[calc(44dvh-128px)] flex-1 flex-col gap-3 md:min-h-0">
-            <div className="custom-scrollbar min-h-0 flex-1 space-y-3 overflow-y-auto pr-1">
-              <div className={sectionCardClass}>
-                <div className="flex items-start justify-between gap-3">
-                  <div className="flex min-w-0 items-center gap-3">
-                    <div className="day:border-gray-200 day:bg-gray-100 relative flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-white/10 bg-[#0A0A0A]">
-                      {motifPreviewPath ? (
-                        <div
-                          className="absolute inset-2"
-                          style={{
-                            backgroundColor: motifPreviewColor,
-                            WebkitMaskImage: `url(${motifPreviewPath})`,
-                            maskImage: `url(${motifPreviewPath})`,
-                            WebkitMaskRepeat: 'no-repeat',
-                            maskRepeat: 'no-repeat',
-                            WebkitMaskSize: 'contain',
-                            maskSize: 'contain',
-                            WebkitMaskPosition: 'center',
-                            maskPosition: 'center',
-                          }}
-                        />
-                      ) : (
-                        <SparklesIcon className="h-5 w-5 text-[#D7B356]" />
-                      )}
-                    </div>
-                    <div className="min-w-0">
-                      <div className="text-xs font-semibold tracking-[0.16em] text-[#D7B356] uppercase">
-                        Selected motif
-                      </div>
-                      <div className="day:text-gray-900 mt-1 truncate text-sm font-semibold text-white capitalize">
-                        {motifName}
-                      </div>
-                      <div className="day:text-gray-500 mt-0.5 text-xs text-white/45">
-                        {motifSurface} ·{' '}
-                        {formatMotifHeight(activeOffset.heightMm ?? initHeight)}
-                        {lengthUnit}
-                      </div>
-                    </div>
-                  </div>
-                  {motifPriceValue !== null && (
-                    <span className="shrink-0 text-sm font-semibold text-[#D7B356]">
-                      +${motifPriceValue.toFixed(2)}
-                    </span>
-                  )}
-                </div>
-                <div className="day:border-gray-200 mt-3 grid grid-cols-2 gap-2 border-t border-white/10 pt-3">
-                  <button
-                    type="button"
-                    onClick={() =>
-                      selectedMotifId && duplicateMotif(selectedMotifId)
-                    }
-                    className="day:border-[#D7B356]/60 day:bg-amber-50 day:text-[#76530c] day:hover:bg-amber-100 rounded-md border border-white/10 bg-white/[0.06] px-3 py-2 text-xs font-semibold text-white/80 transition-colors hover:border-[#D7B356]/50"
-                  >
-                    Duplicate
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      if (selectedMotifId) removeMotif(selectedMotifId);
-                      setSelectedMotifId(null);
-                      setActivePanel(null);
-                    }}
-                    className="day:border-red-300 day:bg-red-50 day:text-red-700 day:hover:bg-red-100 rounded-md border border-red-400/35 px-3 py-2 text-xs font-semibold text-red-200 transition-colors hover:bg-red-500/15"
-                  >
-                    Remove
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() =>
-                      selectedMotifId &&
-                      setMotifOffset(selectedMotifId, {
-                        ...activeOffset,
-                        flipX: !activeOffset.flipX,
-                      })
-                    }
-                    className="day:border-gray-300 day:bg-gray-50 day:text-gray-700 day:hover:bg-gray-100 rounded-md border border-white/10 px-3 py-2 text-xs font-semibold text-white/80 transition-colors hover:border-[#D7B356]/50"
-                  >
-                    Flip X
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() =>
-                      selectedMotifId &&
-                      setMotifOffset(selectedMotifId, {
-                        ...activeOffset,
-                        flipY: !activeOffset.flipY,
-                      })
-                    }
-                    className="day:border-gray-300 day:bg-gray-50 day:text-gray-700 day:hover:bg-gray-100 rounded-md border border-white/10 px-3 py-2 text-xs font-semibold text-white/80 transition-colors hover:border-[#D7B356]/50"
-                  >
-                    Flip Y
-                  </button>
-                </div>
-              </div>
-
-              <div className={`${sectionCardClass} space-y-2`}>
+            <div className="px-1 pt-1 text-sm font-semibold text-white day:text-gray-900">
+              {motifPriceModel?.priceModel.name ?? motifPriceModel?.name ?? 'Motif'}
+            </div>
+            <div className="custom-scrollbar flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto pr-1">
+              <div className="order-3 space-y-2 px-1 pt-1">
                 <div className="flex items-center justify-between gap-3">
                   <label className="day:text-gray-800 text-sm font-semibold text-slate-100">
                     Height
@@ -1739,22 +1587,6 @@ export default function DesignerNav() {
                     </span>
                   </div>
                 </div>
-                <div className="day:border-gray-200 day:bg-gray-100 grid grid-cols-3 gap-1 rounded-lg border border-white/10 bg-white/[0.04] p-1">
-                  {motifHeightSteps.map((step, index) => (
-                    <button
-                      key={step.label}
-                      type="button"
-                      onClick={() => setMotifHeightStepIndex(index)}
-                      className={`rounded-md px-2 py-1.5 text-xs font-medium transition-colors ${
-                        motifHeightStepIndex === index
-                          ? 'bg-[#D7B356] text-slate-900 shadow-sm'
-                          : 'day:text-gray-600 text-white/60 hover:bg-white/10 hover:text-white'
-                      }`}
-                    >
-                      {step.label}
-                    </button>
-                  ))}
-                </div>
                 <div className="relative">
                   <input
                     type="range"
@@ -1785,7 +1617,7 @@ export default function DesignerNav() {
                 </div>
               </div>
 
-              <div className={`${sectionCardClass} space-y-2`}>
+              <div className="order-4 space-y-2 px-1 pt-1">
                 <div className="flex items-center justify-between gap-3">
                   <label className="day:text-gray-800 text-sm font-semibold text-slate-100">
                     Rotation
@@ -1908,7 +1740,7 @@ export default function DesignerNav() {
               </div>
 
               {showMotifColorControls && (
-                <div className={`${sectionCardClass} space-y-2`}>
+                <div className="order-5 space-y-2 px-1 pt-1">
                   <label className="day:text-gray-800 block text-sm font-semibold text-slate-100">
                     Color
                   </label>
@@ -1977,6 +1809,57 @@ export default function DesignerNav() {
                   </div>
                 </div>
               )}
+            </div>
+
+            <div className="day:border-gray-200 shrink-0 border-t border-white/10 pt-3">
+              <div className="grid grid-cols-2 gap-2">
+                <button
+                  type="button"
+                  onClick={() =>
+                    selectedMotifId && duplicateMotif(selectedMotifId)
+                  }
+                  className="day:bg-white day:text-[#8a6a12] rounded-lg border border-[#D7B356]/60 bg-[#171717] px-3 py-2 text-sm font-semibold text-[#F2D58B] transition-colors hover:bg-[#D7B356]/15"
+                >
+                  Duplicate
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (selectedMotifId) removeMotif(selectedMotifId);
+                    setSelectedMotifId(null);
+                    setActivePanel(null);
+                  }}
+                  className="day:bg-white day:text-red-700 rounded-lg border border-red-500/50 bg-[#171717] px-3 py-2 text-sm font-semibold text-red-200 transition-colors hover:bg-red-500/15"
+                >
+                  Delete
+                </button>
+                <button
+                  type="button"
+                  onClick={() =>
+                    selectedMotifId &&
+                    setMotifOffset(selectedMotifId, {
+                      ...activeOffset,
+                      flipX: !activeOffset.flipX,
+                    })
+                  }
+                  className="day:bg-white day:text-[#8a6a12] rounded-lg border border-[#D7B356]/60 bg-[#171717] px-3 py-2 text-sm font-semibold text-[#F2D58B] transition-colors hover:bg-[#D7B356]/15"
+                >
+                  Flip X
+                </button>
+                <button
+                  type="button"
+                  onClick={() =>
+                    selectedMotifId &&
+                    setMotifOffset(selectedMotifId, {
+                      ...activeOffset,
+                      flipY: !activeOffset.flipY,
+                    })
+                  }
+                  className="day:bg-white day:text-[#8a6a12] rounded-lg border border-[#D7B356]/60 bg-[#171717] px-3 py-2 text-sm font-semibold text-[#F2D58B] transition-colors hover:bg-[#D7B356]/15"
+                >
+                  Flip Y
+                </button>
+              </div>
             </div>
           </div>
         ) : null}
@@ -2151,7 +2034,7 @@ export default function DesignerNav() {
 
     if (slug === 'check-price') {
       e.preventDefault();
-      router.push(designerHref('check-price'));
+      setActivePanel('checkprice');
     }
 
     if (slug === 'save-design') {
@@ -2645,7 +2528,7 @@ export default function DesignerNav() {
           : 'day:text-gray-500 day:hover:text-gray-900 text-white/55 hover:text-white'
       }`;
     const dimensionCardClass =
-      'min-h-[98px] rounded-lg border border-white/10 bg-[#171717] p-3 shadow-lg shadow-black/15 day:border-gray-200 day:bg-white md:min-h-0 md:p-3.5';
+      'min-h-[98px] border-t border-white/10 px-3 py-3 day:border-gray-200 md:min-h-0 md:px-3.5 md:py-3.5';
     const dimensionHeaderClass =
       'flex min-h-8 items-center justify-between gap-2';
     const dimensionLabelClass =
@@ -3776,6 +3659,41 @@ export default function DesignerNav() {
                 </button>
               </div>
             </div>
+
+            <div
+              className="mt-3 grid grid-cols-7 gap-1 border-t border-white/10 pt-2"
+              aria-label="Design sections"
+            >
+              {guidedQuickNavSlugs.map((slug) => {
+                const item = menuItems.find((menuItem) => menuItem.slug === slug);
+                if (!item) return null;
+
+                const Icon = item.icon;
+                const isCurrent = activeFullscreenPanel === slug;
+                const label =
+                  slug === 'select-material' &&
+                  (productId === '5' || productId === '32' || isUrn)
+                    ? 'Background'
+                    : guidedQuickNavLabels[slug];
+                return (
+                  <button
+                    key={slug}
+                    type="button"
+                    onClick={() => handleNavigateToPanel(slug)}
+                    aria-current={isCurrent ? 'step' : undefined}
+                    title={`Go to ${label}`}
+                    className={`group flex min-h-12 flex-col items-center justify-center gap-0.5 rounded-md px-1 py-1.5 text-[10px] font-medium transition-colors ${
+                      isCurrent
+                        ? 'bg-[#D7B356] text-slate-950 shadow-sm'
+                        : 'day:text-gray-600 day:hover:bg-white day:hover:text-gray-900 text-white/60 hover:bg-white/10 hover:text-white'
+                    }`}
+                  >
+                    <Icon className="h-4 w-4" aria-hidden="true" />
+                    <span className="truncate">{label}</span>
+                  </button>
+                );
+              })}
+            </div>
           </div>
 
           {/* Mobile step-header overlay — floats over the canvas at the top so
@@ -3807,6 +3725,19 @@ export default function DesignerNav() {
                         />
                       </svg>
                       Menu
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setIsMobileQuickNavOpen((open) => !open)}
+                      aria-label="Show design sections"
+                      aria-expanded={isMobileQuickNavOpen}
+                      className={`inline-flex h-7 w-7 items-center justify-center rounded-md border transition-colors hover:border-[#D7B356]/45 hover:bg-[#24170f] ${
+                        isMobileQuickNavOpen
+                          ? 'border-[#D7B356] bg-[#D7B356] text-slate-950 day:bg-[#D7B356] day:text-slate-950'
+                          : 'border-[#3a2a1c] bg-[#1b120c]/80 text-white day:border-[#ddd2c2] day:bg-[#fbf9f5] day:text-[#302719] day:hover:bg-[#eee6d9]'
+                      }`}
+                    >
+                      <Squares2X2Icon className="h-3.5 w-3.5" aria-hidden="true" />
                     </button>
                   </div>
                   <div className="min-w-0 px-1">
@@ -3851,6 +3782,46 @@ export default function DesignerNav() {
                         width: `${((currentPanelIndex + 1) / navigablePanelSlugs.length) * 100}%`,
                       }}
                     />
+                  </div>
+                )}
+                {isMobileQuickNavOpen && (
+                  <div
+                    className="day:border-[#ddd2c2] mt-2 grid grid-cols-7 gap-1 border-t border-white/10 pt-2"
+                    aria-label="Design sections"
+                  >
+                    {guidedQuickNavSlugs.map((slug) => {
+                      const item = menuItems.find(
+                        (menuItem) => menuItem.slug === slug,
+                      );
+                      if (!item) return null;
+
+                      const Icon = item.icon;
+                      const isCurrent = activeFullscreenPanel === slug;
+                      const label =
+                        slug === 'select-material' &&
+                        (productId === '5' || productId === '32' || isUrn)
+                          ? 'Background'
+                          : guidedQuickNavLabels[slug];
+                      return (
+                        <button
+                          key={slug}
+                          type="button"
+                          onClick={() => {
+                            setIsMobileQuickNavOpen(false);
+                            void handleNavigateToPanel(slug);
+                          }}
+                          aria-label={`Go to ${label}`}
+                          aria-current={isCurrent ? 'step' : undefined}
+                          className={`flex min-h-10 items-center justify-center rounded-md transition-colors ${
+                            isCurrent
+                              ? 'bg-[#D7B356] text-slate-950 shadow-sm'
+                              : 'day:text-gray-600 day:hover:bg-white day:hover:text-gray-900 text-white/70 hover:bg-white/10 hover:text-white'
+                          }`}
+                        >
+                          <Icon className="h-4 w-4" aria-hidden="true" />
+                        </button>
+                      );
+                    })}
                   </div>
                 )}
               </div>,
@@ -4295,9 +4266,16 @@ export default function DesignerNav() {
       ) : (
         <>
           {/* Desktop Header */}
-          <div className="day:border-gray-200 hidden items-center justify-between border-b border-white/10 px-6 md:flex">
-            <Link href="/" className="transition-opacity hover:opacity-80">
-              <img src="/ico/forever-transparent-logo.png" alt="Forever Logo" />
+          <div className="day:border-gray-200 hidden h-44 items-center justify-center border-b border-white/10 px-6 md:flex">
+            <Link
+              href="/"
+              className="flex h-full items-center justify-center transition-opacity hover:opacity-80"
+            >
+              <img
+                src="/ico/forever-transparent-logo.png"
+                alt="Forever Logo"
+                className="h-36 w-auto object-contain"
+              />
             </Link>
           </div>
 
@@ -4490,9 +4468,17 @@ export default function DesignerNav() {
                             <p className="font-playfair-display day:text-gray-900 text-[19px] font-normal tracking-wide text-white/90">
                               {group.label}
                             </p>
-                            <p className="day:text-gray-500 mt-0.5 text-[11px] font-medium tracking-[0.16em] text-white/45 uppercase">
-                              {groupStatus}
-                            </p>
+                            {groupStatus !== 'Available' && (
+                              <p
+                                className={`mt-0.5 text-[11px] font-semibold tracking-[0.16em] uppercase ${
+                                  isCurrentGroup
+                                    ? 'text-[#f0cf79]'
+                                    : 'text-emerald-300/85'
+                                }`}
+                              >
+                                {groupStatus}
+                              </p>
+                            )}
                           </div>
                           <span className="font-playfair-display text-primary/60 shrink-0 text-[10px] tracking-[0.3em] italic">
                             Step {groupIndex + 1}
@@ -4868,6 +4854,26 @@ export default function DesignerNav() {
                                   </Link>
                                 )}
                               </React.Fragment>
+                            );
+                          }
+
+                          // Special handling for Save Design - always a button, never navigate
+                          if (item.slug === 'check-price') {
+                            return (
+                              <Link
+                                key={item.slug}
+                                href={designerHref(item.slug)}
+                                onClick={(e) => handleMenuClick(item.slug, e)}
+                                className="day:border-[#c39a3d] day:from-[#f5df9b] day:to-[#d7b356] day:text-[#30210e] flex w-full items-center justify-between gap-3 rounded-lg border border-[#e6c66f]/70 bg-gradient-to-r from-[#e5c15b] to-[#b9872c] px-4 py-3 text-left text-base font-medium text-[#24170c] shadow-[0_10px_22px_rgba(0,0,0,0.28)] transition-all hover:-translate-y-px hover:from-[#f4d37c] hover:to-[#d7a23e] hover:shadow-[0_13px_28px_rgba(0,0,0,0.34)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#f4d07e]"
+                              >
+                                <span className="flex items-center gap-3">
+                                  <Icon className="h-5 w-5 flex-shrink-0" />
+                                  <span>{displayName}</span>
+                                </span>
+                                <span className="text-xs font-semibold tracking-wide uppercase">
+                                  View estimate
+                                </span>
+                              </Link>
                             );
                           }
 

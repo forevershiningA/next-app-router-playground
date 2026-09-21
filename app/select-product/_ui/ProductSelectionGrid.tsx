@@ -320,22 +320,24 @@ export default function ProductSelectionGrid({
                             </p>
 
                             {priceRange ? (
-                              <div className="day:border-gray-200 day:bg-gray-50 flex items-baseline gap-2 rounded-lg border border-white/10 bg-white/[0.03] px-2.5 py-2 whitespace-nowrap">
-                                <span className="day:text-gray-500 text-[11px] font-medium tracking-[0.12em] text-gray-400 uppercase">
-                                  Sample price
-                                </span>
-                                <span className="day:text-gray-900 text-base font-semibold text-white">
+                              <div className="day:border-gray-200 day:bg-gray-50 rounded-lg border border-white/10 bg-white/[0.03] px-2.5 py-2">
+                                <div className="flex items-baseline gap-2 whitespace-nowrap">
+                                  <span className="day:text-gray-500 text-[11px] font-medium tracking-[0.12em] text-gray-400 uppercase">
+                                    Sample size
+                                  </span>
+                                  <span className="text-gray-500">·</span>
+                                  <span className="day:text-gray-500 text-xs text-gray-400">
+                                    {formatDimensionPair(
+                                      priceRange.width,
+                                      priceRange.height,
+                                      unitSystem,
+                                    )}
+                                  </span>
+                                </div>
+                                <span className="day:text-gray-900 mt-0.5 block text-base font-semibold text-white">
                                   {formatPrice(
                                     priceRange.price,
                                     priceRange.currency,
-                                  )}
-                                </span>
-                                <span className="text-gray-500">·</span>
-                                <span className="day:text-gray-500 text-xs text-gray-400">
-                                  {formatDimensionPair(
-                                    priceRange.width,
-                                    priceRange.height,
-                                    unitSystem,
                                   )}
                                 </span>
                               </div>

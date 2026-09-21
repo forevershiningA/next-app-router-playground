@@ -25,6 +25,9 @@ export default function InscriptionEditPanel() {
   const selectedInscriptionId = useHeadstoneStore(
     (s) => s.selectedInscriptionId,
   );
+  const setSelectedInscriptionId = useHeadstoneStore(
+    (s) => s.setSelectedInscriptionId,
+  );
   const inscriptionMinHeight = useHeadstoneStore((s) => s.inscriptionMinHeight);
   const inscriptionMaxHeight = useHeadstoneStore((s) => s.inscriptionMaxHeight);
   const activeInscriptionText = useHeadstoneStore(
@@ -34,6 +37,9 @@ export default function InscriptionEditPanel() {
     (s) => s.setActiveInscriptionText,
   );
   const showInscriptionColor = useHeadstoneStore((s) => s.showInscriptionColor);
+  const inscriptionPriceModel = useHeadstoneStore(
+    (s) => s.inscriptionPriceModel,
+  );
   const productId = useHeadstoneStore((s) => s.productId);
   const catalog = useHeadstoneStore((s) => s.catalog);
   const isEngraved = catalog?.product.formula === 'Engraved';
@@ -180,7 +186,7 @@ export default function InscriptionEditPanel() {
   const rangeBoundsClass =
     'mt-1 flex w-full justify-between text-xs text-white/35 day:text-gray-400';
   const AlignControls = (
-    <div className="flex w-full items-center justify-between gap-2 rounded-lg border border-white/10 bg-white/[0.04] p-1 day:border-gray-200 day:bg-gray-100">
+    <div className="day:border-gray-200 day:bg-gray-100 flex w-full items-center justify-between gap-1.5 rounded-lg border border-white/10 bg-[#0A0A0A] p-1">
       <div className="grid min-w-0 flex-1 grid-cols-3 gap-1">
         {(
           [
@@ -195,10 +201,10 @@ export default function InscriptionEditPanel() {
               key={opt.value}
               type="button"
               onClick={() => setAlign(opt.value)}
-              className={`w-full rounded-md px-2 py-1.5 text-center text-xs font-medium transition-colors ${
+              className={`w-full rounded-md px-3 py-2 text-center text-sm font-medium transition-colors ${
                 isActive
                   ? 'bg-[#D7B356] text-slate-900 shadow-sm'
-                  : 'text-white/60 hover:bg-white/10 hover:text-white day:text-gray-600'
+                  : 'day:text-gray-600 text-white/60 hover:bg-white/10 hover:text-white'
               }`}
             >
               {opt.label}
@@ -240,10 +246,25 @@ export default function InscriptionEditPanel() {
     },
     [updateLineStore],
   );
+  const draftInscriptionText = activeInscriptionText.trim();
+  const canAddInscription = !active && draftInscriptionText.length > 0;
+  const handleAddInscription = () => {
+    if (active) {
+      setSelectedInscriptionId(null);
+      requestAnimationFrame(() => textInputRef.current?.focus());
+      return;
+    }
+
+    if (!canAddInscription) return;
+    addInscriptionLine({ text: draftInscriptionText });
+  };
 
   return (
-    <div className="space-y-3">
-      <div className={sectionCardClass}>
+    <div className="flex flex-col gap-3">
+      <div className="px-1 pt-1 text-sm font-semibold text-slate-100 day:text-gray-800">
+        {inscriptionPriceModel?.name ?? 'Inscription'}
+      </div>
+      <div className={`${sectionCardClass} order-1`}>
         <div className="mb-2">{AlignControls}</div>
         <textarea
           id="inscriptionTextInput"
@@ -263,21 +284,18 @@ export default function InscriptionEditPanel() {
         />
         <button
           type="button"
-          onClick={() =>
-            addInscriptionLine({
-              text: selectedInscriptionId ? '' : activeInscriptionText,
-            })
-          }
-          className="mt-2 flex w-full items-center justify-center gap-2 rounded-lg border border-[#D7B356] bg-[#D7B356] px-4 py-2.5 text-sm font-semibold text-black transition-colors hover:bg-[#E4C778]"
+          onClick={handleAddInscription}
+          disabled={!active && !canAddInscription}
+          className="mt-2 flex w-full items-center justify-center gap-2 rounded-lg border border-[#D7B356] bg-[#D7B356] px-4 py-2.5 text-sm font-semibold text-black transition-colors hover:bg-[#E4C778] disabled:cursor-not-allowed disabled:opacity-45 disabled:hover:bg-[#D7B356]"
         >
           <span aria-hidden="true">+</span>
-          Add Inscription
+          {active ? 'New Inscription' : 'Add Inscription'}
         </button>
       </div>
 
       {/* Tabs for font and color (only show tabs if color is available) */}
       {showInscriptionColor && (
-        <div className="day:border-gray-200 day:bg-gray-100 hidden gap-1.5 rounded-lg border border-white/10 bg-[#0A0A0A] p-1 md:flex">
+        <div className="day:border-gray-200 day:bg-gray-100 order-2 hidden gap-1.5 rounded-lg border border-white/10 bg-[#0A0A0A] p-1 md:flex">
           <button
             className={`flex-1 rounded-md px-3 py-2 text-sm font-medium transition-all ${
               activeTab === 'font'
@@ -286,7 +304,7 @@ export default function InscriptionEditPanel() {
             }`}
             onClick={() => setActiveTab('font')}
           >
-            Select Font
+            Font
           </button>
           <button
             className={`flex-1 rounded-md px-3 py-2 text-sm font-medium transition-all ${
@@ -296,76 +314,77 @@ export default function InscriptionEditPanel() {
             }`}
             onClick={() => setActiveTab('color')}
           >
-            Select Color
+            Color
           </button>
         </div>
       )}
 
       {/* Font Selection */}
-      {availableFonts.length > 0 && (
-        <div className={`${sectionCardClass} rounded-b-none border-b-0 pb-3`}>
-          {!showInscriptionColor && (
-            <label className={labelClass}>Select Font</label>
-          )}
-          <div className="flex gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:hidden">
-            {availableFonts.map((font) => {
-              const isSelected = (active?.font ?? selectedFont) === font.name;
-              return (
-                <button
-                  key={font.id}
-                  type="button"
-                  onClick={() => {
-                    if (active) updateLine(active.id, { font: font.name });
-                    else setSelectedFont(font.name);
-                  }}
-                  className={`shrink-0 rounded-lg border px-4 py-2 text-sm transition-colors ${
-                    isSelected
-                      ? 'border-2 border-[#D7B356] bg-[#D7B356]/15 text-[#f3d48f]'
-                      : 'border-white/15 bg-white/[0.05] text-white/75'
-                  }`}
-                  style={{ fontFamily: font.name }}
-                >
-                  {font.name}
-                </button>
-              );
-            })}
+      {(!showInscriptionColor || activeTab === 'font') &&
+        availableFonts.length > 0 && (
+          <div className="order-3 px-1">
+            {!showInscriptionColor && (
+              <label className={labelClass}>Select Font</label>
+            )}
+            <div className="flex gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] md:hidden [&::-webkit-scrollbar]:hidden">
+              {availableFonts.map((font) => {
+                const isSelected = (active?.font ?? selectedFont) === font.name;
+                return (
+                  <button
+                    key={font.id}
+                    type="button"
+                    onClick={() => {
+                      if (active) updateLine(active.id, { font: font.name });
+                      else setSelectedFont(font.name);
+                    }}
+                    className={`shrink-0 rounded-lg border px-4 py-2 text-sm transition-colors ${
+                      isSelected
+                        ? 'border-2 border-[#D7B356] bg-[#D7B356]/15 text-[#f3d48f]'
+                        : 'border-white/15 bg-white/[0.05] text-white/75'
+                    }`}
+                    style={{ fontFamily: font.name }}
+                  >
+                    {font.name}
+                  </button>
+                );
+              })}
+            </div>
+            <div className="relative hidden md:block">
+              <select
+                className={`${fieldClass} appearance-none pr-8`}
+                style={{ colorScheme: 'dark' }}
+                value={active?.font ?? selectedFont}
+                onChange={(e) => {
+                  const font = e.target.value;
+                  if (active) {
+                    updateLine(active.id, { font });
+                  } else {
+                    setSelectedFont(font);
+                  }
+                }}
+              >
+                {availableFonts.map((f) => (
+                  <option
+                    key={f.id}
+                    value={f.name}
+                    style={{ backgroundColor: '#ffffff', color: '#111827' }}
+                  >
+                    {f.name}
+                  </option>
+                ))}
+              </select>
+              <span className="day:text-gray-500 pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-slate-400">
+                ▾
+              </span>
+            </div>
           </div>
-          <div className="relative hidden md:block">
-            <select
-              className={`${fieldClass} appearance-none pr-8`}
-              style={{ colorScheme: 'dark' }}
-              value={active?.font ?? selectedFont}
-              onChange={(e) => {
-                const font = e.target.value;
-                if (active) {
-                  updateLine(active.id, { font });
-                } else {
-                  setSelectedFont(font);
-                }
-              }}
-            >
-              {availableFonts.map((f) => (
-                <option
-                  key={f.id}
-                  value={f.name}
-                  style={{ backgroundColor: '#ffffff', color: '#111827' }}
-                >
-                  {f.name}
-                </option>
-              ))}
-            </select>
-            <span className="day:text-gray-500 pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-slate-400">
-              ▾
-            </span>
-          </div>
-        </div>
-      )}
+        )}
 
-      {/* Size + Rotation — always visible when active */}
+      {/* Size, position and rotation are independent of the style tab. */}
       {active && (
         <>
           {/* Size Slider */}
-          <div className={`${sectionCardClass} -mt-3 rounded-t-none pt-3`}>
+          <div className="order-5 px-1 pt-1">
             <div className="flex items-center justify-between gap-2">
               <label className="day:text-gray-800 text-sm font-semibold text-slate-100">
                 Size
@@ -406,7 +425,10 @@ export default function InscriptionEditPanel() {
                     const valueMm = parseInscriptionSizeInput(e.target.value);
                     const clampedValue = Math.min(
                       inscriptionMaxHeight,
-                      Math.max(inscriptionMinHeight, valueMm ?? inscriptionSizeMm),
+                      Math.max(
+                        inscriptionMinHeight,
+                        valueMm ?? inscriptionSizeMm,
+                      ),
                     );
                     updateLine(active.id, { sizeMm: clampedValue });
                     setSizeInputValue(formatInscriptionSize(clampedValue));
@@ -449,7 +471,7 @@ export default function InscriptionEditPanel() {
                 </span>
               </div>
             </div>
-            <div className="mt-2 grid grid-cols-3 gap-1 rounded-lg border border-white/10 bg-white/[0.04] p-1 day:border-gray-200 day:bg-gray-100">
+            <div className="hidden">
               {sizeSteps.map((step, index) => (
                 <button
                   key={step.label}
@@ -458,7 +480,7 @@ export default function InscriptionEditPanel() {
                   className={`rounded-md px-2 py-1.5 text-xs font-medium transition-colors ${
                     sizeStepIndex === index
                       ? 'bg-[#D7B356] text-slate-900 shadow-sm'
-                      : 'text-white/60 hover:bg-white/10 hover:text-white day:text-gray-600'
+                      : 'day:text-gray-600 text-white/60 hover:bg-white/10 hover:text-white'
                   }`}
                 >
                   {step.label}
@@ -478,16 +500,22 @@ export default function InscriptionEditPanel() {
                 className={rangeInputClass}
               />
               <div className={rangeBoundsClass}>
-                <span>{formatInscriptionSize(inscriptionMinHeight)}{getLengthUnitLabel(unitSystem)}</span>
-                <span>{formatInscriptionSize(inscriptionMaxHeight)}{getLengthUnitLabel(unitSystem)}</span>
+                <span>
+                  {formatInscriptionSize(inscriptionMinHeight)}
+                  {getLengthUnitLabel(unitSystem)}
+                </span>
+                <span>
+                  {formatInscriptionSize(inscriptionMaxHeight)}
+                  {getLengthUnitLabel(unitSystem)}
+                </span>
               </div>
             </div>
           </div>
 
           {/* Position controls — touch-friendly alternative to dragging text. */}
-          <div className={sectionCardClass}>
+          <div className={`${sectionCardClass} order-6 md:hidden`}>
             <div className="mb-3 flex items-center justify-between gap-2">
-              <label className="text-sm font-semibold text-slate-100 day:text-gray-800">
+              <label className="day:text-gray-800 text-sm font-semibold text-slate-100">
                 Position
               </label>
             </div>
@@ -514,23 +542,59 @@ export default function InscriptionEditPanel() {
               <button
                 type="button"
                 aria-label={`Move inscription up ${nudgeStep.label}`}
-                onClick={() => updateLine(active.id, { yPos: (active.yPos ?? 0) + nudgeStep.mm })}
+                onClick={() =>
+                  updateLine(active.id, {
+                    yPos: (active.yPos ?? 0) + nudgeStep.mm,
+                  })
+                }
                 className={`${controlButtonClass} active:scale-90 active:bg-[#D7B356]/20`}
               >
-                <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} aria-hidden="true"><path d="m18 15-6-6-6 6" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                <svg
+                  className="h-4 w-4"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth={2.5}
+                  aria-hidden="true"
+                >
+                  <path
+                    d="m18 15-6-6-6 6"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
               </button>
               <span />
               <button
                 type="button"
                 aria-label={`Move inscription left ${nudgeStep.label}`}
-                onClick={() => updateLine(active.id, { xPos: (active.xPos ?? 0) - nudgeStep.mm })}
+                onClick={() =>
+                  updateLine(active.id, {
+                    xPos: (active.xPos ?? 0) - nudgeStep.mm,
+                  })
+                }
                 className={`${controlButtonClass} active:scale-90 active:bg-[#D7B356]/20`}
               >
-                <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} aria-hidden="true"><path d="m15 18-6-6 6-6" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                <svg
+                  className="h-4 w-4"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth={2.5}
+                  aria-hidden="true"
+                >
+                  <path
+                    d="m15 18-6-6 6-6"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
               </button>
               <button
                 type="button"
-                onClick={() => setNudgeStepIndex((index) => (index + 1) % nudgeSteps.length)}
+                onClick={() =>
+                  setNudgeStepIndex((index) => (index + 1) % nudgeSteps.length)
+                }
                 className="rounded px-1.5 py-1 text-xs font-semibold text-[#F2D58B] transition-colors hover:bg-[#D7B356]/15"
                 aria-label={`Change movement step, currently ${nudgeStep.label}`}
               >
@@ -539,26 +603,60 @@ export default function InscriptionEditPanel() {
               <button
                 type="button"
                 aria-label={`Move inscription right ${nudgeStep.label}`}
-                onClick={() => updateLine(active.id, { xPos: (active.xPos ?? 0) + nudgeStep.mm })}
+                onClick={() =>
+                  updateLine(active.id, {
+                    xPos: (active.xPos ?? 0) + nudgeStep.mm,
+                  })
+                }
                 className={`${controlButtonClass} active:scale-90 active:bg-[#D7B356]/20`}
               >
-                <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} aria-hidden="true"><path d="m9 18 6-6-6-6" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                <svg
+                  className="h-4 w-4"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth={2.5}
+                  aria-hidden="true"
+                >
+                  <path
+                    d="m9 18 6-6-6-6"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
               </button>
               <span />
               <button
                 type="button"
                 aria-label={`Move inscription down ${nudgeStep.label}`}
-                onClick={() => updateLine(active.id, { yPos: (active.yPos ?? 0) - nudgeStep.mm })}
+                onClick={() =>
+                  updateLine(active.id, {
+                    yPos: (active.yPos ?? 0) - nudgeStep.mm,
+                  })
+                }
                 className={`${controlButtonClass} active:scale-90 active:bg-[#D7B356]/20`}
               >
-                <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} aria-hidden="true"><path d="m6 9 6 6 6-6" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                <svg
+                  className="h-4 w-4"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth={2.5}
+                  aria-hidden="true"
+                >
+                  <path
+                    d="m6 9 6 6 6-6"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
               </button>
               <span />
             </div>
           </div>
 
           {/* Rotation Slider */}
-          <div className={`${sectionCardClass} hidden md:block`}>
+          <div className="order-7 hidden px-1 pt-1 md:block">
             <div className="flex items-center justify-between gap-2">
               <label className="day:text-gray-800 text-sm font-semibold text-slate-100">
                 Rotation
@@ -666,17 +764,30 @@ export default function InscriptionEditPanel() {
       )}
 
       {/* Color Selection */}
-      {showInscriptionColor && active && (
-        <div className={sectionCardClass}>
+      {showInscriptionColor && activeTab === 'color' && (
+        <div className={`order-4 px-1 ${active ? '' : 'opacity-55'}`}>
+          {!active && (
+            <p className="day:text-gray-500 mb-3 text-sm text-white/60">
+              Add or select an inscription to choose its colour.
+            </p>
+          )}
           {isEngraved && (
             <div className="mb-4 grid grid-cols-2 gap-2">
-              <div
-                className={`day:bg-gray-50 flex cursor-pointer flex-col items-center gap-1.5 rounded-lg border p-3 transition-colors hover:bg-white/[0.08] ${
-                  active.color === '#c99d44'
+              <button
+                type="button"
+                disabled={!active}
+                className={`day:bg-gray-50 flex flex-col items-center gap-1.5 rounded-lg border p-3 transition-colors ${
+                  active
+                    ? 'cursor-pointer hover:bg-white/[0.08]'
+                    : 'cursor-not-allowed'
+                } ${
+                  active?.color === '#c99d44'
                     ? 'border-2 border-[#D7B356] bg-[#D7B356]/15 ring-2 ring-[#D7B356]/30'
-                    : 'border-white/10 hover:border-[#D7B356]/60 day:border-gray-300 day:hover:border-[#D7B356]'
+                    : 'day:border-gray-300 day:hover:border-[#D7B356] border-white/10 hover:border-[#D7B356]/60'
                 }`}
-                onClick={() => updateLine(active.id, { color: '#c99d44' })}
+                onClick={() =>
+                  active && updateLine(active.id, { color: '#c99d44' })
+                }
               >
                 <div
                   className="day:border-gray-300 h-6 w-6 rounded-md border border-slate-600"
@@ -685,14 +796,22 @@ export default function InscriptionEditPanel() {
                 <span className="day:text-gray-700 text-xs font-semibold text-slate-100">
                   Gold Gilding
                 </span>
-              </div>
-              <div
-                className={`day:bg-gray-50 flex cursor-pointer flex-col items-center gap-1.5 rounded-lg border p-3 transition-colors hover:bg-white/[0.08] ${
-                  active.color === '#eeeeee'
+              </button>
+              <button
+                type="button"
+                disabled={!active}
+                className={`day:bg-gray-50 flex flex-col items-center gap-1.5 rounded-lg border p-3 transition-colors ${
+                  active
+                    ? 'cursor-pointer hover:bg-white/[0.08]'
+                    : 'cursor-not-allowed'
+                } ${
+                  active?.color === '#eeeeee'
                     ? 'border-2 border-[#D7B356] bg-[#D7B356]/15 ring-2 ring-[#D7B356]/30'
-                    : 'border-white/10 hover:border-[#D7B356]/60 day:border-gray-300 day:hover:border-[#D7B356]'
+                    : 'day:border-gray-300 day:hover:border-[#D7B356] border-white/10 hover:border-[#D7B356]/60'
                 }`}
-                onClick={() => updateLine(active.id, { color: '#eeeeee' })}
+                onClick={() =>
+                  active && updateLine(active.id, { color: '#eeeeee' })
+                }
               >
                 <div
                   className="day:border-gray-300 h-6 w-6 rounded-md border border-slate-600"
@@ -701,23 +820,34 @@ export default function InscriptionEditPanel() {
                 <span className="day:text-gray-700 text-xs font-semibold text-slate-100">
                   Silver Gilding
                 </span>
-              </div>
+              </button>
             </div>
           )}
 
-          <div className="flex gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:grid md:grid-cols-7">
+          <div className="flex gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] md:grid md:grid-cols-7 [&::-webkit-scrollbar]:hidden">
             {data.colors.map((color) => (
               <button
                 key={color.id}
                 type="button"
-                aria-label={`Select ${color.name}`}
-                className={`h-8 w-8 shrink-0 cursor-pointer rounded-full border-2 transition-colors hover:border-[#D7B356] md:h-7 md:w-7 md:rounded-md ${
-                  active.color === color.hex
-                    ? 'border-[#fff4bf] ring-2 ring-[#D7B356] ring-offset-2 ring-offset-[#171717] day:ring-offset-white'
+                aria-label={
+                  active
+                    ? `Select ${color.name}`
+                    : `${color.name}; add an inscription to select it`
+                }
+                disabled={!active}
+                className={`h-8 w-8 shrink-0 rounded-full border-2 transition-colors md:h-7 md:w-7 md:rounded-md ${
+                  active
+                    ? 'cursor-pointer hover:border-[#D7B356]'
+                    : 'cursor-not-allowed'
+                } ${
+                  active?.color === color.hex
+                    ? 'day:ring-offset-white border-[#fff4bf] ring-2 ring-[#D7B356] ring-offset-2 ring-offset-[#171717]'
                     : 'border-white/15'
                 }`}
                 style={{ backgroundColor: color.hex }}
-                onClick={() => updateLine(active.id, { color: color.hex })}
+                onClick={() =>
+                  active && updateLine(active.id, { color: color.hex })
+                }
                 title={color.name}
               />
             ))}
@@ -727,7 +857,7 @@ export default function InscriptionEditPanel() {
 
       {/* Actions for the selected inscription */}
       {active && (
-        <div className="day:border-gray-200 border-t border-white/10 pt-3">
+        <div className="day:border-gray-200 order-8 border-t border-white/10 pt-3">
           <div className="grid grid-cols-2 gap-2">
             <button
               type="button"
