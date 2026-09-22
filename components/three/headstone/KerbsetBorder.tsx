@@ -19,6 +19,7 @@ import {
   createPolishedGraniteMaterial,
   GRANITE_TILE_SIZE_M,
 } from '#/lib/granite-material';
+import { useMobileNavStore } from '#/lib/mobile-nav-store';
 
 type KerbsetBorderProps = { onClick?: (e: any) => void };
 
@@ -141,10 +142,23 @@ function KerbMesh({
   groupRef: React.RefObject<THREE.Group | null>;
 }) {
   const texture = useTexture(texUrl);
+  const isSizeAdjustmentActive = useMobileNavStore(
+    (state) => state.isSizeAdjustmentActive,
+  );
+  // Build the rounded bars once; dimension controls update the group scale.
+  const [geometryDimensions] = React.useState(() => ({
+    widthMm: kerbWidthMm,
+    heightMm: kerbHeightMm,
+    depthMm: kerbDepthMm,
+  }));
 
-  const kW = kerbWidthMm / 1000;
-  const kH = kerbHeightMm / 1000;
-  const kD = kerbDepthMm / 1000;
+  const kW = geometryDimensions.widthMm / 1000;
+  const kH = geometryDimensions.heightMm / 1000;
+  const kD = geometryDimensions.depthMm / 1000;
+  const isDimensionPreviewActive =
+    geometryDimensions.widthMm !== kerbWidthMm ||
+    geometryDimensions.heightMm !== kerbHeightMm ||
+    geometryDimensions.depthMm !== kerbDepthMm;
   const wall = WALL_MM / 1000;
   // Start at base front face: -(uprightThickness/2) + baseThickness (all in metres)
   const standBackZ = -(uprightThickness / 1000) / 2 + baseThickness / 1000;
@@ -189,7 +203,7 @@ function KerbMesh({
   const targetGroupZ = useRef(kerbCenterZ);
   const targetPosition = useRef(new THREE.Vector3(0, centerY, kerbCenterZ));
   const visualScaleRef = useRef<THREE.Group>(null);
-  const unitScaleRef = useRef(new THREE.Vector3(1, 1, 1));
+  const targetVisualScaleRef = useRef(new THREE.Vector3(1, 1, 1));
   const previousDimensionsRef = useRef<THREE.Vector3 | null>(null);
   const initializedRef = useRef(false);
 
@@ -220,19 +234,29 @@ function KerbMesh({
     if (!groupRef.current || !visualScaleRef.current) return;
     const newKD = kerbDepthMm / 1000;
     const newKH = kerbHeightMm / 1000;
+    const newKW = kerbWidthMm / 1000;
     const newStandBackZ = -(uprightThickness / 1000) / 2 + baseThickness / 1000;
     targetGroupY.current = newKH / 2 + EPSILON;
     targetGroupZ.current = newStandBackZ + newKD / 2;
     targetPosition.current.set(0, targetGroupY.current, targetGroupZ.current);
-    const alpha = 1 - Math.exp(-14 * delta);
+    targetVisualScaleRef.current.set(
+      newKW / Math.max(1e-6, kW),
+      newKH / Math.max(1e-6, kH),
+      newKD / Math.max(1e-6, kD),
+    );
+    const alpha =
+      isSizeAdjustmentActive || isDimensionPreviewActive
+        ? 1
+        : 1 - Math.exp(-14 * delta);
     const stillMoving =
       groupRef.current.position.distanceToSquared(targetPosition.current) >
         1e-10 ||
-      visualScaleRef.current.scale.distanceToSquared(unitScaleRef.current) >
-        1e-10;
+      visualScaleRef.current.scale.distanceToSquared(
+        targetVisualScaleRef.current,
+      ) > 1e-10;
     if (stillMoving) {
       groupRef.current.position.lerp(targetPosition.current, alpha);
-      visualScaleRef.current.scale.lerp(unitScaleRef.current, alpha);
+      visualScaleRef.current.scale.lerp(targetVisualScaleRef.current, alpha);
       state.gl.shadowMap.needsUpdate = true;
       state.invalidate();
     }

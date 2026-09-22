@@ -24,12 +24,12 @@ interface EmailPDFData {
 }
 
 const C = {
-  white: [255, 255, 255] as [number, number, number],
-  black: [20, 20, 20] as [number, number, number],
-  text: [35, 35, 35] as [number, number, number],
-  muted: [90, 90, 90] as [number, number, number],
-  border: [190, 190, 190] as [number, number, number],
-  gold: [222, 189, 104] as [number, number, number],
+  white: [251, 249, 245] as [number, number, number],
+  black: [48, 39, 25] as [number, number, number],
+  text: [78, 66, 48] as [number, number, number],
+  muted: [117, 101, 77] as [number, number, number],
+  border: [221, 210, 194] as [number, number, number],
+  gold: [215, 179, 86] as [number, number, number],
 };
 
 function formatCurrency(cents: number, symbol: string): string {
@@ -54,14 +54,17 @@ export function generateEmailPDF(
   pdf.setFillColor(...C.white);
   pdf.rect(0, 0, W, H, 'F');
 
-  // Header bar
-  pdf.setFillColor(6, 7, 9);
+  // Warm day-mode header bar
+  pdf.setFillColor(238, 230, 217);
   pdf.rect(0, 0, W, 22, 'F');
-  pdf.setTextColor(222, 189, 104);
+  pdf.setDrawColor(...C.gold);
+  pdf.setLineWidth(0.8);
+  pdf.line(M, 13, M + 31, 13);
+  pdf.setTextColor(...C.black);
   pdf.setFontSize(11);
   pdf.setFont('helvetica', 'bold');
   pdf.text(config.company.toUpperCase(), M, 10);
-  pdf.setTextColor(255, 255, 255);
+  pdf.setTextColor(...C.text);
   pdf.setFontSize(8);
   pdf.setFont('helvetica', 'normal');
   pdf.text(config.pdfTitle, M, 16);
@@ -144,7 +147,7 @@ export function generateEmailPDF(
   // Quote table
   if (data.quoteItems.length > 0) {
     // Table header
-    pdf.setFillColor(240, 240, 240);
+    pdf.setFillColor(244, 241, 235);
     pdf.rect(M, y - 2, CW, 8, 'F');
     pdf.setTextColor(...C.muted);
     pdf.setFontSize(7);
@@ -205,7 +208,7 @@ export function generateEmailPDF(
     }
 
     // Total
-    pdf.setDrawColor(...C.black);
+    pdf.setDrawColor(...C.gold);
     pdf.setLineWidth(0.5);
     pdf.line(M + CW * 0.6, y - 2, W - M, y - 2);
     pdf.setTextColor(...C.black);

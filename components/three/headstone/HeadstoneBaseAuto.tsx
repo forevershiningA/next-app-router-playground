@@ -20,6 +20,7 @@ import AdditionModel from '../AdditionModel';
 import type { HeadstoneAPI } from '../../SvgHeadstone';
 import { data } from '#/app/_internal/_data';
 import { getThreeTextFontUrl } from '#/lib/font-utils';
+import { useMobileNavStore } from '#/lib/mobile-nav-store';
 
 const FONT_MAP: Record<string, string> = data.fonts.reduce(
   (map, font) => {
@@ -519,6 +520,9 @@ const HeadstoneBaseAuto = forwardRef<THREE.Mesh, HeadstoneBaseAutoProps>(
     const baseMaterialUrl = useHeadstoneStore((s) => s.baseMaterialUrl);
     const setBaseSwapping = useHeadstoneStore((s) => s.setBaseSwapping);
     const hasStatue = useHeadstoneStore((s) => s.hasStatue);
+    const isSizeAdjustmentActive = useMobileNavStore(
+      (state) => state.isSizeAdjustmentActive,
+    );
     const widthMm = useHeadstoneStore((s) => s.widthMm);
     const baseWidthMm = useHeadstoneStore((s) => s.baseWidthMm);
     const baseHeightMm = useHeadstoneStore((s) => s.baseHeightMm);
@@ -657,7 +661,7 @@ const HeadstoneBaseAuto = forwardRef<THREE.Mesh, HeadstoneBaseAutoProps>(
           b.scale.distanceToSquared(targetScale.current) > 1e-10;
 
         if (stillMoving) {
-          const alpha = 1 - Math.exp(-14 * delta);
+          const alpha = isSizeAdjustmentActive ? 1 : 1 - Math.exp(-14 * delta);
           b.position.lerp(targetPos.current, alpha);
           b.scale.lerp(targetScale.current, alpha);
           state.gl.shadowMap.needsUpdate = true;

@@ -72,11 +72,11 @@ export function EmailLayout({
                 </Link>
               </Text>
               <Text style={footerPowered}>
-                © {new Date().getFullYear()} {config.company}. All rights reserved.
+                © {new Date().getFullYear()} {config.company}. All rights
+                reserved.
               </Text>
             </Section>
           </Section>
-
         </Container>
       </Body>
     </Html>
@@ -88,7 +88,7 @@ export function EmailLayout({
 // ---------------------------------------------------------------------------
 
 const body: React.CSSProperties = {
-  backgroundColor: '#f8fafc',
+  backgroundColor: '#f4f1eb',
   fontFamily:
     '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
   margin: 0,
@@ -96,23 +96,23 @@ const body: React.CSSProperties = {
 };
 
 const container: React.CSSProperties = {
-  backgroundColor: '#ffffff',
+  backgroundColor: '#fbf9f5',
   margin: '0 auto',
   maxWidth: '640px',
-  borderRadius: '8px',
+  borderRadius: '12px',
   overflow: 'hidden',
-  border: '1px solid #e2e8f0',
+  border: '1px solid #ddd2c2',
 };
 
 const header: React.CSSProperties = {
-  backgroundColor: '#ffffff',
+  backgroundColor: '#fbf9f5',
   padding: '30px 42px 28px',
   textAlign: 'center',
-  borderBottom: '1px solid #e2e8f0',
+  borderBottom: '1px solid #ddd2c2',
 };
 
 const brandName: React.CSSProperties = {
-  color: '#b48a2c',
+  color: '#8a6a12',
   fontSize: '22px',
   fontWeight: 700,
   letterSpacing: '2px',
@@ -127,7 +127,7 @@ const logo: React.CSSProperties = {
 };
 
 const headerKicker: React.CSSProperties = {
-  color: '#64748b',
+  color: '#8c7657',
   fontSize: '11px',
   fontWeight: 600,
   letterSpacing: '2.5px',
@@ -136,7 +136,7 @@ const headerKicker: React.CSSProperties = {
 };
 
 const titleText: React.CSSProperties = {
-  color: '#0f172a',
+  color: '#302719',
   fontFamily: 'Georgia, "Times New Roman", serif',
   fontSize: '30px',
   fontWeight: 400,
@@ -145,13 +145,11 @@ const titleText: React.CSSProperties = {
   margin: 0,
 };
 
-const content: React.CSSProperties = {
-  padding: '36px 42px 34px',
-};
+const content: React.CSSProperties = { padding: '36px 42px 34px' };
 
 const footer: React.CSSProperties = {
-  backgroundColor: '#ffffff',
-  borderTop: '1px solid #e2e8f0',
+  backgroundColor: '#eee6d9',
+  borderTop: '1px solid #ddd2c2',
 };
 
 const footerInner: React.CSSProperties = {
@@ -160,7 +158,7 @@ const footerInner: React.CSSProperties = {
 };
 
 const footerCompany: React.CSSProperties = {
-  color: '#0f172a',
+  color: '#302719',
   fontSize: '13px',
   fontWeight: 600,
   letterSpacing: '1px',
@@ -169,26 +167,26 @@ const footerCompany: React.CSSProperties = {
 };
 
 const footerAddress: React.CSSProperties = {
-  color: '#64748b',
+  color: '#625a51',
   fontSize: '12px',
   lineHeight: '19px',
   margin: '0 0 8px',
 };
 
 const footerContact: React.CSSProperties = {
-  color: '#64748b',
+  color: '#625a51',
   fontSize: '12px',
   lineHeight: '19px',
   margin: '0 0 12px',
 };
 
 const footerLink: React.CSSProperties = {
-  color: '#334155',
+  color: '#6c4e22',
   textDecoration: 'none',
 };
 
 const footerPowered: React.CSSProperties = {
-  color: '#94a3b8',
+  color: '#8c7657',
   fontSize: '11px',
   margin: '8px 0 0',
 };

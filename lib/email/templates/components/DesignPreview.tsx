@@ -20,12 +20,7 @@ export function DesignPreview({
     <Section style={wrapper}>
       {screenshotUrl && (
         <Section style={imageFrame}>
-          <Img
-            src={screenshotUrl}
-            alt={designName}
-            width={480}
-            style={image}
-          />
+          <Img src={screenshotUrl} alt={designName} width={480} style={image} />
         </Section>
       )}
 
@@ -58,10 +53,10 @@ const wrapper: React.CSSProperties = {
 };
 
 const imageFrame: React.CSSProperties = {
-  border: '1px solid #e2e8f0',
-  borderRadius: '8px',
+  border: '1px solid #ddd2c2',
+  borderRadius: '12px',
   padding: '10px',
-  backgroundColor: '#f8fafc',
+  backgroundColor: '#f4f1eb',
   display: 'inline-block',
   margin: '0 auto 0',
 };
@@ -73,14 +68,14 @@ const image: React.CSSProperties = {
 };
 
 const caption: React.CSSProperties = {
-  color: '#334155',
+  color: '#302719',
   fontSize: '13px',
   margin: '12px 0 0',
   textAlign: 'center',
 };
 
 const captionLabel: React.CSSProperties = {
-  color: '#64748b',
+  color: '#8c7657',
   fontWeight: 600,
   letterSpacing: '1px',
   textTransform: 'uppercase',
@@ -93,24 +88,24 @@ const ctaWrapper: React.CSSProperties = {
 };
 
 const ctaButton: React.CSSProperties = {
-  backgroundColor: '#0f172a',
-  color: '#ffffff',
+  backgroundColor: '#d7b356',
+  color: '#302719',
   fontSize: '13px',
   fontWeight: 600,
   padding: '12px 22px',
-  borderRadius: '8px',
+  borderRadius: '10px',
   textDecoration: 'none',
   display: 'inline-block',
 };
 
 const editButton: React.CSSProperties = {
-  backgroundColor: '#ffffff',
-  color: '#0f172a',
+  backgroundColor: '#fbf9f5',
+  color: '#302719',
   fontSize: '13px',
   fontWeight: 600,
   padding: '11px 20px',
-  borderRadius: '8px',
-  border: '1px solid #cbd5e1',
+  borderRadius: '10px',
+  border: '1px solid #cdbb9f',
   textDecoration: 'none',
   display: 'inline-block',
   marginTop: '12px',

@@ -44,10 +44,18 @@ export function QuoteTable({
         <table style={ruledTable} cellPadding={0} cellSpacing={0}>
           <thead>
             <tr>
-              <th style={ruledThProduct} align="left">Product</th>
-              <th style={ruledThQty} align="left">Qty</th>
-              <th style={ruledThMoney} align="left">Price</th>
-              <th style={ruledThMoney} align="left">Item Total</th>
+              <th style={ruledThProduct} align="left">
+                Product
+              </th>
+              <th style={ruledThQty} align="left">
+                Qty
+              </th>
+              <th style={ruledThMoney} align="left">
+                Price
+              </th>
+              <th style={ruledThMoney} align="left">
+                Item Total
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -67,10 +75,18 @@ export function QuoteTable({
                   </td>
                   <td style={ruledTd}>{quantity}</td>
                   <td style={ruledTd}>
-                    {formatCurrency(item.unitPriceCents, currencySymbol, currencySide)}
+                    {formatCurrency(
+                      item.unitPriceCents,
+                      currencySymbol,
+                      currencySide,
+                    )}
                   </td>
                   <td style={ruledTd}>
-                    {formatCurrency(item.totalCents, currencySymbol, currencySide)}
+                    {formatCurrency(
+                      item.totalCents,
+                      currencySymbol,
+                      currencySide,
+                    )}
                   </td>
                 </tr>
               );
@@ -120,9 +136,15 @@ export function QuoteTable({
       <table style={table} cellPadding={0} cellSpacing={0}>
         <thead>
           <tr style={theadRow}>
-            <th style={th} align="left">Item</th>
-            <th style={{ ...th, width: '50px' }} align="center">Qty</th>
-            <th style={{ ...th, width: '110px' }} align="right">Price</th>
+            <th style={th} align="left">
+              Item
+            </th>
+            <th style={{ ...th, width: '50px' }} align="center">
+              Qty
+            </th>
+            <th style={{ ...th, width: '110px' }} align="right">
+              Price
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -141,7 +163,9 @@ export function QuoteTable({
         <tfoot>
           {subtotalCents != null && (
             <tr>
-              <td colSpan={2} style={subtotalTd}>Subtotal</td>
+              <td colSpan={2} style={subtotalTd}>
+                Subtotal
+              </td>
               <td style={{ ...subtotalTd, textAlign: 'right' }}>
                 {formatCurrency(subtotalCents, currencySymbol, currencySide)}
               </td>
@@ -149,14 +173,18 @@ export function QuoteTable({
           )}
           {taxCents != null && taxCents > 0 && (
             <tr>
-              <td colSpan={2} style={subtotalTd}>Tax</td>
+              <td colSpan={2} style={subtotalTd}>
+                Tax
+              </td>
               <td style={{ ...subtotalTd, textAlign: 'right' }}>
                 {formatCurrency(taxCents, currencySymbol, currencySide)}
               </td>
             </tr>
           )}
           <tr style={totalRow}>
-            <td colSpan={2} style={totalTd}>{totalLabel}</td>
+            <td colSpan={2} style={totalTd}>
+              {totalLabel}
+            </td>
             <td style={{ ...totalTd, textAlign: 'right' }}>
               {formatCurrency(totalCents, currencySymbol, currencySide)}
             </td>
@@ -179,7 +207,12 @@ function splitDescription(description: string): {
 
   const [, type, name, meta] = match;
   const title = `${type}: ${name}`;
-  const details = meta ? meta.split(',').map((part) => part.trim()).filter(Boolean) : [];
+  const details = meta
+    ? meta
+        .split(',')
+        .map((part) => part.trim())
+        .filter(Boolean)
+    : [];
 
   return { title, details };
 }
@@ -199,12 +232,10 @@ function currencyName(currency: string): string {
   return names[normalized] ?? normalized;
 }
 
-const wrapper: React.CSSProperties = {
-  margin: '30px 0',
-};
+const wrapper: React.CSSProperties = { margin: '30px 0' };
 
 const sectionHeading: React.CSSProperties = {
-  color: '#0f172a',
+  color: '#302719',
   fontSize: '13px',
   fontWeight: 600,
   margin: '0 0 14px',
@@ -214,76 +245,66 @@ const table: React.CSSProperties = {
   width: '100%',
   borderCollapse: 'separate',
   borderSpacing: 0,
-  border: '1px solid #e2e8f0',
-  borderRadius: '8px',
+  border: '1px solid #ddd2c2',
+  borderRadius: '10px',
   overflow: 'hidden',
 };
 
-const theadRow: React.CSSProperties = {
-  backgroundColor: '#f8fafc',
-};
+const theadRow: React.CSSProperties = { backgroundColor: '#eee6d9' };
 
 const th: React.CSSProperties = {
   padding: '10px 14px',
   fontSize: '11px',
   fontWeight: 600,
-  color: '#64748b',
+  color: '#625a51',
   textTransform: 'uppercase',
   letterSpacing: '1px',
-  borderBottom: '1px solid #e2e8f0',
+  borderBottom: '1px solid #ddd2c2',
 };
 
-const tdRowEven: React.CSSProperties = {
-  backgroundColor: '#ffffff',
-};
+const tdRowEven: React.CSSProperties = { backgroundColor: '#fbf9f5' };
 
-const tdRowOdd: React.CSSProperties = {
-  backgroundColor: '#f8fafc',
-};
+const tdRowOdd: React.CSSProperties = { backgroundColor: '#f4f1eb' };
 
 const td: React.CSSProperties = {
   padding: '11px 14px',
   fontSize: '13px',
-  color: '#334155',
-  borderBottom: '1px solid #e2e8f0',
+  color: '#4e4230',
+  borderBottom: '1px solid #ddd2c2',
 };
 
 const subtotalTd: React.CSSProperties = {
   padding: '9px 14px',
   fontSize: '13px',
-  color: '#64748b',
-  borderBottom: '1px solid #e2e8f0',
+  color: '#625a51',
+  borderBottom: '1px solid #ddd2c2',
 };
 
-const totalRow: React.CSSProperties = {
-  backgroundColor: '#ffffff',
-};
+const totalRow: React.CSSProperties = { backgroundColor: '#fffaf0' };
 
 const totalTd: React.CSSProperties = {
   padding: '13px 14px',
   fontSize: '15px',
   fontWeight: 600,
-  color: '#0f172a',
+  color: '#302719',
   letterSpacing: '0.5px',
-  borderTop: '1px solid #cbd5e1',
+  borderTop: '1px solid #cdbb9f',
 };
 
 const disclaimer: React.CSSProperties = {
-  color: '#94a3b8',
+  color: '#8c7657',
   fontSize: '11px',
   margin: '8px 0 0',
   textAlign: 'right',
 };
 
-const ruledWrapper: React.CSSProperties = {
-  margin: '24px 0 30px',
-};
+const ruledWrapper: React.CSSProperties = { margin: '24px 0 30px' };
 
 const ruledTable: React.CSSProperties = {
   width: '100%',
   borderCollapse: 'collapse',
   fontFamily: 'Arial, Helvetica, sans-serif',
-  color: '#000000',
+  color: '#302719',
 };
 
 const ruledTh: React.CSSProperties = {
@@ -291,32 +312,23 @@ const ruledTh: React.CSSProperties = {
   fontSize: '14px',
   fontWeight: 700,
   lineHeight: '18px',
-  color: '#000000',
-  borderBottom: '2px solid #000000',
+  color: '#302719',
+  borderBottom: '2px solid #cdbb9f',
 };
 
-const ruledThProduct: React.CSSProperties = {
-  ...ruledTh,
-  width: '55%',
-};
+const ruledThProduct: React.CSSProperties = { ...ruledTh, width: '55%' };
 
-const ruledThQty: React.CSSProperties = {
-  ...ruledTh,
-  width: '15%',
-};
+const ruledThQty: React.CSSProperties = { ...ruledTh, width: '15%' };
 
-const ruledThMoney: React.CSSProperties = {
-  ...ruledTh,
-  width: '15%',
-};
+const ruledThMoney: React.CSSProperties = { ...ruledTh, width: '15%' };
 
 const ruledTd: React.CSSProperties = {
   padding: '16px 3px 30px',
   fontSize: '14px',
   lineHeight: '18px',
   verticalAlign: 'top',
-  color: '#000000',
-  borderBottom: '2px solid #000000',
+  color: '#4e4230',
+  borderBottom: '2px solid #ddd2c2',
 };
 
 const ruledProductTd: React.CSSProperties = {
@@ -329,18 +341,18 @@ const ruledProductTitle: React.CSSProperties = {
   fontSize: '14px',
   lineHeight: '18px',
   fontWeight: 700,
-  color: '#000000',
+  color: '#302719',
 };
 
 const ruledProductDetail: React.CSSProperties = {
   margin: 0,
   fontSize: '14px',
   lineHeight: '18px',
-  color: '#000000',
+  color: '#625a51',
 };
 
 const ruledSummarySpacer: React.CSSProperties = {
-  borderBottom: '2px solid #000000',
+  borderBottom: '2px solid #ddd2c2',
   padding: '14px 3px',
 };
 
@@ -348,13 +360,11 @@ const ruledSummaryLabel: React.CSSProperties = {
   padding: '14px 3px',
   fontSize: '14px',
   lineHeight: '18px',
-  color: '#000000',
-  borderBottom: '2px solid #000000',
+  color: '#4e4230',
+  borderBottom: '2px solid #ddd2c2',
 };
 
-const ruledSummaryValue: React.CSSProperties = {
-  ...ruledSummaryLabel,
-};
+const ruledSummaryValue: React.CSSProperties = { ...ruledSummaryLabel };
 
 const ruledTotalLabel: React.CSSProperties = {
   ...ruledSummaryLabel,
@@ -370,5 +380,5 @@ const ruledDisclaimer: React.CSSProperties = {
   margin: '16px 0 0',
   fontSize: '14px',
   lineHeight: '18px',
-  color: '#000000',
+  color: '#8c7657',
 };

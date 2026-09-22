@@ -54,7 +54,7 @@ export function PasswordResetEmail({
 
 const greeting: React.CSSProperties = {
   fontSize: '16px',
-  color: '#0f172a',
+  color: '#302719',
   margin: '0 0 16px',
   fontWeight: 600,
 };
@@ -62,14 +62,14 @@ const greeting: React.CSSProperties = {
 const paragraph: React.CSSProperties = {
   fontSize: '14px',
   lineHeight: '22px',
-  color: '#475569',
+  color: '#625a51',
   margin: '0 0 16px',
 };
 
 const button: React.CSSProperties = {
-  backgroundColor: '#0f172a',
-  borderRadius: '8px',
-  color: '#ffffff',
+  backgroundColor: '#d7b356',
+  borderRadius: '10px',
+  color: '#302719',
   display: 'inline-block',
   fontSize: '14px',
   fontWeight: 600,
@@ -82,13 +82,13 @@ const button: React.CSSProperties = {
 const disclaimer: React.CSSProperties = {
   fontSize: '13px',
   lineHeight: '20px',
-  color: '#64748b',
+  color: '#8c7657',
   margin: '0 0 16px',
 };
 
 const regards: React.CSSProperties = {
   fontSize: '14px',
-  color: '#475569',
+  color: '#625a51',
   margin: '24px 0 0',
   lineHeight: '22px',
 };

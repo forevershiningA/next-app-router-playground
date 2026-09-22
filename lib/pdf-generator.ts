@@ -11,24 +11,25 @@ export type DesignPDFData = {
   quote?: PDFQuote;
 };
 
-// Print-friendly colours
+// Day-mode palette, kept print-friendly for a legible physical quote.
 const C = {
-  white:      [255, 255, 255] as [number, number, number],
-  black:      [20, 20, 20]    as [number, number, number],
-  text:       [35, 35, 35]    as [number, number, number],
-  muted:      [90, 90, 90]    as [number, number, number],
-  border:     [190, 190, 190] as [number, number, number],
-  accent:     [70, 70, 70]    as [number, number, number],
+  white: [251, 249, 245] as [number, number, number],
+  black: [48, 39, 25] as [number, number, number],
+  text: [78, 66, 48] as [number, number, number],
+  muted: [117, 101, 77] as [number, number, number],
+  border: [221, 210, 194] as [number, number, number],
+  accent: [167, 125, 50] as [number, number, number],
+  gold: [215, 179, 86] as [number, number, number],
 };
 
 export async function generateDesignPDF(design: DesignPDFData): Promise<void> {
   const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
-  const W = pdf.internal.pageSize.getWidth();   // 210
-  const H = pdf.internal.pageSize.getHeight();  // 297
+  const W = pdf.internal.pageSize.getWidth(); // 210
+  const H = pdf.internal.pageSize.getHeight(); // 297
   const M = 18; // margin
   const CW = W - M * 2; // content width
 
-  // White page background for print readability
+  // Warm day-mode page background for print readability.
   pdf.setFillColor(...C.white);
   pdf.rect(0, 0, W, H, 'F');
 
@@ -42,6 +43,10 @@ export async function generateDesignPDF(design: DesignPDFData): Promise<void> {
   pdf.setFont('helvetica', 'bold');
   pdf.text('FOREVER SHINING', M, 11);
 
+  pdf.setDrawColor(...C.gold);
+  pdf.setLineWidth(0.8);
+  pdf.line(M, 13.5, M + 31, 13.5);
+
   pdf.setTextColor(...C.muted);
   pdf.setFontSize(8);
   pdf.setFont('helvetica', 'normal');
@@ -50,7 +55,9 @@ export async function generateDesignPDF(design: DesignPDFData): Promise<void> {
   // Generated date - top right
   pdf.setTextColor(...C.muted);
   pdf.setFontSize(8);
-  pdf.text(`Generated: ${new Date().toLocaleDateString('en-AU')}`, W - M, 14, { align: 'right' });
+  pdf.text(`Generated: ${new Date().toLocaleDateString('en-AU')}`, W - M, 14, {
+    align: 'right',
+  });
 
   // Title row
   let y = 30;
@@ -93,7 +100,10 @@ export async function generateDesignPDF(design: DesignPDFData): Promise<void> {
       // Keep 4:3 ratio, constrain to max
       let imgW = maxImgW;
       let imgH = (imgW * 3) / 4;
-      if (imgH > maxImgH) { imgH = maxImgH; imgW = (imgH * 4) / 3; }
+      if (imgH > maxImgH) {
+        imgH = maxImgH;
+        imgW = (imgH * 4) / 3;
+      }
       const imgX = M + (CW - imgW) / 2;
 
       pdf.setDrawColor(...C.border);
@@ -107,7 +117,10 @@ export async function generateDesignPDF(design: DesignPDFData): Promise<void> {
   }
 
   // Description block
-  const descLines = pdf.splitTextToSize(design.description || 'Custom memorial design', CW - 12);
+  const descLines = pdf.splitTextToSize(
+    design.description || 'Custom memorial design',
+    CW - 12,
+  );
   const descH = descLines.length * 5 + 12;
 
   pdf.setDrawColor(...C.border);
@@ -168,8 +181,17 @@ export async function generateDesignPDF(design: DesignPDFData): Promise<void> {
   pdf.setTextColor(...C.muted);
   pdf.setFontSize(7);
   pdf.setFont('helvetica', 'normal');
-  pdf.text('Forever Shining Memorial Designs - forevershining.com.au', M, H - 4);
-  pdf.text('This quote is not a final invoice. Prices subject to confirmation.', W - M, H - 4, { align: 'right' });
+  pdf.text(
+    'Forever Shining Memorial Designs - forevershining.com.au',
+    M,
+    H - 4,
+  );
+  pdf.text(
+    'This quote is not a final invoice. Prices subject to confirmation.',
+    W - M,
+    H - 4,
+    { align: 'right' },
+  );
 
   pdf.save(`${design.title.replace(/[^a-z0-9]/gi, '_')}.pdf`);
 }
@@ -202,7 +224,9 @@ async function drawQuoteTable(
   const itemW = width * 0.6;
   const qtyW = width * 0.15;
   const amountW = width - itemW - qtyW;
-  const visibleItems = quote.items.filter((item) => item.amount > 0 || item.quantity > 0);
+  const visibleItems = quote.items.filter(
+    (item) => item.amount > 0 || item.quantity > 0,
+  );
   const tableRows = Math.max(visibleItems.length, 1);
   const estimatedH = 16 + (tableRows + 4) * rowH + (quote.note ? 12 : 0);
 
@@ -230,12 +254,20 @@ async function drawQuoteTable(
   pdf.setFont('helvetica', 'normal');
   pdf.setTextColor(...C.text);
 
-  const rows = visibleItems.length > 0 ? visibleItems : [{ label: 'Design total', quantity: 1, amount: quote.total }];
+  const rows =
+    visibleItems.length > 0
+      ? visibleItems
+      : [{ label: 'Design total', quantity: 1, amount: quote.total }];
   for (const row of rows) {
     pdf.rect(x, y, width, rowH, 'S');
     pdf.text(row.label, x + 3, y + 5.5);
     pdf.text(String(row.quantity), x + itemW + 3, y + 5.5);
-    pdf.text(formatCurrency(row.amount, quote.currency), x + width - 3, y + 5.5, { align: 'right' });
+    pdf.text(
+      formatCurrency(row.amount, quote.currency),
+      x + width - 3,
+      y + 5.5,
+      { align: 'right' },
+    );
     y += rowH;
   }
 
@@ -248,7 +280,9 @@ async function drawQuoteTable(
     pdf.rect(x, y, width, rowH, 'S');
     pdf.setFont('helvetica', label === 'Total' ? 'bold' : 'normal');
     pdf.text(label, x + itemW + 3, y + 5.5);
-    pdf.text(formatCurrency(value, quote.currency), x + width - 3, y + 5.5, { align: 'right' });
+    pdf.text(formatCurrency(value, quote.currency), x + width - 3, y + 5.5, {
+      align: 'right',
+    });
     y += rowH;
   }
 
@@ -373,7 +407,14 @@ async function drawDetailSection(
     if (row.thumbnail) {
       try {
         const imageData = await loadImage(row.thumbnail);
-        pdf.addImage(imageData.data, imageData.format, x + 1.5, y + 1.5, thumbSize, thumbSize);
+        pdf.addImage(
+          imageData.data,
+          imageData.format,
+          x + 1.5,
+          y + 1.5,
+          thumbSize,
+          thumbSize,
+        );
       } catch {
         // Keep row render even if thumbnail fails
       }
@@ -393,14 +434,18 @@ async function drawDetailSection(
 
     pdf.setTextColor(...C.text);
     pdf.setFont('helvetica', 'bold');
-    pdf.text(formatCurrency(row.amount, currency), x + width - 3, y + 7, { align: 'right' });
+    pdf.text(formatCurrency(row.amount, currency), x + width - 3, y + 7, {
+      align: 'right',
+    });
     y += rowH;
   }
 
   return y;
 }
 
-async function loadImage(src: string): Promise<{ data: string; format: 'PNG' | 'JPEG' }> {
+async function loadImage(
+  src: string,
+): Promise<{ data: string; format: 'PNG' | 'JPEG' }> {
   return new Promise((resolve, reject) => {
     if (src.startsWith('data:image/png')) {
       resolve({ data: src, format: 'PNG' });
@@ -411,7 +456,9 @@ async function loadImage(src: string): Promise<{ data: string; format: 'PNG' | '
       return;
     }
     const normalizedSrc =
-      src.startsWith('/') || src.startsWith('http://') || src.startsWith('https://')
+      src.startsWith('/') ||
+      src.startsWith('http://') ||
+      src.startsWith('https://')
         ? src
         : `/${src}`;
     const img = new Image();
@@ -425,11 +472,9 @@ async function loadImage(src: string): Promise<{ data: string; format: 'PNG' | '
         ctx.drawImage(img, 0, 0);
         // PNG preserves transparency and avoids dark backgrounds around SVG motifs.
         resolve({ data: canvas.toDataURL('image/png'), format: 'PNG' });
-      }
-      else reject(new Error('Canvas context failed'));
+      } else reject(new Error('Canvas context failed'));
     };
     img.onerror = reject;
     img.src = normalizedSrc;
   });
 }
-

@@ -24,15 +24,11 @@ export function RegistrationEmail({
         {t('dear')} {data.recipientName ?? t('customer')},
       </Text>
 
-      <Text style={paragraph}>
-        {t('congratulations_for_creating_account')}
-      </Text>
+      <Text style={paragraph}>{t('congratulations_for_creating_account')}</Text>
 
       <Text style={paragraph}>{t('thank_you_for_registering')}</Text>
 
-      <Text style={paragraph}>
-        {t('design_your_own_info')}
-      </Text>
+      <Text style={paragraph}>{t('design_your_own_info')}</Text>
 
       <Text style={paragraph}>
         {t('at_any_time')}{' '}
@@ -42,9 +38,7 @@ export function RegistrationEmail({
         .
       </Text>
 
-      <Text style={paragraph}>
-        {t('if_you_have_any_questions')}
-      </Text>
+      <Text style={paragraph}>{t('if_you_have_any_questions')}</Text>
 
       <Text style={regards}>
         {t('regards')},
@@ -57,7 +51,7 @@ export function RegistrationEmail({
 
 const greeting: React.CSSProperties = {
   fontSize: '16px',
-  color: '#0f172a',
+  color: '#302719',
   margin: '0 0 16px',
   fontWeight: 600,
 };
@@ -65,19 +59,19 @@ const greeting: React.CSSProperties = {
 const paragraph: React.CSSProperties = {
   fontSize: '14px',
   lineHeight: '22px',
-  color: '#475569',
+  color: '#625a51',
   margin: '0 0 16px',
 };
 
 const link: React.CSSProperties = {
-  color: '#334155',
+  color: '#6c4e22',
   textDecoration: 'underline',
   fontWeight: 600,
 };
 
 const regards: React.CSSProperties = {
   fontSize: '14px',
-  color: '#475569',
+  color: '#625a51',
   margin: '24px 0 0',
   lineHeight: '22px',
 };

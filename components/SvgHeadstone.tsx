@@ -22,6 +22,7 @@ import {
   type StainlessFinish,
 } from '#/lib/stainless-texture';
 import { POLISHED_GRANITE_TINT } from '#/lib/granite-material';
+import { useMobileNavStore } from '#/lib/mobile-nav-store';
 
 const DEFAULT_FACE_FALLBACK = '/textures/forever/l/Imperial-Red.webp';
 
@@ -651,6 +652,29 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(
     },
     ref,
   ) => {
+    const isSizeAdjustmentActive = useMobileNavStore(
+      (state) => state.isSizeAdjustmentActive,
+    );
+    // ShapeSwapper remounts this component for a different SVG. Keep the
+    // selected shape's geometry immutable between those swaps; size controls
+    // update only its transform.
+    const [geometryDimensions] = useState(() => ({
+      targetWidth,
+      targetHeight,
+      depth,
+      slantThickness,
+    }));
+
+    const geometryTargetWidth = geometryDimensions.targetWidth;
+    const geometryTargetHeight = geometryDimensions.targetHeight;
+    const geometryDepth = geometryDimensions.depth;
+    const geometrySlantThickness = geometryDimensions.slantThickness;
+    const isGeometryPreviewActive =
+      geometryTargetWidth !== targetWidth ||
+      geometryTargetHeight !== targetHeight ||
+      geometryDepth !== depth ||
+      geometrySlantThickness !== slantThickness;
+
     // 1. Load SVG and Textures
     const svgData = useLoader(SVGLoader, url);
     const sourceSvgCanvasOverlayTexture =
@@ -946,8 +970,8 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(
 
       const widthW = dx * Math.abs(scale);
       const heightW = dy * Math.abs(scale);
-      const wantW = targetWidth ?? widthW;
-      const wantH = targetHeight ?? heightW;
+      const wantW = geometryTargetWidth ?? widthW;
+      const wantH = geometryTargetHeight ?? heightW;
       const sCore = wantW / Math.max(EPS, widthW);
       const coreH_world = heightW * sCore;
       const toSV = (w: number) => w / Math.max(EPS, Math.abs(scale) * sCore);
@@ -1000,7 +1024,14 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(
         targetH_SV,
         cornerRadius,
       };
-    }, [svgData, scale, targetWidth, targetHeight, preserveTop, cornerRadius]);
+    }, [
+      svgData,
+      scale,
+      geometryTargetWidth,
+      geometryTargetHeight,
+      preserveTop,
+      cornerRadius,
+    ]);
 
     const engravingLineGeometries = useMemo(() => {
       if (!showSvgEngraving || !shapeParams) return [];
@@ -1121,8 +1152,7 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(
           }
 
           const shape = new THREE.Shape(newPts);
-          // Use high segment count for smooth lookup
-          return spacedOutline(shape, 4096);
+          return spacedOutline(shape, 768);
         }
       }
 
@@ -1137,10 +1167,10 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(
           (point) =>
             new THREE.Vector2(point.x, Math.min(point.y, bottomTarget_SV)),
         );
-        return spacedOutline(new THREE.Shape(clampedPoints), 4096);
+        return spacedOutline(new THREE.Shape(clampedPoints), 768);
       }
 
-      return spacedOutline(base, 4096);
+      return spacedOutline(base, 768);
     }, [shapeParams, preserveTop]);
 
     // 3b. Generate Geometry (with disposal cleanup)
@@ -1192,7 +1222,7 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(
 
         // FIX: Use absolute thickness in mm instead of ratios
         // The slantThickness parameter is now in mm (100-200mm)
-        const baseThickness = slantThickness / 10; // Convert mm to cm for Three.js units
+        const baseThickness = geometrySlantThickness / 10; // Convert mm to cm for Three.js units
         const topThickness = baseThickness * 0.2; // 20% ratio for top (standard cemetery slant)
 
         // Calculate how far back the top-front edge starts
@@ -1378,7 +1408,7 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(
         //
         //    Math is CORRECT! But maybe the issue is the base back position isn't actually at -depth/2?
         //    Or the depth prop value is wrong?
-        const zTranslation = baseThickness - depth / 2;
+        const zTranslation = baseThickness - geometryDepth / 2;
 
         slantGeometry.translate(-(minX + maxX) / 2, -minY, zTranslation);
         slantGeometry.computeVertexNormals();
@@ -1396,7 +1426,7 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(
         // Calculate world dimensions BEFORE UV mapping
         const worldW = dx * Math.abs(scale) * sCore;
         const worldH = (maxY - minY) * Math.abs(scale) * sCore;
-        const worldDepth = depth * Math.abs(scale);
+        const worldDepth = geometryDepth * Math.abs(scale);
 
         // UV MAPPING (Recalculate based on normalized geometry)
         // =========================================================
@@ -1569,7 +1599,7 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(
 
       // Build extrudes
       const extrudeSettings = {
-        depth,
+        depth: geometryDepth,
         steps: 1,
         bevelEnabled: bevel,
         bevelSegments: bevel ? 2 : 0,
@@ -1602,9 +1632,9 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(
 
       const reliefDepth = Math.max(
         0.001,
-        Math.min(depth - 0.001, Math.max(0.5, depth * 0.2)),
+        Math.min(geometryDepth - 0.001, Math.max(0.5, geometryDepth * 0.2)),
       );
-      const reliefOffset = depth - reliefDepth - 0.0005;
+      const reliefOffset = geometryDepth - reliefDepth - 0.0005;
 
       additionalShapes.forEach(({ shape, isRelief }) => {
         const settings = { ...extrudeSettings };
@@ -1643,7 +1673,11 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(
       //    Align "SVG Bottom" (maxY in most cases, but we use calculated bottomTarget_SV) to Y=0.
       //    This temporarily puts the shape upside down sitting on 0 (range 0 to -Height).
       //    Center Z to 0.
-      merged.translate(-(minX + maxX) / 2, -bottomTarget_SV, -depth / 2);
+      merged.translate(
+        -(minX + maxX) / 2,
+        -bottomTarget_SV,
+        -geometryDepth / 2,
+      );
 
       // 2. Flip Y.
       //    The shape flips vertically.
@@ -1690,9 +1724,9 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(
       // +/-depth/2 discarded both caps for modern (bevelled) SVG headstones.
       merged.computeBoundingBox();
       const capBounds = merged.boundingBox;
-      const capFrontZ = capBounds?.max.z ?? depth / 2;
-      const capBackZ = capBounds?.min.z ?? -depth / 2;
-      const capPlaneEpsilon = Math.max(EPS, Math.abs(depth) * 1e-6);
+      const capFrontZ = capBounds?.max.z ?? geometryDepth / 2;
+      const capBackZ = capBounds?.min.z ?? -geometryDepth / 2;
+      const capPlaneEpsilon = Math.max(EPS, Math.abs(geometryDepth) * 1e-6);
       const getCapMaterialIndex = (vertexIndex: number) => {
         const z0 = pos.getZ(vertexIndex);
         const z1 = pos.getZ(vertexIndex + 1);
@@ -2098,11 +2132,11 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(
     }, [
       shapeParams,
       outline,
-      depth,
+      geometryDepth,
       bevel,
       scale,
       headstoneStyle,
-      slantThickness,
+      geometrySlantThickness,
       autoRepeat,
       tileSize,
       sideTileSize,
@@ -2506,7 +2540,26 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(
     // dimensions and UVs correct. Apply the result through scene groups so the
     // visual transition is smooth rather than stepping at every slider event.
     useLayoutEffect(() => {
-      visualScaleTargetRef.current.set(...meshScale);
+      const widthRatio =
+        targetWidth != null && geometryTargetWidth != null
+          ? targetWidth / Math.max(EPS, geometryTargetWidth)
+          : 1;
+      const heightRatio =
+        targetHeight != null && geometryTargetHeight != null
+          ? targetHeight / Math.max(EPS, geometryTargetHeight)
+          : 1;
+      const livePhysicalDepth =
+        headstoneStyle === 'slant' ? slantThickness : depth;
+      const geometryPhysicalDepth =
+        headstoneStyle === 'slant' ? geometrySlantThickness : geometryDepth;
+      const depthRatio =
+        livePhysicalDepth / Math.max(EPS, geometryPhysicalDepth);
+
+      visualScaleTargetRef.current.set(
+        meshScale[0] * widthRatio,
+        meshScale[1] * heightRatio,
+        meshScale[2] * depthRatio,
+      );
       wrapperPositionTargetRef.current.set(...childWrapperPos);
       if (!visualScaleInitializedRef.current) {
         stoneScaleRef.current?.scale.copy(visualScaleTargetRef.current);
@@ -2543,7 +2596,20 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(
           depth: dims.worldDepth / Math.max(EPS, Math.abs(meshScale[2])),
         };
       }
-    }, [meshScale, childWrapperPos, dims]);
+    }, [
+      meshScale,
+      childWrapperPos,
+      dims,
+      depth,
+      geometryDepth,
+      geometrySlantThickness,
+      geometryTargetHeight,
+      geometryTargetWidth,
+      headstoneStyle,
+      slantThickness,
+      targetHeight,
+      targetWidth,
+    ]);
 
     useFrame((state, delta) => {
       const stoneScale = stoneScaleRef.current;
@@ -2559,7 +2625,10 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(
       }
 
       const targetScale = visualScaleTargetRef.current;
-      const alpha = 1 - Math.exp(-14 * delta);
+      const alpha =
+        isSizeAdjustmentActive || isGeometryPreviewActive
+          ? 1
+          : 1 - Math.exp(-14 * delta);
       stoneScale.scale.lerp(targetScale, alpha);
       surfaceScale.scale.lerp(targetScale, alpha);
       wrapper.position.lerp(wrapperPositionTargetRef.current, alpha);

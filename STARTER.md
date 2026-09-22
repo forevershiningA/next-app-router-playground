@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-09-21
+**Last Updated:** 2026-09-22
 
 **Status entry order:** Add new dated status entries immediately after the table of contents, before the existing status entries. Keep status entries in reverse chronological order (newest first); do not append them to the end of this file.
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots), **Vitest 4.1.8** (unit tests), **Playwright 1.59.1** (E2E tests)
@@ -108,8 +108,36 @@
 97. [September 17 Product Selection Catalogue Layout](#current-status-2026-09-17--product-selection-catalogue-layout)
 98. [September 19 Designer Sidebar and Inscription Editor Clarity](#current-status-2026-09-19--designer-sidebar-and-inscription-editor-clarity)
 99. [September 21 Guided Designer Panel Simplification](#current-status-2026-09-21--guided-designer-panel-simplification)
+100. [September 21 Dimension Rendering and Addition Sizes](#current-status-2026-09-21--dimension-rendering-and-addition-sizes)
+101. [September 22 Mobile Guided Navigation Accessibility](#current-status-2026-09-22--mobile-guided-navigation-accessibility)
+102. [September 22 Day Mode Email and PDF Templates](#current-status-2026-09-22--day-mode-email-and-pdf-templates)
 
 ---
+
+## Current Status (2026-09-22) — Day Mode Email and PDF Templates
+
+- **Shared email treatment:** all transactional emails now use the day-mode palette through `lib/email/templates/components/EmailLayout.tsx`: warm stone page background (`#f4f1eb`), light paper content, deep brown text, sand borders, and subdued gold accents. The shared design preview, contact panel, and both quote-table variants use the same visual language.
+- **All message types:** saved design, invoice, enquiry, registration, and password-reset templates were updated together. Primary actions use the accessible gold `#d7b356` with dark text; secondary actions remain light with a warm border. Do not reintroduce navy/slate colours (`#0f172a`, `#475569`, or `#e2e8f0`) into these templates unless the day-mode system changes deliberately.
+- **PDF consistency:** `lib/pdf-generator.ts` (browser quote download) and `lib/email/pdf-email.ts` (server-generated attachment) use the same warm print-friendly paper, brown ink, sand rules, and gold signature line. The email attachment header is intentionally light rather than the former near-black bar.
+- **Validation:** Prettier, `pnpm exec tsc --noEmit`, and `git diff --check` pass after the template changes.
+
+## Current Status (2026-09-22) — Mobile Guided Navigation Accessibility
+
+- **Five primary editing shortcuts:** the compact guided navigation in `components/DesignerNav.tsx` now contains only **Inscription**, **Photo**, **Motif**, **Price**, and **Save**. The **Material/Background** and **Size** shortcuts were deliberately removed from this quick-access strip to avoid overcrowding. Those workflow steps remain available through the full menu and the guided **Previous / Next** controls.
+- **Larger mobile targets:** both the always-visible guided shortcut row and the temporary mobile quick-navigation tray use five columns instead of seven. The labelled row has 64 px minimum-height buttons, 24 px icons, and 11 px semibold labels; the icon-only tray has 56 px minimum-height buttons and 20 px icons. Preserve these touch-target sizes when changing the mobile flow: the intended audience includes older users.
+- **Terminology:** the image shortcut label is **Photo**. Its route and behavior remain `select-images`; this is a presentation-only wording change.
+- **Validation:** targeted ESLint and `git diff --check` were run after the navigation change.
+
+## Current Status (2026-09-21) — Dimension Rendering and Addition Sizes
+
+- **Immutable dimension geometry:** `components/SvgHeadstone.tsx` now captures the geometry dimensions when a selected SVG shape mounts and keeps that geometry for the lifetime of the shape. Width, Height, and Thickness changes update the `stoneScaleRef`/`surfaceScaleRef` transforms instead of regenerating `ExtrudeGeometry`, cap/wall meshes, normals, UVs, and materials. `ShapeSwapper` keys `SvgHeadstone` by `resolvedUrl`, so selecting another Shape still creates the correct new geometry. Shape-defining changes such as another SVG or corner treatment may rebuild; ordinary dimension edits must not.
+- **Texture/mask model:** the selected shape geometry is the mask/silhouette for the existing face, side, and back textures. Dimension edits retain the same texture/material instances and resize the masked model through transforms. The working outline used to build a new SVG shape was reduced from 4096 to 768 samples; the generated perimeter wall already limits its working contour to about 320 points.
+- **Other monument parts:** `HeadstoneBaseAuto` and `LedgerSlab` use dimension-independent unit geometry scaled by their live dimensions. Ledger keeps one material/texture set while dimensions change. `KerbsetBorder` builds its rounded bar geometry and material set once, then scales and repositions its visual group for Width, Height, and Depth changes. Do not restore per-input geometry/material creation for these controls.
+- **Immediate controls:** while a size range is active, `useMobileNavStore.isSizeAdjustmentActive` prevents `AutoFit` and `FullMonumentFit` from fighting the live transform. Slider previews update without an easing delay; the final camera fit runs after release. The same immutable geometry path makes the Width/Height/Thickness `+` and `−` controls visible without waiting for an SVG geometry rebuild.
+- **Frame-loop rules:** dimension interpolation uses delta-time-based factors when easing is needed. Do not call React state setters or allocate replacement geometry inside `useFrame`. `HeadstoneBaseAuto` derives its base dimensions during render and only mutates Three.js position/scale in the frame loop.
+- **Addition size variants:** additions with multiple configured XML sizes expose a select box, using the same explicit variant-selection pattern as Images. The displayed options use the configured Width × Height × Depth values rather than presenting a continuous size slider that could select unsupported dimensions. Single-size additions remain fixed to their configured size.
+- **Panel product names:** inscription, motif, image, and addition panels display the selected XML/configuration product name as a plain left-aligned line without redundant prefixes such as “Inscription”, “Motif”, or “Image”. Images may therefore show names such as **Ceramic Image** directly.
+- **Validation:** `pnpm exec tsc --noEmit`, targeted ESLint, Prettier, and `git diff --check` pass without errors for the dimension-rendering changes. Existing warnings in the large designer/Three.js components remain; they were not introduced by this work.
 
 ## Current Status (2026-09-21) — Guided Designer Panel Simplification
 

@@ -1,4 +1,11 @@
-import { Button, Column, Hr, Row, Section, Text } from '@react-email/components';
+import {
+  Button,
+  Column,
+  Hr,
+  Row,
+  Section,
+  Text,
+} from '@react-email/components';
 import * as React from 'react';
 import type { CountryEmailConfig, SavedDesignEmailData } from '../types';
 import { appendDesignName } from '../helpers';
@@ -37,7 +44,8 @@ export function SavedDesignEmail({
       : `${(data.totalCents / 100).toFixed(2)} ${config.currencySymbol}`;
 
   const editUrl = `${config.link}/my-account`;
-  const viewDesignUrl = data.reviewUrl ?? `${config.link}/design/${data.designId}`;
+  const viewDesignUrl =
+    data.reviewUrl ?? `${config.link}/design/${data.designId}`;
   const contactUrl = `mailto:${config.email}`;
 
   return (
@@ -45,12 +53,12 @@ export function SavedDesignEmail({
       <Section style={hero}>
         <Text style={heroEyebrow}>Memorial Design Saved</Text>
         <Text style={heroHeading}>
-          Your design is ready,{' '}
-          <span style={heroName}>{firstName}</span>.
+          Your design is ready, <span style={heroName}>{firstName}</span>.
         </Text>
         <Text style={heroCopy}>
-          We&apos;ve saved <strong>&ldquo;{data.designName}&rdquo;</strong> to your account.
-          Your personalised quote is below. You can return to it whenever you are ready.
+          We&apos;ve saved <strong>&ldquo;{data.designName}&rdquo;</strong> to
+          your account. Your personalised quote is below. You can return to it
+          whenever you are ready.
         </Text>
       </Section>
 
@@ -103,22 +111,32 @@ export function SavedDesignEmail({
           <Column style={stepCol}>
             <Text style={stepIcon}>View</Text>
             <Text style={stepTitle}>View Design</Text>
-            <Text style={stepText}>See the full 3D design and quote in your browser</Text>
-            <Button href={viewDesignUrl} style={stepBtnPrimary}>View Design</Button>
+            <Text style={stepText}>
+              See the full 3D design and quote in your browser
+            </Text>
+            <Button href={viewDesignUrl} style={stepBtnPrimary}>
+              View Design
+            </Button>
           </Column>
           <Column style={stepDivider} />
           <Column style={stepCol}>
             <Text style={stepIcon}>Edit</Text>
             <Text style={stepTitle}>Edit Design</Text>
-            <Text style={stepText}>Refine inscriptions, materials or dimensions</Text>
-            <Button href={editUrl} style={stepBtn}>Open Designer</Button>
+            <Text style={stepText}>
+              Refine inscriptions, materials or dimensions
+            </Text>
+            <Button href={editUrl} style={stepBtn}>
+              Open Designer
+            </Button>
           </Column>
           <Column style={stepDivider} />
           <Column style={stepCol}>
             <Text style={stepIcon}>Help</Text>
             <Text style={stepTitle}>Get in Touch</Text>
             <Text style={stepText}>Questions? Our team is ready to help</Text>
-            <Button href={contactUrl} style={stepBtn}>Contact Us</Button>
+            <Button href={contactUrl} style={stepBtn}>
+              Contact Us
+            </Button>
           </Column>
         </Row>
       </Section>
@@ -152,7 +170,6 @@ export function SavedDesignEmail({
         <br />
         <span style={signatureContact}>{config.email}</span>
       </Text>
-
     </EmailLayout>
   );
 }
@@ -161,13 +178,10 @@ export function SavedDesignEmail({
 // Styles
 // ---------------------------------------------------------------------------
 
-const hero: React.CSSProperties = {
-  textAlign: 'center',
-  padding: '0 0 24px',
-};
+const hero: React.CSSProperties = { textAlign: 'center', padding: '0 0 24px' };
 
 const heroEyebrow: React.CSSProperties = {
-  color: '#64748b',
+  color: '#8c7657',
   fontSize: '11px',
   fontWeight: 600,
   letterSpacing: '2px',
@@ -176,7 +190,7 @@ const heroEyebrow: React.CSSProperties = {
 };
 
 const heroHeading: React.CSSProperties = {
-  color: '#0f172a',
+  color: '#302719',
   fontFamily: 'Georgia, "Times New Roman", serif',
   fontSize: '30px',
   fontWeight: 400,
@@ -185,42 +199,40 @@ const heroHeading: React.CSSProperties = {
   letterSpacing: '-0.2px',
 };
 
-const heroName: React.CSSProperties = {
-  color: '#0f172a',
-};
+const heroName: React.CSSProperties = { color: '#8a6a12' };
 
 const heroCopy: React.CSSProperties = {
-  color: '#475569',
+  color: '#625a51',
   fontSize: '15px',
   lineHeight: '23px',
   margin: '0',
 };
 
 const divider: React.CSSProperties = {
-  borderColor: '#e2e8f0',
+  borderColor: '#ddd2c2',
   margin: '28px 0',
 };
 
 const priceCard: React.CSSProperties = {
-  backgroundColor: '#f8fafc',
-  border: '1px solid #e2e8f0',
-  borderRadius: '8px',
+  backgroundColor: '#fffaf0',
+  border: '1px solid #ddd2c2',
+  borderRadius: '10px',
   padding: '24px 28px',
   textAlign: 'center',
   margin: '0 0 32px',
 };
 
 const accessCodeBox: React.CSSProperties = {
-  backgroundColor: '#f8fafc',
-  border: '1px solid #e2e8f0',
-  borderRadius: '8px',
+  backgroundColor: '#f4f1eb',
+  border: '1px solid #ddd2c2',
+  borderRadius: '10px',
   padding: '18px',
   textAlign: 'center',
   margin: '20px 0',
 };
 
 const accessCodeLabel: React.CSSProperties = {
-  color: '#64748b',
+  color: '#8c7657',
   fontSize: '11px',
   letterSpacing: '2px',
   textTransform: 'uppercase',
@@ -228,7 +240,7 @@ const accessCodeLabel: React.CSSProperties = {
 };
 
 const accessCodeValue: React.CSSProperties = {
-  color: '#0f172a',
+  color: '#302719',
   fontSize: '28px',
   fontWeight: 600,
   letterSpacing: '8px',
@@ -236,13 +248,13 @@ const accessCodeValue: React.CSSProperties = {
 };
 
 const accessCodeNote: React.CSSProperties = {
-  color: '#64748b',
+  color: '#625a51',
   fontSize: '13px',
   margin: 0,
 };
 
 const priceLabel: React.CSSProperties = {
-  color: '#64748b',
+  color: '#8c7657',
   fontSize: '11px',
   fontWeight: 600,
   letterSpacing: '2px',
@@ -251,7 +263,7 @@ const priceLabel: React.CSSProperties = {
 };
 
 const priceAmount: React.CSSProperties = {
-  color: '#0f172a',
+  color: '#302719',
   fontSize: '38px',
   fontWeight: 500,
   letterSpacing: '-1px',
@@ -264,9 +276,7 @@ const priceNote: React.CSSProperties = {
   margin: '0',
 };
 
-const nextStepsSection: React.CSSProperties = {
-  margin: '0 0 28px',
-};
+const nextStepsSection: React.CSSProperties = { margin: '0 0 28px' };
 
 const nextStepsHeading: React.CSSProperties = {
   color: '#0f172a',
@@ -284,12 +294,12 @@ const stepCol: React.CSSProperties = {
 
 const stepDivider: React.CSSProperties = {
   width: '1px',
-  backgroundColor: '#e2e8f0',
+  backgroundColor: '#ddd2c2',
   verticalAlign: 'top',
 };
 
 const stepIcon: React.CSSProperties = {
-  color: '#64748b',
+  color: '#8c7657',
   fontSize: '11px',
   fontWeight: 600,
   letterSpacing: '1px',
@@ -298,7 +308,7 @@ const stepIcon: React.CSSProperties = {
 };
 
 const stepTitle: React.CSSProperties = {
-  color: '#0f172a',
+  color: '#302719',
   fontSize: '13px',
   fontWeight: 600,
   margin: '0 0 6px',
@@ -306,45 +316,45 @@ const stepTitle: React.CSSProperties = {
 };
 
 const stepText: React.CSSProperties = {
-  color: '#64748b',
+  color: '#625a51',
   fontSize: '12px',
   lineHeight: '18px',
   margin: '0 0 12px',
 };
 
 const stepBtn: React.CSSProperties = {
-  backgroundColor: '#ffffff',
-  color: '#0f172a',
+  backgroundColor: '#fbf9f5',
+  color: '#302719',
   fontSize: '12px',
   fontWeight: 600,
   padding: '9px 14px',
-  borderRadius: '8px',
-  border: '1px solid #cbd5e1',
+  borderRadius: '10px',
+  border: '1px solid #cdbb9f',
   textDecoration: 'none',
   display: 'inline-block',
 };
 
 const stepBtnPrimary: React.CSSProperties = {
-  backgroundColor: '#0f172a',
-  color: '#ffffff',
+  backgroundColor: '#d7b356',
+  color: '#302719',
   fontSize: '12px',
   fontWeight: 600,
   padding: '8px 14px',
-  borderRadius: '8px',
+  borderRadius: '10px',
   textDecoration: 'none',
   display: 'inline-block',
 };
 
 const warrantyBox: React.CSSProperties = {
-  border: '1px solid #e2e8f0',
-  backgroundColor: '#f8fafc',
-  borderRadius: '8px',
+  border: '1px solid #ddd2c2',
+  backgroundColor: '#f4f1eb',
+  borderRadius: '10px',
   padding: '18px 20px',
   margin: '0 0 28px',
 };
 
 const warrantyIcon: React.CSSProperties = {
-  color: '#64748b',
+  color: '#8a6a12',
   fontSize: '11px',
   margin: '0',
   fontWeight: 600,
@@ -352,7 +362,7 @@ const warrantyIcon: React.CSSProperties = {
 };
 
 const warrantyTitle: React.CSSProperties = {
-  color: '#0f172a',
+  color: '#302719',
   fontSize: '13px',
   fontWeight: 600,
   margin: '0 0 4px',
@@ -360,32 +370,32 @@ const warrantyTitle: React.CSSProperties = {
 };
 
 const warrantyText: React.CSSProperties = {
-  color: '#64748b',
+  color: '#625a51',
   fontSize: '13px',
   lineHeight: '20px',
   margin: '0',
 };
 
 const closing: React.CSSProperties = {
-  color: '#475569',
+  color: '#625a51',
   fontSize: '14px',
   lineHeight: '22px',
   margin: '0 0 24px',
 };
 
 const signature: React.CSSProperties = {
-  color: '#475569',
+  color: '#625a51',
   fontSize: '14px',
   lineHeight: '22px',
   margin: '0',
 };
 
 const signatureCompany: React.CSSProperties = {
-  color: '#0f172a',
+  color: '#302719',
   fontSize: '15px',
 };
 
 const signatureContact: React.CSSProperties = {
-  color: '#334155',
+  color: '#6c4e22',
   fontSize: '13px',
 };

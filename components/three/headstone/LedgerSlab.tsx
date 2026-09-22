@@ -19,6 +19,7 @@ import {
   createPolishedGraniteMaterial,
   GRANITE_TILE_SIZE_M,
 } from '#/lib/granite-material';
+import { useMobileNavStore } from '#/lib/mobile-nav-store';
 
 type LedgerSlabProps = { onClick?: (e: any) => void };
 
@@ -133,6 +134,15 @@ function LedgerMesh({
   meshRef: React.RefObject<THREE.Mesh | null>;
 }) {
   const texture = useTexture(texUrl);
+  const isSizeAdjustmentActive = useMobileNavStore(
+    (state) => state.isSizeAdjustmentActive,
+  );
+  // Keep one texture/material set; live dimensions are represented by scale.
+  const [materialDimensions] = React.useState(() => ({
+    widthMm: ledgerWidthMm,
+    heightMm: ledgerHeightMm,
+    depthMm: ledgerDepthMm,
+  }));
 
   const geometry = useMemo(() => {
     const next = new RoundedBoxGeometry(1, 1, 1, 2, 0.004);
@@ -144,9 +154,19 @@ function LedgerMesh({
   const h = ledgerHeightMm / 1000;
   const d = ledgerDepthMm / 1000;
   const materialSet = useMemo(
-    () => createLedgerMaterials(texture, w, h, d),
-    [texture, w, h, d],
+    () =>
+      createLedgerMaterials(
+        texture,
+        materialDimensions.widthMm / 1000,
+        materialDimensions.heightMm / 1000,
+        materialDimensions.depthMm / 1000,
+      ),
+    [texture, materialDimensions],
   );
+  const isDimensionPreviewActive =
+    materialDimensions.widthMm !== ledgerWidthMm ||
+    materialDimensions.heightMm !== ledgerHeightMm ||
+    materialDimensions.depthMm !== ledgerDepthMm;
 
   useEffect(() => {
     return () => {
@@ -190,7 +210,10 @@ function LedgerMesh({
       meshRef.current.position.distanceToSquared(targetPos.current) > 1e-10 ||
       meshRef.current.scale.distanceToSquared(targetScale.current) > 1e-10;
     if (stillMoving) {
-      const alpha = 1 - Math.exp(-14 * delta);
+      const alpha =
+        isSizeAdjustmentActive || isDimensionPreviewActive
+          ? 1
+          : 1 - Math.exp(-14 * delta);
       meshRef.current.position.lerp(targetPos.current, alpha);
       meshRef.current.scale.lerp(targetScale.current, alpha);
       state.gl.shadowMap.needsUpdate = true;
