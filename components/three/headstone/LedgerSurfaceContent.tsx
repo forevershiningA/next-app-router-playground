@@ -4,11 +4,11 @@ import * as React from 'react';
 import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
 
-import HeadstoneInscription from '../../HeadstoneInscription';
+import HeadstoneInscription from './HeadstoneInscription';
 import MotifModel from '../MotifModel';
 import ImageModel from '../ImageModel';
 import AdditionModel from '../AdditionModel';
-import type { HeadstoneAPI } from '../../SvgHeadstone';
+import type { HeadstoneAPI } from './SvgHeadstone';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import { data } from '#/app/_internal/_data';
 import { getThreeTextFontUrl } from '#/lib/font-utils';

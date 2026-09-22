@@ -8,7 +8,7 @@ import type { PricingBreakdown, ProjectSummary, ProjectRecordWithState } from '#
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import { getDesignerProductStepHref } from '#/lib/designer-product-routes';
 
-import QuickEnquiryForm from '#/components/QuickEnquiryForm';
+import QuickEnquiryForm from '#/components/contact/QuickEnquiryForm';
 
 const currencyFormatter = new Intl.NumberFormat('en-AU', {
   style: 'currency',

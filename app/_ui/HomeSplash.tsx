@@ -16,7 +16,7 @@ import {
   SunIcon,
   XMarkIcon,
 } from '@heroicons/react/24/outline';
-import { useTheme } from '#/components/ThemeProvider';
+import { useTheme } from '#/components/theme/ThemeProvider';
 
 const MEMORIAL_LINKS = [
   { label: 'Headstones', href: '/memorials/headstones' },
@@ -26,7 +26,7 @@ const MEMORIAL_LINKS = [
   { label: 'Pet Memorials', href: '/memorials/pet-memorials' },
 ] as const;
 
-const HeroCanvas = dynamic(() => import('#/components/HeroCanvas'), {
+const HeroCanvas = dynamic(() => import('#/components/marketing/HeroCanvas'), {
   ssr: false,
   loading: () => (
     <div className="flex h-full w-full items-center justify-center" aria-hidden="true">

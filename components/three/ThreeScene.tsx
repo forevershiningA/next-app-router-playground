@@ -11,7 +11,7 @@ import {
 } from 'react';
 import { PerspectiveCamera } from '@react-three/drei';
 import { usePathname } from 'next/navigation';
-import Scene from './three/Scene';
+import Scene from './Scene';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import {
   calculateCatalogPrice,
@@ -24,7 +24,7 @@ import { data } from '#/app/_internal/_data';
 import { loadCatalogForProduct } from '#/lib/check-price-utils';
 import { formatDimensionPair } from '#/lib/unit-system';
 import { useSetUnitSystem, useUnitSystem } from '#/lib/use-unit-system';
-import QuickEnquiryModal from '#/components/QuickEnquiryModal';
+import QuickEnquiryModal from '#/components/contact/QuickEnquiryModal';
 
 import {
   CAMERA_3D_POSITION_Z,
@@ -476,12 +476,12 @@ function ProductNameHeader() {
             type="button"
             onClick={() => setActivePanel('checkprice')}
             aria-label="Open check price breakdown"
-            className="flex h-12 w-full cursor-pointer items-center justify-between gap-1.5 rounded-full border border-white/10 bg-black/80 px-4 py-3 font-mono text-base text-white shadow-xl backdrop-blur-md transition-colors hover:bg-black/90 sm:gap-4 md:px-5"
+            className="day:border-[#d8cfc2] day:bg-[#fbf9f5]/95 day:text-[#2a2118] day:shadow-[#49392b]/15 day:hover:bg-[#f3eee6] flex h-12 w-full cursor-pointer items-center justify-between gap-1.5 rounded-full border border-white/10 bg-black/80 px-4 py-3 font-mono text-base text-white shadow-xl backdrop-blur-md transition-colors hover:bg-black/90 sm:gap-4 md:px-5"
           >
-            <span className="flex min-w-0 flex-1 items-center gap-1 text-sm leading-none text-white/80 md:gap-1.5">
+            <span className="day:text-[#62584d] flex min-w-0 flex-1 items-center gap-1 text-sm leading-none text-white/80 md:gap-1.5">
               <span className="truncate">{sizeLabel}</span>
               <svg
-                className="h-3.5 w-3.5 shrink-0 text-white/45"
+                className="day:text-[#9a8e80] h-3.5 w-3.5 shrink-0 text-white/45"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -495,8 +495,8 @@ function ProductNameHeader() {
                 />
               </svg>
             </span>
-            <div className="h-4 w-px shrink-0 bg-white/20"></div>
-            <span className="shrink-0 font-bold whitespace-nowrap text-[#f3d48f]">
+            <div className="day:bg-[#d8cfc2] h-4 w-px shrink-0 bg-white/20"></div>
+            <span className="day:text-[#9a6e20] shrink-0 font-bold whitespace-nowrap text-[#f3d48f]">
               {priceLabel}
             </span>
           </button>

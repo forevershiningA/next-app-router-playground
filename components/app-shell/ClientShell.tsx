@@ -8,8 +8,8 @@
 import dynamic from 'next/dynamic';
 
 const RouterBinder = dynamic(() => import('#/components/system/RouterBinder'), { ssr: false });
-const DefaultDesignLoader = dynamic(() => import('#/components/DefaultDesignLoader'), { ssr: false });
-const ConditionalCanvas = dynamic(() => import('#/components/ConditionalCanvas'), { ssr: false });
+const DefaultDesignLoader = dynamic(() => import('#/components/projects/DefaultDesignLoader'), { ssr: false });
+const ConditionalCanvas = dynamic(() => import('#/components/app-shell/ConditionalCanvas'), { ssr: false });
 
 export default function ClientShell() {
   return (

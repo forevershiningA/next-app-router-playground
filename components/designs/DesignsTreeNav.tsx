@@ -5,7 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
 import { ChevronRightIcon, ChevronDownIcon } from '@heroicons/react/24/solid';
-import LoadDesignButton from '#/components/LoadDesignButton';
+import LoadDesignButton from '#/components/designer/actions/LoadDesignButton';
 import { getAllSavedDesigns } from '#/lib/saved-designs-data';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import { calculatePrice, computeQuantity } from '#/lib/xml-parser';

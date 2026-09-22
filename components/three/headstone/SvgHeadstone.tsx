@@ -1,4 +1,4 @@
-// components/SvgHeadstone.tsx
+// components/three/headstone/SvgHeadstone.tsx
 'use client';
 
 import * as React from 'react';

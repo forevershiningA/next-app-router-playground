@@ -8,7 +8,7 @@
 
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { useSavedDesign, convertSavedDesignToDYO, SavedDesignData } from '#/components/SavedDesignLoader';
+import { useSavedDesign, convertSavedDesignToDYO, SavedDesignData } from '#/components/projects/SavedDesignLoader';
 
 // Example DYO Editor integration
 export function DYOEditorWithSavedDesigns() {

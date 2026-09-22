@@ -7,7 +7,7 @@ import { Text } from '@react-three/drei';
 import type { HeadstoneAPI } from './SvgHeadstone';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import type { ThreeContextValue } from '#/lib/three-types';
-import SelectionBox from './SelectionBox';
+import SelectionBox from '../ObjectSelectionBox';
 import { data } from '#/app/_internal/_data';
 
 /* ------------------------------------------------------------------ */

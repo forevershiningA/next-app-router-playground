@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import AccountNav from '#/components/AccountNav';
+import AccountNav from '#/components/account/AccountNav';
 import { UserCircleIcon } from '@heroicons/react/24/outline';
 
 export default function AccountDetailsPage() {

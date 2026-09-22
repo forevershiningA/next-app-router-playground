@@ -18,7 +18,7 @@ import {
   useHeadstoneStore,
   type Material as MaterialOption,
 } from '#/lib/headstone-store';
-import SegmentedControl from './ui/SegmentedControl';
+import SegmentedControl from '#/components/ui/SegmentedControl';
 import { getDesignerProductStepHref } from '#/lib/designer-product-routes';
 import { bronzes } from '#/app/_internal/_data';
 import { resolveMaterialAssetPath } from '#/lib/material-utils';

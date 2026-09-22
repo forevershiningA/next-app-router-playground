@@ -3,11 +3,11 @@
 import { Suspense, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import { usePathname } from 'next/navigation';
-import SceneOverlayHost from '#/components/SceneOverlayHost';
-import CheckPricePanel from '#/components/CheckPricePanel';
-import SEOPanel from '#/components/SEOPanel';
-import SceneryToggleButton from '#/components/SceneryToggleButton';
-import ErrorBoundary from '#/components/ErrorBoundary';
+import SceneOverlayHost from '#/components/designer/overlays/SceneOverlayHost';
+import CheckPricePanel from '#/components/designer/quote/CheckPricePanel';
+import SEOPanel from '#/components/designer/tools/SEOPanel';
+import SceneryToggleButton from '#/components/designer/tools/SceneryToggleButton';
+import ErrorBoundary from '#/components/shared/ErrorBoundary';
 import { getDesignerStepSlug } from '#/lib/designer-route-state';
 import { useSceneOverlayStore } from '#/lib/scene-overlay-store';
 import { useHeadstoneStore } from '#/lib/headstone-store';
@@ -21,12 +21,12 @@ const CanvasLoadingFallback = (
   </div>
 );
 
-const ThreeScene = dynamic(() => import('#/components/ThreeScene'), {
+const ThreeScene = dynamic(() => import('#/components/three/ThreeScene'), {
   ssr: false,
   loading: () => CanvasLoadingFallback,
 });
 
-const CropCanvas = dynamic(() => import('#/components/CropCanvas'), {
+const CropCanvas = dynamic(() => import('#/components/designer/canvas/CropCanvas'), {
   ssr: false,
   loading: () => CanvasLoadingFallback,
 });

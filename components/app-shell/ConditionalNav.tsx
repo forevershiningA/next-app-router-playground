@@ -3,9 +3,9 @@
 import { useEffect, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { GlobalNav } from '#/ui/global-nav';
-import DesignsTreeNav from '#/components/DesignsTreeNav';
-import DesignerNav from '#/components/DesignerNav';
-import AccountNav from '#/components/AccountNav';
+import DesignsTreeNav from '#/components/designs/DesignsTreeNav';
+import DesignerNav from '#/components/designer/navigation/DesignerNav';
+import AccountNav from '#/components/account/AccountNav';
 import { type DemoCategory } from '#/lib/db';
 import {
   isDesignerRoutePath,

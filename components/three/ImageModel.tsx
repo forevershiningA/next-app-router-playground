@@ -5,8 +5,8 @@ import * as THREE from 'three';
 import { useThree } from '@react-three/fiber';
 import { SVGLoader } from 'three/examples/jsm/loaders/SVGLoader.js';
 import { useHeadstoneStore } from '#/lib/headstone-store';
-import type { HeadstoneAPI } from '../SvgHeadstone';
-import SelectionBox from '../SelectionBox';
+import type { HeadstoneAPI } from './headstone/SvgHeadstone';
+import SelectionBox from './ObjectSelectionBox';
 import { useRouter, usePathname } from 'next/navigation';
 
 type Props = {

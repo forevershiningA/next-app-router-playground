@@ -9,9 +9,9 @@ import { data } from '#/app/_internal/_data';
 import { applyDesignSnapshot } from '#/lib/project-serializer';
 import { getDesignerProductStepHref } from '#/lib/designer-product-routes';
 import { buildPdfQuoteFromProject } from '#/lib/design-quote';
-import { PriceQuoteDisplay } from '#/components/PriceQuoteDisplay';
+import { PriceQuoteDisplay } from '#/components/quotes/PriceQuoteDisplay';
 
-const EmailShareModal = dynamic(() => import('#/components/EmailShareModal'));
+const EmailShareModal = dynamic(() => import('#/components/account/EmailShareModal'));
 
 const currencyFormatter = new Intl.NumberFormat('en-AU', {
   style: 'currency',

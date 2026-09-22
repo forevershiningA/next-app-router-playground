@@ -3,8 +3,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ChevronRightIcon } from '@heroicons/react/24/outline';
-import DesignsIndexMobileNavToggle from '#/components/DesignsIndexMobileNavToggle';
-import ServerDesignsTreeNav from '#/components/ServerDesignsTreeNav';
+import DesignsIndexMobileNavToggle from '#/components/designs/DesignsIndexMobileNavToggle';
+import ServerDesignsTreeNav from '#/components/designs/ServerDesignsTreeNav';
 import {
   getCategoryDescription,
   getCategorySeoCopy,

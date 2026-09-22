@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useCallback, useMemo, useRef, useEffect } from 'react';
-import OverlayPortal from '#/components/OverlayPortal';
+import OverlayPortal from '#/components/shared/OverlayPortal';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import { useMotifCategory } from '#/lib/use-motifs';
 import { data } from '#/app/_internal/_data';

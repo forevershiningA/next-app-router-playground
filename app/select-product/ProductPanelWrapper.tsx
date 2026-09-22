@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useHeadstoneStore } from '#/lib/headstone-store';
-import SceneOverlayController from '#/components/SceneOverlayController';
+import SceneOverlayController from '#/components/designer/overlays/SceneOverlayController';
 import ProductCard from '#/ui/product-card';
 
 type Product = { id: string; name: string; image: string; category: string };

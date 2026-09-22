@@ -5,7 +5,7 @@ import * as THREE from 'three';
 import { Line2 } from 'three/examples/jsm/lines/Line2';
 import { LineGeometry } from 'three/examples/jsm/lines/LineGeometry';
 import { LineMaterial } from 'three/examples/jsm/lines/LineMaterial';
-import type { HeadstoneAPI } from '#/components/SvgHeadstone';
+import type { HeadstoneAPI } from '#/components/three/headstone/SvgHeadstone';
 
 /** Fixed inset distance from the headstone edge in mm */
 const INSET_DISTANCE_MM = 15;

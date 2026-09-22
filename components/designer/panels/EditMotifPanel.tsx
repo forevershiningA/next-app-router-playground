@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useCallback } from 'react';
-import SceneOverlayController from '#/components/SceneOverlayController';
+import SceneOverlayController from '#/components/designer/overlays/SceneOverlayController';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import TailwindSlider from '#/ui/TailwindSlider';
 import { data } from '#/app/_internal/_data';

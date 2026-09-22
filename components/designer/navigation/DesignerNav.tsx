@@ -37,21 +37,21 @@ import { calculateMotifPrice } from '#/lib/motif-pricing';
 import TailwindSlider from '#/ui/TailwindSlider';
 import { data } from '#/app/_internal/_data';
 import { loadEmblems } from '#/app/_internal/_emblems-loader';
-import InscriptionEditPanel from './InscriptionEditPanel';
-import SegmentedControl from './ui/SegmentedControl';
-import LoadDesignButton from './LoadDesignButton';
-import MaterialSelector from './MaterialSelector';
-import ShapeSelector from './ShapeSelector';
-import BorderSelector from './BorderSelector';
-import FixingSelector from './FixingSelector';
-import AdditionSelector from './AdditionSelector';
-import MotifSelectorPanel from './MotifSelectorPanel';
-import EmblemOverlayPanel from './EmblemOverlayPanel';
+import InscriptionEditPanel from '#/components/designer/panels/InscriptionEditPanel';
+import SegmentedControl from '#/components/ui/SegmentedControl';
+import LoadDesignButton from '#/components/designer/actions/LoadDesignButton';
+import MaterialSelector from '#/components/designer/selectors/MaterialSelector';
+import ShapeSelector from '#/components/designer/selectors/ShapeSelector';
+import BorderSelector from '#/components/designer/selectors/BorderSelector';
+import FixingSelector from '#/components/designer/selectors/FixingSelector';
+import AdditionSelector from '#/components/designer/selectors/AdditionSelector';
+import MotifSelectorPanel from '#/components/designer/selectors/MotifSelectorPanel';
+import EmblemOverlayPanel from '#/components/designer/panels/EmblemOverlayPanel';
 import EmblemSelectionGrid from '#/app/select-emblems/_ui/EmblemSelectionGrid';
-import ImageSelector from './ImageSelector';
-import SaveDesignModal from './SaveDesignModal';
-import QuickEnquiryModal from './QuickEnquiryModal';
-import ConfirmModal from './ConfirmModal';
+import ImageSelector from '#/components/designer/selectors/ImageSelector';
+import SaveDesignModal from '#/components/designer/actions/SaveDesignModal';
+import QuickEnquiryModal from '#/components/contact/QuickEnquiryModal';
+import ConfirmModal from '#/components/shared/ConfirmModal';
 import {
   displayLengthValueFromMm,
   formatDimensionPair,
@@ -61,7 +61,7 @@ import {
   lengthValueToMm,
 } from '#/lib/unit-system';
 import { useSetUnitSystem, useUnitSystem } from '#/lib/use-unit-system';
-import { useTheme } from './ThemeProvider';
+import { useTheme } from '#/components/theme/ThemeProvider';
 import { logger } from '#/lib/logger';
 import { DEFAULT_TEX, TEX_BASE } from '#/lib/headstone-store.types';
 import { getDesignerProductStepHref } from '#/lib/designer-product-routes';

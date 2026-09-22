@@ -4,8 +4,8 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import type { SavedDesignMetadata } from '#/lib/saved-designs-data';
 import { ChevronRightIcon } from '@heroicons/react/24/outline';
-import MobileNavToggle from '#/components/MobileNavToggle';
-import DesignsTreeNav from '#/components/DesignsTreeNav';
+import MobileNavToggle from '#/components/shared/MobileNavToggle';
+import DesignsTreeNav from '#/components/designs/DesignsTreeNav';
 
 interface ProductPageClientProps {
   productSlug: string;

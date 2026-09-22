@@ -11,10 +11,10 @@ import { applyDesignSnapshot } from '#/lib/project-serializer';
 import { getDesignerProductStepHref } from '#/lib/designer-product-routes';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import { buildPdfQuoteFromProject } from '#/lib/design-quote';
-import ConfirmModal from '#/components/ConfirmModal';
+import ConfirmModal from '#/components/shared/ConfirmModal';
 import dynamic from 'next/dynamic';
 import { logger } from '#/lib/logger';
-const EmailShareModal = dynamic(() => import('#/components/EmailShareModal'));
+const EmailShareModal = dynamic(() => import('#/components/account/EmailShareModal'));
 
 type DesignStatus =
   | 'awaiting-approval'

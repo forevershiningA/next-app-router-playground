@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ChevronRightIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
-import DesignsIndexMobileNavToggle from '#/components/DesignsIndexMobileNavToggle';
-import ServerDesignsTreeNav from '#/components/ServerDesignsTreeNav';
+import DesignsIndexMobileNavToggle from '#/components/designs/DesignsIndexMobileNavToggle';
+import ServerDesignsTreeNav from '#/components/designs/ServerDesignsTreeNav';
 import { data } from '#/app/_internal/_data';
 import { PRODUCT_STATS } from '#/lib/saved-designs-data';
 import {

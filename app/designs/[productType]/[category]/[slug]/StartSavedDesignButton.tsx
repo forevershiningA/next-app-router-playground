@@ -26,7 +26,7 @@ export default function StartSavedDesignButton({
     setError(null);
 
     try {
-      const { loadDesignById } = await import('#/components/DefaultDesignLoader');
+      const { loadDesignById } = await import('#/components/projects/DefaultDesignLoader');
       const result = await loadDesignById(designId);
 
       if (!result.success) {

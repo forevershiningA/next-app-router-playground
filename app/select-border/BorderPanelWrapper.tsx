@@ -1,6 +1,6 @@
 'use client';
 
-import SceneOverlayController from '#/components/SceneOverlayController';
+import SceneOverlayController from '#/components/designer/overlays/SceneOverlayController';
 
 export default function BorderPanelWrapper({
   children,

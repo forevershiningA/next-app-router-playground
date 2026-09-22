@@ -1,7 +1,7 @@
 'use client';
 import * as React from 'react';
 import * as THREE from 'three';
-import type { HeadstoneAPI } from '#/components/SvgHeadstone';
+import type { HeadstoneAPI } from '#/components/three/headstone/SvgHeadstone';
 
 // Stainless steel border width in millimetres
 const BORDER_MM = 20;

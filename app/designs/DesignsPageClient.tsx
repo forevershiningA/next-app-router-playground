@@ -5,9 +5,9 @@ import type { SavedDesignMetadata } from '#/lib/saved-designs-data';
 import { ChevronRightIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import Image from 'next/image';
-import MobileNavToggle from '#/components/MobileNavToggle';
-import DesignsTreeNav from '#/components/DesignsTreeNav';
-import DesignSmartSearch from '#/components/DesignSmartSearch';
+import MobileNavToggle from '#/components/shared/MobileNavToggle';
+import DesignsTreeNav from '#/components/designs/DesignsTreeNav';
+import DesignSmartSearch from '#/components/designs/DesignSmartSearch';
 import type { SearchFilters, SearchResult, MLDesignEntry } from '#/lib/ml-search-service';
 import {
   EMPTY_FILTERS,

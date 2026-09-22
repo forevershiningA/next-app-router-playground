@@ -2,8 +2,8 @@
 
 import React from 'react';
 import { useHeadstoneStore } from '#/lib/headstone-store';
-import SceneOverlayController from '#/components/SceneOverlayController';
-import ShapeSelector from '#/components/ShapeSelector';
+import SceneOverlayController from '#/components/designer/overlays/SceneOverlayController';
+import ShapeSelector from '#/components/designer/selectors/ShapeSelector';
 import ShapeTitle from './ShapeTitle';
 
 type Shape = { id: string; name: string; image: string; category: string };

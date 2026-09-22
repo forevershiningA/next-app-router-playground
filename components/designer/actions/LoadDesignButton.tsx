@@ -18,7 +18,7 @@ import {
 } from '@heroicons/react/24/outline';
 import { StarIcon as StarIconSolid } from '@heroicons/react/24/solid';
 import { getAllSavedDesigns, type SavedDesignMetadata } from '#/lib/saved-designs-data';
-import { loadDesignById } from '#/components/DefaultDesignLoader';
+import { loadDesignById } from '#/components/projects/DefaultDesignLoader';
 import { loadMLData, getMLCategories, type MLDesignEntry } from '#/lib/ml-search-service';
 import { useHiddenDesigns } from '#/lib/useHiddenDesigns';
 import { useHeadstoneStore } from '#/lib/headstone-store';

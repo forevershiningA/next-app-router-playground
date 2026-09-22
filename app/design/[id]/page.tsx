@@ -5,7 +5,7 @@ import { db } from '#/lib/db/index';
 import { projects } from '#/lib/db/schema';
 import { eq } from 'drizzle-orm';
 import { buildPdfQuoteFromProject } from '#/lib/design-quote';
-import { PriceQuoteDisplay } from '#/components/PriceQuoteDisplay';
+import { PriceQuoteDisplay } from '#/components/quotes/PriceQuoteDisplay';
 import { getServerSession } from '#/lib/auth/session';
 import { OpenInDesignerButton } from './_open-button';
 

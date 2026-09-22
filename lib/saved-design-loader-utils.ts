@@ -4,7 +4,7 @@
 
 import { createRef } from 'react';
 import { useHeadstoneStore } from '#/lib/headstone-store';
-import type { SavedDesignData } from '#/components/SavedDesignLoader';
+import type { SavedDesignData } from '#/components/projects/SavedDesignLoader';
 import type { Line } from '#/lib/headstone-store';
 import type { Group } from 'three';
 import { logger } from '#/lib/logger';

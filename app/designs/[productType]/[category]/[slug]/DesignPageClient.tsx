@@ -3,7 +3,7 @@
 import { useEffect, useState, Suspense, useRef, useMemo, useCallback } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useSavedDesign, convertSavedDesignToDYO } from '#/components/SavedDesignLoader';
+import { useSavedDesign, convertSavedDesignToDYO } from '#/components/projects/SavedDesignLoader';
 import {
   loadSavedDesignIntoEditor,
   loadCanonicalDesignIntoEditor,
@@ -25,12 +25,12 @@ import { getProductFromId } from '#/lib/product-utils';
 import type { SavedDesignMetadata, DesignCategory } from '#/lib/saved-designs-data';
 import React from 'react';
 import { MotifsData } from '#/motifs_data';
-import DesignSidebar from '#/components/DesignSidebar';
-import DesignContentBlock from '#/components/DesignContentBlock';
+import DesignSidebar from '#/components/designs/DesignSidebar';
+import DesignContentBlock from '#/components/designs/DesignContentBlock';
 import type { CropBounds } from '#/lib/screenshot-crop';
 import { getMotifCategoryName } from '#/lib/motif-translations';
-import MobileNavToggle from '#/components/MobileNavToggle';
-import DesignsTreeNav from '#/components/DesignsTreeNav';
+import MobileNavToggle from '#/components/shared/MobileNavToggle';
+import DesignsTreeNav from '#/components/designs/DesignsTreeNav';
 import { logger } from '#/lib/logger';
 import { getDesignerProductStepHref } from '#/lib/designer-product-routes';
 

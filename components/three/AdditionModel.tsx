@@ -6,10 +6,10 @@ import { useGLTF, useTexture } from '@react-three/drei';
 import { useThree } from '@react-three/fiber';
 import { useHeadstoneStore, type AdditionKind } from '#/lib/headstone-store';
 import { useMobileNavStore } from '#/lib/mobile-nav-store';
-import type { HeadstoneAPI } from '../SvgHeadstone';
+import type { HeadstoneAPI } from './headstone/SvgHeadstone';
 import { data } from '#/app/_internal/_data';
 import { useRouter, usePathname } from 'next/navigation';
-import SelectionBox from '../SelectionBox';
+import SelectionBox from './ObjectSelectionBox';
 import RotatingBoxOutline from './RotatingBoxOutline';
 import {
   clampDepthWithinRange,

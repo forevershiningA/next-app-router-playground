@@ -5,16 +5,16 @@ import { catalog } from '#/lib/catalog-db';
 import { data as internalData } from '#/app/_internal/_data';
 import { Metadata } from 'next';
 import { Geist, Geist_Mono, Playfair_Display } from 'next/font/google';
-import ErrorBoundary from '#/components/ErrorBoundary';
-import ClientShell from '#/components/ClientShell';
-import MobileHeader from '#/components/MobileHeader';
-import MainContent from '#/components/MainContent';
-import ConditionalNav from '#/components/ConditionalNav';
-import MaterialsLoader from '#/components/MaterialsLoader';
-import ShapesLoader from '#/components/ShapesLoader';
-import BordersLoader from '#/components/BordersLoader';
-import { ThemeProvider } from '#/components/ThemeProvider';
-import { ThemeToggle } from '#/components/ThemeToggle';
+import ErrorBoundary from '#/components/shared/ErrorBoundary';
+import ClientShell from '#/components/app-shell/ClientShell';
+import MobileHeader from '#/components/designer/navigation/MobileHeader';
+import MainContent from '#/components/app-shell/MainContent';
+import ConditionalNav from '#/components/app-shell/ConditionalNav';
+import MaterialsLoader from '#/components/designer/catalog/MaterialsLoader';
+import ShapesLoader from '#/components/designer/catalog/ShapesLoader';
+import BordersLoader from '#/components/designer/catalog/BordersLoader';
+import { ThemeProvider } from '#/components/theme/ThemeProvider';
+import { ThemeToggle } from '#/components/theme/ThemeToggle';
 import {
   mapMaterialRecord,
   mapShapeRecord,

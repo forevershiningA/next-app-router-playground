@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useMemo, useEffect } from 'react';
-import SceneOverlayController from '#/components/SceneOverlayController';
+import SceneOverlayController from '#/components/designer/overlays/SceneOverlayController';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import { 
   DESIGN_CATEGORIES, 

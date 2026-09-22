@@ -7,7 +7,7 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import OverlayPortal from '#/components/OverlayPortal';
+import OverlayPortal from '#/components/shared/OverlayPortal';
 
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import { data } from '#/app/_internal/_data';
@@ -687,17 +687,17 @@ export default function CheckPricePanel() {
   return (
     <OverlayPortal containerId="check-price-modal-root" zIndex={11000}>
       <div
-        className="check-price-panel__overlay pointer-events-auto absolute inset-0 z-50 flex items-center justify-center bg-black/70 px-4 py-6 backdrop-blur-sm"
+        className="check-price-panel__overlay day:bg-[#49392b]/30 pointer-events-auto absolute inset-0 z-50 flex items-center justify-center bg-black/70 px-4 py-6 backdrop-blur-sm"
         onClick={handleClose}
       >
         <div
-          className="check-price-panel__modal relative flex max-h-[90vh] w-full max-w-[64rem] flex-col overflow-hidden rounded-lg border border-white/10 bg-[#120804] text-white shadow-2xl ring-1 shadow-black/50 ring-white/5"
+          className="check-price-panel__modal day:border-[#ded5c7] day:bg-[#fbf9f5] day:text-[#2a2118] day:shadow-[#49392b]/20 day:ring-[#eee7dc] relative flex max-h-[90vh] w-full max-w-[64rem] flex-col overflow-hidden rounded-lg border border-white/10 bg-[#120804] text-white shadow-2xl ring-1 shadow-black/50 ring-white/5"
           onClick={(e) => e.stopPropagation()}
         >
           <button
             type="button"
             onClick={handleClose}
-            className="absolute top-4 right-4 z-10 cursor-pointer rounded-full border border-white/15 bg-white/5 p-1.5 text-white/70 transition-colors hover:border-[#D4A84F]/60 hover:text-white"
+            className="day:border-[#d8cfc2] day:bg-[#f1ece4] day:text-[#62584d] day:hover:border-[#b98932] day:hover:bg-[#e9e0d2] day:hover:text-[#2a2118] absolute top-4 right-4 z-10 cursor-pointer rounded-full border border-white/15 bg-white/5 p-1.5 text-white/70 transition-colors hover:border-[#D4A84F]/60 hover:text-white"
             aria-label="Close dialog"
           >
             <svg
@@ -715,36 +715,39 @@ export default function CheckPricePanel() {
             </svg>
           </button>
 
-          <div className="border-b border-white/10 bg-white/[0.03] px-5 py-4 pr-14 md:px-6">
-            <h2 className="font-serif text-2xl font-light text-white md:text-[1.75rem]">
+          <div className="day:border-[#ded5c7] day:bg-[#f3eee6] border-b border-white/10 bg-white/[0.03] px-5 py-4 pr-14 md:px-6">
+            <h2 className="day:text-[#2a2118] font-serif text-2xl font-light text-white md:text-[1.75rem]">
               Check Price Quote
             </h2>
-            <p className="mt-1 text-sm text-white/65">
+            <p className="day:text-[#756a5e] mt-1 text-sm text-white/65">
               Current design itemisation
             </p>
           </div>
 
           <div className="check-price-panel__table flex-1 overflow-x-hidden overflow-y-auto">
-            <div className="divide-y divide-white/10 md:hidden print:hidden">
+            <div className="day:divide-[#e2dbd0] divide-y divide-white/10 md:hidden print:hidden">
               {!activeCatalog ? (
-                <div className="px-5 py-10 text-center text-sm text-white/70">
+                <div className="day:text-[#756a5e] px-5 py-10 text-center text-sm text-white/70">
                   Loading pricing data...
                 </div>
               ) : (
                 quoteRows.map((row) => (
-                  <article key={row.id} className="bg-white/[0.015]">
+                  <article
+                    key={row.id}
+                    className="day:bg-transparent bg-white/[0.015]"
+                  >
                     <div className="grid grid-cols-[4.75rem_minmax(0,1fr)] gap-3 px-4 py-4">
-                      <span className="text-xs font-semibold text-white/50">
+                      <span className="day:text-[#8a7e70] text-xs font-semibold text-white/50">
                         Product
                       </span>
                       <div className="min-w-0 text-xs">
-                        <p className="font-semibold leading-snug text-white">
+                        <p className="day:text-[#2a2118] leading-snug font-semibold text-white">
                           {row.title}
                         </p>
                         {row.details.map((detail) => (
                           <p
                             key={detail}
-                            className="mt-0.5 leading-snug break-words text-white/65"
+                            className="day:text-[#756a5e] mt-0.5 leading-snug break-words text-white/65"
                           >
                             {detail}
                           </p>
@@ -758,16 +761,16 @@ export default function CheckPricePanel() {
                     ].map((item) => (
                       <div
                         key={item.label}
-                        className="grid grid-cols-[4.75rem_minmax(0,1fr)] gap-3 border-t border-white/10 px-4 py-2.5 text-xs"
+                        className="day:border-[#e2dbd0] grid grid-cols-[4.75rem_minmax(0,1fr)] gap-3 border-t border-white/10 px-4 py-2.5 text-xs"
                       >
-                        <span className="font-semibold text-white/50">
+                        <span className="day:text-[#8a7e70] font-semibold text-white/50">
                           {item.label}
                         </span>
                         <span
                           className={`whitespace-nowrap ${
                             item.label === 'Item Total'
                               ? 'font-semibold text-[#D4A84F]'
-                              : 'text-white/80'
+                              : 'day:text-[#49392b] text-white/80'
                           }`}
                         >
                           {item.value}
@@ -779,9 +782,9 @@ export default function CheckPricePanel() {
               )}
             </div>
 
-            <table className="hidden w-full table-fixed border-collapse text-left text-xs md:table sm:text-sm print:table">
+            <table className="hidden w-full table-fixed border-collapse text-left text-xs sm:text-sm md:table print:table">
               <thead className="sticky top-0 z-10">
-                <tr className="border-b border-white/10 bg-[#180c06] text-white/55">
+                <tr className="day:border-[#ded5c7] day:bg-[#f0e9df] day:text-[#756a5e] border-b border-white/10 bg-[#180c06] text-white/55">
                   <th className="w-[55%] px-3 py-3 font-semibold sm:px-6 sm:py-4">
                     Product
                   </th>
@@ -801,7 +804,7 @@ export default function CheckPricePanel() {
                   <tr>
                     <td
                       colSpan={4}
-                      className="px-6 py-10 text-center text-sm text-white/70"
+                      className="day:text-[#756a5e] px-6 py-10 text-center text-sm text-white/70"
                     >
                       Loading pricing data...
                     </td>
@@ -810,26 +813,28 @@ export default function CheckPricePanel() {
                   quoteRows.map((row) => (
                     <tr
                       key={row.id}
-                      className="border-b border-white/10 align-middle last:border-b-0"
+                      className="day:border-[#e2dbd0] border-b border-white/10 align-middle last:border-b-0"
                     >
                       <td className="px-3 py-4 break-words sm:px-6 sm:py-5">
-                        <p className="font-semibold text-white">{row.title}</p>
+                        <p className="day:text-[#2a2118] font-semibold text-white">
+                          {row.title}
+                        </p>
                         {row.details.map((detail) => (
                           <p
                             key={detail}
-                            className="leading-tight break-words text-white/75"
+                            className="day:text-[#756a5e] leading-tight break-words text-white/75"
                           >
                             {detail}
                           </p>
                         ))}
                       </td>
-                      <td className="px-1 py-4 text-center break-words text-white/85 sm:px-6 sm:py-5">
+                      <td className="day:text-[#49392b] px-1 py-4 text-center break-words text-white/85 sm:px-6 sm:py-5">
                         {row.qty}
                       </td>
-                      <td className="px-1 py-4 text-right break-words text-white/60 sm:px-6 sm:py-5">
+                      <td className="day:text-[#756a5e] px-1 py-4 text-right break-words text-white/60 sm:px-6 sm:py-5">
                         {formatMoney(row.unitPrice)}
                       </td>
-                      <td className="px-1 py-4 text-right break-words text-white/75 sm:px-6 sm:py-5">
+                      <td className="day:text-[#49392b] px-1 py-4 text-right break-words text-white/75 sm:px-6 sm:py-5">
                         {formatMoney(row.total)}
                       </td>
                     </tr>
@@ -841,19 +846,19 @@ export default function CheckPricePanel() {
 
           {imagePricingError && (
             <p
-              className="border-t border-white/10 px-6 py-3 text-sm text-red-300"
+              className="day:border-[#ded5c7] day:text-red-700 border-t border-white/10 px-6 py-3 text-sm text-red-300"
               role="status"
             >
               {imagePricingError}
             </p>
           )}
 
-          <div className="ml-auto w-full max-w-sm border-t border-white/10 px-6 py-4 text-sm">
+          <div className="day:border-[#ded5c7] day:bg-[#f3eee6] ml-auto w-full max-w-sm border-t border-white/10 px-6 py-4 text-sm">
             <div className="flex justify-between py-1">
-              <span className="text-white/70">Subtotal</span>
+              <span className="day:text-[#756a5e] text-white/70">Subtotal</span>
               <span>{formatMoney(totalPrice)}</span>
             </div>
-            <div className="mt-2 flex justify-between border-t border-white/10 pt-3 text-base font-semibold">
+            <div className="day:border-[#ded5c7] mt-2 flex justify-between border-t border-white/10 pt-3 text-base font-semibold">
               <span>Total</span>
               <span className="text-[#D4A84F]">{formatMoney(totalPrice)}</span>
             </div>

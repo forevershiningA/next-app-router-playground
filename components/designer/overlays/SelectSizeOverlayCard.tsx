@@ -2,7 +2,7 @@
 'use client';
 
 import * as React from 'react';
-import OverlayPortal from '#/components/OverlayPortal';
+import OverlayPortal from '#/components/shared/OverlayPortal';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 
 export default function SelectSizeOverlayCard() {

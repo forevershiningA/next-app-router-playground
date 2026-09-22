@@ -2,7 +2,7 @@
 
 import React, { useCallback, useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
-import SceneOverlayController from '#/components/SceneOverlayController';
+import SceneOverlayController from '#/components/designer/overlays/SceneOverlayController';
 import { useHeadstoneStore, Line } from '#/lib/headstone-store';
 import TailwindSlider from '#/ui/TailwindSlider';
 import Loader from '#/ui/loader';
