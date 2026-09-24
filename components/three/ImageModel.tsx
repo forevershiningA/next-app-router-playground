@@ -2,12 +2,17 @@
 
 import * as React from 'react';
 import * as THREE from 'three';
-import { useThree } from '@react-three/fiber';
+import { Line } from '@react-three/drei';
+import { useFrame, useThree } from '@react-three/fiber';
 import { SVGLoader } from 'three/examples/jsm/loaders/SVGLoader.js';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import type { HeadstoneAPI } from './headstone/SvgHeadstone';
 import SelectionBox from './ObjectSelectionBox';
 import { useRouter, usePathname } from 'next/navigation';
+import {
+  getFlexibleImageBounds,
+  getImageSizeOptions,
+} from '#/lib/image-size-config';
 
 type Props = {
   id: string;
@@ -107,6 +112,7 @@ export default function ImageModel({
   const updateImagePosition = useHeadstoneStore((s) => s.updateImagePosition);
   const updateImageTarget = useHeadstoneStore((s) => s.updateImageTarget);
   const updateImageSize = useHeadstoneStore((s) => s.updateImageSize);
+  const updateImageSizeVariant = useHeadstoneStore((s) => s.updateImageSizeVariant);
   const updateImageRotation = useHeadstoneStore((s) => s.updateImageRotation);
   const removeImage = useHeadstoneStore((s) => s.removeImage);
   const ledgerWidthMm = useHeadstoneStore((s) => s.ledgerWidthMm);
@@ -114,6 +120,12 @@ export default function ImageModel({
   
   const ref = React.useRef<THREE.Group>(null!);
   const [dragging, setDragging] = React.useState(false);
+  const [showCenterGuide, setShowCenterGuide] = React.useState(false);
+  const [showHorizontalCenterGuide, setShowHorizontalCenterGuide] = React.useState(false);
+  const centerGuideProgressRef = React.useRef(0);
+  const horizontalGuideProgressRef = React.useRef(0);
+  const [centerGuideProgress, setCenterGuideProgress] = React.useState(0);
+  const [horizontalGuideProgress, setHorizontalGuideProgress] = React.useState(0);
   const selected = selectedImageId === id;
   const dragPositionRef = React.useRef<{ xPos: number; yPos: number } | null>(null);
   const animationFrameRef = React.useRef<number | null>(null);
@@ -138,6 +150,47 @@ export default function ImageModel({
   const mouse = React.useMemo(() => new THREE.Vector2(), []);
   const isLedgerSurface = surface === 'ledger';
   const isBaseSurface = surface === 'base';
+
+  useFrame((state, delta) => {
+    const nextCenter = THREE.MathUtils.damp(
+      centerGuideProgressRef.current,
+      dragging && showCenterGuide ? 1 : 0,
+      16,
+      delta,
+    );
+    const nextHorizontal = THREE.MathUtils.damp(
+      horizontalGuideProgressRef.current,
+      dragging && showHorizontalCenterGuide ? 1 : 0,
+      16,
+      delta,
+    );
+
+    if (Math.abs(nextCenter - centerGuideProgressRef.current) > 0.001) {
+      centerGuideProgressRef.current = nextCenter;
+      setCenterGuideProgress(nextCenter);
+      state.invalidate();
+    }
+    if (Math.abs(nextHorizontal - horizontalGuideProgressRef.current) > 0.001) {
+      horizontalGuideProgressRef.current = nextHorizontal;
+      setHorizontalGuideProgress(nextHorizontal);
+      state.invalidate();
+    }
+  });
+  const fixedSizeOptions = React.useMemo(
+    () => (typeId == null ? [] : getImageSizeOptions(typeId)),
+    [typeId],
+  );
+  const flexibleSizeBounds = React.useMemo(
+    () =>
+      typeId == null || fixedSizeOptions.length > 0
+        ? null
+        : getFlexibleImageBounds(typeId),
+    [fixedSizeOptions.length, typeId],
+  );
+  const selectedImage = selectedImages.find((image) => image.id === id);
+  const imageAspectRatio =
+    selectedImage?.croppedAspectRatio ||
+    (widthMm > 0 && heightMm > 0 ? widthMm / heightMm : 1);
 
   // Load image texture
   React.useEffect(() => {
@@ -366,6 +419,24 @@ export default function ImageModel({
       localPt.x = Math.max(minX, Math.min(maxX, localPt.x));
       localPt.y = Math.max(minY, Math.min(maxY, localPt.y));
 
+      const centerX = (bbox.min.x + bbox.max.x) / 2;
+      const centerY = (bbox.min.y + bbox.max.y) / 2;
+      const unitsPerMeter = Math.abs(headstone.unitsPerMeter) || 1000;
+      const centerSnapThreshold = isBaseSurface
+        ? 0.018
+        : Math.max((8 * unitsPerMeter) / 1000, (maxX - minX) * 0.018);
+      const horizontalSnapThreshold = isBaseSurface
+        ? 0.018
+        : Math.max((8 * unitsPerMeter) / 1000, (maxY - minY) * 0.018);
+      const isNearCenter = Math.abs(localPt.x - centerX) <= centerSnapThreshold;
+      const isNearHorizontalCenter =
+        Math.abs(localPt.y - centerY) <= horizontalSnapThreshold;
+
+      localPt.x = isNearCenter ? centerX : localPt.x;
+      localPt.y = isNearHorizontalCenter ? centerY : localPt.y;
+      setShowCenterGuide(isNearCenter);
+      setShowHorizontalCenterGuide(isNearHorizontalCenter);
+
       dragPositionRef.current = { xPos: localPt.x, yPos: localPt.y };
 
       if (animationFrameRef.current !== null) {
@@ -566,6 +637,8 @@ export default function ImageModel({
 
       dragPositionRef.current = null;
       setDragging(false);
+      setShowCenterGuide(false);
+      setShowHorizontalCenterGuide(false);
       gl.domElement.style.cursor = 'auto';
       if (controls) {
         (controls as any).enabled = true;
@@ -691,9 +764,74 @@ export default function ImageModel({
 
   const photoZ = needsCeramicBase ? 0.00008 : 0.00006;
   const selectionZ = needsCeramicBase ? 0.00012 : 0.0001;
+  const guideBounds = isBaseSurface
+    ? {
+        minX: stone.position.x - stone.scale.x / 2,
+        maxX: stone.position.x + stone.scale.x / 2,
+        minY: stone.position.y - stone.scale.y / 2,
+        maxY: stone.position.y + stone.scale.y / 2,
+        centerX: stone.position.x,
+        centerY: stone.position.y,
+      }
+    : {
+        minX: bbox.min.x,
+        maxX: bbox.max.x,
+        minY: bbox.min.y,
+        maxY: bbox.max.y,
+        centerX,
+        centerY,
+      };
 
   return (
     <group ref={ref} position={groupPosition} rotation={groupRotation}>
+      {!isLedgerSurface && centerGuideProgress > 0.01 && (
+        <Line
+          points={[
+            new THREE.Vector3(
+              guideBounds.centerX - groupPosition[0],
+              guideBounds.centerY - groupPosition[1] -
+                (guideBounds.maxY - guideBounds.minY) * 0.48 * centerGuideProgress,
+              selectionZ,
+            ),
+            new THREE.Vector3(
+              guideBounds.centerX - groupPosition[0],
+              guideBounds.centerY - groupPosition[1] +
+                (guideBounds.maxY - guideBounds.minY) * 0.48 * centerGuideProgress,
+              selectionZ,
+            ),
+          ]}
+          color="#ff5fe1"
+          lineWidth={1}
+          transparent
+          opacity={centerGuideProgress * 0.6}
+          depthTest={false}
+          depthWrite={false}
+        />
+      )}
+      {!isLedgerSurface && horizontalGuideProgress > 0.01 && (
+        <Line
+          points={[
+            new THREE.Vector3(
+              guideBounds.centerX - groupPosition[0] -
+                (guideBounds.maxX - guideBounds.minX) * 0.48 * horizontalGuideProgress,
+              guideBounds.centerY - groupPosition[1],
+              selectionZ,
+            ),
+            new THREE.Vector3(
+              guideBounds.centerX - groupPosition[0] +
+                (guideBounds.maxX - guideBounds.minX) * 0.48 * horizontalGuideProgress,
+              guideBounds.centerY - groupPosition[1],
+              selectionZ,
+            ),
+          ]}
+          color="#ff5fe1"
+          lineWidth={1}
+          transparent
+          opacity={horizontalGuideProgress * 0.6}
+          depthTest={false}
+          depthWrite={false}
+        />
+      )}
       
       {/* White ceramic/enamel base - 3D extruded SVG shape with smooth edges */}
       {needsCeramicBase && ceramicBaseData && (
@@ -759,11 +897,56 @@ export default function ImageModel({
           // as the image itself.
           rotation={0}
           unitsPerMeter={headstone?.unitsPerMeter ?? 1}
-          currentSizeMm={widthMm}
+          currentSizeMm={heightMm}
+          minSizeMm={
+            fixedSizeOptions[0]?.height ?? flexibleSizeBounds?.minHeight
+          }
+          maxSizeMm={
+            fixedSizeOptions[fixedSizeOptions.length - 1]?.height ??
+            flexibleSizeBounds?.maxHeight
+          }
           objectType="motif"
+          enableResizeHandles
           animateOnShow={true}
           animationDuration={520}
           onUpdate={(data) => {
+            if (data.sizeMm !== undefined) {
+              if (fixedSizeOptions.length > 0) {
+                const nextIndex = fixedSizeOptions.reduce(
+                  (closestIndex, option, optionIndex) =>
+                    Math.abs(option.height - data.sizeMm!) <
+                    Math.abs(fixedSizeOptions[closestIndex].height - data.sizeMm!)
+                      ? optionIndex
+                      : closestIndex,
+                  0,
+                );
+                const nextSize = fixedSizeOptions[nextIndex];
+                const nextVariant = nextIndex + 1;
+                const nextWidth = nextSize.height * imageAspectRatio;
+                if (selectedImage?.sizeVariant !== nextVariant) {
+                  updateImageSizeVariant(id, nextVariant);
+                }
+                if (
+                  Math.abs(widthMm - nextWidth) > 0.001 ||
+                  Math.abs(heightMm - nextSize.height) > 0.001
+                ) {
+                  updateImageSize(id, nextWidth, nextSize.height);
+                }
+              } else {
+                const nextHeight = Math.max(
+                  flexibleSizeBounds?.minHeight ?? 10,
+                  Math.min(
+                    data.sizeMm,
+                    flexibleSizeBounds?.maxHeight ?? data.sizeMm,
+                  ),
+                );
+                updateImageSize(
+                  id,
+                  nextHeight * imageAspectRatio,
+                  nextHeight,
+                );
+              }
+            }
             if (data.xPos !== undefined && data.yPos !== undefined) {
               if (isLedgerSurface) {
                 const relativeX = data.xPos - centerX;

@@ -50,8 +50,8 @@ import EmblemOverlayPanel from '#/components/designer/panels/EmblemOverlayPanel'
 import EmblemSelectionGrid from '#/app/select-emblems/_ui/EmblemSelectionGrid';
 import ImageSelector from '#/components/designer/selectors/ImageSelector';
 import SaveDesignModal from '#/components/designer/actions/SaveDesignModal';
-import QuickEnquiryModal from '#/components/contact/QuickEnquiryModal';
 import ConfirmModal from '#/components/shared/ConfirmModal';
+import GuestCheckoutModal from '#/components/checkout/GuestCheckoutModal';
 import {
   displayLengthValueFromMm,
   formatDimensionPair,
@@ -601,7 +601,7 @@ export default function DesignerNav() {
   const [showSaveDesignModal, setShowSaveDesignModal] = React.useState(false);
   const [showNewDesignConfirm, setShowNewDesignConfirm] = React.useState(false);
   const [isSavingDesign, setIsSavingDesign] = React.useState(false);
-  const [showQuickEnquiry, setShowQuickEnquiry] = React.useState(false);
+  const [showGuestCheckout, setShowGuestCheckout] = React.useState(false);
 
   // Auto-open save modal when returning from login with ?action=save-design
   useEffect(() => {
@@ -1961,7 +1961,10 @@ export default function DesignerNav() {
     }
   };
 
-  const handleSaveDesign = async (designName: string) => {
+  const handleSaveDesign = async (
+    designName: string,
+    proceedToPurchase = false,
+  ) => {
     setIsSavingDesign(true);
     try {
       // Switch to clean screenshot mode — hides grass/sky/sun rays for a neutral thumbnail
@@ -2230,11 +2233,14 @@ export default function DesignerNav() {
 
       logger.log('Design saved successfully:', result);
 
-      // Success - close modal and redirect to My Account
+      // Success - close modal and continue to the requested destination.
       setShowSaveDesignModal(false);
-
-      // Redirect to My Account
-      router.push('/my-account');
+      const savedProject = result.project as { id?: string } | undefined;
+      if (proceedToPurchase && savedProject?.id) {
+        router.push(`/my-account/designs/${savedProject.id}/buy`);
+      } else {
+        router.push('/my-account');
+      }
     } catch (error) {
       console.error('Error saving design:', error);
       if (error instanceof Error) {
@@ -2245,6 +2251,48 @@ export default function DesignerNav() {
       setIsSavingDesign(false);
     }
   };
+
+  const handleSaveDesignRef = React.useRef(handleSaveDesign);
+  handleSaveDesignRef.current = handleSaveDesign;
+
+  const handleProceedToPurchase = React.useCallback(async () => {
+    if (isSavingDesign) return;
+
+    const sessionResponse = await fetch('/api/auth/session');
+    if (!sessionResponse.ok) {
+      setShowGuestCheckout(true);
+      return;
+    }
+
+    const state = useHeadstoneStore.getState();
+    const orderTitle =
+      state.currentProjectTitle?.trim() ||
+      `Online order ${new Intl.DateTimeFormat('en-AU').format(new Date())}`;
+    await handleSaveDesignRef.current(orderTitle, true);
+  }, [isSavingDesign]);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const shouldResume = params.get('action') === 'proceed-purchase';
+
+    const onProceed = () => {
+      void handleProceedToPurchase();
+    };
+    window.addEventListener('proceedToPurchase', onProceed);
+
+    if (shouldResume) {
+      params.delete('action');
+      const query = params.toString();
+      window.history.replaceState(
+        {},
+        '',
+        pathname + (query ? `?${query}` : ''),
+      );
+      void handleProceedToPurchase();
+    }
+
+    return () => window.removeEventListener('proceedToPurchase', onProceed);
+  }, [handleProceedToPurchase, pathname]);
 
   const handleNewDesign = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -3451,19 +3499,16 @@ export default function DesignerNav() {
           <div className="day:border-[#ddd2c2] day:bg-[#f4f1eb] relative hidden border-b border-white/10 bg-[#1b1511] px-5 py-2.5 md:block md:py-3">
             {/* Row 1: Guided Step label + step badge */}
             <div className="mb-1 flex items-center justify-center gap-2.5 md:mb-2">
-              <p
-                className="font-playfair-display text-xs tracking-[0.35em] italic"
-                style={{ color: '#aaaaaa' }}
-              >
+              <p className="day:text-[#9a876b] font-playfair-display text-xs tracking-[0.35em] text-[#aaaaaa] italic">
                 Guided Step
               </p>
               {currentPanelIndex >= 0 && (
-                <span className="inline-flex items-center gap-1 rounded-full border border-white/20 bg-white/5 px-2.5 py-1 text-xs font-medium">
+                <span className="day:border-[#d8cfbf] day:bg-[#fbf9f4] day:text-[#5c4a32] inline-flex items-center gap-1 rounded-full border border-white/20 bg-white/5 px-2.5 py-1 text-xs font-medium">
                   <span className="text-primary font-semibold">
                     {currentPanelIndex + 1}
                   </span>
-                  <span className="text-white/30">/</span>
-                  <span className="text-white/50">
+                  <span className="day:text-[#9b8c77] text-white/30">/</span>
+                  <span className="day:text-[#6b5a43] text-white/50">
                     {navigablePanelSlugs.length}
                   </span>
                 </span>
@@ -4222,11 +4267,11 @@ export default function DesignerNav() {
             </div>
           </div>
 
-          {/* Quick Enquiry — pinned below the logo (mobile only; desktop shows in canvas) */}
+          {/* Purchase action — pinned below the logo (mobile only; desktop shows in canvas) */}
           <div className="hidden">
             <button
               type="button"
-              onClick={() => setShowQuickEnquiry(true)}
+              onClick={() => void handleProceedToPurchase()}
               className="border-primary/40 bg-primary/10 hover:bg-primary/20 flex w-full items-center justify-center gap-2 rounded-lg border px-4 py-2.5 text-sm font-semibold text-white transition-colors"
             >
               <svg
@@ -4239,10 +4284,10 @@ export default function DesignerNav() {
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth={2}
-                  d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-3 3v-3z"
+                  d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13 5.4 5M7 13l-2 2h13M9 19.5h.01M17 19.5h.01"
                 />
               </svg>
-              Quick Enquiry
+              Proceed to Purchase
             </button>
           </div>
 
@@ -4349,7 +4394,7 @@ export default function DesignerNav() {
                     )}
 
                     <div
-                      className={`rounded-2xl border p-3 shadow-[0_12px_30px_rgba(0,0,0,0.35)] backdrop-blur-sm transition-colors ${
+                      className={`day:shadow-[0_5px_14px_rgba(73,54,30,0.10)] rounded-2xl border p-3 shadow-[0_12px_30px_rgba(0,0,0,0.35)] backdrop-blur-sm transition-colors ${
                         isCurrentGroup
                           ? 'border-primary/45 from-primary/12 day:border-[#D7B356]/60 day:bg-[#DEBD68]/10 bg-gradient-to-br via-white/5 to-black/20'
                           : 'day:border-gray-200 day:from-stone-50 day:via-stone-50 day:to-stone-50 border-white/10 bg-gradient-to-br from-white/5 via-transparent to-black/20'
@@ -4382,7 +4427,7 @@ export default function DesignerNav() {
                               <p
                                 className={`mt-0.5 text-[11px] font-semibold tracking-[0.16em] uppercase ${
                                   isCurrentGroup
-                                    ? 'text-[#f0cf79]'
+                                    ? 'day:text-[#8c6425] text-[#f0cf79]'
                                     : 'text-emerald-300/85'
                                 }`}
                               >
@@ -4905,7 +4950,7 @@ export default function DesignerNav() {
                         {group.label === 'Account' && (
                           <button
                             type="button"
-                            onClick={() => setShowQuickEnquiry(true)}
+                            onClick={() => void handleProceedToPurchase()}
                             className="border-primary/40 bg-primary/10 hover:bg-primary/20 flex w-full items-center gap-3 rounded-lg border px-4 py-3 text-left text-base font-light text-white transition-colors lg:hidden"
                           >
                             <svg
@@ -4919,10 +4964,10 @@ export default function DesignerNav() {
                                 strokeLinecap="round"
                                 strokeLinejoin="round"
                                 strokeWidth={2}
-                                d="M8 10h.01M12 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-3 3v-3z"
+                                d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13 5.4 5M7 13l-2 2h13M9 19.5h.01M17 19.5h.01"
                               />
                             </svg>
-                            <span>Quick Enquiry</span>
+                            <span>Proceed to Purchase</span>
                           </button>
                         )}
                       </div>
@@ -4944,9 +4989,13 @@ export default function DesignerNav() {
         onSave={handleSaveDesign}
         isSaving={isSavingDesign}
       />
-      <QuickEnquiryModal
-        isOpen={showQuickEnquiry}
-        onClose={() => setShowQuickEnquiry(false)}
+      <GuestCheckoutModal
+        isOpen={showGuestCheckout}
+        onClose={() => setShowGuestCheckout(false)}
+        onSuccess={() => {
+          setShowGuestCheckout(false);
+          void handleProceedToPurchase();
+        }}
       />
       <ConfirmModal
         isOpen={showNewDesignConfirm}

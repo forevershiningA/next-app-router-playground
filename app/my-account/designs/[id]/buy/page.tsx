@@ -77,6 +77,8 @@ export default function BuyDesignPage() {
   const [placing, setPlacing] = useState(false);
   const [placed, setPlaced] = useState(false);
   const [error, setError] = useState('');
+  const [isLocalhost, setIsLocalhost] = useState(false);
+  const testOrderRef = useRef(false);
 
   const [form, setForm] = useState<ShippingForm>({
     fullName: '',
@@ -90,6 +92,11 @@ export default function BuyDesignPage() {
     paymentType: 'credit-card',
     notes: '',
   });
+
+  useEffect(() => {
+    const hostname = window.location.hostname;
+    setIsLocalhost(hostname === 'localhost' || hostname === '127.0.0.1');
+  }, []);
 
   // Pre-fill from invoice/profile
   useEffect(() => {
@@ -283,6 +290,8 @@ export default function BuyDesignPage() {
 
   async function handlePlaceOrder(e: React.FormEvent) {
     e.preventDefault();
+    const testOrder = testOrderRef.current;
+    testOrderRef.current = false;
     if (
       !form.fullName ||
       !form.email ||
@@ -302,7 +311,11 @@ export default function BuyDesignPage() {
         const orderRes = await fetch('/api/orders', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ projectId: id, paymentMethod: 'stripe' }),
+          body: JSON.stringify({
+            projectId: id,
+            paymentMethod: 'stripe',
+            testOrder,
+          }),
         });
         const orderData = (await orderRes.json()) as {
           orderId?: string;
@@ -353,7 +366,11 @@ export default function BuyDesignPage() {
         const orderRes = await fetch('/api/orders', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ projectId: id, paymentMethod: 'other' }),
+          body: JSON.stringify({
+            projectId: id,
+            paymentMethod: 'other',
+            testOrder,
+          }),
         });
         const orderData = (await orderRes.json()) as {
           orderId?: string;
@@ -383,13 +400,14 @@ export default function BuyDesignPage() {
   const preview = project?.thumbnailPath || project?.screenshotPath || null;
 
   const inputClass =
-    'w-full rounded-lg border border-white/20 bg-white/5 px-3 py-2 text-sm text-white placeholder-white/30 focus:border-[#D4A84F]/60 focus:outline-none focus:ring-1 focus:ring-[#D4A84F]/40';
-  const labelClass = 'block text-xs font-medium text-white/70 mb-1';
+    'day:border-[#d8cfc2] day:bg-white day:text-[#2a2118] day:placeholder-[#8b7d6b] w-full rounded-lg border border-white/20 bg-white/5 px-3 py-2 text-sm text-white placeholder-white/30 focus:border-[#D4A84F]/60 focus:outline-none focus:ring-1 focus:ring-[#D4A84F]/40';
+  const labelClass =
+    'day:text-[#5d5042] mb-1 block text-xs font-medium text-white/70';
   const requiredMark = <span className="text-[#D4A84F]">*</span>;
 
   if (placed) {
     return (
-      <div className="relative min-h-screen bg-[#050301] text-white">
+      <div className="day:bg-[#f4f1eb] day:text-[#2a2118] relative min-h-screen bg-[#050301] text-white">
         <div
           className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(244,160,80,0.18),_transparent_45%)]"
           aria-hidden
@@ -397,7 +415,7 @@ export default function BuyDesignPage() {
         <div className="relative mx-auto flex min-h-screen max-w-xl flex-col items-center justify-center px-10 text-center">
           <CheckCircleIcon className="mb-6 h-16 w-16 text-[#D4A84F]" />
           <h1 className="mb-3 text-3xl font-semibold">Order Received!</h1>
-          <p className="mb-8 text-white/60">
+          <p className="day:text-[#6b5d4d] mb-8 text-white/60">
             Thank you for your order. Our team will review your design and be in
             touch shortly to confirm production details.
           </p>
@@ -413,7 +431,7 @@ export default function BuyDesignPage() {
   }
 
   return (
-    <div className="relative min-h-screen bg-[#050301] text-white">
+    <div className="day:bg-[#f4f1eb] day:text-[#2a2118] relative min-h-screen bg-[#050301] text-white">
       <Script src="https://js.stripe.com/v3/" strategy="lazyOnload" />
       <Script
         src="https://www.paypal.com/sdk/js?client-id=ARAQC6sW5wGhZbGbPoaqMhKYylVVgDXkLP3PVKGhDd_OywkKfwoqybq9Wf0-wPVghD4qxkbKIOHquUpt&currency=AUD"
@@ -427,13 +445,13 @@ export default function BuyDesignPage() {
       <div className="relative mx-auto w-full max-w-3xl px-4 py-6 sm:px-6 sm:py-10 lg:px-10">
         <Link
           href={`/my-account/designs/${id}`}
-          className="mb-6 inline-flex items-center gap-2 text-sm text-white/70 transition hover:text-white"
+          className="day:text-[#6b5d4d] day:hover:text-[#2a2118] mb-6 inline-flex items-center gap-2 text-sm text-white/70 transition hover:text-white"
         >
           <ArrowLeftIcon className="h-4 w-4" />
           Back to Design
         </Link>
 
-        <div className="rounded-2xl border border-white/10 bg-[#0c0805]/85 px-4 py-6 shadow-[0_25px_65px_rgba(0,0,0,0.6)] backdrop-blur-2xl sm:rounded-[32px] sm:px-10 sm:py-8">
+        <div className="day:border-[#d8cfc2] day:bg-white/95 day:shadow-[0_14px_38px_rgba(73,57,43,0.12)] rounded-2xl border border-white/10 bg-[#0c0805]/85 px-4 py-6 shadow-[0_25px_65px_rgba(0,0,0,0.6)] backdrop-blur-2xl sm:rounded-[32px] sm:px-10 sm:py-8">
           <header className="mb-0 pb-6">
             <h1 className="py-[10px] text-3xl font-semibold tracking-tight">
               Place Order
@@ -441,17 +459,17 @@ export default function BuyDesignPage() {
           </header>
 
           {loadingProject ? (
-            <p className="text-sm text-white/40">Loading…</p>
+            <p className="day:text-[#7a6c5b] text-sm text-white/40">Loading…</p>
           ) : (
             <form onSubmit={handlePlaceOrder} className="space-y-6">
               {/* Design Summary */}
-              <section className="rounded-2xl border border-white/10 bg-white/5 p-5">
-                <h2 className="mb-4 text-base font-semibold text-white/90">
+              <section className="day:border-[#ded5c9] day:bg-[#fbf9f5] rounded-2xl border border-white/10 bg-white/5 p-5">
+                <h2 className="day:text-[#2a2118] mb-4 text-base font-semibold text-white/90">
                   Summary
                 </h2>
                 <div className="flex items-start gap-3 sm:gap-5">
                   {preview && (
-                    <div className="h-16 w-16 shrink-0 overflow-hidden rounded-xl bg-black/50 sm:h-20 sm:w-20">
+                    <div className="day:bg-[#eee8df] h-16 w-16 shrink-0 overflow-hidden rounded-xl bg-black/50 sm:h-20 sm:w-20">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={preview}
@@ -462,7 +480,7 @@ export default function BuyDesignPage() {
                   )}
                   <div className="min-w-0 flex-1">
                     <div className="flex items-start justify-between gap-3">
-                      <p className="min-w-0 text-base leading-snug font-medium break-words text-white">
+                      <p className="day:text-[#2a2118] min-w-0 text-base leading-snug font-medium break-words text-white">
                         {project?.title || 'Untitled Design'}
                       </p>
                       {price && (
@@ -472,22 +490,24 @@ export default function BuyDesignPage() {
                       )}
                     </div>
                     {project?.description && (
-                      <p className="mt-0.5 text-sm break-words text-white/50">
+                      <p className="day:text-[#786a5a] mt-0.5 text-sm break-words text-white/50">
                         {project.description}
                       </p>
                     )}
                   </div>
                 </div>
-                <dl className="mt-4 space-y-1.5 border-t border-white/10 pt-3 text-sm">
-                  <div className="flex items-center justify-between gap-4 text-white/65">
+                <dl className="day:border-[#ded5c9] mt-4 space-y-1.5 border-t border-white/10 pt-3 text-sm">
+                  <div className="day:text-[#6b5d4d] flex items-center justify-between gap-4 text-white/65">
                     <dt>Product</dt>
                     <dd>{price ?? 'Price TBD'}</dd>
                   </div>
-                  <div className="flex items-center justify-between gap-4 text-white/65">
+                  <div className="day:text-[#6b5d4d] flex items-center justify-between gap-4 text-white/65">
                     <dt>Shipping</dt>
-                    <dd className="font-medium text-white/85">Free</dd>
+                    <dd className="day:text-[#3f3429] font-medium text-white/85">
+                      Free
+                    </dd>
                   </div>
-                  <div className="flex items-center justify-between gap-4 pt-1 text-base font-semibold text-white">
+                  <div className="day:text-[#2a2118] flex items-center justify-between gap-4 pt-1 text-base font-semibold text-white">
                     <dt>Total</dt>
                     <dd className="text-[#D4A84F]">{price ?? 'Price TBD'}</dd>
                   </div>
@@ -495,8 +515,8 @@ export default function BuyDesignPage() {
               </section>
 
               {/* Shipping Details */}
-              <section className="rounded-2xl border border-white/10 bg-white/5 p-5 sm:p-6">
-                <h2 className="mb-4 text-base font-semibold text-white/90">
+              <section className="day:border-[#ded5c9] day:bg-[#fbf9f5] rounded-2xl border border-white/10 bg-white/5 p-5 sm:p-6">
+                <h2 className="day:text-[#2a2118] mb-4 text-base font-semibold text-white/90">
                   Shipping Details
                 </h2>
                 <div className="space-y-4">
@@ -605,8 +625,8 @@ export default function BuyDesignPage() {
               </section>
 
               {/* Payment Type */}
-              <section className="rounded-2xl border border-white/10 bg-white/5 p-6">
-                <h2 className="mb-4 text-base font-semibold text-white/90">
+              <section className="day:border-[#ded5c9] day:bg-[#fbf9f5] rounded-2xl border border-white/10 bg-white/5 p-6">
+                <h2 className="day:text-[#2a2118] mb-4 text-base font-semibold text-white/90">
                   Payment Type
                 </h2>
                 <div className="flex flex-wrap gap-3">
@@ -620,7 +640,7 @@ export default function BuyDesignPage() {
                         className={`flex items-center gap-2 rounded-xl border px-5 py-3 text-sm font-medium transition ${
                           active
                             ? 'border-[#D4A84F] bg-[#D4A84F]/10 text-[#D4A84F]'
-                            : 'border-white/20 bg-white/5 text-white/60 hover:border-white/40 hover:text-white'
+                            : 'day:border-[#d8cfc2] day:bg-white day:text-[#5d5042] day:hover:border-[#bda98b] day:hover:text-[#2a2118] border-white/20 bg-white/5 text-white/60 hover:border-white/40 hover:text-white'
                         }`}
                       >
                         {type === 'credit-card' ? (
@@ -656,16 +676,16 @@ export default function BuyDesignPage() {
                   })}
                 </div>
                 {form.paymentType === 'other' && (
-                  <div className="mt-4 space-y-3 rounded-xl border border-white/10 bg-white/5 p-5 text-sm text-white/70">
-                    <p className="text-base font-semibold text-white/90">
+                  <div className="day:border-[#ded5c9] day:bg-white day:text-[#6b5d4d] mt-4 space-y-3 rounded-xl border border-white/10 bg-white/5 p-5 text-sm text-white/70">
+                    <p className="day:text-[#2a2118] text-base font-semibold text-white/90">
                       Alternative payment options:
                     </p>
 
                     <div>
-                      <p className="font-medium text-white/80">
+                      <p className="day:text-[#3f3429] font-medium text-white/80">
                         📞 Credit Card by Phone
                       </p>
-                      <p className="ml-6 text-white/60">
+                      <p className="day:text-[#6b5d4d] ml-6 text-white/60">
                         (08) 6191 0396 &nbsp;/&nbsp; 0419 945 950 &nbsp;/&nbsp;
                         1300 851 181 (local rate)
                         <br />
@@ -674,36 +694,45 @@ export default function BuyDesignPage() {
                     </div>
 
                     <div>
-                      <p className="font-medium text-white/80">🏦 BPAY</p>
-                      <p className="ml-6 text-white/60">
+                      <p className="day:text-[#3f3429] font-medium text-white/80">
+                        🏦 BPAY
+                      </p>
+                      <p className="day:text-[#6b5d4d] ml-6 text-white/60">
                         Biller Code:{' '}
-                        <strong className="text-white/80">566380</strong>
+                        <strong className="day:text-[#3f3429] text-white/80">
+                          566380
+                        </strong>
                         <br />
                         Your BPAY Reference:{' '}
-                        <strong className="text-white/80">
+                        <strong className="day:text-[#3f3429] text-white/80">
                           provided in your invoice
                         </strong>
                       </p>
                     </div>
 
                     <div>
-                      <p className="font-medium text-white/80">
+                      <p className="day:text-[#3f3429] font-medium text-white/80">
                         💳 Direct Deposit
                       </p>
-                      <p className="ml-6 text-white/60">
+                      <p className="day:text-[#6b5d4d] ml-6 text-white/60">
                         The Stainless Steel Monument Company Pty Ltd
                         <br />
-                        BSB: <strong className="text-white/80">
+                        BSB:{' '}
+                        <strong className="day:text-[#3f3429] text-white/80">
                           034-604
                         </strong>{' '}
                         &nbsp; Account:{' '}
-                        <strong className="text-white/80">192-715</strong>
+                        <strong className="day:text-[#3f3429] text-white/80">
+                          192-715
+                        </strong>
                       </p>
                     </div>
 
                     <div>
-                      <p className="font-medium text-white/80">✉️ Cheque</p>
-                      <p className="ml-6 text-white/60">
+                      <p className="day:text-[#3f3429] font-medium text-white/80">
+                        ✉️ Cheque
+                      </p>
+                      <p className="day:text-[#6b5d4d] ml-6 text-white/60">
                         Payable to:{' '}
                         <em>The Stainless Steel Monument Company</em>
                         <br />
@@ -711,7 +740,7 @@ export default function BuyDesignPage() {
                       </p>
                     </div>
 
-                    <p className="border-t border-white/10 pt-1 text-xs text-white/40">
+                    <p className="day:border-[#ded5c9] day:text-[#806f5d] border-t border-white/10 pt-1 text-xs text-white/40">
                       We will commence with your order once we have confirmation
                       of payment. Questions? Call us or use the{' '}
                       <a
@@ -734,7 +763,7 @@ export default function BuyDesignPage() {
                       id="paypal-button-container"
                     />
                     {!paypalReady && (
-                      <p className="mt-2 text-sm text-white/40">
+                      <p className="day:text-[#806f5d] mt-2 text-sm text-white/40">
                         Loading PayPal…
                       </p>
                     )}
@@ -743,8 +772,8 @@ export default function BuyDesignPage() {
               </section>
 
               {/* Order Notes */}
-              <section className="rounded-2xl border border-white/10 bg-white/5 p-6">
-                <h2 className="mb-4 text-base font-semibold text-white/90">
+              <section className="day:border-[#ded5c9] day:bg-[#fbf9f5] rounded-2xl border border-white/10 bg-white/5 p-6">
+                <h2 className="day:text-[#2a2118] mb-4 text-base font-semibold text-white/90">
                   Order Notes
                 </h2>
                 <div>
@@ -769,21 +798,38 @@ export default function BuyDesignPage() {
 
               <div className="flex flex-col gap-4 pt-2 sm:flex-row sm:items-center">
                 {form.paymentType !== 'paypal' && (
-                  <button
-                    type="submit"
-                    disabled={placing}
-                    className="w-full rounded-lg bg-[#D4A84F] px-8 py-3 text-sm font-semibold text-black transition hover:bg-[#e0b86a] disabled:opacity-50 sm:w-auto"
-                  >
-                    {placing
-                      ? 'Processing…'
-                      : form.paymentType === 'credit-card'
-                        ? `Continue to Payment${price ? ` (${price})` : ''}`
-                        : 'Place Order'}
-                  </button>
+                  <>
+                    <button
+                      type="submit"
+                      onClick={() => {
+                        testOrderRef.current = false;
+                      }}
+                      disabled={placing}
+                      className="w-full rounded-lg bg-[#D4A84F] px-8 py-3 text-sm font-semibold text-black transition hover:bg-[#e0b86a] disabled:opacity-50 sm:w-auto"
+                    >
+                      {placing
+                        ? 'Processing…'
+                        : form.paymentType === 'credit-card'
+                          ? `Continue to Payment${price ? ` (${price})` : ''}`
+                          : 'Place Order'}
+                    </button>
+                    {isLocalhost && (
+                      <button
+                        type="submit"
+                        onClick={() => {
+                          testOrderRef.current = true;
+                        }}
+                        disabled={placing}
+                        className="day:text-sky-800 w-full rounded-lg border border-sky-400/60 bg-sky-400/10 px-8 py-3 text-sm font-semibold text-sky-700 transition hover:bg-sky-400/20 disabled:opacity-50 sm:w-auto"
+                      >
+                        {placing ? 'Processing…' : 'Test Order ($1.00)'}
+                      </button>
+                    )}
+                  </>
                 )}
                 <Link
                   href={`/my-account/designs/${id}`}
-                  className="text-sm text-white/50 transition hover:text-white"
+                  className="day:text-[#6b5d4d] day:hover:text-[#2a2118] text-sm text-white/50 transition hover:text-white"
                 >
                   Cancel
                 </Link>

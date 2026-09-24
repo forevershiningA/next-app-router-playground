@@ -286,7 +286,7 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
                           sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
                         />
                         {isSelected && (
-                          <span className="absolute top-3 right-3 inline-flex items-center gap-1 rounded-full bg-[#cfac6c] px-2.5 py-1 text-xs font-semibold text-slate-950 shadow-lg">
+                          <span className="day:shadow-[0_2px_6px_rgba(128,96,43,0.16)] absolute top-3 right-3 inline-flex items-center gap-1 rounded-full bg-[#cfac6c] px-2.5 py-1 text-xs font-semibold text-slate-950 shadow-lg">
                             <CheckCircleIcon className="h-4 w-4" />
                             Selected
                           </span>
@@ -526,9 +526,9 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
         )}`;
 
   return (
-    <div className="day:bg-stone-100 day:bg-none min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950">
+    <div className="day:bg-[#fcfbf8] day:bg-none min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950">
       {/* Header Section */}
-      <div className="day:border-gray-200 day:bg-white day:bg-none relative overflow-hidden border-b border-white/10 bg-gradient-to-r from-gray-900/50 to-gray-800/50 backdrop-blur-sm">
+      <div className="day:border-[#e8e1d5] day:bg-[#fffdf9] day:bg-none relative overflow-hidden border-b border-white/10 bg-gradient-to-r from-gray-900/50 to-gray-800/50 backdrop-blur-sm">
         <div className="day:hidden absolute inset-0 bg-gradient-to-br from-[#cfac6c]/5 via-transparent to-transparent" />
         <div className="relative mx-auto max-w-7xl px-6 py-6 lg:px-8">
           <div className="text-left sm:text-center">
@@ -552,7 +552,7 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
       </div>
 
       {/* Category Filter */}
-      <div className="day:border-gray-200 day:bg-white relative border-b border-white/5 bg-gray-900/30">
+      <div className="day:border-[#e8e1d5] day:bg-[#fffdf9] relative border-b border-white/5 bg-gray-900/30">
         <div className="day:hidden absolute inset-0 bg-gradient-to-r from-transparent via-[#cfac6c]/3 to-transparent" />
         <div className="relative mx-auto max-w-7xl px-6 py-3.5 lg:px-8">
           <div className="-mx-6 flex snap-x gap-2 overflow-x-auto px-6 pr-12 [scrollbar-width:none] sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0 [&::-webkit-scrollbar]:hidden">
@@ -645,7 +645,7 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
               <h2 className="day:text-gray-600 text-sm font-medium text-gray-300">
                 {resultsHeading}
               </h2>
-              <div className="day:text-gray-400 hidden text-xs tracking-[0.16em] text-gray-500 uppercase sm:block">
+              <div className="day:text-[#98763f] hidden text-xs font-medium tracking-[0.16em] text-gray-500 uppercase sm:block">
                 Select one to continue
               </div>
             </div>
@@ -665,10 +665,10 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
                 return (
                   <article
                     key={shape.id}
-                    className={`group day:bg-white relative flex h-full flex-col overflow-hidden rounded-lg border bg-[#171717] transition-all ${
+                    className={`group day:border-[#e2dbcf] day:bg-[#fffdf9] relative flex h-full flex-col overflow-hidden rounded-lg border bg-[#171717] transition-all ${
                       isSelected
-                        ? 'border-[#cfac6c] shadow-lg shadow-[#cfac6c]/20'
-                        : 'day:border-gray-200 day:hover:border-[#cfac6c]/60 border-white/12 hover:-translate-y-0.5 hover:border-[#cfac6c]/60 hover:shadow-lg hover:shadow-[#cfac6c]/10'
+                        ? 'day:shadow-[0_6px_18px_rgba(128,96,43,0.13)] border-[#cfac6c] shadow-lg shadow-[#cfac6c]/20'
+                        : 'day:hover:border-[#cfac6c]/60 day:shadow-[0_2px_8px_rgba(73,54,30,0.06)] day:hover:shadow-[0_8px_20px_rgba(128,96,43,0.10)] border-white/12 hover:-translate-y-0.5 hover:border-[#cfac6c]/60 hover:shadow-lg hover:shadow-[#cfac6c]/10'
                     }`}
                   >
                     <button
@@ -677,16 +677,16 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
                       aria-pressed={isSelected}
                       className="flex w-full flex-1 cursor-pointer flex-col text-left focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[#cfac6c]"
                     >
-                      <div className="day:border-gray-200 day:bg-gray-100 day:bg-none relative aspect-square w-full overflow-hidden border-b border-white/10 bg-[radial-gradient(circle_at_35%_20%,#4a4a4a_0%,#2b2b2b_44%,#151515_100%)]">
+                      <div className="day:border-[#e8e1d5] day:bg-[#f7f4ee] day:bg-none relative aspect-square w-full overflow-hidden border-b border-white/10 bg-[radial-gradient(circle_at_35%_20%,#4a4a4a_0%,#2b2b2b_44%,#151515_100%)]">
                         <Image
                           src={shapeUrl}
                           alt={shape.name}
                           fill
-                          className="day:brightness-100 day:invert-0 object-contain p-8 brightness-0 drop-shadow-[0_8px_6px_rgba(0,0,0,0.55)] invert-[68%] transition-transform duration-300 group-hover:scale-105"
+                          className="day:brightness-100 day:invert-0 day:drop-shadow-[0_4px_4px_rgba(42,33,24,0.18)] object-contain p-8 brightness-0 drop-shadow-[0_8px_6px_rgba(0,0,0,0.55)] invert-[68%] transition-transform duration-300 group-hover:scale-105"
                           sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
                         />
                         {isSelected && (
-                          <span className="absolute top-3 right-3 inline-flex items-center gap-1 rounded-full bg-[#cfac6c] px-2.5 py-1 text-xs font-semibold text-slate-950 shadow-lg">
+                          <span className="day:shadow-[0_2px_6px_rgba(128,96,43,0.16)] absolute top-3 right-3 inline-flex items-center gap-1 rounded-full bg-[#cfac6c] px-2.5 py-1 text-xs font-semibold text-slate-950 shadow-lg">
                             <CheckCircleIcon className="h-4 w-4" />
                             Selected
                           </span>
@@ -704,9 +704,9 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
                       <button
                         type="button"
                         onClick={() => handleShapeContinue(shape)}
-                        className="inline-flex min-h-10 w-full items-center justify-center gap-2 rounded-lg border border-[#cfac6c] px-3 py-2 text-sm font-semibold text-[#cfac6c] transition-all hover:bg-[#cfac6c] hover:text-slate-900 hover:shadow-lg hover:shadow-[#cfac6c]/30 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#cfac6c]"
+                        className="day:shadow-none inline-flex min-h-10 w-full items-center justify-center gap-2 rounded-lg border border-[#cfac6c] px-3 py-2 text-sm font-semibold text-[#cfac6c] transition-all hover:bg-[#cfac6c] hover:text-slate-900 hover:shadow-lg hover:shadow-[#cfac6c]/30 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#cfac6c]"
                       >
-                        Continue
+                        {isSelected ? `Continue with ${shape.name}` : 'Select'}
                         <ArrowRightIcon className="h-4 w-4" />
                       </button>
                     </div>

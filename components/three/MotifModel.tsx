@@ -2,7 +2,8 @@
 
 import * as React from 'react';
 import * as THREE from 'three';
-import { useThree } from '@react-three/fiber';
+import { useFrame, useThree } from '@react-three/fiber';
+import { Line } from '@react-three/drei';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import type { HeadstoneAPI } from './headstone/SvgHeadstone';
 import SelectionBox from './ObjectSelectionBox';
@@ -137,6 +138,12 @@ export default function MotifModel({
   const headstoneMaterialUrl = useHeadstoneStore((s) => s.headstoneMaterialUrl);
   const ref = React.useRef<THREE.Group>(null!);
   const [dragging, setDragging] = React.useState(false);
+  const [showCenterGuide, setShowCenterGuide] = React.useState(false);
+  const [showHorizontalCenterGuide, setShowHorizontalCenterGuide] = React.useState(false);
+  const guideProgressRef = React.useRef(0);
+  const horizontalGuideProgressRef = React.useRef(0);
+  const [guideProgress, setGuideProgress] = React.useState(0);
+  const [horizontalGuideProgress, setHorizontalGuideProgress] = React.useState(0);
   const dragPositionRef = React.useRef<{ xPos: number; yPos: number } | null>(null);
   const animationFrameRef = React.useRef<number | null>(null);
   const transferringRef = React.useRef(false);
@@ -167,6 +174,34 @@ export default function MotifModel({
 
   const raycaster = React.useMemo(() => new THREE.Raycaster(), []);
   const mouse = React.useMemo(() => new THREE.Vector2(), []);
+
+  useFrame((state, delta) => {
+    const next = THREE.MathUtils.damp(
+      guideProgressRef.current,
+      dragging && showCenterGuide ? 1 : 0,
+      16,
+      delta,
+    );
+    if (Math.abs(next - guideProgressRef.current) > 0.001) {
+      guideProgressRef.current = next;
+      setGuideProgress(next);
+      state.invalidate();
+    }
+  });
+
+  useFrame((state, delta) => {
+    const next = THREE.MathUtils.damp(
+      horizontalGuideProgressRef.current,
+      dragging && showHorizontalCenterGuide ? 1 : 0,
+      16,
+      delta,
+    );
+    if (Math.abs(next - horizontalGuideProgressRef.current) > 0.001) {
+      horizontalGuideProgressRef.current = next;
+      setHorizontalGuideProgress(next);
+      state.invalidate();
+    }
+  });
 
   React.useEffect(() => {
     let disposed = false;
@@ -379,6 +414,25 @@ export default function MotifModel({
       localPt.x = Math.max(minX, Math.min(maxX, localPt.x));
       localPt.y = Math.max(minY, Math.min(maxY, localPt.y));
 
+      const centerX = (bbox.min.x + bbox.max.x) / 2;
+      const centerY = (bbox.min.y + bbox.max.y) / 2;
+      const safeUnitsPerMeter =
+        Math.abs(headstone.unitsPerMeter) > 1e-6
+          ? Math.abs(headstone.unitsPerMeter)
+          : 1000;
+      const centerSnapThreshold = isBaseSurface
+        ? 0.018
+        : Math.max(8 * safeUnitsPerMeter / 1000, (maxX - minX) * 0.018);
+      const horizontalSnapThreshold = isBaseSurface
+        ? 0.018
+        : Math.max(8 * safeUnitsPerMeter / 1000, (maxY - minY) * 0.018);
+      const isNearCenter = Math.abs(localPt.x - centerX) <= centerSnapThreshold;
+      const isNearHorizontalCenter = Math.abs(localPt.y - centerY) <= horizontalSnapThreshold;
+      localPt.x = isNearCenter ? centerX : localPt.x;
+      localPt.y = isNearHorizontalCenter ? centerY : localPt.y;
+      setShowCenterGuide(isNearCenter);
+      setShowHorizontalCenterGuide(isNearHorizontalCenter);
+
       const currentOffset = motifOffsets[id] ?? baseOffsetDefaults;
       const coordinateSpace = currentOffset.coordinateSpace ?? (currentOffset.target !== undefined ? 'absolute' : 'offset');
       const isCanonical = coordinateSpace === 'absolute' || coordinateSpace === 'mm-center';
@@ -396,8 +450,6 @@ export default function MotifModel({
           yPos: localPt.y,
         };
       } else {
-        const centerX = (bbox.min.x + bbox.max.x) / 2;
-        const centerY = (bbox.min.y + bbox.max.y) / 2;
         dragPositionRef.current = {
           xPos: localPt.x - centerX,
           yPos: -(localPt.y - centerY),
@@ -640,6 +692,8 @@ export default function MotifModel({
       }
       
       setDragging(false);
+      setShowCenterGuide(false);
+      setShowHorizontalCenterGuide(false);
       if (controls) (controls as any).enabled = true;
       gl.domElement.style.cursor = 'auto';
       if (pointerCaptureTargetRef.current && e.pointerId !== undefined) {
@@ -799,6 +853,50 @@ export default function MotifModel({
     <>
       {/* Parent group for positioning - same coordinate system as inscriptions */}
       <group position={groupPosition} rotation={groupRotation}>
+        {!isLedgerSurface && guideProgress > 0.01 && (
+          <Line
+            points={[
+              new THREE.Vector3(
+                (isBaseSurface ? stone.position.x : centerX) - groupPosition[0],
+                (isBaseSurface ? stone.position.y - stone.scale.y * 0.48 : minY) - groupPosition[1],
+                0.02,
+              ),
+              new THREE.Vector3(
+                (isBaseSurface ? stone.position.x : centerX) - groupPosition[0],
+                (isBaseSurface ? stone.position.y + stone.scale.y * 0.48 : maxY) - groupPosition[1],
+                0.02,
+              ),
+            ]}
+            color="#ff5fe1"
+            lineWidth={1}
+            transparent
+            opacity={guideProgress * 0.6}
+            depthTest={false}
+            depthWrite={false}
+          />
+        )}
+        {!isLedgerSurface && horizontalGuideProgress > 0.01 && (
+          <Line
+            points={[
+              new THREE.Vector3(
+                (isBaseSurface ? stone.position.x - stone.scale.x * 0.48 : minX) - groupPosition[0],
+                (isBaseSurface ? stone.position.y : centerY) - groupPosition[1],
+                0.02,
+              ),
+              new THREE.Vector3(
+                (isBaseSurface ? stone.position.x + stone.scale.x * 0.48 : maxX) - groupPosition[0],
+                (isBaseSurface ? stone.position.y : centerY) - groupPosition[1],
+                0.02,
+              ),
+            ]}
+            color="#ff5fe1"
+            lineWidth={1}
+            transparent
+            opacity={horizontalGuideProgress * 0.6}
+            depthTest={false}
+            depthWrite={false}
+          />
+        )}
         {isStainlessSteelMotif && (
           <mesh
             geometry={planeGeometry}
@@ -916,17 +1014,14 @@ export default function MotifModel({
             unitsPerMeter={headstone.unitsPerMeter}
             currentSizeMm={offset.heightMm ?? 100}
             objectType="motif"
+            enableResizeHandles
             // Keep motif selection static: this canvas is demand-rendered and
             // a reveal animation could otherwise stop after its first frame.
             animateOnShow={false}
             onUpdate={(data) => {
-              if (data.scaleFactor !== undefined) {
-                // Update heightMm based on scale factor
-                const newHeightMm = (offset.heightMm ?? 100) * data.scaleFactor;
-                // Round to integer and enforce minimum of 40mm for color motifs
-                const roundedHeight = Math.round(newHeightMm);
-                const clampedHeight = Math.max(40, Math.min(roundedHeight, 500));
-                
+              if (data.sizeMm !== undefined) {
+                const clampedHeight = Math.max(40, Math.min(data.sizeMm, 500));
+
                 setMotifOffset(id, {
                   ...offset,
                   heightMm: clampedHeight,

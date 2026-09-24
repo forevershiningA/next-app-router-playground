@@ -24,7 +24,6 @@ import { data } from '#/app/_internal/_data';
 import { loadCatalogForProduct } from '#/lib/check-price-utils';
 import { formatDimensionPair } from '#/lib/unit-system';
 import { useSetUnitSystem, useUnitSystem } from '#/lib/use-unit-system';
-import QuickEnquiryModal from '#/components/contact/QuickEnquiryModal';
 
 import {
   CAMERA_3D_POSITION_Z,
@@ -153,7 +152,6 @@ function ProductNameHeader() {
   const [resolvedCatalog, setResolvedCatalog] = useState<CatalogData | null>(
     null,
   );
-  const [showQuickEnquiry, setShowQuickEnquiry] = useState(false);
   const fallbackProductId = useMemo(
     () => productId ?? data.products[0]?.id ?? null,
     [productId],
@@ -439,7 +437,7 @@ function ProductNameHeader() {
         )}
         <button
           type="button"
-          onClick={() => setShowQuickEnquiry(true)}
+          onClick={() => window.dispatchEvent(new CustomEvent('proceedToPurchase'))}
           className="pointer-events-auto flex items-center gap-2 rounded-full px-3 text-sm font-semibold tracking-wide text-white transition-colors hover:bg-white/10"
         >
           <svg
@@ -452,17 +450,12 @@ function ProductNameHeader() {
               strokeLinecap="round"
               strokeLinejoin="round"
               strokeWidth={2}
-              d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-3 3v-3z"
+              d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13 5.4 5M7 13l-2 2h13M9 19.5h.01M17 19.5h.01"
             />
           </svg>
-          Quick Enquiry
+          Proceed to Purchase
         </button>
       </div>
-
-      <QuickEnquiryModal
-        isOpen={showQuickEnquiry}
-        onClose={() => setShowQuickEnquiry(false)}
-      />
 
       {/* On mobile keep the quote action below the fixed header. The bottom
           sheet otherwise covers it while editing a design step. */}

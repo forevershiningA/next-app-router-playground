@@ -14,7 +14,9 @@ import { buildPdfQuoteFromProject } from '#/lib/design-quote';
 import ConfirmModal from '#/components/shared/ConfirmModal';
 import dynamic from 'next/dynamic';
 import { logger } from '#/lib/logger';
-const EmailShareModal = dynamic(() => import('#/components/account/EmailShareModal'));
+const EmailShareModal = dynamic(
+  () => import('#/components/account/EmailShareModal'),
+);
 
 type DesignStatus =
   | 'awaiting-approval'
@@ -152,10 +154,10 @@ function AuthGate({
   }
 
   const inputCls =
-    'w-full rounded-lg border border-white/18 bg-white/[0.06] px-4 py-3 text-sm text-white placeholder-white/35 transition-colors focus:border-[#D4A84F] focus:outline-none focus:ring-2 focus:ring-[#D4A84F]/35';
+    'day:border-[#d8cfc2] day:bg-white day:text-[#2a2118] day:placeholder-[#8b7d6b] w-full rounded-lg border border-white/18 bg-white/[0.06] px-4 py-3 text-sm text-white placeholder-white/35 transition-colors focus:border-[#D4A84F] focus:outline-none focus:ring-2 focus:ring-[#D4A84F]/35';
 
   return (
-    <div className="relative flex min-h-screen items-center justify-center bg-[#050301] px-6 text-white">
+    <div className="day:bg-[#f4f1eb] day:text-[#2a2118] relative flex min-h-screen items-center justify-center bg-[#050301] px-6 text-white">
       <div
         className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(244,160,80,0.18),_transparent_45%)]"
         aria-hidden
@@ -172,14 +174,14 @@ function AuthGate({
               Back to your design
             </button>
           )}
-          <h1 className="text-3xl font-semibold tracking-tight text-white">
+          <h1 className="day:text-[#2a2118] text-3xl font-semibold tracking-tight text-white">
             {isReset ? 'Reset Password' : 'My Account'}
           </h1>
-          <p className="mt-1 text-sm text-white/55">
+          <p className="day:text-[#786a5a] mt-1 text-sm text-white/55">
             Forever Shining Memorial Designs
           </p>
           {isSavingDesign && !isReset && (
-            <p className="mt-4 rounded-lg border border-[#D4A84F]/25 bg-[#D4A84F]/10 px-3 py-2.5 text-sm leading-relaxed text-white/80">
+            <p className="day:text-[#5d5042] mt-4 rounded-lg border border-[#D4A84F]/25 bg-[#D4A84F]/10 px-3 py-2.5 text-sm leading-relaxed text-white/80">
               Sign in or create an account to save your project and access it
               anytime.
             </p>
@@ -188,7 +190,7 @@ function AuthGate({
 
         {/* Tab switcher — hidden in reset mode */}
         {!isReset && (
-          <div className="mb-6 flex rounded-xl border border-white/10 bg-white/5 p-1">
+          <div className="day:border-[#d8cfc2] day:bg-white mb-6 flex rounded-xl border border-white/10 bg-white/5 p-1">
             {(['login', 'register'] as const).map((t) => (
               <button
                 key={t}
@@ -200,7 +202,7 @@ function AuthGate({
                 className={`flex-1 cursor-pointer rounded-lg py-2 text-sm font-medium transition-colors ${
                   tab === t
                     ? 'bg-[#D4A84F] text-[#1a0f05]'
-                    : 'text-white/65 hover:text-white'
+                    : 'day:text-[#6b5d4d] day:hover:text-[#2a2118] text-white/65 hover:text-white'
                 }`}
               >
                 {t === 'login' ? 'Sign in' : 'Register'}
@@ -210,7 +212,7 @@ function AuthGate({
         )}
 
         {isReset && (
-          <div className="mb-5 space-y-3 text-sm leading-relaxed text-white/70">
+          <div className="day:text-[#6b5d4d] mb-5 space-y-3 text-sm leading-relaxed text-white/70">
             <p>
               If you have lost your password and cannot login, enter your login
               email address into the form below and click the Reset button.
@@ -248,7 +250,7 @@ function AuthGate({
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="mb-1.5 block text-xs tracking-wider text-white/70 uppercase">
+            <label className="day:text-[#5d5042] mb-1.5 block text-xs tracking-wider text-white/70 uppercase">
               Email
             </label>
             <input
@@ -264,7 +266,7 @@ function AuthGate({
 
           {!isReset && (
             <div>
-              <label className="mb-1.5 block text-xs tracking-wider text-white/70 uppercase">
+              <label className="day:text-[#5d5042] mb-1.5 block text-xs tracking-wider text-white/70 uppercase">
                 Password
               </label>
               <div className="relative">
@@ -291,7 +293,7 @@ function AuthGate({
           )}
           {!isReset && tab === 'register' && (
             <div>
-              <label className="mb-1.5 block text-xs tracking-wider text-white/70 uppercase">
+              <label className="day:text-[#5d5042] mb-1.5 block text-xs tracking-wider text-white/70 uppercase">
                 Confirm Password
               </label>
               <input
@@ -337,7 +339,7 @@ function AuthGate({
               <button
                 type="button"
                 onClick={enterReset}
-                className="cursor-pointer text-xs text-white/70 transition-colors hover:text-[#D4A84F]"
+                className="day:text-[#6b5d4d] cursor-pointer text-xs text-white/70 transition-colors hover:text-[#D4A84F]"
               >
                 Forgot your password?{' '}
                 <span className="text-[#D4A84F]">Reset it</span>
@@ -350,7 +352,7 @@ function AuthGate({
               <button
                 type="button"
                 onClick={exitReset}
-                className="cursor-pointer text-xs text-white/70 transition-colors hover:text-[#D4A84F]"
+                className="day:text-[#6b5d4d] cursor-pointer text-xs text-white/70 transition-colors hover:text-[#D4A84F]"
               >
                 ← Login to an account
               </button>
@@ -358,7 +360,7 @@ function AuthGate({
           )}
         </form>
 
-        <p className="mt-8 text-center text-xs text-white/50">
+        <p className="day:text-[#806f5d] mt-8 text-center text-xs text-white/50">
           Need help?{' '}
           <a
             href="mailto:support@forevershining.com"
@@ -566,7 +568,7 @@ function MyAccountContent() {
   // Still checking session
   if (session === undefined) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-[#050301]">
+      <div className="day:bg-[#f4f1eb] flex min-h-screen items-center justify-center bg-[#050301]">
         <div className="h-6 w-6 animate-spin rounded-full border-2 border-[#D4A84F]/30 border-t-[#D4A84F]" />
       </div>
     );

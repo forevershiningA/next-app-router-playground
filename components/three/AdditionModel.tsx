@@ -2,8 +2,8 @@
 
 import * as React from 'react';
 import * as THREE from 'three';
-import { useGLTF, useTexture } from '@react-three/drei';
-import { useThree } from '@react-three/fiber';
+import { Line, useGLTF, useTexture } from '@react-three/drei';
+import { useFrame, useThree } from '@react-three/fiber';
 import { useHeadstoneStore, type AdditionKind } from '#/lib/headstone-store';
 import { useMobileNavStore } from '#/lib/mobile-nav-store';
 import type { HeadstoneAPI } from './headstone/SvgHeadstone';
@@ -73,6 +73,16 @@ type AdditionOffsetState = {
   sourceId?: string;
   zPosFinalized?: boolean;
   footprintWidth?: number;
+};
+
+type AdditionSizeVariant = {
+  variant: number;
+  code: string;
+  width: number;
+  height: number;
+  depth: number;
+  availability?: boolean;
+  retailPrice?: number;
 };
 
 export default function AdditionModel({
@@ -215,6 +225,38 @@ function AdditionModelInner({
   );
   const ref = React.useRef<THREE.Group>(null!);
   const [dragging, setDragging] = React.useState(false);
+  const [showCenterGuide, setShowCenterGuide] = React.useState(false);
+  const [showHorizontalCenterGuide, setShowHorizontalCenterGuide] = React.useState(false);
+  const centerGuideProgressRef = React.useRef(0);
+  const horizontalGuideProgressRef = React.useRef(0);
+  const [centerGuideProgress, setCenterGuideProgress] = React.useState(0);
+  const [horizontalGuideProgress, setHorizontalGuideProgress] = React.useState(0);
+
+  useFrame((state, delta) => {
+    const nextCenter = THREE.MathUtils.damp(
+      centerGuideProgressRef.current,
+      dragging && showCenterGuide ? 1 : 0,
+      16,
+      delta,
+    );
+    const nextHorizontal = THREE.MathUtils.damp(
+      horizontalGuideProgressRef.current,
+      dragging && showHorizontalCenterGuide ? 1 : 0,
+      16,
+      delta,
+    );
+
+    if (Math.abs(nextCenter - centerGuideProgressRef.current) > 0.001) {
+      centerGuideProgressRef.current = nextCenter;
+      setCenterGuideProgress(nextCenter);
+      state.invalidate();
+    }
+    if (Math.abs(nextHorizontal - horizontalGuideProgressRef.current) > 0.001) {
+      horizontalGuideProgressRef.current = nextHorizontal;
+      setHorizontalGuideProgress(nextHorizontal);
+      state.invalidate();
+    }
+  });
 
   // K2254 was supplied only as a legacy 3DS/MAX asset, so there is no GLB at
   // its catalog path. Use the matching Tedesche GLB until its own model is
@@ -324,6 +366,16 @@ function AdditionModelInner({
     const variant = Math.max(1, Math.round(storedOffset?.sizeVariant ?? 1));
     return variants[variant - 1] ?? variants[0];
   }, [addition.sizes, storedOffset?.sizeVariant]);
+  const applicationSizeRange = React.useMemo(() => {
+    if (additionKind !== 'application' || !addition.sizes?.length) return null;
+    const heights = (addition.sizes as AdditionSizeVariant[]).map(
+      (variant) => variant.height,
+    );
+    return {
+      min: Math.min(...heights),
+      max: Math.max(...heights),
+    };
+  }, [addition.sizes, additionKind]);
 
   // Compute headstone bounds and default offsets early so helper hooks can use them
   const stone = headstone?.mesh?.current as THREE.Mesh | null;
@@ -935,6 +987,26 @@ function AdditionModelInner({
         clamped.z = Math.max(minZ, Math.min(maxZ, clamped.z));
       }
 
+      if (additionKind === 'application') {
+        const unitsPerMeter = Math.abs(headstone?.unitsPerMeter ?? 1000) || 1000;
+        const centerSnapThreshold = Math.max(
+          (8 * unitsPerMeter) / 1000,
+          (maxX - minX) * 0.018,
+        );
+        const horizontalSnapThreshold = Math.max(
+          (8 * unitsPerMeter) / 1000,
+          (maxY - minY) * 0.018,
+        );
+        const isNearCenter = Math.abs(clamped.x - centerX) <= centerSnapThreshold;
+        const isNearHorizontalCenter =
+          Math.abs(clamped.y - centerY) <= horizontalSnapThreshold;
+
+        clamped.x = isNearCenter ? centerX : clamped.x;
+        clamped.y = isNearHorizontalCenter ? centerY : clamped.y;
+        setShowCenterGuide(isNearCenter);
+        setShowHorizontalCenterGuide(isNearHorizontalCenter);
+      }
+
       const headstoneMesh = headstone?.mesh?.current as THREE.Mesh | null;
       if (!headstoneMesh || !bbox) return;
 
@@ -972,6 +1044,7 @@ function AdditionModelInner({
     },
     [
       baseDepthRange,
+      additionKind,
       bbox,
       computeInteractionPoint,
       headFrontZ,
@@ -1084,6 +1157,8 @@ function AdditionModelInner({
     const onUp = (e: PointerEvent) => {
       e.preventDefault();
       setDragging(false);
+      setShowCenterGuide(false);
+      setShowHorizontalCenterGuide(false);
       dragDeltaRef.current = null;
       if (controls) (controls as any).enabled = true;
       gl.domElement.style.cursor = 'auto';
@@ -1330,6 +1405,58 @@ function AdditionModelInner({
     <>
       {/* Parent group for positioning - convert Y-down saved coords to Y-up display */}
       <group position={groupPosition} rotation={groupRotation}>
+        {additionKind === 'application' &&
+          !isLedgerSurface &&
+          centerGuideProgress > 0.01 && (
+            <Line
+              points={[
+                new THREE.Vector3(
+                  centerX - groupPosition[0],
+                  centerY - groupPosition[1] -
+                    (bbox.max.y - bbox.min.y) * 0.48 * centerGuideProgress,
+                  0.003,
+                ),
+                new THREE.Vector3(
+                  centerX - groupPosition[0],
+                  centerY - groupPosition[1] +
+                    (bbox.max.y - bbox.min.y) * 0.48 * centerGuideProgress,
+                  0.003,
+                ),
+              ]}
+              color="#ff5fe1"
+              lineWidth={1}
+              transparent
+              opacity={centerGuideProgress * 0.6}
+              depthTest={false}
+              depthWrite={false}
+            />
+          )}
+        {additionKind === 'application' &&
+          !isLedgerSurface &&
+          horizontalGuideProgress > 0.01 && (
+            <Line
+              points={[
+                new THREE.Vector3(
+                  centerX - groupPosition[0] -
+                    (bbox.max.x - bbox.min.x) * 0.48 * horizontalGuideProgress,
+                  centerY - groupPosition[1],
+                  0.003,
+                ),
+                new THREE.Vector3(
+                  centerX - groupPosition[0] +
+                    (bbox.max.x - bbox.min.x) * 0.48 * horizontalGuideProgress,
+                  centerY - groupPosition[1],
+                  0.003,
+                ),
+              ]}
+              color="#ff5fe1"
+              lineWidth={1}
+              transparent
+              opacity={horizontalGuideProgress * 0.6}
+              depthTest={false}
+              depthWrite={false}
+            />
+          )}
         {/* Addition mesh with scale and Y-flip */}
         {/* Applications use reduced Z-scale for flatter appearance, statues/vases use normal scale */}
         <group
@@ -1354,11 +1481,44 @@ function AdditionModelInner({
             rotation={0}
             unitsPerMeter={headstone.unitsPerMeter}
             currentSizeMm={targetHeightMm * (offset.scale ?? 1)}
+            minSizeMm={applicationSizeRange?.min ?? targetHeightMm * 0.05}
+            maxSizeMm={applicationSizeRange?.max ?? targetHeightMm * 5}
             objectType="addition"
             additionType={additionKind}
+            enableResizeHandles
             animateOnShow
             animationDuration={520}
             onUpdate={(data) => {
+              if (data.sizeMm !== undefined) {
+                const variants = (addition.sizes ?? []) as AdditionSizeVariant[];
+                if (variants.length > 0) {
+                  const nextIndex = variants.reduce(
+                    (closestIndex, variant, variantIndex) =>
+                      Math.abs(variant.height - data.sizeMm!) <
+                      Math.abs(variants[closestIndex].height - data.sizeMm!)
+                        ? variantIndex
+                        : closestIndex,
+                    0,
+                  );
+                  const nextVariant = nextIndex + 1;
+                  if (
+                    offset.sizeVariant !== nextVariant ||
+                    (offset.scale ?? 1) !== 1
+                  ) {
+                    setAdditionOffset(id, {
+                      ...offset,
+                      sizeVariant: nextVariant,
+                      scale: 1,
+                    });
+                  }
+                } else {
+                  const nextScale = data.sizeMm / targetHeightMm;
+                  setAdditionOffset(id, {
+                    ...offset,
+                    scale: Math.max(0.05, Math.min(5, nextScale)),
+                  });
+                }
+              }
               if (data.scaleFactor !== undefined) {
                 const newScale = (offset.scale ?? 1) * data.scaleFactor;
                 const clampedScale = Math.max(0.05, Math.min(5, newScale));

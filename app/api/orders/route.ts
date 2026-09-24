@@ -14,6 +14,11 @@ function generateInvoiceNumber(): string {
   return `INV-${y}${m}-${rand}`;
 }
 
+function isLocalRequest(request: NextRequest): boolean {
+  const hostname = new URL(request.url).hostname;
+  return hostname === 'localhost' || hostname === '127.0.0.1';
+}
+
 export async function POST(request: NextRequest) {
   try {
     const session = await getServerSession();
@@ -24,9 +29,11 @@ export async function POST(request: NextRequest) {
     const body = (await request.json()) as {
       projectId: string;
       paymentMethod: 'stripe' | 'other';
+      testOrder?: boolean;
     };
 
     const { projectId, paymentMethod } = body;
+    const isTestOrder = body.testOrder === true && isLocalRequest(request);
 
     if (!projectId || !['stripe', 'other'].includes(paymentMethod)) {
       return NextResponse.json(
@@ -55,15 +62,21 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    const totalCents = isTestOrder ? 100 : quote.totalCents;
+    const subtotalCents = isTestOrder
+      ? 100
+      : Math.round(quote.breakdown.subtotal! * 100);
+    const taxCents = isTestOrder ? 0 : Math.round(quote.breakdown.tax! * 100);
+
     const [order] = await db
       .insert(orders)
       .values({
         projectId,
         accountId: session.accountId,
         status: 'pending',
-        subtotalCents: Math.round(quote.breakdown.subtotal! * 100),
-        taxCents: Math.round(quote.breakdown.tax! * 100),
-        totalCents: quote.totalCents,
+        subtotalCents,
+        taxCents,
+        totalCents,
         currency: quote.currency,
         invoiceNumber: generateInvoiceNumber(),
       })
@@ -75,7 +88,7 @@ export async function POST(request: NextRequest) {
         orderId: order.id,
         description: project.title,
         quantity: 1,
-        unitPriceCents: quote.totalCents,
+        unitPriceCents: totalCents,
       });
 
     await db
@@ -84,7 +97,7 @@ export async function POST(request: NextRequest) {
         orderId: order.id,
         provider: paymentMethod,
         providerRef: null,
-        amountCents: quote.totalCents,
+        amountCents: totalCents,
         currency: quote.currency,
         status: 'pending',
         receivedAt: null,

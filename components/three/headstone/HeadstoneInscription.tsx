@@ -3,7 +3,7 @@
 import * as React from 'react';
 import * as THREE from 'three';
 import { useThree, useFrame } from '@react-three/fiber';
-import { Text } from '@react-three/drei';
+import { Line, Text } from '@react-three/drei';
 import type { HeadstoneAPI } from './SvgHeadstone';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import type { ThreeContextValue } from '#/lib/three-types';
@@ -378,6 +378,12 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
       () => new THREE.Vector3(0, 0, headstone.frontZ + liftLocal),
     );
     const [dragging, setDragging] = React.useState(false);
+    const [showCenterGuide, setShowCenterGuide] = React.useState(false);
+    const guideProgressRef = React.useRef(0);
+    const [guideProgress, setGuideProgress] = React.useState(0);
+    const [showHorizontalCenterGuide, setShowHorizontalCenterGuide] = React.useState(false);
+    const horizontalGuideProgressRef = React.useRef(0);
+    const [horizontalGuideProgress, setHorizontalGuideProgress] = React.useState(0);
     const [dragOffset, setDragOffset] = React.useState(new THREE.Vector3());
     const [textBounds, setTextBounds] = React.useState({ width: 0, height: 0 });
     const [stainlessBridgeMasks, setStainlessBridgeMasks] = React.useState<StainlessBridgeMask[]>([]);
@@ -386,6 +392,26 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
     const textMeshRef = React.useRef<THREE.Mesh | null>(null);
     // Prevents double-fire when transferring surface mid-drag (component unmounts asynchronously)
     const transferringRef = React.useRef(false);
+
+    useFrame((state, delta) => {
+      const target = dragging && showCenterGuide ? 1 : 0;
+      const next = THREE.MathUtils.damp(guideProgressRef.current, target, 16, delta);
+      if (Math.abs(next - guideProgressRef.current) > 0.001) {
+        guideProgressRef.current = next;
+        setGuideProgress(next);
+        state.invalidate();
+      }
+    });
+
+    useFrame((state, delta) => {
+      const target = dragging && showHorizontalCenterGuide ? 1 : 0;
+      const next = THREE.MathUtils.damp(horizontalGuideProgressRef.current, target, 16, delta);
+      if (Math.abs(next - horizontalGuideProgressRef.current) > 0.001) {
+        horizontalGuideProgressRef.current = next;
+        setHorizontalGuideProgress(next);
+        state.invalidate();
+      }
+    });
 
     /* ---------------- position on current mesh bbox once available ---------------- */
     React.useEffect(() => {
@@ -643,6 +669,21 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
 
         const clampedX = Math.max(minX, Math.min(maxX, next.x));
         const clampedY = Math.max(minY, Math.min(maxY, next.y));
+        // Snap a nearby inscription to the vertical centre axis.
+        const centerSnapThreshold = isBaseSurface
+          ? 0.018
+          : Math.max(8 * mmToLocalUnits, (maxX - minX) * 0.018);
+        const isNearCenter =
+          Math.abs(clampedX - surfaceBounds.centerX) <= centerSnapThreshold;
+        const alignedX = isNearCenter ? surfaceBounds.centerX : clampedX;
+        const horizontalSnapThreshold = isBaseSurface
+          ? 0.018
+          : Math.max(8 * mmToLocalUnits, (maxY - minY) * 0.018);
+        const isNearHorizontalCenter =
+          Math.abs(clampedY - surfaceBounds.centerY) <= horizontalSnapThreshold;
+        const alignedY = isNearHorizontalCenter ? surfaceBounds.centerY : clampedY;
+        setShowCenterGuide(isNearCenter);
+        setShowHorizontalCenterGuide(isNearHorizontalCenter);
 
         const targetSurface = isBaseSurface ? 'base' : 'headstone';
         const baseWidth =
@@ -657,8 +698,8 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
         if (isBaseSurface) {
           // Base mesh is a unit cube: clamped coords are ±0.5.
           // Convert to assembly-meters for correct rendering.
-          const absX = stone.position.x + clampedX * stone.scale.x;
-          const absY = stone.position.y + clampedY * stone.scale.y;
+          const absX = stone.position.x + alignedX * stone.scale.x;
+          const absY = stone.position.y + alignedY * stone.scale.y;
           const posZ = stone.position.z + stone.scale.z / 2 + liftLocal;
           updateLineStore(id, {
             xPos: absX,
@@ -670,8 +711,8 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
           setPos(new THREE.Vector3(0, 0, posZ));
         } else {
           updateLineStore(id, {
-            xPos: clampedX,
-            yPos: clampedY,
+            xPos: alignedX,
+            yPos: alignedY,
             baseWidthMm: baseWidth,
             baseHeightMm: baseHeight,
           });
@@ -688,6 +729,7 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
         id,
         isBaseSurface,
         isLedgerSurface,
+        mmToLocalUnits,
         liftLocal,
         mouse,
         raycaster,
@@ -743,6 +785,8 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
         }
         
         setDragging(false);
+        setShowCenterGuide(false);
+        setShowHorizontalCenterGuide(false);
         if (controls) controls.enabled = true;
         gl.domElement.style.cursor = 'auto';
         const target = e.target as Element;
@@ -935,7 +979,34 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
         rotation={groupRotation}
         visible={coordinateSpace !== 'mm-center' || !!surfaceBounds || (isBaseSurface && !!baseMesh)}
       >
-        {/* Main text */}
+        {!isLedgerSurface && surfaceBounds && guideProgress > 0.01 ? (
+          <Line
+            points={[
+              new THREE.Vector3(surfaceBounds.centerX - groupPosition[0], surfaceBounds.centerY - groupPosition[1] - (surfaceBounds.maxY - surfaceBounds.minY) * 0.48 * guideProgress, 0.02),
+              new THREE.Vector3(surfaceBounds.centerX - groupPosition[0], surfaceBounds.centerY - groupPosition[1] + (surfaceBounds.maxY - surfaceBounds.minY) * 0.48 * guideProgress, 0.02),
+            ]}
+            color="#ff5fe1"
+            lineWidth={1}
+            transparent
+            opacity={guideProgress * 0.6}
+            depthTest={false}
+            depthWrite={false}
+          />
+        ) : null}
+        {!isLedgerSurface && surfaceBounds && horizontalGuideProgress > 0.01 ? (
+          <Line
+            points={[
+              new THREE.Vector3(surfaceBounds.centerX - groupPosition[0] - (surfaceBounds.maxX - surfaceBounds.minX) * 0.48 * horizontalGuideProgress, surfaceBounds.centerY - groupPosition[1], 0.02),
+              new THREE.Vector3(surfaceBounds.centerX - groupPosition[0] + (surfaceBounds.maxX - surfaceBounds.minX) * 0.48 * horizontalGuideProgress, surfaceBounds.centerY - groupPosition[1], 0.02),
+            ]}
+            color="#ff5fe1"
+            lineWidth={1}
+            transparent
+            opacity={horizontalGuideProgress * 0.6}
+            depthTest={false}
+            depthWrite={false}
+          />
+        ) : null}
         <Text
           font={visibleFont}
           color={renderedTextColor}
@@ -1047,6 +1118,7 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
           <SelectionBox
             objectId={id}
             position={new THREE.Vector3(0, 0, 0.01)}
+            initialPosition={{ x: xPos ?? 0, y: yPos ?? 0 }}
             bounds={{
               width: textBounds.width,
               height: textBounds.height,
@@ -1059,8 +1131,13 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
             animationDuration={520}
             onUpdate={(data) => {
               if (data.sizeMm !== undefined) {
-                // Use the absolute size value directly
                 updateLineStore(id, { sizeMm: data.sizeMm });
+              }
+              if (data.xPos !== undefined || data.yPos !== undefined) {
+                updateLineStore(id, {
+                  xPos: data.xPos,
+                  yPos: data.yPos,
+                });
               }
               if (data.rotationDeg !== undefined) {
                 // Add the rotation delta to current rotation

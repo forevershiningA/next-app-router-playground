@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-09-22
+**Last Updated:** 2026-09-24
 
 **Status entry order:** Add new dated status entries immediately after the table of contents, before the existing status entries. Keep status entries in reverse chronological order (newest first); do not append them to the end of this file.
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots), **Vitest 4.1.8** (unit tests), **Playwright 1.59.1** (E2E tests)
@@ -112,8 +112,69 @@
 101. [September 22 Mobile Guided Navigation Accessibility](#current-status-2026-09-22--mobile-guided-navigation-accessibility)
 102. [September 22 Day Mode Email and PDF Templates](#current-status-2026-09-22--day-mode-email-and-pdf-templates)
 103. [September 22 Component Structure](#current-status-2026-09-22--component-structure)
+104. [September 23 Designer Day Mode and Inscription Transform Controls](#current-status-2026-09-23--designer-day-mode-and-inscription-transform-controls)
+105. [September 24 Canvas Transform Controls and Guest Purchase Flow](#current-status-2026-09-24--canvas-transform-controls-and-guest-purchase-flow)
+106. [September 24 My Account Day Mode and Local Test Orders](#current-status-2026-09-24--my-account-day-mode-and-local-test-orders)
 
 ---
+
+## Current Status (2026-09-24) — My Account Day Mode and Local Test Orders
+
+### My Account and Place Order day mode
+
+- **Account entry:** `app/my-account/page.tsx` now uses the shared warm day-mode palette for the login, registration, and password-reset views: paper background (`#f4f1eb`), dark-brown text, white inputs, sand borders, and gold actions. The saved-designs area already had a partial day treatment; this change closes the visually obvious dark gap at account entry.
+- **Place Order:** `app/my-account/designs/[id]/buy/page.tsx` now renders its loading state, navigation link, order card, summary, shipping form, payment choices, alternative-payment instructions, notes field, cancellation link, and completion state in day mode. The dark checkout remains unchanged when day mode is off.
+- **Palette rule:** retain the gold purchase/payment accent (`#D4A84F`) but use dark brown text and paper surfaces in day mode. Do not leave `text-white/*`, `bg-white/5`, or white borders without an explicit `day:` counterpart inside account checkout surfaces.
+
+### Local Test Order ($1.00)
+
+- **UI:** only when the browser hostname is `localhost` or `127.0.0.1`, Place Order shows an additional `Test Order ($1.00)` submit button. It is intentionally absent from all other hosts.
+- **Order creation:** the button sends `testOrder: true` to `POST /api/orders`. `app/api/orders/route.ts` independently checks `new URL(request.url).hostname`; it applies the test flag only for `localhost` or `127.0.0.1`.
+- **Authoritative amount:** a permitted test order stores `subtotalCents: 100`, `taxCents: 0`, `totalCents: 100`, and a pending payment for 100 cents. The Stripe checkout endpoint already uses the stored pending order total, so Stripe receives exactly `$1.00` without trusting a browser-provided amount.
+- **Production safety:** passing `testOrder: true` to production or any non-local host is ignored; the server calculates and stores the normal authoritative quote. Do not weaken the host check or move the amount override exclusively into client code.
+
+### Validation
+
+- `pnpm exec prettier --write app/api/orders/route.ts app/my-account/designs/[id]/buy/page.tsx`, `pnpm exec tsc --noEmit`, and `git diff --check` pass. Targeted ESLint reports only pre-existing warnings in `app/my-account/page.tsx`.
+
+## Current Status (2026-09-24) — Canvas Transform Controls and Guest Purchase Flow
+
+### Shared canvas selection and resizing
+
+- **Current visual standard:** selected flat elements use a thin continuous outline with four small corner handles (`tl`, `tr`, `br`, and `bl`). The earlier September 23 description of eight inscription handles is historical and has been superseded by this four-corner mechanism.
+- **Resize algorithm:** `components/three/ObjectSelectionBox.tsx` projects the pointer onto the selection plane and calculates proportional scale from the pointer vector relative to the object's centre. The calculation uses the pointer-down geometry and an `onUpdate` ref, avoiding accumulated scale, reversed motion, cursor/handle separation, and React rerender jumps.
+- **Inscriptions:** resize proportionally without changing their saved `xPos` / `yPos`. Resizing an inscription that was moved vertically no longer resets it to the headstone centre.
+- **Motifs:** use the same four handles and continuous absolute `sizeMm` updates. Their resize range is clamped without rounding or repeated multiplication, so resizing remains smooth at large sizes.
+- **Images:** use the same transform frame. Flexible image products resize continuously inside configured bounds. Fixed-size products map the drag to the nearest catalog size while preserving the cropped aspect ratio and `sizeVariant`.
+- **Applications:** flat additions use the same four-corner frame. Catalog sizes are authoritative: a single-size application stays at that size, while a multi-size application selects the nearest variant. Applications without catalog variants retain bounded continuous scaling.
+- **3D additions:** statues and vases deliberately keep their existing 3D positioning and corner-outline controls. Do not replace them with the flat Application resize frame without revisiting base/ledger coordinates and depth movement.
+- **Centre guides:** Inscriptions, Motifs, Images, and Applications snap independently to the headstone's vertical and horizontal centre axes while being moved. Thin magenta guides animate in and out during the snap. The flat 2D guide treatment is not applied to statues or vases; ledger handling remains separate.
+- **Relevant files:** `components/three/ObjectSelectionBox.tsx`, `components/three/headstone/HeadstoneInscription.tsx`, `components/three/MotifModel.tsx`, `components/three/ImageModel.tsx`, and `components/three/AdditionModel.tsx`.
+
+### Proceed to Purchase and automatic guest accounts
+
+- **CTA replacement:** the designer-facing `Quick Enquiry` action in `components/three/ThreeScene.tsx` and `components/designer/navigation/DesignerNav.tsx` is now `Proceed to Purchase` with a cart icon. The standalone enquiry API/components still exist for genuine contact enquiries and admin records; do not rename those domain features globally.
+- **Logged-in flow:** clicking the purchase CTA captures a clean screenshot, saves the current design through `/api/projects`, and opens the same `/my-account/designs/[id]/buy` interface used by Buy actions in My Account. The automatic title is `Online order [date]` unless the design already has a title.
+- **Logged-out flow:** `components/checkout/GuestCheckoutModal.tsx` asks only for email and phone. It posts to `POST /api/auth/guest-checkout`; no ordinary registration form or password field is shown.
+- **Guest account endpoint:** `app/api/auth/guest-checkout/route.ts` normalizes and validates the email, sanitizes the phone, rejects a missing phone, and refuses to attach checkout to an existing email. For a new email it creates an active `client` account and profile (`Guest Customer`) in one database transaction.
+- **Secret password:** the endpoint creates a cryptographically random internal password with `crypto.randomBytes`, stores only a bcrypt hash, and never returns or emails the credential. Unlike the legacy PHP implementation, the browser does not need the stored password hash because the endpoint immediately issues the application's signed HTTP-only session cookie.
+- **Continuation:** after account creation, the modal closes, the design is saved, and the existing Buy Design page opens. Its profile fetch pre-fills the newly stored email and phone before the customer completes shipping and payment.
+- **Existing email safety:** `/api/auth/guest-checkout` returns `account_exists` instead of creating a duplicate account or silently using an existing one. The current modal tells the customer to sign in; a checkout-specific inline password continuation equivalent to the latest `old-dyo` implementation has not yet been added to the Next.js flow.
+- **Payment reuse:** delivery/payment logic remains centralized in `app/my-account/designs/[id]/buy/page.tsx`, including Stripe and alternative payment methods. The designer CTA must not implement a second payment path.
+
+### Validation
+
+- Targeted ESLint reports no new errors; the large existing `DesignerNav.tsx` still has pre-existing warnings.
+- `pnpm exec tsc --noEmit` and `git diff --check` pass for the current implementation.
+
+## Current Status (2026-09-23) — Designer Day Mode and Inscription Transform Controls
+
+- **Day-mode selection flow:** `app/select-shape/_ui/ShapeSelectionGrid.tsx` and `components/designer/navigation/DesignerNav.tsx` use the warmer paper, brown ink, sand border, restrained-gold accent treatment. The guided-step indicator explicitly keeps the total visible (for example, `4 / 8`) with sufficient day-mode contrast.
+- **Inscription selection treatment:** `components/three/ObjectSelectionBox.tsx` renders a thin blue rectangular outline and eight white, square transform handles for selected inscriptions. The handles are intentionally 15% smaller than the earlier 14 mm version (11.9 mm nominal size) to keep text selection precise without obscuring small lettering. Other selection types retain their existing treatment.
+- **Transform behaviour:** corner handles resize proportionally. The top, bottom, left, and right handles resize only along their own axis and move the inscription centre in the dragged direction; the opposite edge stays fixed. The drag origin position and original dimensions are captured at pointer-down so position changes do not accumulate across React rerenders.
+- **Persistence:** `components/three/headstone/HeadstoneInscription.tsx` passes the current `xPos` / `yPos` into the selection box and persists position together with `sizeMm`, so a resize-induced shift remains after release.
+- **Centre snapping:** while dragging an inscription on the upright headstone, its centre snaps near the vertical or horizontal centre axis. A thin magenta guide grows and fades in/out to a maximum opacity of `0.6`. Only the two centre axes are shown; edge and distribution guides are intentionally excluded. Guides are not shown for ledger surfaces.
+- **Validation:** targeted ESLint for `ObjectSelectionBox.tsx` and `HeadstoneInscription.tsx` reports no errors; pre-existing warnings remain. `git diff --check` passes.
 
 ## Current Status (2026-09-22) — Component Structure
 
@@ -137,7 +198,7 @@
 - **Shared email treatment:** all transactional emails now use the day-mode palette through `lib/email/templates/components/EmailLayout.tsx`: warm stone page background (`#f4f1eb`), light paper content, deep brown text, sand borders, and subdued gold accents. The shared design preview, contact panel, and both quote-table variants use the same visual language.
 - **All message types:** saved design, invoice, enquiry, registration, and password-reset templates were updated together. Primary actions use the accessible gold `#d7b356` with dark text; secondary actions remain light with a warm border. Do not reintroduce navy/slate colours (`#0f172a`, `#475569`, or `#e2e8f0`) into these templates unless the day-mode system changes deliberately.
 - **PDF consistency:** `lib/pdf-generator.ts` (browser quote download) and `lib/email/pdf-email.ts` (server-generated attachment) use the same warm print-friendly paper, brown ink, sand rules, and gold signature line. The email attachment header is intentionally light rather than the former near-black bar.
-- **Designer quote day mode:** `components/designer/quote/CheckPricePanel.tsx` uses the same warm paper treatment in day mode, including its backdrop, heading, mobile rows, desktop table, close control, and totals area. The bottom price chip in `components/three/ThreeScene.tsx` also switches to a light paper surface with brown text and a restrained gold total. Night-mode classes remain the default, so this does not alter the dark studio canvas.
+- **Designer quote day mode:** the **Price** shortcut in `components/designer/navigation/DesignerNav.tsx` and the bottom canvas chip in `components/three/ThreeScene.tsx` both set `activePanel` to `checkprice`, so they must retain one shared `components/designer/quote/CheckPricePanel.tsx` implementation. The panel uses the warm paper treatment in day mode, including its backdrop, heading, mobile rows, desktop table, close control, and totals area. The canvas chip also switches to a light paper surface with brown text and a restrained gold total. Night-mode classes remain the default, so this does not alter the dark studio canvas.
 - **Validation:** Prettier, `pnpm exec tsc --noEmit`, and `git diff --check` pass after the template changes.
 
 ## Current Status (2026-09-22) — Mobile Guided Navigation Accessibility
