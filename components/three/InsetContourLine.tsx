@@ -44,7 +44,10 @@ export function isContourSupported(
   return CONTOUR_SHAPE_FILES.has(filename);
 }
 
-type InsetContourLineProps = { headstone: HeadstoneAPI };
+type InsetContourLineProps = {
+  headstone: HeadstoneAPI;
+  color: string;
+};
 
 /**
  * Extract the upper arc of the outline (excluding the flat bottom edge).
@@ -145,11 +148,14 @@ function offsetOpenPathInward(
 }
 
 /**
- * Renders a white inset contour border on the headstone front face.
+ * Renders a coloured inset contour border on the headstone front face.
  * Strategy: offset only the curved top portion, then connect with
  * clean vertical sides and a horizontal bottom line — no miter artifacts.
  */
-export default function InsetContourLine({ headstone }: InsetContourLineProps) {
+export default function InsetContourLine({
+  headstone,
+  color,
+}: InsetContourLineProps) {
   const { outlinePoints, unitsPerMeter } = headstone;
 
   const lineObject = useMemo(() => {
@@ -286,6 +292,16 @@ export default function InsetContourLine({ headstone }: InsetContourLineProps) {
     // `CONTOUR_BUILD_VERSION` intentionally invalidates this object after a
     // Fast Refresh that changes the contour-construction code.
   }, [outlinePoints, unitsPerMeter, CONTOUR_BUILD_VERSION]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  React.useEffect(() => {
+    if (!lineObject) return;
+
+    lineObject.traverse((object) => {
+      if (!(object instanceof Line2)) return;
+      const material = object.material as LineMaterial;
+      material.color.set(color);
+    });
+  }, [lineObject, color]);
 
   if (!lineObject) return null;
 

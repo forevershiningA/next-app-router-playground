@@ -59,11 +59,7 @@ export async function POST(request: Request) {
   }
 
   const order = await db.query.orders.findFirst({
-    where: and(
-      eq(orders.id, orderId),
-      eq(orders.accountId, accountId),
-      eq(orders.status, 'pending'),
-    ),
+    where: and(eq(orders.id, orderId), eq(orders.accountId, accountId)),
   });
 
   if (!order) {
@@ -81,21 +77,25 @@ export async function POST(request: Request) {
     return NextResponse.json({ received: true });
   }
 
-  const now = new Date();
-  const [updated] = await db
-    .update(orders)
-    .set({ status: 'paid', paidAt: now, updatedAt: now })
-    .where(and(eq(orders.id, orderId), eq(orders.status, 'pending')))
-    .returning();
+  if (!['pending', 'paid'].includes(order.status)) {
+    return NextResponse.json({ received: true });
+  }
 
-  if (updated) {
-    await db
+  const now = new Date();
+  await db.transaction(async (tx) => {
+    if (order.status === 'pending') {
+      await tx
+        .update(orders)
+        .set({ status: 'paid', paidAt: now, updatedAt: now })
+        .where(and(eq(orders.id, orderId), eq(orders.status, 'pending')));
+    }
+    await tx
       .update(payments)
       .set({ status: 'completed', providerRef: checkout.id, receivedAt: now })
       .where(
         and(eq(payments.orderId, orderId), eq(payments.provider, 'stripe')),
       );
-  }
+  });
 
   return NextResponse.json({ received: true });
 }

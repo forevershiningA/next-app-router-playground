@@ -850,6 +850,33 @@ export default function DesignerNav() {
     ],
   );
 
+  const canvasStepNavigationRef = React.useRef(handleNavigateToPanel);
+  canvasStepNavigationRef.current = handleNavigateToPanel;
+
+  useEffect(() => {
+    const handleCanvasStepNavigation = (event: Event) => {
+      const customEvent = event as CustomEvent<{ slug?: string }>;
+      const slug = customEvent.detail?.slug;
+      if (!slug) return;
+
+      // These routes do not use a fullscreen selector panel, so always keep
+      // their standard link-navigation behaviour.
+      if (slug === 'select-product' || slug === 'corners' || slug === 'holes') {
+        router.push(designerHref(slug));
+        return;
+      }
+
+      void canvasStepNavigationRef.current(slug);
+    };
+
+    window.addEventListener('navigateDesignerStep', handleCanvasStepNavigation);
+    return () =>
+      window.removeEventListener(
+        'navigateDesignerStep',
+        handleCanvasStepNavigation,
+      );
+  }, [designerHref, router]);
+
   const hasActiveAdditionForPanel =
     !!selectedAdditionId &&
     !!additionOffsets[selectedAdditionId] &&
@@ -4412,7 +4439,7 @@ export default function DesignerNav() {
                             isPastGroup
                               ? 'border-emerald-400/40 bg-emerald-400/10 text-emerald-300'
                               : isCurrentGroup
-                                ? 'bg-primary/20 border-white/80 text-white'
+                                ? 'day:border-[#bda98b] day:bg-[#f7efd9] day:text-[#4b3824] bg-primary/20 border-white/80 text-white'
                                 : 'border-primary/40 text-primary'
                           }`}
                         >
@@ -4905,7 +4932,7 @@ export default function DesignerNav() {
                         })}
                         {group.label === 'Setup' && (
                           <>
-                            <label className="flex w-full cursor-pointer items-center gap-3 rounded-lg border border-white/10 bg-white/[0.035] px-4 py-3 text-left text-base font-light text-gray-200 transition-colors hover:border-white/20 hover:bg-white/10">
+                            <label className="day:border-[#d8cfc2] day:bg-[#fbf9f5] day:text-[#4b3824] day:hover:border-[#bda98b] day:hover:bg-[#f5efe5] flex w-full cursor-pointer items-center gap-3 rounded-lg border border-white/10 bg-white/[0.035] px-4 py-3 text-left text-base font-light text-gray-200 transition-colors hover:border-white/20 hover:bg-white/10">
                               <input
                                 type="checkbox"
                                 checked={showAdvancedActions}
@@ -4914,10 +4941,10 @@ export default function DesignerNav() {
                                   setShowAdvancedActions(isEnabled);
                                   if (!isEnabled) setShowConvertPanel(false);
                                 }}
-                                className="h-4 w-4 rounded border-white/30 bg-transparent accent-[#D7B356]"
+                                className="day:border-[#bda98b] h-4 w-4 rounded border-white/30 bg-transparent accent-[#D7B356]"
                               />
                               <span className="flex-1">Advanced</span>
-                              <span className="text-xs text-white/35">
+                              <span className="day:text-[#806f5d] text-xs text-white/35">
                                 Optional tools
                               </span>
                             </label>

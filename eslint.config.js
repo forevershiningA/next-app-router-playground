@@ -2,11 +2,11 @@
 
 const nextCoreWebVitals = require('eslint-config-next/core-web-vitals');
 const nextTypeScript = require('eslint-config-next/typescript');
-
 module.exports = [
   {
     ignores: [
       'legacy/**',
+      'old-dyo/**',
       'docs/**',
       'src/**',
       'archive/**',
@@ -15,6 +15,7 @@ module.exports = [
       'test-results/**',
       'playwright-report/**',
       '.next/**',
+      'next-env.d.ts',
       'node_modules/**',
     ],
   },

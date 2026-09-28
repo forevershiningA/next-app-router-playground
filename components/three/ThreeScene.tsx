@@ -8,6 +8,7 @@ import {
   useRef,
   useMemo,
   useCallback,
+  type MouseEvent as ReactMouseEvent,
 } from 'react';
 import { PerspectiveCamera } from '@react-three/drei';
 import { usePathname } from 'next/navigation';
@@ -42,6 +43,135 @@ const STUDIO_BACKDROP_PATHS: Record<string, string> = {
   '#2c2c2c': '/visuals/designer-studio-cyclorama-charcoal.webp',
   '#0d1b2a': '/visuals/designer-studio-cyclorama-midnight.webp',
 };
+
+const CANVAS_STEP_GROUPS = [
+  {
+    label: 'Setup',
+    steps: [
+      { slug: 'select-product', label: 'Select Product' },
+      { slug: 'select-shape', label: 'Select Shape' },
+      { slug: 'select-border', label: 'Select Border', when: 'border' },
+      { slug: 'select-material', label: 'Select Material' },
+      { slug: 'select-size', label: 'Select Size' },
+      { slug: 'select-fastening', label: 'Fastening Type', when: 'bronze' },
+      { slug: 'corners', label: 'Corners', when: 'stainless-plaque' },
+      { slug: 'holes', label: 'Holes', when: 'stainless-plaque' },
+    ],
+  },
+  {
+    label: 'Design',
+    steps: [
+      { slug: 'inscriptions', label: 'Add Your Inscriptions' },
+      { slug: 'select-images', label: 'Add Your Image' },
+      { slug: 'select-additions', label: 'Select Additions', when: 'additions' },
+      { slug: 'select-emblems', label: 'Select Emblems', when: 'bronze' },
+      { slug: 'select-motifs', label: 'Select Motifs' },
+      { slug: 'check-price', label: 'Check Price' },
+      { slug: 'save-design', label: 'Save Design' },
+    ],
+  },
+] as const;
+
+type CanvasStepCondition = 'border' | 'bronze' | 'stainless-plaque' | 'additions';
+
+function CanvasStepContextMenu({
+  x,
+  y,
+  onClose,
+}: {
+  x: number;
+  y: number;
+  onClose: () => void;
+}) {
+  const menuRef = useRef<HTMLDivElement>(null);
+  const productId = useHeadstoneStore((state) => state.productId);
+  const catalog = useHeadstoneStore((state) => state.catalog);
+  const productType = catalog?.product.type;
+  const isPlaque = productType === 'plaque' || productType === 'bronze_plaque';
+  const hasBorder = catalog?.product.border === '1';
+  const isBronzePlaque = productId === '5';
+  const isStainlessPlaque = productId === '52';
+  const excludesAdditions =
+    isPlaque ||
+    catalog?.product.laser === '1' ||
+    productId === '1' ||
+    productId === '23';
+
+  const matchesCondition = useCallback(
+    (condition: CanvasStepCondition | undefined) => {
+      if (!condition) return true;
+      if (condition === 'border') return isPlaque && hasBorder;
+      if (condition === 'bronze') return isBronzePlaque;
+      if (condition === 'stainless-plaque') return isStainlessPlaque;
+      return !excludesAdditions;
+    },
+    [excludesAdditions, hasBorder, isBronzePlaque, isPlaque, isStainlessPlaque],
+  );
+
+  useEffect(() => {
+    const handlePointerDown = (event: PointerEvent) => {
+      if (!menuRef.current?.contains(event.target as Node)) onClose();
+    };
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') onClose();
+    };
+
+    window.addEventListener('pointerdown', handlePointerDown);
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('resize', onClose);
+    window.addEventListener('scroll', onClose, true);
+    return () => {
+      window.removeEventListener('pointerdown', handlePointerDown);
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('resize', onClose);
+      window.removeEventListener('scroll', onClose, true);
+    };
+  }, [onClose]);
+
+  const selectStep = (slug: string) => {
+    window.dispatchEvent(
+      new CustomEvent('navigateDesignerStep', { detail: { slug } }),
+    );
+    onClose();
+  };
+
+  return (
+    <div
+      ref={menuRef}
+      role="menu"
+      aria-label="Designer steps"
+      className="day:border-[#d8cfc2] day:bg-[#fbf9f5] day:text-[#302719] fixed z-[100] w-60 overflow-hidden rounded-xl border border-white/15 bg-[#15100c]/95 py-1.5 text-white shadow-2xl shadow-black/40 backdrop-blur-md"
+      style={{ left: x, top: y }}
+      onContextMenu={(event) => event.preventDefault()}
+    >
+      {CANVAS_STEP_GROUPS.map((group) => {
+        const visibleSteps = group.steps.filter((step) =>
+          matchesCondition('when' in step ? step.when : undefined),
+        );
+        if (visibleSteps.length === 0) return null;
+
+        return (
+          <div key={group.label} className="py-1">
+            <p className="day:text-[#8e7d68] px-3 pt-1 pb-1 text-[10px] font-bold tracking-[0.18em] text-white/45 uppercase">
+              {group.label}
+            </p>
+            {visibleSteps.map((step) => (
+              <button
+                key={step.slug}
+                type="button"
+                role="menuitem"
+                className="day:hover:bg-[#eee6d9] flex w-full cursor-pointer items-center px-3 py-2 text-left text-sm font-medium transition-colors hover:bg-white/10"
+                onClick={() => selectStep(step.slug)}
+              >
+                {step.label}
+              </button>
+            ))}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
 
 function CameraController() {
   const { controls, camera, size } = useThree();
@@ -520,6 +650,10 @@ export default function ThreeScene() {
   const [shouldAnimateFade, setShouldAnimateFade] = useState(true);
   const [targetRotation, setTargetRotation] = useState(0);
   const [isCompactDevice, setIsCompactDevice] = useState(false);
+  const [contextMenuPosition, setContextMenuPosition] = useState<{
+    x: number;
+    y: number;
+  } | null>(null);
   const currentRotation = useRef(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const hasInitiallyLoaded = useRef(false);
@@ -569,6 +703,26 @@ export default function ThreeScene() {
   const rotateRight = () => {
     setTargetRotation((prev) => prev + Math.PI / 6); // +30 degrees
   };
+
+  const openCanvasStepMenu = useCallback(
+    (event: ReactMouseEvent<HTMLDivElement>) => {
+      event.preventDefault();
+      const menuWidth = 240;
+      const menuHeight = 440;
+      const padding = 8;
+      setContextMenuPosition({
+        x: Math.max(
+          padding,
+          Math.min(event.clientX, window.innerWidth - menuWidth - padding),
+        ),
+        y: Math.max(
+          padding,
+          Math.min(event.clientY, window.innerHeight - menuHeight - padding),
+        ),
+      });
+    },
+    [],
+  );
 
   useEffect(() => {
     currentRotation.current = 0;
@@ -710,6 +864,7 @@ export default function ThreeScene() {
           )}
 
           <div
+            onContextMenu={openCanvasStepMenu}
             className={`h-full w-full transition-opacity duration-500 ${sceneReady ? 'opacity-100' : 'opacity-0'}`}
           >
             <Canvas
@@ -782,6 +937,13 @@ export default function ThreeScene() {
               </Suspense>
             </Canvas>
           </div>
+
+          {contextMenuPosition && (
+            <CanvasStepContextMenu
+              {...contextMenuPosition}
+              onClose={() => setContextMenuPosition(null)}
+            />
+          )}
 
           {/* Rotation Controls */}
           {!is2DMode && (

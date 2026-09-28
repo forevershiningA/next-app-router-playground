@@ -179,6 +179,7 @@ export default function ShapeSwapper({
   const borderName = useHeadstoneStore((s) => s.borderName);
   const setBorderName = useHeadstoneStore((s) => s.setBorderName);
   const showInsetContour = useHeadstoneStore((s) => s.showInsetContour);
+  const insetContourColor = useHeadstoneStore((s) => s.insetContourColor);
   const inscriptions = useHeadstoneStore((s) => s.inscriptions);
   const selected = useHeadstoneStore((s) => s.selected);
   const setSelected = useHeadstoneStore((s) => s.setSelected);
@@ -253,6 +254,8 @@ export default function ShapeSwapper({
   const setLoading = useHeadstoneStore((s) => s.setLoading);
   const productId = useHeadstoneStore((s) => s.productId);
   const catalog = useHeadstoneStore((s) => s.catalog);
+  const isTraditionalEngravedHeadstone =
+    productId === '124' || catalog?.product.id === '124';
   const isPlaque = catalog?.product.type === 'plaque' || catalog?.product.type === 'bronze_plaque';
   const isBronzePlaque = productId === '5' || catalog?.product.id === '5';
   const isFullColourPlaque = catalog?.product.id === '32';
@@ -665,6 +668,11 @@ export default function ShapeSwapper({
             // black, flat image.
             sourceSvgOverlayUrl={bowlArtworkOverlayUrl}
             showSvgEngraving={showSvgEngraving}
+            engravingColor={
+              isTraditionalEngravedHeadstone
+                ? insetContourColor
+                : undefined
+            }
             engravingStrokeWidthMm={engravingStrokeWidthMm}
             preserveTop={preserveTopForShape}
             bevel={
@@ -889,7 +897,14 @@ export default function ShapeSwapper({
 
               {/* Render inset contour line for headstones */}
               {showInsetContour && !isPlaque && isContourSupported(shapeUrl) && (
-                <InsetContourLine headstone={api} />
+                <InsetContourLine
+                  headstone={api}
+                  color={
+                    isTraditionalEngravedHeadstone
+                      ? insetContourColor
+                      : '#ffffff'
+                  }
+                />
               )}
             </>
             );

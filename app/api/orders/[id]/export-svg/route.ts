@@ -13,13 +13,20 @@ function readPublicSvg(urlPath: string): string | null {
   const clean = urlPath.replace(/^\//, '');
   const fullPath = join(PUBLIC_DIR, clean);
   if (!existsSync(fullPath)) return null;
-  try { return readFileSync(fullPath, 'utf-8'); } catch { return null; }
+  try {
+    return readFileSync(fullPath, 'utf-8');
+  } catch {
+    return null;
+  }
 }
 
 function extractViewBox(svg: string): [number, number, number, number] {
   const m = svg.match(/viewBox="([^"]+)"/);
   if (!m) return [0, 0, 400, 400];
-  const [x, y, w, h] = m[1].trim().split(/[\s,]+/).map(Number);
+  const [x, y, w, h] = m[1]
+    .trim()
+    .split(/[\s,]+/)
+    .map(Number);
   return [x ?? 0, y ?? 0, w ?? 400, h ?? 400];
 }
 
@@ -45,7 +52,9 @@ function computePathBounds(paths: Array<{ d: string }>) {
   const xs: number[] = [];
   const ys: number[] = [];
   for (const { d } of paths) {
-    const nums = (d.match(/-?[\d]*\.?[\d]+(?:[eE][-+]?[\d]+)?/g) ?? []).map(Number);
+    const nums = (d.match(/-?[\d]*\.?[\d]+(?:[eE][-+]?[\d]+)?/g) ?? []).map(
+      Number,
+    );
     for (let i = 0; i + 1 < nums.length; i += 2) {
       xs.push(nums[i]);
       ys.push(nums[i + 1]);
@@ -57,7 +66,10 @@ function computePathBounds(paths: Array<{ d: string }>) {
   const minY = Math.min(...ys);
   const maxY = Math.max(...ys);
   return {
-    minX, maxX, minY, maxY,
+    minX,
+    maxX,
+    minY,
+    maxY,
     dx: maxX - minX,
     dy: maxY - minY,
     centerX: (minX + maxX) / 2,
@@ -65,7 +77,11 @@ function computePathBounds(paths: Array<{ d: string }>) {
 }
 
 function esc(s: string) {
-  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  return s
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
 }
 
 export async function GET(
@@ -80,7 +96,11 @@ export async function GET(
   const { id } = await params;
 
   const [row] = await db
-    .select({ invoiceNumber: orders.invoiceNumber, designState: projects.designState })
+    .select({
+      invoiceNumber: orders.invoiceNumber,
+      designSnapshot: orders.designSnapshot,
+      designState: projects.designState,
+    })
     .from(orders)
     .leftJoin(projects, eq(orders.projectId, projects.id))
     .where(eq(orders.id, id))
@@ -88,8 +108,16 @@ export async function GET(
 
   if (!row) return NextResponse.json({ error: 'Not found' }, { status: 404 });
 
-  const ds = row.designState as DesignerSnapshot | null;
-  if (!ds) return NextResponse.json({ error: 'No design state for this order' }, { status: 404 });
+  const snapshot = row.designSnapshot as {
+    designState?: DesignerSnapshot;
+  } | null;
+  const ds =
+    snapshot?.designState ?? (row.designState as DesignerSnapshot | null);
+  if (!ds)
+    return NextResponse.json(
+      { error: 'No design state for this order' },
+      { status: 404 },
+    );
 
   const stoneW = ds.widthMm ?? 600;
   const stoneH = ds.heightMm ?? 900;
@@ -116,7 +144,9 @@ export async function GET(
       const shapeViewW = vw - vx;
       const shapeViewH = vh - vy;
       const paths = extractPaths(svgSrc);
-      const pathBounds = computePathBounds(paths.filter(p => p.fill !== 'none'));
+      const pathBounds = computePathBounds(
+        paths.filter((p) => p.fill !== 'none'),
+      );
 
       if (pathBounds && paths.length > 0) {
         const { minX, maxX, minY, dx, centerX } = pathBounds;
@@ -215,7 +245,8 @@ export async function GET(
     const heightMmMotif = offset?.heightMm ?? 100;
     const mxPos = offset?.xPos ?? 0;
     const myPos = offset?.yPos ?? 0;
-    const coordSpace = offset?.coordinateSpace ??
+    const coordSpace =
+      offset?.coordinateSpace ??
       (offset?.target !== undefined ? 'absolute' : 'offset');
 
     const [mx, my] = geoToSvg(mxPos, myPos, coordSpace);
@@ -233,8 +264,8 @@ export async function GET(
         const flipY = offset?.flipY ? -1 : 1;
         motifLayers.push(
           `<g transform="translate(${mx.toFixed(3)},${my.toFixed(3)}) scale(${flipX},${flipY}) translate(${-(motifW / 2).toFixed(3)},${-(heightMmMotif / 2).toFixed(3)}) scale(${scale.toFixed(6)})" fill="${color}">` +
-          paths.map((p) => `<path d="${p.d}"/>`).join('') +
-          '</g>',
+            paths.map((p) => `<path d="${p.d}"/>`).join('') +
+            '</g>',
         );
       } else {
         // Fallback: labelled placeholder
@@ -261,18 +292,27 @@ export async function GET(
     const isDefaultCenter = xPos === 0 && yPos === 0;
     // coordinateSpace is not declared on SavedInscription but may be present at runtime
     const coordSpace = (ins as Record<string, unknown>).coordinateSpace as
-      'mm-center' | 'absolute' | undefined;
-    const [ix, iy] = geoToSvg(xPos, yPos, coordSpace ?? 'absolute', isDefaultCenter);
+      | 'mm-center'
+      | 'absolute'
+      | undefined;
+    const [ix, iy] = geoToSvg(
+      xPos,
+      yPos,
+      coordSpace ?? 'absolute',
+      isDefaultCenter,
+    );
     const fontSize = ins.sizeMm ?? 20;
     const font = ins.font || 'Times New Roman';
     const color = ins.color || '#000000';
     const rot = -(ins.rotationDeg ?? 0); // Three.js rot → SVG rot (flip sign)
     inscriptionLayers.push(
       `<text x="${ix.toFixed(3)}" y="${iy.toFixed(3)}"` +
-      ` font-family="${esc(font)}" font-size="${fontSize}"` +
-      ` fill="${color}" text-anchor="middle" dominant-baseline="middle"` +
-      (rot !== 0 ? ` transform="rotate(${rot},${ix.toFixed(3)},${iy.toFixed(3)})"` : '') +
-      `>${esc(ins.text)}</text>`,
+        ` font-family="${esc(font)}" font-size="${fontSize}"` +
+        ` fill="${color}" text-anchor="middle" dominant-baseline="middle"` +
+        (rot !== 0
+          ? ` transform="rotate(${rot},${ix.toFixed(3)},${iy.toFixed(3)})"`
+          : '') +
+        `>${esc(ins.text)}</text>`,
     );
   }
 
@@ -289,8 +329,12 @@ export async function GET(
     `  <g transform="translate(${PAD},${PAD})">`,
     `    <!-- Stone outline -->`,
     `    ${shapeLayer}`,
-    motifLayers.length ? `    <!-- Motifs -->\n    ${motifLayers.join('\n    ')}` : '',
-    inscriptionLayers.length ? `    <!-- Inscriptions -->\n    ${inscriptionLayers.join('\n    ')}` : '',
+    motifLayers.length
+      ? `    <!-- Motifs -->\n    ${motifLayers.join('\n    ')}`
+      : '',
+    inscriptionLayers.length
+      ? `    <!-- Inscriptions -->\n    ${inscriptionLayers.join('\n    ')}`
+      : '',
     `  </g>`,
     `</svg>`,
   ]

@@ -807,6 +807,11 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
       const productDefaultColor =
         catalog.product.defaultColor ||
         (catalog.product.laser === '1' ? '#ffffff' : '#c99d44');
+      // The Traditional Engraved shape outline is the same finish family as
+      // inscriptions, so start it from the product colour configured in XML.
+      if (catalog.product.id === '124') {
+        set({ insetContourColor: normalizeThreeColorValue(productDefaultColor) });
+      }
       set((s) => {
         const visibility = {
           showBase,
@@ -1490,6 +1495,10 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
   showInsetContour: false,
   setShowInsetContour(show) {
     set({ showInsetContour: show });
+  },
+  insetContourColor: '#eeeeee',
+  setInsetContourColor(color) {
+    set({ insetContourColor: normalizeThreeColorValue(color) });
   },
 
   materialUrl: `${TEX_BASE}${DEFAULT_TEX}`,

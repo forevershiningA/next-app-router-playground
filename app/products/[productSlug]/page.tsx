@@ -3,30 +3,28 @@
 
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { productSEOData, type ProductSEO } from '#/lib/seo-templates';
+import {
+  bronzePlaqueDedications,
+  productSEOData,
+  type ProductSEO,
+} from '#/lib/seo-templates';
 import Link from 'next/link';
 import { Boundary } from '#/ui/boundary';
 
-type Props = {
-  params: Promise<{ productSlug: string }>;
-};
+type Props = { params: Promise<{ productSlug: string }> };
 
 // Generate static params for all products
 export async function generateStaticParams() {
-  return Object.keys(productSEOData).map(slug => ({
-    productSlug: slug,
-  }));
+  return Object.keys(productSEOData).map((slug) => ({ productSlug: slug }));
 }
 
 // Generate metadata for SEO
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { productSlug } = await params;
   const seoData = productSEOData[productSlug];
-  
+
   if (!seoData) {
-    return {
-      title: 'Product Not Found',
-    };
+    return { title: 'Product Not Found' };
   }
 
   return {
@@ -38,9 +36,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       description: seoData.metaDescription,
       type: 'website',
     },
-    alternates: {
-      canonical: `/products/${productSlug}`,
-    },
+    alternates: { canonical: `/products/${productSlug}` },
   };
 }
 
@@ -51,6 +47,12 @@ export default async function ProductPage({ params }: Props) {
   if (!seoData) {
     notFound();
   }
+
+  const featuredTemplate = bronzePlaqueDedications[0];
+  const templateHref =
+    productSlug === 'bronze-plaque'
+      ? `/products/${productSlug}/dedication/${featuredTemplate.venueSlug}/${featuredTemplate.inscriptionSlug}`
+      : '/select-shape';
 
   return (
     <Boundary label={`Product: ${productSlug}`}>
@@ -67,7 +69,7 @@ export default async function ProductPage({ params }: Props) {
 
         {/* Featured Keywords */}
         <div className="flex flex-wrap gap-2">
-          {seoData.featuredKeywords.map(keyword => (
+          {seoData.featuredKeywords.map((keyword) => (
             <span
               key={keyword}
               className="rounded-full bg-gray-800 px-3 py-1 text-sm text-gray-300"
@@ -83,13 +85,13 @@ export default async function ProductPage({ params }: Props) {
             {seoData.h2}
           </h2>
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {seoData.templateTypes.map(templateType => (
+            {seoData.templateTypes.map((templateType) => (
               <Link
                 key={templateType}
-                href={`/products/${productSlug}/${templateType}`}
+                href={templateHref}
                 className="rounded-lg border border-gray-700 bg-gray-800/50 p-6 transition-all hover:border-gray-600 hover:bg-gray-800"
               >
-                <h3 className="text-lg font-semibold capitalize text-gray-100">
+                <h3 className="text-lg font-semibold text-gray-100 capitalize">
                   {templateType} Templates
                 </h3>
                 <p className="mt-2 text-sm text-gray-400">
@@ -109,7 +111,7 @@ export default async function ProductPage({ params }: Props) {
             Popular Use Cases
           </h2>
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-            {seoData.useCases.map(useCase => (
+            {seoData.useCases.map((useCase) => (
               <div
                 key={useCase.slug}
                 className="rounded-lg border border-gray-700 bg-gray-800/50 p-6"
@@ -121,11 +123,8 @@ export default async function ProductPage({ params }: Props) {
                   {useCase.description}
                 </p>
                 <div className="mt-3 flex flex-wrap gap-2">
-                  {useCase.keywords.slice(0, 3).map(keyword => (
-                    <span
-                      key={keyword}
-                      className="text-xs text-gray-500"
-                    >
+                  {useCase.keywords.slice(0, 3).map((keyword) => (
+                    <span key={keyword} className="text-xs text-gray-500">
                       #{keyword.replace(/\s+/g, '')}
                     </span>
                   ))}
@@ -138,10 +137,15 @@ export default async function ProductPage({ params }: Props) {
         {/* CTA Section */}
         <section className="rounded-lg border border-blue-500/20 bg-blue-950/10 p-8 text-center">
           <h2 className="text-2xl font-semibold text-gray-100">
-            Start Designing Your Custom {seoData.slug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')}
+            Start Designing Your Custom{' '}
+            {seoData.slug
+              .split('-')
+              .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+              .join(' ')}
           </h2>
           <p className="mt-2 text-gray-400">
-            Use our interactive 3D design tool to create the perfect memorial or dedication.
+            Use our interactive 3D design tool to create the perfect memorial or
+            dedication.
           </p>
           <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:justify-center">
             <Link
@@ -151,7 +155,7 @@ export default async function ProductPage({ params }: Props) {
               Start Design Process
             </Link>
             <Link
-              href={`/products/${productSlug}/dedication`}
+              href={templateHref}
               className="rounded-lg border border-gray-600 bg-gray-800 px-6 py-3 font-semibold text-gray-100 transition-colors hover:bg-gray-700"
             >
               Browse Templates
@@ -161,11 +165,18 @@ export default async function ProductPage({ params }: Props) {
 
         {/* SEO Content */}
         <section className="prose prose-invert max-w-none">
-          <h2>About {seoData.slug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')}</h2>
+          <h2>
+            About{' '}
+            {seoData.slug
+              .split('-')
+              .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+              .join(' ')}
+          </h2>
           <p className="text-gray-400">
-            Our {seoData.slug.split('-').join(' ')} are crafted with precision and care, designed to create
-            lasting memorials and dedications. Using the finest materials and professional engraving techniques,
-            we ensure your tribute stands the test of time.
+            Our {seoData.slug.split('-').join(' ')} are crafted with precision
+            and care, designed to create lasting memorials and dedications.
+            Using the finest materials and professional engraving techniques, we
+            ensure your tribute stands the test of time.
           </p>
           <h3>Features & Benefits</h3>
           <ul className="text-gray-400">
@@ -178,9 +189,11 @@ export default async function ProductPage({ params }: Props) {
           </ul>
           <h3>Design Process</h3>
           <p className="text-gray-400">
-            Creating your custom {seoData.slug.split('-').join(' ')} is simple. Choose from our templates
-            or start from scratch using our interactive design tool. Preview your design in 3D, make adjustments
-            in real-time, and get instant pricing. When you're satisfied, place your order and we'll handle the rest.
+            Creating your custom {seoData.slug.split('-').join(' ')} is simple.
+            Choose from our templates or start from scratch using our
+            interactive design tool. Preview your design in 3D, make adjustments
+            in real-time, and get instant pricing. When you're satisfied, place
+            your order and we'll handle the rest.
           </p>
         </section>
 

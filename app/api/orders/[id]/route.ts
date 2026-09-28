@@ -24,21 +24,32 @@ export async function PATCH(
       );
     }
 
-    const [updated] = await db
-      .update(orders)
-      .set({ status: 'cancelled', updatedAt: new Date() })
-      .where(and(eq(orders.id, id), eq(orders.accountId, session.accountId)))
-      .returning();
+    const updated = await db.transaction(async (tx) => {
+      const [order] = await tx
+        .update(orders)
+        .set({ status: 'cancelled', updatedAt: new Date() })
+        .where(
+          and(
+            eq(orders.id, id),
+            eq(orders.accountId, session.accountId),
+            eq(orders.status, 'pending'),
+          ),
+        )
+        .returning();
+      if (!order) return null;
+      await tx
+        .update(payments)
+        .set({ status: 'cancelled' })
+        .where(and(eq(payments.orderId, id), eq(payments.status, 'pending')));
+      return order;
+    });
 
     if (!updated) {
-      return NextResponse.json({ error: 'Order not found' }, { status: 404 });
+      return NextResponse.json(
+        { error: 'Pending order not found' },
+        { status: 404 },
+      );
     }
-
-    // Update related payment record too
-    await db
-      .update(payments)
-      .set({ status: 'cancelled' })
-      .where(eq(payments.orderId, id));
 
     return NextResponse.json({ success: true, orderId: id });
   } catch (error) {

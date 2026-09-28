@@ -289,7 +289,7 @@ export const productSEOData: Record<string, ProductSEO> = {
       'bronze plaque design',
       'engraved bronze plaque',
     ],
-    templateTypes: ['dedication', 'memorial', 'achievement', 'honor'],
+    templateTypes: ['dedication'],
     useCases: [
       {
         slug: 'building-dedications',

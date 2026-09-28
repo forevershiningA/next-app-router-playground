@@ -22,9 +22,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   // Static pages
   const staticPages: MetadataRoute.Sitemap = [
-    { url: BASE_URL, lastModified: SITE_LAUNCH_DATE, changeFrequency: 'weekly', priority: 1.0 },
-    { url: `${BASE_URL}/designs`, lastModified: SITE_LAUNCH_DATE, changeFrequency: 'weekly', priority: 0.9 },
-    { url: `${BASE_URL}/select-size`, lastModified: SITE_LAUNCH_DATE, changeFrequency: 'monthly', priority: 0.8 },
+    {
+      url: BASE_URL,
+      lastModified: SITE_LAUNCH_DATE,
+      changeFrequency: 'weekly',
+      priority: 1.0,
+    },
+    {
+      url: `${BASE_URL}/designs`,
+      lastModified: SITE_LAUNCH_DATE,
+      changeFrequency: 'weekly',
+      priority: 0.9,
+    },
   ];
 
   const guidePages: MetadataRoute.Sitemap = [
@@ -39,14 +48,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.65,
   }));
 
-  const seoProductPages: MetadataRoute.Sitemap = Object.keys(productSEOData).map((productSlug) => ({
+  const seoProductPages: MetadataRoute.Sitemap = Object.keys(
+    productSEOData,
+  ).map((productSlug) => ({
     url: `${BASE_URL}/products/${productSlug}`,
     lastModified: SITE_LAUNCH_DATE,
     changeFrequency: 'monthly' as const,
     priority: 0.7,
   }));
 
-  const memorialTypePagesSitemap: MetadataRoute.Sitemap = Object.keys(memorialTypePages).map((typeSlug) => ({
+  const memorialTypePagesSitemap: MetadataRoute.Sitemap = Object.keys(
+    memorialTypePages,
+  ).map((typeSlug) => ({
     url: `${BASE_URL}/memorials/${typeSlug}`,
     lastModified: SITE_LAUNCH_DATE,
     changeFrequency: 'monthly' as const,
@@ -54,12 +67,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
   }));
 
   // Product type pages
-  const productPages: MetadataRoute.Sitemap = productGroups.map(([productSlug]) => ({
-    url: `${BASE_URL}/designs/${productSlug}`,
-    lastModified: SITE_LAUNCH_DATE,
-    changeFrequency: 'weekly' as const,
-    priority: 0.8,
-  }));
+  const productPages: MetadataRoute.Sitemap = productGroups.map(
+    ([productSlug]) => ({
+      url: `${BASE_URL}/designs/${productSlug}`,
+      lastModified: SITE_LAUNCH_DATE,
+      changeFrequency: 'weekly' as const,
+      priority: 0.8,
+    }),
+  );
 
   // Category pages — track the most recent design date per category for accurate lastModified
   const categoryLatest = new Map<string, Date>();
@@ -73,13 +88,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
   }
   const indexableCategories = new Map<string, boolean>(
     productGroups.flatMap(([productSlug, productDesigns]) =>
-      groupDesignsByCategory(productDesigns).map(([category, categoryDesigns]) => [
-        `${productSlug}/${category}`,
-        isIndexableCategoryDesignSet(categoryDesigns),
-      ] as const),
+      groupDesignsByCategory(productDesigns).map(
+        ([category, categoryDesigns]) =>
+          [
+            `${productSlug}/${category}`,
+            isIndexableCategoryDesignSet(categoryDesigns),
+          ] as const,
+      ),
     ),
   );
-  const categoryPages: MetadataRoute.Sitemap = Array.from(categoryLatest.entries())
+  const categoryPages: MetadataRoute.Sitemap = Array.from(
+    categoryLatest.entries(),
+  )
     .filter(([key]) => indexableCategories.get(key))
     .map(([key, date]) => ({
       url: `${BASE_URL}/designs/${key}`,

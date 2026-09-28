@@ -12,6 +12,8 @@ import { useRouter } from 'next/navigation';
 import {
   ArrowUpTrayIcon,
   CheckCircleIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
   NoSymbolIcon,
 } from '@heroicons/react/24/outline';
 import {
@@ -20,11 +22,12 @@ import {
 } from '#/lib/headstone-store';
 import SegmentedControl from '#/components/ui/SegmentedControl';
 import { getDesignerProductStepHref } from '#/lib/designer-product-routes';
-import { bronzes } from '#/app/_internal/_data';
+import { bronzes, data } from '#/app/_internal/_data';
 import { resolveMaterialAssetPath } from '#/lib/material-utils';
 import { preloadSceneTexture } from '#/lib/preload-texture';
 import { useImageCropState } from './useImageCropState';
 import type { MaskShape } from '#/lib/image-mask';
+import { isContourSupported } from '#/components/three/InsetContourLine';
 
 type MaterialSelectorProps = {
   materials: MaterialOption[];
@@ -70,6 +73,10 @@ export default function MaterialSelector({
   const widthMm = useHeadstoneStore((s) => s.widthMm);
   const heightMm = useHeadstoneStore((s) => s.heightMm);
   const setCropCanvasData = useHeadstoneStore((s) => s.setCropCanvasData);
+  const shapeUrl = useHeadstoneStore((s) => s.shapeUrl);
+  const showInsetContour = useHeadstoneStore((s) => s.showInsetContour);
+  const insetContourColor = useHeadstoneStore((s) => s.insetContourColor);
+  const setInsetContourColor = useHeadstoneStore((s) => s.setInsetContourColor);
   const isPlaque = catalog?.product.type === 'plaque';
   const isBronzePlaque = productId === '5';
   const isFullColourPlaque = productId === '32';
@@ -77,10 +84,27 @@ export default function MaterialSelector({
   const isUrn = catalog?.product.type === 'urn';
   const usesBackgrounds = isFullColourPlaque || isUrn;
   const isFullMonument = catalog?.product.type === 'full-monument';
+  const isTraditionalEngravedHeadstone =
+    productId === '124' || catalog?.product.id === '124';
+  const activeMaterialTarget = forceTarget ?? editingObject;
+  const hasSandblastedShapeOutline = React.useMemo(() => {
+    const shapePath = shapeUrl?.split(/[?#]/)[0];
+    return data.shapes.some(
+      (shape) =>
+        shapePath === `/shapes/headstones/${shape.image}` &&
+        shape.sandblastedBorders === true,
+    );
+  }, [shapeUrl]);
+  const showInsetContourColor =
+    isTraditionalEngravedHeadstone &&
+    activeMaterialTarget === 'headstone' &&
+    (hasSandblastedShapeOutline ||
+      (showInsetContour && isContourSupported(shapeUrl)));
   const [bgTab, setBgTab] = React.useState<'background' | 'color'>(
     'background',
   );
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const outlineColorsRef = useRef<HTMLDivElement>(null);
 
   // Background crop state using the existing crop system
   const {
@@ -739,6 +763,103 @@ export default function MaterialSelector({
             ]}
           />
         </div>
+      )}
+
+      {showInsetContourColor && (
+        <section className="day:border-[#d8d1c6] day:bg-[#fbfaf7] rounded-xl border border-white/10 bg-white/[0.04] px-3 py-3">
+          <div className="mb-2 flex items-center justify-between gap-3">
+            <div>
+              <h3 className="day:text-[#33291f] text-sm font-semibold text-slate-100">
+                Shape outline colour
+              </h3>
+            </div>
+            <div className="flex shrink-0 items-center gap-2">
+              <span
+                className="day:text-[#51493f] text-xs font-semibold text-white/75"
+                title={
+                  data.colors.find((color) => color.hex === insetContourColor)
+                    ?.name ?? insetContourColor
+                }
+              >
+                {data.colors.find((color) => color.hex === insetContourColor)
+                  ?.name ?? 'Custom'}
+              </span>
+              <div className="hidden items-center gap-1 md:flex">
+                <button
+                  type="button"
+                  aria-label="Show previous outline colours"
+                  className="day:border-[#d8d1c6] day:text-[#51493f] day:hover:bg-[#eee6d9] flex h-6 w-6 cursor-pointer items-center justify-center rounded-full border border-white/15 text-white/75 transition-colors hover:bg-white/10"
+                  onClick={() =>
+                    outlineColorsRef.current?.scrollBy({
+                      left: -220,
+                      behavior: 'smooth',
+                    })
+                  }
+                >
+                  <ChevronLeftIcon className="h-3.5 w-3.5" />
+                </button>
+                <button
+                  type="button"
+                  aria-label="Show more outline colours"
+                  className="day:border-[#d8d1c6] day:text-[#51493f] day:hover:bg-[#eee6d9] flex h-6 w-6 cursor-pointer items-center justify-center rounded-full border border-white/15 text-white/75 transition-colors hover:bg-white/10"
+                  onClick={() =>
+                    outlineColorsRef.current?.scrollBy({
+                      left: 220,
+                      behavior: 'smooth',
+                    })
+                  }
+                >
+                  <ChevronRightIcon className="h-3.5 w-3.5" />
+                </button>
+              </div>
+            </div>
+          </div>
+          <div
+            ref={outlineColorsRef}
+            className="flex min-w-0 touch-pan-x snap-x snap-mandatory gap-2 overflow-x-auto overscroll-x-contain pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+            onWheel={(event) => {
+              if (Math.abs(event.deltaY) <= Math.abs(event.deltaX)) return;
+              event.currentTarget.scrollLeft += event.deltaY;
+            }}
+          >
+            {data.colors.map((color) => {
+              const isSelected = insetContourColor === color.hex;
+              return (
+                <button
+                  key={color.id}
+                  type="button"
+                  aria-label={`Select ${color.name} for the shape outline`}
+                  aria-pressed={isSelected}
+                  onClick={() => setInsetContourColor(color.hex)}
+                  title={color.name}
+                  className={`relative h-9 w-9 shrink-0 snap-start rounded-full border-2 transition-transform hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D7B356] focus-visible:ring-offset-2 focus-visible:ring-offset-[#171717] day:focus-visible:ring-offset-[#fbfaf7] ${
+                    isSelected
+                      ? 'border-[#fff4bf] ring-2 ring-[#D7B356] ring-offset-2 ring-offset-[#171717] day:ring-offset-[#fbfaf7]'
+                      : 'border-white/20 day:border-[#cfc6b8]'
+                  }`}
+                  style={{ backgroundColor: color.hex }}
+                >
+                  {isSelected && (
+                    <svg
+                      className={`absolute inset-0 m-auto h-4 w-4 ${
+                        color.hex === '#eeeeee' || color.hex === '#ffce00'
+                          ? 'text-slate-900'
+                          : 'text-white'
+                      }`}
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth={3}
+                      aria-hidden="true"
+                    >
+                      <path d="m5 12 4 4L19 7" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  )}
+                </button>
+              );
+            })}
+          </div>
+        </section>
       )}
 
       {/* Hidden file input */}

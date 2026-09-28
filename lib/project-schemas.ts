@@ -88,6 +88,7 @@ export type DesignerSnapshot = {
   borderName: string | null;
   fixingType?: 'flat-back' | 'lugs-with-studs' | 'screws';
   showInsetContour?: boolean;
+  insetContourColor?: string;
   materialUrl: string | null;
   headstoneMaterialUrl: string | null;
   baseMaterialUrl: string | null;

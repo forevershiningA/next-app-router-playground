@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { ArrowLeftIcon, CheckCircleIcon } from '@heroicons/react/24/outline';
@@ -15,7 +15,7 @@ type ShippingForm = {
   state: string;
   postcode: string;
   country: string;
-  paymentType: 'credit-card' | 'paypal' | 'other';
+  paymentType: 'credit-card' | 'other';
   notes: string;
 };
 
@@ -26,22 +26,6 @@ type Project = {
   totalPriceCents?: number | null;
   screenshotPath?: string | null;
   thumbnailPath?: string | null;
-};
-
-type PayPalActions = {
-  order: {
-    create(input: unknown): Promise<string>;
-    capture(): Promise<{ id?: string }>;
-  };
-};
-
-type PayPalNamespace = {
-  Buttons(config: {
-    createOrder(data: unknown, actions: PayPalActions): Promise<string>;
-    onApprove(data: unknown, actions: PayPalActions): Promise<unknown>;
-    onError(): void;
-    onCancel(): void;
-  }): { render(target: HTMLElement): void };
 };
 
 type StripeNamespace = {
@@ -148,141 +132,7 @@ export default function BuyDesignPage() {
     fetchData();
   }, [id]);
 
-  // Render PayPal buttons once SDK is ready and PayPal method is selected
-  const [paypalReady, setPaypalReady] = useState(false);
-  const paypalContainerRef = useRef<HTMLDivElement>(null);
-  const paypalRendered = useRef(false);
-
   const effectiveAmountCents = project?.totalPriceCents ?? 0;
-
-  const sendOrderEmail = useCallback(() => {
-    fetch('/api/email', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        type: 'order',
-        recipientEmail: form.email,
-        recipientName: form.fullName,
-        countryCode: 'au',
-        orderId: id,
-        invoiceNumber: `INV-${id.slice(0, 8).toUpperCase()}`,
-        designName: project?.title ?? 'Untitled Design',
-        screenshotUrl: project?.screenshotPath ?? undefined,
-        quoteItems: [],
-        subtotalCents: project?.totalPriceCents ?? 0,
-        taxCents: Math.round((project?.totalPriceCents ?? 0) * 0.1),
-        totalCents: Math.round((project?.totalPriceCents ?? 0) * 1.1),
-        currency: 'AUD',
-        customerAddress: [
-          form.address,
-          form.city,
-          form.state,
-          form.postcode,
-          form.country,
-        ]
-          .filter(Boolean)
-          .join(', '),
-      }),
-    }).catch((err) => console.error('Order email failed:', err));
-  }, [
-    form.address,
-    form.city,
-    form.country,
-    form.email,
-    form.fullName,
-    form.postcode,
-    form.state,
-    id,
-    project,
-  ]);
-
-  useEffect(() => {
-    if (
-      form.paymentType !== 'paypal' ||
-      !paypalReady ||
-      !paypalContainerRef.current
-    )
-      return;
-    if (paypalRendered.current) return;
-    paypalRendered.current = true;
-
-    const amountCents = effectiveAmountCents;
-    const amountStr = (amountCents / 100).toFixed(2);
-    const paypal = (window as Window & { paypal?: PayPalNamespace }).paypal;
-    if (!paypal) return;
-
-    paypal
-      .Buttons({
-        createOrder: (_data: unknown, actions: PayPalActions) => {
-          return actions.order.create({
-            purchase_units: [
-              {
-                amount: {
-                  currency_code: 'AUD',
-                  value: amountStr,
-                  breakdown: {
-                    item_total: { currency_code: 'AUD', value: amountStr },
-                  },
-                },
-                items: [
-                  {
-                    name: project?.title ?? 'Headstone Design',
-                    sku: id,
-                    unit_amount: { currency_code: 'AUD', value: amountStr },
-                    quantity: '1',
-                    category: 'PHYSICAL_GOODS',
-                  },
-                ],
-              },
-            ],
-          });
-        },
-        onApprove: async (_data: unknown, actions: PayPalActions) => {
-          try {
-            const details = await actions.order.capture();
-            const paypalRef = details?.id ?? undefined;
-            const response = await fetch('/api/orders', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                projectId: id,
-                paymentMethod: 'paypal',
-                paymentRef: paypalRef,
-                status: 'paid',
-              }),
-            });
-            const result = (await response.json()) as { error?: string };
-            if (!response.ok) {
-              setError(
-                result.error ?? 'Could not save your order. Please contact us.',
-              );
-              return;
-            }
-            sendOrderEmail();
-            setPlaced(true);
-          } catch {
-            setError(
-              'PayPal payment could not be completed. Please contact us if you were charged.',
-            );
-          }
-        },
-        onError: () => setError('PayPal payment failed. Please try again.'),
-        onCancel: () => setError('PayPal payment was cancelled.'),
-      })
-      .render(paypalContainerRef.current);
-  }, [
-    form.paymentType,
-    paypalReady,
-    project,
-    id,
-    effectiveAmountCents,
-    sendOrderEmail,
-  ]);
-
-  // Reset PayPal render flag when switching away from PayPal or test mode changes
-  useEffect(() => {
-    if (form.paymentType !== 'paypal') paypalRendered.current = false;
-  }, [form.paymentType]);
 
   function set(field: keyof ShippingForm, value: string) {
     setForm((f) => ({ ...f, [field]: value }));
@@ -315,6 +165,7 @@ export default function BuyDesignPage() {
             projectId: id,
             paymentMethod: 'stripe',
             testOrder,
+            shippingDetails: form,
           }),
         });
         const orderData = (await orderRes.json()) as {
@@ -370,6 +221,7 @@ export default function BuyDesignPage() {
             projectId: id,
             paymentMethod: 'other',
             testOrder,
+            shippingDetails: form,
           }),
         });
         const orderData = (await orderRes.json()) as {
@@ -380,12 +232,9 @@ export default function BuyDesignPage() {
           setError(orderData.error ?? 'Could not create your order');
           return;
         }
-        sendOrderEmail();
         setPlaced(true);
         return;
       }
-
-      // PayPal is handled via the rendered PayPal Buttons — submit does nothing
     } catch {
       setError('Something went wrong. Please try again.');
     } finally {
@@ -433,11 +282,6 @@ export default function BuyDesignPage() {
   return (
     <div className="day:bg-[#f4f1eb] day:text-[#2a2118] relative min-h-screen bg-[#050301] text-white">
       <Script src="https://js.stripe.com/v3/" strategy="lazyOnload" />
-      <Script
-        src="https://www.paypal.com/sdk/js?client-id=ARAQC6sW5wGhZbGbPoaqMhKYylVVgDXkLP3PVKGhDd_OywkKfwoqybq9Wf0-wPVghD4qxkbKIOHquUpt&currency=AUD"
-        strategy="lazyOnload"
-        onReady={() => setPaypalReady(true)}
-      />
       <div
         className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(244,160,80,0.18),_transparent_45%),radial-gradient(circle_at_bottom,_rgba(88,144,255,0.18),_transparent_40%)]"
         aria-hidden
@@ -755,20 +599,6 @@ export default function BuyDesignPage() {
                     </p>
                   </div>
                 )}
-
-                {form.paymentType === 'paypal' && (
-                  <div className="mt-4">
-                    <div
-                      ref={paypalContainerRef}
-                      id="paypal-button-container"
-                    />
-                    {!paypalReady && (
-                      <p className="day:text-[#806f5d] mt-2 text-sm text-white/40">
-                        Loading PayPal…
-                      </p>
-                    )}
-                  </div>
-                )}
               </section>
 
               {/* Order Notes */}
@@ -797,36 +627,34 @@ export default function BuyDesignPage() {
               )}
 
               <div className="flex flex-col gap-4 pt-2 sm:flex-row sm:items-center">
-                {form.paymentType !== 'paypal' && (
-                  <>
+                <>
+                  <button
+                    type="submit"
+                    onClick={() => {
+                      testOrderRef.current = false;
+                    }}
+                    disabled={placing}
+                    className="w-full rounded-lg bg-[#D4A84F] px-8 py-3 text-sm font-semibold text-black transition hover:bg-[#e0b86a] disabled:opacity-50 sm:w-auto"
+                  >
+                    {placing
+                      ? 'Processing…'
+                      : form.paymentType === 'credit-card'
+                        ? `Continue to Payment${price ? ` (${price})` : ''}`
+                        : 'Place Order'}
+                  </button>
+                  {isLocalhost && (
                     <button
                       type="submit"
                       onClick={() => {
-                        testOrderRef.current = false;
+                        testOrderRef.current = true;
                       }}
                       disabled={placing}
-                      className="w-full rounded-lg bg-[#D4A84F] px-8 py-3 text-sm font-semibold text-black transition hover:bg-[#e0b86a] disabled:opacity-50 sm:w-auto"
+                      className="day:text-sky-800 w-full rounded-lg border border-sky-400/60 bg-sky-400/10 px-8 py-3 text-sm font-semibold text-sky-700 transition hover:bg-sky-400/20 disabled:opacity-50 sm:w-auto"
                     >
-                      {placing
-                        ? 'Processing…'
-                        : form.paymentType === 'credit-card'
-                          ? `Continue to Payment${price ? ` (${price})` : ''}`
-                          : 'Place Order'}
+                      {placing ? 'Processing…' : 'Test Order ($1.00)'}
                     </button>
-                    {isLocalhost && (
-                      <button
-                        type="submit"
-                        onClick={() => {
-                          testOrderRef.current = true;
-                        }}
-                        disabled={placing}
-                        className="day:text-sky-800 w-full rounded-lg border border-sky-400/60 bg-sky-400/10 px-8 py-3 text-sm font-semibold text-sky-700 transition hover:bg-sky-400/20 disabled:opacity-50 sm:w-auto"
-                      >
-                        {placing ? 'Processing…' : 'Test Order ($1.00)'}
-                      </button>
-                    )}
-                  </>
-                )}
+                  )}
+                </>
                 <Link
                   href={`/my-account/designs/${id}`}
                   className="day:text-[#6b5d4d] day:hover:text-[#2a2118] text-sm text-white/50 transition hover:text-white"

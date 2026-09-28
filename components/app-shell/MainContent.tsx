@@ -17,6 +17,7 @@ export default function MainContent({
   // Check if we're on any /designs route
   const isDesignsRoute = pathname?.startsWith('/designs');
   const isMemorialsRoute = pathname?.startsWith('/memorials');
+  const isProductsRoute = pathname?.startsWith('/products');
   const isAdminRoute = pathname?.startsWith('/admin');
   const isDesignShareRoute = pathname?.startsWith('/design/');
 
@@ -38,7 +39,13 @@ export default function MainContent({
   return (
     <div
       className={
-        !isAdminRoute && !isDesignShareRoute && !isDesignsRoute && !isMemorialsRoute && !isHomepage && isSidebarOpen
+        !isAdminRoute &&
+        !isDesignShareRoute &&
+        !isDesignsRoute &&
+        !isMemorialsRoute &&
+        !isProductsRoute &&
+        !isHomepage &&
+        isSidebarOpen
           ? 'lg:pl-[400px]'
           : ''
       }

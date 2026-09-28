@@ -1,9 +1,9 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-09-24
+**Last Updated:** 2026-09-28
 
 **Status entry order:** Add new dated status entries immediately after the table of contents, before the existing status entries. Keep status entries in reverse chronological order (newest first); do not append them to the end of this file.
-**Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots), **Vitest 4.1.8** (unit tests), **Playwright 1.59.1** (E2E tests)
+**Tech Stack:** Next.js 15.5.26, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots), **Vitest 4.1.8** (unit tests), **Playwright 1.59.1** (E2E tests)
 
 ---
 
@@ -115,8 +115,53 @@
 104. [September 23 Designer Day Mode and Inscription Transform Controls](#current-status-2026-09-23--designer-day-mode-and-inscription-transform-controls)
 105. [September 24 Canvas Transform Controls and Guest Purchase Flow](#current-status-2026-09-24--canvas-transform-controls-and-guest-purchase-flow)
 106. [September 24 My Account Day Mode and Local Test Orders](#current-status-2026-09-24--my-account-day-mode-and-local-test-orders)
+107. [September 24 Traditional Outline Colours and Canvas Step Menu](#current-status-2026-09-24--traditional-outline-colours-and-canvas-step-menu)
+108. [September 28 Technical and SEO Audit Remediation](#current-status-2026-09-28--technical-and-seo-audit-remediation)
 
 ---
+
+## Current Status (2026-09-28) — Technical and SEO Audit Remediation
+
+### Orders, payments, and customer records
+
+- **Atomic order creation:** `POST /api/orders` validates delivery details, calculates the quote on the server, and creates the order, item, and pending payment in one transaction. It no longer accepts PayPal client-capture payloads; checkout supports Stripe or the existing alternative-payment path.
+- **Snapshot and delivery data:** `orders` now persist `customerEmail`, `shippingDetails`, and `designSnapshot`, including the project state, pricing breakdown, and preview paths at order time. SVG export uses this snapshot, with the legacy project state only as fallback.
+- **Order/project integrity:** the order-to-project foreign key uses `ON DELETE RESTRICT`, and project deletion first returns HTTP 409 when an order exists. A paid order is therefore still auditable if a customer changes or attempts to remove their design.
+- **State transitions:** cancellation only changes pending orders and pending payments, within one transaction. The Stripe webhook validates signature, amount, and currency; it handles pending and already-paid orders idempotently so a retry can reconcile the payment record.
+- **Confirmation email:** the alternative-payment confirmation is sent from the API using the authenticated project and server quote, rather than browser-provided totals or an independently generated invoice number.
+- **Migration:** `drizzle/0005_flawless_gorilla_man.sql` adds the snapshot and shipping columns and changes the foreign key. Apply it with `pnpm db:migrate` in every target environment before deploying code that writes orders. It has been generated but not applied from this workspace.
+
+### SEO, routing, and application shell
+
+- `/products` permanently redirects to `/memorials`. Product cards use valid destinations, invalid template parameter combinations return 404, and template JSON-LD breadcrumbs use `https://forevershining.org` rather than a placeholder domain.
+- `/seo` now issues a server-side permanent redirect to `/designs`. `/select-size` is no longer in the sitemap, and `/login` has metadata `noindex, nofollow` in addition to the existing robots policy.
+- Product pages are classified as marketing pages in `ConditionalCanvas`, `ConditionalNav`, and `MainContent`; they no longer mount the designer canvas or inherit the designer navigation/header on mobile.
+
+### Tooling and validation
+
+- Next.js, `@next/mdx`, and `eslint-config-next` are aligned on `15.5.26`. `eslint.config.js` uses Next's flat configuration exports and ignores generated `next-env.d.ts` plus the archived `old-dyo/` source tree.
+- Validation completed after the changes: `pnpm type-check`, `pnpm test` (**104 tests**), `pnpm lint`, `git diff --check`, and a production `pnpm build` (generated `.next/BUILD_ID`).
+- Detailed findings and supporting audit materials are in `docs/audits/2026-09-28/README.md`. Remaining follow-up is operational: deploy the migration, then verify production redirects, structured data, and Google Search Console indexing signals.
+
+## Current Status (2026-09-24) — Traditional Outline Colours and Canvas Step Menu
+
+### Traditional Engraved shape outline colour
+
+- **Scope:** Traditional Engraved Headstones (product `124`) now expose `Shape outline colour` in `Select Material` while editing the headstone. The control is shown for either a supported inset contour or a selected shape whose catalog entry has `sandblastedBorders: true` (for example Military Tank). Do not gate sandblasted SVG outlines behind `showInsetContour`; they are a separate rendering path and can be visible without that toggle.
+- **Palette and defaults:** the selector uses `data.colors`, matching Traditional Engraved inscription colours. On catalog load, `insetContourColor` is initialized from the product XML `defaultColor`, normalized through `normalizeThreeColorValue`, so its default is the same configured finish as inscriptions. Saved snapshots persist and restore this property through `lib/project-serializer.ts` and `lib/project-schemas.ts`.
+- **Rendering:** `components/three/headstone/ShapeSwapper.tsx` passes `insetContourColor` into both `InsetContourLine` and `SvgHeadstone`'s `engravingColor`. The latter is required for the white sandblasted SVG outline on detailed new shapes; the former handles simple inset-contour shapes. Non-Traditional products retain their existing white outlines.
+- **Desktop interaction:** the colour strip remains horizontally scrollable, supports vertical mouse-wheel-to-horizontal scrolling, and has desktop previous/next arrow controls. The explanatory sublabel was deliberately removed to keep the material panel compact.
+
+### Canvas right-click step menu
+
+- **Trigger and behaviour:** right-clicking directly over the 3D canvas opens a compact DOM context menu with the applicable Setup and Design workflow steps. It is not a Three.js scene object, so it does not add draw calls or interfere with R3F object selection/orbit behaviour.
+- **Availability:** menu entries are filtered by product capabilities: border, bronze fastening/emblems, stainless plaque corners/holes, and additions appear only where applicable. Selecting a step dispatches `navigateDesignerStep`; `DesignerNav` receives this event and reuses its existing route/panel navigation, including Check Price and Save Design handling.
+- **Dismissal:** clicking outside, pressing Escape, scrolling, or resizing the viewport closes the menu. Its fixed viewport position is clamped to keep the menu on screen.
+- **Relevant files:** `components/three/ThreeScene.tsx`, `components/designer/navigation/DesignerNav.tsx`, `components/designer/selectors/MaterialSelector.tsx`, `components/three/InsetContourLine.tsx`, `components/three/headstone/ShapeSwapper.tsx`, `lib/headstone-store.ts`, `lib/headstone-store.types.ts`, `lib/project-serializer.ts`, and `lib/project-schemas.ts`.
+
+### Validation
+
+- `pnpm exec tsc --noEmit` and `git diff --check` pass. Targeted ESLint has no new errors; warnings in the large pre-existing store, scene, and material selector files remain.
 
 ## Current Status (2026-09-24) — My Account Day Mode and Local Test Orders
 

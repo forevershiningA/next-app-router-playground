@@ -332,6 +332,8 @@ export type HeadstoneState = {
 
   showInsetContour: boolean;
   setShowInsetContour: (show: boolean) => void;
+  insetContourColor: string;
+  setInsetContourColor: (color: string) => void;
 
   materialUrl: string | null;
   setMaterialUrl: (url: string) => void;

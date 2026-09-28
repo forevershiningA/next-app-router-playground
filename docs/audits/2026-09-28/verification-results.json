@@ -1,0 +1,14 @@
+{
+  "date": "2026-09-28",
+  "baseCommit": "70f5d44bb87310e312cae1a0a976ccccc1016ded",
+  "workingTreeWasDirty": true,
+  "unitTests": { "command": "pnpm test", "exitCode": 0, "filesPassed": 10, "testsPassed": 104 },
+  "typeCheck": { "command": "pnpm type-check", "exitCode": 0 },
+  "priorAuditTests": { "command": "pnpm exec vitest run --config docs/audits/2026-09-13/vitest.config.ts", "exitCode": 0, "filesPassed": 2, "testsPassed": 10 },
+  "paymentReproductions": { "command": "pnpm exec vitest run --config docs/audits/2026-09-28/vitest.config.ts", "exitCode": 0, "filesPassed": 1, "testsPassed": 3, "meaning": "Passing confirms defects; isolated service doubles, no real payments." },
+  "lint": { "command": "pnpm lint", "exitCode": 1, "errors": 10, "directory": "old-dyo" },
+  "sourceFormatting": { "command": "pnpm exec prettier --list-different app components lib tests .github next.config.ts package.json", "exitCode": 1, "filesListed": 322, "writes": false },
+  "build": { "command": "pnpm build", "exitCode": 0, "staticPages": 115, "compilationMinutes": 6.1, "warnings": true },
+  "externalWritesPerformed": false,
+  "applicationCodeChanged": false
+}

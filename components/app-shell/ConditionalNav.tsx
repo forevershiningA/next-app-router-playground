@@ -212,6 +212,7 @@ export default function ConditionalNav({ items }: { items: DemoCategory[] }) {
   const isSeoDesignsListingRoute =
     designRouteParts[0] === 'designs' && designRouteParts.length <= 3;
   const isMemorialsRoute = pathname?.startsWith('/memorials');
+  const isProductsRoute = pathname?.startsWith('/products');
   const isAdminRoute = pathname?.startsWith('/admin');
 
   // Check if we're on homepage or other designer pages
@@ -226,6 +227,10 @@ export default function ConditionalNav({ items }: { items: DemoCategory[] }) {
     isSeoDesignsListingRoute
   ) {
     return null;
+  }
+
+  if (isProductsRoute) {
+    return <GlobalNav items={items} />;
   }
 
   if (isDesignsRoute) {

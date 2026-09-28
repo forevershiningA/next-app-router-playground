@@ -1,11 +1,18 @@
 import { NextRequest, NextResponse, after } from 'next/server';
+import { and, eq } from 'drizzle-orm';
+import { db } from '#/lib/db/index';
+import { orders } from '#/lib/db/schema';
 import {
   listProjectSummaries,
   saveProjectRecord,
   deleteProjectRecord,
   updateProjectAssetPaths,
 } from '#/lib/projects-db';
-import type { DesignerSnapshot, PricingBreakdown } from '#/lib/project-schemas';
+import type {
+  DesignerSnapshot,
+  PricingBreakdown,
+  SavedImage,
+} from '#/lib/project-schemas';
 import { getServerSession } from '#/lib/auth/session';
 import { sendEmail } from '#/lib/email';
 import { detailedQuoteItems } from '#/lib/email/helpers';
@@ -26,10 +33,13 @@ function cleanDesignState(designState: DesignerSnapshot): DesignerSnapshot {
 
   // Remove base64 data from selected images if they exist
   if (cleaned.selectedImages && Array.isArray(cleaned.selectedImages)) {
-    cleaned.selectedImages = cleaned.selectedImages.map((img: any) => ({
-      ...img,
-      data: img.url || img.data, // Keep URL, remove base64 data
-    }));
+    cleaned.selectedImages = cleaned.selectedImages.map((img: SavedImage) => {
+      const legacyImage = img as SavedImage & { url?: string; data?: string };
+      return {
+        ...img,
+        data: legacyImage.url || legacyImage.data, // Keep URL, remove base64 data
+      };
+    });
   }
 
   return cleaned;
@@ -254,6 +264,20 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json(
         { message: 'Project ID is required' },
         { status: 400 },
+      );
+    }
+
+    const existingOrder = await db.query.orders.findFirst({
+      where: and(
+        eq(orders.projectId, projectId),
+        eq(orders.accountId, session.accountId),
+      ),
+      columns: { id: true },
+    });
+    if (existingOrder) {
+      return NextResponse.json(
+        { message: 'Projects with orders cannot be deleted.' },
+        { status: 409 },
       );
     }
 

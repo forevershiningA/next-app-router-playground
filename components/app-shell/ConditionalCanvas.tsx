@@ -26,10 +26,10 @@ const ThreeScene = dynamic(() => import('#/components/three/ThreeScene'), {
   loading: () => CanvasLoadingFallback,
 });
 
-const CropCanvas = dynamic(() => import('#/components/designer/canvas/CropCanvas'), {
-  ssr: false,
-  loading: () => CanvasLoadingFallback,
-});
+const CropCanvas = dynamic(
+  () => import('#/components/designer/canvas/CropCanvas'),
+  { ssr: false, loading: () => CanvasLoadingFallback },
+);
 
 export default function ConditionalCanvas() {
   const pathname = usePathname();
@@ -45,6 +45,7 @@ export default function ConditionalCanvas() {
   const segments = pathname?.split('/').filter(Boolean) || [];
   const isDesignPage = pathname?.startsWith('/designs') && segments.length >= 1;
   const isMemorialsPage = pathname?.startsWith('/memorials');
+  const isProductsPage = pathname?.startsWith('/products');
 
   // Check if we're on the homepage
   const isHomePage = pathname === '/';
@@ -106,6 +107,7 @@ export default function ConditionalCanvas() {
       ((isHomePage ||
         isDesignPage ||
         isMemorialsPage ||
+        isProductsPage ||
         isSelectProductPage ||
         isSelectShapePage ||
         isCheckPricePage ||
@@ -129,6 +131,7 @@ export default function ConditionalCanvas() {
     isHomePage,
     isDesignPage,
     isMemorialsPage,
+    isProductsPage,
     isSelectProductPage,
     isSelectShapePage,
     isSelectMaterialPage,
@@ -139,6 +142,7 @@ export default function ConditionalCanvas() {
     isCheckPricePage,
     isMyAccountPage,
     isAdminPage,
+    isDesignSharePage,
     isOrdersPage,
     isSelectSizePage,
     isInscriptionsPage,
@@ -152,6 +156,7 @@ export default function ConditionalCanvas() {
     ((isHomePage ||
       isDesignPage ||
       isMemorialsPage ||
+      isProductsPage ||
       isSelectProductPage ||
       isSelectShapePage ||
       isCheckPricePage ||
