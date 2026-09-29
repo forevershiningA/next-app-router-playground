@@ -100,19 +100,20 @@ export default function SelectionBox({
   const usesInscriptionSelectionStyle =
     objectType === 'inscription' || enableResizeHandles;
   const usesSubtleOutlineRef = React.useRef(usesSubtleOutline);
+  const isMotifRef = React.useRef(objectType === 'motif');
   React.useEffect(() => {
     usesSubtleOutlineRef.current = usesSubtleOutline;
   }, [usesSubtleOutline]);
+  React.useEffect(() => {
+    isMotifRef.current = objectType === 'motif';
+  }, [objectType]);
   // A resizable motif uses the same continuous rectangular outline as an
   // inscription. Keep the older viewfinder outline for passive selections.
-  const usesTransformOutline = !usesInscriptionSelectionStyle && usesSubtleOutline;
+  const usesTransformOutline =
+    !usesInscriptionSelectionStyle && usesSubtleOutline;
   const shouldShowHandles =
     objectType === 'inscription' || enableResizeHandles || !usesSubtleOutline;
   const shouldShowOutline = true;
-  // Motif selection sits almost coplanar with the memorial surface. Rendering
-  // its outline above the surface prevents the depth buffer from hiding it
-  // immediately after a new motif is added.
-  const renderMotifOutlineAboveSurface = objectType === 'motif';
   // A gold outline remains legible on both the light canvas and dark granite.
   const outlineColor = usesInscriptionSelectionStyle
     ? 0x5c9dff
@@ -122,9 +123,7 @@ export default function SelectionBox({
         ? 0xf8f5ee
         : 0x5c9dff;
   const outlineLineWidth =
-    !usesInscriptionSelectionStyle && objectType === 'motif'
-      ? 2.5
-      : 1.5;
+    !usesInscriptionSelectionStyle && objectType === 'motif' ? 2.5 : 1.5;
   const baseOutlineOpacity =
     !usesInscriptionSelectionStyle && objectType === 'motif'
       ? 1
@@ -308,15 +307,23 @@ export default function SelectionBox({
         initialSizeMm: currentSizeMm,
         initialX: initialPosition.x,
         initialY: initialPosition.y,
-        selectionGroup: e.object?.parent instanceof THREE.Group ? e.object.parent : null,
+        selectionGroup:
+          e.object?.parent instanceof THREE.Group ? e.object.parent : null,
         dragPlane: (() => {
           const selectionGroup = e.object?.parent;
           if (!(selectionGroup instanceof THREE.Group)) return null;
-          const worldPosition = selectionGroup.getWorldPosition(new THREE.Vector3());
+          const worldPosition = selectionGroup.getWorldPosition(
+            new THREE.Vector3(),
+          );
           const worldNormal = new THREE.Vector3(0, 0, 1)
-            .applyQuaternion(selectionGroup.getWorldQuaternion(new THREE.Quaternion()))
+            .applyQuaternion(
+              selectionGroup.getWorldQuaternion(new THREE.Quaternion()),
+            )
             .normalize();
-          return new THREE.Plane().setFromNormalAndCoplanarPoint(worldNormal, worldPosition);
+          return new THREE.Plane().setFromNormalAndCoplanarPoint(
+            worldNormal,
+            worldPosition,
+          );
         })(),
         pointerStartLocal: (() => {
           const selectionGroup = e.object?.parent;
@@ -429,7 +436,9 @@ export default function SelectionBox({
     const getCornerScaleAtPointer = (event: PointerEvent) => {
       if (
         !usesInscriptionSelectionStyle ||
-        !['topLeft', 'topRight', 'bottomLeft', 'bottomRight'].includes(dragHandle) ||
+        !['topLeft', 'topRight', 'bottomLeft', 'bottomRight'].includes(
+          dragHandle,
+        ) ||
         !dragStartRef.current.selectionGroup ||
         !dragStartRef.current.dragPlane ||
         !dragStartRef.current.pointerStartLocal
@@ -443,11 +452,17 @@ export default function SelectionBox({
         -((event.clientY - rect.top) / rect.height) * 2 + 1,
       );
       resizeRaycaster.setFromCamera(pointerNdc, camera);
-      if (!resizeRaycaster.ray.intersectPlane(dragStartRef.current.dragPlane, intersection)) {
+      if (
+        !resizeRaycaster.ray.intersectPlane(
+          dragStartRef.current.dragPlane,
+          intersection,
+        )
+      ) {
         return null;
       }
 
-      const localPoint = dragStartRef.current.selectionGroup.worldToLocal(intersection);
+      const localPoint =
+        dragStartRef.current.selectionGroup.worldToLocal(intersection);
       // Same center-based projection used by the legacy 2D DYO editor.
       // It remains continuous at min/max sizes because the calculation is
       // relative to the exact point where this handle was grabbed.
@@ -512,10 +527,18 @@ export default function SelectionBox({
 
             const horizontal = !['top', 'bottom'].includes(dragHandle);
             const vertical = !['left', 'right'].includes(dragHandle);
-            const scaleX = horizontal ? 1 + (deltaX * factorX) / sensitivity : 1;
+            const scaleX = horizontal
+              ? 1 + (deltaX * factorX) / sensitivity
+              : 1;
             const scaleY = vertical ? 1 + (deltaY * factorY) / sensitivity : 1;
             const pointerScale = getCornerScaleAtPointer(e);
-            const scale = pointerScale ?? (horizontal && vertical ? (scaleX + scaleY) / 2 : horizontal ? scaleX : scaleY);
+            const scale =
+              pointerScale ??
+              (horizontal && vertical
+                ? (scaleX + scaleY) / 2
+                : horizontal
+                  ? scaleX
+                  : scaleY);
             const newSizeMm = dragStartRef.current.initialSizeMm * scale;
             const clampedSize = Math.max(
               minSizeMm ?? 10,
@@ -651,7 +674,18 @@ export default function SelectionBox({
 
   useFrame((state, delta) => {
     if (groupRef.current) {
-      if (usesSubtleOutlineRef.current) {
+      if (isMotifRef.current) {
+        // A motif belongs only to the front-facing memorial surface. Hide its
+        // editor affordance as soon as that surface turns away from the camera.
+        groupRef.current.getWorldPosition(worldPos);
+        groupRef.current.getWorldDirection(worldNormal);
+        cameraDir.subVectors(camera.position, worldPos).normalize();
+        const nextVisible = cameraDir.dot(worldNormal) >= 0;
+        if (nextVisible !== visibilityRef.current) {
+          visibilityRef.current = nextVisible;
+          setIsVisible(nextVisible);
+        }
+      } else if (usesSubtleOutlineRef.current) {
         if (!visibilityRef.current) {
           visibilityRef.current = true;
           setIsVisible(true);
@@ -699,7 +733,7 @@ export default function SelectionBox({
             lineWidth={outlineLineWidth}
             renderOrder={1001}
             depthWrite={false}
-            depthTest={!renderMotifOutlineAboveSurface}
+            depthTest
             transparent
             opacity={outlineOpacity}
             raycast={disableRaycast}
@@ -816,99 +850,101 @@ export default function SelectionBox({
             />
           </mesh>
 
-          {!usesSubtleOutline && <>
-          {/* Edge Handles - Top Center */}
-          <mesh
-            position={[0, minHalfHeight, handleZOffset]}
-            renderOrder={1002}
-            visible={handlesVisible}
-            scale={[handleScale, handleScale, handleScale]}
-            onClick={(e) => e.stopPropagation()}
-            onPointerDown={(e) => handlePointerDown(e, 'top')}
-            onPointerEnter={() => handlePointerEnter('top')}
-            onPointerLeave={handlePointerLeave}
-          >
-            <boxGeometry
-              args={[fixedHandleSize, fixedHandleSize, handleThickness]}
-            />
-            <meshBasicMaterial
-              color={handleColor}
-              transparent
-              opacity={handleOpacity}
-              depthWrite={false}
-              depthTest={true}
-            />
-          </mesh>
+          {!usesSubtleOutline && (
+            <>
+              {/* Edge Handles - Top Center */}
+              <mesh
+                position={[0, minHalfHeight, handleZOffset]}
+                renderOrder={1002}
+                visible={handlesVisible}
+                scale={[handleScale, handleScale, handleScale]}
+                onClick={(e) => e.stopPropagation()}
+                onPointerDown={(e) => handlePointerDown(e, 'top')}
+                onPointerEnter={() => handlePointerEnter('top')}
+                onPointerLeave={handlePointerLeave}
+              >
+                <boxGeometry
+                  args={[fixedHandleSize, fixedHandleSize, handleThickness]}
+                />
+                <meshBasicMaterial
+                  color={handleColor}
+                  transparent
+                  opacity={handleOpacity}
+                  depthWrite={false}
+                  depthTest={true}
+                />
+              </mesh>
 
-          {/* Edge Handles - Bottom Center */}
-          <mesh
-            position={[0, -minHalfHeight, handleZOffset]}
-            renderOrder={1002}
-            visible={handlesVisible}
-            scale={[handleScale, handleScale, handleScale]}
-            onClick={(e) => e.stopPropagation()}
-            onPointerDown={(e) => handlePointerDown(e, 'bottom')}
-            onPointerEnter={() => handlePointerEnter('bottom')}
-            onPointerLeave={handlePointerLeave}
-          >
-            <boxGeometry
-              args={[fixedHandleSize, fixedHandleSize, handleThickness]}
-            />
-            <meshBasicMaterial
-              color={handleColor}
-              transparent
-              opacity={handleOpacity}
-              depthWrite={false}
-              depthTest={true}
-            />
-          </mesh>
+              {/* Edge Handles - Bottom Center */}
+              <mesh
+                position={[0, -minHalfHeight, handleZOffset]}
+                renderOrder={1002}
+                visible={handlesVisible}
+                scale={[handleScale, handleScale, handleScale]}
+                onClick={(e) => e.stopPropagation()}
+                onPointerDown={(e) => handlePointerDown(e, 'bottom')}
+                onPointerEnter={() => handlePointerEnter('bottom')}
+                onPointerLeave={handlePointerLeave}
+              >
+                <boxGeometry
+                  args={[fixedHandleSize, fixedHandleSize, handleThickness]}
+                />
+                <meshBasicMaterial
+                  color={handleColor}
+                  transparent
+                  opacity={handleOpacity}
+                  depthWrite={false}
+                  depthTest={true}
+                />
+              </mesh>
 
-          {/* Edge Handles - Left Center */}
-          <mesh
-            position={[-minHalfWidth, 0, handleZOffset]}
-            renderOrder={1002}
-            visible={handlesVisible}
-            scale={[handleScale, handleScale, handleScale]}
-            onClick={(e) => e.stopPropagation()}
-            onPointerDown={(e) => handlePointerDown(e, 'left')}
-            onPointerEnter={() => handlePointerEnter('left')}
-            onPointerLeave={handlePointerLeave}
-          >
-            <boxGeometry
-              args={[fixedHandleSize, fixedHandleSize, handleThickness]}
-            />
-            <meshBasicMaterial
-              color={handleColor}
-              transparent
-              opacity={handleOpacity}
-              depthWrite={false}
-              depthTest={true}
-            />
-          </mesh>
+              {/* Edge Handles - Left Center */}
+              <mesh
+                position={[-minHalfWidth, 0, handleZOffset]}
+                renderOrder={1002}
+                visible={handlesVisible}
+                scale={[handleScale, handleScale, handleScale]}
+                onClick={(e) => e.stopPropagation()}
+                onPointerDown={(e) => handlePointerDown(e, 'left')}
+                onPointerEnter={() => handlePointerEnter('left')}
+                onPointerLeave={handlePointerLeave}
+              >
+                <boxGeometry
+                  args={[fixedHandleSize, fixedHandleSize, handleThickness]}
+                />
+                <meshBasicMaterial
+                  color={handleColor}
+                  transparent
+                  opacity={handleOpacity}
+                  depthWrite={false}
+                  depthTest={true}
+                />
+              </mesh>
 
-          {/* Edge Handles - Right Center */}
-          <mesh
-            position={[minHalfWidth, 0, handleZOffset]}
-            renderOrder={1002}
-            visible={handlesVisible}
-            scale={[handleScale, handleScale, handleScale]}
-            onClick={(e) => e.stopPropagation()}
-            onPointerDown={(e) => handlePointerDown(e, 'right')}
-            onPointerEnter={() => handlePointerEnter('right')}
-            onPointerLeave={handlePointerLeave}
-          >
-            <boxGeometry
-              args={[fixedHandleSize, fixedHandleSize, handleThickness]}
-            />
-            <meshBasicMaterial
-              color={handleColor}
-              transparent
-              opacity={handleOpacity}
-              depthWrite={false}
-              depthTest={true}
-            />
-          </mesh>
-          </>}
+              {/* Edge Handles - Right Center */}
+              <mesh
+                position={[minHalfWidth, 0, handleZOffset]}
+                renderOrder={1002}
+                visible={handlesVisible}
+                scale={[handleScale, handleScale, handleScale]}
+                onClick={(e) => e.stopPropagation()}
+                onPointerDown={(e) => handlePointerDown(e, 'right')}
+                onPointerEnter={() => handlePointerEnter('right')}
+                onPointerLeave={handlePointerLeave}
+              >
+                <boxGeometry
+                  args={[fixedHandleSize, fixedHandleSize, handleThickness]}
+                />
+                <meshBasicMaterial
+                  color={handleColor}
+                  transparent
+                  opacity={handleOpacity}
+                  depthWrite={false}
+                  depthTest={true}
+                />
+              </mesh>
+            </>
+          )}
         </>
       )}
     </group>

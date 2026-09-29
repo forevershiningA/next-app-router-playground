@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-09-28
+**Last Updated:** 2026-09-29
 
 **Status entry order:** Add new dated status entries immediately after the table of contents, before the existing status entries. Keep status entries in reverse chronological order (newest first); do not append them to the end of this file.
 **Tech Stack:** Next.js 15.5.26, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots), **Vitest 4.1.8** (unit tests), **Playwright 1.59.1** (E2E tests)
@@ -117,6 +117,27 @@
 106. [September 24 My Account Day Mode and Local Test Orders](#current-status-2026-09-24--my-account-day-mode-and-local-test-orders)
 107. [September 24 Traditional Outline Colours and Canvas Step Menu](#current-status-2026-09-24--traditional-outline-colours-and-canvas-step-menu)
 108. [September 28 Technical and SEO Audit Remediation](#current-status-2026-09-28--technical-and-seo-audit-remediation)
+109. [September 29 Motif Selection and Sandblasted Shape Contours](#current-status-2026-09-29--motif-selection-and-sandblasted-shape-contours)
+
+---
+
+## Current Status (2026-09-29) — Motif Selection and Sandblasted Shape Contours
+
+### Motif selection outline
+
+- `components/three/ObjectSelectionBox.tsx` draws a selected motif's rectangular transform outline with `depthTest` enabled and `depthWrite={false}`. The granite therefore occludes the affordance from the rear and from other geometry in front of it; do not use `depthTest={false}` to compensate for a near-coplanar motif.
+- A motif selection also checks the camera-facing direction of its local `+Z` surface each frame. It is unmounted when the camera is behind that front surface, which makes the editor affordance behave as part of the front-face UI rather than an X-ray overlay. Other subtle outlines retain their existing behaviour.
+- Keep the outline's small local Z lift supplied by `MotifModel` (`position={new THREE.Vector3(0, 0, 0.002)}`): it prevents front-view z-fighting without sacrificing correct depth occlusion.
+
+### Traditional Engraved shape outline colour
+
+- Catalog shapes with `sandblastedBorders: true` use `SvgHeadstone`'s SVG engraving path for the configurable `Shape outline colour`; this is distinct from `InsetContourLine`, which covers the supported simple traditional headstone contours.
+- In `components/three/headstone/ShapeSwapper.tsx`, fixed headstone assets with a sandblasted SVG outline must render with `bevel={false}`. A bevel pulls the front cap inward while the coloured contour still follows the source SVG perimeter, leaving an unintended granite rim outside the line—most obvious along curved upper sections and detailed silhouettes.
+- This is deliberately scoped to `showSvgEngraving`. Fixed shapes without a sandblasted outline retain their bevel where eligible, while the coloured outline and the physical front edge now share the same contour.
+
+### Validation
+
+- `pnpm exec prettier --write components/three/ObjectSelectionBox.tsx components/three/headstone/ShapeSwapper.tsx`, targeted ESLint, and `git diff --check` completed without errors. Targeted lint continues to report pre-existing warnings in both large components.
 
 ---
 

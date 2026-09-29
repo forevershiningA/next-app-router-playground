@@ -80,10 +80,11 @@ const absoluteFromCenterOffsets = (
   y: metrics.centerY - (offsetY ?? 0),
 });
 
-const centerOffsetsFromAbsolute = (x: number, y: number, metrics: BoxMetrics) => ({
-  xPos: x - metrics.centerX,
-  yPos: metrics.centerY - y,
-});
+const centerOffsetsFromAbsolute = (
+  x: number,
+  y: number,
+  metrics: BoxMetrics,
+) => ({ xPos: x - metrics.centerX, yPos: metrics.centerY - y });
 
 /* --------------------------------- font map --------------------------------- */
 // Simply use the font files as specified in the data
@@ -138,10 +139,7 @@ function PreloadTexture({
   // Match SvgHeadstone's loader request exactly. Preloading only the face
   // leaves its face-and-side request uncached, which can still suspend and
   // briefly remove the headstone when a material changes.
-  useTexture({
-    face: url,
-    ...(hasSideTexture ? { side: url } : {}),
-  });
+  useTexture({ face: url, ...(hasSideTexture ? { side: url } : {}) });
   React.useEffect(() => {
     const id = requestAnimationFrame(() => onReady?.());
     return () => cancelAnimationFrame(id);
@@ -169,7 +167,10 @@ export default function ShapeSwapper({
   const resolvedHeadstoneMeshRef = headstoneMeshRef ?? internalHeadstoneMeshRef;
   const currentBoundingBoxRef = React.useRef<THREE.Box3 | null>(null);
   const [bboxVersion, setBboxVersion] = React.useState(0);
-  const pendingRemapRef = React.useRef<{ oldBox: THREE.Box3; targetShapeUrl: string } | null>(null);
+  const pendingRemapRef = React.useRef<{
+    oldBox: THREE.Box3;
+    targetShapeUrl: string;
+  } | null>(null);
   const prevShapeUrlRef = React.useRef<string | null>(null);
 
   const heightMm = useHeadstoneStore((s) => s.heightMm);
@@ -197,9 +198,7 @@ export default function ShapeSwapper({
   const setSelectedAdditionId = useHeadstoneStore(
     (s) => s.setSelectedAdditionId,
   );
-  const setSelectedMotifId = useHeadstoneStore(
-    (s) => s.setSelectedMotifId,
-  );
+  const setSelectedMotifId = useHeadstoneStore((s) => s.setSelectedMotifId);
   const setActivePanel = useHeadstoneStore((s) => s.setActivePanel);
   const motifOffsets = useHeadstoneStore((s) => s.motifOffsets);
   const openInscriptions = useHeadstoneStore((s) => s.openInscriptions);
@@ -214,14 +213,19 @@ export default function ShapeSwapper({
   const emblemOffsets = useHeadstoneStore((s) => s.emblemOffsets);
 
   const headstoneInscriptions = React.useMemo(
-    () => inscriptions.filter((line) => (line.target ?? 'headstone') === 'headstone'),
+    () =>
+      inscriptions.filter(
+        (line) => (line.target ?? 'headstone') === 'headstone',
+      ),
     [inscriptions],
   );
 
   const headstoneAdditionIds = React.useMemo(
     () =>
       selectedAdditions.filter(
-        (additionId) => (additionOffsets[additionId]?.targetSurface ?? 'headstone') === 'headstone',
+        (additionId) =>
+          (additionOffsets[additionId]?.targetSurface ?? 'headstone') ===
+          'headstone',
       ),
     [selectedAdditions, additionOffsets],
   );
@@ -229,20 +233,25 @@ export default function ShapeSwapper({
   const headstoneMotifs = React.useMemo(
     () =>
       selectedMotifs.filter(
-        (motif) => (motifOffsets[motif.id]?.target ?? 'headstone') === 'headstone',
+        (motif) =>
+          (motifOffsets[motif.id]?.target ?? 'headstone') === 'headstone',
       ),
     [selectedMotifs, motifOffsets],
   );
 
   const headstoneImages = React.useMemo(
-    () => selectedImages.filter((image) => (image.target ?? 'headstone') === 'headstone'),
+    () =>
+      selectedImages.filter(
+        (image) => (image.target ?? 'headstone') === 'headstone',
+      ),
     [selectedImages],
   );
 
   const headstoneEmblems = React.useMemo(
     () =>
       selectedEmblems.filter(
-        (emblem) => (emblemOffsets[emblem.id]?.target ?? 'headstone') === 'headstone',
+        (emblem) =>
+          (emblemOffsets[emblem.id]?.target ?? 'headstone') === 'headstone',
       ),
     [selectedEmblems, emblemOffsets],
   );
@@ -256,7 +265,9 @@ export default function ShapeSwapper({
   const catalog = useHeadstoneStore((s) => s.catalog);
   const isTraditionalEngravedHeadstone =
     productId === '124' || catalog?.product.id === '124';
-  const isPlaque = catalog?.product.type === 'plaque' || catalog?.product.type === 'bronze_plaque';
+  const isPlaque =
+    catalog?.product.type === 'plaque' ||
+    catalog?.product.type === 'bronze_plaque';
   const isBronzePlaque = productId === '5' || catalog?.product.id === '5';
   const isFullColourPlaque = catalog?.product.id === '32';
   const isUrn = catalog?.product.type === 'urn';
@@ -268,140 +279,199 @@ export default function ShapeSwapper({
     catalog?.product.id === '1' ||
     catalog?.product.id === '23' ||
     catalog?.product.id === '52';
-  const showStainlessRim = catalog?.product.id === '1' || catalog?.product.id === '23';
+  const showStainlessRim =
+    catalog?.product.id === '1' || catalog?.product.id === '23';
   const ssCorners = useHeadstoneStore((s) => s.ssCorners);
   const ssHoles = useHeadstoneStore((s) => s.ssHoles);
   const fixingType = useHeadstoneStore((s) => s.fixingType);
-  const ssFinish: 'brushed' | 'polished' =
-    headstoneMaterialUrl?.includes('high-polished-ss-swatch') ? 'polished' : 'brushed';
+  const ssFinish: 'brushed' | 'polished' = headstoneMaterialUrl?.includes(
+    'high-polished-ss-swatch',
+  )
+    ? 'polished'
+    : 'brushed';
   const bronzeBorderColor = '#FFDFA3';
   const useShapeOutlineBorder =
     isBronzePlaque &&
     Boolean(shapeUrl?.includes('oval_') || shapeUrl?.includes('circle'));
   const isNonRectangularPlaque =
-    isPlaque && Boolean(shapeUrl?.includes('oval_') || shapeUrl?.includes('circle'));
+    isPlaque &&
+    Boolean(shapeUrl?.includes('oval_') || shapeUrl?.includes('circle'));
   const isPetRockPlaque = productId === '135' || catalog?.product.id === '135';
 
-  const remapLayoutsBetweenBoxes = React.useCallback((oldBox: THREE.Box3, newBox: THREE.Box3) => {
-    const oldMetrics = getBoxMetrics(oldBox);
-    const newMetrics = getBoxMetrics(newBox);
+  const remapLayoutsBetweenBoxes = React.useCallback(
+    (oldBox: THREE.Box3, newBox: THREE.Box3) => {
+      const oldMetrics = getBoxMetrics(oldBox);
+      const newMetrics = getBoxMetrics(newBox);
 
-    useHeadstoneStore.setState((state) => {
-      const updates: Partial<typeof state> = {};
+      useHeadstoneStore.setState((state) => {
+        const updates: Partial<typeof state> = {};
 
-      if (state.inscriptions.length > 0) {
-        let linesChanged = false;
-        const remappedLines = state.inscriptions.map((line) => {
-          if (line.target === 'base' || line.target === 'ledger') {
-            return line;
-          }
-          const originalX = line.xPos ?? 0;
-          const originalY = line.yPos ?? 0;
-          const mapped = remapPointBetweenBoxes(originalX, originalY, oldMetrics, newMetrics);
-          if (
-            Math.abs(mapped.x - originalX) > BBOX_EPSILON ||
-            Math.abs(mapped.y - originalY) > BBOX_EPSILON
-          ) {
-            linesChanged = true;
-            return { ...line, xPos: mapped.x, yPos: mapped.y };
-          }
-          return line;
-        });
-        if (linesChanged) {
-          updates.inscriptions = remappedLines;
-        }
-      }
-
-      if (Object.keys(state.additionOffsets).length > 0) {
-        let additionClone: typeof state.additionOffsets | null = null;
-        for (const [id, offset] of Object.entries(state.additionOffsets)) {
-          const surface = offset.targetSurface ?? 'headstone';
-          if (surface === 'base' || surface === 'ledger') continue;
-          const absolutePoint = absoluteFromCenterOffsets(offset.xPos, offset.yPos, oldMetrics);
-          const mapped = remapPointBetweenBoxes(absolutePoint.x, absolutePoint.y, oldMetrics, newMetrics);
-          const nextOffsets = centerOffsetsFromAbsolute(mapped.x, mapped.y, newMetrics);
-          if (
-            Math.abs((offset.xPos ?? 0) - nextOffsets.xPos) > BBOX_EPSILON ||
-            Math.abs((offset.yPos ?? 0) - nextOffsets.yPos) > BBOX_EPSILON
-          ) {
-            if (!additionClone) {
-              additionClone = { ...state.additionOffsets };
+        if (state.inscriptions.length > 0) {
+          let linesChanged = false;
+          const remappedLines = state.inscriptions.map((line) => {
+            if (line.target === 'base' || line.target === 'ledger') {
+              return line;
             }
-            additionClone[id] = { ...offset, xPos: nextOffsets.xPos, yPos: nextOffsets.yPos };
-          }
-        }
-        if (additionClone) {
-          updates.additionOffsets = additionClone;
-        }
-      }
-
-      if (Object.keys(state.motifOffsets).length > 0) {
-        let motifClone: typeof state.motifOffsets | null = null;
-        for (const [id, offset] of Object.entries(state.motifOffsets)) {
-          const surface = offset.target ?? 'headstone';
-          if (surface === 'base' || surface === 'ledger') continue;
-          const isAbsolute = (offset.coordinateSpace ?? 'offset') === 'absolute';
-
-          if (isAbsolute) {
-            const originalX = offset.xPos ?? 0;
-            const originalY = offset.yPos ?? 0;
-            const mapped = remapPointBetweenBoxes(originalX, originalY, oldMetrics, newMetrics);
+            const originalX = line.xPos ?? 0;
+            const originalY = line.yPos ?? 0;
+            const mapped = remapPointBetweenBoxes(
+              originalX,
+              originalY,
+              oldMetrics,
+              newMetrics,
+            );
             if (
               Math.abs(mapped.x - originalX) > BBOX_EPSILON ||
               Math.abs(mapped.y - originalY) > BBOX_EPSILON
             ) {
-              if (!motifClone) {
-                motifClone = { ...state.motifOffsets };
-              }
-              motifClone[id] = { ...offset, xPos: mapped.x, yPos: mapped.y };
+              linesChanged = true;
+              return { ...line, xPos: mapped.x, yPos: mapped.y };
             }
-          } else {
-            const absolutePoint = absoluteFromCenterOffsets(offset.xPos, offset.yPos, oldMetrics);
-            const mapped = remapPointBetweenBoxes(absolutePoint.x, absolutePoint.y, oldMetrics, newMetrics);
-            const nextOffsets = centerOffsetsFromAbsolute(mapped.x, mapped.y, newMetrics);
+            return line;
+          });
+          if (linesChanged) {
+            updates.inscriptions = remappedLines;
+          }
+        }
+
+        if (Object.keys(state.additionOffsets).length > 0) {
+          let additionClone: typeof state.additionOffsets | null = null;
+          for (const [id, offset] of Object.entries(state.additionOffsets)) {
+            const surface = offset.targetSurface ?? 'headstone';
+            if (surface === 'base' || surface === 'ledger') continue;
+            const absolutePoint = absoluteFromCenterOffsets(
+              offset.xPos,
+              offset.yPos,
+              oldMetrics,
+            );
+            const mapped = remapPointBetweenBoxes(
+              absolutePoint.x,
+              absolutePoint.y,
+              oldMetrics,
+              newMetrics,
+            );
+            const nextOffsets = centerOffsetsFromAbsolute(
+              mapped.x,
+              mapped.y,
+              newMetrics,
+            );
             if (
               Math.abs((offset.xPos ?? 0) - nextOffsets.xPos) > BBOX_EPSILON ||
               Math.abs((offset.yPos ?? 0) - nextOffsets.yPos) > BBOX_EPSILON
             ) {
-              if (!motifClone) {
-                motifClone = { ...state.motifOffsets };
+              if (!additionClone) {
+                additionClone = { ...state.additionOffsets };
               }
-              motifClone[id] = { ...offset, xPos: nextOffsets.xPos, yPos: nextOffsets.yPos };
+              additionClone[id] = {
+                ...offset,
+                xPos: nextOffsets.xPos,
+                yPos: nextOffsets.yPos,
+              };
             }
           }
+          if (additionClone) {
+            updates.additionOffsets = additionClone;
+          }
         }
-        if (motifClone) {
-          updates.motifOffsets = motifClone;
-        }
-      }
 
-      if (state.selectedImages.length > 0) {
-        let imagesChanged = false;
-        const remappedImages = state.selectedImages.map((image) => {
-          const surface = image.target ?? 'headstone';
-          if (surface === 'base' || surface === 'ledger') {
+        if (Object.keys(state.motifOffsets).length > 0) {
+          let motifClone: typeof state.motifOffsets | null = null;
+          for (const [id, offset] of Object.entries(state.motifOffsets)) {
+            const surface = offset.target ?? 'headstone';
+            if (surface === 'base' || surface === 'ledger') continue;
+            const isAbsolute =
+              (offset.coordinateSpace ?? 'offset') === 'absolute';
+
+            if (isAbsolute) {
+              const originalX = offset.xPos ?? 0;
+              const originalY = offset.yPos ?? 0;
+              const mapped = remapPointBetweenBoxes(
+                originalX,
+                originalY,
+                oldMetrics,
+                newMetrics,
+              );
+              if (
+                Math.abs(mapped.x - originalX) > BBOX_EPSILON ||
+                Math.abs(mapped.y - originalY) > BBOX_EPSILON
+              ) {
+                if (!motifClone) {
+                  motifClone = { ...state.motifOffsets };
+                }
+                motifClone[id] = { ...offset, xPos: mapped.x, yPos: mapped.y };
+              }
+            } else {
+              const absolutePoint = absoluteFromCenterOffsets(
+                offset.xPos,
+                offset.yPos,
+                oldMetrics,
+              );
+              const mapped = remapPointBetweenBoxes(
+                absolutePoint.x,
+                absolutePoint.y,
+                oldMetrics,
+                newMetrics,
+              );
+              const nextOffsets = centerOffsetsFromAbsolute(
+                mapped.x,
+                mapped.y,
+                newMetrics,
+              );
+              if (
+                Math.abs((offset.xPos ?? 0) - nextOffsets.xPos) >
+                  BBOX_EPSILON ||
+                Math.abs((offset.yPos ?? 0) - nextOffsets.yPos) > BBOX_EPSILON
+              ) {
+                if (!motifClone) {
+                  motifClone = { ...state.motifOffsets };
+                }
+                motifClone[id] = {
+                  ...offset,
+                  xPos: nextOffsets.xPos,
+                  yPos: nextOffsets.yPos,
+                };
+              }
+            }
+          }
+          if (motifClone) {
+            updates.motifOffsets = motifClone;
+          }
+        }
+
+        if (state.selectedImages.length > 0) {
+          let imagesChanged = false;
+          const remappedImages = state.selectedImages.map((image) => {
+            const surface = image.target ?? 'headstone';
+            if (surface === 'base' || surface === 'ledger') {
+              return image;
+            }
+            const originalX = image.xPos ?? 0;
+            const originalY = image.yPos ?? 0;
+            const mapped = remapPointBetweenBoxes(
+              originalX,
+              originalY,
+              oldMetrics,
+              newMetrics,
+            );
+            if (
+              Math.abs(mapped.x - originalX) > BBOX_EPSILON ||
+              Math.abs(mapped.y - originalY) > BBOX_EPSILON
+            ) {
+              imagesChanged = true;
+              return { ...image, xPos: mapped.x, yPos: mapped.y };
+            }
             return image;
+          });
+          if (imagesChanged) {
+            updates.selectedImages = remappedImages;
           }
-          const originalX = image.xPos ?? 0;
-          const originalY = image.yPos ?? 0;
-          const mapped = remapPointBetweenBoxes(originalX, originalY, oldMetrics, newMetrics);
-          if (
-            Math.abs(mapped.x - originalX) > BBOX_EPSILON ||
-            Math.abs(mapped.y - originalY) > BBOX_EPSILON
-          ) {
-            imagesChanged = true;
-            return { ...image, xPos: mapped.x, yPos: mapped.y };
-          }
-          return image;
-        });
-        if (imagesChanged) {
-          updates.selectedImages = remappedImages;
         }
-      }
 
-      return updates;
-    });
-  }, []);
+        return updates;
+      });
+    },
+    [],
+  );
 
   const heightM = React.useMemo(() => heightMm / 1000, [heightMm]);
   const widthM = React.useMemo(() => widthMm / 1000, [widthMm]);
@@ -416,31 +486,39 @@ export default function ShapeSwapper({
     );
   const isLegacyPetBowlShape =
     isPetRockPlaque &&
-    Boolean(shapeUrl?.includes('pet_bowl.svg') || shapeUrl?.includes('pet_bowl_a.svg'));
+    Boolean(
+      shapeUrl?.includes('pet_bowl.svg') ||
+        shapeUrl?.includes('pet_bowl_a.svg'),
+    );
   const requestedUrl = isLegacyCatBowlShape
     ? '/shapes/headstones/pet_bowl_outline.svg?petRock=cat'
     : isLegacyPetBowlShape
       ? shapeUrl?.includes('petRock=cat')
         ? '/shapes/headstones/pet_bowl_outline.svg?petRock=cat'
         : '/shapes/headstones/pet_bowl_outline.svg?petRock=dog'
-    : shapeUrl || DEFAULT_SHAPE_URL;
+      : shapeUrl || DEFAULT_SHAPE_URL;
   const isPetBowlOutlineShape = requestedUrl.includes('pet_bowl_outline.svg');
   const isCatBowlShape =
     requestedUrl.includes('petRock=cat') ||
     isLegacyCatBowlShape ||
-    (isPetRockPlaque && isPetBowlOutlineShape && !requestedUrl.includes('petRock=dog'));
+    (isPetRockPlaque &&
+      isPetBowlOutlineShape &&
+      !requestedUrl.includes('petRock=dog'));
   const isDogBowlShape = requestedUrl.includes('petRock=dog');
-  const bowlArtworkOverlayUrl =
-    isCatBowlShape
-      ? '/shapes/headstones/cat_bowl_a.svg'
-      : isDogBowlShape
-        ? '/shapes/headstones/pet_bowl_a.svg'
-        : null;
+  const bowlArtworkOverlayUrl = isCatBowlShape
+    ? '/shapes/headstones/cat_bowl_a.svg'
+    : isDogBowlShape
+      ? '/shapes/headstones/pet_bowl_a.svg'
+      : null;
   const requestedTex = React.useMemo(() => {
     if (!headstoneMaterialUrl) {
       return `${TEX_BASE}${DEFAULT_TEX}`;
     }
-    if (headstoneMaterialUrl.startsWith('http') || headstoneMaterialUrl.startsWith('data:') || headstoneMaterialUrl.startsWith('blob:')) {
+    if (
+      headstoneMaterialUrl.startsWith('http') ||
+      headstoneMaterialUrl.startsWith('data:') ||
+      headstoneMaterialUrl.startsWith('blob:')
+    ) {
       return headstoneMaterialUrl;
     }
     if (headstoneMaterialUrl.startsWith('/')) {
@@ -449,14 +527,17 @@ export default function ShapeSwapper({
     return `/${headstoneMaterialUrl.replace(/^\/+/, '')}`;
   }, [headstoneMaterialUrl]);
 
-  const isBlobOrDataTex = requestedTex.startsWith('blob:') || requestedTex.startsWith('data:');
+  const isBlobOrDataTex =
+    requestedTex.startsWith('blob:') || requestedTex.startsWith('data:');
 
   const [visibleUrl, setVisibleUrl] = React.useState<string | null>(null);
   // Re-introduce visibleTex state to decouple loading from display
   const [visibleTex, setVisibleTex] = React.useState<string | null>(
     () => requestedTex,
   );
-  const pendingTextureSwap = React.useRef<ReturnType<typeof setTimeout> | null>(null);
+  const pendingTextureSwap = React.useRef<ReturnType<typeof setTimeout> | null>(
+    null,
+  );
 
   const [fitTick, setFitTick] = React.useState(0);
 
@@ -496,7 +577,7 @@ export default function ShapeSwapper({
         'helmet.svg',
         'medical-doctor-profession-specialist-medic.svg',
       ]),
-    []
+    [],
   );
   const currentShapeSlug = React.useMemo(() => {
     if (!resolvedUrl) return null;
@@ -504,7 +585,8 @@ export default function ShapeSwapper({
     return parts[parts.length - 1]?.toLowerCase() ?? null;
   }, [resolvedUrl]);
   const isCustomUploadedShape =
-    resolvedUrl.startsWith('data:image/svg+xml') || resolvedUrl.startsWith('blob:');
+    resolvedUrl.startsWith('data:image/svg+xml') ||
+    resolvedUrl.startsWith('blob:');
   const isFixedHeadstoneAsset = React.useMemo(() => {
     if (!currentShapeSlug) return false;
     if (fixedShapeSlugs.has(currentShapeSlug)) return true;
@@ -512,14 +594,18 @@ export default function ShapeSwapper({
   }, [currentShapeSlug, fixedShapeSlugs]);
   const selectedCatalogShape = React.useMemo(() => {
     const pathname = resolvedUrl.split(/[?#]/)[0];
-    return data.shapes.find((shape) => pathname === `/shapes/headstones/${shape.image}`);
+    return data.shapes.find(
+      (shape) => pathname === `/shapes/headstones/${shape.image}`,
+    );
   }, [resolvedUrl]);
   const showSvgEngraving = selectedCatalogShape?.sandblastedBorders === true;
   const isTraditionalEngraved = Boolean(
     catalog?.product.name.toLowerCase().includes('traditional engraved'),
   );
   const engravingStrokeWidthMm = isTraditionalEngraved
-    ? catalog?.product.additions.find((addition) => addition.type === 'inscription')?.minHeight
+    ? catalog?.product.additions.find(
+        (addition) => addition.type === 'inscription',
+      )?.minHeight
     : undefined;
   const preserveTopForShape =
     !isCustomUploadedShape &&
@@ -575,13 +661,7 @@ export default function ShapeSwapper({
       // Trigger fit
       setFitTick((n) => n + 1);
     }
-  }, [
-    isMaterialChange,
-    visibleUrl,
-    requestedUrl,
-    visibleTex,
-    requestedTex
-  ]);
+  }, [isMaterialChange, visibleUrl, requestedUrl, visibleTex, requestedTex]);
 
   React.useEffect(() => {
     const id = requestAnimationFrame(() => setFitTick((n) => n + 1));
@@ -610,10 +690,18 @@ export default function ShapeSwapper({
     if (loading) return;
     const state = useHeadstoneStore.getState();
     const hasExistingHeadstoneLayout =
-      state.inscriptions.some((line) => (line.target ?? 'headstone') === 'headstone') ||
-      Object.values(state.motifOffsets).some((offset) => (offset.target ?? 'headstone') === 'headstone') ||
-      Object.values(state.additionOffsets).some((offset) => (offset.targetSurface ?? 'headstone') === 'headstone') ||
-      state.selectedImages.some((image) => (image.target ?? 'headstone') === 'headstone');
+      state.inscriptions.some(
+        (line) => (line.target ?? 'headstone') === 'headstone',
+      ) ||
+      Object.values(state.motifOffsets).some(
+        (offset) => (offset.target ?? 'headstone') === 'headstone',
+      ) ||
+      Object.values(state.additionOffsets).some(
+        (offset) => (offset.targetSurface ?? 'headstone') === 'headstone',
+      ) ||
+      state.selectedImages.some(
+        (image) => (image.target ?? 'headstone') === 'headstone',
+      );
     if (
       prevShapeUrlRef.current &&
       prevShapeUrlRef.current !== shapeUrl &&
@@ -639,7 +727,6 @@ export default function ShapeSwapper({
     pendingRemapRef.current = null;
   }, [visibleUrl, remapLayoutsBetweenBoxes, bboxVersion, loading]);
 
-
   return (
     <>
       <group ref={tabletRef}>
@@ -650,7 +737,11 @@ export default function ShapeSwapper({
             depth={headstoneDepth}
             scale={0.01}
             faceTexture={resolvedTex}
-            sideTexture={isFullColourPlaque || isUrn || isStainlessSteel ? null : resolvedTex}
+            sideTexture={
+              isFullColourPlaque || isUrn || isStainlessSteel
+                ? null
+                : resolvedTex
+            }
             stretchFace={isFullColourPlaque}
             isFullColourPlaque={isFullColourPlaque}
             isUrn={isUrn}
@@ -669,20 +760,23 @@ export default function ShapeSwapper({
             sourceSvgOverlayUrl={bowlArtworkOverlayUrl}
             showSvgEngraving={showSvgEngraving}
             engravingColor={
-              isTraditionalEngravedHeadstone
-                ? insetContourColor
-                : undefined
+              isTraditionalEngravedHeadstone ? insetContourColor : undefined
             }
             engravingStrokeWidthMm={engravingStrokeWidthMm}
             preserveTop={preserveTopForShape}
             bevel={
               isFixedHeadstoneAsset &&
+              // The sandblasted shape outline follows the SVG's outer contour.
+              // A bevel shrinks only the front cap, leaving a visible granite
+              // rim beyond the coloured line on curved and detailed shapes.
+              !showSvgEngraving &&
               // The tank has a detailed, concave outline. A broad bevel pulls
               // its front cap inward from the perimeter and makes the right
               // wall look offset from the face.
               currentShapeSlug !== 'war-tank.svg' &&
               currentShapeSlug !== 'military-boot.svg' &&
-              currentShapeSlug !== 'palace-guards-with-machine-gun-variant.svg' &&
+              currentShapeSlug !==
+                'palace-guards-with-machine-gun-variant.svg' &&
               currentShapeSlug !== 'communications-soldier.svg' &&
               currentShapeSlug !== 'paratrooper.svg' &&
               currentShapeSlug !== 'pledge-soldier.svg' &&
@@ -693,7 +787,8 @@ export default function ShapeSwapper({
               currentShapeSlug !== 'fire.svg' &&
               currentShapeSlug !== 'first-aid-kit.svg' &&
               currentShapeSlug !== 'helmet.svg' &&
-              currentShapeSlug !== 'medical-doctor-profession-specialist-medic.svg' &&
+              currentShapeSlug !==
+                'medical-doctor-profession-specialist-medic.svg' &&
               !isPlaque &&
               !isUrn &&
               !isStainlessSteel &&
@@ -706,13 +801,18 @@ export default function ShapeSwapper({
             meshProps={{
               name: 'headstone',
               onClick: (e) => {
-                logger.log('[ShapeSwapper] Headstone onClick, event object:', e.object.name);
+                logger.log(
+                  '[ShapeSwapper] Headstone onClick, event object:',
+                  e.object.name,
+                );
                 e.stopPropagation();
-                
+
                 // Don't select headstone if clicking on an image
                 // Images have renderOrder 999, headstone has lower/default
                 if (e.object.renderOrder === 999) {
-                  logger.log('[ShapeSwapper] Ignoring click - it was on an image');
+                  logger.log(
+                    '[ShapeSwapper] Ignoring click - it was on an image',
+                  );
                   return;
                 }
 
@@ -721,195 +821,212 @@ export default function ShapeSwapper({
               },
             }}
           >
-          {(api: HeadstoneAPI, selectedAdditionIds: string[]) => {
-            if (resolvedHeadstoneMeshRef && api.mesh.current) {
-              (resolvedHeadstoneMeshRef as any).current = api.mesh.current;
-            }
-            
-            return (
-            <>
-               {headstoneInscriptions.map((line: Line, i: number) => {
-                 const zBump = (headstoneInscriptions.length - 1 - i) * 0.00005;
-                 const scaledX = line.xPos ?? 0;
-                 const scaledY = line.yPos ?? 0;
-                 return (
-                 <ErrorBoundary key={line.id}>
-                   <React.Suspense fallback={null}>
-                      <HeadstoneInscription
-                        ref={line.ref}
-                        id={line.id}
-                        headstone={api}
-                        surface="headstone"
-                       font={FONT_MAP[line.font] || '/fonts/ebgaramond.woff2'}
-                      editable
-                      selected={
-                        !suppressInscriptionSelectionOutline &&
-                        selectedInscriptionId === line.id
-                      }
-                      onSelectInscription={() => {
-                        setSelected(null);
-                        setSelectedMotifId(null); // Clear motif selection
-                        setSelectedAdditionId(null); // Clear addition selection
-                        setSelectedInscriptionId(line.id);
-                        
-                        // Navigate to inscriptions if not already there
-                        if (getDesignerStepSlug(pathname) !== 'inscriptions') {
-                          router.push(getDesignerProductStepHref('inscriptions', productId));
-                        }
+            {(api: HeadstoneAPI, selectedAdditionIds: string[]) => {
+              if (resolvedHeadstoneMeshRef && api.mesh.current) {
+                (resolvedHeadstoneMeshRef as any).current = api.mesh.current;
+              }
 
-                        if (typeof window !== 'undefined') {
-                          window.dispatchEvent(
-                            new CustomEvent('openFullscreenPanel', {
-                              detail: { panel: 'inscriptions' },
-                            }),
-                          );
-                        }
-                      }}
-                      color={line.color}
-                      lift={0.002}
-                      xPos={scaledX}
-                      yPos={scaledY}
-                      coordinateSpace={line.coordinateSpace}
-                      rotationDeg={line.rotationDeg}
-                      height={line.sizeMm}
-                      text={line.text}
-                      textAlign={line.textAlign}
-                      zBump={zBump}
-                      layer={line.layer}
-                    />
-                  </React.Suspense>
-                </ErrorBoundary>
-              )})}
+              return (
+                <>
+                  {headstoneInscriptions.map((line: Line, i: number) => {
+                    const zBump =
+                      (headstoneInscriptions.length - 1 - i) * 0.00005;
+                    const scaledX = line.xPos ?? 0;
+                    const scaledY = line.yPos ?? 0;
+                    return (
+                      <ErrorBoundary key={line.id}>
+                        <React.Suspense fallback={null}>
+                          <HeadstoneInscription
+                            ref={line.ref}
+                            id={line.id}
+                            headstone={api}
+                            surface="headstone"
+                            font={
+                              FONT_MAP[line.font] || '/fonts/ebgaramond.woff2'
+                            }
+                            editable
+                            selected={
+                              !suppressInscriptionSelectionOutline &&
+                              selectedInscriptionId === line.id
+                            }
+                            onSelectInscription={() => {
+                              setSelected(null);
+                              setSelectedMotifId(null); // Clear motif selection
+                              setSelectedAdditionId(null); // Clear addition selection
+                              setSelectedInscriptionId(line.id);
 
-               {headstoneAdditionIds.map((additionId, i) => (
-                 <ErrorBoundary key={`${additionId}-${i}`}>
-                   <React.Suspense fallback={null}>
-                     <AdditionModel
-                       id={additionId}
-                       headstone={api}
-                       surface="headstone"
-                       index={i}
-                     />
-                   </React.Suspense>
-                 </ErrorBoundary>
-               ))}
+                              // Navigate to inscriptions if not already there
+                              if (
+                                getDesignerStepSlug(pathname) !== 'inscriptions'
+                              ) {
+                                router.push(
+                                  getDesignerProductStepHref(
+                                    'inscriptions',
+                                    productId,
+                                  ),
+                                );
+                              }
 
-               {headstoneMotifs.map((motif, i) => (
-                 <ErrorBoundary key={`${motif.id}-${i}`}>
-                   <React.Suspense fallback={null}>
-                     <MotifModel
-                       id={motif.id}
-                       svgPath={motif.svgPath}
-                       color={motif.color}
-                       headstone={api}
-                       surface="headstone"
-                       index={i}
-                       layer={motifOffsets[motif.id]?.layer}
-                     />
-                   </React.Suspense>
-                 </ErrorBoundary>
-               ))}
+                              if (typeof window !== 'undefined') {
+                                window.dispatchEvent(
+                                  new CustomEvent('openFullscreenPanel', {
+                                    detail: { panel: 'inscriptions' },
+                                  }),
+                                );
+                              }
+                            }}
+                            color={line.color}
+                            lift={0.002}
+                            xPos={scaledX}
+                            yPos={scaledY}
+                            coordinateSpace={line.coordinateSpace}
+                            rotationDeg={line.rotationDeg}
+                            height={line.sizeMm}
+                            text={line.text}
+                            textAlign={line.textAlign}
+                            zBump={zBump}
+                            layer={line.layer}
+                          />
+                        </React.Suspense>
+                      </ErrorBoundary>
+                    );
+                  })}
 
-               {headstoneImages.map((image, i) => (
-                 <ErrorBoundary key={`${image.id}-${i}`}>
-                   <React.Suspense fallback={null}>
-                     <ImageModel
-                       id={image.id}
-                       imageUrl={image.imageUrl}
-                      widthMm={image.widthMm}
-                      heightMm={image.heightMm}
-                      xPos={image.xPos}
-                      yPos={image.yPos}
-                      rotationZ={image.rotationZ}
-                      typeId={image.typeId}
-                       maskShape={image.maskShape}
-                       headstone={api}
-                       surface="headstone"
-                       index={i}
-                       coordinateSpace={image.coordinateSpace}
-                       layer={image.layer}
-                     />
-                   </React.Suspense>
-                 </ErrorBoundary>
-               ))}
+                  {headstoneAdditionIds.map((additionId, i) => (
+                    <ErrorBoundary key={`${additionId}-${i}`}>
+                      <React.Suspense fallback={null}>
+                        <AdditionModel
+                          id={additionId}
+                          headstone={api}
+                          surface="headstone"
+                          index={i}
+                        />
+                      </React.Suspense>
+                    </ErrorBoundary>
+                  ))}
 
-               {headstoneEmblems.map((emblem, i) => (
-                 <ErrorBoundary key={`emblem-${emblem.id}-${i}`}>
-                   <React.Suspense fallback={null}>
-                     <EmblemModel
-                       id={emblem.id}
-                       emblemId={emblem.emblemId}
-                       imageUrl={emblem.imageUrl}
-                       headstone={api}
-                       surface="headstone"
-                       index={i}
-                     />
-                   </React.Suspense>
-                 </ErrorBoundary>
-               ))}
+                  {headstoneMotifs.map((motif, i) => (
+                    <ErrorBoundary key={`${motif.id}-${i}`}>
+                      <React.Suspense fallback={null}>
+                        <MotifModel
+                          id={motif.id}
+                          svgPath={motif.svgPath}
+                          color={motif.color}
+                          headstone={api}
+                          surface="headstone"
+                          index={i}
+                          layer={motifOffsets[motif.id]?.layer}
+                        />
+                      </React.Suspense>
+                    </ErrorBoundary>
+                  ))}
 
-              {/* Render border if set */}
-              {borderName && isPlaque && (
-                <ErrorBoundary>
-                  <React.Suspense fallback={null}>
-                    <BronzeBorder
-                      borderName={borderName}
-                      plaqueWidth={api.worldWidth}
-                      plaqueHeight={api.worldHeight}
-                      unitsPerMeter={api.unitsPerMeter}
-                      frontZ={api.frontZ}
-                      color={bronzeBorderColor}
+                  {headstoneImages.map((image, i) => (
+                    <ErrorBoundary key={`${image.id}-${i}`}>
+                      <React.Suspense fallback={null}>
+                        <ImageModel
+                          id={image.id}
+                          imageUrl={image.imageUrl}
+                          widthMm={image.widthMm}
+                          heightMm={image.heightMm}
+                          xPos={image.xPos}
+                          yPos={image.yPos}
+                          rotationZ={image.rotationZ}
+                          typeId={image.typeId}
+                          maskShape={image.maskShape}
+                          headstone={api}
+                          surface="headstone"
+                          index={i}
+                          coordinateSpace={image.coordinateSpace}
+                          layer={image.layer}
+                        />
+                      </React.Suspense>
+                    </ErrorBoundary>
+                  ))}
+
+                  {headstoneEmblems.map((emblem, i) => (
+                    <ErrorBoundary key={`emblem-${emblem.id}-${i}`}>
+                      <React.Suspense fallback={null}>
+                        <EmblemModel
+                          id={emblem.id}
+                          emblemId={emblem.emblemId}
+                          imageUrl={emblem.imageUrl}
+                          headstone={api}
+                          surface="headstone"
+                          index={i}
+                        />
+                      </React.Suspense>
+                    </ErrorBoundary>
+                  ))}
+
+                  {/* Render border if set */}
+                  {borderName && isPlaque && (
+                    <ErrorBoundary>
+                      <React.Suspense fallback={null}>
+                        <BronzeBorder
+                          borderName={borderName}
+                          plaqueWidth={api.worldWidth}
+                          plaqueHeight={api.worldHeight}
+                          unitsPerMeter={api.unitsPerMeter}
+                          frontZ={api.frontZ}
+                          color={bronzeBorderColor}
+                          depth={headstoneDepth}
+                          isStainlessSteel={isFullColourPlaque}
+                          outlinePoints={api.outlinePoints}
+                          useShapeOutlineBorder={useShapeOutlineBorder}
+                          shapeUrl={shapeUrl}
+                        />
+                      </React.Suspense>
+                    </ErrorBoundary>
+                  )}
+
+                  {isBronzePlaque && (
+                    <PlaqueFixings
+                      fixingType={fixingType}
+                      worldWidth={api.worldWidth}
+                      worldHeight={api.worldHeight}
                       depth={headstoneDepth}
-                      isStainlessSteel={isFullColourPlaque}
-                      outlinePoints={api.outlinePoints}
-                      useShapeOutlineBorder={useShapeOutlineBorder}
+                      unitsPerMeter={api.unitsPerMeter}
+                      depthUnitsPerMeter={api.depthUnitsPerMeter}
+                    />
+                  )}
+
+                  {/* Mounting holes for SS plaque (product 52) */}
+                  {isStainlessSteel && (
+                    <SsPlaqueHoles
+                      ssHoles={ssHoles}
+                      worldWidth={api.worldWidth}
+                      worldHeight={api.worldHeight}
+                      meshRef={api.mesh}
+                    />
+                  )}
+
+                  {/* Urn stainless steel border effect: vitreous enamel inlay in front of urn body */}
+                  {isUrn && (
+                    <UrnEnamelInlay
+                      api={api}
+                      textureUrl={urnInlayTexUrl}
                       shapeUrl={shapeUrl}
                     />
-                  </React.Suspense>
-                </ErrorBoundary>
-              )}
+                  )}
 
-              {isBronzePlaque && (
-                <PlaqueFixings
-                  fixingType={fixingType}
-                  worldWidth={api.worldWidth}
-                  worldHeight={api.worldHeight}
-                  depth={headstoneDepth}
-                  unitsPerMeter={api.unitsPerMeter}
-                  depthUnitsPerMeter={api.depthUnitsPerMeter}
-                />
-              )}
-
-              {/* Mounting holes for SS plaque (product 52) */}
-              {isStainlessSteel && (
-                <SsPlaqueHoles
-                  ssHoles={ssHoles}
-                  worldWidth={api.worldWidth}
-                  worldHeight={api.worldHeight}
-                  meshRef={api.mesh}
-                />
-              )}
-
-              {/* Urn stainless steel border effect: vitreous enamel inlay in front of urn body */}
-              {isUrn && (
-                <UrnEnamelInlay api={api} textureUrl={urnInlayTexUrl} shapeUrl={shapeUrl} />
-              )}
-
-              {/* Render inset contour line for headstones */}
-              {showInsetContour && !isPlaque && isContourSupported(shapeUrl) && (
-                <InsetContourLine
-                  headstone={api}
-                  color={
-                    isTraditionalEngravedHeadstone
-                      ? insetContourColor
-                      : '#ffffff'
-                  }
-                />
-              )}
-            </>
-            );
-          }}
-        </SvgHeadstone>
+                  {/* Render inset contour line for headstones */}
+                  {showInsetContour &&
+                    !isPlaque &&
+                    isContourSupported(shapeUrl) && (
+                      <InsetContourLine
+                        headstone={api}
+                        color={
+                          isTraditionalEngravedHeadstone
+                            ? insetContourColor
+                            : '#ffffff'
+                        }
+                      />
+                    )}
+                </>
+              );
+            }}
+          </SvgHeadstone>
         </React.Suspense>
 
         {catalog?.product.type === 'full-monument' ? (
@@ -923,7 +1040,7 @@ export default function ShapeSwapper({
                 : (fitTargetRef ?? tabletRef)
             }
             anchor={resolvedHeadstoneMeshRef as React.RefObject<THREE.Object3D>}
-            margin={1.20}
+            margin={1.2}
             pad={0}
             duration={0.25}
             readyTimeoutMs={100}
@@ -966,4 +1083,3 @@ export default function ShapeSwapper({
     </>
   );
 }
-
