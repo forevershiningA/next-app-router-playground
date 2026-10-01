@@ -828,6 +828,10 @@ export default function DesignerNav() {
         return;
       }
 
+      if (fullscreenPanelSlugs.has(slug)) {
+        setIsLoadingPanel(true);
+      }
+
       if (slug === 'save-design') {
         const res = await fetch('/api/auth/session');
         if (!res.ok) {
@@ -963,7 +967,7 @@ export default function DesignerNav() {
     (activeFullscreenPanel === 'select-motifs' && !isMotifCatalogVisible);
 
   // Add loading state when pathname changes
-  useEffect(() => {
+  React.useLayoutEffect(() => {
     setIsLoadingPanel(true);
     const timer = setTimeout(() => {
       setIsLoadingPanel(false);
@@ -1982,6 +1986,7 @@ export default function DesignerNav() {
   const handleMenuClick = async (slug: string, e: React.MouseEvent) => {
     if (fullscreenPanelSlugs.has(slug)) {
       e.preventDefault();
+      setIsLoadingPanel(true);
       if (slug === 'select-material' && canSelectStainlessGraniteBaseMaterial) {
         setEditingObject('base');
         setSelected('base');
@@ -3697,7 +3702,10 @@ export default function DesignerNav() {
 
                   const Icon = item.icon;
                   const isCurrent = activeFullscreenPanel === slug;
-                  const label = guidedQuickNavLabels[slug] ?? item.name;
+                  const label =
+                    slug === 'select-material' && productId === '5'
+                      ? 'Background'
+                      : (guidedQuickNavLabels[slug] ?? item.name);
                   return (
                     <button
                       key={slug}
@@ -3833,7 +3841,10 @@ export default function DesignerNav() {
 
                       const Icon = item.icon;
                       const isCurrent = activeFullscreenPanel === slug;
-                      const label = guidedQuickNavLabels[slug];
+                      const label =
+                        slug === 'select-material' && productId === '5'
+                          ? 'Background'
+                          : guidedQuickNavLabels[slug];
                       return (
                         <button
                           key={slug}
@@ -3977,7 +3988,7 @@ export default function DesignerNav() {
               ))}
             {activeFullscreenPanel === 'select-fastening' && (
               <div className="space-y-6">
-                <div className="overflow-hidden rounded-2xl border border-[#3A3A3A] bg-[#1F1F1F]/95 p-3 shadow-xl backdrop-blur-sm md:p-4">
+                <div className="day:border-[#ddd2c2] day:bg-[#f4f1eb]/95 overflow-hidden rounded-2xl border border-[#3A3A3A] bg-[#1F1F1F]/95 p-3 shadow-xl backdrop-blur-sm md:p-4">
                   <FixingSelector />
                 </div>
               </div>

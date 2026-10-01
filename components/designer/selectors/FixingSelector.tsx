@@ -45,8 +45,8 @@ export default function FixingSelector() {
             onClick={() => setFixingType(option.id)}
             className={`group overflow-hidden rounded-xl border text-left transition-all ${
               selected
-                ? 'border-[#D7B356] bg-[#D7B356]/10 ring-2 ring-[#D7B356]/40'
-                : 'border-white/10 bg-white/5 hover:border-[#D7B356]/60 hover:bg-white/10'
+                ? 'day:bg-[#f8f1df] border-[#D7B356] bg-[#D7B356]/10 ring-2 ring-[#D7B356]/40'
+                : 'day:border-gray-200 day:bg-white day:hover:border-[#D7B356]/60 day:hover:bg-[#faf7f0] border-white/10 bg-white/5 hover:border-[#D7B356]/60 hover:bg-white/10'
             }`}
             aria-pressed={selected}
           >
@@ -61,10 +61,18 @@ export default function FixingSelector() {
               />
             </div>
             <div className="p-3">
-              <div className={`text-sm font-semibold ${selected ? 'text-[#D7B356]' : 'text-white'}`}>
+              <div
+                className={`text-sm font-semibold ${
+                  selected
+                    ? 'day:text-[#9a6d0b] text-[#D7B356]'
+                    : 'day:text-gray-900 text-white'
+                }`}
+              >
                 {option.name}
               </div>
-              <p className="mt-1 text-xs leading-5 text-white/60">{option.description}</p>
+              <p className="day:text-gray-500 mt-1 text-xs leading-5 text-white/60">
+                {option.description}
+              </p>
             </div>
           </button>
         );

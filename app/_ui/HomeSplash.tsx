@@ -2,8 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import dynamic from 'next/dynamic';
-import { useEffect, useRef, useState, MouseEvent } from 'react';
+import { useEffect, useState, MouseEvent } from 'react';
 import {
   ArrowRightIcon,
   Bars3Icon,
@@ -17,6 +16,7 @@ import {
   XMarkIcon,
 } from '@heroicons/react/24/outline';
 import { useTheme } from '#/components/theme/ThemeProvider';
+import { homeFaqItems } from '#/app/_internal/home-content';
 
 const MEMORIAL_LINKS = [
   { label: 'Headstones', href: '/memorials/headstones' },
@@ -26,14 +26,128 @@ const MEMORIAL_LINKS = [
   { label: 'Pet Memorials', href: '/memorials/pet-memorials' },
 ] as const;
 
-const HeroCanvas = dynamic(() => import('#/components/marketing/HeroCanvas'), {
-  ssr: false,
-  loading: () => (
-    <div className="flex h-full w-full items-center justify-center" aria-hidden="true">
-      <div className="h-12 w-12 animate-spin rounded-full border-4 border-gray-700 border-t-white" />
-    </div>
-  ),
-});
+const HOME_PRODUCT_OPTIONS = [
+  {
+    name: 'Laser-Etched Black Granite Headstone',
+    category: 'Custom headstones',
+    description:
+      'Create a polished black granite headstone with a photographic portrait, personal inscription, and detailed laser-etched artwork.',
+    image: '/webp/products/APP_ID_4-medium.webp',
+    href: '/laser-etched-black-granite-headstone/select-shape',
+    designLabel: 'Design a headstone',
+    learnMoreHref: '/memorials/headstones',
+  },
+  {
+    name: 'Traditional Engraved Headstone',
+    category: 'Granite memorials',
+    description:
+      'Choose a traditional granite headstone shape, stone colour, engraved wording, motifs, and coordinated memorial accessories.',
+    image: '/webp/products/APP_ID_124-medium.webp',
+    href: '/traditional-engraved-headstone/select-shape',
+    designLabel: 'Design a headstone',
+    learnMoreHref: '/memorials/headstones',
+  },
+  {
+    name: 'Bronze Memorial Plaque',
+    category: 'Memorial plaques',
+    description:
+      'Design a cast bronze plaque with a custom border, background, raised inscription, emblems, motifs, and fixing system.',
+    image: '/webp/products/APP_ID_5-medium.webp',
+    href: '/bronze-plaque/select-shape',
+    designLabel: 'Design a bronze plaque',
+    learnMoreHref: '/memorials/plaques',
+  },
+  {
+    name: 'Full Colour Memorial Plaque',
+    category: 'Personalised plaques',
+    description:
+      'Combine photographs, colour backgrounds, meaningful text, and decorative details in a durable personalised memorial plaque.',
+    image: '/webp/products/APP_ID_32-medium.webp',
+    href: '/full-colour-plaque/select-shape',
+    designLabel: 'Design a memorial plaque',
+    learnMoreHref: '/memorials/plaques',
+  },
+  {
+    name: 'Black Granite Full Monument',
+    category: 'Full monuments',
+    description:
+      'Plan a complete granite monument with a headstone, bases, kerbs, cover, inscriptions, portraits, and coordinated additions.',
+    image: '/webp/products/APP_ID_100-medium.webp',
+    href: '/laser-etched-black-granite-full-monument/select-shape',
+    designLabel: 'Design a full monument',
+    learnMoreHref: '/memorials/full-monuments',
+  },
+  {
+    name: 'Stainless Steel Memorial Urn',
+    category: 'Memorial urns',
+    description:
+      'Personalise a stainless steel vitreous enamel inlaid urn with imagery, colour, wording, and a carefully selected finish.',
+    image: '/webp/products/APP_ID_2350-medium.webp',
+    href: '/stainless-steel-vitreous-enamel-inlaid-urn/select-shape',
+    designLabel: 'Design a memorial urn',
+    learnMoreHref: '/memorials/urns',
+  },
+  {
+    name: 'Black Granite Mini Headstone',
+    category: 'Mini headstones',
+    description:
+      'Create a compact black granite memorial with a laser-etched portrait, inscription, and artwork for a garden or smaller resting place.',
+    image: '/webp/products/APP_ID_22-medium.webp',
+    href: '/laser-etched-black-granite-mini-headstone/select-shape',
+    designLabel: 'Design a mini headstone',
+    learnMoreHref: '/memorials/headstones',
+  },
+  {
+    name: 'Stainless Steel Memorial Plaque',
+    category: 'Metal memorial plaques',
+    description:
+      'Design a durable YAG-lasered stainless steel plaque with precise wording, imagery, motifs, and fixing options for indoor or outdoor display.',
+    image: '/webp/products/APP_ID_52-medium.webp',
+    href: '/yag-lasered-stainless-steel-plaque/select-shape',
+    designLabel: 'Design a steel plaque',
+    learnMoreHref: '/memorials/plaques',
+  },
+  {
+    name: 'Laser-Etched Pet Memorial Plaque',
+    category: 'Pet memorials',
+    description:
+      'Remember a beloved companion with a personalised black granite pet plaque featuring their portrait, name, dates, and a meaningful message.',
+    image: '/webp/products/APP_ID_9-medium.webp',
+    href: '/laser-etched-pet-plaque/select-shape',
+    designLabel: 'Design a pet plaque',
+    learnMoreHref: '/memorials/pet-memorials',
+  },
+  {
+    name: 'Stainless Steel Light Transmitting Headstone',
+    category: 'Stainless steel headstones',
+    description:
+      'Create a contemporary stainless steel headstone with light-transmitting inscriptions and motifs, a glass backing, and a matching base.',
+    image: '/webp/products/APP_ID_1-medium.webp',
+    href: '/stainless-steel-light-transmitting-headstone/select-shape',
+    designLabel: 'Design a steel headstone',
+    learnMoreHref: '/memorials/headstones',
+  },
+  {
+    name: 'Traditional Engraved Memorial Plaque',
+    category: 'Engraved granite plaques',
+    description:
+      'Choose a granite or stone finish and add deeply engraved lettering, borders, photographs, and motifs to a traditional memorial plaque.',
+    image: '/webp/products/APP_ID_34-medium.webp',
+    href: '/traditional-engraved-plaque/select-shape',
+    designLabel: 'Design an engraved plaque',
+    learnMoreHref: '/memorials/plaques',
+  },
+  {
+    name: 'Traditional Engraved Full Monument',
+    category: 'Traditional monuments',
+    description:
+      'Design a complete traditional monument with coordinated granite elements, engraved inscriptions, decorative motifs, and memorial accessories.',
+    image: '/webp/products/APP_ID_101-medium.webp',
+    href: '/traditional-engraved-full-monument/select-shape',
+    designLabel: 'Design a full monument',
+    learnMoreHref: '/memorials/full-monuments',
+  },
+] as const;
 
 const HASH_MODAL_CONTENT = {
   contact: {
@@ -189,11 +303,6 @@ const hasModalLinks = (
 
 export default function HomeSplash() {
   const { theme, toggleTheme } = useTheme();
-  const [showHeroCanvas, setShowHeroCanvas] = useState(false);
-  const [heroCanvasReady, setHeroCanvasReady] = useState(false);
-  const [heroCanvasInViewport, setHeroCanvasInViewport] = useState(true);
-  const heroCanvasContainerRef = useRef<HTMLDivElement | null>(null);
-  const [rotation, setRotation] = useState(0);
   const [activeModal, setActiveModal] = useState<HashModalKey | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -204,33 +313,6 @@ export default function HomeSplash() {
 
   const closeModal = () => setActiveModal(null);
   const activeModalContent = activeModal ? HASH_MODAL_CONTENT[activeModal] : null;
-
-  useEffect(() => {
-    const timeoutId = globalThis.setTimeout(() => setShowHeroCanvas(true), 1200);
-
-    return () => {
-      globalThis.clearTimeout(timeoutId);
-    };
-  }, []);
-
-  useEffect(() => {
-    const container = heroCanvasContainerRef.current;
-    if (!container || typeof IntersectionObserver === 'undefined') return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        const isVisible = entry.isIntersecting;
-        setHeroCanvasInViewport(isVisible);
-        if (!isVisible) {
-          setHeroCanvasReady(false);
-        }
-      },
-      { root: null, threshold: 0.01 },
-    );
-
-    observer.observe(container);
-    return () => observer.disconnect();
-  }, []);
 
   useEffect(() => {
     if (!activeModal) return;
@@ -260,22 +342,17 @@ export default function HomeSplash() {
     };
   }, [mobileMenuOpen]);
 
-  const rotateLeft = () => {
-    setRotation((prev) => prev + Math.PI / 4);
-  };
-
-  const rotateRight = () => {
-    setRotation((prev) => prev - Math.PI / 4);
-  };
-
   return (
     <div
       className="min-h-screen"
       style={{ background: 'radial-gradient(circle at 50% 100%, #3E3020 0%, #121212 60%)' }}
     >
       
-      {/* Hero Section - Full Viewport Layout */}
-      <div className="relative flex min-h-0 flex-col overflow-hidden sm:min-h-screen" role="banner">
+      {/* Hero Section */}
+      <div
+        className="relative flex h-[min(600px,100svh)] min-h-[560px] max-h-[600px] flex-col overflow-hidden"
+        role="banner"
+      >
         
         {/* Responsive Header - Absolute top */}
         <header className="absolute top-0 left-0 right-0 z-50 px-4 py-3 sm:px-6 sm:py-4" style={{ caretColor: 'transparent' }}>
@@ -427,8 +504,7 @@ export default function HomeSplash() {
         <div className="absolute inset-0 bg-gradient-to-b from-[#071a31]/75 via-[#08243b]/38 to-[#06120d]/26" aria-hidden="true" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_58%,rgba(255,255,255,0.1),transparent_38%)]" aria-hidden="true" />
         
-        {/* Main Content - Flex Grow to Center Vertically */}
-        <div className="relative z-10 flex flex-col justify-start flex-grow w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8 pt-[130px] sm:pt-[116px]">
+        <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-grow flex-col justify-center px-4 pb-14 pt-[150px] sm:px-6 sm:pb-16 sm:pt-[145px] lg:px-8">
           <div className="flex flex-col text-center">
             
             {/* Headline - Connect the live design to the crafted memorial */}
@@ -451,71 +527,12 @@ export default function HomeSplash() {
                 textShadow: '0 1px 1px rgba(0,0,0,0.2), 0 4px 20px rgba(0,0,0,0)'
               }}
             >
-              You can Design Online a lasting memorial.
+              Design a lasting memorial online.
               <br />
-              See every detail in 3D before we craft it.
+              Personalise every detail and preview it in 3D.
             </p>
             
-            {/* 3D Canvas - TALLER container with overlap layout */}
-            <div
-              ref={heroCanvasContainerRef}
-              className="order-3 w-full h-[40vh] sm:h-[57vh] min-h-[330px] sm:min-h-[430px] flex items-center justify-center relative -mt-2 -mb-10 translate-y-[30px] sm:order-5 sm:-mt-5 sm:-mb-28 z-0 pointer-events-none"
-            >
-              
-              {/* Soft product lift without darkening the stone preview */}
-              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                <div className="w-[62vh] h-[62vh] bg-gradient-radial from-white/16 via-white/5 to-transparent rounded-full blur-3xl"></div>
-              </div>
-              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                <div className="w-[44vh] h-[44vh] bg-gradient-radial from-[#cfac6c]/22 via-[#cfac6c]/8 to-transparent rounded-full blur-2xl"></div>
-              </div>
-              
-              {/* The Canvas Itself - Re-enable pointer events for the canvas specifically */}
-              <div className="w-full h-full pointer-events-auto">
-                {showHeroCanvas && heroCanvasInViewport ? (
-                  <div
-                    className={`h-full w-full transition-all duration-500 ease-out ${heroCanvasReady ? 'opacity-100' : 'opacity-0'}`}
-                    style={{
-                      transform: heroCanvasReady ? 'translateY(0) scale(1)' : 'translateY(8px) scale(0.98)',
-                    }}
-                  >
-                    <HeroCanvas rotation={rotation} onReady={() => setHeroCanvasReady(true)} />
-                  </div>
-                ) : heroCanvasInViewport ? (
-                  <div className="flex h-full w-full items-center justify-center" aria-hidden="true">
-                    <div className="h-12 w-12 animate-spin rounded-full border-4 border-gray-700 border-t-white" />
-                  </div>
-                ) : (
-                  null
-                )}
-                {/* Rotation Controls - Subtle, elegant chevrons */}
-                {showHeroCanvas && heroCanvasInViewport && heroCanvasReady && (
-                  <>
-                    <button 
-                      onClick={rotateLeft}
-                      className="absolute left-[5%] sm:left-[15%] md:left-[calc(50%-270px)] top-1/2 z-30 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-lg border border-white/45 bg-[#0b1622]/85 text-white shadow-lg shadow-black/30 backdrop-blur-md transition-colors hover:border-[#cfac6c] hover:bg-[#cfac6c] hover:text-slate-950"
-                      aria-label="Rotate headstone left to view different angles"
-                    >
-                      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-                      </svg>
-                    </button>
-                    <button 
-                      onClick={rotateRight}
-                      className="absolute right-[5%] sm:right-[15%] md:right-[calc(50%-270px)] top-1/2 z-30 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-lg border border-white/45 bg-[#0b1622]/85 text-white shadow-lg shadow-black/30 backdrop-blur-md transition-colors hover:border-[#cfac6c] hover:bg-[#cfac6c] hover:text-slate-950"
-                      aria-label="Rotate headstone right to view different angles"
-                    >
-                      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-                      </svg>
-                    </button>
-                  </>
-                )}
-              </div>
-            </div>
-            
-            {/* CTAs - z-index ensures they sit ON TOP of canvas bottom area */}
-            <div className="order-4 relative z-20 mb-4 flex flex-col items-center gap-3">
+            <div className="order-3 relative z-20 mt-8 flex flex-col items-center gap-4">
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full">
                 <Link
                   href="/select-product"
@@ -524,16 +541,19 @@ export default function HomeSplash() {
                   aria-label="Start designing a memorial in 3D"
                   style={{ letterSpacing: '0.05em' }}
                 >
-                  Start Designing in 3D
+                  Design Your Memorial in 3D
                   <ArrowRightIcon className="relative top-px h-4 w-4 shrink-0" aria-hidden="true" />
                 </Link>
                 <Link
                   href="#how-it-works"
                   className="inline-flex w-auto items-center justify-center rounded-lg border-2 border-white/65 bg-white/15 px-7 py-3.5 text-center text-sm font-semibold tracking-wide text-white shadow-lg shadow-black/15 backdrop-blur-sm transition-colors hover:border-[#cfac6c] hover:bg-white/25 sm:px-10 sm:py-4 sm:text-base"
                 >
-                  See How It Works
+                  How Our Memorial Designer Works
                 </Link>
               </div>
+              <p className="text-center text-xs font-medium tracking-wide text-white/85 sm:text-sm">
+                Design online · Save and share your proof · Review pricing before ordering
+              </p>
             </div>
 
           </div>
@@ -598,7 +618,7 @@ export default function HomeSplash() {
                 </button>
               </div>
               <h2 className="mt-3 max-w-2xl font-serif text-3xl leading-[1.22] text-white sm:text-4xl day:text-gray-900">
-                Forever Shining gently guides you from the first choice to the final proof
+                Design a Personalised Memorial Online in 3D
               </h2>
               <p className="mt-5 text-sm font-semibold text-[#f3d48f] day:text-amber-700">
                 Creating lasting tributes since 2005
@@ -658,78 +678,193 @@ export default function HomeSplash() {
         </div>
       </section>
 
-      {/* Personalisation Showcase */}
-      <section className="relative overflow-hidden bg-[#f4f1eb] py-16 day:bg-[#f4f1eb]">
+      {/* Search-friendly product entry point outside the designer shell. */}
+      <section
+        aria-labelledby="home-products-heading"
+        className="relative overflow-hidden border-y border-white/10 bg-[#11100e] py-16 day:border-gray-200 day:bg-white"
+      >
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
-            <div className="max-w-2xl">
+          <div className="mx-auto max-w-3xl text-center">
+            <p className="text-xs font-semibold tracking-[0.24em] text-[#cfac6c] uppercase day:text-amber-700">
+              Choose your memorial
+            </p>
+            <h2
+              id="home-products-heading"
+              className="mt-3 font-serif text-3xl leading-tight text-white sm:text-4xl day:text-gray-900"
+            >
+              Design a custom headstone, plaque, monument, or urn online
+            </h2>
+            <p className="mx-auto mt-4 max-w-2xl text-base leading-7 text-gray-300 day:text-gray-600">
+              Start with the memorial that best suits your family, cemetery, or setting. Each guided designer lets you compare shapes, materials, sizes, inscriptions, images, and meaningful details before ordering.
+            </p>
+          </div>
+
+          <div className="mt-10 grid grid-cols-1 items-stretch gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {HOME_PRODUCT_OPTIONS.map((product) => (
+              <article
+                key={product.href}
+                className="group flex h-full flex-col overflow-hidden rounded-xl border border-white/12 bg-[#171717] shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#cfac6c]/65 hover:shadow-xl hover:shadow-black/20 day:border-gray-200 day:bg-white day:hover:border-[#cfac6c]/65 day:hover:shadow-gray-200/70"
+              >
+                <div className="relative aspect-[4/3] overflow-hidden bg-[#101010] day:bg-[#f3f1ed]">
+                  <Image
+                    src={product.image}
+                    alt={`${product.name} available to personalise online`}
+                    fill
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    className="object-contain p-4 transition-transform duration-500 group-hover:scale-105"
+                  />
+                </div>
+
+                <div className="flex flex-1 flex-col p-5">
+                  <p className="text-[11px] font-semibold tracking-[0.15em] text-[#cfac6c] uppercase day:text-amber-700">
+                    {product.category}
+                  </p>
+                  <h3 className="mt-2 text-lg leading-snug font-semibold text-white day:text-gray-900">
+                    {product.name}
+                  </h3>
+                  <p className="mt-3 flex-1 text-sm leading-6 text-gray-300 day:text-gray-600">
+                    {product.description}
+                  </p>
+                  <div className="mt-5 grid grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)] gap-2">
+                    <Link
+                      href={product.href}
+                      prefetch={false}
+                      className="inline-flex min-h-11 items-center justify-center gap-1.5 rounded-lg bg-[#cfac6c] px-3 py-2.5 text-center text-sm font-semibold text-slate-950 transition-colors hover:bg-[#d7b979] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#f3d48f]"
+                    >
+                      {product.designLabel}
+                      <ArrowRightIcon className="h-4 w-4 shrink-0" aria-hidden="true" />
+                    </Link>
+                    <Link
+                      href={product.learnMoreHref}
+                      className="inline-flex min-h-11 items-center justify-center rounded-lg border border-white/20 px-3 py-2.5 text-center text-sm font-semibold text-white transition-colors hover:border-[#cfac6c]/70 hover:bg-white/[0.06] day:border-gray-300 day:text-gray-800 day:hover:bg-gray-50"
+                    >
+                      Learn more
+                    </Link>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+
+          <div className="mt-9 flex flex-col items-center gap-3 text-center">
+            <Link
+              href="/select-product"
+              prefetch={false}
+              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-[#cfac6c] px-6 py-3 text-sm font-semibold text-slate-950 transition-colors hover:bg-[#d7b979]"
+            >
+              View all memorial products
+              <ArrowRightIcon className="h-4 w-4" aria-hidden="true" />
+            </Link>
+            <p className="max-w-2xl text-xs leading-5 text-gray-400 day:text-gray-500">
+              You can save your design, share it with family, and review pricing before making a final decision.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section className="relative overflow-hidden bg-[#f4f1eb] py-16">
+        <div className="mx-auto max-w-7xl px-6 lg:px-8">
+          <div className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:items-start">
+            <div className="max-w-xl">
               <p className="text-xs font-semibold tracking-[0.24em] text-[#a77d32] uppercase">
-                Made personal
+                A clear design process
               </p>
               <h2 className="mt-3 font-serif text-3xl leading-tight text-[#1d1a17] sm:text-4xl">
-                Bring every meaningful detail together
+                How to Design Your Memorial Online
               </h2>
               <p className="mt-3 text-base leading-7 text-[#625a51]">
-                Explore the shape, inscription, imagery, and finish until the memorial feels like the right reflection of their life.
+                Work through each decision at your own pace. The 3D preview updates as you choose the product, dimensions, wording, and personal details.
               </p>
               <Link
-                href="/designs"
-                className="mt-5 inline-flex w-fit items-center gap-2 text-sm font-semibold text-[#302719] transition-colors hover:text-[#a77d32]"
+                href="/select-product"
+                prefetch={false}
+                className="mt-6 inline-flex min-h-11 w-fit items-center gap-2 rounded-lg bg-[#cfac6c] px-5 py-2.5 text-sm font-semibold text-slate-950 transition-colors hover:bg-[#d7b979]"
               >
-                Explore memorial designs
+                Choose a memorial product
                 <ArrowRightIcon className="h-4 w-4" aria-hidden="true" />
               </Link>
             </div>
+
+            <ol className="grid gap-4 sm:grid-cols-3">
+              {[
+                {
+                  title: 'Choose the memorial',
+                  description:
+                    'Compare headstones, plaques, monuments, urns, and pet memorials before opening the designer.',
+                },
+                {
+                  title: 'Personalise the details',
+                  description:
+                    'Select the shape, material, size, inscription, portrait, motifs, and available accessories.',
+                },
+                {
+                  title: 'Review before ordering',
+                  description:
+                    'Check the 3D preview and pricing, then save or share the proof with family before moving forward.',
+                },
+              ].map((step, index) => (
+                <li
+                  key={step.title}
+                  className="rounded-xl border border-[#d9d1c5] bg-white p-5 shadow-sm"
+                >
+                  <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-[#cfac6c] text-sm font-bold text-slate-950">
+                    {index + 1}
+                  </span>
+                  <h3 className="mt-4 text-base font-semibold text-[#1d1a17]">
+                    {step.title}
+                  </h3>
+                  <p className="mt-2 text-sm leading-6 text-[#625a51]">
+                    {step.description}
+                  </p>
+                </li>
+              ))}
+            </ol>
+          </div>
+        </div>
+      </section>
+
+      <section
+        id="faq"
+        aria-labelledby="home-faq-heading"
+        className="relative border-t border-white/10 bg-[#0b0b0b] py-16 day:border-gray-200 day:bg-stone-100"
+      >
+        <div className="mx-auto max-w-4xl px-6 lg:px-8">
+          <div className="text-center">
+            <p className="text-xs font-semibold tracking-[0.24em] text-[#cfac6c] uppercase day:text-amber-700">
+              Memorial design questions
+            </p>
+            <h2
+              id="home-faq-heading"
+              className="mt-3 font-serif text-3xl leading-tight text-white sm:text-4xl day:text-gray-900"
+            >
+              Frequently Asked Questions About Designing a Memorial
+            </h2>
+            <p className="mx-auto mt-4 max-w-2xl text-base leading-7 text-gray-300 day:text-gray-600">
+              Practical answers about personalisation, cemetery requirements, saving a design, and ordering from your region.
+            </p>
           </div>
 
-          <div className="mt-9 grid gap-5 md:grid-cols-3">
-            <article className="group overflow-hidden rounded-2xl border border-black/5 bg-[#211e1a] shadow-sm">
-              <div className="relative aspect-[4/5] overflow-hidden bg-[#e3d8c8]">
-                <Image
-                  src="/visuals/memorial-shape-studio.webp"
-                  alt="A refined black granite memorial in a studio setting"
-                  fill
-                  className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
-                  sizes="(min-width: 768px) 33vw, 100vw"
-                />
-              </div>
-              <div className="p-5 text-white">
-                <p className="text-lg font-semibold">Shape a lasting tribute</p>
-                <p className="mt-1 text-sm leading-6 text-white/70">Explore form, inscriptions, and meaningful motifs in one considered design.</p>
-              </div>
-            </article>
-
-            <article className="group overflow-hidden rounded-2xl border border-black/5 bg-[#211e1a] shadow-sm">
-              <div className="relative aspect-[4/5] overflow-hidden bg-[#e3d8c8]">
-                <Image
-                  src="/visuals/memorial-photo-detail-studio.webp"
-                  alt="A ceramic memorial portrait and vase in a studio setting"
-                  fill
-                  className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
-                  sizes="(min-width: 768px) 33vw, 100vw"
-                />
-              </div>
-              <div className="p-5 text-white">
-                <p className="font-semibold">Add a cherished photo</p>
-                <p className="mt-1 text-sm leading-6 text-white/70">Keep a familiar face close in a beautifully finished memorial detail.</p>
-              </div>
-            </article>
-
-            <article className="group overflow-hidden rounded-2xl border border-black/5 bg-[#211e1a] shadow-sm">
-              <div className="relative aspect-[4/5] overflow-hidden bg-[#e3d8c8]">
-                <Image
-                  src="/visuals/memorial-finishes-studio.webp"
-                  alt="Polished black and honed gray granite finish samples"
-                  fill
-                  className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
-                  sizes="(min-width: 768px) 33vw, 100vw"
-                />
-              </div>
-              <div className="p-5 text-white">
-                <p className="font-semibold">Choose a lasting finish</p>
-                <p className="mt-1 text-sm leading-6 text-white/70">Compare granite tones and finishes until every choice feels right.</p>
-              </div>
-            </article>
+          <div className="mt-9 space-y-3">
+            {homeFaqItems.map((item, index) => (
+              <details
+                key={item.question}
+                open={index === 0}
+                className="group rounded-xl border border-white/12 bg-white/[0.04] px-5 py-4 day:border-gray-200 day:bg-white"
+              >
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-left text-base font-semibold text-white marker:content-none day:text-gray-900">
+                  {item.question}
+                  <span
+                    className="text-xl leading-none text-[#cfac6c] transition-transform group-open:rotate-45"
+                    aria-hidden="true"
+                  >
+                    +
+                  </span>
+                </summary>
+                <p className="mt-3 max-w-3xl text-sm leading-6 text-gray-300 day:text-gray-600">
+                  {item.answer}
+                </p>
+              </details>
+            ))}
           </div>
         </div>
       </section>
@@ -745,7 +880,7 @@ export default function HomeSplash() {
                 Need a hand?
               </p>
               <h2 className="mt-2 font-serif text-2xl leading-tight text-white sm:text-3xl day:text-gray-900">
-                Talk through your options with a memorial specialist
+                Get Help Choosing a Headstone, Plaque, or Memorial
               </h2>
               <p className="mt-2 text-sm leading-6 text-gray-300 day:text-gray-600">
                 We can help with choosing a memorial, materials, wording, and the next step when you are ready.

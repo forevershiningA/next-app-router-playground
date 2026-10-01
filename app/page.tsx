@@ -1,17 +1,17 @@
 import type { Metadata } from 'next';
 import HomeSplash from './_ui/HomeSplash';
+import { homeFaqItems } from './_internal/home-content';
 
 export const metadata: Metadata = {
   title: {
-    absolute: 'Forever Shining Memorials | Design Headstones, Plaques & Urns Online',
+    absolute:
+      'Custom Headstones, Memorial Plaques & Monuments | Forever Shining',
   },
   description:
     'Forever Shining helps families design and buy custom headstones, plaques, full monuments, urns and pet memorials online with live preview and pricing.',
-  alternates: {
-    canonical: 'https://forevershining.org',
-  },
+  alternates: { canonical: 'https://forevershining.org' },
   openGraph: {
-    title: 'Forever Shining Memorials | Design Headstones, Plaques & Urns Online',
+    title: 'Custom Headstones, Memorial Plaques & Monuments | Forever Shining',
     description:
       'Design and buy custom headstones, plaques, monuments, urns and pet memorials online with a live preview and pricing.',
     url: 'https://forevershining.org',
@@ -53,7 +53,12 @@ const socialProfiles = [
   'https://www.youtube.com/@forevershining/featured',
 ];
 
-function aggregateOffer(url: string, lowPrice: string, highPrice: string, offerCount: number) {
+function aggregateOffer(
+  url: string,
+  lowPrice: string,
+  highPrice: string,
+  offerCount: number,
+) {
   return {
     '@type': 'AggregateOffer',
     priceCurrency: 'USD',
@@ -64,34 +69,6 @@ function aggregateOffer(url: string, lowPrice: string, highPrice: string, offerC
     url,
   };
 }
-
-const faqItems = [
-  {
-    question: 'Can I design a memorial online before placing an order?',
-    answer:
-      'Yes. The Forever Shining design studio lets you choose a memorial type, shape, material, inscription, motifs, and additions with a live 3D preview before you request pricing or place an order. Bronze Plaques, Memorial Plaques, and Headstones are core products for international customers.',
-  },
-  {
-    question: 'Can I save and share a headstone design with family?',
-    answer:
-      'Yes. You can save a draft, review it later, and share the design proof with family members so everyone can approve the wording and layout before production.',
-  },
-  {
-    question: 'Do cemetery requirements affect the memorial design?',
-    answer:
-      'Yes. Cemeteries can set rules for size, material, foundation, and installation. We recommend checking with the cemetery office before final approval and can help review the requirements for your design.',
-  },
-  {
-    question: 'What details can be personalised?',
-    answer:
-      'You can personalise inscriptions, dates, verses, fonts, motifs, photo etching, shapes, materials, sizes, and selected accessories depending on the memorial product.',
-  },
-  {
-    question: 'Which countries and regions do you serve?',
-    answer:
-      'Forever Shining serves customers in Australia, the United States, Canada, and Europe, with a strong focus on Bronze Plaques and other Memorial Plaques as well as selected Headstones.',
-  },
-];
 
 const structuredData = {
   '@context': 'https://schema.org',
@@ -131,9 +108,7 @@ const structuredData = {
       telephone: primaryContact.telephone,
       email: primaryContact.email,
       priceRange: '$$-$$$$',
-      parentOrganization: {
-        '@id': 'https://forevershining.org#organization',
-      },
+      parentOrganization: { '@id': 'https://forevershining.org#organization' },
       address: {
         '@type': 'PostalAddress',
         streetAddress: primaryContact.streetAddress,
@@ -157,7 +132,12 @@ const structuredData = {
             '@type': 'Product',
             name: 'Bronze Plaques',
             category: 'Memorial plaque',
-            offers: aggregateOffer('https://forevershining.org/bronze-plaque/select-shape', '346', '5666', 3),
+            offers: aggregateOffer(
+              'https://forevershining.org/bronze-plaque/select-shape',
+              '346',
+              '5666',
+              3,
+            ),
           },
         },
         {
@@ -168,7 +148,12 @@ const structuredData = {
             '@type': 'Product',
             name: 'Memorial Plaques',
             category: 'Plaque',
-            offers: aggregateOffer('https://forevershining.org/memorials/plaques', '255', '4418', 4),
+            offers: aggregateOffer(
+              'https://forevershining.org/memorials/plaques',
+              '255',
+              '4418',
+              4,
+            ),
           },
         },
         {
@@ -179,7 +164,12 @@ const structuredData = {
             '@type': 'Product',
             name: 'Headstones',
             category: 'Memorial headstone',
-            offers: aggregateOffer('https://forevershining.org/memorials/headstones', '603', '11496', 4),
+            offers: aggregateOffer(
+              'https://forevershining.org/memorials/headstones',
+              '603',
+              '11496',
+              4,
+            ),
           },
         },
       ],
@@ -189,9 +179,7 @@ const structuredData = {
       '@id': 'https://forevershining.org#website',
       url: 'https://forevershining.org',
       name: 'Forever Shining',
-      publisher: {
-        '@id': 'https://forevershining.org#organization',
-      },
+      publisher: { '@id': 'https://forevershining.org#organization' },
       potentialAction: {
         '@type': 'SearchAction',
         target: 'https://forevershining.org/designs?q={search_term_string}',
@@ -202,26 +190,19 @@ const structuredData = {
       '@type': 'WebPage',
       '@id': 'https://forevershining.org#webpage',
       url: 'https://forevershining.org',
-      name: 'Forever Shining Memorials | Design Headstones, Plaques & Urns Online',
+      name: 'Custom Headstones, Memorial Plaques & Monuments | Forever Shining',
       description:
         'Forever Shining helps families design and buy custom headstones, plaques, full monuments, urns and pet memorials online with live preview and pricing.',
-      isPartOf: {
-        '@id': 'https://forevershining.org#website',
-      },
-      about: {
-        '@id': 'https://forevershining.org#localbusiness',
-      },
+      isPartOf: { '@id': 'https://forevershining.org#website' },
+      about: { '@id': 'https://forevershining.org#localbusiness' },
     },
     {
       '@type': 'FAQPage',
       '@id': 'https://forevershining.org#faq',
-      mainEntity: faqItems.map((item) => ({
+      mainEntity: homeFaqItems.map((item) => ({
         '@type': 'Question',
         name: item.question,
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: item.answer,
-        },
+        acceptedAnswer: { '@type': 'Answer', text: item.answer },
       })),
     },
   ],

@@ -118,11 +118,11 @@
 107. [September 24 Traditional Outline Colours and Canvas Step Menu](#current-status-2026-09-24--traditional-outline-colours-and-canvas-step-menu)
 108. [September 28 Technical and SEO Audit Remediation](#current-status-2026-09-28--technical-and-seo-audit-remediation)
 109. [September 29 Motif Selection and Sandblasted Shape Contours](#current-status-2026-09-29--motif-selection-and-sandblasted-shape-contours)
-110. [October 1 Bronze Plaque Scaling, Emblems, and Guided Quick Navigation](#current-status-2026-10-01--bronze-plaque-scaling-emblems-and-guided-quick-navigation)
+110. [October 1 Bronze Plaque Designer and Home Page SEO](#current-status-2026-10-01--bronze-plaque-designer-and-home-page-seo)
 
 ---
 
-## Current Status (2026-10-01) — Bronze Plaque Scaling, Emblems, and Guided Quick Navigation
+## Current Status (2026-10-01) — Bronze Plaque Designer and Home Page SEO
 
 ### Surface scaling and physical-size design content
 
@@ -146,12 +146,25 @@
 - `components/designer/navigation/DesignerNav.tsx` builds the desktop quick menu from the product's navigable panels instead of a five-item hard-coded list. Bronze Plaque now exposes Shape, Border, Material, Size, Fastening, Inscription, Photo, Additions, Emblem, Motif, Price, and Save where applicable.
 - The desktop quick menu keeps its existing icon and label sizing in fixed-width cells. Horizontal overflow is handled by left/right arrow controls, scroll snapping, and automatic centering of the active action.
 - Day-mode styling now covers the Bronze Border selector, the Select Emblems catalog, selected-emblem editor actions, inputs, empty states, and shared slider controls. Relevant implementations are `components/designer/selectors/BorderSelector.tsx`, `app/select-emblems/_ui/EmblemSelectionGrid.tsx`, `components/designer/panels/EmblemOverlayPanel.tsx`, and `ui/TailwindSlider.tsx`.
+- Bronze Plaque labels `select-material` as `Background` in the desktop and mobile quick-navigation metadata; other products retain `Material`.
+- `components/designer/selectors/FixingSelector.tsx` and its container in `DesignerNav.tsx` now provide complete day-mode surfaces, borders, selected states, headings, and descriptions for Flat Back, Lugs with Studs, and Screws.
+- Panel loaders for Images, Motifs, Emblems, and Additions use the same spinner presentation and minimum 300 ms display as Select Materials. Loading is activated immediately when fullscreen navigation starts, and `useLayoutEffect` applies it before a newly selected catalog can paint, preventing a flash of content before the loader.
+
+### Home Page product discovery and SEO
+
+- `app/_ui/HomeSplash.tsx` no longer imports or mounts `components/marketing/HeroCanvas`. The hero contains the marketing header, one descriptive H1, concise supporting copy, two CTAs, and a short trust line over the existing landscape background. All canvas loading, intersection tracking, rotation state, fallback product image, and rotation controls were removed from the Home Page bundle.
+- Hero height is responsive but capped at 600 CSS pixels (`h-[min(600px,100svh)]`, `min-h-[560px]`, `max-h-[600px]`). Its primary CTA is `Design Your Memorial in 3D`; the secondary anchor explains how the memorial designer works.
+- The Home Page product section after `Created from experience` contains 12 real catalog products. Each semantic `article` has a product-name H3, concrete description, optimized Next.js image, a product-specific `Design ...` link to the matching `select-shape` route, and a separate `Learn more` link to the relevant indexable `/memorials/...` category page. The section H2 remains the category-level `Design a custom headstone, plaque, monument, or urn online` rather than repeating product names at H2 level.
+- Generic studio-image cards were replaced with a factual three-step ordered process: choose the memorial, personalise its available details, then review the 3D preview and price before saving or sharing the proof.
+- `app/_internal/home-content.ts` is the single source for the five Home Page FAQs. `HomeSplash` renders those answers in accessible native `details` elements, while `app/page.tsx` maps the same data into `FAQPage` JSON-LD, ensuring structured data matches visible content.
+- Home metadata now uses `Custom Headstones, Memorial Plaques & Monuments | Forever Shining` for the document title, Open Graph title, and WebPage structured-data name. The canonical remains `https://forevershining.org`.
+- The Home Page deliberately does not add a `Product` JSON-LD object for every catalog card. Individual product and memorial landing pages remain the appropriate locations for focused Product/Offer and breadcrumb structured data.
 
 ### Validation
 
-- `pnpm type-check` passes with the current Bronze Plaque and emblem changes.
+- `pnpm type-check` passes with the current Bronze Plaque, navigation, and Home Page changes.
 - Targeted ESLint runs complete without errors; the large legacy scene components still report their existing warnings.
-- `git diff --check` passes, and Playwright visual checks covered day-mode emblem states, selected-emblem controls, side/rear selection depth, fixed physical sizing between 300 x 200 mm and 560 x 400 mm products, and plaque-click deselection.
+- `git diff --check` passes. Playwright visual checks covered day-mode emblem states, selected-emblem controls, side/rear selection depth, fixed physical sizing between 300 x 200 mm and 560 x 400 mm products, plaque-click deselection, and the no-canvas Home Page hero at a 1488 x 900 viewport.
 
 ---
 
