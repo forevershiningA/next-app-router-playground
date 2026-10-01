@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-09-29
+**Last Updated:** 2026-10-01
 
 **Status entry order:** Add new dated status entries immediately after the table of contents, before the existing status entries. Keep status entries in reverse chronological order (newest first); do not append them to the end of this file.
 **Tech Stack:** Next.js 15.5.26, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots), **Vitest 4.1.8** (unit tests), **Playwright 1.59.1** (E2E tests)
@@ -118,6 +118,40 @@
 107. [September 24 Traditional Outline Colours and Canvas Step Menu](#current-status-2026-09-24--traditional-outline-colours-and-canvas-step-menu)
 108. [September 28 Technical and SEO Audit Remediation](#current-status-2026-09-28--technical-and-seo-audit-remediation)
 109. [September 29 Motif Selection and Sandblasted Shape Contours](#current-status-2026-09-29--motif-selection-and-sandblasted-shape-contours)
+110. [October 1 Bronze Plaque Scaling, Emblems, and Guided Quick Navigation](#current-status-2026-10-01--bronze-plaque-scaling-emblems-and-guided-quick-navigation)
+
+---
+
+## Current Status (2026-10-01) — Bronze Plaque Scaling, Emblems, and Guided Quick Navigation
+
+### Surface scaling and physical-size design content
+
+- `components/three/headstone/SvgHeadstone.tsx` now exposes a separate `unscaledChildren` layer. The layer still inherits the source SVG's base `meshScale`, but it does not inherit the live, non-uniform width/height scale used to resize the plaque or headstone surface.
+- `components/three/headstone/ShapeSwapper.tsx` renders inscriptions, additions, motifs, images, and emblems in that physical-size layer. Product resizing therefore remaps their positions to the new design box without stretching their geometry. Emblem offsets participate in the same remapping path as the other positioned content.
+- Fixed catalog sizes remain real physical sizes. For example, emblem size 1 is 50 mm on both products, so it intentionally occupies a larger percentage of a 300 x 200 mm plaque than of a 560 x 400 mm plaque. Do not reintroduce product width/height scaling around design content to equalize its relative on-screen size.
+- Surface-bound decoration remains inside the live surface-scale group. `components/three/BronzeBorder.tsx` compensates its source geometry against non-uniform plaque scaling so corner details and rail thickness remain consistent, while border positions still follow the resized perimeter.
+- `components/three/headstone/PlaqueFixings.tsx` follows the resized surface for placement but inversely compensates its hardware geometry on X/Y. Lugs, studs, and screws therefore remain circular and correctly proportioned instead of being flattened with the plaque.
+
+### Selection outlines and pointer interaction
+
+- `components/three/ObjectSelectionBox.tsx` keeps transform handles at a fixed 12 CSS-pixel screen size. Each frame it converts that size into world units and compensates the selected object's non-uniform parent scale, so inscriptions, motifs, images, additions, and emblems share the same apparent handle size across 300 x 200 mm plaques and larger headstones.
+- Modern flat/resizable objects use their exact measured half-width and half-height for the outline. They do not inherit the legacy minimum based on handle size; consequently a small inscription's outline can continue shrinking vertically with the text.
+- `components/three/EmblemModel.tsx` uses the same continuous blue outline and four resize handles as images. Resize operations snap to the fixed `EMBLEM_SIZES` variants (50, 75, 100, 150, 220, 300, and 400 mm), using the emblem's controlling landscape/portrait dimension.
+- Emblem selection uses only a very small front-surface Z bias, matching images. Depth testing remains meaningful: the affordance stays close to the plaque in side views and is occluded when orbiting behind the plaque rather than floating through it.
+- The first left-click on an unselected emblem only selects it. Dragging can begin on a subsequent pointer press and updates only while the primary mouse button remains held, preventing the emblem from jumping or following the pointer after a selection click.
+- Clicking the Bronze Plaque mesh clears any selected inscription, addition, motif, image, or emblem, closes the object editor state, and makes the plaque/headstone the active selection again.
+
+### Bronze designer navigation and day mode
+
+- `components/designer/navigation/DesignerNav.tsx` builds the desktop quick menu from the product's navigable panels instead of a five-item hard-coded list. Bronze Plaque now exposes Shape, Border, Material, Size, Fastening, Inscription, Photo, Additions, Emblem, Motif, Price, and Save where applicable.
+- The desktop quick menu keeps its existing icon and label sizing in fixed-width cells. Horizontal overflow is handled by left/right arrow controls, scroll snapping, and automatic centering of the active action.
+- Day-mode styling now covers the Bronze Border selector, the Select Emblems catalog, selected-emblem editor actions, inputs, empty states, and shared slider controls. Relevant implementations are `components/designer/selectors/BorderSelector.tsx`, `app/select-emblems/_ui/EmblemSelectionGrid.tsx`, `components/designer/panels/EmblemOverlayPanel.tsx`, and `ui/TailwindSlider.tsx`.
+
+### Validation
+
+- `pnpm type-check` passes with the current Bronze Plaque and emblem changes.
+- Targeted ESLint runs complete without errors; the large legacy scene components still report their existing warnings.
+- `git diff --check` passes, and Playwright visual checks covered day-mode emblem states, selected-emblem controls, side/rear selection depth, fixed physical sizing between 300 x 200 mm and 560 x 400 mm products, and plaque-click deselection.
 
 ---
 
@@ -15802,6 +15836,6 @@ Both commands pass. Browser rendering still needs to be checked after the next l
 
 ---
 
-_End of STARTER.md - Last updated: 2026-08-21_
+_End of STARTER.md - Last updated: 2026-10-01_
 
 ---

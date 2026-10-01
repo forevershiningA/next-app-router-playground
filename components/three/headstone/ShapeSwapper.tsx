@@ -199,6 +199,8 @@ export default function ShapeSwapper({
     (s) => s.setSelectedAdditionId,
   );
   const setSelectedMotifId = useHeadstoneStore((s) => s.setSelectedMotifId);
+  const setSelectedImageId = useHeadstoneStore((s) => s.setSelectedImageId);
+  const setSelectedEmblemId = useHeadstoneStore((s) => s.setSelectedEmblemId);
   const setActivePanel = useHeadstoneStore((s) => s.setActivePanel);
   const motifOffsets = useHeadstoneStore((s) => s.motifOffsets);
   const openInscriptions = useHeadstoneStore((s) => s.openInscriptions);
@@ -467,6 +469,40 @@ export default function ShapeSwapper({
           }
         }
 
+        if (Object.keys(state.emblemOffsets).length > 0) {
+          let emblemClone: typeof state.emblemOffsets | null = null;
+          for (const [id, offset] of Object.entries(state.emblemOffsets)) {
+            const surface = offset.target ?? 'headstone';
+            if (surface === 'base' || surface === 'ledger') continue;
+            const isAbsolute =
+              (offset.coordinateSpace ?? 'offset') === 'absolute';
+            const absolutePoint = isAbsolute
+              ? { x: offset.xPos ?? 0, y: offset.yPos ?? 0 }
+              : absoluteFromCenterOffsets(offset.xPos, offset.yPos, oldMetrics);
+            const mapped = remapPointBetweenBoxes(
+              absolutePoint.x,
+              absolutePoint.y,
+              oldMetrics,
+              newMetrics,
+            );
+            const nextPoint = isAbsolute
+              ? { xPos: mapped.x, yPos: mapped.y }
+              : centerOffsetsFromAbsolute(mapped.x, mapped.y, newMetrics);
+            if (
+              Math.abs((offset.xPos ?? 0) - nextPoint.xPos) > BBOX_EPSILON ||
+              Math.abs((offset.yPos ?? 0) - nextPoint.yPos) > BBOX_EPSILON
+            ) {
+              if (!emblemClone) emblemClone = { ...state.emblemOffsets };
+              emblemClone[id] = {
+                ...offset,
+                xPos: nextPoint.xPos,
+                yPos: nextPoint.yPos,
+              };
+            }
+          }
+          if (emblemClone) updates.emblemOffsets = emblemClone;
+        }
+
         return updates;
       });
     },
@@ -727,6 +763,122 @@ export default function ShapeSwapper({
     pendingRemapRef.current = null;
   }, [visibleUrl, remapLayoutsBetweenBoxes, bboxVersion, loading]);
 
+  const renderUnscaledDesign = (api: HeadstoneAPI) => (
+    <>
+      {headstoneInscriptions.map((line: Line, i: number) => {
+        const zBump = (headstoneInscriptions.length - 1 - i) * 0.00005;
+        return (
+          <ErrorBoundary key={line.id}>
+            <React.Suspense fallback={null}>
+              <HeadstoneInscription
+                ref={line.ref}
+                id={line.id}
+                headstone={api}
+                surface="headstone"
+                font={FONT_MAP[line.font] || '/fonts/ebgaramond.woff2'}
+                editable
+                selected={
+                  !suppressInscriptionSelectionOutline &&
+                  selectedInscriptionId === line.id
+                }
+                onSelectInscription={() => {
+                  setSelected(null);
+                  setSelectedMotifId(null);
+                  setSelectedAdditionId(null);
+                  setSelectedInscriptionId(line.id);
+                  if (getDesignerStepSlug(pathname) !== 'inscriptions') {
+                    router.push(
+                      getDesignerProductStepHref('inscriptions', productId),
+                    );
+                  }
+                  window.dispatchEvent(
+                    new CustomEvent('openFullscreenPanel', {
+                      detail: { panel: 'inscriptions' },
+                    }),
+                  );
+                }}
+                color={line.color}
+                lift={0.002}
+                xPos={line.xPos ?? 0}
+                yPos={line.yPos ?? 0}
+                coordinateSpace={line.coordinateSpace}
+                rotationDeg={line.rotationDeg}
+                height={line.sizeMm}
+                text={line.text}
+                textAlign={line.textAlign}
+                zBump={zBump}
+                layer={line.layer}
+              />
+            </React.Suspense>
+          </ErrorBoundary>
+        );
+      })}
+      {headstoneAdditionIds.map((additionId, i) => (
+        <ErrorBoundary key={`${additionId}-${i}`}>
+          <React.Suspense fallback={null}>
+            <AdditionModel
+              id={additionId}
+              headstone={api}
+              surface="headstone"
+              index={i}
+            />
+          </React.Suspense>
+        </ErrorBoundary>
+      ))}
+      {headstoneMotifs.map((motif, i) => (
+        <ErrorBoundary key={`${motif.id}-${i}`}>
+          <React.Suspense fallback={null}>
+            <MotifModel
+              id={motif.id}
+              svgPath={motif.svgPath}
+              color={motif.color}
+              headstone={api}
+              surface="headstone"
+              index={i}
+              layer={motifOffsets[motif.id]?.layer}
+            />
+          </React.Suspense>
+        </ErrorBoundary>
+      ))}
+      {headstoneImages.map((image, i) => (
+        <ErrorBoundary key={`${image.id}-${i}`}>
+          <React.Suspense fallback={null}>
+            <ImageModel
+              id={image.id}
+              imageUrl={image.imageUrl}
+              widthMm={image.widthMm}
+              heightMm={image.heightMm}
+              xPos={image.xPos}
+              yPos={image.yPos}
+              rotationZ={image.rotationZ}
+              typeId={image.typeId}
+              maskShape={image.maskShape}
+              headstone={api}
+              surface="headstone"
+              index={i}
+              coordinateSpace={image.coordinateSpace}
+              layer={image.layer}
+            />
+          </React.Suspense>
+        </ErrorBoundary>
+      ))}
+      {headstoneEmblems.map((emblem, i) => (
+        <ErrorBoundary key={`emblem-${emblem.id}-${i}`}>
+          <React.Suspense fallback={null}>
+            <EmblemModel
+              id={emblem.id}
+              emblemId={emblem.emblemId}
+              imageUrl={emblem.imageUrl}
+              headstone={api}
+              surface="headstone"
+              index={i}
+            />
+          </React.Suspense>
+        </ErrorBoundary>
+      ))}
+    </>
+  );
+
   return (
     <>
       <group ref={tabletRef}>
@@ -798,6 +950,7 @@ export default function ShapeSwapper({
             headstoneStyle={headstoneStyle}
             slantThickness={slantThickness}
             selectedAdditions={selectedAdditions}
+            unscaledChildren={renderUnscaledDesign}
             meshProps={{
               name: 'headstone',
               onClick: (e) => {
@@ -816,148 +969,162 @@ export default function ShapeSwapper({
                   return;
                 }
 
+                setSelectedInscriptionId(null);
+                setSelectedAdditionId(null);
+                setSelectedMotifId(null);
+                setSelectedImageId(null);
+                setSelectedEmblemId(null);
+                setActivePanel(null);
                 setEditingObject('headstone');
                 setSelected('headstone');
               },
             }}
           >
-            {(api: HeadstoneAPI, selectedAdditionIds: string[]) => {
+            {(api: HeadstoneAPI, _selectedAdditionIds: string[]) => {
               if (resolvedHeadstoneMeshRef && api.mesh.current) {
                 (resolvedHeadstoneMeshRef as any).current = api.mesh.current;
               }
 
               return (
                 <>
-                  {headstoneInscriptions.map((line: Line, i: number) => {
-                    const zBump =
-                      (headstoneInscriptions.length - 1 - i) * 0.00005;
-                    const scaledX = line.xPos ?? 0;
-                    const scaledY = line.yPos ?? 0;
-                    return (
-                      <ErrorBoundary key={line.id}>
-                        <React.Suspense fallback={null}>
-                          <HeadstoneInscription
-                            ref={line.ref}
-                            id={line.id}
-                            headstone={api}
-                            surface="headstone"
-                            font={
-                              FONT_MAP[line.font] || '/fonts/ebgaramond.woff2'
-                            }
-                            editable
-                            selected={
-                              !suppressInscriptionSelectionOutline &&
-                              selectedInscriptionId === line.id
-                            }
-                            onSelectInscription={() => {
-                              setSelected(null);
-                              setSelectedMotifId(null); // Clear motif selection
-                              setSelectedAdditionId(null); // Clear addition selection
-                              setSelectedInscriptionId(line.id);
+                  {/* Design content is rendered through unscaledChildren above.
+                      Keep surfaceScaleRef reserved for physical decorations. */}
+                  {false && (
+                    <>
+                      {headstoneInscriptions.map((line: Line, i: number) => {
+                        const zBump =
+                          (headstoneInscriptions.length - 1 - i) * 0.00005;
+                        const scaledX = line.xPos ?? 0;
+                        const scaledY = line.yPos ?? 0;
+                        return (
+                          <ErrorBoundary key={line.id}>
+                            <React.Suspense fallback={null}>
+                              <HeadstoneInscription
+                                ref={line.ref}
+                                id={line.id}
+                                headstone={api}
+                                surface="headstone"
+                                font={
+                                  FONT_MAP[line.font] ||
+                                  '/fonts/ebgaramond.woff2'
+                                }
+                                editable
+                                selected={
+                                  !suppressInscriptionSelectionOutline &&
+                                  selectedInscriptionId === line.id
+                                }
+                                onSelectInscription={() => {
+                                  setSelected(null);
+                                  setSelectedMotifId(null); // Clear motif selection
+                                  setSelectedAdditionId(null); // Clear addition selection
+                                  setSelectedInscriptionId(line.id);
 
-                              // Navigate to inscriptions if not already there
-                              if (
-                                getDesignerStepSlug(pathname) !== 'inscriptions'
-                              ) {
-                                router.push(
-                                  getDesignerProductStepHref(
-                                    'inscriptions',
-                                    productId,
-                                  ),
-                                );
-                              }
+                                  // Navigate to inscriptions if not already there
+                                  if (
+                                    getDesignerStepSlug(pathname) !==
+                                    'inscriptions'
+                                  ) {
+                                    router.push(
+                                      getDesignerProductStepHref(
+                                        'inscriptions',
+                                        productId,
+                                      ),
+                                    );
+                                  }
 
-                              if (typeof window !== 'undefined') {
-                                window.dispatchEvent(
-                                  new CustomEvent('openFullscreenPanel', {
-                                    detail: { panel: 'inscriptions' },
-                                  }),
-                                );
-                              }
-                            }}
-                            color={line.color}
-                            lift={0.002}
-                            xPos={scaledX}
-                            yPos={scaledY}
-                            coordinateSpace={line.coordinateSpace}
-                            rotationDeg={line.rotationDeg}
-                            height={line.sizeMm}
-                            text={line.text}
-                            textAlign={line.textAlign}
-                            zBump={zBump}
-                            layer={line.layer}
-                          />
-                        </React.Suspense>
-                      </ErrorBoundary>
-                    );
-                  })}
+                                  if (typeof window !== 'undefined') {
+                                    window.dispatchEvent(
+                                      new CustomEvent('openFullscreenPanel', {
+                                        detail: { panel: 'inscriptions' },
+                                      }),
+                                    );
+                                  }
+                                }}
+                                color={line.color}
+                                lift={0.002}
+                                xPos={scaledX}
+                                yPos={scaledY}
+                                coordinateSpace={line.coordinateSpace}
+                                rotationDeg={line.rotationDeg}
+                                height={line.sizeMm}
+                                text={line.text}
+                                textAlign={line.textAlign}
+                                zBump={zBump}
+                                layer={line.layer}
+                              />
+                            </React.Suspense>
+                          </ErrorBoundary>
+                        );
+                      })}
 
-                  {headstoneAdditionIds.map((additionId, i) => (
-                    <ErrorBoundary key={`${additionId}-${i}`}>
-                      <React.Suspense fallback={null}>
-                        <AdditionModel
-                          id={additionId}
-                          headstone={api}
-                          surface="headstone"
-                          index={i}
-                        />
-                      </React.Suspense>
-                    </ErrorBoundary>
-                  ))}
+                      {headstoneAdditionIds.map((additionId, i) => (
+                        <ErrorBoundary key={`${additionId}-${i}`}>
+                          <React.Suspense fallback={null}>
+                            <AdditionModel
+                              id={additionId}
+                              headstone={api}
+                              surface="headstone"
+                              index={i}
+                            />
+                          </React.Suspense>
+                        </ErrorBoundary>
+                      ))}
 
-                  {headstoneMotifs.map((motif, i) => (
-                    <ErrorBoundary key={`${motif.id}-${i}`}>
-                      <React.Suspense fallback={null}>
-                        <MotifModel
-                          id={motif.id}
-                          svgPath={motif.svgPath}
-                          color={motif.color}
-                          headstone={api}
-                          surface="headstone"
-                          index={i}
-                          layer={motifOffsets[motif.id]?.layer}
-                        />
-                      </React.Suspense>
-                    </ErrorBoundary>
-                  ))}
+                      {headstoneMotifs.map((motif, i) => (
+                        <ErrorBoundary key={`${motif.id}-${i}`}>
+                          <React.Suspense fallback={null}>
+                            <MotifModel
+                              id={motif.id}
+                              svgPath={motif.svgPath}
+                              color={motif.color}
+                              headstone={api}
+                              surface="headstone"
+                              index={i}
+                              layer={motifOffsets[motif.id]?.layer}
+                            />
+                          </React.Suspense>
+                        </ErrorBoundary>
+                      ))}
 
-                  {headstoneImages.map((image, i) => (
-                    <ErrorBoundary key={`${image.id}-${i}`}>
-                      <React.Suspense fallback={null}>
-                        <ImageModel
-                          id={image.id}
-                          imageUrl={image.imageUrl}
-                          widthMm={image.widthMm}
-                          heightMm={image.heightMm}
-                          xPos={image.xPos}
-                          yPos={image.yPos}
-                          rotationZ={image.rotationZ}
-                          typeId={image.typeId}
-                          maskShape={image.maskShape}
-                          headstone={api}
-                          surface="headstone"
-                          index={i}
-                          coordinateSpace={image.coordinateSpace}
-                          layer={image.layer}
-                        />
-                      </React.Suspense>
-                    </ErrorBoundary>
-                  ))}
+                      {headstoneImages.map((image, i) => (
+                        <ErrorBoundary key={`${image.id}-${i}`}>
+                          <React.Suspense fallback={null}>
+                            <ImageModel
+                              id={image.id}
+                              imageUrl={image.imageUrl}
+                              widthMm={image.widthMm}
+                              heightMm={image.heightMm}
+                              xPos={image.xPos}
+                              yPos={image.yPos}
+                              rotationZ={image.rotationZ}
+                              typeId={image.typeId}
+                              maskShape={image.maskShape}
+                              headstone={api}
+                              surface="headstone"
+                              index={i}
+                              coordinateSpace={image.coordinateSpace}
+                              layer={image.layer}
+                            />
+                          </React.Suspense>
+                        </ErrorBoundary>
+                      ))}
 
-                  {headstoneEmblems.map((emblem, i) => (
-                    <ErrorBoundary key={`emblem-${emblem.id}-${i}`}>
-                      <React.Suspense fallback={null}>
-                        <EmblemModel
-                          id={emblem.id}
-                          emblemId={emblem.emblemId}
-                          imageUrl={emblem.imageUrl}
-                          headstone={api}
-                          surface="headstone"
-                          index={i}
-                        />
-                      </React.Suspense>
-                    </ErrorBoundary>
-                  ))}
+                      {headstoneEmblems.map((emblem, i) => (
+                        <ErrorBoundary key={`emblem-${emblem.id}-${i}`}>
+                          <React.Suspense fallback={null}>
+                            <EmblemModel
+                              id={emblem.id}
+                              emblemId={emblem.emblemId}
+                              imageUrl={emblem.imageUrl}
+                              headstone={api}
+                              surface="headstone"
+                              index={i}
+                            />
+                          </React.Suspense>
+                        </ErrorBoundary>
+                      ))}
+                    </>
+                  )}
 
                   {/* Render border if set */}
                   {borderName && isPlaque && (
@@ -975,6 +1142,12 @@ export default function ShapeSwapper({
                           outlinePoints={api.outlinePoints}
                           useShapeOutlineBorder={useShapeOutlineBorder}
                           shapeUrl={shapeUrl}
+                          surfaceScaleX={
+                            widthM / Math.max(1e-6, api.worldWidth)
+                          }
+                          surfaceScaleY={
+                            heightM / Math.max(1e-6, api.worldHeight)
+                          }
                         />
                       </React.Suspense>
                     </ErrorBoundary>
@@ -988,6 +1161,8 @@ export default function ShapeSwapper({
                       depth={headstoneDepth}
                       unitsPerMeter={api.unitsPerMeter}
                       depthUnitsPerMeter={api.depthUnitsPerMeter}
+                      surfaceScaleX={widthM / Math.max(1e-6, api.worldWidth)}
+                      surfaceScaleY={heightM / Math.max(1e-6, api.worldHeight)}
                     />
                   )}
 

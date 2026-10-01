@@ -12,6 +12,9 @@ type Props = {
   unitsPerMeter: number;
   /** Number of local units in one world metre along the plaque depth. */
   depthUnitsPerMeter?: number;
+  /** Additional live X/Y scaling applied by SvgHeadstone's surface wrapper. */
+  surfaceScaleX?: number;
+  surfaceScaleY?: number;
 };
 
 /**
@@ -26,6 +29,8 @@ export function PlaqueFixings({
   depth,
   unitsPerMeter,
   depthUnitsPerMeter,
+  surfaceScaleX = 1,
+  surfaceScaleY = 1,
 }: Props) {
   if (fixingType === 'flat-back') return null;
 
@@ -54,68 +59,84 @@ export function PlaqueFixings({
   const lugDepth = 0.005 * depthUnits;
   const studRadius = 0.0035 * units;
   const studLength = 0.012 * depthUnits;
+  // Keep positions in the surface coordinate system so they follow the plaque
+  // corners, but cancel the wrapper's live non-uniform scale for the hardware
+  // itself. Otherwise circular screws become ellipses and lugs are flattened.
+  const hardwareScale: [number, number, number] = [
+    1 / Math.max(1e-6, Math.abs(surfaceScaleX)),
+    1 / Math.max(1e-6, Math.abs(surfaceScaleY)),
+    1,
+  ];
 
   return (
     <group name="plaque-fixings">
       {fixingType === 'screws' &&
         points.map(([x, y], index) => (
           <group key={`screw-${index}`} position={[x, y, 0]}>
-            {/* The head is shallow but solid, so it reads correctly from side views. */}
-            <mesh
-              position={[0, 0, screwHeadHeight / 2]}
-              rotation={[Math.PI / 2, 0, 0]}
-              castShadow
-            >
-              <cylinderGeometry
-                args={[screwRadius, screwRadius, screwHeadHeight, 20]}
-              />
-              <meshStandardMaterial
-                color="#a87338"
-                metalness={0.84}
-                roughness={0.3}
-              />
-            </mesh>
-            <mesh
-              position={[0, 0, screwHeadHeight + screwSlotHeight / 2]}
-              rotation={[0, 0, Math.PI / 4]}
-            >
-              <boxGeometry
-                args={[screwRadius * 1.2, screwRadius * 0.17, screwSlotHeight]}
-              />
-              <meshStandardMaterial
-                color="#3d2a1a"
-                metalness={0.55}
-                roughness={0.5}
-              />
-            </mesh>
+            <group scale={hardwareScale}>
+              {/* The head is shallow but solid, so it reads correctly from side views. */}
+              <mesh
+                position={[0, 0, screwHeadHeight / 2]}
+                rotation={[Math.PI / 2, 0, 0]}
+                castShadow
+              >
+                <cylinderGeometry
+                  args={[screwRadius, screwRadius, screwHeadHeight, 20]}
+                />
+                <meshStandardMaterial
+                  color="#a87338"
+                  metalness={0.84}
+                  roughness={0.3}
+                />
+              </mesh>
+              <mesh
+                position={[0, 0, screwHeadHeight + screwSlotHeight / 2]}
+                rotation={[0, 0, Math.PI / 4]}
+              >
+                <boxGeometry
+                  args={[
+                    screwRadius * 1.2,
+                    screwRadius * 0.17,
+                    screwSlotHeight,
+                  ]}
+                />
+                <meshStandardMaterial
+                  color="#3d2a1a"
+                  metalness={0.55}
+                  roughness={0.5}
+                />
+              </mesh>
+            </group>
           </group>
         ))}
 
       {fixingType === 'lugs-with-studs' &&
         points.map(([x, y], index) => (
           <group key={`lug-${index}`} position={[x, y, rearZ]}>
-            <mesh position={[0, 0, -lugDepth / 2]} castShadow>
-              <boxGeometry args={[lugWidth, lugHeight, lugDepth]} />
-              <meshStandardMaterial
-                color="#8b6131"
-                metalness={0.78}
-                roughness={0.32}
-              />
-            </mesh>
-            <mesh
-              position={[0, 0, -lugDepth - studLength / 2]}
-              rotation={[Math.PI / 2, 0, 0]}
-              castShadow
-            >
-              <cylinderGeometry
-                args={[studRadius, studRadius, studLength, 16]}
-              />
-              <meshStandardMaterial
-                color="#a8a39a"
-                metalness={0.9}
-                roughness={0.24}
-              />
-            </mesh>
+            <group scale={hardwareScale}>
+              <mesh position={[0, 0, -lugDepth / 2]} castShadow>
+                <boxGeometry args={[lugWidth, lugHeight, lugDepth]} />
+                <meshStandardMaterial
+                  color="#8b6131"
+                  metalness={0.78}
+                  roughness={0.32}
+                />
+              </mesh>
+              <mesh
+                position={[0, 0, -lugDepth - studLength / 2]}
+                rotation={[Math.PI / 2, 0, 0]}
+                castShadow
+              >
+                <cylinderGeometry
+                  args={[studRadius, studRadius, studLength, 16]}
+                />
+                <meshStandardMaterial
+                  color="#a8a39a"
+                  metalness={0.9}
+                  roughness={0.24}
+                />
+              </mesh>
+            </group>
           </group>
         ))}
     </group>

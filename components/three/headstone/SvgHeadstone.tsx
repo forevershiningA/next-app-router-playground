@@ -262,6 +262,11 @@ type Props = {
     api: HeadstoneAPI,
     selectedAdditions: string[],
   ) => React.ReactNode;
+  /** Content whose physical size must not inherit live surface resizing. */
+  unscaledChildren?: (
+    api: HeadstoneAPI,
+    selectedAdditions: string[],
+  ) => React.ReactNode;
   selectedAdditions?: string[];
 };
 
@@ -648,6 +653,7 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(
       slantThickness = 150, // Default 150mm
       meshProps,
       children,
+      unscaledChildren,
       selectedAdditions = [],
     },
     ref,
@@ -2837,6 +2843,10 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(
                 {typeof children === 'function' &&
                   children(childApi, selectedAdditions)}
               </group>
+              <group scale={meshScale}>
+                {typeof unscaledChildren === 'function' &&
+                  unscaledChildren(childApi, selectedAdditions)}
+              </group>
             </group>
           ) : (
             <group position-z={apiData?.frontZ || 0}>
@@ -2850,6 +2860,10 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(
                 )}
                 {typeof children === 'function' &&
                   children(childApi, selectedAdditions)}
+              </group>
+              <group scale={meshScale}>
+                {typeof unscaledChildren === 'function' &&
+                  unscaledChildren(childApi, selectedAdditions)}
               </group>
             </group>
           )}

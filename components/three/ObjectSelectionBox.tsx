@@ -6,6 +6,7 @@ import { useThree, useFrame } from '@react-three/fiber';
 import { Line } from '@react-three/drei';
 
 const DEFAULT_ANIMATION_DURATION_MS = 520;
+const HANDLE_SCREEN_SIZE_PX = 12;
 
 type Props = {
   /** Unique ID for the selected object */
@@ -73,7 +74,7 @@ export default function SelectionBox({
   animationDuration = DEFAULT_ANIMATION_DURATION_MS,
 }: Props) {
   const threeContext = useThree();
-  const { camera, gl, controls, invalidate } = threeContext;
+  const { camera, gl, controls, invalidate, size, viewport } = threeContext;
 
   // Determine if this is a 2D object (flat on headstone surface)
   const is2DObject =
@@ -136,9 +137,16 @@ export default function SelectionBox({
       ? 0x2196f3
       : outlineColor;
 
-  // Calculate handle positions - ensure minimum spacing (MUST be before useEffect)
-  const minHalfWidth = Math.max(bounds.width / 2, fixedHandleSize * 1.5);
-  const minHalfHeight = Math.max(bounds.height / 2, fixedHandleSize * 1.5);
+  // Modern flat-object controls must track the real bounds even when the
+  // object becomes smaller than a handle. The handles themselves are kept at
+  // a constant screen size in useFrame, so padding the outline made it stop
+  // shrinking before the inscription did.
+  const minHalfWidth = usesInscriptionSelectionStyle
+    ? bounds.width / 2
+    : Math.max(bounds.width / 2, fixedHandleSize * 1.5);
+  const minHalfHeight = usesInscriptionSelectionStyle
+    ? bounds.height / 2
+    : Math.max(bounds.height / 2, fixedHandleSize * 1.5);
 
   const [hoveredHandle, setHoveredHandle] = React.useState<HandleType | null>(
     null,
@@ -661,7 +669,9 @@ export default function SelectionBox({
 
   // Refs for non-interactive elements
   const groupRef = React.useRef<THREE.Group>(null);
+  const handleRefs = React.useRef<Array<THREE.Mesh | null>>([]);
   const disableRaycast = React.useCallback((..._args: any[]) => {}, []);
+  const worldScale = React.useMemo(() => new THREE.Vector3(), []);
 
   // Cleanup timeout on unmount
   React.useEffect(() => {
@@ -674,6 +684,32 @@ export default function SelectionBox({
 
   useFrame((state, delta) => {
     if (groupRef.current) {
+      // Keep editor handles the same size on screen for every product size.
+      // Their positions still inherit the surface transform, but their visual
+      // geometry compensates both camera zoom and non-uniform parent scaling.
+      groupRef.current.getWorldPosition(worldPos);
+      groupRef.current.getWorldScale(worldScale);
+      const visibleWorldHeight = viewport.getCurrentViewport(
+        camera,
+        worldPos,
+      ).height;
+      const handleWorldSize =
+        (HANDLE_SCREEN_SIZE_PX * visibleWorldHeight) / Math.max(1, size.height);
+      const scaleX =
+        handleWorldSize /
+        Math.max(1e-6, fixedHandleSize * Math.abs(worldScale.x));
+      const scaleY =
+        handleWorldSize /
+        Math.max(1e-6, fixedHandleSize * Math.abs(worldScale.y));
+      const scaleZ = Math.min(scaleX, scaleY);
+      handleRefs.current.forEach((handle) => {
+        handle?.scale.set(
+          scaleX * handleScale,
+          scaleY * handleScale,
+          scaleZ * handleScale,
+        );
+      });
+
       if (isMotifRef.current) {
         // A motif belongs only to the front-facing memorial surface. Hide its
         // editor affordance as soon as that surface turns away from the camera.
@@ -744,10 +780,12 @@ export default function SelectionBox({
         <>
           {/* Corner Handles - Top-Left */}
           <mesh
+            ref={(node) => {
+              handleRefs.current[0] = node;
+            }}
             position={[-minHalfWidth, minHalfHeight, handleZOffset]}
             renderOrder={1002}
             visible={handlesVisible}
-            scale={[handleScale, handleScale, handleScale]}
             onClick={(e) => e.stopPropagation()}
             onPointerDown={(e) => handlePointerDown(e, 'topLeft')}
             onPointerEnter={() => handlePointerEnter('topLeft')}
@@ -771,10 +809,12 @@ export default function SelectionBox({
 
           {/* Top-Right */}
           <mesh
+            ref={(node) => {
+              handleRefs.current[1] = node;
+            }}
             position={[minHalfWidth, minHalfHeight, handleZOffset]}
             renderOrder={1002}
             visible={handlesVisible}
-            scale={[handleScale, handleScale, handleScale]}
             onClick={(e) => e.stopPropagation()}
             onPointerDown={(e) => handlePointerDown(e, 'topRight')}
             onPointerEnter={() => handlePointerEnter('topRight')}
@@ -798,10 +838,12 @@ export default function SelectionBox({
 
           {/* Bottom-Left */}
           <mesh
+            ref={(node) => {
+              handleRefs.current[2] = node;
+            }}
             position={[-minHalfWidth, -minHalfHeight, handleZOffset]}
             renderOrder={1002}
             visible={handlesVisible}
-            scale={[handleScale, handleScale, handleScale]}
             onClick={(e) => e.stopPropagation()}
             onPointerDown={(e) => handlePointerDown(e, 'bottomLeft')}
             onPointerEnter={() => handlePointerEnter('bottomLeft')}
@@ -825,10 +867,12 @@ export default function SelectionBox({
 
           {/* Bottom-Right */}
           <mesh
+            ref={(node) => {
+              handleRefs.current[3] = node;
+            }}
             position={[minHalfWidth, -minHalfHeight, handleZOffset]}
             renderOrder={1002}
             visible={handlesVisible}
-            scale={[handleScale, handleScale, handleScale]}
             onClick={(e) => e.stopPropagation()}
             onPointerDown={(e) => handlePointerDown(e, 'bottomRight')}
             onPointerEnter={() => handlePointerEnter('bottomRight')}
@@ -854,10 +898,12 @@ export default function SelectionBox({
             <>
               {/* Edge Handles - Top Center */}
               <mesh
+                ref={(node) => {
+                  handleRefs.current[4] = node;
+                }}
                 position={[0, minHalfHeight, handleZOffset]}
                 renderOrder={1002}
                 visible={handlesVisible}
-                scale={[handleScale, handleScale, handleScale]}
                 onClick={(e) => e.stopPropagation()}
                 onPointerDown={(e) => handlePointerDown(e, 'top')}
                 onPointerEnter={() => handlePointerEnter('top')}
@@ -877,10 +923,12 @@ export default function SelectionBox({
 
               {/* Edge Handles - Bottom Center */}
               <mesh
+                ref={(node) => {
+                  handleRefs.current[5] = node;
+                }}
                 position={[0, -minHalfHeight, handleZOffset]}
                 renderOrder={1002}
                 visible={handlesVisible}
-                scale={[handleScale, handleScale, handleScale]}
                 onClick={(e) => e.stopPropagation()}
                 onPointerDown={(e) => handlePointerDown(e, 'bottom')}
                 onPointerEnter={() => handlePointerEnter('bottom')}
@@ -900,10 +948,12 @@ export default function SelectionBox({
 
               {/* Edge Handles - Left Center */}
               <mesh
+                ref={(node) => {
+                  handleRefs.current[6] = node;
+                }}
                 position={[-minHalfWidth, 0, handleZOffset]}
                 renderOrder={1002}
                 visible={handlesVisible}
-                scale={[handleScale, handleScale, handleScale]}
                 onClick={(e) => e.stopPropagation()}
                 onPointerDown={(e) => handlePointerDown(e, 'left')}
                 onPointerEnter={() => handlePointerEnter('left')}
@@ -923,10 +973,12 @@ export default function SelectionBox({
 
               {/* Edge Handles - Right Center */}
               <mesh
+                ref={(node) => {
+                  handleRefs.current[7] = node;
+                }}
                 position={[minHalfWidth, 0, handleZOffset]}
                 renderOrder={1002}
                 visible={handlesVisible}
-                scale={[handleScale, handleScale, handleScale]}
                 onClick={(e) => e.stopPropagation()}
                 onPointerDown={(e) => handlePointerDown(e, 'right')}
                 onPointerEnter={() => handlePointerEnter('right')}

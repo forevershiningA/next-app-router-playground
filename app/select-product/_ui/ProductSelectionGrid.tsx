@@ -144,6 +144,12 @@ export default function ProductSelectionGrid({
       return { ...group, products: orderProductsForDisplay(groupProducts) };
     })
     .filter((group) => group.products.length > 0);
+  const selectedProduct = products.find(
+    (product) => product.id === currentProductId,
+  );
+  const selectedProductCategory = productCategories.find(
+    (category) => category.id === selectedProduct?.category,
+  );
 
   return (
     <div className="day:bg-stone-100 day:bg-none min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950">
@@ -230,7 +236,7 @@ export default function ProductSelectionGrid({
       </div>
 
       {/* Products Grid */}
-      <div className="mx-auto max-w-7xl px-6 pt-5 pb-28 lg:px-8 lg:pb-5">
+      <div className="mx-auto max-w-7xl px-6 pt-5 pb-36 lg:px-8 lg:pb-5">
         {filteredProducts.length === 0 ? (
           <div className="py-20 text-center">
             <h3 className="day:text-gray-900 text-xl font-medium text-white">
@@ -378,9 +384,16 @@ export default function ProductSelectionGrid({
         <div className="day:border-gray-200 day:bg-white/95 fixed right-0 bottom-0 left-0 z-30 border-t border-[#cfac6c]/30 bg-[#121212]/95 px-6 py-3 shadow-2xl shadow-black/40 backdrop-blur-md lg:hidden">
           <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-3 sm:flex-row sm:items-center">
             <div>
-              <p className="day:text-gray-900 text-sm font-semibold text-white">
-                {products.find((product) => product.id === currentProductId)
-                  ?.name ?? 'Product selected'}
+              <p className="day:text-gray-500 text-[11px] font-semibold tracking-[0.12em] text-[#cfac6c] uppercase">
+                Your selected product
+              </p>
+              <p className="day:text-gray-900 mt-0.5 text-sm font-semibold text-white">
+                {selectedProduct?.name ?? 'Product selected'}
+                {selectedProductCategory && (
+                  <span className="day:text-gray-500 ml-2 text-xs font-medium text-gray-300">
+                    · {selectedProductCategory.name}
+                  </span>
+                )}
               </p>
               <p className="day:text-gray-600 mt-0.5 text-xs text-gray-300">
                 Next: choose a shape for your memorial.
@@ -394,7 +407,7 @@ export default function ProductSelectionGrid({
             >
               {isProductLoading
                 ? 'Loading product…'
-                : 'Continue to Select Shape'}
+                : 'Customize selected product'}
               <ArrowRightIcon className="h-4 w-4" />
             </button>
           </div>

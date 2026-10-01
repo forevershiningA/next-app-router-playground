@@ -59,42 +59,57 @@ export default function EmblemOverlayPanel() {
   const isOpen = activePanel === 'emblem' && !!activeId;
   if (!isOpen || !activeId || !activeOffset) return null;
 
-  const emblemName = activeEmblem?.emblemId
-    ?.replace(/^br\d+[lr]?[-_]?/, '')
-    .replace(/[-_]+/g, ' ')
-    .replace(/\b\w/g, (c) => c.toUpperCase()) || 'Emblem';
+  const emblemName =
+    activeEmblem?.emblemId
+      ?.replace(/^br\d+[lr]?[-_]?/, '')
+      .replace(/[-_]+/g, ' ')
+      .replace(/\b\w/g, (c) => c.toUpperCase()) || 'Emblem';
 
   return (
     <div className="w-full">
       {/* Header */}
-      <div className="mb-4 flex items-center justify-between border-b border-white/10 pb-3">
-        <h3 className="text-base font-medium text-white">Edit Emblem</h3>
+      <div className="day:border-gray-200 mb-4 flex items-center justify-between border-b border-white/10 pb-3">
+        <h3 className="day:text-gray-900 text-base font-medium text-white">
+          Edit Emblem
+        </h3>
         <button
           onClick={handleClose}
-          className="text-white/60 hover:text-white transition-colors"
+          className="day:text-gray-500 day:hover:text-gray-900 text-white/60 transition-colors hover:text-white"
           title="Close"
         >
-          <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          <svg
+            className="h-5 w-5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M6 18L18 6M6 6l12 12"
+            />
           </svg>
         </button>
       </div>
 
       <div className="space-y-4">
-        <div className="text-sm text-white/70">
-          <span className="font-semibold text-white">{emblemName}</span>
+        <div className="day:text-gray-600 text-sm text-white/70">
+          <span className="day:text-gray-900 font-semibold text-white">
+            {emblemName}
+          </span>
         </div>
 
         {/* Actions */}
         <div className="flex space-x-2">
           <button
-            className="flex-1 cursor-pointer rounded-lg bg-violet-600 px-3 py-2 text-sm font-medium text-white hover:bg-violet-700 transition-colors"
+            className="day:border-[#c99a3e] day:bg-[#f6efe3] day:text-[#795814] day:hover:bg-[#eddfc5] flex-1 cursor-pointer rounded-lg border border-[#D7B356]/60 bg-[#D7B356]/15 px-3 py-2 text-sm font-medium text-[#F2D58B] transition-colors hover:bg-[#D7B356]/25"
             onClick={handleDuplicate}
           >
             Duplicate
           </button>
           <button
-            className="flex-1 cursor-pointer rounded-lg bg-red-600 px-3 py-2 text-sm font-medium text-white hover:bg-red-700 transition-colors"
+            className="day:border-red-300 day:bg-red-50 day:text-red-700 day:hover:bg-red-100 flex-1 cursor-pointer rounded-lg border border-red-500/60 bg-red-600 px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-red-700"
             onClick={handleDelete}
           >
             Delete
@@ -127,8 +142,8 @@ export default function EmblemOverlayPanel() {
           <button
             className={`flex-1 cursor-pointer rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
               activeOffset.flipX
-                ? 'bg-violet-600 text-white'
-                : 'bg-white/10 text-white/70 hover:bg-white/20'
+                ? 'day:bg-[#D7B356] day:text-slate-950 bg-[#D7B356] text-slate-950'
+                : 'day:border-gray-300 day:bg-gray-100 day:text-gray-700 day:hover:bg-gray-200 border border-transparent bg-white/10 text-white/70 hover:bg-white/20'
             }`}
             onClick={() => updateOffset({ flipX: !activeOffset.flipX })}
           >
@@ -137,8 +152,8 @@ export default function EmblemOverlayPanel() {
           <button
             className={`flex-1 cursor-pointer rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
               activeOffset.flipY
-                ? 'bg-violet-600 text-white'
-                : 'bg-white/10 text-white/70 hover:bg-white/20'
+                ? 'day:bg-[#D7B356] day:text-slate-950 bg-[#D7B356] text-slate-950'
+                : 'day:border-gray-300 day:bg-gray-100 day:text-gray-700 day:hover:bg-gray-200 border border-transparent bg-white/10 text-white/70 hover:bg-white/20'
             }`}
             onClick={() => updateOffset({ flipY: !activeOffset.flipY })}
           >

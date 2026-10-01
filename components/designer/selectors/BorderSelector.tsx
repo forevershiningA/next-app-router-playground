@@ -126,8 +126,8 @@ export default function BorderSelector({ borders, disableInternalScroll = false,
           const isSelected = currentBorderName === border.name || 
                            (border.id === '0' && !currentBorderName);
           const baseCardClasses = isSelected
-            ? `ring-2 ring-offset-2 ring-offset-[#0f0a07]`
-            : 'border border-white/10 hover:border-[#D7B356]/40';
+            ? `ring-2 ring-offset-2 ring-offset-[#0f0a07] day:ring-offset-[#f4f1eb]`
+            : 'day:border-[#ddd2c2] day:hover:border-[#b58b31]/60 border border-white/10 hover:border-[#D7B356]/40';
           const svgPath = getBorderAsset(border);
           
           return (
@@ -135,12 +135,12 @@ export default function BorderSelector({ borders, disableInternalScroll = false,
               key={border.id}
               type="button"
               onClick={() => handleBorderSelect(border)}
-              className={`relative overflow-hidden rounded-xl bg-[#0f0a07] transition-all duration-150 hover:bg-[#1a110b] focus-visible:outline-none ${baseCardClasses} cursor-pointer`}
+              className={`day:bg-[#fbf9f5] day:hover:bg-[#f1eadf] relative overflow-hidden rounded-xl bg-[#0f0a07] transition-all duration-150 hover:bg-[#1a110b] focus-visible:outline-none ${baseCardClasses} cursor-pointer`}
               style={isSelected ? { '--tw-ring-color': accentHex } as React.CSSProperties : undefined}
               title={border.name}
             >
               {/* Border Preview */}
-              <div className="relative aspect-square rounded-t-xl bg-gradient-to-b from-black/40 via-black/10 to-black/40">
+              <div className="day:from-[#eee6d9] day:via-[#fbf9f5] day:to-[#eee6d9] relative aspect-square rounded-t-xl bg-gradient-to-b from-black/40 via-black/10 to-black/40">
                 {svgPath ? (
                   <>
                     <div
@@ -173,7 +173,7 @@ export default function BorderSelector({ borders, disableInternalScroll = false,
                     />
                   </>
                 ) : (
-                  <div className="w-full h-full flex items-center justify-center text-sm text-slate-200/60">
+                  <div className="day:text-[#756856] w-full h-full flex items-center justify-center text-sm text-slate-200/60">
                     None
                   </div>
                 )}
@@ -187,9 +187,9 @@ export default function BorderSelector({ borders, disableInternalScroll = false,
               </div>
 
               {/* Border Name */}
-              <div className="p-2 h-12 flex items-center justify-center bg-[#0f0a07]/80 rounded-b-xl">
+              <div className="day:bg-[#f4f1eb] p-2 h-12 flex items-center justify-center bg-[#0f0a07]/80 rounded-b-xl">
                 <div className={`text-xs text-center line-clamp-2 ${
-                  isSelected ? 'font-semibold' : 'text-slate-200'
+                  isSelected ? 'font-semibold' : 'day:text-[#4d4233] text-slate-200'
                 }`}
                   style={isSelected ? { color: accentHex } : undefined}
                 >

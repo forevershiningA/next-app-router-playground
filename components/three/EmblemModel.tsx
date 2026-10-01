@@ -40,11 +40,16 @@ export default function EmblemModel({
   const ref = React.useRef<THREE.Group>(null!);
   const [dragging, setDragging] = React.useState(false);
   const selected = selectedEmblemId === id;
-  const dragPositionRef = React.useRef<{ xPos: number; yPos: number } | null>(null);
+  const dragPositionRef = React.useRef<{ xPos: number; yPos: number } | null>(
+    null,
+  );
   const animationFrameRef = React.useRef<number | null>(null);
   const pointerCaptureTargetRef = React.useRef<HTMLElement | null>(null);
 
-  const dragPlane = React.useMemo(() => new THREE.Plane(new THREE.Vector3(0, 0, 1), 0), []);
+  const dragPlane = React.useMemo(
+    () => new THREE.Plane(new THREE.Vector3(0, 0, 1), 0),
+    [],
+  );
   const fallbackIntersection = React.useMemo(() => new THREE.Vector3(), []);
   const [texture, setTexture] = React.useState<THREE.Texture | null>(null);
   const planeGeometry = React.useMemo(() => new THREE.PlaneGeometry(1, 1), []);
@@ -108,7 +113,9 @@ export default function EmblemModel({
     const imgW = texture.image.width || 1;
     const imgH = texture.image.height || 1;
     const aspect = imgW / imgH;
-    const sizeEntry = EMBLEM_SIZES.find((s) => s.variant === offset.sizeVariant);
+    const sizeEntry = EMBLEM_SIZES.find(
+      (s) => s.variant === offset.sizeVariant,
+    );
     const sizeMm = sizeEntry?.heightMm ?? 100;
 
     let targetW: number;
@@ -156,13 +163,20 @@ export default function EmblemModel({
       if (!worldPoint) return;
 
       const localPt = targetMesh.worldToLocal(worldPoint);
-      if (!targetMesh.geometry.boundingBox) targetMesh.geometry.computeBoundingBox();
+      if (!targetMesh.geometry.boundingBox)
+        targetMesh.geometry.computeBoundingBox();
       const bbox = targetMesh.geometry.boundingBox!;
 
       const inset = 0.01;
       const spanY = bbox.max.y - bbox.min.y;
-      localPt.x = Math.max(bbox.min.x + inset, Math.min(bbox.max.x - inset, localPt.x));
-      localPt.y = Math.max(bbox.min.y + inset + 0.04 * spanY, Math.min(bbox.max.y - inset, localPt.y));
+      localPt.x = Math.max(
+        bbox.min.x + inset,
+        Math.min(bbox.max.x - inset, localPt.x),
+      );
+      localPt.y = Math.max(
+        bbox.min.y + inset + 0.04 * spanY,
+        Math.min(bbox.max.y - inset, localPt.y),
+      );
 
       dragPositionRef.current = { xPos: localPt.x, yPos: localPt.y };
 
@@ -182,10 +196,22 @@ export default function EmblemModel({
         animationFrameRef.current = null;
       });
     },
-    [camera, dragPlane, fallbackIntersection, gl, headstone, id, mouse, raycaster, setEmblemOffset, surface],
+    [
+      camera,
+      dragPlane,
+      fallbackIntersection,
+      gl,
+      headstone,
+      id,
+      mouse,
+      raycaster,
+      setEmblemOffset,
+      surface,
+    ],
   );
 
-  // Pointer down: select + start drag
+  // First pointer down only selects the emblem. Dragging starts on a
+  // subsequent pointer down, once the emblem is already active.
   const handlePointerDown = React.useCallback(
     (e: any) => {
       e.stopPropagation();
@@ -199,8 +225,15 @@ export default function EmblemModel({
 
       if (typeof window !== 'undefined') {
         window.dispatchEvent(
-          new CustomEvent('openFullscreenPanel', { detail: { panel: 'select-emblems' } }),
+          new CustomEvent('openFullscreenPanel', {
+            detail: { panel: 'select-emblems' },
+          }),
         );
+      }
+
+      if (!selected) {
+        gl.domElement.style.cursor = 'grab';
+        return;
       }
 
       setDragging(true);
@@ -210,12 +243,17 @@ export default function EmblemModel({
         pointerCaptureTargetRef.current = targetElement;
       }
 
-      const clientX = e.clientX ?? e.touches?.[0]?.clientX ?? 0;
-      const clientY = e.clientY ?? e.touches?.[0]?.clientY ?? 0;
-      placeOnSurface(clientX, clientY);
       gl.domElement.style.cursor = 'grabbing';
     },
-    [gl, headstone, id, placeOnSurface, setActivePanel, setSelected, setSelectedEmblemId],
+    [
+      gl,
+      headstone,
+      id,
+      selected,
+      setActivePanel,
+      setSelected,
+      setSelectedEmblemId,
+    ],
   );
 
   // Drag move/up listeners
@@ -224,6 +262,12 @@ export default function EmblemModel({
 
     const onMove = (event: PointerEvent) => {
       event.preventDefault();
+      if ((event.buttons & 1) === 0) {
+        setDragging(false);
+        gl.domElement.style.cursor = 'auto';
+        if (controls) (controls as any).enabled = true;
+        return;
+      }
       placeOnSurface(event.clientX, event.clientY);
     };
 
@@ -239,7 +283,9 @@ export default function EmblemModel({
       if (controls) (controls as any).enabled = true;
 
       if (pointerCaptureTargetRef.current && event.pointerId !== undefined) {
-        pointerCaptureTargetRef.current.releasePointerCapture?.(event.pointerId);
+        pointerCaptureTargetRef.current.releasePointerCapture?.(
+          event.pointerId,
+        );
         pointerCaptureTargetRef.current = null;
       }
     };
@@ -264,7 +310,8 @@ export default function EmblemModel({
   if (!headstone || !stone) return null;
 
   const unitsPerMeter = headstone.unitsPerMeter ?? 1000;
-  const safeUnitsPerMeter = Math.abs(unitsPerMeter) > 1e-6 ? Math.abs(unitsPerMeter) : 1000;
+  const safeUnitsPerMeter =
+    Math.abs(unitsPerMeter) > 1e-6 ? Math.abs(unitsPerMeter) : 1000;
   const mmToLocalUnits = safeUnitsPerMeter / 1000;
 
   // Derive aspect ratio from loaded texture (width / height)
@@ -274,10 +321,16 @@ export default function EmblemModel({
 
   const widthUnits = (offset.widthMm ?? 100) * mmToLocalUnits;
   const heightUnits = (offset.heightMm ?? 100) * mmToLocalUnits;
+  const currentEmblemSizeMm =
+    aspect >= 1 ? (offset.widthMm ?? 100) : (offset.heightMm ?? 100);
 
   const frontZ = headstone.frontZ ?? 0;
   const stackOffset = index * 0.2;
   const groupZ = frontZ + stackOffset * mmToLocalUnits;
+  // Match ImageModel: the editor outline only needs a tiny depth bias to
+  // avoid z-fighting. A physical 0.5 mm lift visibly detached it from small
+  // plaques when viewed at an angle.
+  const selectionZ = 0.0001;
 
   if (!stone.geometry.boundingBox) stone.geometry.computeBoundingBox();
   const bbox = stone.geometry.boundingBox!;
@@ -341,15 +394,30 @@ export default function EmblemModel({
       {selected && (
         <SelectionBox
           objectId={id}
-          position={new THREE.Vector3(0, 0, 0.5 * mmToLocalUnits)}
+          position={new THREE.Vector3(0, 0, selectionZ)}
           bounds={{ width: widthUnits, height: heightUnits }}
-          rotation={rotZ}
+          // The parent group already carries the emblem rotation.
+          rotation={0}
           unitsPerMeter={headstone.unitsPerMeter ?? 1}
-          currentSizeMm={offset.heightMm}
+          currentSizeMm={currentEmblemSizeMm}
+          minSizeMm={EMBLEM_SIZES[0].heightMm}
+          maxSizeMm={EMBLEM_SIZES[EMBLEM_SIZES.length - 1].heightMm}
           objectType="motif"
+          enableResizeHandles
           animateOnShow
           animationDuration={520}
           onUpdate={(data) => {
+            if (data.sizeMm !== undefined) {
+              const nextSize = EMBLEM_SIZES.reduce((closest, size) =>
+                Math.abs(size.heightMm - data.sizeMm!) <
+                Math.abs(closest.heightMm - data.sizeMm!)
+                  ? size
+                  : closest,
+              );
+              if (nextSize.variant !== offset.sizeVariant) {
+                setEmblemOffset(id, { sizeVariant: nextSize.variant });
+              }
+            }
             if (data.xPos !== undefined && data.yPos !== undefined) {
               setEmblemOffset(id, {
                 xPos: data.xPos,

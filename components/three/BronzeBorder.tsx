@@ -22,6 +22,8 @@ interface BronzeBorderProps {
   outlinePoints?: THREE.Vector2[];
   useShapeOutlineBorder?: boolean;
   shapeUrl?: string | null;
+  surfaceScaleX?: number;
+  surfaceScaleY?: number;
 }
 
 interface BorderResources {
@@ -417,6 +419,8 @@ export function BronzeBorder({
   outlinePoints,
   useShapeOutlineBorder = false,
   shapeUrl = null,
+  surfaceScaleX = 1,
+  surfaceScaleY = 1,
 }: BronzeBorderProps) {
   const unitScale = Math.max(1e-6, Math.abs(unitsPerMeter) || 1);
   const localWidth = Math.max(1e-3, Math.abs(plaqueWidth) * unitScale);
@@ -503,11 +507,17 @@ export function BronzeBorder({
     materialRef.current = null;
   }, []);
 
-  // Handle Resize Debouncing (Fast Path: scale, Slow Path: rebuild geometry)
-  // Stainless steel borders use fixed physical frame width — skip debounce
-  // so discrete size steps rebuild geometry immediately.
+  // The oversized SVGs for plaque borders are copied, mirrored and clipped into
+  // four corners. Scaling their completed group independently on X/Y squashes
+  // those details, so rebuild them at the requested dimensions instead.
+  // This intentionally leaves the resize fast path available to headstone-only
+  // outline borders and other geometry.
+  const mustPreservePlaqueCornerGeometry = usesIntegratedRails;
+
+  // Handle resize debouncing. Stainless steel and Bronze Plaque borders keep
+  // their physical frame/corner proportions, so they rebuild immediately.
   useEffect(() => {
-    if (isStainlessSteel) {
+    if (isStainlessSteel || mustPreservePlaqueCornerGeometry) {
       setDebouncedDims({ w: localWidth, h: localHeight });
       return;
     }
@@ -521,15 +531,19 @@ export function BronzeBorder({
     return () => {
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
     };
-  }, [localWidth, localHeight, isStainlessSteel]);
+  }, [localWidth, localHeight, isStainlessSteel, mustPreservePlaqueCornerGeometry]);
 
   useLayoutEffect(() => {
     if (!groupRef.current || !builtState.group) return;
+    if (mustPreservePlaqueCornerGeometry) {
+      groupRef.current.scale.set(1, 1, 1);
+      return;
+    }
     const { w, h } = builtState.dims;
     const safeW = w || 1;
     const safeH = h || 1;
     groupRef.current.scale.set(localWidth / safeW, localHeight / safeH, 1);
-  }, [localWidth, localHeight, builtState]);
+  }, [localWidth, localHeight, builtState, mustPreservePlaqueCornerGeometry]);
 
   useEffect(() => {
     if (!resolvedSlug || usesShapeOutline) {
@@ -608,8 +622,9 @@ export function BronzeBorder({
       textures: bronzeTextures ?? undefined,
       integratedRails: usesIntegratedRails,
       material,
-      borderSlug: resolvedSlug,
       isStainlessSteel,
+      surfaceScaleX,
+      surfaceScaleY,
     });
 
     if (!built) {
@@ -626,7 +641,7 @@ export function BronzeBorder({
     // eslint-disable-next-line react-hooks/exhaustive-deps -- localWidth/localHeight intentionally
     // excluded: the useLayoutEffect fast-path handles smooth scaling during drag; only debouncedDims
     // should trigger expensive geometry rebuilds.
-  }, [svgData, shouldRender, debouncedDims, depth, frontZ, bronzeTextures, disposeResources, usesIntegratedRails, getMaterial, unitScale, resolvedSlug, isStainlessSteel, usesShapeOutline, outlinePoints, shapeUrl]);
+  }, [svgData, shouldRender, debouncedDims, depth, frontZ, bronzeTextures, disposeResources, usesIntegratedRails, getMaterial, unitScale, resolvedSlug, isStainlessSteel, usesShapeOutline, outlinePoints, shapeUrl, surfaceScaleX, surfaceScaleY]);
 
   if (!builtState.group) {
     return null;
@@ -763,8 +778,9 @@ function buildBorderGroup(
     textures?: BronzeTextures;
     integratedRails?: boolean;
     material: THREE.MeshPhysicalMaterial;
-    borderSlug?: string | null;
     isStainlessSteel?: boolean;
+    surfaceScaleX?: number;
+    surfaceScaleY?: number;
   },
 ): {
   group: THREE.Group;
@@ -779,8 +795,9 @@ function buildBorderGroup(
     textures,
     integratedRails = false,
     material,
-    borderSlug,
     isStainlessSteel: ssBorder = false,
+    surfaceScaleX = 1,
+    surfaceScaleY = 1,
   } = params;
   const safeUnitScale = Math.max(1e-6, unitScale ?? 1);
   const width = Math.max(1e-3, Math.abs(plaqueWidth));
@@ -869,14 +886,10 @@ function buildBorderGroup(
     : Math.max(0.6, lineThicknessMm * (0.2 + 0.12 * sizeCompression));
   const lineGap = Math.max(0.00015 * safeUnitScale, (lineGapMm / 1000) * safeUnitScale);
 
-  // Scale decorative corner detail. Integrated rail SVGs should stretch to full width/height.
-  const INTEGRATED_SCALE_OVERRIDES: Record<string, number> = {
-    border1a: 4,
-  };
-
   if (integratedRails) {
-    let uniformScale = Math.min(width / originalWidth, height / originalHeight);
+    let uniformScale: number;
     if (ssBorder) {
+      uniformScale = Math.min(width / originalWidth, height / originalHeight);
       // Fixed frame: scale the SVG so border frame stays a constant physical
       // width regardless of plaque size. Larger plaques get a thinner-looking
       // border, smaller plaques get a proportionally thicker border.
@@ -884,14 +897,23 @@ function buildBorderGroup(
       const referenceDimMm = 200;
       const fixedFrameFactor = referenceDimMm / Math.max(80, minDimensionMm);
       uniformScale *= fixedFrameFactor;
-    }else if (borderSlug && INTEGRATED_SCALE_OVERRIDES[borderSlug]) {
-      const rawOverride = INTEGRATED_SCALE_OVERRIDES[borderSlug];
-      const smallPlaqueFactor = clamp01((minDimensionMm - 320) / 480);
-      const lerpedOverride = THREE.MathUtils.lerp(1, rawOverride, smallPlaqueFactor);
-      uniformScale *= lerpedOverride;
+    } else {
+      // Bronze SVGs are deliberately oversized. Keep their source span at the
+      // 300×200-mm reference size (3 × the reference short side), then mirror
+      // and crop it into each corner. Scaling the source to each plaque's short
+      // side changed the physical size of the corner artwork on portrait and
+      // landscape plaques.
+      const bronzeReferenceShortSideMm = 200;
+      const bronzeSourceSpan = (bronzeReferenceShortSideMm / 1000) * safeUnitScale * 3;
+      uniformScale = bronzeSourceSpan / Math.max(originalWidth, originalHeight);
     }
-    uniformScale *= 5.0;
-    merged.scale(uniformScale, uniformScale, 1);
+    const safeSurfaceScaleX = Math.max(1e-6, Math.abs(surfaceScaleX));
+    const safeSurfaceScaleY = Math.max(1e-6, Math.abs(surfaceScaleY));
+    merged.scale(
+      ssBorder ? uniformScale : uniformScale / safeSurfaceScaleX,
+      ssBorder ? uniformScale : uniformScale / safeSurfaceScaleY,
+      1,
+    );
   } else {
     const targetCornerSpanMm = Math.max(lineThicknessMm * 4, minDimensionMm * 0.16 * borderScaleFactor);
     const targetCornerSpan = (targetCornerSpanMm / 1000) * safeUnitScale;
@@ -900,24 +922,7 @@ function buildBorderGroup(
   }
   merged.computeVertexNormals();
   merged.computeBoundingBox();
-  let scaledBounds = merged.boundingBox!;
-
-  if (integratedRails && !ssBorder && width > 0 && height > 0) {
-    const coverageX = (scaledBounds.max.x - scaledBounds.min.x) / width;
-    const coverageY = (scaledBounds.max.y - scaledBounds.min.y) / height;
-    // Target coverage > 1.0 means the border geometry intentionally extends beyond the
-    // plaque boundary; createCornerMesh slices each quadrant so it renders correctly.
-    // This keeps frame elements visually thick enough to be seen on the plaque.
-    const targetCoverage = 3.0;
-    const dominantCoverage = Math.max(coverageX, coverageY);
-
-    if (dominantCoverage > targetCoverage) {
-      const shrink = Math.max(0.25, targetCoverage / Math.max(1e-6, dominantCoverage));
-      merged.scale(shrink, shrink, 1);
-      merged.computeBoundingBox();
-      scaledBounds = merged.boundingBox!;
-    }
-  }
+  const scaledBounds = merged.boundingBox!;
 
   const cornerSpanX = scaledBounds.max.x - scaledBounds.min.x;
   const cornerSpanY = scaledBounds.max.y - scaledBounds.min.y;

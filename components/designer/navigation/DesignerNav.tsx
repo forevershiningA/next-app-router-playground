@@ -17,6 +17,8 @@ import {
   ArrowPathIcon,
   ChevronDownIcon,
   ChevronUpIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
   RectangleStackIcon,
   PhotoIcon,
   UserCircleIcon,
@@ -141,19 +143,16 @@ const menuGroups = [
 
 // Flatten for compatibility with existing code
 const menuItems = menuGroups.flatMap((group) => group.items);
-const guidedQuickNavSlugs = [
-  'inscriptions',
-  'select-images',
-  'select-motifs',
-  'check-price',
-  'save-design',
-] as const;
-const guidedQuickNavLabels: Record<
-  (typeof guidedQuickNavSlugs)[number],
-  string
-> = {
+const guidedQuickNavLabels: Record<string, string> = {
+  'select-shape': 'Shape',
+  'select-border': 'Border',
+  'select-material': 'Material',
+  'select-size': 'Size',
+  'select-fastening': 'Fastening',
   inscriptions: 'Inscription',
   'select-images': 'Photo',
+  'select-additions': 'Additions',
+  'select-emblems': 'Emblem',
   'select-motifs': 'Motif',
   'check-price': 'Price',
   'save-design': 'Save',
@@ -663,6 +662,7 @@ export default function DesignerNav() {
   const [showCanvas, setShowCanvas] = React.useState(false);
   const [isLoadingPanel, setIsLoadingPanel] = React.useState(false);
   const [isMobileQuickNavOpen, setIsMobileQuickNavOpen] = React.useState(false);
+  const desktopQuickNavRef = React.useRef<HTMLDivElement>(null);
   const [lastMotifCategoryId, setLastMotifCategoryId] = React.useState<
     string | null
   >(null);
@@ -767,6 +767,21 @@ export default function DesignerNav() {
     canSelectStainlessGraniteBaseMaterial,
     shouldHideMaterialStep,
   ]);
+  const guidedQuickNavSlugs = React.useMemo(() => {
+    const slugs = [...navigablePanelSlugs];
+    const saveIndex = slugs.indexOf('save-design');
+    slugs.splice(saveIndex >= 0 ? saveIndex : slugs.length, 0, 'check-price');
+    return slugs;
+  }, [navigablePanelSlugs]);
+  const scrollQuickNav = React.useCallback(
+    (target: React.RefObject<HTMLDivElement | null>, direction: -1 | 1) => {
+      target.current?.scrollBy({
+        left: direction * Math.max(144, target.current.clientWidth * 0.72),
+        behavior: 'smooth',
+      });
+    },
+    [],
+  );
 
   const currentSlugFromPathname = designerStepSlug ?? '';
   const currentPanelIndex = activeFullscreenPanel
@@ -780,6 +795,21 @@ export default function DesignerNav() {
       : null;
   const isImageCropActive =
     activeFullscreenPanel === 'select-images' && Boolean(cropCanvasData);
+  useEffect(() => {
+    const frameId = window.requestAnimationFrame(() => {
+      const activeSlug = activeFullscreenPanel ?? currentSlugFromPathname;
+      const activeItem =
+        desktopQuickNavRef.current?.querySelector<HTMLElement>(
+          `[data-quick-nav-slug="${activeSlug}"]`,
+        );
+      activeItem?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'nearest',
+        inline: 'center',
+      });
+    });
+    return () => window.cancelAnimationFrame(frameId);
+  }, [activeFullscreenPanel, currentSlugFromPathname, guidedQuickNavSlugs]);
   const getPanelDisplayName = React.useCallback(
     (slug: string | null) =>
       slug === 'select-material' &&
@@ -1831,12 +1861,12 @@ export default function DesignerNav() {
       <div className="flex h-full flex-col">
         {/* Emblem edit panel when an emblem is selected */}
         {activePanel === 'emblem' && selectedEmblemId && (
-          <div className="mb-4 rounded-2xl border border-[#3A3A3A] bg-[#1F1F1F]/95 p-4 shadow-xl backdrop-blur-sm">
+          <div className="day:border-gray-200 day:bg-white/95 mb-4 rounded-2xl border border-[#3A3A3A] bg-[#1F1F1F]/95 p-4 shadow-xl backdrop-blur-sm">
             <EmblemOverlayPanel />
           </div>
         )}
         {/* Emblem catalog grid */}
-        <div className="flex-1 overflow-hidden rounded-2xl border border-[#3A3A3A] bg-[#1F1F1F]/95 shadow-xl backdrop-blur-sm">
+        <div className="day:border-gray-200 day:bg-white/95 flex-1 overflow-hidden rounded-2xl border border-[#3A3A3A] bg-[#1F1F1F]/95 shadow-xl backdrop-blur-sm">
           <EmblemSelectionGrid emblems={emblems} />
         </div>
       </div>
@@ -3645,37 +3675,57 @@ export default function DesignerNav() {
               </div>
             </div>
 
-            <div
-              className="mt-3 grid grid-cols-5 gap-1.5 border-t border-white/10 pt-2"
-              aria-label="Design sections"
-            >
-              {guidedQuickNavSlugs.map((slug) => {
-                const item = menuItems.find(
-                  (menuItem) => menuItem.slug === slug,
-                );
-                if (!item) return null;
+            <div className="day:border-[#ddd2c2] mt-3 flex items-center gap-1 border-t border-white/10 pt-2">
+              <button
+                type="button"
+                onClick={() => scrollQuickNav(desktopQuickNavRef, -1)}
+                aria-label="Scroll configuration actions left"
+                className="day:border-[#ddd2c2] day:bg-[#fbf9f5] day:text-[#625a51] day:hover:bg-[#eee6d9] flex h-9 w-7 shrink-0 items-center justify-center rounded-md border border-white/10 bg-white/5 text-white/65 transition-colors hover:bg-white/10 hover:text-white"
+              >
+                <ChevronLeftIcon className="h-4 w-4" aria-hidden="true" />
+              </button>
+              <div
+                ref={desktopQuickNavRef}
+                className="grid min-w-0 flex-1 snap-x snap-mandatory auto-cols-[64px] grid-flow-col gap-1.5 overflow-x-auto overscroll-x-contain scroll-smooth [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+                aria-label="Configuration actions"
+              >
+                {guidedQuickNavSlugs.map((slug) => {
+                  const item = menuItems.find(
+                    (menuItem) => menuItem.slug === slug,
+                  );
+                  if (!item) return null;
 
-                const Icon = item.icon;
-                const isCurrent = activeFullscreenPanel === slug;
-                const label = guidedQuickNavLabels[slug];
-                return (
-                  <button
-                    key={slug}
-                    type="button"
-                    onClick={() => handleNavigateToPanel(slug)}
-                    aria-current={isCurrent ? 'step' : undefined}
-                    title={`Go to ${label}`}
-                    className={`group flex min-h-16 flex-col items-center justify-center gap-1 rounded-md px-1.5 py-2 text-[11px] font-semibold transition-colors ${
-                      isCurrent
-                        ? 'bg-[#D7B356] text-slate-950 shadow-sm'
-                        : 'day:text-gray-600 day:hover:bg-white day:hover:text-gray-900 text-white/60 hover:bg-white/10 hover:text-white'
-                    }`}
-                  >
-                    <Icon className="h-6 w-6" aria-hidden="true" />
-                    <span className="truncate">{label}</span>
-                  </button>
-                );
-              })}
+                  const Icon = item.icon;
+                  const isCurrent = activeFullscreenPanel === slug;
+                  const label = guidedQuickNavLabels[slug] ?? item.name;
+                  return (
+                    <button
+                      key={slug}
+                      type="button"
+                      onClick={() => handleNavigateToPanel(slug)}
+                      data-quick-nav-slug={slug}
+                      aria-current={isCurrent ? 'step' : undefined}
+                      title={`Go to ${label}`}
+                      className={`group flex min-h-16 snap-start flex-col items-center justify-center gap-1 rounded-md px-1.5 py-2 text-[11px] font-semibold transition-colors ${
+                        isCurrent
+                          ? 'bg-[#D7B356] text-slate-950 shadow-sm'
+                          : 'day:text-gray-600 day:hover:bg-white day:hover:text-gray-900 text-white/60 hover:bg-white/10 hover:text-white'
+                      }`}
+                    >
+                      <Icon className="h-6 w-6" aria-hidden="true" />
+                      <span className="truncate">{label}</span>
+                    </button>
+                  );
+                })}
+              </div>
+              <button
+                type="button"
+                onClick={() => scrollQuickNav(desktopQuickNavRef, 1)}
+                aria-label="Scroll configuration actions right"
+                className="day:border-[#ddd2c2] day:bg-[#fbf9f5] day:text-[#625a51] day:hover:bg-[#eee6d9] flex h-9 w-7 shrink-0 items-center justify-center rounded-md border border-white/10 bg-white/5 text-white/65 transition-colors hover:bg-white/10 hover:text-white"
+              >
+                <ChevronRightIcon className="h-4 w-4" aria-hidden="true" />
+              </button>
             </div>
           </div>
 
@@ -3914,7 +3964,7 @@ export default function DesignerNav() {
                 </div>
               ) : (
                 <div className="space-y-6">
-                  <div className="overflow-hidden rounded-2xl border border-[#3A3A3A] bg-[#1F1F1F]/95 p-3 shadow-xl backdrop-blur-sm md:h-[calc(100vh-220px)] md:p-4">
+                  <div className="day:border-[#ddd2c2] day:bg-[#f4f1eb]/95 overflow-hidden rounded-2xl border border-[#3A3A3A] bg-[#1F1F1F]/95 p-3 shadow-xl backdrop-blur-sm md:h-[calc(100vh-220px)] md:p-4">
                     <div className="overflow-y-auto pr-1 md:h-full">
                       <BorderSelector
                         borders={borders}
@@ -4719,7 +4769,7 @@ export default function DesignerNav() {
                                     {isActive &&
                                       !selectedMotifId &&
                                       !selectedAdditionId && (
-                                        <div className="mt-3 rounded-2xl border border-[#3A3A3A] bg-[#1F1F1F]/95 p-4 shadow-xl backdrop-blur-sm">
+                                        <div className="day:border-[#ddd2c2] day:bg-[#f4f1eb]/95 mt-3 rounded-2xl border border-[#3A3A3A] bg-[#1F1F1F]/95 p-4 shadow-xl backdrop-blur-sm">
                                           <BorderSelector borders={borders} />
                                         </div>
                                       )}
