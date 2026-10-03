@@ -30,6 +30,7 @@ module.exports = {
       },
       fontFamily: {
         'playfair-display': ['var(--font-playfair-display)', 'serif'],
+        serif: ['var(--font-playfair-display)', 'serif'],
       },
     },
     dropShadow: {

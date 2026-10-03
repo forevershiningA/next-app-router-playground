@@ -55,7 +55,7 @@ function getSimplifiedProductType(productName: string): string {
   
   if (name.includes('laser-etched') || name.includes('laser etched')) {
     if (name.includes('colour') || name.includes('color')) {
-      return 'Laser-Etched Colour';
+      return 'Laser-Etched Color';
     }
     return 'Laser-Etched Black Granite';
   }
@@ -63,7 +63,7 @@ function getSimplifiedProductType(productName: string): string {
   if (name.includes('bronze')) return 'Bronze';
   if (name.includes('stainless steel')) return 'Stainless Steel';
   if (name.includes('traditional')) return 'Traditional Engraved';
-  if (name.includes('full colour') || name.includes('full color')) return 'Full Colour';
+  if (name.includes('full colour') || name.includes('full color')) return 'Full Color';
   
   return productName;
 }
@@ -101,7 +101,7 @@ function buildDesignDescription({
   const motifText = motifList ? ` Motifs: ${motifList}.` : '';
   const phraseText = phraseFromSlug && !seoTitle.includes(phraseFromSlug)
     ? ` Layout: ${phraseFromSlug.replace(/\s+\d+$/, '')}.` : '';
-  return `${seoTitle}.${motifText}${phraseText} Personalise inscriptions and preview your memorial online before requesting a proof.`;
+  return `${seoTitle}.${motifText}${phraseText} Personalize inscriptions and preview your memorial online before requesting a proof.`;
 }
 
 function truncateMetaDescription(description: string): string {
@@ -198,9 +198,7 @@ export async function generateMetadata({ params }: SavedDesignPageProps): Promis
       canonical: canonicalUrl,
       languages: {
         'x-default': canonicalUrl,
-        'en-GB': canonicalUrl,
         'en-US': canonicalUrl,
-        'en-AU': canonicalUrl,
       },
     },
     openGraph: {
@@ -208,7 +206,7 @@ export async function generateMetadata({ params }: SavedDesignPageProps): Promis
       description,
       url: canonicalUrl,
       siteName: 'Forever Shining',
-      locale: 'en_GB',
+      locale: 'en_US',
       type: 'website',
       images: [
         {
@@ -528,7 +526,7 @@ export default async function SavedDesignPage({ params }: SavedDesignPageProps) 
             </h2>
             <div className="space-y-3 text-sm leading-7 text-slate-600">
               <p>
-                This {categoryTitle.toLowerCase()} layout is a starting point for a personalised{' '}
+                This {categoryTitle.toLowerCase()} layout is a starting point for a personalized{' '}
                 {simplifiedProduct.toLowerCase()} {productTypeDisplay.toLowerCase()}. Use it to compare the
                 shape, inscription balance and decorative detail before opening the design tool for final changes.
               </p>
@@ -608,10 +606,10 @@ export default async function SavedDesignPage({ params }: SavedDesignPageProps) 
                 <dt className="text-slate-500 font-medium">Typical size</dt>
                 <dd className="text-slate-900">
                   {design.productType === 'monument'
-                    ? '900×600mm headstone + full base, ledger & kerb set'
+                    ? '36×24 in headstone + full base, ledger and curb set'
                     : design.productType === 'plaque'
-                    ? '457×305mm – 914×610mm (many standard sizes)'
-                    : '600×450mm – 1800×900mm (custom sizes available)'}
+                    ? '18×12 in – 36×24 in (many standard sizes)'
+                    : '24×18 in – 72×36 in (custom sizes available)'}
                 </dd>
               </div>
               <div className="flex justify-between px-4 py-3 bg-slate-50">
@@ -705,7 +703,7 @@ export default async function SavedDesignPage({ params }: SavedDesignPageProps) 
             designId={designId}
             className="inline-block rounded-lg bg-slate-900 px-6 py-3 font-medium text-white transition-colors hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60"
           >
-            Personalise This Design
+            Personalize This Design
           </StartSavedDesignButton>
         </div>
       </div>

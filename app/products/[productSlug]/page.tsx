@@ -181,7 +181,7 @@ export default async function ProductPage({ params }: Props) {
           <h3>Features & Benefits</h3>
           <ul className="text-gray-400">
             <li>Professional quality engraving and craftsmanship</li>
-            <li>Worldwide shipping and installation services</li>
+            <li>US delivery and installation options confirmed with your quote</li>
             <li>Interactive 3D design preview</li>
             <li>Custom sizes and shapes available</li>
             <li>Premium materials built to last</li>
@@ -207,13 +207,6 @@ export default async function ProductPage({ params }: Props) {
               name: seoData.h1,
               description: seoData.metaDescription,
               category: 'Memorial Products',
-              offers: {
-                '@type': 'AggregateOffer',
-                priceCurrency: 'AUD',
-                lowPrice: '695',
-                highPrice: '9995',
-                availability: 'https://schema.org/InStock',
-              },
             }),
           }}
         />

@@ -122,7 +122,7 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
   const title = `${searchTitle} | Forever Shining`;
 
   // Build description
-  const description = `Browse ${designCount} ${categoryTitle.toLowerCase()} ${productInfo.kind} designs in ${productInfo.finish}. ${categoryDesc} Customise online with inscriptions, motifs, photos and live preview.`;
+  const description = `Browse ${designCount} ${categoryTitle.toLowerCase()} ${productInfo.kind} designs in ${productInfo.finish}. ${categoryDesc} Customize online with inscriptions, motifs, photos and live preview.`;
 
   // Build keywords
   const keywords = [
@@ -155,9 +155,7 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
       canonical: canonicalUrl,
       languages: {
         'x-default': canonicalUrl,
-        'en-GB': canonicalUrl,
         'en-US': canonicalUrl,
-        'en-AU': canonicalUrl,
       },
     },
     openGraph: {
@@ -165,7 +163,7 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
       description,
       url: canonicalUrl,
       siteName: 'Forever Shining',
-      locale: 'en_GB',
+      locale: 'en_US',
       type: 'website',
     },
     twitter: {
@@ -231,11 +229,11 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
               {categoryTitle} {productInfo.shortName} Designs
             </h1>
             <p className="text-lg md:text-xl text-stone-600 font-light max-w-3xl leading-relaxed">
-              {categoryDescription} These {productInfo.kind} templates can be personalised with names,
+              {categoryDescription} These {productInfo.kind} templates can be personalized with names,
               dates, verses, motifs and photos before ordering.
             </p>
             <p className="text-sm text-stone-500 mt-5 font-light">
-              {designs.length.toLocaleString()} design templates to personalise
+              {designs.length.toLocaleString()} design templates to personalize
             </p>
           </header>
 

@@ -287,7 +287,7 @@ function DesignSpecificContent({
     setContent({
       intro: `This ${shapeName} design is a ${finishType} ${productKind} layout for ${categoryTitle.toLowerCase()} wording. The ${shapeName.toLowerCase()} shape frames the main inscription clearly, with space for meaningful text and decorative motifs. It works well in ${materialHint} with a prominent family name and a clean, highly legible verse font.`,
       layoutGuidance: `Top line (family name): up to 12 words; best at 2–3 words|Body lines: ${guidance.chars}, ${guidance.lines}|Motifs: ${guidance.motifTip}|Tip: keep the longest line in the center for visual balance`,
-      sizes: 'Common sizes vary by product and cemetery rules|Finishes: traditional engraving, laser etching, bronze casting or colour detail where available|Materials: granite, bronze and stainless steel options depend on product type',
+      sizes: 'Common sizes vary by product and cemetery rules|Finishes: traditional engraving, laser etching, bronze casting or color detail where available|Materials: granite, bronze and stainless steel options depend on product type',
       approval: 'We prepare proofs for your cemetery and can help with permits. Installation is available through our certified installer network.',
       timeline: 'Lead time typically 2–3 weeks after proof approval (express available)'
     });
@@ -2768,14 +2768,14 @@ export default function DesignPageClient({
     const lower = name.toLowerCase();
     if (lower.includes('laser-etched') || lower.includes('laser etched')) {
       if (lower.includes('colour') || lower.includes('color')) {
-        return 'Laser-Etched Colour';
+        return 'Laser-Etched Color';
       }
       return 'Laser-Etched Black Granite';
     }
     if (lower.includes('bronze')) return 'Bronze';
     if (lower.includes('stainless steel')) return 'Stainless Steel';
     if (lower.includes('traditional')) return 'Traditional Engraved';
-    if (lower.includes('full colour') || lower.includes('full color')) return 'Full Colour';
+    if (lower.includes('full colour') || lower.includes('full color')) return 'Full Color';
     return name;
   };
   
@@ -3096,7 +3096,7 @@ export default function DesignPageClient({
           <div className="grid gap-7 lg:grid-cols-[minmax(0,1.05fr)_380px] lg:items-start">
             <section aria-labelledby="design-title">
               <p className="mb-3 text-xs font-semibold uppercase tracking-[0.22em] text-[#9b7a24]">
-                Customisable memorial design
+                Customizable memorial design
               </p>
               <h1 id="design-title" className="max-w-4xl text-3xl md:text-5xl font-serif font-light text-stone-950 tracking-tight">
                 {formattedDesignTitle}
@@ -3135,7 +3135,7 @@ export default function DesignPageClient({
             <aside className="lg:sticky lg:top-6">
               <div className="rounded-lg border border-stone-200 bg-white p-5 shadow-sm">
                 <p className="text-xs font-semibold uppercase tracking-[0.18em] text-stone-500">
-                  Ready to personalise
+                  Ready to personalize
                 </p>
                 <div className="mt-4 grid grid-cols-2 gap-3 text-sm">
                   <div className="rounded-lg bg-stone-50 p-3">

@@ -4,19 +4,40 @@ import { homeFaqItems } from './_internal/home-content';
 
 export const metadata: Metadata = {
   title: {
-    absolute:
-      'Custom Headstones, Memorial Plaques & Monuments | Forever Shining',
+    absolute: 'Custom Headstones & Grave Markers | Forever Shining USA',
   },
   description:
-    'Forever Shining helps families design and buy custom headstones, plaques, full monuments, urns and pet memorials online with live preview and pricing.',
-  alternates: { canonical: 'https://forevershining.org' },
+    'Design custom headstones, grave markers and memorial plaques online in the USA. Personalize inscriptions, photos and motifs with live 3D preview and clear pricing.',
+  alternates: {
+    canonical: 'https://forevershining.org',
+    languages: {
+      'en-US': 'https://forevershining.org',
+      'x-default': 'https://forevershining.org',
+    },
+  },
   openGraph: {
-    title: 'Custom Headstones, Memorial Plaques & Monuments | Forever Shining',
+    title: 'Custom Headstones & Grave Markers | Forever Shining USA',
     description:
-      'Design and buy custom headstones, plaques, monuments, urns and pet memorials online with a live preview and pricing.',
+      'Design custom headstones, grave markers and memorial plaques online in the USA with live 3D preview and clear pricing.',
     url: 'https://forevershining.org',
     siteName: 'Forever Shining',
+    locale: 'en_US',
     type: 'website',
+    images: [
+      {
+        url: '/backgrounds/tree-2916763_1920.webp',
+        width: 1920,
+        height: 1139,
+        alt: 'A peaceful memorial landscape by Forever Shining',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Custom Headstones & Grave Markers | Forever Shining USA',
+    description:
+      'Design custom headstones, grave markers and memorial plaques online in the USA with live 3D preview and clear pricing.',
+    images: ['/backgrounds/tree-2916763_1920.webp'],
   },
 };
 
@@ -43,7 +64,8 @@ const businessContacts = [
   },
 ];
 
-const primaryContact = businessContacts[0];
+const businessContactsByPriority = [businessContacts[1], businessContacts[0]];
+const primaryContact = businessContactsByPriority[0];
 
 const socialProfiles = [
   'https://www.facebook.com/ForeverShiningAustralia/',
@@ -52,23 +74,6 @@ const socialProfiles = [
   'https://www.pinterest.com/forevershining1/',
   'https://www.youtube.com/@forevershining/featured',
 ];
-
-function aggregateOffer(
-  url: string,
-  lowPrice: string,
-  highPrice: string,
-  offerCount: number,
-) {
-  return {
-    '@type': 'AggregateOffer',
-    priceCurrency: 'USD',
-    lowPrice,
-    highPrice,
-    offerCount,
-    availability: 'https://schema.org/InStock',
-    url,
-  };
-}
 
 const structuredData = {
   '@context': 'https://schema.org',
@@ -83,7 +88,7 @@ const structuredData = {
         url: 'https://forevershining.org/ico/forever-transparent-logo.png',
       },
       sameAs: socialProfiles,
-      contactPoint: businessContacts.map((contact) => ({
+      contactPoint: businessContactsByPriority.map((contact) => ({
         '@type': 'ContactPoint',
         telephone: contact.telephone,
         contactType: 'customer service',
@@ -91,7 +96,7 @@ const structuredData = {
         areaServed: contact.name,
         availableLanguage: ['English'],
       })),
-      address: businessContacts.map((contact) => ({
+      address: businessContactsByPriority.map((contact) => ({
         '@type': 'PostalAddress',
         streetAddress: contact.streetAddress,
         addressLocality: contact.addressLocality,
@@ -101,8 +106,8 @@ const structuredData = {
       })),
     },
     {
-      '@type': ['LocalBusiness', 'Store'],
-      '@id': 'https://forevershining.org#localbusiness',
+      '@type': 'OnlineStore',
+      '@id': 'https://forevershining.org#store',
       name: 'Forever Shining',
       url: 'https://forevershining.org',
       telephone: primaryContact.telephone,
@@ -118,58 +123,37 @@ const structuredData = {
         addressCountry: primaryContact.addressCountry,
       },
       areaServed: [
-        { '@type': 'Country', name: 'Australia' },
         { '@type': 'Country', name: 'United States' },
         { '@type': 'Country', name: 'Canada' },
+        { '@type': 'Country', name: 'Australia' },
         { '@type': 'Place', name: 'Europe' },
       ],
       makesOffer: [
         {
           '@type': 'Offer',
-          availability: 'https://schema.org/InStock',
           url: 'https://forevershining.org/bronze-plaque/select-shape',
           itemOffered: {
             '@type': 'Product',
             name: 'Bronze Plaques',
             category: 'Memorial plaque',
-            offers: aggregateOffer(
-              'https://forevershining.org/bronze-plaque/select-shape',
-              '346',
-              '5666',
-              3,
-            ),
           },
         },
         {
           '@type': 'Offer',
-          availability: 'https://schema.org/InStock',
           url: 'https://forevershining.org/memorials/plaques',
           itemOffered: {
             '@type': 'Product',
             name: 'Memorial Plaques',
             category: 'Plaque',
-            offers: aggregateOffer(
-              'https://forevershining.org/memorials/plaques',
-              '255',
-              '4418',
-              4,
-            ),
           },
         },
         {
           '@type': 'Offer',
-          availability: 'https://schema.org/InStock',
           url: 'https://forevershining.org/memorials/headstones',
           itemOffered: {
             '@type': 'Product',
             name: 'Headstones',
             category: 'Memorial headstone',
-            offers: aggregateOffer(
-              'https://forevershining.org/memorials/headstones',
-              '603',
-              '11496',
-              4,
-            ),
           },
         },
       ],
@@ -190,11 +174,11 @@ const structuredData = {
       '@type': 'WebPage',
       '@id': 'https://forevershining.org#webpage',
       url: 'https://forevershining.org',
-      name: 'Custom Headstones, Memorial Plaques & Monuments | Forever Shining',
+      name: 'Custom Headstones & Grave Markers | Forever Shining USA',
       description:
-        'Forever Shining helps families design and buy custom headstones, plaques, full monuments, urns and pet memorials online with live preview and pricing.',
+        'Design custom headstones, grave markers and memorial plaques online in the USA with live 3D preview, personalized inscriptions and clear pricing.',
       isPartOf: { '@id': 'https://forevershining.org#website' },
-      about: { '@id': 'https://forevershining.org#localbusiness' },
+      about: { '@id': 'https://forevershining.org#store' },
     },
     {
       '@type': 'FAQPage',

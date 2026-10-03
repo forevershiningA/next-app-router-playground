@@ -22,6 +22,7 @@ export function guideMetadata({ slug, title, description }: GuideSeoInput): Meta
       description,
       url,
       siteName: 'Forever Shining',
+      locale: 'en_US',
       type: 'article',
       images: [
         {

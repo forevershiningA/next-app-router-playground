@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-10-01
+**Last Updated:** 2026-10-03
 
 **Status entry order:** Add new dated status entries immediately after the table of contents, before the existing status entries. Keep status entries in reverse chronological order (newest first); do not append them to the end of this file.
 **Tech Stack:** Next.js 15.5.26, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots), **Vitest 4.1.8** (unit tests), **Playwright 1.59.1** (E2E tests)
@@ -119,6 +119,112 @@
 108. [September 28 Technical and SEO Audit Remediation](#current-status-2026-09-28--technical-and-seo-audit-remediation)
 109. [September 29 Motif Selection and Sandblasted Shape Contours](#current-status-2026-09-29--motif-selection-and-sandblasted-shape-contours)
 110. [October 1 Bronze Plaque Designer and Home Page SEO](#current-status-2026-10-01--bronze-plaque-designer-and-home-page-seo)
+111. [October 2 Home Page UX/SEO Audit and USA-first Positioning](#current-status-2026-10-02--home-page-uxseo-audit-and-usa-first-positioning)
+112. [October 3 Home Page Design Consistency and Hero Tuning](#current-status-2026-10-03--home-page-design-consistency-and-hero-tuning)
+
+---
+
+## Current Status (2026-10-03) — Home Page Design Consistency and Hero Tuning
+
+### Design direction
+
+- The Home Page now follows a restrained **quiet memorial atelier** direction: charcoal and near-black surfaces, ivory content areas, aged-gold actions, Playfair Display for emotional headings, and Geist for functional copy.
+- The page deliberately avoids generic gradient decoration and repeated rounded-card styling. Fine borders, square/small-radius controls, measured spacing, and the memorial photography provide the visual identity.
+- The intended conversion sequence is: hero promise → four designer benefits → 3D designer explanation → six principal product choices → three-step process → FAQ → support CTA → footer.
+- The Home Page remains compatible with both the default dark theme and the global `day:` theme variants.
+
+### Home Page implementation
+
+- `app/_ui/HomeSplash.tsx` contains the complete Home Page UI and responsive mobile menu.
+- The hero uses `/backgrounds/tree-2916763_1920.webp` as a priority `next/image`. It has **no gradient or vignette overlay**. The current compromise after visual review of `screen.png` is the original image colour with a uniform CSS `brightness(0.7)` filter. Do not restore the previous heavy dark gradient or the later over-bright `brightness(0.94)` treatment without a new visual review.
+- Hero heading and supporting copy use local text shadows for legibility instead of darkening the whole photograph.
+- The four-item benefits strip (`Design online in 3D`, `Make every detail personal`, `See pricing as you design`, `Crafting memorials since 2005`) now uses 16 px titles, 14 px descriptions, 28 px icons, and increased spacing so it remains legible below the hero.
+- The product section renders `HOME_PRODUCT_OPTIONS.slice(0, 6)` on every breakpoint. The remaining products are reached through `View all memorial products`; the October 2 note saying desktop renders all 12 is superseded.
+- Product presentation uses six restrained bordered tiles instead of twelve elevated rounded cards. The process section uses a genuine ordered sequence (`01`–`03`) with ruled columns rather than three generic cards.
+- Section headings use a consistent scale and `text-pretty`; small section labels use reduced tracking and sentence case rather than repeated all-caps eyebrows.
+- FAQ rows use separators instead of standalone rounded panels. The light process section intentionally provides contrast and breathing room between dark catalogue and FAQ sections.
+- The design remains responsive at 1440 px desktop and 390 px mobile. The checked mobile render had `scrollWidth === clientWidth` (no horizontal overflow). Lazy `next/image` product assets may remain blank in a one-shot full-page Playwright screenshot until scrolled into view; this is expected loading behaviour.
+
+### UX, accessibility, and interaction
+
+- The primary CTA remains `Design Your Memorial in 3D` and routes to `/select-product`; `/designs` is the secondary browsing path.
+- Semantic links/buttons, the skip link, heading hierarchy, global focus-visible treatment, mobile-dialog focus trap, Escape handling, scroll locking, and focus restoration remain in place.
+- Non-essential scale/transform effects retain `motion-reduce` fallbacks. Product hover motion was reduced and the main 3D preview no longer animates vertically.
+- The benefits strip and all primary controls retain approximately 44 px or larger touch targets.
+
+### SEO and structured data
+
+- `app/page.tsx` retains the USA-first Home metadata, canonical URL, language alternates, Open Graph/Twitter data, and visible-FAQ-aligned `FAQPage` JSON-LD.
+- The business entity in JSON-LD is now `OnlineStore` with `@id=https://forevershining.org#store`, replacing the potentially misleading `LocalBusiness`/`Store` classification tied to a Canadian address. The `WebPage.about` reference points to the new store ID.
+- `app/layout.tsx` exports a responsive `Viewport` theme color: `#0c0b0a` for dark preference and `#f7f4ee` for light preference.
+- Follow-up: verify that `/designs?q={search_term_string}` truly consumes and exposes the `q` parameter before retaining the `WebSite.SearchAction` structured-data entry.
+- Still needed: a purpose-built 1200×630 social image and verified business trust evidence. Do not invent reviews, warranties, US premises, installation coverage, delivery terms, or lead times.
+
+### Validation and working-tree state
+
+- Prettier passes for `app/_ui/HomeSplash.tsx`, `app/layout.tsx`, and `app/page.tsx`.
+- ESLint reports 0 errors on these files. A warning remains in `HomeSplash.tsx` about reading `menuButtonRef.current` in the effect cleanup; it is non-blocking but can be removed by capturing the ref value inside the effect.
+- TypeScript and `git diff --check` pass for the Home Page changes.
+- Local Chromium renders were reviewed at desktop and mobile widths. Temporary audit screenshots were removed; root `screen.png` is the user-provided visual reference and must not be deleted or reverted.
+- Relevant modified files are `app/_ui/HomeSplash.tsx`, `app/layout.tsx`, and `app/page.tsx`. The wider working tree contains unrelated pre-existing changes; do not reset or overwrite them.
+
+---
+
+## Current Status (2026-10-02) — Home Page UX/SEO Audit and USA-first Positioning
+
+### Product and market direction
+
+- `forevershining.org` is currently a test/global storefront, not the production replacement for `forevershining.com.au`.
+- The immediate market position for `.org` is **USA-first** because the United States is the primary growth market. Canada is secondary; Australia and Europe remain supported international markets.
+- The current implementation scope to evaluate and iterate first is the **Home Page**. The `/designs` gallery and the 3D designer remain the main organic-traffic and conversion hypothesis, but further rollout should follow evidence from indexing, Search Console, analytics, and completed conversion paths.
+- Do not imply a physical US office, US manufacturing, free delivery, nationwide installation, cemetery approval, warranties, lead times, or other commercial claims until the business confirms them. The current North America contact address is in Oshawa, Ontario, Canada.
+- Do not convert checkout, admin, database, or catalog pricing from AUD to USD based only on marketing copy. Currency, tax, Stripe account, regional price lists, freight, installation, and legal terms require a separate business decision.
+
+### Home Page implementation
+
+- `app/page.tsx` now presents USA-first metadata: `Custom Headstones & Grave Markers | Forever Shining USA`, US-oriented description, canonical `https://forevershining.org`, `en-US`, `en_US`, and complete Open Graph/Twitter image data.
+- `app/layout.tsx` uses `lang="en-US"` and USA-oriented root metadata. `metadataBase` remains `https://forevershining.org`.
+- `app/_ui/HomeSplash.tsx` uses American English (`color`, `personalize`, `personalized`) and a clearer H1: `Custom Headstones, Grave Markers & Memorial Plaques`.
+- The primary Home CTA opens `/select-product`; `/designs` remains the discovery/browsing route. Keep one dominant action and avoid multiplying equivalent CTA labels.
+- Mobile renders the first 6 product cards; cards 7–12 are hidden below `sm`, followed by `View all memorial products`. Desktop still renders all 12 products.
+- The hero background was moved to a priority `next/image` with responsive sizing. Decorative layers are hidden from assistive technology.
+- The page has one `<main id="main-content">`, a skip link, logical H1–H3 hierarchy, global visible keyboard focus, 44 px-class touch targets, and reduced-motion variants for non-essential card/preview transforms.
+- The mobile menu is a modal dialog with Escape handling, focus entry, Tab trapping, scroll locking, and focus restoration. Its backdrop is still a clickable `<div>` and is a minor semantic follow-up.
+- Footer FAQ and How It Works links are real anchors; Privacy and Sitemap use real routes. Support uses the North America email while the Australian business remains shown as an international contact.
+- `app/_internal/home-content.ts` is the shared source for visible FAQ answers and `FAQPage` JSON-LD, so structured and visible content stay aligned.
+
+### Home Page audit outcome
+
+- Initial audit scores: UX/conversion 6.5, SEO 7.5, visual consistency 7.0, accessibility 5.0.
+- Re-audit scores after remediation: UX/conversion **7.8**, SEO **8.3**, visual consistency **8.1**, accessibility **8.5**.
+- All original P0 accessibility blockers are resolved. Chromium renders at 1440×900 and 390×844 showed no horizontal overflow and a materially shorter mobile decision path.
+- Detailed reports:
+  - `docs/audits/2026-10-02/homepage-ux-seo-design-audit.md`
+  - `docs/audits/2026-10-02/homepage-usa-first-re-audit.md`
+
+### Highest-value remaining Home Page work
+
+1. Add verifiable US-relevant trust evidence directly below the hero: genuine reviews, completed projects, measurable order/project history, material durability/warranty information, or cemetery-approval guidance. `Since 2005` is currently the only strong proof point.
+2. Explain the US service model accurately: where products are made, how freight is quoted, whether installation is coordinated, typical lead times, and how cemetery requirements are checked. Avoid unsupported claims.
+3. Reconsider `LocalBusiness/Store` JSON-LD in `app/page.tsx`. It currently uses the Canadian address while the page is USA-first. If `.org` has no physical US location, `Organization` and/or `OnlineStore` is safer than creating a misleading local signal.
+4. Replace the generic landscape social image with a dedicated 1200×630 branded image containing a real memorial and concise benefit.
+5. Test 6 product cards on desktop instead of 12 so the design process, FAQ, and support appear earlier.
+6. Standardize the main CTA label (`Design Your Memorial in 3D`, `Start Designing in 3D`, and `Choose a memorial product` currently express the same funnel step).
+7. Replace footer text abbreviations (`IG`, `FB`, `PI`, `YT`) with a consistent accessible SVG icon set while retaining link `aria-label` values.
+8. Measure production LCP, INP, CLS, scroll depth, Home → designer/gallery click-through, saved designs, quote starts, and completed orders. Local development timing is not valid field-performance evidence.
+
+### Validation snapshot
+
+- TypeScript: passed.
+- ESLint on changed files: 0 errors; warnings remain in large/pre-existing components.
+- Vitest: **104/104 tests passed** across 10 files.
+- Next.js production build: passed; **116 static pages** generated.
+- `git diff --check`: passed; Windows LF/CRLF notices are informational.
+
+### Working-tree caution
+
+- The current working tree contains the Home audit/remediation changes plus USA-first copy and metadata adjustments in several public `/designs`, memorial, product, guide, localization, and selection files. Treat these as one uncommitted working set unless intentionally separated before commit.
+- The Home Page re-audit itself only added documentation; it did not automatically implement the remaining trust/content recommendations because they require verified business evidence.
 
 ---
 
@@ -15849,6 +15955,6 @@ Both commands pass. Browser rendering still needs to be checked after the next l
 
 ---
 
-_End of STARTER.md - Last updated: 2026-10-01_
+_End of STARTER.md - Last updated: 2026-10-03_
 
 ---

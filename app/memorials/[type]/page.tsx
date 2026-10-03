@@ -70,10 +70,10 @@ const memorialBuyingGuidance: Record<
   },
   plaques: {
     summary:
-      'Memorial plaques are usually chosen for cemetery niches, walls, gardens, cremation memorials and compact grave markers. Compare bronze, stainless steel, laser colour and engraved stone options by finish, size and installation setting.',
+      'Memorial plaques are commonly chosen for cemetery niches, walls, gardens, cremation memorials and compact grave markers. Compare bronze, stainless steel, laser color and engraved stone options by finish, size and installation setting.',
     points: [
       'Bronze plaques suit formal cemetery markers with raised lettering and decorative borders.',
-      'Laser colour and full colour plaques are stronger choices when a portrait or image-led tribute matters.',
+      'Laser color and full color plaques are stronger choices when a portrait or image-led tribute matters.',
       'Stainless steel plaques suit modern memorial walls, garden markers and clean reflective finishes.',
     ],
   },
@@ -88,11 +88,11 @@ const memorialBuyingGuidance: Record<
   },
   urns: {
     summary:
-      'Personalised memorial urns can include vitreous enamel backgrounds, photos, names, dates and symbolic artwork. They are useful when families want a smaller keepsake or cremation memorial with a finished visual design.',
+      'Personalized memorial urns can include vitreous enamel backgrounds, photos, names, dates and symbolic artwork. They are useful when families want a smaller keepsake or cremation memorial with a finished visual design.',
     points: [
-      'Photo and background choices have the biggest effect on the look of a personalised urn.',
+      'Photo and background choices have the biggest effect on the look of a personalized urn.',
       'Shorter inscriptions usually work better on curved or compact urn surfaces.',
-      'Match motifs and colours to the person, service theme or family remembrance setting.',
+      'Match motifs and colors to the person, service theme or family remembrance setting.',
     ],
   },
   'pet-memorials': {
@@ -705,8 +705,8 @@ function PublicFooter() {
                 </div>
               </div>
               <p className="day:text-gray-500 mt-4 leading-6 text-white/55">
-                Serving Australia, the United States, Canada, and Europe for
-                Bronze Plaques, Memorial Plaques, and Headstones.
+                Serving families across the United States and Canada, with
+                international support available for Australia and Europe.
               </p>
             </div>
           </div>

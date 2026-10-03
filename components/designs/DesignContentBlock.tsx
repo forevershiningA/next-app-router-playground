@@ -23,7 +23,7 @@ import {
 
 const BRONZE_PLAQUE_FINISH = 'Clear lacquer seal over natural aluminium';
 const BRONZE_PLAQUE_FINISH_DESCRIPTION =
-  'To finish, the whole plaque is sealed with a high quality clear lacquer that helps preserve the bright shiny colour of the natural aluminium.';
+  'To finish, the whole plaque is sealed with a high quality clear lacquer that helps preserve the bright natural color of the aluminum.';
 
 /**
  * Format shape name for display - convert snake_case or lowercase to Title Case
@@ -248,7 +248,7 @@ export default function DesignContentBlock({
       },
       {
         question: `Can I change fonts and motifs on this design?`,
-        answer: `Absolutely! This design is fully ${locale.spellings.customise}able. You can choose from 10+ professional fonts suitable for memorials, adjust text sizes, and select from over 5,000 motifs including religious symbols, flora, fauna, and custom imagery. ${design.hasMotifs ? 'This design already includes motifs which you can keep, replace, or remove.' : 'You can easily add motifs to personalise your memorial.'} All changes are made through our interactive design tool with instant preview.`
+        answer: `Absolutely! This design is fully ${locale.spellings.customise}able. You can choose from 10+ professional fonts suitable for memorials, adjust text sizes, and select from over 5,000 motifs including religious symbols, flora, fauna, and custom imagery. ${design.hasMotifs ? 'This design already includes motifs which you can keep, replace, or remove.' : 'You can easily add motifs to personalize your memorial.'} All changes are made through our interactive design tool with instant preview.`
       },
       {
         question: `How long does ${isLaser ? 'laser-etched black granite' : isBronze ? 'bronze' : simplifiedProductName.toLowerCase()} last outdoors?`,

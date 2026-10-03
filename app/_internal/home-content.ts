@@ -15,13 +15,13 @@ export const homeFaqItems = [
       'Yes. Cemeteries can set rules for size, material, foundation, and installation. We recommend checking with the cemetery office before final approval and can help review the requirements for your design.',
   },
   {
-    question: 'What details can be personalised?',
+    question: 'What details can be personalized?',
     answer:
-      'Depending on the memorial product, you can personalise inscriptions, dates, verses, fonts, motifs, photo etching, shapes, materials, sizes, and selected accessories.',
+      'Depending on the memorial product, you can personalize inscriptions, dates, verses, fonts, motifs, photo etching, shapes, materials, sizes, and selected accessories.',
   },
   {
     question: 'Which countries and regions do you serve?',
     answer:
-      'Forever Shining serves customers in Australia, the United States, Canada, and Europe, with a strong focus on bronze plaques, memorial plaques, headstones, monuments, and urns.',
+      'Forever Shining primarily serves families across the United States and Canada, with international support available for Australia and Europe. Delivery and installation options are confirmed for each destination.',
   },
 ] as const;

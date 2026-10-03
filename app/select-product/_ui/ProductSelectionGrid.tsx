@@ -26,19 +26,19 @@ function formatPrice(value: number, currency: string) {
     return '—';
   }
 
-  const cacheKey = currency || 'AUD';
+  const cacheKey = currency || 'USD';
   let formatter = priceFormatterCache.get(cacheKey);
   if (!formatter) {
     try {
-      formatter = new Intl.NumberFormat('en-AU', {
+      formatter = new Intl.NumberFormat('en-US', {
         style: 'currency',
-        currency: cacheKey || 'AUD',
+        currency: cacheKey || 'USD',
         maximumFractionDigits: 0,
       });
     } catch {
-      formatter = new Intl.NumberFormat('en-AU', {
+      formatter = new Intl.NumberFormat('en-US', {
         style: 'currency',
-        currency: 'AUD',
+        currency: 'USD',
         maximumFractionDigits: 0,
       });
     }

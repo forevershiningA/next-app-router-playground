@@ -52,7 +52,7 @@ export const bronzePlaqueDedications: DedicationTemplate[] = [
     category: 'education',
     metadata: {
       title: 'Bronze Plaque Dedication for The Science Hall - Knowledge is the Seed of Progress',
-      description: 'Design a custom bronze dedication plaque for The Science Hall with the inspiring inscription "Knowledge is the seed of progress". Professional engraving, worldwide shipping.',
+      description: 'Design a custom bronze dedication plaque for The Science Hall with the inscription "Knowledge is the seed of progress." Professional engraving with US delivery options.',
       keywords: ['bronze plaque', 'science hall dedication', 'educational plaque', 'bronze dedication', 'knowledge inscription'],
     },
   },
@@ -276,7 +276,7 @@ export const productSEOData: Record<string, ProductSEO> = {
   'bronze-plaque': {
     slug: 'bronze-plaque',
     metaTitle: 'Bronze Plaque - Custom Dedication & Memorial Plaques | DYO',
-    metaDescription: 'Design custom bronze plaques for dedications, memorials, and honors. Professional engraving, premium bronze, worldwide installation. Get instant pricing.',
+    metaDescription: 'Design custom bronze plaques for dedications, memorials and honors in the USA. Professional engraving, premium bronze and delivery options confirmed by quote.',
     keywords: [
       'bronze plaque',
       'custom bronze plaque',
@@ -323,7 +323,7 @@ export const productSEOData: Record<string, ProductSEO> = {
   'laser-etched-black-granite-headstone': {
     slug: 'laser-etched-black-granite-headstone',
     metaTitle: 'Laser-Etched Black Granite Headstone - Custom Memorial Design | DYO',
-    metaDescription: 'Design a laser-etched black granite headstone with photographic quality. Custom shapes, sizes, and inscriptions. Professional installation worldwide.',
+    metaDescription: 'Design a laser-etched black granite headstone online in the USA. Customize shapes, sizes, inscriptions and photo-quality artwork with a live preview.',
     keywords: [
       'laser etched headstone',
       'black granite headstone',

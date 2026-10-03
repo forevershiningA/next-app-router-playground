@@ -4,7 +4,7 @@ import { GuideStructuredData, guideMetadata } from '../_seo';
 const seo = {
   slug: 'cemetery-regulations',
   title: 'Cemetery Regulations Guide | Forever Shining',
-  description: 'Understand cemetery memorial regulations in Australia and the United States. Size restrictions, material requirements, and compliance information.',
+  description: 'Understand cemetery headstone and grave marker regulations in the United States, including size, material, foundation and installation requirements.',
 };
 
 export const metadata = guideMetadata(seo);
@@ -31,33 +31,34 @@ export default function CemeteryRegulationsGuide() {
           </p>
 
           <h2 className="text-2xl font-serif font-light text-slate-900 mt-12 mb-4">
-            Australian Cemetery Compliance
+            United States Cemetery Requirements
           </h2>
           <p className="text-slate-700 font-light mb-4">
-            Most Australian cemeteries require memorials to be made of durable materials like 
-            granite or bronze with specific size restrictions varying by cemetery. Common requirements include:
+            Cemetery rules in the United States vary by state, cemetery, section and plot. Before
+            choosing a headstone or grave marker, ask the cemetery for its current written rules.
+            Common requirements include:
           </p>
           <ul className="list-disc pl-6 text-slate-700 font-light space-y-2">
-            <li>Height restrictions typically between 600mm and 1200mm</li>
-            <li>Width restrictions based on plot size and cemetery section</li>
-            <li>Thickness requirements for structural stability</li>
-            <li>Foundation or base installation requirements</li>
-            <li>Approved materials (usually granite, marble, or bronze)</li>
+            <li>Maximum height, width and thickness for the plot</li>
+            <li>Upright monument or flat grave marker restrictions by section</li>
+            <li>Required granite, bronze or other approved materials</li>
+            <li>Foundation specifications and approved installation methods</li>
+            <li>Application, permit and installer requirements</li>
           </ul>
 
           <h2 className="text-2xl font-serif font-light text-slate-900 mt-12 mb-4">
-            United States Cemetery Compliance
+            Preparing a Design for Approval
           </h2>
           <p className="text-slate-700 font-light mb-4">
-            Cemetery regulations in the United States vary significantly by state and individual 
-            cemetery. Common requirements include:
+            A digital design is a useful starting point, but the cemetery must approve the final
+            dimensions, material and installation plan. Keep these details ready when requesting approval:
           </p>
           <ul className="list-disc pl-6 text-slate-700 font-light space-y-2">
-            <li>Maximum height and width dimensions</li>
-            <li>Foundation specifications and installation methods</li>
-            <li>Material approvals (granite, bronze, marble typically accepted)</li>
-            <li>Inscription content guidelines</li>
-            <li>Installation timeline requirements</li>
+            <li>The cemetery name, city, state and plot section</li>
+            <li>Memorial dimensions in inches</li>
+            <li>Material, finish, base and foundation details</li>
+            <li>Inscription, emblem and photo placement</li>
+            <li>The cemetery's approved installer requirements</li>
           </ul>
 
           <h2 className="text-2xl font-serif font-light text-slate-900 mt-12 mb-4">

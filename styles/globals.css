@@ -15,17 +15,23 @@
 @custom-variant day (&:where([data-theme=day], [data-theme=day] *));
 
 /* CRITICAL: Prevent text cursor (caret) from appearing anywhere except inputs */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   caret-color: transparent !important;
 }
 
-input, textarea, [contenteditable="true"] {
+input,
+textarea,
+[contenteditable='true'] {
   caret-color: auto !important;
   cursor: text !important;
 }
 
 /* Prevent text cursor on non-editable elements */
-*:not(input):not(textarea):not([contenteditable="true"]):not(button):not(a):not([role="button"]) {
+*:not(input):not(textarea):not([contenteditable='true']):not(button):not(a):not(
+    [role='button']
+  ) {
   cursor: default;
 }
 
@@ -33,13 +39,18 @@ button,
 button *,
 a,
 a *,
-[role="button"],
-[role="button"] * {
+[role='button'],
+[role='button'] * {
   cursor: pointer !important;
 }
 
 /* Ensure images, buttons, links show pointer cursor */
-img, svg, [role="img"], button, a, [role="button"] {
+img,
+svg,
+[role='img'],
+button,
+a,
+[role='button'] {
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
@@ -54,22 +65,41 @@ img, svg, [role="img"], button, a, [role="button"] {
 }
 
 /* Absolutely prevent caret on divs and spans */
-div, span, p, h1, h2, h3, h4, h5, h6, header, footer, nav, section {
+div,
+span,
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+header,
+footer,
+nav,
+section {
   caret-color: transparent !important;
 }
 
-/* Prevent focus outline from triggering caret */
-button:focus,
-a:focus,
-[role="button"]:focus {
-  outline: none;
-  caret-color: transparent !important;
+/* Consistent keyboard focus across links, buttons, summaries and controls. */
+:where(
+  a,
+  button,
+  summary,
+  input,
+  select,
+  textarea,
+  [role='button']
+):focus-visible {
+  outline: 3px solid #f3d48f;
+  outline-offset: 3px;
+  caret-color: auto;
 }
 
 /* Prevent mousedown from creating text selection on buttons */
 button,
 a,
-[role="button"] {
+[role='button'] {
   -webkit-tap-highlight-color: transparent;
 }
 
@@ -266,12 +296,14 @@ a,
     animation: guided-next-gold-flash 2.8s ease-in-out infinite;
   }
 
-  [data-theme=day] .animate-guided-next-gold-flash:not(:disabled) {
+  [data-theme='day'] .animate-guided-next-gold-flash:not(:disabled) {
     animation: guided-next-gold-flash-day 2.8s ease-in-out infinite;
   }
 
   .text-shadow-hero {
-    text-shadow: 0 2px 2px rgba(0, 0, 0, 0.85), 0 2px 2px rgba(0, 0, 0, 0.75);
+    text-shadow:
+      0 2px 2px rgba(0, 0, 0, 0.85),
+      0 2px 2px rgba(0, 0, 0, 0.75);
   }
 
   .text-shadow-subhero {
@@ -340,8 +372,14 @@ a,
 }
 
 h1 {
-  padding: 40px 0px;
+  padding: 0;
   margin: 0px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html:focus-within {
+    scroll-behavior: auto;
+  }
 }
 
 /* Memorial type pages use compact, content-led headings. */
@@ -443,7 +481,7 @@ html:has([data-memorials-page]) {
   .mdc-data-table__content .table-header-for-mobile {
     display: inline-block;
   }
-  
+
   .mobile-only {
     display: block;
   }
@@ -470,11 +508,11 @@ html:has([data-memorials-page]) {
 }
 
 /* Hide 3D canvas on product SEO pages */
-body:has([data-seo-page="true"]) canvas {
+body:has([data-seo-page='true']) canvas {
   display: none !important;
 }
 
-body:has([data-seo-page="true"]) .lg\:pl-\[400px\] {
+body:has([data-seo-page='true']) .lg\:pl-\[400px\] {
   padding-left: 0 !important;
 }
 
@@ -544,49 +582,49 @@ input[type='range']::-ms-thumb {
    ───────────────────────────────────────────────────────────────────────────── */
 
 /* Body background */
-[data-theme=day] body {
+[data-theme='day'] body {
   background-color: #f4f1eb;
   color-scheme: light;
 }
 
 /* color-scheme on html for scrollbar/native controls */
-html[data-theme=day] {
+html[data-theme='day'] {
   color-scheme: light;
 }
 
 /* ── Stepper buttons (+ / - increment buttons in panels) ── */
-[data-theme=day] .fs-stepper-btn {
+[data-theme='day'] .fs-stepper-btn {
   background-color: #e5e1db;
   color: #2a1f14;
 }
-[data-theme=day] .fs-stepper-btn:hover {
+[data-theme='day'] .fs-stepper-btn:hover {
   background-color: #d5d0c8;
 }
 
 /* ── Stepper / number inputs inside the designer nav ── */
-[data-theme=day] .fs-designer-nav input[type="number"] {
+[data-theme='day'] .fs-designer-nav input[type='number'] {
   background-color: #ffffff;
   color: #1a1209;
   border-color: rgba(0, 0, 0, 0.2);
 }
-[data-theme=day] .fs-designer-nav input[type="number"]:focus {
-  border-color: #D7B356;
+[data-theme='day'] .fs-designer-nav input[type='number']:focus {
+  border-color: #d7b356;
   outline: none;
 }
 
 /* ── Range sliders (track) inside designer nav ── */
-[data-theme=day] .fs-designer-nav input[type="range"] {
-  accent-color: #D7B356;
+[data-theme='day'] .fs-designer-nav input[type='range'] {
+  accent-color: #d7b356;
 }
 
 /* ── Scrollbar in day mode ── */
-[data-theme=day] .custom-scrollbar::-webkit-scrollbar-track {
+[data-theme='day'] .custom-scrollbar::-webkit-scrollbar-track {
   background: rgba(0, 0, 0, 0.06);
 }
-[data-theme=day] .custom-scrollbar::-webkit-scrollbar-thumb {
+[data-theme='day'] .custom-scrollbar::-webkit-scrollbar-thumb {
   background: rgba(215, 179, 86, 0.45);
 }
-[data-theme=day] .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+[data-theme='day'] .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background: rgba(215, 179, 86, 0.7);
 }
 

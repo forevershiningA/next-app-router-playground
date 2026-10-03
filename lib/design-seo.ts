@@ -145,12 +145,12 @@ const productSeoInfo: Record<string, ProductSeoInfo> = {
       'Classic engraved plaques for cremation niches, memorial walls, gardens and compact cemetery markers.',
   },
   'laser-colour-plaque': {
-    name: 'Laser Colour Memorial Plaque',
-    shortName: 'Laser Colour Plaque',
+    name: 'Laser Color Memorial Plaque',
+    shortName: 'Laser Color Plaque',
     kind: 'plaque',
-    finish: 'colour laser-etched',
+    finish: 'color laser-etched',
     description:
-      'Colour memorial plaques for photo-led tributes, custom artwork and compact personalised memorial layouts.',
+      'Color memorial plaques for photo-led tributes, custom artwork and compact personalized memorial layouts.',
   },
   'stainless-steel-plaque': {
     name: 'Stainless Steel Memorial Plaque',
@@ -169,12 +169,12 @@ const productSeoInfo: Record<string, ProductSeoInfo> = {
       'Small-format headstone designs for garden memorials, cremation memorials and compact remembrance spaces.',
   },
   'full-colour-plaque': {
-    name: 'Full Colour Memorial Plaque',
-    shortName: 'Full Colour Plaque',
+    name: 'Full Color Memorial Plaque',
+    shortName: 'Full Color Plaque',
     kind: 'plaque',
-    finish: 'full colour',
+    finish: 'full color',
     description:
-      'Full colour memorial plaque designs for image-rich, highly personalised tribute plaques.',
+      'Full color memorial plaque designs for image-rich, highly personalized tribute plaques.',
   },
   'traditional-monument': {
     name: 'Traditional Monument',
@@ -190,7 +190,7 @@ const productSeoInfo: Record<string, ProductSeoInfo> = {
     kind: 'monument',
     finish: 'laser-etched granite',
     description:
-      'Full monument designs with laser-etched granite panels, detailed imagery and personalised inscription layouts.',
+      'Full monument designs with laser-etched granite panels, detailed imagery and personalized inscription layouts.',
   },
   pets: {
     name: 'Pet Memorial',
@@ -208,7 +208,7 @@ export function getProductSeoInfo(productSlug: string): ProductSeoInfo {
     shortName: formatSlug(productSlug),
     kind: 'memorial',
     finish: 'custom memorial',
-    description: 'Custom memorial designs with personalised inscriptions, motifs and live preview.',
+    description: 'Custom memorial designs with personalized inscriptions, motifs and live preview.',
   };
 }
 

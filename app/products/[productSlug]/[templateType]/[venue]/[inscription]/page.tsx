@@ -565,7 +565,7 @@ export default async function TemplatePage({ params }: Props) {
               <p className="text-gray-400">
                 We provide detailed installation instructions and all necessary
                 mounting hardware with your plaque. We also offer professional
-                installation coordination services worldwide. The plaque comes
+                delivery and installation coordination options across the United States. The plaque comes
                 pre-drilled for easy wall mounting at {venueDisplay}.
               </p>
             </div>

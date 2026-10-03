@@ -131,7 +131,7 @@ export const memorialTypePages: Record<MemorialTypeSlug, PageConfig> = {
     title: 'Plaques',
     navLabel: 'Plaques',
     intro:
-      'Compare Bronze Plaques, Memorial Plaques, Full Colour Plaques, Traditional Engraved Plaques and stainless steel plaque options.',
+      'Compare bronze plaques, memorial plaques, full color plaques, traditional engraved plaques and stainless steel grave marker options.',
     categoryIds: ['plaques'],
     tutorialTags: [
       'bronze_plaque_description',
@@ -190,7 +190,7 @@ export const memorialTypePages: Record<MemorialTypeSlug, PageConfig> = {
     title: 'Urns',
     navLabel: 'Urns',
     intro:
-      'Create personalised memorial Urns with vitreous enamel backgrounds, inscriptions, motifs and photo-based artwork.',
+      'Create personalized memorial urns with vitreous enamel backgrounds, inscriptions, motifs and photo-based artwork.',
     categoryIds: ['urns'],
     tutorialTags: [
       'background_vitreous_description',
@@ -205,7 +205,7 @@ export const memorialTypePages: Record<MemorialTypeSlug, PageConfig> = {
       },
       {
         src: 'https://www.forevershining.com.au/wp-content/uploads/2021/08/Campbell-urn-705x705.jpg',
-        alt: 'Personalised urn gallery example',
+        alt: 'Personalized urn gallery example',
       },
       {
         src: 'https://www.forevershining.com.au/wp-content/uploads/2021/08/Dalton-urn-705x705.jpg',

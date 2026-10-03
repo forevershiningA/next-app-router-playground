@@ -3,7 +3,7 @@ import '#/styles/globals.css';
 import db from '#/lib/db';
 import { catalog } from '#/lib/catalog-db';
 import { data as internalData } from '#/app/_internal/_data';
-import { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Geist, Geist_Mono, Playfair_Display } from 'next/font/google';
 import ErrorBoundary from '#/components/shared/ErrorBoundary';
 import ClientShell from '#/components/app-shell/ClientShell';
@@ -35,19 +35,26 @@ const playfairDisplay = Playfair_Display({
 
 export const metadata: Metadata = {
   title: {
-    default: 'Design Your Own Headstone',
-    template: '%s | DYO Headstones',
+    default: 'Design Your Own Headstone Online | Forever Shining',
+    template: '%s | Forever Shining',
   },
   metadataBase: new URL('https://forevershining.org'),
   description:
-    'Design custom memorial headstones online with real-time 3D visualization. Choose from 30+ premium materials, personalize inscriptions, add laser-etched photos and decorative elements.',
+    'Design custom headstones, grave markers and memorial plaques online in the USA with live 3D preview, personalized inscriptions, photos and clear pricing.',
   openGraph: {
-    title: 'Design Your Own Headstone - Interactive 3D Memorial Design',
+    title: 'Design Your Own Headstone Online | Forever Shining',
     description:
-      'Create a personalized memorial headstone with our interactive 3D design studio. Select shapes, materials, inscriptions, and decorations with instant visualization.',
+      'Create a personalized headstone, grave marker or memorial plaque online with live 3D preview for families across the United States.',
     images: [`/api/og?title=Design Your Own Headstone`],
   },
   twitter: { card: 'summary_large_image' },
+};
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: '(prefers-color-scheme: dark)', color: '#0c0b0a' },
+    { media: '(prefers-color-scheme: light)', color: '#f7f4ee' },
+  ],
 };
 
 export default async function RootLayout({
@@ -119,7 +126,7 @@ export default async function RootLayout({
 
   return (
     <html
-      lang="en"
+      lang="en-US"
       data-theme="dark"
       className="[color-scheme:dark]"
       suppressHydrationWarning

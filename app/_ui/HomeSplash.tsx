@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { useEffect, useState, MouseEvent } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   ArrowRightIcon,
   Bars3Icon,
@@ -11,11 +11,8 @@ import {
   HeartIcon,
   MagnifyingGlassIcon,
   PencilSquareIcon,
-  MoonIcon,
-  SunIcon,
   XMarkIcon,
 } from '@heroicons/react/24/outline';
-import { useTheme } from '#/components/theme/ThemeProvider';
 import { homeFaqItems } from '#/app/_internal/home-content';
 
 const MEMORIAL_LINKS = [
@@ -41,7 +38,7 @@ const HOME_PRODUCT_OPTIONS = [
     name: 'Traditional Engraved Headstone',
     category: 'Granite memorials',
     description:
-      'Choose a traditional granite headstone shape, stone colour, engraved wording, motifs, and coordinated memorial accessories.',
+      'Choose a traditional granite headstone shape, stone color, engraved wording, motifs, and coordinated memorial accessories.',
     image: '/webp/products/APP_ID_124-medium.webp',
     href: '/traditional-engraved-headstone/select-shape',
     designLabel: 'Design a headstone',
@@ -58,10 +55,10 @@ const HOME_PRODUCT_OPTIONS = [
     learnMoreHref: '/memorials/plaques',
   },
   {
-    name: 'Full Colour Memorial Plaque',
-    category: 'Personalised plaques',
+    name: 'Full Color Memorial Plaque',
+    category: 'Personalized plaques',
     description:
-      'Combine photographs, colour backgrounds, meaningful text, and decorative details in a durable personalised memorial plaque.',
+      'Combine photographs, color backgrounds, meaningful text, and decorative details in a durable personalized memorial plaque.',
     image: '/webp/products/APP_ID_32-medium.webp',
     href: '/full-colour-plaque/select-shape',
     designLabel: 'Design a memorial plaque',
@@ -81,7 +78,7 @@ const HOME_PRODUCT_OPTIONS = [
     name: 'Stainless Steel Memorial Urn',
     category: 'Memorial urns',
     description:
-      'Personalise a stainless steel vitreous enamel inlaid urn with imagery, colour, wording, and a carefully selected finish.',
+      'Personalize a stainless steel vitreous enamel inlaid urn with imagery, color, wording, and a carefully selected finish.',
     image: '/webp/products/APP_ID_2350-medium.webp',
     href: '/stainless-steel-vitreous-enamel-inlaid-urn/select-shape',
     designLabel: 'Design a memorial urn',
@@ -111,7 +108,7 @@ const HOME_PRODUCT_OPTIONS = [
     name: 'Laser-Etched Pet Memorial Plaque',
     category: 'Pet memorials',
     description:
-      'Remember a beloved companion with a personalised black granite pet plaque featuring their portrait, name, dates, and a meaningful message.',
+      'Remember a beloved companion with a personalized black granite pet plaque featuring their portrait, name, dates, and a meaningful message.',
     image: '/webp/products/APP_ID_9-medium.webp',
     href: '/laser-etched-pet-plaque/select-shape',
     designLabel: 'Design a pet plaque',
@@ -149,188 +146,40 @@ const HOME_PRODUCT_OPTIONS = [
   },
 ] as const;
 
-const HASH_MODAL_CONTENT = {
-  contact: {
-    eyebrow: 'Personal Support',
-    title: 'Talk with a Designer',
-    description: 'Our memorial specialists are available every day to guide you through sizing, materials, and wording.',
-    bullets: [
-      'Call us at +61 8 6191 0396 for guidance on sizing, materials, and cemetery requirements.',
-      'Email admin@forevershining.com.au for a written response within one business day.',
-      'Book a complimentary screen-share to co-design live with your family.'
-    ],
-    links: [
-      { label: 'Call Now', href: 'tel:+61861910396' },
-      { label: 'Email Support', href: 'mailto:admin@forevershining.com.au' }
-    ]
-  },
-  headstones: {
-    eyebrow: 'Memorial Types',
-    title: 'Custom Headstones',
-    description: 'Preview upright, serpentine, and slant silhouettes in real-time 3D, complete with bases and vases.',
-    bullets: [
-      'Mix 40+ shapes with granite or bronze finishes.',
-      'Dial in exact width, height, and depth in millimetres.',
-      'Export proofs to share with family before you approve production.'
-    ]
-  },
-  plaques: {
-    eyebrow: 'Memorial Types',
-    title: 'Garden & Wall Plaques',
-    description: 'Design bronze or granite plaques for gardens, walls, mausoleums, or cremation memorials.',
-    bullets: [
-      'Choose from beveled, book, and scroll layouts.',
-      'Add photo etchings, emblems, or raised bronze letters.',
-      'Generate instant pricing for single or companion layouts.'
-    ]
-  },
-  urns: {
-    eyebrow: 'Memorial Types',
-    title: 'Urns & Keepsakes',
-    description: 'Coordinate urn colors, engravings, and motif placement with the rest of your memorial design.',
-    bullets: [
-      'Preview indoor and outdoor safe finishes.',
-      'Add inscriptions, dates, and iconography in seconds.',
-      'Match granite, marble, or metal textures to an existing monument.'
-    ]
-  },
-  monuments: {
-    eyebrow: 'Memorial Types',
-    title: 'Full Monument Sets',
-    description: 'Plan coordinated uprights, kerbs, covers, and accessories for family estates.',
-    bullets: [
-      'Combine bases, tablets, vases, statues, and lighting.',
-      'Model custom sizes for council or cemetery guidelines.',
-      'Share 3D walkthroughs with extended family for quick approvals.'
-    ]
-  },
-  pets: {
-    eyebrow: 'Memorial Types',
-    title: 'Pet Memorials',
-    description: 'Create heartfelt garden markers, plaques, and urns that celebrate beloved companions.',
-    bullets: [
-      'Pick playful motifs—paw prints, hearts, and florals.',
-      'Upload photos for laser or sandblast etching.',
-      'Order lightweight plaques with delivery options across Australia, the United States, Canada, and Europe.'
-    ]
-  },
-  'how-it-works': {
-    eyebrow: 'Guided Flow',
-    title: 'How the Studio Works',
-    description: 'A three-step workflow keeps your family in sync from inspiration to final approval.',
-    bullets: [
-      'Step 1: Choose product, shape, and material with real-time previews.',
-      'Step 2: Personalize inscriptions, motifs, and additions with live pricing.',
-      'Step 3: Share proofs, lock pricing, and hand off to production when ready.'
-    ]
-  },
-  pricing: {
-    eyebrow: 'Transparency',
-    title: 'Pricing Guide',
-    description: 'See every component—headstone, base, inscriptions, motifs, freight—before you place an order.',
-    bullets: [
-      'Live calculator updates as you change dimensions or finishes.',
-      'Optional services (installation, foundation, shipping) itemized clearly.',
-      'Download quotes or send a secure payment link when the family approves.'
-    ]
-  },
-  materials: {
-    eyebrow: 'Material Library',
-    title: 'Granite, Bronze & More',
-    description: 'Browse calibrated swatches for Glory Black, Blue Pearl, Bahama Blue, bronze finishes, and ceramic photos.',
-    bullets: [
-      'Compare polished, honed, rock-pitched, and steeled textures.',
-      'Preview weathering and contrast for each inscription style.',
-      'Lock preferred materials to keep future edits on-brand.'
-    ]
-  },
-  faq: {
-    eyebrow: 'Common Questions',
-    title: 'Frequently Asked Questions',
-    description: 'Get instant answers about shipping, cemetery approvals, photo requirements, and payment schedules.',
-    bullets: [
-      'Understand proofing timelines and how many revisions are included.',
-      'Learn how we handle cemetery permits and installation coordination.',
-      'See engraving, etching, and ceramic photo care instructions.'
-    ]
-  },
-  privacy: {
-    eyebrow: 'Policy Snapshot',
-    title: 'Privacy Practices',
-    description: 'We only store the information needed to save your designs and process approved orders.',
-    bullets: [
-      'Design files stay encrypted at rest and are deleted on request.',
-      'Payment data is handled by PCI-compliant processors; we never store card numbers.',
-      'You can export or purge personal data by emailing admin@forevershining.com.au.'
-    ],
-    links: [{ label: 'Request Full Policy', href: 'mailto:admin@forevershining.com.au?subject=Privacy%20Policy%20Request' }]
-  },
-  terms: {
-    eyebrow: 'Policy Snapshot',
-    title: 'Terms of Service',
-    description: 'Review the expectations around artwork approval, payment milestones, and cancellation windows.',
-    bullets: [
-      'Orders enter production only after you sign off on the final proof.',
-      '50% deposits are refundable until materials are cut; after that we credit future work.',
-      'Manufacturing timelines average 6–10 weeks, depending on material availability.'
-    ],
-    links: [{ label: 'Request Full Terms', href: 'mailto:admin@forevershining.com.au?subject=Terms%20of%20Service%20Request' }]
-  },
-  sitemap: {
-    eyebrow: 'Navigation',
-    title: 'Site Overview',
-    description: 'Jump directly to the most visited flows in the studio experience.',
-    bullets: [
-      'Select Product → Shape → Material → Size → Personalize → Check Price.',
-      'Saved Designs: resume drafts from any device in seconds.',
-      'Support Center: chat, schedule a call, or download buyer guides.'
-    ],
-    links: [
-      { label: 'Start Designing', href: '/select-product' },
-      { label: 'Resume a Saved Design', href: '/designs' }
-    ]
-  }
-} as const;
-
-type HashModalKey = keyof typeof HASH_MODAL_CONTENT;
-type HashModalContent = (typeof HASH_MODAL_CONTENT)[HashModalKey];
-type HashModalLink = { label: string; href: string };
-
-const hasModalLinks = (
-  content: HashModalContent,
-): content is HashModalContent & { links: readonly HashModalLink[] } =>
-  'links' in content && Array.isArray(content.links);
-
 export default function HomeSplash() {
-  const { theme, toggleTheme } = useTheme();
-  const [activeModal, setActiveModal] = useState<HashModalKey | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-  const handleHashLink = (slug: HashModalKey) => (event: MouseEvent<HTMLElement>) => {
-    event.preventDefault();
-    setActiveModal(slug);
-  };
-
-  const closeModal = () => setActiveModal(null);
-  const activeModalContent = activeModal ? HASH_MODAL_CONTENT[activeModal] : null;
-
-  useEffect(() => {
-    if (!activeModal) return;
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        setActiveModal(null);
-      }
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [activeModal]);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
+  const mobileMenuRef = useRef<HTMLDivElement>(null);
 
   // Mobile menu: close on Escape and lock body scroll while open
   useEffect(() => {
     if (!mobileMenuOpen) return;
+    const previouslyFocused = document.activeElement as HTMLElement | null;
+    const menu = mobileMenuRef.current;
+    const focusableSelector =
+      'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])';
+    const closeButton = menu?.querySelector<HTMLElement>('[data-menu-close]');
+    closeButton?.focus();
+
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
         setMobileMenuOpen(false);
+        return;
+      }
+      if (event.key === 'Tab' && menu) {
+        const focusable = [
+          ...menu.querySelectorAll<HTMLElement>(focusableSelector),
+        ];
+        const first = focusable[0];
+        const last = focusable.at(-1);
+        if (!first || !last) return;
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault();
+          last.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault();
+          first.focus();
+        }
       }
     };
     window.addEventListener('keydown', handleKeyDown);
@@ -339,51 +188,63 @@ export default function HomeSplash() {
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
       document.body.style.overflow = previousOverflow;
+      (previouslyFocused ?? menuButtonRef.current)?.focus();
     };
   }, [mobileMenuOpen]);
 
   return (
-    <div
-      className="min-h-screen"
-      style={{ background: 'radial-gradient(circle at 50% 100%, #3E3020 0%, #121212 60%)' }}
-    >
-      
+    <main id="main-content" className="min-h-screen bg-[#0c0b0a]">
+      <a
+        href="#home-heading"
+        className="fixed top-4 left-4 z-[10001] -translate-y-24 rounded-md bg-[#cfac6c] px-4 py-2 font-semibold text-slate-950 transition-transform focus:translate-y-0"
+      >
+        Skip to main content
+      </a>
+
       {/* Hero Section */}
       <div
-        className="relative flex h-[min(600px,100svh)] min-h-[560px] max-h-[600px] flex-col overflow-hidden"
+        className="relative flex h-[min(680px,100svh)] max-h-[680px] min-h-[600px] flex-col overflow-hidden"
         role="banner"
       >
-        
         {/* Responsive Header - Absolute top */}
-        <header className="absolute top-0 left-0 right-0 z-50 px-4 py-3 sm:px-6 sm:py-4" style={{ caretColor: 'transparent' }}>
+        <header
+          className="absolute top-0 right-0 left-0 z-50 px-4 py-3 sm:px-6 sm:py-4"
+          style={{ caretColor: 'transparent' }}
+        >
           <div className="mx-auto flex w-full max-w-7xl items-center justify-between gap-5 xl:gap-8">
             {/* Logo - Responsive width, aligned left */}
             <div
-              className="w-52 shrink-0 sm:w-56 md:w-64 transition-all select-none pointer-events-none"
-            style={{ caretColor: 'transparent', userSelect: 'none' }}
-          >
-            <Image 
-              src="/ico/forever-transparent-logo.png" 
-              alt="Forever Shining - Design Online" 
-              width={320}
-              height={100}
-              className="w-full h-auto select-none"
-              priority
-              quality={75}
-              sizes="(min-width: 768px) 288px, (min-width: 640px) 224px, 208px"
-              draggable={false}
-              style={{ userSelect: 'none', pointerEvents: 'none' }}
-            />
-          </div>
+              className="pointer-events-none w-52 shrink-0 select-none sm:w-56 md:w-64"
+              style={{ caretColor: 'transparent', userSelect: 'none' }}
+            >
+              <Image
+                src="/ico/forever-transparent-logo.png"
+                alt="Forever Shining - Design Online"
+                width={320}
+                height={100}
+                className="h-auto w-full select-none"
+                priority
+                quality={75}
+                sizes="(min-width: 768px) 288px, (min-width: 640px) 224px, 208px"
+                draggable={false}
+                style={{ userSelect: 'none', pointerEvents: 'none' }}
+              />
+            </div>
 
-            <nav className="absolute left-1/2 hidden -translate-x-1/2 text-center xl:block" aria-label="Memorial product pages">
-              <p className="mb-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-[#f3d48f]">
+            <nav
+              className="absolute left-1/2 hidden -translate-x-1/2 text-center xl:block"
+              aria-label="Memorial product pages"
+            >
+              <p className="mb-1 text-[10px] font-semibold tracking-[0.18em] text-[#e3c887]">
                 You design it. We craft it.
               </p>
-              <ul className="flex items-center justify-center gap-5 whitespace-nowrap text-sm font-semibold text-white/90">
+              <ul className="flex items-center justify-center gap-5 text-sm font-semibold whitespace-nowrap text-white/90">
                 {MEMORIAL_LINKS.map((link) => (
                   <li key={link.href}>
-                    <Link href={link.href} className="transition-colors hover:text-[#f3d48f]">
+                    <Link
+                      href={link.href}
+                      className="transition-colors hover:text-[#f3d48f]"
+                    >
                       {link.label}
                     </Link>
                   </li>
@@ -391,7 +252,10 @@ export default function HomeSplash() {
               </ul>
             </nav>
 
-            <nav className="hidden shrink-0 items-center gap-2 xl:flex" aria-label="Design actions">
+            <nav
+              className="hidden shrink-0 items-center gap-2 xl:flex"
+              aria-label="Design actions"
+            >
               <Link
                 href="/designs"
                 className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-white/30 bg-white/[0.08] text-white transition-colors hover:border-[#cfac6c]/80 hover:bg-white/15 hover:text-[#f3d48f]"
@@ -399,30 +263,45 @@ export default function HomeSplash() {
               >
                 <MagnifyingGlassIcon className="h-5 w-5" aria-hidden="true" />
               </Link>
-            <Link
-              href="/designs"
-              className="inline-flex min-h-10 items-center justify-center rounded-lg border border-white/30 bg-white/[0.08] px-4 text-sm font-semibold text-white transition-colors hover:border-[#cfac6c]/80 hover:bg-white/15 hover:text-[#f3d48f]"
-            >
-              Browse Designs
-            </Link>
+              <Link
+                href="/designs"
+                className="inline-flex min-h-10 items-center justify-center rounded-lg border border-white/30 bg-white/[0.08] px-4 text-sm font-semibold text-white transition-colors hover:border-[#cfac6c]/80 hover:bg-white/15 hover:text-[#f3d48f]"
+              >
+                Browse Designs
+              </Link>
             </nav>
+
+            <Link
+              href="/select-product"
+              prefetch={false}
+              className="ml-auto hidden min-h-11 items-center justify-center rounded-lg bg-[#cfac6c] px-4 text-sm font-semibold text-slate-950 transition-colors hover:bg-[#d7b979] md:inline-flex xl:hidden"
+            >
+              Start Designing
+            </Link>
 
             {/* Menu button for all breakpoints below the full desktop navigation. */}
             <button
-            type="button"
-            onClick={() => setMobileMenuOpen(true)}
-            className="shrink-0 rounded-lg border border-white/30 bg-white/[0.08] p-2 text-white backdrop-blur-sm transition-colors hover:border-[#cfac6c]/80 xl:hidden"
-            aria-label="Open menu"
-            aria-expanded={mobileMenuOpen}
-          >
-            <Bars3Icon className="h-6 w-6" aria-hidden="true" />
+              ref={menuButtonRef}
+              type="button"
+              onClick={() => setMobileMenuOpen(true)}
+              className="shrink-0 rounded-lg border border-white/30 bg-white/[0.08] p-2 text-white backdrop-blur-sm transition-colors hover:border-[#cfac6c]/80 xl:hidden"
+              aria-label="Open menu"
+              aria-expanded={mobileMenuOpen}
+            >
+              <Bars3Icon className="h-6 w-6" aria-hidden="true" />
             </button>
           </div>
         </header>
 
         {/* Mobile Menu Drawer */}
         {mobileMenuOpen && (
-          <div className="fixed inset-0 z-[60] xl:hidden" role="dialog" aria-modal="true" aria-label="Site menu">
+          <div
+            ref={mobileMenuRef}
+            className="fixed inset-0 z-[60] overscroll-contain xl:hidden"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="mobile-menu-title"
+          >
             <div
               className="absolute inset-0 bg-black/60 backdrop-blur-sm"
               onClick={() => setMobileMenuOpen(false)}
@@ -432,7 +311,7 @@ export default function HomeSplash() {
               {/* Match the home header so the logo and close button stay in
                   exactly the same place when the mobile menu opens. */}
               <div className="flex items-center justify-between gap-5 px-4 py-3">
-                <div className="w-52 select-none pointer-events-none">
+                <div className="pointer-events-none w-52 select-none">
                   <Image
                     src="/ico/forever-transparent-logo.png"
                     alt="Forever Shining"
@@ -444,6 +323,7 @@ export default function HomeSplash() {
                   />
                 </div>
                 <button
+                  data-menu-close
                   type="button"
                   onClick={() => setMobileMenuOpen(false)}
                   className="shrink-0 rounded-lg border border-white/15 bg-white/[0.06] p-2 text-white backdrop-blur-sm transition-colors hover:border-[#cfac6c]/60"
@@ -454,9 +334,12 @@ export default function HomeSplash() {
               </div>
 
               <p className="mt-6 px-5 text-[11px] font-semibold tracking-[0.24em] text-[#f3d48f] uppercase">
-                Memorials
+                <span id="mobile-menu-title">Memorials</span>
               </p>
-              <nav className="mt-2 flex flex-col px-5" aria-label="Memorial product pages">
+              <nav
+                className="mt-2 flex flex-col px-5"
+                aria-label="Memorial product pages"
+              >
                 {MEMORIAL_LINKS.map((link) => (
                   <Link
                     key={link.href}
@@ -489,79 +372,86 @@ export default function HomeSplash() {
             </div>
           </div>
         )}
-      
+
         {/* Background Layers */}
-        <div 
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat" 
-          style={{ 
-            backgroundImage: 'url(/backgrounds/tree-2916763_1920.webp)',
-            filter: 'blur(1px) saturate(0.9) brightness(0.76)',
-            transform: 'scale(1)'
-          }}
-          role="presentation"
+        <Image
+          src="/backgrounds/tree-2916763_1920.webp"
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover object-center [filter:brightness(0.7)]"
           aria-hidden="true"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#071a31]/75 via-[#08243b]/38 to-[#06120d]/26" aria-hidden="true" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_58%,rgba(255,255,255,0.1),transparent_38%)]" aria-hidden="true" />
-        
-        <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-grow flex-col justify-center px-4 pb-14 pt-[150px] sm:px-6 sm:pb-16 sm:pt-[145px] lg:px-8">
+
+        <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-grow flex-col justify-center px-4 pt-[150px] pb-14 sm:px-6 sm:pt-[145px] sm:pb-20 lg:px-8">
           <div className="flex flex-col text-center">
-            
             {/* Headline - Connect the live design to the crafted memorial */}
-            <h1 className="order-1 !mb-0 !pb-0 text-3xl font-playfair-display tracking-tight sm:text-5xl leading-tight">
+            <h1
+              id="home-heading"
+              className="font-playfair-display order-1 !mb-0 scroll-mt-24 !pb-0 text-[2.35rem] leading-[1.08] tracking-[-0.025em] sm:text-6xl"
+            >
               <span
-                className="inline-block font-semibold text-[2rem] sm:text-5xl mx-auto"
-                style={{ 
+                className="mx-auto inline-block max-w-5xl font-semibold"
+                style={{
                   color: '#FFFEF8',
-                  textShadow: '0 1px 1px rgba(0,0,0,2), 0 4px 24px rgba(0,0,0,0)'
+                  textShadow:
+                    '0 2px 3px rgba(0,0,0,.72), 0 6px 28px rgba(0,0,0,.4)',
                 }}
               >
-                Custom Headstones, Monuments<br className="hidden lg:block" />{' '}
-                &amp; Memorial Plaques
+                Custom Headstones, Grave Markers
+                <br className="hidden lg:block" /> &amp; Memorial Plaques
               </span>
             </h1>
             <p
-              className="order-2 mx-auto mt-3 max-w-2xl text-lg font-normal leading-snug sm:text-2xl md:mb-6"
-              style={{ 
+              className="order-2 mx-auto mt-6 max-w-2xl text-base leading-7 font-normal text-pretty sm:text-xl sm:leading-8 md:mb-4"
+              style={{
                 color: '#FFFFFF',
-                textShadow: '0 1px 1px rgba(0,0,0,0.2), 0 4px 20px rgba(0,0,0,0)'
+                textShadow:
+                  '0 2px 3px rgba(0,0,0,.72), 0 4px 18px rgba(0,0,0,.38)',
               }}
             >
               Design a lasting memorial online.
               <br />
-              Personalise every detail and preview it in 3D.
+              Personalize every detail and preview it in 3D.
             </p>
-            
-            <div className="order-3 relative z-20 mt-8 flex flex-col items-center gap-4">
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full">
+
+            <div className="relative z-20 order-3 mt-7 flex flex-col items-center gap-4">
+              <div className="flex w-full flex-col items-center justify-center gap-4 sm:flex-row">
                 <Link
                   href="/select-product"
                   prefetch={false}
-                  className="inline-flex w-auto items-center justify-center gap-2 rounded-lg bg-[#cfac6c] px-7 py-3.5 text-center text-sm font-semibold tracking-wide text-slate-950 transition-colors hover:bg-[#d7b979] sm:px-10 sm:py-4 sm:text-base"
+                  className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-sm bg-[#d0ad68] px-7 py-3.5 text-center text-sm font-semibold text-[#17120a] transition-colors hover:bg-[#e0c27f] sm:w-auto sm:px-10 sm:text-base"
                   aria-label="Start designing a memorial in 3D"
                   style={{ letterSpacing: '0.05em' }}
                 >
                   Design Your Memorial in 3D
-                  <ArrowRightIcon className="relative top-px h-4 w-4 shrink-0" aria-hidden="true" />
+                  <ArrowRightIcon
+                    className="relative top-px h-4 w-4 shrink-0"
+                    aria-hidden="true"
+                  />
                 </Link>
                 <Link
                   href="#how-it-works"
-                  className="inline-flex w-auto items-center justify-center rounded-lg border-2 border-white/65 bg-white/15 px-7 py-3.5 text-center text-sm font-semibold tracking-wide text-white shadow-lg shadow-black/15 backdrop-blur-sm transition-colors hover:border-[#cfac6c] hover:bg-white/25 sm:px-10 sm:py-4 sm:text-base"
+                  className="inline-flex min-h-12 w-full items-center justify-center rounded-sm border border-white/55 bg-black/15 px-7 py-3.5 text-center text-sm font-semibold text-white backdrop-blur-sm transition-colors hover:border-[#d0ad68] hover:bg-black/30 sm:w-auto sm:px-10 sm:text-base"
                 >
                   How Our Memorial Designer Works
                 </Link>
               </div>
-              <p className="text-center text-xs font-medium tracking-wide text-white/85 sm:text-sm">
-                Design online · Save and share your proof · Review pricing before ordering
+              <p className="text-center text-xs font-medium text-white/80 sm:text-sm">
+                Design online, share the proof, and review pricing before
+                ordering.
               </p>
             </div>
-
           </div>
         </div>
       </div>
 
-      <section className="relative border-b border-white/10 bg-[#0b0b0b] day:border-gray-200 day:bg-white" aria-label="Designer benefits">
-        <div className="mx-auto grid max-w-7xl grid-cols-1 gap-x-8 px-6 sm:grid-cols-2 lg:grid-cols-4 lg:px-8">
+      <section
+        className="day:border-stone-200 day:bg-[#f7f4ee] relative border-b border-[#d0ad68]/20 bg-[#0c0b0a]"
+        aria-label="Designer benefits"
+      >
+        <div className="mx-auto grid max-w-7xl grid-cols-1 px-6 sm:grid-cols-2 lg:grid-cols-4 lg:px-8">
           {[
             {
               icon: ComputerDesktopIcon,
@@ -580,15 +470,26 @@ export default function HomeSplash() {
             },
             {
               icon: HeartIcon,
-              title: 'Crafted with care',
-              description: 'Take your time, then share a proof with family.',
+              title: 'Crafting memorials since 2005',
+              description:
+                'Experience and support for every considered decision.',
             },
           ].map(({ icon: Icon, title, description }) => (
-            <div key={title} className="flex gap-3 py-5 sm:py-6">
-              <Icon className="mt-0.5 h-6 w-6 shrink-0 text-[#cfac6c]" aria-hidden="true" />
+            <div
+              key={title}
+              className="flex gap-4 border-b border-white/10 py-6 last:border-b-0 sm:border-r sm:px-5 sm:odd:pl-0 sm:nth-[2]:border-r-0 lg:border-b-0 lg:px-6 lg:nth-[2]:border-r lg:nth-[4]:border-r-0 lg:nth-[4]:pr-0"
+            >
+              <Icon
+                className="mt-0.5 h-7 w-7 shrink-0 text-[#cfac6c]"
+                aria-hidden="true"
+              />
               <div>
-                <p className="text-sm font-semibold text-white day:text-gray-900">{title}</p>
-                <p className="mt-1 text-xs leading-5 text-gray-400 day:text-gray-600">{description}</p>
+                <p className="day:text-gray-900 text-base leading-6 font-semibold text-white">
+                  {title}
+                </p>
+                <p className="day:text-gray-600 mt-1.5 text-sm leading-6 text-gray-400">
+                  {description}
+                </p>
               </div>
             </div>
           ))}
@@ -598,39 +499,40 @@ export default function HomeSplash() {
       {/* Features Section - How It Works */}
       <section
         id="how-it-works"
-        className="relative overflow-hidden border-t border-white/10 bg-[#0b0b0b] py-16 day:border-gray-200 day:bg-stone-100"
+        className="day:border-stone-200 day:bg-[#f7f4ee] relative scroll-mt-24 overflow-hidden border-t border-white/10 bg-[#11100e] py-20"
       >
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="grid gap-10 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:items-start">
+          <div className="grid gap-12 lg:grid-cols-[minmax(0,0.78fr)_minmax(0,1.22fr)] lg:items-center">
             <div>
-              <div className="flex items-center justify-between gap-4">
-                <p className="text-xs font-semibold tracking-[0.28em] text-[#cfac6c] uppercase day:text-amber-700">
-                  Created from experience
-                </p>
-                <button
-                  type="button"
-                  onClick={toggleTheme}
-                  aria-label={theme === 'day' ? 'Switch to night mode' : 'Switch to day mode'}
-                  title={theme === 'day' ? 'Night mode' : 'Day mode'}
-                  className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-white/20 bg-[#1a1208]/80 text-white/60 shadow-md backdrop-blur-sm transition-all duration-200 hover:border-white/40 hover:bg-[#1a1208]/95 hover:text-white day:border-[#D7B356]/50 day:bg-white/90 day:text-amber-700 day:hover:border-[#D7B356]/80 day:hover:bg-white day:hover:text-amber-800 md:hidden"
-                >
-                  {theme === 'day' ? <MoonIcon className="h-4 w-4" /> : <SunIcon className="h-4 w-4" />}
-                </button>
-              </div>
-              <h2 className="mt-3 max-w-2xl font-serif text-3xl leading-[1.22] text-white sm:text-4xl day:text-gray-900">
-                Design a Personalised Memorial Online in 3D
+              <p className="day:text-amber-800 text-xs font-semibold tracking-[0.12em] text-[#d0ad68]">
+                Memorial design, made considered
+              </p>
+              <h2 className="day:text-stone-900 mt-4 max-w-2xl font-serif text-3xl leading-[1.16] text-pretty text-white sm:text-5xl">
+                Design a Personalized Memorial Online in 3D
               </h2>
-              <p className="mt-5 text-sm font-semibold text-[#f3d48f] day:text-amber-700">
+              <p className="day:text-amber-800 mt-6 text-sm font-semibold text-[#e3c887]">
                 Creating lasting tributes since 2005
               </p>
-              <p className="mt-4 max-w-xl text-base leading-7 text-gray-300 day:text-gray-600">
-                Design a memorial with clarity and care, at a pace that feels right for your family. See every decision in 3D before moving forward.
+              <p className="day:text-gray-600 mt-4 max-w-xl text-base leading-7 text-gray-300">
+                Design a memorial with clarity and care, at a pace that feels
+                right for your family. See every decision in 3D before moving
+                forward.
               </p>
 
-              <ul className="mt-5 space-y-3 text-sm font-medium text-gray-300 day:text-gray-600">
-                {['Begin without pressure', 'See every change in 3D', 'Save and share with family'].map((item) => (
-                  <li key={item} className="flex items-center gap-3.5 leading-5">
-                    <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-[#cfac6c]" aria-hidden="true" />
+              <ul className="day:text-gray-600 mt-5 space-y-3 text-sm font-medium text-gray-300">
+                {[
+                  'Begin without pressure',
+                  'See every change in 3D',
+                  'Save and share with family',
+                ].map((item) => (
+                  <li
+                    key={item}
+                    className="flex items-center gap-3.5 leading-5"
+                  >
+                    <span
+                      className="h-1.5 w-1.5 shrink-0 rounded-full bg-[#cfac6c]"
+                      aria-hidden="true"
+                    />
                     {item}
                   </li>
                 ))}
@@ -640,14 +542,14 @@ export default function HomeSplash() {
                 <Link
                   href="/select-product"
                   prefetch={false}
-                  className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-[#cfac6c] px-5 py-2.5 text-sm font-semibold text-slate-950 transition-colors hover:bg-[#d7b979]"
+                  className="inline-flex min-h-11 items-center justify-center gap-2 rounded-sm bg-[#d0ad68] px-5 py-2.5 text-sm font-semibold text-[#17120a] transition-colors hover:bg-[#e0c27f]"
                 >
                   Start Designing in 3D
                   <ArrowRightIcon className="h-4 w-4" aria-hidden="true" />
                 </Link>
                 <Link
                   href="/designs"
-                  className="inline-flex min-h-11 items-center justify-center rounded-lg border border-white/45 bg-white/[0.06] px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:border-[#cfac6c]/80 hover:bg-white/12 day:border-gray-300 day:text-gray-800 day:hover:bg-white"
+                  className="day:border-gray-300 day:text-gray-800 day:hover:bg-white inline-flex min-h-11 items-center justify-center rounded-lg border border-white/45 bg-white/[0.06] px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:border-[#cfac6c]/80 hover:bg-white/12"
                 >
                   Browse Designs
                 </Link>
@@ -658,18 +560,18 @@ export default function HomeSplash() {
               href="/select-product"
               prefetch={false}
               aria-label="Open the 3D memorial designer"
-              className="group relative block overflow-hidden rounded-2xl border border-white/25 bg-[#17120d] shadow-[0_24px_60px_rgba(0,0,0,0.35)] ring-1 ring-white/[0.1] transition-transform duration-500 hover:-translate-y-1 day:border-gray-300 day:ring-gray-200"
+              className="group day:border-stone-300 relative block overflow-hidden rounded-sm border border-white/20 bg-[#17120d] shadow-[0_28px_70px_rgba(0,0,0,0.4)]"
             >
               <div className="relative aspect-[21/10] overflow-hidden">
                 <Image
                   src="/screenshots/designer-3d-preview.webp"
-                  alt="The Forever Shining 3D memorial designer showing a personalised headstone"
+                  alt="The Forever Shining 3D memorial designer showing a personalized headstone"
                   fill
                   sizes="(min-width: 1024px) 55vw, 100vw"
-                  className="object-cover transition-transform duration-700 group-hover:scale-[1.025]"
+                  className="object-cover"
                 />
 
-                <div className="absolute right-4 top-4 rounded-full border border-white/25 bg-[#17120d]/90 px-3 py-1.5 text-[10px] font-semibold tracking-[0.18em] text-[#f3d48f] uppercase shadow-md backdrop-blur-sm sm:right-5 sm:top-5">
+                <div className="absolute top-4 right-4 border border-white/25 bg-[#17120d]/90 px-3 py-1.5 text-[10px] font-semibold tracking-[0.12em] text-[#e3c887] backdrop-blur-sm sm:top-5 sm:right-5">
                   Live 3D preview
                 </div>
               </div>
@@ -681,62 +583,68 @@ export default function HomeSplash() {
       {/* Search-friendly product entry point outside the designer shell. */}
       <section
         aria-labelledby="home-products-heading"
-        className="relative overflow-hidden border-y border-white/10 bg-[#11100e] py-16 day:border-gray-200 day:bg-white"
+        className="day:border-stone-200 day:bg-white relative overflow-hidden border-y border-white/10 bg-[#0c0b0a] py-20"
       >
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="mx-auto max-w-3xl text-center">
-            <p className="text-xs font-semibold tracking-[0.24em] text-[#cfac6c] uppercase day:text-amber-700">
+          <div className="max-w-3xl">
+            <p className="day:text-amber-800 text-xs font-semibold tracking-[0.12em] text-[#d0ad68]">
               Choose your memorial
             </p>
             <h2
               id="home-products-heading"
-              className="mt-3 font-serif text-3xl leading-tight text-white sm:text-4xl day:text-gray-900"
+              className="day:text-stone-900 mt-4 font-serif text-3xl leading-[1.16] text-pretty text-white sm:text-5xl"
             >
               Design a custom headstone, plaque, monument, or urn online
             </h2>
-            <p className="mx-auto mt-4 max-w-2xl text-base leading-7 text-gray-300 day:text-gray-600">
-              Start with the memorial that best suits your family, cemetery, or setting. Each guided designer lets you compare shapes, materials, sizes, inscriptions, images, and meaningful details before ordering.
+            <p className="day:text-stone-600 mt-5 max-w-2xl text-base leading-7 text-gray-300">
+              Start with the memorial that best suits your family, cemetery, or
+              setting. Each guided designer lets you compare shapes, materials,
+              sizes, inscriptions, images, and meaningful details before
+              ordering.
             </p>
           </div>
 
-          <div className="mt-10 grid grid-cols-1 items-stretch gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {HOME_PRODUCT_OPTIONS.map((product) => (
+          <div className="mt-12 grid grid-cols-1 items-stretch gap-x-6 gap-y-8 sm:grid-cols-2 lg:grid-cols-3">
+            {HOME_PRODUCT_OPTIONS.slice(0, 6).map((product) => (
               <article
                 key={product.href}
-                className="group flex h-full flex-col overflow-hidden rounded-xl border border-white/12 bg-[#171717] shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#cfac6c]/65 hover:shadow-xl hover:shadow-black/20 day:border-gray-200 day:bg-white day:hover:border-[#cfac6c]/65 day:hover:shadow-gray-200/70"
+                className="group day:border-stone-200 day:bg-white flex h-full flex-col overflow-hidden border border-white/12 bg-[#151412] transition-colors hover:border-[#d0ad68]/65"
               >
-                <div className="relative aspect-[4/3] overflow-hidden bg-[#101010] day:bg-[#f3f1ed]">
+                <div className="day:bg-[#f3f1ed] relative aspect-[4/3] overflow-hidden bg-[#101010]">
                   <Image
                     src={product.image}
-                    alt={`${product.name} available to personalise online`}
+                    alt={`${product.name} available to personalize online`}
                     fill
                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                    className="object-contain p-4 transition-transform duration-500 group-hover:scale-105"
+                    className="object-contain p-5 transition-transform duration-500 group-hover:scale-[1.025] motion-reduce:transition-none motion-reduce:group-hover:transform-none"
                   />
                 </div>
 
                 <div className="flex flex-1 flex-col p-5">
-                  <p className="text-[11px] font-semibold tracking-[0.15em] text-[#cfac6c] uppercase day:text-amber-700">
+                  <p className="day:text-amber-800 text-[11px] font-semibold tracking-[0.08em] text-[#d0ad68]">
                     {product.category}
                   </p>
-                  <h3 className="mt-2 text-lg leading-snug font-semibold text-white day:text-gray-900">
+                  <h3 className="day:text-gray-900 mt-2 text-lg leading-snug font-semibold text-white">
                     {product.name}
                   </h3>
-                  <p className="mt-3 flex-1 text-sm leading-6 text-gray-300 day:text-gray-600">
+                  <p className="day:text-gray-600 mt-3 flex-1 text-sm leading-6 text-gray-300">
                     {product.description}
                   </p>
                   <div className="mt-5 grid grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)] gap-2">
                     <Link
                       href={product.href}
                       prefetch={false}
-                      className="inline-flex min-h-11 items-center justify-center gap-1.5 rounded-lg bg-[#cfac6c] px-3 py-2.5 text-center text-sm font-semibold text-slate-950 transition-colors hover:bg-[#d7b979] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#f3d48f]"
+                      className="inline-flex min-h-11 items-center justify-center gap-1.5 rounded-sm bg-[#d0ad68] px-3 py-2.5 text-center text-sm font-semibold text-[#17120a] transition-colors hover:bg-[#e0c27f] focus-visible:ring-2 focus-visible:ring-[#f3d48f] focus-visible:outline-none"
                     >
                       {product.designLabel}
-                      <ArrowRightIcon className="h-4 w-4 shrink-0" aria-hidden="true" />
+                      <ArrowRightIcon
+                        className="h-4 w-4 shrink-0"
+                        aria-hidden="true"
+                      />
                     </Link>
                     <Link
                       href={product.learnMoreHref}
-                      className="inline-flex min-h-11 items-center justify-center rounded-lg border border-white/20 px-3 py-2.5 text-center text-sm font-semibold text-white transition-colors hover:border-[#cfac6c]/70 hover:bg-white/[0.06] day:border-gray-300 day:text-gray-800 day:hover:bg-gray-50"
+                      className="day:border-stone-300 day:text-stone-800 day:hover:bg-stone-50 inline-flex min-h-11 items-center justify-center rounded-sm border border-white/20 px-3 py-2.5 text-center text-sm font-semibold text-white transition-colors hover:border-[#d0ad68]/70 hover:bg-white/[0.06]"
                     >
                       Learn more
                     </Link>
@@ -750,42 +658,45 @@ export default function HomeSplash() {
             <Link
               href="/select-product"
               prefetch={false}
-              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-[#cfac6c] px-6 py-3 text-sm font-semibold text-slate-950 transition-colors hover:bg-[#d7b979]"
+              className="day:text-[#6f511c] inline-flex min-h-11 items-center justify-center gap-2 rounded-sm border border-[#d0ad68] px-6 py-3 text-sm font-semibold text-[#e3c887] transition-colors hover:bg-[#d0ad68] hover:text-[#17120a]"
             >
               View all memorial products
               <ArrowRightIcon className="h-4 w-4" aria-hidden="true" />
             </Link>
-            <p className="max-w-2xl text-xs leading-5 text-gray-400 day:text-gray-500">
-              You can save your design, share it with family, and review pricing before making a final decision.
+            <p className="day:text-gray-500 max-w-2xl text-xs leading-5 text-gray-400">
+              You can save your design, share it with family, and review pricing
+              before making a final decision.
             </p>
           </div>
         </div>
       </section>
 
-      <section className="relative overflow-hidden bg-[#f4f1eb] py-16">
+      <section className="relative overflow-hidden bg-[#eee9df] py-20">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:items-start">
+          <div className="grid gap-12 lg:grid-cols-[0.72fr_1.28fr] lg:items-start">
             <div className="max-w-xl">
-              <p className="text-xs font-semibold tracking-[0.24em] text-[#a77d32] uppercase">
+              <p className="text-xs font-semibold tracking-[0.12em] text-[#7b5a20]">
                 A clear design process
               </p>
-              <h2 className="mt-3 font-serif text-3xl leading-tight text-[#1d1a17] sm:text-4xl">
+              <h2 className="mt-4 font-serif text-3xl leading-[1.16] text-pretty text-[#1d1a17] sm:text-5xl">
                 How to Design Your Memorial Online
               </h2>
               <p className="mt-3 text-base leading-7 text-[#625a51]">
-                Work through each decision at your own pace. The 3D preview updates as you choose the product, dimensions, wording, and personal details.
+                Work through each decision at your own pace. The 3D preview
+                updates as you choose the product, dimensions, wording, and
+                personal details.
               </p>
               <Link
                 href="/select-product"
                 prefetch={false}
-                className="mt-6 inline-flex min-h-11 w-fit items-center gap-2 rounded-lg bg-[#cfac6c] px-5 py-2.5 text-sm font-semibold text-slate-950 transition-colors hover:bg-[#d7b979]"
+                className="mt-7 inline-flex min-h-11 w-fit items-center gap-2 rounded-sm bg-[#1d1a17] px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#3a332c]"
               >
                 Choose a memorial product
                 <ArrowRightIcon className="h-4 w-4" aria-hidden="true" />
               </Link>
             </div>
 
-            <ol className="grid gap-4 sm:grid-cols-3">
+            <ol className="grid border-t border-[#bdb4a6] sm:grid-cols-3 sm:border-l">
               {[
                 {
                   title: 'Choose the memorial',
@@ -793,7 +704,7 @@ export default function HomeSplash() {
                     'Compare headstones, plaques, monuments, urns, and pet memorials before opening the designer.',
                 },
                 {
-                  title: 'Personalise the details',
+                  title: 'Personalize the details',
                   description:
                     'Select the shape, material, size, inscription, portrait, motifs, and available accessories.',
                 },
@@ -805,10 +716,13 @@ export default function HomeSplash() {
               ].map((step, index) => (
                 <li
                   key={step.title}
-                  className="rounded-xl border border-[#d9d1c5] bg-white p-5 shadow-sm"
+                  className="border-r border-b border-[#bdb4a6] p-6 sm:min-h-64"
                 >
-                  <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-[#cfac6c] text-sm font-bold text-slate-950">
-                    {index + 1}
+                  <span
+                    className="font-serif text-4xl text-[#9a742f]"
+                    aria-hidden="true"
+                  >
+                    0{index + 1}
                   </span>
                   <h3 className="mt-4 text-base font-semibold text-[#1d1a17]">
                     {step.title}
@@ -826,21 +740,22 @@ export default function HomeSplash() {
       <section
         id="faq"
         aria-labelledby="home-faq-heading"
-        className="relative border-t border-white/10 bg-[#0b0b0b] py-16 day:border-gray-200 day:bg-stone-100"
+        className="day:border-stone-200 day:bg-[#f7f4ee] relative scroll-mt-24 border-t border-white/10 bg-[#11100e] py-20"
       >
         <div className="mx-auto max-w-4xl px-6 lg:px-8">
           <div className="text-center">
-            <p className="text-xs font-semibold tracking-[0.24em] text-[#cfac6c] uppercase day:text-amber-700">
+            <p className="day:text-amber-800 text-xs font-semibold tracking-[0.12em] text-[#d0ad68]">
               Memorial design questions
             </p>
             <h2
               id="home-faq-heading"
-              className="mt-3 font-serif text-3xl leading-tight text-white sm:text-4xl day:text-gray-900"
+              className="day:text-stone-900 mt-4 font-serif text-3xl leading-[1.16] text-pretty text-white sm:text-5xl"
             >
               Frequently Asked Questions About Designing a Memorial
             </h2>
-            <p className="mx-auto mt-4 max-w-2xl text-base leading-7 text-gray-300 day:text-gray-600">
-              Practical answers about personalisation, cemetery requirements, saving a design, and ordering from your region.
+            <p className="day:text-gray-600 mx-auto mt-4 max-w-2xl text-base leading-7 text-gray-300">
+              Practical answers about personalisation, cemetery requirements,
+              saving a design, and ordering from your region.
             </p>
           </div>
 
@@ -849,9 +764,9 @@ export default function HomeSplash() {
               <details
                 key={item.question}
                 open={index === 0}
-                className="group rounded-xl border border-white/12 bg-white/[0.04] px-5 py-4 day:border-gray-200 day:bg-white"
+                className="group day:border-stone-200 day:bg-white border-b border-white/15 bg-transparent px-1 py-5 first:border-t"
               >
-                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-left text-base font-semibold text-white marker:content-none day:text-gray-900">
+                <summary className="day:text-gray-900 flex cursor-pointer list-none items-center justify-between gap-4 text-left text-base font-semibold text-white marker:content-none">
                   {item.question}
                   <span
                     className="text-xl leading-none text-[#cfac6c] transition-transform group-open:rotate-45"
@@ -860,7 +775,7 @@ export default function HomeSplash() {
                     +
                   </span>
                 </summary>
-                <p className="mt-3 max-w-3xl text-sm leading-6 text-gray-300 day:text-gray-600">
+                <p className="day:text-gray-600 mt-3 max-w-3xl text-sm leading-6 text-gray-300">
                   {item.answer}
                 </p>
               </details>
@@ -870,33 +785,32 @@ export default function HomeSplash() {
       </section>
 
       {/* Support CTA */}
-      <section
-        className="relative overflow-hidden border-t border-white/10 bg-[#101010] py-10 day:border-gray-200 day:bg-white"
-      >
+      <section className="day:border-gray-200 day:bg-white relative overflow-hidden border-t border-white/10 bg-[#101010] py-10">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
             <div className="max-w-2xl">
-              <p className="text-xs font-semibold tracking-[0.22em] text-[#cfac6c] uppercase day:text-amber-700">
+              <p className="day:text-amber-700 text-xs font-semibold tracking-[0.22em] text-[#cfac6c] uppercase">
                 Need a hand?
               </p>
-              <h2 className="mt-2 font-serif text-2xl leading-tight text-white sm:text-3xl day:text-gray-900">
+              <h2 className="day:text-gray-900 mt-2 font-serif text-2xl leading-tight text-white sm:text-3xl">
                 Get Help Choosing a Headstone, Plaque, or Memorial
               </h2>
-              <p className="mt-2 text-sm leading-6 text-gray-300 day:text-gray-600">
-                We can help with choosing a memorial, materials, wording, and the next step when you are ready.
+              <p className="day:text-gray-600 mt-2 text-sm leading-6 text-gray-300">
+                We can help with choosing a memorial, materials, wording, and
+                the next step when you are ready.
               </p>
             </div>
 
             <div className="flex flex-col gap-3 sm:flex-row lg:items-center">
               <a
-                href="https://www.forevershining.com.au/contact/"
+                href="mailto:admin@bronze-plaque.com?subject=Memorial%20Design%20Help"
                 className="inline-flex min-h-11 items-center justify-center rounded-lg bg-[#cfac6c] px-5 py-2.5 text-sm font-semibold text-slate-950 transition-colors hover:bg-[#d7b979]"
               >
                 Contact us
               </a>
               <Link
                 href="/designs"
-                className="inline-flex min-h-11 items-center justify-center rounded-lg border border-white/15 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:border-[#cfac6c]/60 hover:bg-white/5 day:border-gray-300 day:text-gray-800 day:hover:bg-gray-50"
+                className="day:border-gray-300 day:text-gray-800 day:hover:bg-gray-50 inline-flex min-h-11 items-center justify-center rounded-lg border border-white/15 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:border-[#cfac6c]/60 hover:bg-white/5"
               >
                 Browse Designs
               </Link>
@@ -906,107 +820,268 @@ export default function HomeSplash() {
       </section>
 
       {/* Footer Navigation */}
-      <footer className="relative bg-[#050402] border-t border-[#d4af37]/20 day:bg-gray-100 day:border-gray-200">
+      <footer className="day:bg-gray-100 day:border-gray-200 relative border-t border-[#d4af37]/20 bg-[#050402]">
         <div className="mx-auto max-w-7xl px-6 py-16 lg:py-20">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[1fr_0.75fr_0.85fr_2.1fr] gap-10 text-white day:text-gray-900">
+          <div className="day:text-gray-900 grid grid-cols-1 gap-10 text-white sm:grid-cols-2 lg:grid-cols-[1fr_0.75fr_0.85fr_2.1fr]">
             <div>
-              <div className="flex items-center gap-3 text-2xl font-serif">
+              <div className="flex items-center gap-3 font-serif text-2xl">
                 <span className="tracking-wide">Forever Shining</span>
               </div>
-              <p className="mt-4 text-sm text-white/70 day:text-gray-600">
-                Crafting lasting tributes for families around the world since 2005.
+              <p className="day:text-gray-600 mt-4 text-sm text-white/70">
+                Crafting lasting tributes for families around the world since
+                2005.
               </p>
               <div className="mt-6 flex items-center gap-3 text-sm">
-                <a href="https://www.instagram.com/forevershiningaus/" target="_blank" rel="noreferrer" aria-label="Forever Shining on Instagram" className="w-9 h-9 rounded-full border border-white/20 text-white/80 flex items-center justify-center hover:border-[#d4af37] hover:text-[#d4af37] transition-colors cursor-pointer day:border-gray-300 day:text-gray-500 day:hover:border-amber-500 day:hover:text-amber-600">
+                <a
+                  href="https://www.instagram.com/forevershiningaus/"
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label="Forever Shining on Instagram"
+                  className="day:border-gray-300 day:text-gray-500 day:hover:border-amber-500 day:hover:text-amber-600 flex h-9 w-9 cursor-pointer items-center justify-center rounded-full border border-white/20 text-white/80 transition-colors hover:border-[#d4af37] hover:text-[#d4af37]"
+                >
                   <span aria-hidden="true">IG</span>
                 </a>
-                <a href="https://www.facebook.com/ForeverShiningAustralia/" target="_blank" rel="noreferrer" aria-label="Forever Shining on Facebook" className="w-9 h-9 rounded-full border border-white/20 text-white/80 flex items-center justify-center hover:border-[#d4af37] hover:text-[#d4af37] transition-colors cursor-pointer day:border-gray-300 day:text-gray-500 day:hover:border-amber-500 day:hover:text-amber-600">
+                <a
+                  href="https://www.facebook.com/ForeverShiningAustralia/"
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label="Forever Shining on Facebook"
+                  className="day:border-gray-300 day:text-gray-500 day:hover:border-amber-500 day:hover:text-amber-600 flex h-9 w-9 cursor-pointer items-center justify-center rounded-full border border-white/20 text-white/80 transition-colors hover:border-[#d4af37] hover:text-[#d4af37]"
+                >
                   <span aria-hidden="true">FB</span>
                 </a>
-                <a href="https://www.pinterest.com/forevershining1/" target="_blank" rel="noreferrer" aria-label="Forever Shining on Pinterest" className="w-9 h-9 rounded-full border border-white/20 text-white/80 flex items-center justify-center hover:border-[#d4af37] hover:text-[#d4af37] transition-colors cursor-pointer day:border-gray-300 day:text-gray-500 day:hover:border-amber-500 day:hover:text-amber-600">
+                <a
+                  href="https://www.pinterest.com/forevershining1/"
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label="Forever Shining on Pinterest"
+                  className="day:border-gray-300 day:text-gray-500 day:hover:border-amber-500 day:hover:text-amber-600 flex h-9 w-9 cursor-pointer items-center justify-center rounded-full border border-white/20 text-white/80 transition-colors hover:border-[#d4af37] hover:text-[#d4af37]"
+                >
                   <span aria-hidden="true">PI</span>
                 </a>
-                <a href="https://twitter.com/ForeverShiningA" target="_blank" rel="noreferrer" aria-label="Forever Shining on X" className="w-9 h-9 rounded-full border border-white/20 text-white/80 flex items-center justify-center hover:border-[#d4af37] hover:text-[#d4af37] transition-colors cursor-pointer day:border-gray-300 day:text-gray-500 day:hover:border-amber-500 day:hover:text-amber-600">
+                <a
+                  href="https://twitter.com/ForeverShiningA"
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label="Forever Shining on X"
+                  className="day:border-gray-300 day:text-gray-500 day:hover:border-amber-500 day:hover:text-amber-600 flex h-9 w-9 cursor-pointer items-center justify-center rounded-full border border-white/20 text-white/80 transition-colors hover:border-[#d4af37] hover:text-[#d4af37]"
+                >
                   <span aria-hidden="true">X</span>
                 </a>
-                <a href="https://www.youtube.com/@forevershining/featured" target="_blank" rel="noreferrer" aria-label="Forever Shining on YouTube" className="w-9 h-9 rounded-full border border-white/20 text-white/80 flex items-center justify-center hover:border-[#d4af37] hover:text-[#d4af37] transition-colors cursor-pointer day:border-gray-300 day:text-gray-500 day:hover:border-amber-500 day:hover:text-amber-600">
+                <a
+                  href="https://www.youtube.com/@forevershining/featured"
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label="Forever Shining on YouTube"
+                  className="day:border-gray-300 day:text-gray-500 day:hover:border-amber-500 day:hover:text-amber-600 flex h-9 w-9 cursor-pointer items-center justify-center rounded-full border border-white/20 text-white/80 transition-colors hover:border-[#d4af37] hover:text-[#d4af37]"
+                >
                   <span aria-hidden="true">YT</span>
                 </a>
               </div>
             </div>
 
             <div>
-              <p className="text-sm font-serif tracking-[0.4em] text-[#f3d48f] uppercase day:text-amber-700">Memorials</p>
-              <ul className="mt-4 space-y-2 text-sm text-white/70 day:text-gray-600">
-                <li><Link href="/memorials/headstones" className="hover:text-white transition-colors cursor-pointer day:hover:text-gray-900">Headstones</Link></li>
-                <li><Link href="/memorials/plaques" className="hover:text-white transition-colors cursor-pointer day:hover:text-gray-900">Plaques</Link></li>
-                <li><Link href="/memorials/urns" className="hover:text-white transition-colors cursor-pointer day:hover:text-gray-900">Urns</Link></li>
-                <li><Link href="/memorials/full-monuments" className="hover:text-white transition-colors cursor-pointer day:hover:text-gray-900">Full Monuments</Link></li>
-                <li><Link href="/memorials/pet-memorials" className="hover:text-white transition-colors cursor-pointer day:hover:text-gray-900">Pet Memorials</Link></li>
+              <p className="day:text-amber-700 font-serif text-sm tracking-[0.4em] text-[#f3d48f] uppercase">
+                Memorials
+              </p>
+              <ul className="day:text-gray-600 mt-4 space-y-2 text-sm text-white/70">
+                <li>
+                  <Link
+                    href="/memorials/headstones"
+                    className="day:hover:text-gray-900 cursor-pointer transition-colors hover:text-white"
+                  >
+                    Headstones
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/memorials/plaques"
+                    className="day:hover:text-gray-900 cursor-pointer transition-colors hover:text-white"
+                  >
+                    Plaques
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/memorials/urns"
+                    className="day:hover:text-gray-900 cursor-pointer transition-colors hover:text-white"
+                  >
+                    Urns
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/memorials/full-monuments"
+                    className="day:hover:text-gray-900 cursor-pointer transition-colors hover:text-white"
+                  >
+                    Full Monuments
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/memorials/pet-memorials"
+                    className="day:hover:text-gray-900 cursor-pointer transition-colors hover:text-white"
+                  >
+                    Pet Memorials
+                  </Link>
+                </li>
               </ul>
             </div>
 
             <div>
-              <p className="text-sm font-serif tracking-[0.4em] text-[#f3d48f] uppercase day:text-amber-700">Help & Guides</p>
-              <ul className="mt-4 space-y-2 text-sm text-white/70 day:text-gray-600">
-                <li><a href="#how-it-works" onClick={handleHashLink('how-it-works')} role="button" aria-haspopup="dialog" className="hover:text-white transition-colors cursor-pointer day:hover:text-gray-900">How it Works</a></li>
-                <li><a href="#pricing" onClick={handleHashLink('pricing')} role="button" aria-haspopup="dialog" className="hover:text-white transition-colors cursor-pointer day:hover:text-gray-900">Pricing Guide</a></li>
-                <li><a href="#materials" onClick={handleHashLink('materials')} role="button" aria-haspopup="dialog" className="hover:text-white transition-colors cursor-pointer day:hover:text-gray-900">Material Guide</a></li>
-                <li><a href="#faq" onClick={handleHashLink('faq')} role="button" aria-haspopup="dialog" className="hover:text-white transition-colors cursor-pointer day:hover:text-gray-900">FAQ</a></li>
+              <p className="day:text-amber-700 font-serif text-sm tracking-[0.4em] text-[#f3d48f] uppercase">
+                Help & Guides
+              </p>
+              <ul className="day:text-gray-600 mt-4 space-y-2 text-sm text-white/70">
+                <li>
+                  <a
+                    href="#how-it-works"
+                    className="day:hover:text-gray-900 cursor-pointer transition-colors hover:text-white"
+                  >
+                    How it Works
+                  </a>
+                </li>
+                <li>
+                  <Link
+                    href="/designs/guide/pricing"
+                    className="day:hover:text-gray-900 cursor-pointer transition-colors hover:text-white"
+                  >
+                    Pricing Guide
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/designs/guide/buying-guide"
+                    className="day:hover:text-gray-900 cursor-pointer transition-colors hover:text-white"
+                  >
+                    Buying Guide
+                  </Link>
+                </li>
+                <li>
+                  <a
+                    href="#faq"
+                    className="day:hover:text-gray-900 cursor-pointer transition-colors hover:text-white"
+                  >
+                    FAQ
+                  </a>
+                </li>
               </ul>
             </div>
 
             <div className="lg:min-w-0">
-              <p className="text-sm font-serif tracking-[0.4em] text-[#f3d48f] uppercase day:text-amber-700">Get in Touch</p>
-              <div className="mt-4 text-sm text-white/80 day:text-gray-600">
+              <p className="day:text-amber-700 font-serif text-sm tracking-[0.4em] text-[#f3d48f] uppercase">
+                Get in Touch
+              </p>
+              <div className="day:text-gray-600 mt-4 text-sm text-white/80">
                 <div className="grid gap-5 sm:grid-cols-2">
                   <div>
-                    <a href="tel:+16473880931" className="text-lg font-semibold text-white hover:text-[#f3d48f] transition-colors cursor-pointer day:text-gray-900 day:hover:text-amber-600">(+1) 647 388 0931</a>
-                    <p className="mt-2 text-white/70 day:text-gray-600">
-                      <a href="mailto:admin@bronze-plaque.com" className="hover:text-[#f3d48f] transition-colors cursor-pointer day:hover:text-amber-600">admin@bronze-plaque.com</a>
+                    <a
+                      href="tel:+16473880931"
+                      className="day:text-gray-900 day:hover:text-amber-600 cursor-pointer text-lg font-semibold text-white transition-colors hover:text-[#f3d48f]"
+                    >
+                      (+1) 647 388 0931
+                    </a>
+                    <p className="day:text-gray-600 mt-2 text-white/70">
+                      <a
+                        href="mailto:admin@bronze-plaque.com"
+                        className="day:hover:text-amber-600 cursor-pointer transition-colors hover:text-[#f3d48f]"
+                      >
+                        admin@bronze-plaque.com
+                      </a>
                     </p>
-                    <p className="mt-2 text-white/70 leading-relaxed day:text-gray-600">
-                      1101 Eagle Ridge Drive<br />Oshawa Ontario L1K 0L8
+                    <p className="day:text-gray-600 mt-2 leading-relaxed text-white/70">
+                      1101 Eagle Ridge Drive
+                      <br />
+                      Oshawa Ontario L1K 0L8
                     </p>
                   </div>
-                  <div className="border-t border-white/10 pt-3 sm:border-l sm:border-t-0 sm:pl-5 sm:pt-0 day:border-gray-200">
-                  <a href="tel:+61861910396" className="text-lg font-semibold text-white hover:text-[#f3d48f] transition-colors cursor-pointer day:text-gray-900 day:hover:text-amber-600">+61 8 6191 0396</a>
-                  <p className="mt-2 text-white/70 day:text-gray-600">
-                    <a href="mailto:admin@forevershining.com.au" className="hover:text-[#f3d48f] transition-colors cursor-pointer day:hover:text-amber-600">admin@forevershining.com.au</a>
-                  </p>
-                  <p className="mt-2 text-white/70 leading-relaxed day:text-gray-600">
-                    1/44 Port Kembla Dve<br />Bibra Lake WA 6163
-                  </p>
+                  <div className="day:border-gray-200 border-t border-white/10 pt-3 sm:border-t-0 sm:border-l sm:pt-0 sm:pl-5">
+                    <a
+                      href="tel:+61861910396"
+                      className="day:text-gray-900 day:hover:text-amber-600 cursor-pointer text-lg font-semibold text-white transition-colors hover:text-[#f3d48f]"
+                    >
+                      +61 8 6191 0396
+                    </a>
+                    <p className="day:text-gray-600 mt-2 text-white/70">
+                      <a
+                        href="mailto:admin@forevershining.com.au"
+                        className="day:hover:text-amber-600 cursor-pointer transition-colors hover:text-[#f3d48f]"
+                      >
+                        admin@forevershining.com.au
+                      </a>
+                    </p>
+                    <p className="day:text-gray-600 mt-2 leading-relaxed text-white/70">
+                      1/44 Port Kembla Dve
+                      <br />
+                      Bibra Lake WA 6163
+                    </p>
                   </div>
                 </div>
-                <p className="mt-4 text-white/60 leading-relaxed day:text-gray-500">
-                  Serving Australia, the United States, Canada, and Europe for Bronze Plaques, Memorial Plaques, and Headstones.
+                <p className="day:text-gray-500 mt-4 leading-relaxed text-white/60">
+                  Serving families across the United States and Canada, with
+                  international support available for Australia and Europe.
                 </p>
               </div>
             </div>
           </div>
 
-          <div className="mt-12 border-t border-white/10 pt-6 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-white/60 day:border-gray-200 day:text-gray-500">
+          <div className="day:border-gray-200 day:text-gray-500 mt-12 flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-6 text-xs text-white/60 md:flex-row">
             <p>© 2026 Forever Shining. All rights reserved.</p>
-            <div className="flex items-center gap-4 text-white/70 text-sm day:text-gray-600">
-              <a href="#privacy" onClick={handleHashLink('privacy')} role="button" aria-haspopup="dialog" className="hover:text-white transition-colors cursor-pointer day:hover:text-gray-900">Privacy Policy</a>
-              <span className="text-white/40 day:text-gray-300">|</span>
-              <a href="#terms" onClick={handleHashLink('terms')} role="button" aria-haspopup="dialog" className="hover:text-white transition-colors cursor-pointer day:hover:text-gray-900">Terms of Service</a>
-              <span className="text-white/40 day:text-gray-300">|</span>
-              <a href="#sitemap" onClick={handleHashLink('sitemap')} role="button" aria-haspopup="dialog" className="hover:text-white transition-colors cursor-pointer day:hover:text-gray-900">Sitemap</a>
+            <div className="day:text-gray-600 flex items-center gap-4 text-sm text-white/70">
+              <Link
+                href="/privacy"
+                className="day:hover:text-gray-900 cursor-pointer transition-colors hover:text-white"
+              >
+                Privacy Policy
+              </Link>
+              <span className="day:text-gray-300 text-white/40">|</span>
+              <a
+                href="mailto:admin@bronze-plaque.com?subject=Terms%20of%20Service%20Request"
+                className="day:hover:text-gray-900 cursor-pointer transition-colors hover:text-white"
+              >
+                Request Terms
+              </a>
+              <span className="day:text-gray-300 text-white/40">|</span>
+              <a
+                href="/sitemap.xml"
+                className="day:hover:text-gray-900 cursor-pointer transition-colors hover:text-white"
+              >
+                Sitemap
+              </a>
             </div>
           </div>
 
-          <div className="mt-4 flex flex-col md:flex-row items-center justify-between gap-3 text-[11px] text-white/45 day:text-gray-400">
-            <div className="flex items-center flex-wrap gap-2">
-              <span className="text-white/55 day:text-gray-500">Partners:</span>
-              <a href="https://www.bronze-plaque.com/" target="_blank" rel="noopener noreferrer" className="hover:text-white cursor-pointer day:hover:text-gray-700">Bronze-Plaque.com</a>
+          <div className="day:text-gray-400 mt-4 flex flex-col items-center justify-between gap-3 text-[11px] text-white/45 md:flex-row">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="day:text-gray-500 text-white/55">Partners:</span>
+              <a
+                href="https://www.bronze-plaque.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="day:hover:text-gray-700 cursor-pointer hover:text-white"
+              >
+                Bronze-Plaque.com
+              </a>
               <span>•</span>
-              <a href="https://headstonesdesigner.com/" target="_blank" rel="noopener noreferrer" className="hover:text-white cursor-pointer day:hover:text-gray-700">HeadstonesDesigner.com</a>
+              <a
+                href="https://headstonesdesigner.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="day:hover:text-gray-700 cursor-pointer hover:text-white"
+              >
+                HeadstonesDesigner.com
+              </a>
               <span>•</span>
-              <a href="https://www.forevershining.com.au/" target="_blank" rel="noopener noreferrer" className="hover:text-white cursor-pointer day:hover:text-gray-700">Forever Shining Australia</a>
+              <a
+                href="https://www.forevershining.com.au/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="day:hover:text-gray-700 cursor-pointer hover:text-white"
+              >
+                Forever Shining Australia
+              </a>
             </div>
-            <div className="flex items-center gap-3 text-white/55 day:text-gray-500">
+            <div className="day:text-gray-500 flex items-center gap-3 text-white/55">
               <span className="tracking-widest">VISA</span>
               <span className="tracking-widest">MC</span>
               <span className="tracking-widest">PayPal</span>
@@ -1014,73 +1089,6 @@ export default function HomeSplash() {
           </div>
         </div>
       </footer>
-
-      {activeModalContent && (
-        <div
-          className="fixed inset-0 z-[10000] flex items-center justify-center bg-black/75 px-4 py-6 backdrop-blur-sm"
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="hash-modal-title"
-          onClick={closeModal}
-        >
-          <div
-            className="relative w-full max-w-xl overflow-hidden rounded-3xl border border-[#d4af37]/35 bg-gradient-to-b from-[#191108]/95 via-[#120d07]/95 to-[#0a0704]/95 p-6 text-white shadow-[0_35px_90px_rgba(0,0,0,0.7)] ring-1 ring-white/10 md:p-7"
-            onClick={(event) => event.stopPropagation()}
-          >
-            <div
-              aria-hidden
-              className="pointer-events-none absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-[#d4af37]/18 via-[#d4af37]/6 to-transparent"
-            />
-            <button
-              type="button"
-              onClick={closeModal}
-              className="absolute right-4 top-4 rounded-full border border-white/25 bg-black/25 p-1.5 text-white/70 transition-colors hover:border-white/60 hover:text-white cursor-pointer"
-              aria-label="Close dialog"
-            >
-              <svg className="h-4 w-4" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M6 6l8 8M14 6l-8 8" />
-              </svg>
-            </button>
-            <div className="relative">
-              {activeModalContent.eyebrow && (
-                <p className="mb-3 inline-flex items-center rounded-full border border-[#d4af37]/45 bg-[#d4af37]/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.22em] text-[#f3d48f]">
-                  {activeModalContent.eyebrow}
-                </p>
-              )}
-              <h3 id="hash-modal-title" className="text-2xl font-serif text-white md:text-[1.75rem]">
-                {activeModalContent.title}
-              </h3>
-              <p className="mt-3 max-w-[62ch] text-sm leading-relaxed text-white/85 md:text-[15px]">
-                {activeModalContent.description}
-              </p>
-            </div>
-            {activeModalContent.bullets && (
-              <ul className="mt-6 space-y-3 rounded-2xl border border-white/10 bg-white/[0.03] p-4 text-sm text-white/85 md:p-5">
-                {activeModalContent.bullets.map((item) => (
-                  <li key={item} className="flex items-start gap-3">
-                    <span className="mt-2 h-1.5 w-1.5 flex-none rounded-full bg-[#d4af37]" />
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-            )}
-            {hasModalLinks(activeModalContent) && (
-              <div className="mt-6 flex flex-wrap gap-3">
-                {activeModalContent.links.map((link) => (
-                  <a
-                    key={link.href + link.label}
-                    href={link.href}
-                    className="rounded-full border border-[#d4af37]/65 bg-[#d4af37]/10 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#d4af37]/20"
-                  >
-                    {link.label}
-                  </a>
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
-      )}
-    </div>
+    </main>
   );
 }
-

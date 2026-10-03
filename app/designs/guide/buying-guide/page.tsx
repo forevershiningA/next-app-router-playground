@@ -68,9 +68,9 @@ export default function BuyingGuide() {
             Step 4: Delivery and Installation
           </h2>
           <p className="text-slate-700 font-light mb-4">
-            Delivery is included in the price. For heavy headstones, we deliver to a shipping 
-            depot for collection. Professional installation can be arranged through our network 
-            of certified installers.
+            Delivery options depend on the memorial type and destination. For heavy headstones,
+            freight may be arranged to a commercial address or local depot. We confirm shipping
+            and available installation support for your US location before production begins.
           </p>
 
           <div className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-6">

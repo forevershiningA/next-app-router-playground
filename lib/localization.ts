@@ -24,10 +24,13 @@ export interface LocalizedContent {
  * Get region from mlDir
  */
 export function getRegionFromMlDir(mlDir: string): Region {
-  if (mlDir === 'forevershining') return 'AU';
+  // forevershining.org is the global storefront with the United States as its
+  // primary market. Source-library names describe where legacy assets came
+  // from, not the visitor-facing locale.
+  if (mlDir === 'forevershining') return 'US';
   if (mlDir === 'bronze-plaque') return 'US';
   if (mlDir === 'headstonesdesigner') return 'US';
-  return 'AU'; // default
+  return 'US'; // global storefront default
 }
 
 /**

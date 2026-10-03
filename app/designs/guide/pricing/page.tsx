@@ -38,7 +38,7 @@ export default function PricingGuide() {
             <li>High-quality materials (granite, bronze, or stainless steel)</li>
             <li>Inscriptions in your choice of fonts at no additional cost</li>
             <li>First motif free (laser-etched products)</li>
-            <li>Delivery to mainland Australia or continental US</li>
+            <li>Delivery options across the continental United States, confirmed with your quote</li>
             <li>10-year manufacturer warranty</li>
           </ul>
 

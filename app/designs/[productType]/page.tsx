@@ -39,7 +39,7 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
   const title = `${productInfo.name} Designs | Forever Shining`;
 
   // Build description
-  const description = `Browse ${designCount} ${productInfo.shortName.toLowerCase()} designs across ${categoryCount} categories. ${productInfo.description} Customise inscriptions, verses, motifs and photos online with live preview.`;
+  const description = `Browse ${designCount} ${productInfo.shortName.toLowerCase()} designs across ${categoryCount} categories. ${productInfo.description} Customize inscriptions, verses, motifs and photos online with live preview.`;
 
   // Build keywords
   const keywords = [
@@ -73,9 +73,7 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
       canonical: canonicalUrl,
       languages: {
         'x-default': canonicalUrl,
-        'en-GB': canonicalUrl,
         'en-US': canonicalUrl,
-        'en-AU': canonicalUrl,
       },
     },
     openGraph: {
@@ -83,7 +81,7 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
       description,
       url: canonicalUrl,
       siteName: 'Forever Shining',
-      locale: 'en_GB',
+      locale: 'en_US',
       type: 'website',
     },
     twitter: {
@@ -147,7 +145,7 @@ export default async function ProductTypePage({ params }: ProductPageProps) {
               {productInfo.name} Designs
             </h1>
             <p className="text-lg md:text-xl text-stone-600 font-light max-w-3xl leading-relaxed">
-              {productInfo.description} Browse by memorial theme, then personalise a design with names,
+              {productInfo.description} Browse by memorial theme, then personalize a design with names,
               dates, verses, motifs and photos.
             </p>
             <p className="text-sm text-stone-500 mt-5 font-light">

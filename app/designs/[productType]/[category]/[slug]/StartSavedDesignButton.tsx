@@ -13,7 +13,7 @@ interface StartSavedDesignButtonProps {
 export default function StartSavedDesignButton({
   designId,
   className,
-  children = 'Personalise This Design',
+  children = 'Personalize This Design',
 }: StartSavedDesignButtonProps) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);

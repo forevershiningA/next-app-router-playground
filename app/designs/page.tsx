@@ -48,8 +48,8 @@ export async function generateMetadata({
   const hasSearchQuery = Boolean(q?.trim());
   const totalDesigns = Object.values(PRODUCT_STATS).reduce((sum, n) => sum + n, 0);
   
-  const title = 'Custom Headstone & Memorial Designs | Plaques & Monuments | Forever Shining';
-  const description = `Browse ${totalDesigns.toLocaleString()} custom headstone, plaque and memorial designs. Personalise granite, bronze and stainless steel memorials online with inscriptions, motifs, photos and 3D preview.`;
+  const title = 'Headstone & Grave Marker Designs | Forever Shining USA';
+  const description = `Browse ${totalDesigns.toLocaleString()} custom headstone, grave marker and memorial plaque designs for US families. Personalize inscriptions, motifs and photos online with live 3D preview.`;
   
   // Generate keywords from actual data
   const keywords = [
@@ -69,7 +69,8 @@ export async function generateMetadata({
     'cemetery headstone',
     'grave marker designs',
     'memorial stone design',
-    'forever shining australia',
+    'headstone designer usa',
+    'custom grave markers usa',
   ];
 
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://forevershining.org';
@@ -84,7 +85,7 @@ export async function generateMetadata({
       description,
       url: canonicalUrl,
       siteName: 'Forever Shining',
-      locale: 'en_AU',
+      locale: 'en_US',
       type: 'website',
     },
     twitter: {
@@ -95,9 +96,7 @@ export async function generateMetadata({
     alternates: {
       canonical: canonicalUrl,
       languages: {
-        'en-GB': `${baseUrl}/designs`,
         'en-US': `${baseUrl}/designs`,
-        'en-AU': `${baseUrl}/designs`,
         'x-default': `${baseUrl}/designs`,
       },
     },
@@ -153,7 +152,7 @@ export default async function DesignsPage({
                 Custom Headstone & Memorial Design Results for &quot;{query}&quot;
               </h1>
               <p className="max-w-3xl text-lg font-light leading-relaxed text-stone-700 md:text-xl">
-                Browse matching custom headstone, plaque and monument templates. Open a design to personalise
+                Browse matching custom headstone, grave marker and memorial plaque templates. Open a design to personalize
                 inscriptions, photos, motifs and layout details.
               </p>
               <p className="mt-5 text-sm font-light text-stone-600">
@@ -269,9 +268,9 @@ export default async function DesignsPage({
 
   const faqItems = [
     {
-      question: 'Can each memorial design be personalised?',
+      question: 'Can each memorial design be personalized?',
       answer:
-        'Yes. Each design can be customised with names, dates, inscriptions, verses, motifs, photos, materials and layout adjustments before a proof is prepared for production.',
+        'Yes. Each design can be customized with names, dates, inscriptions, verses, motifs, photos, materials and layout adjustments before a proof is prepared for production.',
     },
     {
       question: 'What types of memorials are included in the design gallery?',
@@ -281,7 +280,7 @@ export default async function DesignsPage({
     {
       question: 'Can I preview a headstone or plaque before ordering?',
       answer:
-        'Yes. Designs can be opened in the online designer to review the layout, personalise the wording and preview the memorial before requesting a proof or placing an order.',
+        'Yes. Designs can be opened in the online designer to review the layout, personalize the wording and preview the memorial before requesting a proof or placing an order.',
     },
   ];
   const structuredData = [
@@ -290,7 +289,7 @@ export default async function DesignsPage({
       '@type': 'CollectionPage',
               name: 'Custom Headstone & Memorial Designs',
       description:
-        'Browse customisable headstone, plaque and monument designs by product, memorial theme, material and finish.',
+        'Browse customizable headstone, grave marker, plaque and monument designs by product, memorial theme, material and finish.',
       url: `${baseUrl}/designs`,
       mainEntity: {
         '@type': 'ItemList',
@@ -364,14 +363,15 @@ export default async function DesignsPage({
 
           <header className="mb-8 max-w-5xl">
             <p className="mb-3 text-xs font-semibold uppercase tracking-[0.22em] text-[#9b7a24]">
-              Customisable memorial templates
+              Customizable memorial templates
             </p>
             <h1 className="text-4xl md:text-6xl font-serif font-light text-stone-950 mb-5 tracking-tight">
-              Custom Headstone & Memorial Designs
+              Headstone, Grave Marker & Memorial Plaque Designs
             </h1>
             <p className="text-lg md:text-xl text-stone-700 font-light max-w-3xl leading-relaxed">
-              Browse custom headstone, plaque and monument designs by product, tribute theme, material and finish.
-              Each template can be personalised online with inscriptions, motifs, photos and a live 3D preview.
+              Browse custom headstone, grave marker, memorial plaque and monument designs by product, tribute
+              theme, material and finish. Each template can be personalized online with inscriptions, motifs,
+              photos and a live 3D preview.
             </p>
             <p className="text-sm text-stone-600 mt-5 font-light">
               {designs.length.toLocaleString()} design templates across {productGroups.length} curated collections
@@ -541,7 +541,7 @@ export default async function DesignsPage({
               <div className="space-y-4 text-sm font-light leading-7 text-stone-700 md:text-base">
                 <p>
                   Forever Shining memorial designs are built as practical starting points for families choosing
-                  a personalised cemetery memorial. Browse custom memorial designs by product type, tribute theme,
+                  a personalized cemetery memorial. Browse custom memorial designs by product type, tribute theme,
                   material and finish, then open any layout in the online design tool to adjust the inscription,
                   motif placement, photos and overall balance.
                 </p>
