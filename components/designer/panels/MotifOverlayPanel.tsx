@@ -1,6 +1,12 @@
 'use client';
 
-import React, { useState, useCallback, useMemo, useRef, useEffect } from 'react';
+import React, {
+  useState,
+  useCallback,
+  useMemo,
+  useRef,
+  useEffect,
+} from 'react';
 import OverlayPortal from '#/components/shared/OverlayPortal';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import { useMotifCategory } from '#/lib/use-motifs';
@@ -26,17 +32,18 @@ export default function MotifOverlayPanel() {
   const motifsCatalog = useHeadstoneStore((s) => s.motifsCatalog);
   const categories: Array<MotifCatalogItem | LegacyMotifCategory> =
     motifsCatalog.length > 0 ? motifsCatalog : data.motifs;
-  
-  const [selectedCategoryIndex, setSelectedCategoryIndex] = useState<number | null>(null);
+
+  const [selectedCategoryIndex, setSelectedCategoryIndex] = useState<
+    number | null
+  >(null);
   const [searchQuery, setSearchQuery] = useState('');
-  const [viewMode, setViewMode] = useState<'categories' | 'motifs'>('categories');
-  
+  const [viewMode, setViewMode] = useState<'categories' | 'motifs'>(
+    'categories',
+  );
+
   const cardRef = useRef<HTMLDivElement | null>(null);
   const [collapsed, setCollapsed] = useState(false);
-  const [pos, setPos] = useState<{ x: number; y: number }>({
-    x: 24,
-    y: 24,
-  });
+  const [pos, setPos] = useState<{ x: number; y: number }>({ x: 24, y: 24 });
 
   const downElRef = useRef<HTMLElement | null>(null);
   const dragRaf = useRef<number | null>(null);
@@ -95,14 +102,17 @@ export default function MotifOverlayPanel() {
     setSearchQuery('');
   }, []);
 
-  const handleMotifSelect = useCallback((fileName: string) => {
-    if (selectedCategoryIndex === null) return;
-    
-    const svgPath = getMotifSvgPath(fileName);
-    
-    // Add motif to headstone
-    addMotif(svgPath);
-  }, [selectedCategoryIndex, addMotif]);
+  const handleMotifSelect = useCallback(
+    (fileName: string) => {
+      if (selectedCategoryIndex === null) return;
+
+      const svgPath = getMotifSvgPath(fileName);
+
+      // Add motif to headstone
+      addMotif(svgPath);
+    },
+    [selectedCategoryIndex, addMotif],
+  );
 
   const onPointerDown: React.PointerEventHandler<HTMLDivElement> = (e) => {
     if (e.button !== 0) return;
@@ -197,10 +207,10 @@ export default function MotifOverlayPanel() {
   // Filter categories based on search
   const filteredCategories = useMemo(() => {
     if (!searchQuery) return categories;
-    
+
     const query = searchQuery.toLowerCase();
-    return categories.filter(motif => 
-      motif.name.toLowerCase().includes(query)
+    return categories.filter((motif) =>
+      motif.name.toLowerCase().includes(query),
     );
   }, [searchQuery, categories]);
 
@@ -226,9 +236,11 @@ export default function MotifOverlayPanel() {
                   dragging ? 'cursor-grabbing' : 'cursor-grab'
                 }`}
               >
-                <h1 className="text-base leading-none font-semibold">
-                  {viewMode === 'categories' ? 'Select Motif Category' : `Motifs: ${selectedCategoryIndex !== null ? getMotifCategoryName(categories[selectedCategoryIndex].name) : ''}`}
-                </h1>
+                <h2 className="text-base leading-none font-semibold">
+                  {viewMode === 'categories'
+                    ? 'Select Motif Category'
+                    : `Motifs: ${selectedCategoryIndex !== null ? getMotifCategoryName(categories[selectedCategoryIndex].name) : ''}`}
+                </h2>
               </div>
 
               <div className="flex gap-2">
@@ -239,11 +251,17 @@ export default function MotifOverlayPanel() {
                     className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-white/10 hover:bg-white/15 active:bg-white/20"
                   >
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                      <path d="M19 12H5M5 12l7 7M5 12l7-7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      <path
+                        d="M19 12H5M5 12l7 7M5 12l7-7"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
                     </svg>
                   </button>
                 )}
-                
+
                 <button
                   onClick={toggleCollapsed}
                   aria-label={collapsed ? 'Maximize' : 'Minimize'}
@@ -259,18 +277,27 @@ export default function MotifOverlayPanel() {
                     </svg>
                   ) : (
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                      <path d="M5 12h14" stroke="currentColor" strokeWidth="2" />
+                      <path
+                        d="M5 12h14"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                      />
                     </svg>
                   )}
                 </button>
-                
+
                 <button
                   onClick={handleClose}
                   aria-label="Close"
                   className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-white/10 hover:bg-white/15 active:bg-white/20"
                 >
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                    <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                    <path
+                      d="M18 6L6 18M6 6l12 12"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                    />
                   </svg>
                 </button>
               </div>
@@ -278,160 +305,173 @@ export default function MotifOverlayPanel() {
 
             {!collapsed && (
               <div className="px-4 pb-4">
-      <div className="space-y-3">
-        {/* Search Bar (Categories View) */}
-        {viewMode === 'categories' && (
-          <div className="relative">
-            <input
-              type="text"
-              placeholder="Search categories..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-white/10 px-3 py-2 text-sm text-white placeholder-white/50 focus:bg-white/20 focus:outline-none focus:ring-2 focus:ring-violet-500"
-            />
-            {searchQuery && (
-              <button
-                onClick={() => setSearchQuery('')}
-                className="absolute right-2 top-1/2 -translate-y-1/2 text-white/50 hover:text-white"
-              >
-                ✕
-              </button>
-            )}
-          </div>
-        )}
-
-        {/* Back Button (Motifs View) */}
-        {viewMode === 'motifs' && (
-          <button
-            onClick={handleBackToCategories}
-            className="flex w-full items-center space-x-2 bg-white/10 px-3 py-2 text-sm text-white hover:bg-white/20"
-          >
-            <span>←</span>
-            <span>Back to Categories</span>
-          </button>
-        )}
-
-        {/* Categories Grid */}
-        {viewMode === 'categories' && (
-          <div className="space-y-2">
-            <div className="text-xs text-white/60">
-              {filteredCategories.length} {filteredCategories.length === 1 ? 'category' : 'categories'}
-            </div>
-            
-            <div className="grid grid-cols-3 gap-2">
-              {filteredCategories.map((motif, index) => {
-                // Find the actual index in the full array
-                const actualIndex = categories.findIndex((item) => item.id === motif.id);
-                const thumbnailPath = getMotifCategoryImage({
-                  name: motif.name,
-                  category: 'category' in motif ? motif.category : null,
-                  src: 'src' in motif ? motif.src : undefined,
-                  img: 'img' in motif ? motif.img : undefined,
-                  previewUrl: 'previewUrl' in motif ? motif.previewUrl : undefined,
-                  fallback: '/png/motifs/s/default.png',
-                });
-                
-                return (
-                  <button
-                    key={motif.id}
-                    onClick={() => handleCategorySelect(actualIndex)}
-                    className="group relative flex flex-col overflow-hidden bg-gray-900/50 hover:bg-gray-900 p-4 cursor-pointer"
-                  >
-                    {/* Category Preview Image */}
-                    <div className="relative aspect-square w-full overflow-hidden bg-white mb-2">
-                      <img
-                        src={thumbnailPath}
-                        alt={motif.name}
-                        className="h-full w-full object-contain p-1"
-                        loading="lazy"
+                <div className="space-y-3">
+                  {/* Search Bar (Categories View) */}
+                  {viewMode === 'categories' && (
+                    <div className="relative">
+                      <input
+                        type="text"
+                        placeholder="Search categories..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="w-full bg-white/10 px-3 py-2 text-sm text-white placeholder-white/50 focus:bg-white/20 focus:ring-2 focus:ring-violet-500 focus:outline-none"
                       />
+                      {searchQuery && (
+                        <button
+                          onClick={() => setSearchQuery('')}
+                          className="absolute top-1/2 right-2 -translate-y-1/2 text-white/50 hover:text-white"
+                        >
+                          ✕
+                        </button>
+                      )}
                     </div>
-                    
-                    {/* Category Name */}
-                    <div className="text-xs text-white text-center truncate">
-                      {getMotifCategoryName(motif.name)}
+                  )}
+
+                  {/* Back Button (Motifs View) */}
+                  {viewMode === 'motifs' && (
+                    <button
+                      onClick={handleBackToCategories}
+                      className="flex w-full items-center space-x-2 bg-white/10 px-3 py-2 text-sm text-white hover:bg-white/20"
+                    >
+                      <span>←</span>
+                      <span>Back to Categories</span>
+                    </button>
+                  )}
+
+                  {/* Categories Grid */}
+                  {viewMode === 'categories' && (
+                    <div className="space-y-2">
+                      <div className="text-xs text-white/60">
+                        {filteredCategories.length}{' '}
+                        {filteredCategories.length === 1
+                          ? 'category'
+                          : 'categories'}
+                      </div>
+
+                      <div className="grid grid-cols-3 gap-2">
+                        {filteredCategories.map((motif, index) => {
+                          // Find the actual index in the full array
+                          const actualIndex = categories.findIndex(
+                            (item) => item.id === motif.id,
+                          );
+                          const thumbnailPath = getMotifCategoryImage({
+                            name: motif.name,
+                            category:
+                              'category' in motif ? motif.category : null,
+                            src: 'src' in motif ? motif.src : undefined,
+                            img: 'img' in motif ? motif.img : undefined,
+                            previewUrl:
+                              'previewUrl' in motif
+                                ? motif.previewUrl
+                                : undefined,
+                            fallback: '/png/motifs/s/default.png',
+                          });
+
+                          return (
+                            <button
+                              key={motif.id}
+                              onClick={() => handleCategorySelect(actualIndex)}
+                              className="group relative flex cursor-pointer flex-col overflow-hidden bg-gray-900/50 p-4 hover:bg-gray-900"
+                            >
+                              {/* Category Preview Image */}
+                              <div className="relative mb-2 aspect-square w-full overflow-hidden bg-white">
+                                <img
+                                  src={thumbnailPath}
+                                  alt={motif.name}
+                                  className="h-full w-full object-contain p-1"
+                                  loading="lazy"
+                                />
+                              </div>
+
+                              {/* Category Name */}
+                              <div className="truncate text-center text-xs text-white">
+                                {getMotifCategoryName(motif.name)}
+                              </div>
+                            </button>
+                          );
+                        })}
+                      </div>
+
+                      {filteredCategories.length === 0 && (
+                        <div className="py-8 text-center text-sm text-white/50">
+                          No categories found matching "{searchQuery}"
+                        </div>
+                      )}
                     </div>
-                  </button>
-                );
-              })}
-            </div>
+                  )}
 
-            {filteredCategories.length === 0 && (
-              <div className="py-8 text-center text-sm text-white/50">
-                No categories found matching "{searchQuery}"
-              </div>
-            )}
-          </div>
-        )}
+                  {/* Motifs Grid */}
+                  {viewMode === 'motifs' && selectedCategoryIndex !== null && (
+                    <div className="space-y-2">
+                      {/* Stats */}
+                      <div className="flex items-center justify-between text-xs text-white/60">
+                        <span>
+                          Showing {motifFiles.length} of {totalCount} motifs
+                        </span>
+                        {isLoading && (
+                          <span className="animate-pulse">Loading...</span>
+                        )}
+                      </div>
 
-        {/* Motifs Grid */}
-        {viewMode === 'motifs' && selectedCategoryIndex !== null && (
-          <div className="space-y-2">
-            {/* Stats */}
-            <div className="flex items-center justify-between text-xs text-white/60">
-              <span>
-                Showing {motifFiles.length} of {totalCount} motifs
-              </span>
-              {isLoading && <span className="animate-pulse">Loading...</span>}
-            </div>
+                      {/* Error State */}
+                      {error && (
+                        <div className="bg-red-500/20 p-3 text-sm text-red-200">
+                          Error loading motifs: {error.message}
+                        </div>
+                      )}
 
-            {/* Error State */}
-            {error && (
-              <div className="bg-red-500/20 p-3 text-sm text-red-200">
-                Error loading motifs: {error.message}
-              </div>
-            )}
+                      {/* Motif Grid */}
+                      <div className="grid max-h-[60vh] grid-cols-4 gap-2 overflow-y-auto pr-2">
+                        {motifFiles.map((fileName) => {
+                          const thumbnailPath = getMotifThumbnailPath(fileName);
 
-            {/* Motif Grid */}
-            <div className="grid max-h-[60vh] grid-cols-4 gap-2 overflow-y-auto pr-2">
-              {motifFiles.map((fileName) => {
-                const thumbnailPath = getMotifThumbnailPath(fileName);
-                
-                return (
-                  <button
-                    key={fileName}
-                    onClick={() => handleMotifSelect(fileName)}
-                    className="relative aspect-square overflow-hidden bg-white cursor-pointer"
-                    title={fileName}
-                  >
-                    <img
-                      src={thumbnailPath}
-                      alt={fileName}
-                      className="h-full w-full object-contain p-1"
-                      loading="lazy"
-                    />
-                  </button>
-                );
-              })}
-            </div>
+                          return (
+                            <button
+                              key={fileName}
+                              onClick={() => handleMotifSelect(fileName)}
+                              className="relative aspect-square cursor-pointer overflow-hidden bg-white"
+                              title={fileName}
+                            >
+                              <img
+                                src={thumbnailPath}
+                                alt={fileName}
+                                className="h-full w-full object-contain p-1"
+                                loading="lazy"
+                              />
+                            </button>
+                          );
+                        })}
+                      </div>
 
-            {/* Load More Button */}
-            {hasMore && (
-              <button
-                onClick={loadMore}
-                disabled={isLoading}
-                className="w-full bg-violet-600 px-4 py-2 text-sm font-medium text-white hover:bg-violet-700 disabled:cursor-not-allowed disabled:opacity-50"
-              >
-                {isLoading ? 'Loading...' : `Load More (${totalCount - motifFiles.length} remaining)`}
-              </button>
-            )}
+                      {/* Load More Button */}
+                      {hasMore && (
+                        <button
+                          onClick={loadMore}
+                          disabled={isLoading}
+                          className="w-full bg-violet-600 px-4 py-2 text-sm font-medium text-white hover:bg-violet-700 disabled:cursor-not-allowed disabled:opacity-50"
+                        >
+                          {isLoading
+                            ? 'Loading...'
+                            : `Load More (${totalCount - motifFiles.length} remaining)`}
+                        </button>
+                      )}
 
-            {/* Empty State */}
-            {!isLoading && motifFiles.length === 0 && (
-              <div className="py-8 text-center text-sm text-white/50">
-                No motifs available in this category
-              </div>
-            )}
+                      {/* Empty State */}
+                      {!isLoading && motifFiles.length === 0 && (
+                        <div className="py-8 text-center text-sm text-white/50">
+                          No motifs available in this category
+                        </div>
+                      )}
 
-            {/* Loading State */}
-            {isLoading && motifFiles.length === 0 && (
-              <div className="flex justify-center py-8">
-                <div className="h-8 w-8 animate-spin rounded-full border-4 border-white/20 border-t-violet-500" />
-              </div>
-            )}
-          </div>
-        )}
-      </div>
+                      {/* Loading State */}
+                      {isLoading && motifFiles.length === 0 && (
+                        <div className="flex justify-center py-8">
+                          <div className="h-8 w-8 animate-spin rounded-full border-4 border-white/20 border-t-violet-500" />
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
               </div>
             )}
           </div>

@@ -38,6 +38,8 @@ import {
 } from '#/lib/unit-system';
 import { useUnitSystem } from '#/lib/use-unit-system';
 import { getFixingTypeLabel } from '#/lib/fixing-type';
+import { formatAudPrice } from '#/lib/currency';
+import { useCurrency } from '#/lib/use-currency';
 
 type QuoteRow = {
   id: string;
@@ -47,9 +49,6 @@ type QuoteRow = {
   unitPrice: number | null;
   total: number | null;
 };
-
-const formatMoney = (value: number | null) =>
-  typeof value === 'number' ? `$${value.toFixed(2)}` : '-';
 
 export default function CheckPricePanel() {
   const catalog = useHeadstoneStore((s) => s.catalog);
@@ -85,6 +84,12 @@ export default function CheckPricePanel() {
   const fixingType = useHeadstoneStore((s) => s.fixingType);
   const fixedSizes = useHeadstoneStore((s) => s.fixedSizes);
   const unitSystem = useUnitSystem();
+  const { currency, rates } = useCurrency();
+  const formatMoney = useCallback(
+    (value: number | null) =>
+      typeof value === 'number' ? formatAudPrice(value, currency, rates) : '-',
+    [currency, rates],
+  );
   const fallbackProductId = useMemo(
     () => productId ?? data.products[0]?.id ?? null,
     [productId],

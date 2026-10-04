@@ -235,10 +235,10 @@ export default function HomeSplash() {
               className="absolute left-1/2 hidden -translate-x-1/2 text-center xl:block"
               aria-label="Memorial product pages"
             >
-              <p className="mb-1 text-[10px] font-semibold tracking-[0.18em] text-[#e3c887]">
+              <p className="mb-1 font-semibold tracking-[0.18em] text-[#e3c887]">
                 You design it. We craft it.
               </p>
-              <ul className="flex items-center justify-center gap-5 text-sm font-semibold whitespace-nowrap text-white/90">
+              <ul className="flex items-center justify-center gap-5 font-semibold whitespace-nowrap text-white/90">
                 {MEMORIAL_LINKS.map((link) => (
                   <li key={link.href}>
                     <Link
@@ -258,14 +258,14 @@ export default function HomeSplash() {
             >
               <Link
                 href="/designs"
-                className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-white/30 bg-white/[0.08] text-white transition-colors hover:border-[#cfac6c]/80 hover:bg-white/15 hover:text-[#f3d48f]"
+                className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-white/30 bg-white/[0.01] text-white transition-colors hover:border-[#ffffff]/80 hover:bg-white/15 hover:text-[#ffffff]"
                 aria-label="Search memorial designs"
               >
                 <MagnifyingGlassIcon className="h-5 w-5" aria-hidden="true" />
               </Link>
               <Link
                 href="/designs"
-                className="inline-flex min-h-10 items-center justify-center rounded-lg border border-white/30 bg-white/[0.08] px-4 text-sm font-semibold text-white transition-colors hover:border-[#cfac6c]/80 hover:bg-white/15 hover:text-[#f3d48f]"
+                className="inline-flex min-h-10 items-center justify-center rounded-lg border border-white/30 bg-white/[0.01] px-4 text-sm font-semibold text-white transition-colors hover:border-[#ffffff]/80 hover:bg-white/5 hover:text-[#ffffff]"
               >
                 Browse Designs
               </Link>
@@ -380,7 +380,7 @@ export default function HomeSplash() {
           fill
           priority
           sizes="100vw"
-          className="object-cover object-center [filter:brightness(0.7)]"
+          className="object-cover object-center [filter:brightness(0.6)]"
           aria-hidden="true"
         />
 
@@ -433,7 +433,7 @@ export default function HomeSplash() {
                 </Link>
                 <Link
                   href="#how-it-works"
-                  className="inline-flex min-h-12 w-full items-center justify-center rounded-sm border border-white/55 bg-black/15 px-7 py-3.5 text-center text-sm font-semibold text-white backdrop-blur-sm transition-colors hover:border-[#d0ad68] hover:bg-black/30 sm:w-auto sm:px-10 sm:text-base"
+                  className="inline-flex min-h-12 w-full items-center justify-center rounded-sm border border-white/55 bg-black/15 px-7 py-3.5 text-center text-sm font-semibold text-white transition-colors hover:border-[#d0ad68] hover:bg-black/30 sm:w-auto sm:px-10 sm:text-base"
                 >
                   How Our Memorial Designer Works
                 </Link>

@@ -93,8 +93,9 @@ export default function MaterialTitle({
   }
 
   return (
-    <h1 className="text-xl font-semibold text-gray-300">
-      {productId === '5' ? 'Background' : 'Select Material'}{name ? <span> - {name}</span> : null}
-    </h1>
+    <h2 className="text-xl font-semibold text-gray-300">
+      {productId === '5' ? 'Background' : 'Select Material'}
+      {name ? <span> - {name}</span> : null}
+    </h2>
   );
 }

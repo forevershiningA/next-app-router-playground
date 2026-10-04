@@ -5,19 +5,33 @@ import { useRouter } from 'next/navigation';
 import { useHeadstoneStore, type Line } from '#/lib/headstone-store';
 import { data } from '#/app/_internal/_data';
 import { calculateMotifPrice } from '#/lib/motif-pricing';
-import { calculatePrice, calculatePricePowerLaw, computeQuantity, type PriceModel } from '#/lib/xml-parser';
-import { calculateImagePrice, fetchImagePricing, type ImagePricingMap } from '#/lib/image-pricing';
+import {
+  calculatePrice,
+  calculatePricePowerLaw,
+  computeQuantity,
+  type PriceModel,
+} from '#/lib/xml-parser';
+import {
+  calculateImagePrice,
+  fetchImagePricing,
+  type ImagePricingMap,
+} from '#/lib/image-pricing';
 import { getImageSizeOption } from '#/lib/image-size-config';
 import { EMBLEM_SIZES } from '#/app/_internal/_emblems-loader';
-import { getCheckPriceMaterialName, isStainlessSteelHeadstoneProduct } from '#/lib/check-price-utils';
+import {
+  getCheckPriceMaterialName,
+  isStainlessSteelHeadstoneProduct,
+} from '#/lib/check-price-utils';
 import { getDesignerStepSlug } from '#/lib/designer-route-state';
 import { buildPdfQuoteFromProject } from '#/lib/design-quote';
 import { captureDesignSnapshot } from '#/lib/project-serializer';
 import { getFixingTypeLabel } from '#/lib/fixing-type';
+import DesignerPageHeading from '#/components/designer/DesignerPageHeading';
+import UnitCurrencySelects from '#/components/designer/navigation/UnitCurrencySelects';
+import { formatAudPrice } from '#/lib/currency';
+import { useCurrency } from '#/lib/use-currency';
 
-type CheckPriceGridProps = {
-  initialImagePricing?: ImagePricingMap | null;
-};
+type CheckPriceGridProps = { initialImagePricing?: ImagePricingMap | null };
 
 type QuoteCategory =
   | 'all'
@@ -40,10 +54,11 @@ type QuoteRow = {
 };
 
 const toAssetPath = (path?: string | null) =>
-  path ? (path.startsWith('/') || path.startsWith('data:') ? path : `/${path}`) : '';
-
-const formatMoney = (value: number | null) =>
-  typeof value === 'number' ? `$${value.toFixed(2)}` : '-';
+  path
+    ? path.startsWith('/') || path.startsWith('data:')
+      ? path
+      : `/${path}`
+    : '';
 
 const getInscriptionColorPriceNote = (color?: string) => {
   const colorName = data.colors.find((c) => c.hex === color)?.name;
@@ -69,7 +84,8 @@ const calculateInscriptionLinePrice = (
         price.note === mappedNote,
     ) ??
     inscriptionPriceModel.prices.find(
-      (price) => quantity >= price.startQuantity && quantity <= price.endQuantity,
+      (price) =>
+        quantity >= price.startQuantity && quantity <= price.endQuantity,
     );
 
   if (!tier) return 0;
@@ -89,12 +105,24 @@ const getInitialReturnPath = () => {
   return '/select-size';
 };
 
-export default function CheckPriceGrid({ initialImagePricing = null }: CheckPriceGridProps) {
+export default function CheckPriceGrid({
+  initialImagePricing = null,
+}: CheckPriceGridProps) {
   const router = useRouter();
+  const { currency, rates } = useCurrency();
+  const formatMoney = useCallback(
+    (value: number | null) =>
+      typeof value === 'number' ? formatAudPrice(value, currency, rates) : '-',
+    [currency, rates],
+  );
   const [returnPath] = useState(getInitialReturnPath);
-  const [selectedQuoteCategory, setSelectedQuoteCategory] = useState<QuoteCategory>('all');
-  const [imagePricingData, setImagePricingData] = useState<ImagePricingMap | null>(initialImagePricing);
-  const [imagePricingError, setImagePricingError] = useState<string | null>(null);
+  const [selectedQuoteCategory, setSelectedQuoteCategory] =
+    useState<QuoteCategory>('all');
+  const [imagePricingData, setImagePricingData] =
+    useState<ImagePricingMap | null>(initialImagePricing);
+  const [imagePricingError, setImagePricingError] = useState<string | null>(
+    null,
+  );
   const isMountedRef = useRef(true);
   const productId = useHeadstoneStore((s) => s.productId);
   const fixingType = useHeadstoneStore((s) => s.fixingType);
@@ -120,8 +148,13 @@ export default function CheckPriceGrid({ initialImagePricing = null }: CheckPric
   const motifOffsets = useHeadstoneStore((s) => s.motifOffsets);
   const motifPriceModel = useHeadstoneStore((s) => s.motifPriceModel);
   const showInscriptionColor = useHeadstoneStore((s) => s.showInscriptionColor);
-  const inscriptionPriceModel = useHeadstoneStore((s) => s.inscriptionPriceModel);
-  const isStainlessSteelHeadstone = isStainlessSteelHeadstoneProduct(productId, catalog);
+  const inscriptionPriceModel = useHeadstoneStore(
+    (s) => s.inscriptionPriceModel,
+  );
+  const isStainlessSteelHeadstone = isStainlessSteelHeadstoneProduct(
+    productId,
+    catalog,
+  );
 
   useEffect(() => {
     return () => {
@@ -151,36 +184,52 @@ export default function CheckPriceGrid({ initialImagePricing = null }: CheckPric
   // Get product name from catalog
   const productName = catalog?.product?.name || 'Not selected';
   const isUrnProduct = catalog?.product?.type === 'urn' || productId === '2350';
-  
+
   // Get motif and inscription details from catalog additions
-  const motifAddition = catalog?.product?.additions?.find(a => a.type === 'motif');
-  
+  const motifAddition = catalog?.product?.additions?.find(
+    (a) => a.type === 'motif',
+  );
+
   const motifProductId = motifAddition?.id || productId;
   const motifName = motifAddition?.name || 'Motif';
-  
-  const inscriptionAddition = catalog?.product?.additions?.find(a => a.type === 'inscription');
-  
+
+  const inscriptionAddition = catalog?.product?.additions?.find(
+    (a) => a.type === 'inscription',
+  );
+
   const inscriptionProductId = inscriptionAddition?.id || productId;
   const inscriptionName = inscriptionAddition?.name || 'Inscription';
-  const baseAddition = catalog?.product?.additions?.find(a => a.type === 'base');
+  const baseAddition = catalog?.product?.additions?.find(
+    (a) => a.type === 'base',
+  );
   const baseProductId = baseAddition?.id || '–';
   const baseProductName = baseAddition?.name || 'Base';
-  
+
   // Get shape name from URL
-  const shapeName = shapeUrl 
-    ? shapeUrl.split('/').pop()?.replace('.svg', '').replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())
+  const shapeName = shapeUrl
+    ? shapeUrl
+        .split('/')
+        .pop()
+        ?.replace('.svg', '')
+        .replace(/_/g, ' ')
+        .replace(/\b\w/g, (l) => l.toUpperCase())
     : 'Not selected';
 
   // For urns the shape code drives price selection (e.g. "heart", "oval", "rectangle", "triangle")
-  const urnShapeCode = isUrnProduct && shapeUrl
-    ? shapeUrl.split('/').pop()?.replace('.svg', '') ?? null
-    : null;
-  
+  const urnShapeCode =
+    isUrnProduct && shapeUrl
+      ? (shapeUrl.split('/').pop()?.replace('.svg', '') ?? null)
+      : null;
+
   // Get material name from URL
   const headstoneMaterialName = headstoneMaterialUrl
-    ? headstoneMaterialUrl.split('/').pop()?.replace('.webp', '').replace(/-/g, ' ')
+    ? headstoneMaterialUrl
+        .split('/')
+        .pop()
+        ?.replace('.webp', '')
+        .replace(/-/g, ' ')
     : 'Not selected';
-  
+
   const baseMaterialName = baseMaterialUrl
     ? baseMaterialUrl.split('/').pop()?.replace('.webp', '').replace(/-/g, ' ')
     : 'Not selected';
@@ -189,51 +238,76 @@ export default function CheckPriceGrid({ initialImagePricing = null }: CheckPric
   // Urns: quantity = 1 unit; price entry is matched by urnShapeCode (note field).
   // Other products: derive quantity from dimensions and quantity_type.
   // Product 52 (SS Plaque): power-law formula (legacy getEquation case 2); value = mm².
-  const headstoneQuantity = productId === '52'
-    ? widthMm * heightMm            // raw mm² — power-law function divides by 100 internally
-    : isUrnProduct
-      ? 1
-      : (catalog?.product?.priceModel
-          ? computeQuantity(catalog.product.priceModel, { width: widthMm, height: heightMm, depth: uprightThickness })
-          : 0);
+  const headstoneQuantity =
+    productId === '52'
+      ? widthMm * heightMm // raw mm² — power-law function divides by 100 internally
+      : isUrnProduct
+        ? 1
+        : catalog?.product?.priceModel
+          ? computeQuantity(catalog.product.priceModel, {
+              width: widthMm,
+              height: heightMm,
+              depth: uprightThickness,
+            })
+          : 0;
 
-  const ssMaterialNote = (headstoneMaterialUrl ?? '').includes('polished') ? 'polished' : 'brushed';
-  const headstonePrice = catalog && headstoneQuantity > 0
-    ? (productId === '52'
-        ? calculatePricePowerLaw(catalog.product.priceModel, headstoneQuantity, ssMaterialNote)
-        : calculatePrice(catalog.product.priceModel, headstoneQuantity, urnShapeCode ?? undefined))
-    : 0;
+  const ssMaterialNote = (headstoneMaterialUrl ?? '').includes('polished')
+    ? 'polished'
+    : 'brushed';
+  const headstonePrice =
+    catalog && headstoneQuantity > 0
+      ? productId === '52'
+        ? calculatePricePowerLaw(
+            catalog.product.priceModel,
+            headstoneQuantity,
+            ssMaterialNote,
+          )
+        : calculatePrice(
+            catalog.product.priceModel,
+            headstoneQuantity,
+            urnShapeCode ?? undefined,
+          )
+      : 0;
 
   // Calculate base price using catalog
-  const baseQuantity = showBase && catalog?.product?.basePriceModel
-    ? computeQuantity(catalog.product.basePriceModel, { width: baseWidthMm, height: baseHeightMm, depth: baseThickness })
-    : 0;
-  
-  const basePrice = showBase && catalog?.product?.basePriceModel && baseQuantity > 0
-    ? calculatePrice(catalog.product.basePriceModel, baseQuantity)
-    : 0;
-  
+  const baseQuantity =
+    showBase && catalog?.product?.basePriceModel
+      ? computeQuantity(catalog.product.basePriceModel, {
+          width: baseWidthMm,
+          height: baseHeightMm,
+          depth: baseThickness,
+        })
+      : 0;
+
+  const basePrice =
+    showBase && catalog?.product?.basePriceModel && baseQuantity > 0
+      ? calculatePrice(catalog.product.basePriceModel, baseQuantity)
+      : 0;
+
   const additionsPrice = selectedAdditions.length * 75;
-  
+
   // Calculate real motif prices (sum of individual motif prices)
   const motifsPrice = useMemo(() => {
     return selectedMotifs.reduce((total, motif) => {
       const offset = motifOffsets[motif.id];
       const heightMm = offset?.heightMm ?? 100;
       const isLaser = catalog?.product.laser === '1';
-      
+
       if (!isLaser && motifPriceModel) {
-        return total + calculateMotifPrice(
-          heightMm,
-          motif.color,
-          motifPriceModel.priceModel,
-          isLaser
+        return (
+          total +
+          calculateMotifPrice(
+            heightMm,
+            motif.color,
+            motifPriceModel.priceModel,
+            isLaser,
+          )
         );
       }
       return total;
     }, 0);
   }, [selectedMotifs, motifOffsets, motifPriceModel, catalog]);
-  
+
   const validInscriptions = useMemo(() => {
     return (inscriptions || []).filter((line) => line.text?.trim());
   }, [inscriptions]);
@@ -245,10 +319,16 @@ export default function CheckPriceGrid({ initialImagePricing = null }: CheckPric
     }
 
     return validInscriptions.reduce(
-      (total, line) => total + calculateInscriptionLinePrice(line, inscriptionPriceModel),
+      (total, line) =>
+        total + calculateInscriptionLinePrice(line, inscriptionPriceModel),
       0,
     );
-  }, [validInscriptions, inscriptionPriceModel, productId, showInscriptionColor]);
+  }, [
+    validInscriptions,
+    inscriptionPriceModel,
+    productId,
+    showInscriptionColor,
+  ]);
 
   // Get detailed inscription items
   const inscriptionItems = useMemo(() => {
@@ -256,8 +336,9 @@ export default function CheckPriceGrid({ initialImagePricing = null }: CheckPric
       productId !== '32' && showInscriptionColor && inscriptionPriceModel;
 
     return validInscriptions.map((line) => {
-      const colorName = data.colors.find((c) => c.hex === line.color)?.name || line.color;
-      
+      const colorName =
+        data.colors.find((c) => c.hex === line.color)?.name || line.color;
+
       return {
         id: line.id,
         text: line.text,
@@ -270,7 +351,12 @@ export default function CheckPriceGrid({ initialImagePricing = null }: CheckPric
           : 0,
       };
     });
-  }, [validInscriptions, inscriptionPriceModel, productId, showInscriptionColor]);
+  }, [
+    validInscriptions,
+    inscriptionPriceModel,
+    productId,
+    showInscriptionColor,
+  ]);
 
   const imageItems = useMemo(() => {
     if (!selectedImages.length) return [];
@@ -287,11 +373,12 @@ export default function CheckPriceGrid({ initialImagePricing = null }: CheckPric
         ? calculateImagePrice(product, widthMm, heightMm, img.colorMode)
         : 0;
 
-      const colorDisplay = img.colorMode === 'bw'
-        ? 'Black & White'
-        : img.colorMode === 'sepia'
-          ? 'Sepia'
-          : 'Full Color';
+      const colorDisplay =
+        img.colorMode === 'bw'
+          ? 'Black & White'
+          : img.colorMode === 'sepia'
+            ? 'Sepia'
+            : 'Full Color';
 
       return {
         id: img.id,
@@ -319,7 +406,9 @@ export default function CheckPriceGrid({ initialImagePricing = null }: CheckPric
   const emblemItems = useMemo(() => {
     return selectedEmblems.map((emb) => {
       const offset = emblemOffsets[emb.id];
-      const sizeEntry = EMBLEM_SIZES.find((s) => s.variant === (offset?.sizeVariant ?? 3));
+      const sizeEntry = EMBLEM_SIZES.find(
+        (s) => s.variant === (offset?.sizeVariant ?? 3),
+      );
       const sizeMm = sizeEntry?.heightMm ?? 100;
       return {
         id: emb.id,
@@ -334,21 +423,32 @@ export default function CheckPriceGrid({ initialImagePricing = null }: CheckPric
     });
   }, [selectedEmblems, emblemOffsets]);
 
-  const subtotal = headstonePrice + basePrice + additionsPrice + motifsPrice + emblemsPrice + inscriptionPrice + imagePriceTotal;
+  const subtotal =
+    headstonePrice +
+    basePrice +
+    additionsPrice +
+    motifsPrice +
+    emblemsPrice +
+    inscriptionPrice +
+    imagePriceTotal;
   const tax = subtotal * 0.1; // 10% tax
   const total = subtotal + tax;
 
   // Get detailed addition items
   const additionItems = useMemo(() => {
-    return selectedAdditions.map(addId => {
+    return selectedAdditions.map((addId) => {
       const parts = addId.split('_');
-      const baseId = parts.length > 1 && !isNaN(Number(parts[parts.length - 1]))
-        ? parts.slice(0, -1).join('_')
-        : addId;
-      
-      const addition = data.additions.find(a => a.id === baseId);
+      const baseId =
+        parts.length > 1 && !isNaN(Number(parts[parts.length - 1]))
+          ? parts.slice(0, -1).join('_')
+          : addId;
+
+      const addition = data.additions.find((a) => a.id === baseId);
       const dirName = addition?.file?.split('/')?.[0] || '';
-      const thumbnail = dirName && addition?.image ? `/additions/${dirName}/${addition.image}` : null;
+      const thumbnail =
+        dirName && addition?.image
+          ? `/additions/${dirName}/${addition.image}`
+          : null;
       const sizeVariant = additionOffsets?.[addId]?.sizeVariant ?? 1;
       return {
         id: addId,
@@ -360,34 +460,35 @@ export default function CheckPriceGrid({ initialImagePricing = null }: CheckPric
       };
     });
   }, [selectedAdditions, additionOffsets]);
-  
+
   // Get detailed motif items
   const motifItems = useMemo(() => {
     return selectedMotifs.map((motif) => {
       const offset = motifOffsets[motif.id];
       const heightMm = offset?.heightMm ?? 100;
-      
+
       const isStainlessSteelMotif = isStainlessSteelHeadstone;
       const colorObj = data.colors.find((c) => c.hex === motif.color);
       const materialName = getCheckPriceMaterialName(headstoneMaterialUrl);
       const colorName = isStainlessSteelMotif
         ? materialName
         : colorObj?.name || 'Black';
-      
-      const motifFileName = motif.svgPath.split('/').pop()?.replace('.svg', '') || 'unknown';
-      
+
+      const motifFileName =
+        motif.svgPath.split('/').pop()?.replace('.svg', '') || 'unknown';
+
       const isLaser = catalog?.product.laser === '1';
       let individualPrice = 0;
-      
+
       if (!isLaser && motifPriceModel) {
         individualPrice = calculateMotifPrice(
           heightMm,
           motif.color,
           motifPriceModel.priceModel,
-          isLaser
+          isLaser,
         );
       }
-      
+
       return {
         id: motif.id,
         name: motifFileName,
@@ -400,7 +501,14 @@ export default function CheckPriceGrid({ initialImagePricing = null }: CheckPric
         price: individualPrice,
       };
     });
-  }, [selectedMotifs, motifOffsets, motifPriceModel, catalog, isStainlessSteelHeadstone, headstoneMaterialUrl]);
+  }, [
+    selectedMotifs,
+    motifOffsets,
+    motifPriceModel,
+    catalog,
+    isStainlessSteelHeadstone,
+    headstoneMaterialUrl,
+  ]);
 
   const quoteRows = useMemo<QuoteRow[]>(() => {
     const rows: QuoteRow[] = [
@@ -409,10 +517,7 @@ export default function CheckPriceGrid({ initialImagePricing = null }: CheckPric
         category: 'product',
         title: `Product ID: ${productId || '-'} - ${productName}`,
         details: isUrnProduct
-          ? [
-              `Shape: ${shapeName}`,
-              `Background: ${headstoneMaterialName}`,
-            ]
+          ? [`Shape: ${shapeName}`, `Background: ${headstoneMaterialName}`]
           : [
               `Shape: ${shapeName}`,
               `Material: ${headstoneMaterialName}`,
@@ -510,10 +615,7 @@ export default function CheckPriceGrid({ initialImagePricing = null }: CheckPric
         id: `addition-${item.id}`,
         category: 'additions',
         title: `Product ID: ${item.baseId} - ${item.name}`,
-        details: [
-          `Type: ${item.type}`,
-          `Size Variant: ${item.sizeVariant}`,
-        ],
+        details: [`Type: ${item.type}`, `Size Variant: ${item.sizeVariant}`],
         qty: 1,
         unitPrice: 75,
         total: 75,
@@ -561,28 +663,46 @@ export default function CheckPriceGrid({ initialImagePricing = null }: CheckPric
   }, [catalog]);
 
   const quoteCategoryFilters = useMemo(() => {
-    const filters: Array<{ id: QuoteCategory; label: string; count: number }> = [
-      { id: 'all', label: 'All Items', count: quoteRows.length },
-      {
-        id: 'product',
-        label: primaryProductFilterLabel,
-        count: quoteRows.filter((row) => row.category === 'product').length,
-      },
-      { id: 'base', label: 'Base', count: quoteRows.filter((row) => row.category === 'base').length },
-      {
-        id: 'inscriptions',
-        label: 'Inscriptions',
-        count: quoteRows.filter((row) => row.category === 'inscriptions').length,
-      },
-      { id: 'motifs', label: 'Motifs', count: quoteRows.filter((row) => row.category === 'motifs').length },
-      { id: 'emblems', label: 'Emblems', count: quoteRows.filter((row) => row.category === 'emblems').length },
-      { id: 'images', label: 'Images', count: quoteRows.filter((row) => row.category === 'images').length },
-      {
-        id: 'additions',
-        label: 'Additions',
-        count: quoteRows.filter((row) => row.category === 'additions').length,
-      },
-    ];
+    const filters: Array<{ id: QuoteCategory; label: string; count: number }> =
+      [
+        { id: 'all', label: 'All Items', count: quoteRows.length },
+        {
+          id: 'product',
+          label: primaryProductFilterLabel,
+          count: quoteRows.filter((row) => row.category === 'product').length,
+        },
+        {
+          id: 'base',
+          label: 'Base',
+          count: quoteRows.filter((row) => row.category === 'base').length,
+        },
+        {
+          id: 'inscriptions',
+          label: 'Inscriptions',
+          count: quoteRows.filter((row) => row.category === 'inscriptions')
+            .length,
+        },
+        {
+          id: 'motifs',
+          label: 'Motifs',
+          count: quoteRows.filter((row) => row.category === 'motifs').length,
+        },
+        {
+          id: 'emblems',
+          label: 'Emblems',
+          count: quoteRows.filter((row) => row.category === 'emblems').length,
+        },
+        {
+          id: 'images',
+          label: 'Images',
+          count: quoteRows.filter((row) => row.category === 'images').length,
+        },
+        {
+          id: 'additions',
+          label: 'Additions',
+          count: quoteRows.filter((row) => row.category === 'additions').length,
+        },
+      ];
 
     return filters.filter((filter) => filter.id === 'all' || filter.count > 0);
   }, [primaryProductFilterLabel, quoteRows]);
@@ -599,11 +719,14 @@ export default function CheckPriceGrid({ initialImagePricing = null }: CheckPric
       0,
     );
   }, [selectedQuoteCategory, subtotal, visibleQuoteRows]);
-  const visibleTax = selectedQuoteCategory === 'all' ? tax : visibleSubtotal * 0.1;
+  const visibleTax =
+    selectedQuoteCategory === 'all' ? tax : visibleSubtotal * 0.1;
   const visibleTotal = visibleSubtotal + visibleTax;
 
   useEffect(() => {
-    if (quoteCategoryFilters.some((filter) => filter.id === selectedQuoteCategory)) {
+    if (
+      quoteCategoryFilters.some((filter) => filter.id === selectedQuoteCategory)
+    ) {
       return;
     }
     setSelectedQuoteCategory('all');
@@ -633,7 +756,10 @@ export default function CheckPriceGrid({ initialImagePricing = null }: CheckPric
       };
       const { generateDesignPDF } = await import('#/lib/pdf-generator');
       await generateDesignPDF({
-        title: snapshot.metadata?.currentProjectTitle || productName || 'Memorial Design',
+        title:
+          snapshot.metadata?.currentProjectTitle ||
+          productName ||
+          'Memorial Design',
         screenshot: snapshot.metadata?.screenshot || '',
         priceLabel: formatMoney(total),
         createdLabel: new Date().toLocaleDateString('en-AU', {
@@ -669,23 +795,23 @@ export default function CheckPriceGrid({ initialImagePricing = null }: CheckPric
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950 text-white day:bg-none day:bg-stone-100 day:text-gray-900">
-      <header className="relative overflow-hidden border-b border-white/10 bg-gradient-to-r from-gray-900/50 to-gray-800/50 backdrop-blur-sm day:border-gray-200 day:bg-white day:bg-none">
-        <div className="absolute inset-0 bg-gradient-to-br from-[#cfac6c]/5 via-transparent to-transparent day:hidden" />
+    <div className="day:bg-none day:bg-stone-100 day:text-gray-900 min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950 text-white">
+      <header className="day:border-gray-200 day:bg-white day:bg-none relative overflow-hidden border-b border-white/10 bg-gradient-to-r from-gray-900/50 to-gray-800/50 backdrop-blur-sm">
+        <div className="day:hidden absolute inset-0 bg-gradient-to-br from-[#cfac6c]/5 via-transparent to-transparent" />
         <div className="relative mx-auto max-w-7xl px-6 py-6 lg:px-8">
+          <UnitCurrencySelects className="mb-3 justify-end sm:absolute sm:top-6 sm:right-6 sm:mb-0 lg:right-8" />
           <div className="text-left sm:text-center">
-            <h1 className="font-serif text-3xl font-light tracking-tight text-white day:text-gray-900 sm:text-4xl lg:text-[2.75rem]">
-              Check Price
-            </h1>
-            <p className="mx-0 mt-3 max-w-3xl text-base leading-6 text-gray-100 day:text-gray-600 sm:mx-auto">
-              Review your selected product, options and itemised price before saving your design.
+            <DesignerPageHeading sectionTitle="Check Price" />
+            <p className="day:text-gray-600 mx-0 mt-3 max-w-3xl text-base leading-6 text-gray-100 sm:mx-auto">
+              Review your selected product, options and itemised price before
+              saving your design.
             </p>
           </div>
         </div>
       </header>
 
-      <div className="relative border-b border-white/5 bg-gray-900/30 day:border-gray-200 day:bg-white">
-        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#cfac6c]/3 to-transparent day:hidden" />
+      <div className="day:border-gray-200 day:bg-white relative border-b border-white/5 bg-gray-900/30">
+        <div className="day:hidden absolute inset-0 bg-gradient-to-r from-transparent via-[#cfac6c]/3 to-transparent" />
         <div className="relative mx-auto max-w-7xl px-6 py-3.5 lg:px-8">
           <div className="-mx-6 flex snap-x gap-2 overflow-x-auto px-6 pb-1 sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0 sm:pb-0">
             {quoteCategoryFilters.map((filter) => {
@@ -698,11 +824,13 @@ export default function CheckPriceGrid({ initialImagePricing = null }: CheckPric
                   className={`shrink-0 snap-start rounded-full px-5 py-2.5 text-sm font-medium whitespace-nowrap transition-all ${
                     isSelected
                       ? 'bg-[#cfac6c] text-slate-900 shadow-lg shadow-[#cfac6c]/20'
-                      : 'border border-white/20 text-white hover:border-[#cfac6c]/30 hover:bg-white/10 day:border-gray-300 day:text-gray-700 day:hover:bg-gray-100'
+                      : 'day:border-gray-300 day:text-gray-700 day:hover:bg-gray-100 border border-white/20 text-white hover:border-[#cfac6c]/30 hover:bg-white/10'
                   }`}
                 >
                   {filter.label}
-                  {filter.id !== 'all' && filter.count > 1 ? ` (${filter.count})` : ''}
+                  {filter.id !== 'all' && filter.count > 1
+                    ? ` (${filter.count})`
+                    : ''}
                 </button>
               );
             })}
@@ -711,70 +839,97 @@ export default function CheckPriceGrid({ initialImagePricing = null }: CheckPric
       </div>
 
       <main className="w-full px-4 py-8 sm:px-6 lg:px-8">
-        <div className="overflow-hidden rounded-lg border border-white/10 bg-[#120804] shadow-2xl shadow-black/30 day:border-gray-200 day:bg-white day:shadow-none">
+        <div className="day:border-gray-200 day:bg-white day:shadow-none overflow-hidden rounded-lg border border-white/10 bg-[#120804] shadow-2xl shadow-black/30">
           <div className="overflow-x-auto">
-          <table className="w-full min-w-[520px] border-collapse text-left text-sm">
-            <thead>
-              <tr className="border-b border-white/10 bg-white/[0.03] text-white/55 day:border-gray-200 day:bg-gray-50 day:text-gray-500">
-                <th className="w-[50%] px-4 py-4 font-semibold sm:px-6">Product</th>
-                <th className="w-[10%] px-3 py-4 text-center font-semibold sm:px-6">Qty</th>
-                <th className="w-[20%] px-3 py-4 text-right font-semibold sm:px-6">Price</th>
-                <th className="w-[20%] px-3 py-4 text-right font-semibold sm:px-6">Item Total</th>
-              </tr>
-            </thead>
-            <tbody>
-              {visibleQuoteRows.map((row) => (
-                <tr key={row.id} className="border-b border-white/10 align-middle last:border-b-0 day:border-gray-200">
-                  <td className="px-4 py-6 sm:px-6">
-                    <p className="font-semibold text-white day:text-gray-900">{row.title}</p>
-                    {row.details.map((detail) => (
-                      <p key={detail} className="leading-tight text-white/75 day:text-gray-700">
-                        {detail}
-                      </p>
-                    ))}
-                  </td>
-                  <td className="px-3 py-6 text-center text-white/85 day:text-gray-800 sm:px-6">{row.qty}</td>
-                  <td className="px-3 py-6 text-right text-white/60 day:text-gray-500 sm:px-6">{formatMoney(row.unitPrice)}</td>
-                  <td className="px-3 py-6 text-right text-white/75 day:text-gray-600 sm:px-6">{formatMoney(row.total)}</td>
+            <table className="w-full min-w-[520px] border-collapse text-left text-sm">
+              <thead>
+                <tr className="day:border-gray-200 day:bg-gray-50 day:text-gray-500 border-b border-white/10 bg-white/[0.03] text-white/55">
+                  <th className="w-[50%] px-4 py-4 font-semibold sm:px-6">
+                    Product
+                  </th>
+                  <th className="w-[10%] px-3 py-4 text-center font-semibold sm:px-6">
+                    Qty
+                  </th>
+                  <th className="w-[20%] px-3 py-4 text-right font-semibold sm:px-6">
+                    Price
+                  </th>
+                  <th className="w-[20%] px-3 py-4 text-right font-semibold sm:px-6">
+                    Item Total
+                  </th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {visibleQuoteRows.map((row) => (
+                  <tr
+                    key={row.id}
+                    className="day:border-gray-200 border-b border-white/10 align-middle last:border-b-0"
+                  >
+                    <td className="px-4 py-6 sm:px-6">
+                      <p className="day:text-gray-900 font-semibold text-white">
+                        {row.title}
+                      </p>
+                      {row.details.map((detail) => (
+                        <p
+                          key={detail}
+                          className="day:text-gray-700 leading-tight text-white/75"
+                        >
+                          {detail}
+                        </p>
+                      ))}
+                    </td>
+                    <td className="day:text-gray-800 px-3 py-6 text-center text-white/85 sm:px-6">
+                      {row.qty}
+                    </td>
+                    <td className="day:text-gray-500 px-3 py-6 text-right text-white/60 sm:px-6">
+                      {formatMoney(row.unitPrice)}
+                    </td>
+                    <td className="day:text-gray-600 px-3 py-6 text-right text-white/75 sm:px-6">
+                      {formatMoney(row.total)}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
 
           {imagePricingError && (
-            <p className="border-t border-white/10 px-6 py-3 text-sm text-red-300 day:border-gray-200 day:text-red-600" role="status">
+            <p
+              className="day:border-gray-200 day:text-red-600 border-t border-white/10 px-6 py-3 text-sm text-red-300"
+              role="status"
+            >
               {imagePricingError}
             </p>
           )}
 
-          <div className="ml-auto w-full max-w-sm border-t border-white/10 px-6 py-4 text-sm day:border-gray-200">
+          <div className="day:border-gray-200 ml-auto w-full max-w-sm border-t border-white/10 px-6 py-4 text-sm">
             <div className="flex justify-between py-1">
-              <span className="text-white/70 day:text-gray-600">Subtotal</span>
+              <span className="day:text-gray-600 text-white/70">Subtotal</span>
               <span>{formatMoney(visibleSubtotal)}</span>
             </div>
             <div className="flex justify-between py-1">
-              <span className="text-white/70 day:text-gray-600">Tax (10%)</span>
+              <span className="day:text-gray-600 text-white/70">Tax (10%)</span>
               <span>{formatMoney(visibleTax)}</span>
             </div>
-            <div className="mt-2 flex justify-between border-t border-white/10 pt-3 text-base font-semibold day:border-gray-200">
+            <div className="day:border-gray-200 mt-2 flex justify-between border-t border-white/10 pt-3 text-base font-semibold">
               <span>Total</span>
-              <span className="text-[#D4A84F]">{formatMoney(visibleTotal)}</span>
+              <span className="text-[#D4A84F]">
+                {formatMoney(visibleTotal)}
+              </span>
             </div>
           </div>
 
-          <div className="check-price-actions flex justify-end gap-3 border-t border-white/10 bg-white/[0.03] px-5 py-4 day:border-gray-200 day:bg-gray-50">
+          <div className="check-price-actions day:border-gray-200 day:bg-gray-50 flex justify-end gap-3 border-t border-white/10 bg-white/[0.03] px-5 py-4">
             <button
               type="button"
               onClick={handleDownloadPdf}
-              className="rounded-md border border-[#D4A84F]/70 bg-[#D4A84F] px-5 py-2 text-sm font-semibold uppercase tracking-wide text-[#1a1208] shadow-sm transition hover:bg-[#C49940]"
+              className="rounded-md border border-[#D4A84F]/70 bg-[#D4A84F] px-5 py-2 text-sm font-semibold tracking-wide text-[#1a1208] uppercase shadow-sm transition hover:bg-[#C49940]"
             >
               Download PDF
             </button>
             <button
               type="button"
               onClick={handleSaveDesign}
-              className="rounded-md border border-white/15 bg-white/10 px-5 py-2 text-sm font-semibold uppercase tracking-wide text-white transition hover:bg-white/15 day:border-gray-300 day:bg-white day:text-gray-800 day:hover:bg-gray-100"
+              className="day:border-gray-300 day:bg-white day:text-gray-800 day:hover:bg-gray-100 rounded-md border border-white/15 bg-white/10 px-5 py-2 text-sm font-semibold tracking-wide text-white uppercase transition hover:bg-white/15"
             >
               Save Design
             </button>

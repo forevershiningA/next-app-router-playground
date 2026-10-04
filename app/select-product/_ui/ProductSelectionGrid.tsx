@@ -3,14 +3,17 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { ArrowRightIcon, CheckCircleIcon } from '@heroicons/react/24/outline';
+import { ArrowRightIcon } from '@heroicons/react/24/outline';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import { Product } from '#/lib/db';
 import type { ProductPriceSample } from '#/lib/types/pricing';
 import { getDesignerProductSlug } from '#/lib/designer-product-routes';
 import { orderProductsForDisplay } from '#/lib/product-display-order';
 import { formatDimensionPair } from '#/lib/unit-system';
-import { useSetUnitSystem, useUnitSystem } from '#/lib/use-unit-system';
+import { useUnitSystem } from '#/lib/use-unit-system';
+import { formatAudPrice } from '#/lib/currency';
+import { useCurrency } from '#/lib/use-currency';
+import UnitCurrencySelects from '#/components/designer/navigation/UnitCurrencySelects';
 
 type ProductCategory = {
   id: string;
@@ -18,35 +21,6 @@ type ProductCategory = {
   description: string;
   icon: string;
 };
-
-const priceFormatterCache = new Map<string, Intl.NumberFormat>();
-
-function formatPrice(value: number, currency: string) {
-  if (!Number.isFinite(value)) {
-    return '—';
-  }
-
-  const cacheKey = currency || 'USD';
-  let formatter = priceFormatterCache.get(cacheKey);
-  if (!formatter) {
-    try {
-      formatter = new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: cacheKey || 'USD',
-        maximumFractionDigits: 0,
-      });
-    } catch {
-      formatter = new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: 'USD',
-        maximumFractionDigits: 0,
-      });
-    }
-    priceFormatterCache.set(cacheKey, formatter);
-  }
-
-  return formatter.format(Math.max(0, Math.round(value)));
-}
 
 const productCategories: ProductCategory[] = [
   {
@@ -101,31 +75,24 @@ export default function ProductSelectionGrid({
   descriptionMap,
 }: ProductGridProps) {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
-  const [isProductLoading, setIsProductLoading] = useState(false);
+  const [loadingProductId, setLoadingProductId] = useState<string | null>(null);
   const router = useRouter();
   const unitSystem = useUnitSystem();
-  const setUnitSystem = useSetUnitSystem();
+  const { currency, rates } = useCurrency();
   const setProductId = useHeadstoneStore((s) => s.setProductId);
-  const currentProductId = useHeadstoneStore((s) => s.productId);
-
-  const handleContinue = () => {
-    if (!currentProductId) return;
-
-    const productSlug = getDesignerProductSlug(currentProductId);
-    router.push(productSlug ? `/${productSlug}/select-shape` : '/select-shape');
-  };
 
   const handleProductSelect = async (product: Product) => {
-    if (currentProductId === product.id && !isProductLoading) {
-      handleContinue();
-      return;
-    }
+    if (loadingProductId) return;
 
-    setIsProductLoading(true);
+    setLoadingProductId(product.id);
     try {
       await setProductId(product.id);
+      const productSlug = getDesignerProductSlug(product.id);
+      router.push(
+        productSlug ? `/${productSlug}/select-shape` : '/select-shape',
+      );
     } finally {
-      setIsProductLoading(false);
+      setLoadingProductId(null);
     }
   };
 
@@ -144,44 +111,13 @@ export default function ProductSelectionGrid({
       return { ...group, products: orderProductsForDisplay(groupProducts) };
     })
     .filter((group) => group.products.length > 0);
-  const selectedProduct = products.find(
-    (product) => product.id === currentProductId,
-  );
-  const selectedProductCategory = productCategories.find(
-    (category) => category.id === selectedProduct?.category,
-  );
-
   return (
     <div className="day:bg-stone-100 day:bg-none min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950">
       {/* Header Section */}
       <div className="day:border-gray-200 day:bg-white day:bg-none relative overflow-hidden border-b border-white/10 bg-gradient-to-r from-gray-900/50 to-gray-800/50 backdrop-blur-sm">
         <div className="day:hidden absolute inset-0 bg-gradient-to-br from-[#cfac6c]/5 via-transparent to-transparent" />
         <div className="relative mx-auto max-w-7xl px-6 py-4 lg:px-8">
-          <div className="day:border-gray-200 day:bg-white/90 absolute top-4 right-6 flex rounded-full border border-white/10 bg-black/55 p-1 shadow-lg backdrop-blur-md lg:right-8">
-            {[
-              { value: 'metric' as const, label: 'MM' },
-              { value: 'imperial' as const, label: 'IN' },
-            ].map((option) => {
-              const isActive = unitSystem === option.value;
-              return (
-                <button
-                  key={option.value}
-                  type="button"
-                  onClick={() => setUnitSystem(option.value)}
-                  aria-label={`Use ${option.value} units`}
-                  aria-pressed={isActive}
-                  title={`Use ${option.value} units`}
-                  className={`h-7 min-w-10 rounded-full px-3 text-xs font-semibold tracking-wide transition-colors ${
-                    isActive
-                      ? 'bg-[#cfac6c] text-slate-950'
-                      : 'day:text-gray-600 day:hover:bg-gray-100 text-white/70 hover:bg-white/10 hover:text-white'
-                  }`}
-                >
-                  {option.label}
-                </button>
-              );
-            })}
-          </div>
+          <UnitCurrencySelects className="mb-3 justify-end sm:absolute sm:top-4 sm:right-6 sm:mb-0 lg:right-8" />
           <div className="text-left sm:text-center">
             <h1 className="day:text-gray-900 font-serif text-3xl font-light tracking-tight text-white sm:text-4xl lg:text-[2.5rem]">
               Select Your Memorial Product
@@ -284,7 +220,6 @@ export default function ProductSelectionGrid({
                     }`}
                   >
                     {group.products.map((product) => {
-                      const isSelected = currentProductId === product.id;
                       const priceRange = priceMap[product.id];
                       const description =
                         descriptionMap[product.id] ??
@@ -293,12 +228,8 @@ export default function ProductSelectionGrid({
                         <button
                           key={product.id}
                           onClick={() => handleProductSelect(product)}
-                          aria-pressed={isSelected}
-                          className={`group day:bg-white relative flex h-full cursor-pointer flex-col overflow-hidden rounded-lg border bg-[#171717] text-left transition-all ${
-                            isSelected
-                              ? 'border-[#cfac6c] shadow-lg shadow-[#cfac6c]/20'
-                              : 'day:border-gray-200 day:hover:border-[#cfac6c]/60 border-white/12 hover:-translate-y-0.5 hover:border-[#cfac6c]/60 hover:shadow-lg hover:shadow-[#cfac6c]/10'
-                          }`}
+                          disabled={loadingProductId !== null}
+                          className="group day:border-gray-200 day:bg-white day:hover:border-[#cfac6c]/60 relative flex h-full cursor-pointer flex-col overflow-hidden rounded-lg border border-white/12 bg-[#171717] text-left transition-all hover:-translate-y-0.5 hover:border-[#cfac6c]/60 hover:shadow-lg hover:shadow-[#cfac6c]/10 disabled:cursor-wait disabled:opacity-70"
                         >
                           <div className="relative aspect-square w-full overflow-hidden bg-[#101010]">
                             <Image
@@ -308,12 +239,6 @@ export default function ProductSelectionGrid({
                               className="object-contain p-2 transition-transform duration-300 group-hover:scale-105"
                               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 20vw"
                             />
-                            {isSelected && (
-                              <span className="absolute top-3 right-3 inline-flex items-center gap-1 rounded-full bg-[#cfac6c] px-2.5 py-1 text-xs font-semibold text-slate-950 shadow-lg">
-                                <CheckCircleIcon className="h-4 w-4" />
-                                Selected
-                              </span>
-                            )}
                           </div>
 
                           <div className="flex flex-1 flex-col gap-2.5 p-3.5">
@@ -341,9 +266,11 @@ export default function ProductSelectionGrid({
                                   </span>
                                 </div>
                                 <span className="day:text-gray-900 mt-0.5 block text-base font-semibold text-white">
-                                  {formatPrice(
+                                  {formatAudPrice(
                                     priceRange.price,
-                                    priceRange.currency,
+                                    currency,
+                                    rates,
+                                    0,
                                   )}
                                 </span>
                               </div>
@@ -355,15 +282,11 @@ export default function ProductSelectionGrid({
                             )}
 
                             <div className="mt-auto pt-1">
-                              <span
-                                className={`inline-flex min-h-10 w-full items-center justify-center gap-2 rounded-lg border border-[#cfac6c] px-3 py-2 text-sm font-semibold transition-all duration-200 ${
-                                  isSelected
-                                    ? 'bg-[#cfac6c] text-slate-900 shadow-lg shadow-[#cfac6c]/30'
-                                    : 'bg-transparent text-[#cfac6c] group-hover:bg-[#cfac6c] group-hover:text-slate-900 group-hover:shadow-lg group-hover:shadow-[#cfac6c]/30'
-                                }`}
-                              >
+                              <span className="inline-flex min-h-10 w-full items-center justify-center gap-2 rounded-lg border border-[#cfac6c] bg-transparent px-3 py-2 text-sm font-semibold text-[#cfac6c] transition-all duration-200 group-hover:bg-[#cfac6c] group-hover:text-slate-900 group-hover:shadow-lg group-hover:shadow-[#cfac6c]/30">
                                 <span>
-                                  {isSelected ? 'Continue' : 'Select product'}
+                                  {loadingProductId === product.id
+                                    ? 'Loading product…'
+                                    : 'Select product'}
                                 </span>
                                 <ArrowRightIcon className="h-4 w-4" />
                               </span>
@@ -379,40 +302,6 @@ export default function ProductSelectionGrid({
           </>
         )}
       </div>
-
-      {currentProductId && (
-        <div className="day:border-gray-200 day:bg-white/95 fixed right-0 bottom-0 left-0 z-30 border-t border-[#cfac6c]/30 bg-[#121212]/95 px-6 py-3 shadow-2xl shadow-black/40 backdrop-blur-md lg:hidden">
-          <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-3 sm:flex-row sm:items-center">
-            <div>
-              <p className="day:text-gray-500 text-[11px] font-semibold tracking-[0.12em] text-[#cfac6c] uppercase">
-                Your selected product
-              </p>
-              <p className="day:text-gray-900 mt-0.5 text-sm font-semibold text-white">
-                {selectedProduct?.name ?? 'Product selected'}
-                {selectedProductCategory && (
-                  <span className="day:text-gray-500 ml-2 text-xs font-medium text-gray-300">
-                    · {selectedProductCategory.name}
-                  </span>
-                )}
-              </p>
-              <p className="day:text-gray-600 mt-0.5 text-xs text-gray-300">
-                Next: choose a shape for your memorial.
-              </p>
-            </div>
-            <button
-              type="button"
-              onClick={handleContinue}
-              disabled={isProductLoading}
-              className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-lg bg-[#cfac6c] px-5 py-2.5 text-sm font-semibold text-slate-950 shadow-lg shadow-[#cfac6c]/20 transition-colors hover:bg-[#dfc17e] disabled:cursor-wait disabled:opacity-70 sm:w-auto"
-            >
-              {isProductLoading
-                ? 'Loading product…'
-                : 'Customize selected product'}
-              <ArrowRightIcon className="h-4 w-4" />
-            </button>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

@@ -2,11 +2,22 @@ import { describe, it, expect } from 'vitest';
 import {
   resolveUnitSystemFromCountry,
   parseUnitSystemCookie,
+  resolveUnitSystemFromCurrency,
   formatImperialFromMm,
   formatLengthFromMm,
   formatDimensionPair,
   formatDimensionTriplet,
 } from '#/lib/unit-system';
+
+describe('resolveUnitSystemFromCurrency', () => {
+  it('uses inches for USD and millimetres for every other supported currency', () => {
+    expect(resolveUnitSystemFromCurrency('USD')).toBe('imperial');
+    expect(resolveUnitSystemFromCurrency('GBP')).toBe('metric');
+    expect(resolveUnitSystemFromCurrency('EUR')).toBe('metric');
+    expect(resolveUnitSystemFromCurrency('CAD')).toBe('metric');
+    expect(resolveUnitSystemFromCurrency('AUD')).toBe('metric');
+  });
+});
 
 describe('resolveUnitSystemFromCountry', () => {
   it('returns imperial for US', () => {
@@ -57,7 +68,9 @@ describe('parseUnitSystemCookie', () => {
   });
 
   it('parses cookie among multiple cookies', () => {
-    expect(parseUnitSystemCookie('session=abc; unit_system=imperial; lang=en')).toBe('imperial');
+    expect(
+      parseUnitSystemCookie('session=abc; unit_system=imperial; lang=en'),
+    ).toBe('imperial');
   });
 
   it('returns null for missing cookie', () => {
@@ -127,11 +140,15 @@ describe('formatDimensionPair', () => {
 
 describe('formatDimensionTriplet', () => {
   it('formats metric triplet', () => {
-    expect(formatDimensionTriplet(600, 900, 150, 'metric')).toBe('600 × 900 × 150 mm');
+    expect(formatDimensionTriplet(600, 900, 150, 'metric')).toBe(
+      '600 × 900 × 150 mm',
+    );
   });
 
   it('formats imperial triplet', () => {
     // 304.8 = 12", 457.2 = 18", 152.4 = 6"
-    expect(formatDimensionTriplet(304.8, 457.2, 152.4, 'imperial')).toBe('12" × 18" × 6"');
+    expect(formatDimensionTriplet(304.8, 457.2, 152.4, 'imperial')).toBe(
+      '12" × 18" × 6"',
+    );
   });
 });

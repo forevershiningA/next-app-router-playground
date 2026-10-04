@@ -9,14 +9,20 @@ export default function SelectSizeOverlayCard() {
   const activePanel = useHeadstoneStore((s) => s.activePanel);
   const selectedAdditionId = useHeadstoneStore((s) => s.selectedAdditionId);
   const selectedMotifId = useHeadstoneStore((s) => s.selectedMotifId);
-  const selectedInscriptionId = useHeadstoneStore((s) => s.selectedInscriptionId);
+  const selectedInscriptionId = useHeadstoneStore(
+    (s) => s.selectedInscriptionId,
+  );
   const selected = useHeadstoneStore((s) => s.selected);
   const setSelected = useHeadstoneStore((s) => s.setSelected);
   const setEditingObject = useHeadstoneStore((s) => s.setEditingObject);
-  const setSelectedInscriptionId = useHeadstoneStore((s) => s.setSelectedInscriptionId);
-  const setSelectedAdditionId = useHeadstoneStore((s) => s.setSelectedAdditionId);
+  const setSelectedInscriptionId = useHeadstoneStore(
+    (s) => s.setSelectedInscriptionId,
+  );
+  const setSelectedAdditionId = useHeadstoneStore(
+    (s) => s.setSelectedAdditionId,
+  );
   const setSelectedMotifId = useHeadstoneStore((s) => s.setSelectedMotifId);
-  
+
   const cardRef = React.useRef<HTMLDivElement | null>(null);
   const [collapsed, setCollapsed] = React.useState(false);
   const [pos, setPos] = React.useState<{ x: number; y: number }>({
@@ -182,9 +188,9 @@ export default function SelectSizeOverlayCard() {
                   dragging ? 'cursor-grabbing' : 'cursor-grab'
                 }`}
               >
-                <h1 className="text-base leading-none font-semibold">
+                <h2 className="text-base leading-none font-semibold">
                   Select Size
-                </h1>
+                </h2>
               </div>
 
               {/* min/max button (excluded from drag) */}
@@ -218,12 +224,12 @@ export default function SelectSizeOverlayCard() {
                   Thickness is computed from size; cemeteries may have
                   regulations on allowable dimensions.
                 </p>
-                
+
                 {/* Selection buttons */}
-                <div className="flex gap-2 mb-3">
+                <div className="mb-3 flex gap-2">
                   <button
                     onClick={handleHeadstoneClick}
-                    className={`flex-1 px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                    className={`flex-1 rounded-md px-4 py-2 text-sm font-medium transition-colors ${
                       selected === 'headstone'
                         ? 'bg-white text-black'
                         : 'bg-white/10 text-white hover:bg-white/20'
@@ -233,7 +239,7 @@ export default function SelectSizeOverlayCard() {
                   </button>
                   <button
                     onClick={handleBaseClick}
-                    className={`flex-1 px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                    className={`flex-1 rounded-md px-4 py-2 text-sm font-medium transition-colors ${
                       selected === 'base'
                         ? 'bg-white text-black'
                         : 'bg-white/10 text-white hover:bg-white/20'

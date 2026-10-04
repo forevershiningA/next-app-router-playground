@@ -1,5 +1,9 @@
 export type UnitSystem = 'metric' | 'imperial';
 
+export function resolveUnitSystemFromCurrency(currency: string): UnitSystem {
+  return currency.toUpperCase() === 'USD' ? 'imperial' : 'metric';
+}
+
 const US_STYLE_COUNTRIES = new Set(['US', 'LR', 'MM']);
 
 export function resolveUnitSystemFromCountry(countryCode: string | null | undefined): UnitSystem {

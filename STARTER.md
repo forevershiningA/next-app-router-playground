@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-10-03
+**Last Updated:** 2026-10-04
 
 **Status entry order:** Add new dated status entries immediately after the table of contents, before the existing status entries. Keep status entries in reverse chronological order (newest first); do not append them to the end of this file.
 **Tech Stack:** Next.js 15.5.26, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots), **Vitest 4.1.8** (unit tests), **Playwright 1.59.1** (E2E tests)
@@ -121,6 +121,109 @@
 110. [October 1 Bronze Plaque Designer and Home Page SEO](#current-status-2026-10-01--bronze-plaque-designer-and-home-page-seo)
 111. [October 2 Home Page UX/SEO Audit and USA-first Positioning](#current-status-2026-10-02--home-page-uxseo-audit-and-usa-first-positioning)
 112. [October 3 Home Page Design Consistency and Hero Tuning](#current-status-2026-10-03--home-page-design-consistency-and-hero-tuning)
+113. [October 3 Designer Flow, Shape Categories, Units, and Display Currencies](#current-status-2026-10-03--designer-flow-shape-categories-units-and-display-currencies)
+114. [October 4 Currency Symbols, Locale Defaults, and Automatic Units](#current-status-2026-10-04--currency-symbols-locale-defaults-and-automatic-units)
+
+---
+
+## Current Status (2026-10-04) — Currency Symbols, Locale Defaults, and Automatic Units
+
+### Shared currency and unit behavior
+
+- `components/designer/navigation/UnitCurrencySelects.tsx` now renders only the currency select. The separate `MM/IN` select has been intentionally removed.
+- Measurement units are derived automatically from the active display currency through `lib/use-unit-system.ts` and `resolveUnitSystemFromCurrency()` in `lib/unit-system.ts`:
+  - `USD` uses imperial measurements (`in`);
+  - `GBP`, `EUR`, `AUD`, and `CAD` use metric measurements (`mm`).
+- Do not restore an independent unit selector or unit-preference cookie unless product requirements change. All consumers of `useUnitSystem()` update automatically when the currency changes, including Select Product, Check Price, the 3D price/dimension chip, and designer measurement controls.
+
+### Initial currency and session preference
+
+- `lib/use-currency.ts` uses `USD` as its stable SSR/hydration fallback and no longer reads or writes the old `display_currency` cookie.
+- On the first client render, when no session choice exists, `resolveCurrencyFromLanguages()` in `lib/currency.ts` derives the display currency from `navigator.languages` / `navigator.language`:
+  - US → `USD`;
+  - Great Britain → `GBP`;
+  - Canada → `CAD`;
+  - Australia or New Zealand → `AUD`;
+  - recognized European languages → `EUR`;
+  - unknown or unsupported locales → `USD`.
+- A manual selection is written to `sessionStorage` under `display_currency`. It survives navigation and reloads in the same browser tab/session, but intentionally does not become a long-lived preference.
+- Mounted currency consumers synchronize through the `currency-changed` browser event. An in-memory fallback keeps the manual choice active if browser storage is unavailable.
+
+### Price symbols and select theming
+
+- `formatAudPrice()` uses `Intl.NumberFormat` with `currencyDisplay: 'narrowSymbol'`. Displayed prices therefore use `£` for GBP, `€` for EUR, and `$` for USD/CAD/AUD; the currency select itself continues to show the unambiguous codes `USD`, `GBP`, `EUR`, `AUD`, and `CAD`.
+- The currency select explicitly uses `[color-scheme:dark]` in night mode and `day:[color-scheme:light]` in day mode. Its background, text, border, hover state, and focus ring are defined for both themes. Preserve the explicit color-scheme declarations because they also theme the browser-native option popup.
+- Currency conversion remains presentation-only. AUD continues to be the pricing source of truth for catalog calculations, persisted designs/orders, tax, and payment validation.
+
+### Relevant files and validation
+
+- `lib/currency.ts`: supported currencies, locale-to-currency resolution, AUD conversion, narrow-symbol formatting.
+- `lib/use-currency.ts`: exchange-rate loading, session preference, browser event synchronization.
+- `lib/unit-system.ts` and `lib/use-unit-system.ts`: currency-to-unit mapping consumed throughout the designer.
+- `components/designer/navigation/UnitCurrencySelects.tsx`: themed currency-only select.
+- `tests/unit/currency.test.ts` and `tests/unit/unit-system.test.ts`: locale/currency and currency/unit mappings.
+- Validation on 2026-10-04: targeted tests pass (`35/35`) and `pnpm type-check` passes.
+
+---
+
+## Current Status (2026-10-03) — Designer Flow, Shape Categories, Units, and Display Currencies
+
+### Designer heading hierarchy
+
+- `components/designer/DesignerPageHeading.tsx` is the shared heading component for designer selection pages.
+- The selected product name is the semantic `<h1>` (for example, `Bronze Plaque`). It remains visually secondary, gold, tracked, and uppercase, and has `mt-5` (20 px) above it.
+- The section/action name is the semantic `<h2>` (for example, `Select Your Shape`). It remains visually primary and renders above the product name through flex ordering.
+- Do not swap the visible order when maintaining the semantic hierarchy: the section title stays on top, while the product `<h1>` stays underneath.
+
+### Logo direction
+
+- The site currently retains `/public/ico/forever-transparent-logo.png` as a static logo. A lightweight CSS/SVG flare experiment was reviewed and fully reverted because it did not match the intended reference animation.
+- Do not restore the removed `AnimatedLogo` component or its CSS. The agreed future direction is to prepare and review a purpose-built animated GIF (or another supplied animation asset) separately before replacing the static logo.
+
+### One-click product and shape progression
+
+- Product cards in `app/select-product/_ui/ProductSelectionGrid.tsx` immediately set the product and navigate to the product-prefixed `select-shape` route on a single click. The old selected-card state and separate continue action are intentionally removed.
+- Shape cards in `app/select-shape/_ui/ShapeSelectionGrid.tsx` also progress on the first click. The destination depends on product capabilities: material, border, size, or another applicable designer step.
+- The in-designer shape selector (`components/designer/selectors/ShapeSelector.tsx`) follows the same direct-progression behaviour and opens the corresponding fullscreen panel where required.
+- Loading/disabled state must continue to prevent duplicate product navigation while `setProductId()` resolves.
+
+### Shape-category scope
+
+- `Traditional`, `Modern`, `Military`, `First Responders`, `Custom`, and any future additional shape-category filters are shown only for **Headstones** and **Full Monuments**.
+- `canUseShapeCategoryFilters` in `ShapeSelectionGrid.tsx` is the authoritative gate for the category bar and custom SVG category.
+- Other product families (plaques, urns, pet memorials, etc.) receive their applicable shapes directly without the category-filter row.
+- Product-specific restrictions still take precedence. Mini, pet-mini, stainless, and traditional-only products may use their narrower shape lists even when they belong to a headstone family.
+
+### Unit and display-currency controls
+
+- The shared native control lives in `components/designer/navigation/UnitCurrencySelects.tsx` and now contains only display currencies: `USD`, `GBP`, `EUR`, `AUD`, and `CAD`.
+- It is used on Select Product, the desktop 3D canvas, mobile designer headers, the guided mobile panel header, and the standalone Check Price page.
+- As of 2026-10-04, units are derived from currency (`USD` → inches; all other supported currencies → millimetres), and manual currency selection is session-scoped. See the newer status entry above for the authoritative behavior.
+
+### Currency conversion architecture
+
+- **AUD remains the source of truth.** Catalog prices, calculations, saved project/order values, tax calculations, Stripe/payment validation, and database currency fields must remain AUD unless the commercial/payment architecture is deliberately changed later.
+- Currency selection converts presentation only. Do not feed converted display values back into the headstone store, pricing models, project persistence, or checkout totals.
+- `lib/currency.ts` defines supported currencies, fallback AUD rates, `convertFromAud()`, and `formatAudPrice()`.
+- `app/api/exchange-rates/route.ts` fetches AUD reference rates from Frankfurter v2 (`USD`, `GBP`, `EUR`, `CAD`), caches responses for 24 hours, and returns AUD at `1`.
+- If the external service is unavailable, the API and client fall back to the embedded rates in `FALLBACK_AUD_RATES`; the UI remains usable while the display currency follows the browser/session rules documented in the 2026-10-04 entry.
+- Current display conversion is wired into:
+  - Select Product sample prices;
+  - the 3D scene price chip;
+  - fixed-size/plaque price presentation in `DesignerNav`;
+  - the modal `CheckPricePanel` item rows and totals;
+  - the standalone `app/check-price/_ui/CheckPriceGrid.tsx` rows and totals.
+- `Intl.NumberFormat` uses narrow symbols: GBP renders with `£`, EUR with `€`, and USD/CAD/AUD with `$`. The currency code remains visible in the select box.
+- The Frankfurter rate endpoint was verified locally on 2026-10-03. The UI conversion test verified that changing the selected currency recalculates the Bronze Plaque sample price.
+
+### Validation
+
+- Desktop (1440 × 900) and mobile (390 × 844) Select Product renders were visually reviewed. The select boxes fit the header without horizontal overflow.
+- The exchange-rate API returned all five supported currencies with AUD as the base.
+- TypeScript passes (`pnpm type-check`).
+- Targeted ESLint runs report no new errors; existing warnings in large legacy designer files remain non-blocking.
+- Prettier and `git diff --check` pass for the currency/unit implementation.
+- The wider working tree contains pre-existing design changes. Preserve them and avoid broad resets when modifying this feature.
 
 ---
 
@@ -459,7 +562,7 @@
 
 ## Current Status (2026-09-17) — Product Selection Catalogue Layout
 
-- **File and responsibility:** `app/select-product/_ui/ProductSelectionGrid.tsx` owns the client-side catalogue browsing state, unit toggle, product choice, and the transition to the selected product's `select-shape` route.
+- **File and responsibility:** `app/select-product/_ui/ProductSelectionGrid.tsx` owns the client-side catalogue browsing state, currency display, product choice, and the transition to the selected product's `select-shape` route. Units are derived from currency by the shared unit hook.
 - **Compact product header:** the `/select-product` header uses reduced vertical padding and a single-line desktop instruction: “Choose a memorial product to begin — then refine its shape, material and dimensions with transparent pricing.” The metric/imperial control has explicit accessible labels and native tooltips.
 - **Category-specific desktop layout:** only the **All Products** tab uses a 50/50 desktop grid of category sections (for example Plaques beside Headstones). Its cards remain two columns within each half. Selecting an individual category makes its section full width and uses three desktop card columns, increasing to five at `xl`; do not apply the two-card 50/50 arrangement to a filtered category.
 - **Catalogue controls and product cards:** category pills show their live product count. The former aggregate “All Products · N products” heading is intentionally removed. Product-card price metadata is a single compact line in the form `Sample price $916 · 12″ × 8″` (with the current unit system applied).
@@ -762,12 +865,12 @@ Primary files: `components/SceneryToggleButton.tsx`, `components/ThreeScene.tsx`
 - In studio mode, `Scene.tsx` uses a contact shadow only. It intentionally omits the outdoor standalone-headstone concrete foundation, which otherwise becomes an oversized dark pad beneath the Base. The real granite Base remains visible and grounded. Outdoor meadow mode retains its concrete foundation.
 - `StudioScenery` in `Scene.tsx` is intentionally minimal; the CSS backdrop in `ThreeScene.tsx` provides the scenery image while Three.js supplies the product lighting and grounding shadow.
 
-### Unit-toggle hydration reliability
+### Automatic-unit hydration reliability
 
 Primary file: `lib/use-unit-system.ts`.
 
-- SSR and the initial client render must always start with the same default unit system: `imperial`. The saved MM/IN preference is read only after hydration in `useEffect`, then shared through the existing browser event.
-- Do not initialise React state from `document.cookie` during render. That caused an SSR/client mismatch where the server rendered **IN** while a client cookie rendered **MM**, triggering React hydration recovery. Persist preference changes to the cookie as before; only the initial read timing changed.
+- This section's former unit-cookie implementation was superseded on 2026-10-04. `useUnitSystem()` now derives units from the active currency: `USD` uses imperial and every other supported currency uses metric.
+- `useCurrency()` uses `USD` for SSR and the first client render, then applies a session choice or browser-locale default after hydration. Do not read browser storage or `navigator` during render; doing so would reintroduce hydration mismatches.
 
 ### Material-preview feedback
 
@@ -814,7 +917,7 @@ Primary files: `app/_internal/_additions-loader.ts`, `components/AdditionSelecto
 
 - Addition dimensions and retail prices must come from the parsed XML size variant. K2213 is `140 × 270 × 140 mm`, retail `$382.20`; K2254 is `145 × 240 × 145 mm`, retail `$423.80`.
 - K2254 has no committed `public/additions/2254/2254.glb` (only legacy 3DS/MAX assets). `AdditionModel` therefore resolves K2254 to the compatible K2213 GLB and texture as a temporary visual fallback, while preserving K2254's own XML dimensions and price. Do not restore the missing K2254 GLB URL or the R3F scene will throw a 404 and hit the error boundary. Replace the fallback once an exported K2254 GLB is supplied.
-- Addition cards and the **Selected Addition** summary both display `width × height × depth` using `formatDimensionTriplet(...)`, so the text follows the global MM/IN toggle. Keep stored values in millimetres.
+- Addition cards and the **Selected Addition** summary both display `width × height × depth` using `formatDimensionTriplet(...)`, so the text follows the unit system derived from the selected currency. Keep stored values in millimetres.
 - A base-mounted vase or statue expands the granite Base by `30%` in width and `50%` in depth. The standalone concrete foundation and its contact shadow must use that same footprint and centre, otherwise the granite Base visibly overhangs the pad.
 - `duplicateAddition()` must treat `footprintWidth` as metres and translate the physical separation into the Base unit-cube local coordinate system. For a base-mounted item, move the copy to the free side of the Base; using raw `20`/`120` offsets sends the duplicate outside the scene.
 - The **Flower Pots** Base option is available only on ordinary `headstone` products, not Mini Headstones. It renders two lightweight procedural flower-pot inserts with black flower holes and selectable Black/Silver/Gold finish for all other insert surfaces. Flower Pots use exactly the same widened Base and concrete-foundation footprint as a base-mounted vase/statue: `+30%` width and `+50%` depth.
@@ -1258,9 +1361,8 @@ git diff --check
 
 Primary files: `lib/unit-system.ts`, `lib/use-unit-system.ts`, `ui/TailwindSlider.tsx`, `components/DesignerNav.tsx`, `components/InscriptionEditPanel.tsx`, `components/EditImagePanel.tsx`, `components/EditMotifPanel.tsx`, and `components/EmblemOverlayPanel.tsx`.
 
-- Dimensions are always stored internally in millimetres. The unit setting affects only display values and user input, preventing a unit toggle from changing the physical design.
-- New visitors default to **IN**. `useUnitSystem()` falls back to `imperial` when no `unit_system` cookie exists.
-- A deliberate MM / IN change uses `useSetUnitSystem()` to persist `unit_system` and `unit_system_user` cookies for one year. The preference is shared by the designer Canvas and other client-side views.
+- **Superseded behavior:** the manual MM/IN preference described in this dated entry was removed on 2026-10-04. Units now follow display currency (`USD` → imperial; all others → metric), with no independent unit control.
+- Dimensions remain stored internally in millimetres. The derived unit setting affects only display values and user input and never changes the physical design.
 - Use `formatLengthFromMm`, `formatDimensionPair`, and `formatDimensionTriplet` for non-editable labels. Imperial formatting uses whole inches rounded **up** (`Math.ceil`); do not introduce a competing rounding rule.
 - `TailwindSlider` treats `unit="mm"` as a physical-length control. In IN mode it presents whole-inch bounds/values, converts user input back to mm, and preserves the original mm-based state contract.
 - Raw sizing sliders in `DesignerNav` use `displayLengthValueFromMm()` / `lengthValueToMm()` for the same conversion. Degree, percentage, scale, and size-variant controls must not be converted.
@@ -1269,7 +1371,7 @@ Primary files: `lib/unit-system.ts`, `lib/use-unit-system.ts`, `ui/TailwindSlide
 
 Primary file: `app/select-product/_ui/ProductSelectionGrid.tsx`.
 
-- `/select-product` has its own MM / IN switch in the header. It reads/writes the same global cookie preference as the Canvas.
+- `/select-product` has a currency select in the header. Its sample dimensions use the unit system derived from that currency.
 - The `Sample price` dimension line must use `formatDimensionPair(priceRange.width, priceRange.height, unitSystem)`, not an inline `mm` string.
 
 ### Bronze Plaque fixing
@@ -2070,7 +2172,9 @@ Important Check Price notes:
 
 ### Unit Toggle State
 
-The easy display-only mm/in toggle was implemented. Internal sizes, positions, catalog values, and pricing calculations remain in millimeters.
+> Historical note: this manual toggle implementation was superseded on 2026-10-04. The MM/IN control and `useSetUnitSystem()` were removed; units now follow the selected display currency. The table below records the earlier implementation only.
+
+The easy display-only mm/in toggle was implemented at that time. Internal sizes, positions, catalog values, and pricing calculations remain in millimeters.
 
 | File                             | Current Behavior                                                                                                                                                                                             |
 | -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------- |
@@ -15955,6 +16059,6 @@ Both commands pass. Browser rendering still needs to be checked after the next l
 
 ---
 
-_End of STARTER.md - Last updated: 2026-10-03_
+_End of STARTER.md - Last updated: 2026-10-04_
 
 ---

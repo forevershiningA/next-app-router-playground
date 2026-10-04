@@ -24,7 +24,10 @@ import {
 import { data } from '#/app/_internal/_data';
 import { loadCatalogForProduct } from '#/lib/check-price-utils';
 import { formatDimensionPair } from '#/lib/unit-system';
-import { useSetUnitSystem, useUnitSystem } from '#/lib/use-unit-system';
+import { useUnitSystem } from '#/lib/use-unit-system';
+import { formatAudPrice } from '#/lib/currency';
+import { useCurrency } from '#/lib/use-currency';
+import UnitCurrencySelects from '#/components/designer/navigation/UnitCurrencySelects';
 
 import {
   CAMERA_3D_POSITION_Z,
@@ -63,7 +66,11 @@ const CANVAS_STEP_GROUPS = [
     steps: [
       { slug: 'inscriptions', label: 'Add Your Inscriptions' },
       { slug: 'select-images', label: 'Add Your Image' },
-      { slug: 'select-additions', label: 'Select Additions', when: 'additions' },
+      {
+        slug: 'select-additions',
+        label: 'Select Additions',
+        when: 'additions',
+      },
       { slug: 'select-emblems', label: 'Select Emblems', when: 'bronze' },
       { slug: 'select-motifs', label: 'Select Motifs' },
       { slug: 'check-price', label: 'Check Price' },
@@ -72,7 +79,11 @@ const CANVAS_STEP_GROUPS = [
   },
 ] as const;
 
-type CanvasStepCondition = 'border' | 'bronze' | 'stainless-plaque' | 'additions';
+type CanvasStepCondition =
+  | 'border'
+  | 'bronze'
+  | 'stainless-plaque'
+  | 'additions';
 
 function CanvasStepContextMenu({
   x,
@@ -217,37 +228,6 @@ function CameraController() {
   }, [controls, camera, isMobileDesignerStep, productType]);
 
   return null;
-}
-
-function UnitSystemToggle() {
-  const unitSystem = useUnitSystem();
-  const setUnitSystem = useSetUnitSystem();
-
-  return (
-    <div className="pointer-events-auto absolute top-6 right-6 z-10 hidden rounded-full border border-white/10 bg-black/55 p-1 shadow-lg backdrop-blur-md lg:flex">
-      {[
-        { value: 'metric' as const, label: 'mm' },
-        { value: 'imperial' as const, label: 'in' },
-      ].map((option) => {
-        const isActive = unitSystem === option.value;
-        return (
-          <button
-            key={option.value}
-            type="button"
-            onClick={() => setUnitSystem(option.value)}
-            aria-pressed={isActive}
-            className={`h-7 min-w-10 rounded-full px-3 text-xs font-semibold tracking-wide uppercase transition-colors ${
-              isActive
-                ? 'bg-[#cfac6c] text-slate-950'
-                : 'text-white/70 hover:bg-white/10 hover:text-white'
-            }`}
-          >
-            {option.label}
-          </button>
-        );
-      })}
-    </div>
-  );
 }
 
 // Product Name Header Component - Apple Studio Look
@@ -532,11 +512,12 @@ function ProductNameHeader() {
 
     return `${dimensionLabel} · ${formatDimensionPair(activeDimension.widthMm, activeDimension.heightMm, unitSystem).replace(/\s*×\s*/g, '×')}`;
   }, [activeDimension, displayShapeName, unitSystem]);
-  const priceLabel = `$${totalPrice.toFixed(2)}`;
+  const { currency, rates } = useCurrency();
+  const priceLabel = formatAudPrice(totalPrice, currency, rates);
 
   return (
     <>
-      <UnitSystemToggle />
+      <UnitCurrencySelects className="pointer-events-auto absolute top-6 right-6 z-10 hidden lg:flex" />
 
       {/* Product context and quote action share one studio toolbar. */}
       <div className="absolute top-6 left-1/2 z-10 hidden h-12 max-w-[min(38rem,calc(100vw-470px))] -translate-x-1/2 items-stretch rounded-full border border-white/10 bg-black/80 p-1 shadow-xl backdrop-blur-md lg:flex">
@@ -567,7 +548,9 @@ function ProductNameHeader() {
         )}
         <button
           type="button"
-          onClick={() => window.dispatchEvent(new CustomEvent('proceedToPurchase'))}
+          onClick={() =>
+            window.dispatchEvent(new CustomEvent('proceedToPurchase'))
+          }
           className="pointer-events-auto flex items-center gap-2 rounded-full px-3 text-sm font-semibold tracking-wide text-white transition-colors hover:bg-white/10"
         >
           <svg

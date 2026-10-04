@@ -62,7 +62,9 @@ import {
   getLengthUnitLabel,
   lengthValueToMm,
 } from '#/lib/unit-system';
-import { useSetUnitSystem, useUnitSystem } from '#/lib/use-unit-system';
+import { useUnitSystem } from '#/lib/use-unit-system';
+import { formatAudPrice } from '#/lib/currency';
+import { useCurrency } from '#/lib/use-currency';
 import { useTheme } from '#/components/theme/ThemeProvider';
 import { logger } from '#/lib/logger';
 import { DEFAULT_TEX, TEX_BASE } from '#/lib/headstone-store.types';
@@ -73,6 +75,7 @@ import {
 } from '#/lib/designer-route-state';
 import { useMobileNavStore } from '#/lib/mobile-nav-store';
 import { captureDesignSnapshot } from '#/lib/project-serializer';
+import UnitCurrencySelects from './UnitCurrencySelects';
 
 // Menu items grouped by workflow stage
 const menuGroups = [
@@ -366,7 +369,7 @@ function useDesignerNavPanelState({
 
 export default function DesignerNav() {
   const unitSystem = useUnitSystem();
-  const setUnitSystem = useSetUnitSystem();
+  const { currency, rates } = useCurrency();
   const displayLength = React.useCallback(
     (valueMm: number) => displayLengthValueFromMm(valueMm, unitSystem),
     [unitSystem],
@@ -798,10 +801,9 @@ export default function DesignerNav() {
   useEffect(() => {
     const frameId = window.requestAnimationFrame(() => {
       const activeSlug = activeFullscreenPanel ?? currentSlugFromPathname;
-      const activeItem =
-        desktopQuickNavRef.current?.querySelector<HTMLElement>(
-          `[data-quick-nav-slug="${activeSlug}"]`,
-        );
+      const activeItem = desktopQuickNavRef.current?.querySelector<HTMLElement>(
+        `[data-quick-nav-slug="${activeSlug}"]`,
+      );
       activeItem?.scrollIntoView({
         behavior: 'smooth',
         block: 'nearest',
@@ -2835,7 +2837,7 @@ export default function DesignerNav() {
                       Plaque Price
                     </div>
                     <div className="text-2xl font-semibold text-white">
-                      ${activeSize.price.toFixed(2)}
+                      {formatAudPrice(activeSize.price, currency, rates)}
                     </div>
                   </div>
                 )}
@@ -3796,26 +3798,7 @@ export default function DesignerNav() {
                     </p>
                   </div>
                   <div className="flex justify-end">
-                    <div className="day:border-[#ddd2c2] day:bg-[#eee6d9] flex rounded-full border border-white/10 bg-black/35 p-0.5">
-                      {[
-                        { value: 'metric' as const, label: 'mm' },
-                        { value: 'imperial' as const, label: 'in' },
-                      ].map((option) => (
-                        <button
-                          key={option.value}
-                          type="button"
-                          onClick={() => setUnitSystem(option.value)}
-                          aria-pressed={unitSystem === option.value}
-                          className={`h-7 min-w-9 rounded-full px-2 text-[10px] font-semibold tracking-wide uppercase transition-colors ${
-                            unitSystem === option.value
-                              ? 'bg-[#cfac6c] text-slate-950'
-                              : 'day:text-[#625a51] day:hover:bg-[#fbf9f5] day:hover:text-[#1d1a17] text-white/65 hover:bg-white/10 hover:text-white'
-                          }`}
-                        >
-                          {option.label}
-                        </button>
-                      ))}
-                    </div>
+                    <UnitCurrencySelects compact />
                   </div>
                 </div>
                 {currentPanelIndex >= 0 && (
@@ -4309,7 +4292,7 @@ export default function DesignerNav() {
       ) : (
         <>
           {/* Desktop Header */}
-          <div className="day:border-gray-200 hidden h-44 items-center justify-center border-b border-white/10 px-6 md:flex">
+          <div className="day:border-gray-200 hidden h-36 items-center justify-center border-b border-white/10 px-6 md:flex">
             <Link
               href="/"
               className="flex h-full items-center justify-center transition-opacity hover:opacity-80"
@@ -4317,7 +4300,7 @@ export default function DesignerNav() {
               <img
                 src="/ico/forever-transparent-logo.png"
                 alt="Forever Logo"
-                className="h-36 w-auto object-contain"
+                className="h-28 w-auto object-contain"
               />
             </Link>
           </div>
@@ -4482,10 +4465,10 @@ export default function DesignerNav() {
                     )}
 
                     <div
-                      className={`day:shadow-[0_5px_14px_rgba(73,54,30,0.10)] rounded-2xl border p-3 shadow-[0_12px_30px_rgba(0,0,0,0.35)] backdrop-blur-sm transition-colors ${
+                      className={`rounded-lg border p-3 shadow-[0_6px_18px_rgba(0,0,0,0.22)] transition-colors ${
                         isCurrentGroup
-                          ? 'border-primary/45 from-primary/12 day:border-[#D7B356]/60 day:bg-[#DEBD68]/10 bg-gradient-to-br via-white/5 to-black/20'
-                          : 'day:border-gray-200 day:from-stone-50 day:via-stone-50 day:to-stone-50 border-white/10 bg-gradient-to-br from-white/5 via-transparent to-black/20'
+                          ? 'border-primary/45 bg-primary/[0.06] day:border-[#c59b49] day:bg-[#f5eddd]'
+                          : 'day:border-gray-200 day:bg-stone-50 border-white/10 bg-white/[0.03]'
                       }`}
                     >
                       <button
@@ -4562,14 +4545,6 @@ export default function DesignerNav() {
                             catalog?.product.type === 'headstone'
                               ? 'Select Size & Base'
                               : item.name;
-
-                          // Status-based styling
-                          const statusClasses =
-                            itemStatus === 'complete'
-                              ? 'border-green-500/30 text-green-400'
-                              : itemStatus === 'incomplete'
-                                ? 'border-amber-500/30 text-amber-400'
-                                : 'border-white/10 text-gray-200';
 
                           // Hide "Select Material" for laser etched products and stainless steel headstones
                           if (
@@ -4792,7 +4767,7 @@ export default function DesignerNav() {
                                     data-section={item.slug}
                                     className={`flex cursor-pointer items-center gap-3 rounded-lg px-4 py-3 text-base font-light transition-all ${
                                       isActive
-                                        ? 'day:border-[#D7B356]/40 day:bg-[#DEBD68]/10 day:text-[#3d2817] border border-white/30 bg-white/15 text-white shadow-lg backdrop-blur-sm'
+                                        ? 'day:border-[#b88a32] day:bg-[#f3e6c9] day:text-[#3d2817] border border-white/30 bg-white/15 text-white shadow-sm'
                                         : 'day:border-gray-200 day:text-gray-700 day:hover:border-gray-300 day:hover:bg-gray-100 border border-white/10 text-gray-200 hover:border-white/20 hover:bg-white/10'
                                     }`}
                                   >
@@ -4960,7 +4935,7 @@ export default function DesignerNav() {
                                   onClick={(e) => handleMenuClick(item.slug, e)}
                                   className={`flex cursor-pointer items-center justify-between gap-3 rounded-lg px-4 py-3 text-base font-light transition-all ${
                                     isActive
-                                      ? 'day:border-[#D7B356]/40 day:bg-[#DEBD68]/10 day:text-[#3d2817] border border-white/30 bg-white/15 text-white shadow-lg backdrop-blur-sm'
+                                      ? 'day:border-[#b88a32] day:bg-[#f3e6c9] day:text-[#3d2817] border border-white/30 bg-white/15 text-white shadow-sm'
                                       : 'day:border-gray-200 day:text-gray-700 day:hover:border-gray-300 day:hover:bg-gray-100 border border-white/10 text-gray-200 hover:border-white/20 hover:bg-white/10'
                                   }`}
                                 >
@@ -4968,6 +4943,15 @@ export default function DesignerNav() {
                                     <Icon className="h-5 w-5 flex-shrink-0" />
                                     <span>{displayName}</span>
                                   </div>
+
+                                  {itemStatus === 'complete' && !isActive && (
+                                    <span
+                                      className="day:bg-emerald-50 day:text-emerald-700 inline-flex h-5 w-5 items-center justify-center rounded-full bg-emerald-400/15 text-xs font-bold text-emerald-300"
+                                      aria-label="Complete"
+                                    >
+                                      ✓
+                                    </span>
+                                  )}
 
                                   {itemCount && itemCount > 0 && (
                                     <span className="rounded-full bg-amber-500/20 px-2 py-0.5 text-xs font-medium text-amber-400">

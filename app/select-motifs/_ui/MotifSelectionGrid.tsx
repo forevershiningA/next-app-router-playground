@@ -6,6 +6,7 @@ import { useHeadstoneStore } from '#/lib/headstone-store';
 import { getMotifCategoryName } from '#/lib/motif-translations';
 import Loader from '#/ui/loader';
 import { MotifsData } from '../../../motifs_data.js';
+import DesignerPageHeading from '#/components/designer/DesignerPageHeading';
 
 type Motif = {
   id: string | number;
@@ -132,11 +133,13 @@ export default function MotifSelectionGrid({
         <div className="absolute inset-0 bg-gradient-to-br from-[#cfac6c]/5 via-transparent to-transparent" />
         <div className="relative mx-auto max-w-7xl px-6 py-12 lg:px-8">
           <div className="text-center">
-            <h1 className="font-serif text-4xl font-light tracking-tight text-white sm:text-5xl lg:text-6xl">
-              {selectedCategoryMotif
-                ? getMotifCategoryName(selectedCategoryMotif.name)
-                : 'Select Motifs'}
-            </h1>
+            <DesignerPageHeading
+              sectionTitle={
+                selectedCategoryMotif
+                  ? getMotifCategoryName(selectedCategoryMotif.name)
+                  : 'Select Motifs'
+              }
+            />
             <p className="mx-auto mt-4 max-w-3xl text-lg text-gray-300">
               {selectedCategoryMotif
                 ? 'Choose a motif to add to your memorial'
