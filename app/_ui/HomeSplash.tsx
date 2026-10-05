@@ -6,11 +6,7 @@ import { useEffect, useRef, useState } from 'react';
 import {
   ArrowRightIcon,
   Bars3Icon,
-  ComputerDesktopIcon,
-  CurrencyDollarIcon,
-  HeartIcon,
   MagnifyingGlassIcon,
-  PencilSquareIcon,
   XMarkIcon,
 } from '@heroicons/react/24/outline';
 import { homeFaqItems } from '#/app/_internal/home-content';
@@ -202,10 +198,7 @@ export default function HomeSplash() {
       </a>
 
       {/* Hero Section */}
-      <div
-        className="relative flex h-[min(680px,100svh)] max-h-[680px] min-h-[600px] flex-col overflow-hidden"
-        role="banner"
-      >
+      <div className="relative flex flex-col overflow-hidden" role="banner">
         {/* Responsive Header - Absolute top */}
         <header
           className="absolute top-0 right-0 left-0 z-50 px-4 py-3 sm:px-6 sm:py-4"
@@ -230,27 +223,6 @@ export default function HomeSplash() {
                 style={{ userSelect: 'none', pointerEvents: 'none' }}
               />
             </div>
-
-            <nav
-              className="absolute left-1/2 hidden -translate-x-1/2 text-center xl:block"
-              aria-label="Memorial product pages"
-            >
-              <p className="mb-1 font-semibold tracking-[0.18em] text-[#e3c887]">
-                You design it. We craft it.
-              </p>
-              <ul className="flex items-center justify-center gap-5 font-semibold whitespace-nowrap text-white/90">
-                {MEMORIAL_LINKS.map((link) => (
-                  <li key={link.href}>
-                    <Link
-                      href={link.href}
-                      className="transition-colors hover:text-[#f3d48f]"
-                    >
-                      {link.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </nav>
 
             <nav
               className="hidden shrink-0 items-center gap-2 xl:flex"
@@ -384,12 +356,12 @@ export default function HomeSplash() {
           aria-hidden="true"
         />
 
-        <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-grow flex-col justify-center px-4 pt-[150px] pb-14 sm:px-6 sm:pt-[145px] sm:pb-20 lg:px-8">
+        <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-col px-4 pt-[126px] pb-10 sm:px-6 sm:pt-[124px] sm:pb-12 lg:px-8">
           <div className="flex flex-col text-center">
             {/* Headline - Connect the live design to the crafted memorial */}
             <h1
               id="home-heading"
-              className="font-playfair-display order-1 !mb-0 scroll-mt-24 !pb-0 text-[2.35rem] leading-[1.08] tracking-[-0.025em] sm:text-6xl"
+              className="font-playfair-display order-1 !mb-0 scroll-mt-24 !pb-0 text-[1.9rem] leading-[1.12] tracking-[-0.025em] sm:text-[2.5rem]"
             >
               <span
                 className="mx-auto inline-block max-w-5xl font-semibold"
@@ -399,102 +371,44 @@ export default function HomeSplash() {
                     '0 2px 3px rgba(0,0,0,.72), 0 6px 28px rgba(0,0,0,.4)',
                 }}
               >
-                Custom Headstones, Grave Markers
+                Design Custom Headstones, Grave Markers
                 <br className="hidden lg:block" /> &amp; Memorial Plaques
               </span>
             </h1>
             <p
-              className="order-2 mx-auto mt-6 max-w-2xl text-base leading-7 font-normal text-pretty sm:text-xl sm:leading-8 md:mb-4"
+              className="order-2 mx-auto mt-4 max-w-2xl text-base leading-7 font-normal text-pretty sm:text-xl sm:leading-8"
               style={{
                 color: '#FFFFFF',
                 textShadow:
                   '0 2px 3px rgba(0,0,0,.72), 0 4px 18px rgba(0,0,0,.38)',
               }}
             >
-              Design a lasting memorial online.
-              <br />
-              Personalize every detail and preview it in 3D.
+              Personalize the stone, shape, inscription, and meaningful details.
+              Preview your memorial in 3D and see pricing as you design.
             </p>
 
-            <div className="relative z-20 order-3 mt-7 flex flex-col items-center gap-4">
-              <div className="flex w-full flex-col items-center justify-center gap-4 sm:flex-row">
-                <Link
-                  href="/select-product"
-                  prefetch={false}
-                  className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-sm bg-[#d0ad68] px-7 py-3.5 text-center text-sm font-semibold text-[#17120a] transition-colors hover:bg-[#e0c27f] sm:w-auto sm:px-10 sm:text-base"
-                  aria-label="Start designing a memorial in 3D"
-                  style={{ letterSpacing: '0.05em' }}
-                >
-                  Design Your Memorial in 3D
-                  <ArrowRightIcon
-                    className="relative top-px h-4 w-4 shrink-0"
-                    aria-hidden="true"
-                  />
-                </Link>
-                <Link
-                  href="#how-it-works"
-                  className="inline-flex min-h-12 w-full items-center justify-center rounded-sm border border-white/55 bg-black/15 px-7 py-3.5 text-center text-sm font-semibold text-white transition-colors hover:border-[#d0ad68] hover:bg-black/30 sm:w-auto sm:px-10 sm:text-base"
-                >
-                  How Our Memorial Designer Works
-                </Link>
-              </div>
+            <div className="relative z-20 order-3 mt-5 flex flex-col items-center gap-3">
+              <Link
+                href="/select-product"
+                prefetch={false}
+                className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-sm bg-[#d0ad68] px-7 py-3.5 text-center text-sm font-semibold text-[#17120a] transition-colors hover:bg-[#e0c27f] sm:w-auto sm:px-10 sm:text-base"
+                aria-label="Design your memorial"
+                style={{ letterSpacing: '0.05em' }}
+              >
+                Design Your Memorial
+                <ArrowRightIcon
+                  className="relative top-px h-4 w-4 shrink-0"
+                  aria-hidden="true"
+                />
+              </Link>
               <p className="text-center text-xs font-medium text-white/80 sm:text-sm">
-                Design online, share the proof, and review pricing before
-                ordering.
+                Review your design and pricing before ordering. No commitment
+                required.
               </p>
             </div>
           </div>
         </div>
       </div>
-
-      <section
-        className="day:border-stone-200 day:bg-[#f7f4ee] relative border-b border-[#d0ad68]/20 bg-[#0c0b0a]"
-        aria-label="Designer benefits"
-      >
-        <div className="mx-auto grid max-w-7xl grid-cols-1 px-6 sm:grid-cols-2 lg:grid-cols-4 lg:px-8">
-          {[
-            {
-              icon: ComputerDesktopIcon,
-              title: 'Design online in 3D',
-              description: 'See your memorial take shape as you create.',
-            },
-            {
-              icon: PencilSquareIcon,
-              title: 'Make every detail personal',
-              description: 'Choose words, photos, motifs, and materials.',
-            },
-            {
-              icon: CurrencyDollarIcon,
-              title: 'See pricing as you design',
-              description: 'Make informed choices before you move forward.',
-            },
-            {
-              icon: HeartIcon,
-              title: 'Crafting memorials since 2005',
-              description:
-                'Experience and support for every considered decision.',
-            },
-          ].map(({ icon: Icon, title, description }) => (
-            <div
-              key={title}
-              className="flex gap-4 border-b border-white/10 py-6 last:border-b-0 sm:border-r sm:px-5 sm:odd:pl-0 sm:nth-[2]:border-r-0 lg:border-b-0 lg:px-6 lg:nth-[2]:border-r lg:nth-[4]:border-r-0 lg:nth-[4]:pr-0"
-            >
-              <Icon
-                className="mt-0.5 h-7 w-7 shrink-0 text-[#cfac6c]"
-                aria-hidden="true"
-              />
-              <div>
-                <p className="day:text-gray-900 text-base leading-6 font-semibold text-white">
-                  {title}
-                </p>
-                <p className="day:text-gray-600 mt-1.5 text-sm leading-6 text-gray-400">
-                  {description}
-                </p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
 
       {/* Features Section - How It Works */}
       <section
@@ -504,10 +418,7 @@ export default function HomeSplash() {
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="grid gap-12 lg:grid-cols-[minmax(0,0.78fr)_minmax(0,1.22fr)] lg:items-center">
             <div>
-              <p className="day:text-amber-800 text-xs font-semibold tracking-[0.12em] text-[#d0ad68]">
-                Memorial design, made considered
-              </p>
-              <h2 className="day:text-stone-900 mt-4 max-w-2xl font-serif text-3xl leading-[1.16] text-pretty text-white sm:text-5xl">
+              <h2 className="day:text-stone-900 max-w-2xl font-serif text-3xl leading-[1.16] text-pretty text-white sm:text-5xl">
                 Design a Personalized Memorial Online in 3D
               </h2>
               <p className="day:text-amber-800 mt-6 text-sm font-semibold text-[#e3c887]">

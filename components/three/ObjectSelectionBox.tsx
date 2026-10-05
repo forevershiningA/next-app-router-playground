@@ -27,6 +27,8 @@ type Props = {
   maxSizeMm?: number;
   /** Show interactive resize handles for otherwise outline-only selections. */
   enableResizeHandles?: boolean;
+  /** Use the continuous blue image-style outline without implying resize. */
+  useImageSelectionStyle?: boolean;
   /** Update callback */
   onUpdate?: (data: {
     xPos?: number;
@@ -67,6 +69,7 @@ export default function SelectionBox({
   minSizeMm,
   maxSizeMm,
   enableResizeHandles = false,
+  useImageSelectionStyle = false,
   onUpdate,
   objectType = 'inscription',
   additionType,
@@ -99,7 +102,9 @@ export default function SelectionBox({
     objectType === 'motif' ||
     (objectType === 'addition' && additionType === 'application');
   const usesInscriptionSelectionStyle =
-    objectType === 'inscription' || enableResizeHandles;
+    objectType === 'inscription' ||
+    enableResizeHandles ||
+    useImageSelectionStyle;
   const usesSubtleOutlineRef = React.useRef(usesSubtleOutline);
   const isMotifRef = React.useRef(objectType === 'motif');
   React.useEffect(() => {
@@ -112,8 +117,9 @@ export default function SelectionBox({
   // inscription. Keep the older viewfinder outline for passive selections.
   const usesTransformOutline =
     !usesInscriptionSelectionStyle && usesSubtleOutline;
-  const shouldShowHandles =
-    objectType === 'inscription' || enableResizeHandles || !usesSubtleOutline;
+  const shouldShowHandles = useImageSelectionStyle
+    ? enableResizeHandles
+    : objectType === 'inscription' || enableResizeHandles || !usesSubtleOutline;
   const shouldShowOutline = true;
   // A gold outline remains legible on both the light canvas and dark granite.
   const outlineColor = usesInscriptionSelectionStyle

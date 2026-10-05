@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-10-04
+**Last Updated:** 2026-10-05
 
 **Status entry order:** Add new dated status entries immediately after the table of contents, before the existing status entries. Keep status entries in reverse chronological order (newest first); do not append them to the end of this file.
 **Tech Stack:** Next.js 15.5.26, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots), **Vitest 4.1.8** (unit tests), **Playwright 1.59.1** (E2E tests)
@@ -123,6 +123,42 @@
 112. [October 3 Home Page Design Consistency and Hero Tuning](#current-status-2026-10-03--home-page-design-consistency-and-hero-tuning)
 113. [October 3 Designer Flow, Shape Categories, Units, and Display Currencies](#current-status-2026-10-03--designer-flow-shape-categories-units-and-display-currencies)
 114. [October 4 Currency Symbols, Locale Defaults, and Automatic Units](#current-status-2026-10-04--currency-symbols-locale-defaults-and-automatic-units)
+115. [October 5 Fixed Addition Sizes, Designer Control Layout, and Home Hero Simplification](#current-status-2026-10-05--fixed-addition-sizes-designer-control-layout-and-home-hero-simplification)
+
+---
+
+## Current Status (2026-10-05) — Fixed Addition Sizes, Designer Control Layout, and Home Hero Simplification
+
+### Addition assets and catalog sizes
+
+- `components/three/AdditionModel.tsx` resolves the known legacy Biondan exports that ship `diffuseMap.webp` instead of `colorMap.webp`. The explicit directory set currently includes `1539`, `1774`, `2413`, `2438`, `4814`, `4816`, `4841`, and `4866`; this fixes the Croce PAR (`4816`) texture-loading error without masking unrelated missing assets.
+- `scripts/generate-addition-sizes.mjs` extracts purchasable Addition dimensions from the source XML and writes `app/_internal/_addition-sizes.generated.json`. Regenerate this file when Addition XML dimensions change instead of maintaining a second hand-written size list.
+- `app/_internal/_additions-loader.ts` merges the generated sizes into the runtime catalog. At the time of generation, 73 of 82 catalog Additions had XML or fallback size variants; nine did not expose source dimensions.
+- Addition dimensions are fixed catalog variants. The renderer deliberately ignores stale or arbitrary `offset.scale` values and renders the selected `sizeVariant` at `scale: 1`. Do not restore continuous free scaling for Additions.
+
+### Addition selection and editing controls
+
+- Every selected Addition uses the same continuous blue selection outline as uploaded Images through `useImageSelectionStyle` in `components/three/ObjectSelectionBox.tsx`.
+- A one-size Addition shows the selection outline without resize handles. An Addition with two or more catalog variants shows drag handles; dragging snaps to the nearest available XML height and updates `sizeVariant`, never an arbitrary intermediate scale.
+- The Size control in the edit panel and the canvas drag handles share the same `sizeVariant` state, so changing either keeps the other synchronized.
+- Addition and Motif edit panels in `components/designer/navigation/DesignerNav.tsx`, plus the Emblem edit panel in `components/designer/panels/EmblemOverlayPanel.tsx`, place actions such as Duplicate and Delete directly after the controls. The outer panel content scrolls as one unit so actions do not sit below a large empty region or disappear at the bottom of the panel.
+
+### Designer day-mode polish
+
+- Measurement-unit labels use explicit dark day-mode text so `mm` remains legible on white controls.
+- The Flower Pots control no longer turns into a white-on-white button in day mode; its hover state uses a warm cream background with dark text.
+
+### Home page Hero direction
+
+- `app/_ui/HomeSplash.tsx` now leads with `Design Custom Headstones, Grave Markers & Memorial Plaques`, a single primary CTA (`Design Your Memorial`), and concise copy explaining personalization, the 3D preview, and visible pricing.
+- The Hero is content-height rather than viewport-height, uses tighter vertical padding, and has a smaller H1 (`1.9rem` on mobile and `2.5rem` from `sm`).
+- The secondary Hero CTA, the desktop product-link menu, `You design it. We craft it.`, and the separate benefits-icon bar below the Hero were intentionally removed to reduce distraction and excess height. Product links remain available in the mobile menu.
+- The eyebrow `Memorial design, made considered` above the following 3D-design section was also removed, together with its leftover heading margin.
+
+### Validation notes
+
+- The Addition and designer-control changes passed TypeScript checking during implementation.
+- The final Home page edits and this status update were checked with Prettier and `git diff --check`; the existing HomeSplash ref-cleanup ESLint warning is unrelated to these changes.
 
 ---
 

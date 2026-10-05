@@ -1164,8 +1164,8 @@ export default function DesignerNav() {
     return (
       <div className="flex h-full min-h-0 flex-col gap-3">
         {hasActiveAddition ? (
-          <div className="flex min-h-[calc(44dvh-128px)] flex-1 flex-col gap-3 md:min-h-0">
-            <div className="custom-scrollbar flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto pr-1">
+          <div className="custom-scrollbar flex min-h-[calc(44dvh-128px)] flex-1 flex-col gap-3 overflow-y-auto pr-1 md:min-h-0">
+            <div className="flex flex-col gap-3">
               {activeAddition && (
                 <div className="day:text-gray-900 px-1 pt-1 text-sm font-semibold text-white">
                   {activeAdditionDisplayName}
@@ -1184,6 +1184,7 @@ export default function DesignerNav() {
                       setAdditionOffset(selectedAdditionId, {
                         ...activeAdditionOffset,
                         sizeVariant: Number(e.target.value),
+                        scale: 1,
                       });
                     }}
                     className="day:border-gray-300 day:bg-gray-100 day:text-gray-900 min-w-0 flex-1 rounded-md border border-white/10 bg-[#121212] px-3 py-2 text-sm font-semibold text-white outline-none focus:border-[#D7B356]"
@@ -1450,13 +1451,13 @@ export default function DesignerNav() {
     return (
       <div className="flex h-full flex-col gap-4">
         {hasActiveMotif ? (
-          <div className="flex min-h-[calc(44dvh-128px)] flex-1 flex-col gap-3 md:min-h-0">
+          <div className="custom-scrollbar flex min-h-[calc(44dvh-128px)] flex-1 flex-col gap-3 overflow-y-auto pr-1 md:min-h-0">
             <div className="day:text-gray-900 px-1 pt-1 text-sm font-semibold text-white">
               {motifPriceModel?.priceModel.name ??
                 motifPriceModel?.name ??
                 'Motif'}
             </div>
-            <div className="custom-scrollbar flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto pr-1">
+            <div className="flex flex-col gap-3">
               <div className="order-3 space-y-2 px-1 pt-1">
                 <div className="flex items-center justify-between gap-3">
                   <label className="day:text-gray-800 text-sm font-semibold text-slate-100">
@@ -2536,13 +2537,13 @@ export default function DesignerNav() {
       `flex-1 rounded-md border px-3 py-1.5 text-sm font-medium transition-colors ${
         isActive
           ? 'day:border-[#c79c47] day:bg-[#dfb858] day:text-[#1d1a17] day:shadow-[#a77d32]/20 border-white/20 bg-white/[0.12] text-white shadow-inner shadow-black/20'
-          : 'day:border-gray-300 day:text-gray-600 day:hover:bg-white border-white/12 text-white/60 hover:border-white/25 hover:bg-white/[0.06] hover:text-white'
+          : 'day:border-gray-300 day:text-gray-600 day:hover:bg-[#f3ead8] day:hover:text-gray-900 border-white/12 text-white/60 hover:border-white/25 hover:bg-white/[0.06] hover:text-white'
       }`;
     const headstoneStyleTabClass = (isActive: boolean) =>
       `flex-1 rounded-md border px-3 py-1.5 text-sm font-semibold transition-colors ${
         isActive
           ? 'border-[#e4c778] bg-[#d7b356] text-[#1a1308] shadow-[inset_0_1px_0_rgba(255,255,255,0.35)]'
-          : 'day:border-gray-300 day:text-gray-600 day:hover:bg-white border-white/12 text-white/60 hover:border-white/25 hover:bg-white/[0.06] hover:text-white'
+          : 'day:border-gray-300 day:text-gray-600 day:hover:bg-[#f3ead8] day:hover:text-gray-900 border-white/12 text-white/60 hover:border-white/25 hover:bg-white/[0.06] hover:text-white'
       }`;
     const dimensionTabClass = (isActive: boolean) =>
       `relative flex-1 px-1 py-2 text-sm font-semibold transition-colors ${
@@ -3028,7 +3029,7 @@ export default function DesignerNav() {
                       />
                     </svg>
                   </button>
-                  <span className="text-sm font-semibold text-white/70">
+                  <span className="day:text-gray-600 text-sm font-semibold text-white/70">
                     {lengthUnit}
                   </span>
                 </div>
@@ -3140,7 +3141,7 @@ export default function DesignerNav() {
                       />
                     </svg>
                   </button>
-                  <span className="text-sm font-semibold text-white/70">
+                  <span className="day:text-gray-600 text-sm font-semibold text-white/70">
                     {lengthUnit}
                   </span>
                 </div>
@@ -3290,7 +3291,7 @@ export default function DesignerNav() {
                     />
                   </svg>
                 </button>
-                <span className="text-sm font-semibold text-white/70">
+                <span className="day:text-gray-600 text-sm font-semibold text-white/70">
                   {lengthUnit}
                 </span>
               </div>
@@ -3405,7 +3406,7 @@ export default function DesignerNav() {
                     />
                   </svg>
                 </button>
-                <span className="text-sm font-semibold text-white/70">
+                <span className="day:text-gray-600 text-sm font-semibold text-white/70">
                   {lengthUnit}
                 </span>
               </div>
@@ -3503,7 +3504,7 @@ export default function DesignerNav() {
                       />
                     </svg>
                   </button>
-                  <span className="text-sm font-semibold text-white/70">
+                  <span className="day:text-gray-600 text-sm font-semibold text-white/70">
                     {lengthUnit}
                   </span>
                 </div>

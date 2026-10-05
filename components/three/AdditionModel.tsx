@@ -10,7 +10,6 @@ import type { HeadstoneAPI } from './headstone/SvgHeadstone';
 import { data } from '#/app/_internal/_data';
 import { useRouter, usePathname } from 'next/navigation';
 import SelectionBox from './ObjectSelectionBox';
-import RotatingBoxOutline from './RotatingBoxOutline';
 import {
   clampDepthWithinRange,
   clampValue,
@@ -24,6 +23,20 @@ import {
 } from '#/lib/addition-utils';
 
 const MM = 0.001; // meters per millimeter
+
+// A small group of legacy Biondan exports uses the original Blender-style
+// `diffuseMap` filename. Resolve the known asset name before useTexture so a
+// missing colorMap request cannot reject Suspense and trip the scene boundary.
+const DIFFUSE_MAP_ADDITION_DIRS = new Set([
+  '1539',
+  '1774',
+  '2413',
+  '2438',
+  '4814',
+  '4816',
+  '4841',
+  '4866',
+]);
 
 // Addition positioning constants
 const DEFAULT_POSITIONS = {
@@ -82,7 +95,6 @@ type AdditionSizeVariant = {
   height: number;
   depth: number;
   availability?: boolean;
-  retailPrice?: number;
 };
 
 export default function AdditionModel({
@@ -185,7 +197,6 @@ function AdditionModelInner({
   const selectedAdditionId = useHeadstoneStore((s) => s.selectedAdditionId);
   const setAdditionOffset = useHeadstoneStore((s) => s.setAdditionOffset);
   const setActivePanel = useHeadstoneStore((s) => s.setActivePanel);
-  const selectedPrimary = useHeadstoneStore((s) => s.selected);
   const additionKind: AdditionKind =
     (addition.type as AdditionKind) ?? 'application';
   const ledgerWidthMm = useHeadstoneStore((s) => s.ledgerWidthMm);
@@ -226,11 +237,13 @@ function AdditionModelInner({
   const ref = React.useRef<THREE.Group>(null!);
   const [dragging, setDragging] = React.useState(false);
   const [showCenterGuide, setShowCenterGuide] = React.useState(false);
-  const [showHorizontalCenterGuide, setShowHorizontalCenterGuide] = React.useState(false);
+  const [showHorizontalCenterGuide, setShowHorizontalCenterGuide] =
+    React.useState(false);
   const centerGuideProgressRef = React.useRef(0);
   const horizontalGuideProgressRef = React.useRef(0);
   const [centerGuideProgress, setCenterGuideProgress] = React.useState(0);
-  const [horizontalGuideProgress, setHorizontalGuideProgress] = React.useState(0);
+  const [horizontalGuideProgress, setHorizontalGuideProgress] =
+    React.useState(0);
 
   useFrame((state, delta) => {
     const nextCenter = THREE.MathUtils.damp(
@@ -261,16 +274,18 @@ function AdditionModelInner({
   // K2254 was supplied only as a legacy 3DS/MAX asset, so there is no GLB at
   // its catalog path. Use the matching Tedesche GLB until its own model is
   // exported, while retaining K2254's XML dimensions and price elsewhere.
-  const modelFile =
-    addition.id === 'K2254' ? '2213/2213.glb' : addition.file;
+  const modelFile = addition.id === 'K2254' ? '2213/2213.glb' : addition.file;
 
   // Load GLB and its matching texture path.
   const glbPath = `/additions/${modelFile}`;
   const dirNum = modelFile.split('/')[0];
+  const textureFile = DIFFUSE_MAP_ADDITION_DIRS.has(dirNum)
+    ? 'diffuseMap.webp'
+    : 'colorMap.webp';
 
   // Load GLB and texture - these must be called unconditionally
   const gltf = useGLTF(glbPath);
-  const colorMap = useTexture(`/additions/${dirNum}/colorMap.webp`);
+  const colorMap = useTexture(`/additions/${dirNum}/${textureFile}`);
 
   // These must come after other hooks but before conditional returns
   const raycaster = React.useMemo(() => new THREE.Raycaster(), []);
@@ -360,32 +375,33 @@ function AdditionModelInner({
     scene.updateMatrixWorld(true);
     return new THREE.Box3().setFromObject(scene);
   }, [scene, id]);
+  const sizeVariants = React.useMemo(
+    () => (addition.sizes ?? []) as AdditionSizeVariant[],
+    [addition.sizes],
+  );
   const selectedSizeData = React.useMemo(() => {
-    const variants = addition.sizes ?? [];
-    if (!variants.length) return null;
+    if (!sizeVariants.length) return null;
     const variant = Math.max(1, Math.round(storedOffset?.sizeVariant ?? 1));
-    return variants[variant - 1] ?? variants[0];
-  }, [addition.sizes, storedOffset?.sizeVariant]);
-  const applicationSizeRange = React.useMemo(() => {
-    if (additionKind !== 'application' || !addition.sizes?.length) return null;
-    const heights = (addition.sizes as AdditionSizeVariant[]).map(
-      (variant) => variant.height,
-    );
-    return {
-      min: Math.min(...heights),
-      max: Math.max(...heights),
-    };
-  }, [addition.sizes, additionKind]);
+    return sizeVariants[variant - 1] ?? sizeVariants[0];
+  }, [sizeVariants, storedOffset?.sizeVariant]);
+  const hasMultipleSizeVariants = sizeVariants.length > 1;
+  const minVariantHeightMm = hasMultipleSizeVariants
+    ? Math.min(...sizeVariants.map((variant) => variant.height))
+    : undefined;
+  const maxVariantHeightMm = hasMultipleSizeVariants
+    ? Math.max(...sizeVariants.map((variant) => variant.height))
+    : undefined;
 
   // Compute headstone bounds and default offsets early so helper hooks can use them
   const stone = headstone?.mesh?.current as THREE.Mesh | null;
   const prefersBaseSurface =
     surface !== 'ledger' &&
     (additionKind === 'statue' || additionKind === 'vase');
-  const [sceneBaseMesh, setSceneBaseMesh] =
-    React.useState<THREE.Mesh | null>(null);
+  const [sceneBaseMesh, setSceneBaseMesh] = React.useState<THREE.Mesh | null>(
+    null,
+  );
   const resolvedBaseMesh = React.useMemo(
-    () => (surface === 'base' ? stone : baseMeshRef ?? sceneBaseMesh),
+    () => (surface === 'base' ? stone : (baseMeshRef ?? sceneBaseMesh)),
     [surface, stone, baseMeshRef, sceneBaseMesh],
   );
   React.useEffect(() => {
@@ -423,13 +439,7 @@ function AdditionModelInner({
       cancelled = true;
       clearInterval(interval);
     };
-  }, [
-    threeScene,
-    baseDimensionsKey,
-    prefersBaseSurface,
-    surface,
-    baseMeshRef,
-  ]);
+  }, [threeScene, baseDimensionsKey, prefersBaseSurface, surface, baseMeshRef]);
   const bbox = React.useMemo(() => {
     if (!stone) return null;
     if (!stone.geometry.boundingBox) stone.geometry.computeBoundingBox();
@@ -614,12 +624,14 @@ function AdditionModelInner({
   const dominantDimension = Math.max(size.x, size.y, size.z);
   const modelHeight = Math.max(1e-6, dominantDimension);
   const auto = targetHeightInSurfaceUnits / modelHeight;
-  const user = Math.max(0.05, Math.min(5, offset.scale ?? 1));
+  // Catalog dimensions are purchasable variants, not resize limits. Ignore
+  // stale free-scale values for these products and render the selected XML
+  // size exactly.
+  const user = 1;
   const finalScale = auto * user;
   const wantsFullDepth =
     (isBaseSurface || isLedgerSurface) && additionKind !== 'application';
-  const wantsBaseAnchorMargin =
-    isBaseSurface && additionKind !== 'application';
+  const wantsBaseAnchorMargin = isBaseSurface && additionKind !== 'application';
   const depthScale =
     additionKind === 'application'
       ? APPLICATION_DEPTH_SCALE
@@ -973,7 +985,17 @@ function AdditionModelInner({
       if (!data) return;
 
       let { clamped } = data;
-      const { centerX, centerY, minX, maxX, minY, maxY, minZ, maxZ, targetMesh } = data;
+      const {
+        centerX,
+        centerY,
+        minX,
+        maxX,
+        minY,
+        maxY,
+        minZ,
+        maxZ,
+        targetMesh,
+      } = data;
 
       if (dragDeltaRef.current) {
         clamped = clamped.clone();
@@ -988,7 +1010,8 @@ function AdditionModelInner({
       }
 
       if (additionKind === 'application') {
-        const unitsPerMeter = Math.abs(headstone?.unitsPerMeter ?? 1000) || 1000;
+        const unitsPerMeter =
+          Math.abs(headstone?.unitsPerMeter ?? 1000) || 1000;
         const centerSnapThreshold = Math.max(
           (8 * unitsPerMeter) / 1000,
           (maxX - minX) * 0.018,
@@ -997,7 +1020,8 @@ function AdditionModelInner({
           (8 * unitsPerMeter) / 1000,
           (maxY - minY) * 0.018,
         );
-        const isNearCenter = Math.abs(clamped.x - centerX) <= centerSnapThreshold;
+        const isNearCenter =
+          Math.abs(clamped.x - centerX) <= centerSnapThreshold;
         const isNearHorizontalCenter =
           Math.abs(clamped.y - centerY) <= horizontalSnapThreshold;
 
@@ -1322,17 +1346,10 @@ function AdditionModelInner({
     setAdditionOffset(id, { footprintWidth: width });
   }, [scaledBounds.width, offset.footprintWidth, setAdditionOffset, id]);
 
-  // Applications get blue selection box with handles
-  // Statues/Vases get simple white corner outlines like headstone
-  const showApplicationBox =
-    isSelected &&
-    additionKind === 'application' &&
-    scaledBounds.width > 0 &&
-    scaledBounds.height > 0;
-  const showCornerOutline =
-    isSelected &&
-    selectedPrimary !== 'base' &&
-    (additionKind === 'statue' || additionKind === 'vase');
+  // Every catalog addition uses the same passive, image-style selection
+  // outline. Fixed-size products must not suggest free resizing.
+  const showAdditionBox =
+    isSelected && scaledBounds.width > 0 && scaledBounds.height > 0;
 
   // Debug logging
 
@@ -1357,8 +1374,7 @@ function AdditionModelInner({
   const ledgerTopY_actual = stone.position.y + stone.scale.y / 2;
 
   const desiredY = centerY - displayOffsetY;
-  const baseYPosition =
-    isBaseSurface && baseTopY != null ? baseTopY : desiredY;
+  const baseYPosition = isBaseSurface && baseTopY != null ? baseTopY : desiredY;
   const finalY =
     prefersBaseSurface && offset.targetSurface === 'base'
       ? baseYPosition
@@ -1412,13 +1428,15 @@ function AdditionModelInner({
               points={[
                 new THREE.Vector3(
                   centerX - groupPosition[0],
-                  centerY - groupPosition[1] -
+                  centerY -
+                    groupPosition[1] -
                     (bbox.max.y - bbox.min.y) * 0.48 * centerGuideProgress,
                   0.003,
                 ),
                 new THREE.Vector3(
                   centerX - groupPosition[0],
-                  centerY - groupPosition[1] +
+                  centerY -
+                    groupPosition[1] +
                     (bbox.max.y - bbox.min.y) * 0.48 * centerGuideProgress,
                   0.003,
                 ),
@@ -1437,13 +1455,15 @@ function AdditionModelInner({
             <Line
               points={[
                 new THREE.Vector3(
-                  centerX - groupPosition[0] -
+                  centerX -
+                    groupPosition[0] -
                     (bbox.max.x - bbox.min.x) * 0.48 * horizontalGuideProgress,
                   centerY - groupPosition[1],
                   0.003,
                 ),
                 new THREE.Vector3(
-                  centerX - groupPosition[0] +
+                  centerX -
+                    groupPosition[0] +
                     (bbox.max.x - bbox.min.x) * 0.48 * horizontalGuideProgress,
                   centerY - groupPosition[1],
                   0.003,
@@ -1472,8 +1492,8 @@ function AdditionModelInner({
           <primitive object={scene} />
         </group>
 
-        {/* Selection box with resize and rotation handles - for applications only */}
-        {showApplicationBox && (
+        {/* Passive image-style selection outline for every fixed-size addition. */}
+        {showAdditionBox && (
           <SelectionBox
             objectId={id}
             position={new THREE.Vector3(0, 0, 0.002)}
@@ -1481,48 +1501,32 @@ function AdditionModelInner({
             rotation={0}
             unitsPerMeter={headstone.unitsPerMeter}
             currentSizeMm={targetHeightMm * (offset.scale ?? 1)}
-            minSizeMm={applicationSizeRange?.min ?? targetHeightMm * 0.05}
-            maxSizeMm={applicationSizeRange?.max ?? targetHeightMm * 5}
+            minSizeMm={minVariantHeightMm ?? targetHeightMm}
+            maxSizeMm={maxVariantHeightMm ?? targetHeightMm}
             objectType="addition"
             additionType={additionKind}
-            enableResizeHandles
+            useImageSelectionStyle
+            enableResizeHandles={hasMultipleSizeVariants}
             animateOnShow
             animationDuration={520}
             onUpdate={(data) => {
-              if (data.sizeMm !== undefined) {
-                const variants = (addition.sizes ?? []) as AdditionSizeVariant[];
-                if (variants.length > 0) {
-                  const nextIndex = variants.reduce(
-                    (closestIndex, variant, variantIndex) =>
-                      Math.abs(variant.height - data.sizeMm!) <
-                      Math.abs(variants[closestIndex].height - data.sizeMm!)
-                        ? variantIndex
-                        : closestIndex,
-                    0,
-                  );
-                  const nextVariant = nextIndex + 1;
-                  if (
-                    offset.sizeVariant !== nextVariant ||
-                    (offset.scale ?? 1) !== 1
-                  ) {
-                    setAdditionOffset(id, {
-                      ...offset,
-                      sizeVariant: nextVariant,
-                      scale: 1,
-                    });
-                  }
-                } else {
-                  const nextScale = data.sizeMm / targetHeightMm;
+              if (data.sizeMm !== undefined && hasMultipleSizeVariants) {
+                const nextIndex = sizeVariants.reduce(
+                  (closestIndex, variant, variantIndex) =>
+                    Math.abs(variant.height - data.sizeMm!) <
+                    Math.abs(sizeVariants[closestIndex].height - data.sizeMm!)
+                      ? variantIndex
+                      : closestIndex,
+                  0,
+                );
+                const nextVariant = nextIndex + 1;
+                if (offset.sizeVariant !== nextVariant) {
                   setAdditionOffset(id, {
                     ...offset,
-                    scale: Math.max(0.05, Math.min(5, nextScale)),
+                    sizeVariant: nextVariant,
+                    scale: 1,
                   });
                 }
-              }
-              if (data.scaleFactor !== undefined) {
-                const newScale = (offset.scale ?? 1) * data.scaleFactor;
-                const clampedScale = Math.max(0.05, Math.min(5, newScale));
-                setAdditionOffset(id, { ...offset, scale: clampedScale });
               }
               if (data.rotationDeg !== undefined) {
                 const newRotation =
@@ -1532,25 +1536,7 @@ function AdditionModelInner({
             }}
           />
         )}
-
-        {/* Simple white corner outline - for statues and vases (like headstone) */}
-        {showCornerOutline && (
-          <RotatingBoxOutline
-            key={`${id}-${depthScale}-outline`}
-            targetRef={ref}
-            visible={true}
-            color="#ffffff"
-            pad={0.002}
-            depthPad={0.002 * depthScale}
-            through={false}
-            lineLength={0.15}
-            bottomLift={0.025}
-            animateOnShow
-            animationDuration={420}
-          />
-        )}
       </group>
     </>
   );
 }
-

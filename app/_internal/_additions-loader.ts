@@ -1,5 +1,6 @@
 // Load additions with size data
 import type { Addition } from './_data';
+import generatedAdditionSizes from './_addition-sizes.generated.json';
 
 // Size data for common additions (extracted from XML)
 const FALLBACK_SIZES: Record<
@@ -87,6 +88,33 @@ const FALLBACK_SIZES: Record<
       availability: true,
       wholesalePrice: 61.87,
       retailPrice: 160.86,
+      notes: '',
+    },
+  ],
+  // motifs-biondan.xml: Croce PAR is sold only in these two fixed sizes.
+  B4831: [
+    {
+      variant: 1,
+      code: 'B4831',
+      width: 125,
+      height: 300,
+      depth: 20,
+      weight: 0,
+      availability: true,
+      wholesalePrice: 134.65,
+      retailPrice: 350.09,
+      notes: '',
+    },
+    {
+      variant: 2,
+      code: 'B4816',
+      width: 160,
+      height: 400,
+      depth: 20,
+      weight: 0,
+      availability: true,
+      wholesalePrice: 198.72,
+      retailPrice: 516.67,
       notes: '',
     },
   ],
@@ -913,6 +941,9 @@ const existingAdditions: Partial<Addition>[] = [
 export function loadAdditionsWithSizes(): Addition[] {
   return existingAdditions.map((existing) => {
     const fallbackSize = FALLBACK_SIZES[existing.id!];
+    const generatedSizes = generatedAdditionSizes[
+      existing.id! as keyof typeof generatedAdditionSizes
+    ] as Addition['sizes'] | undefined;
 
     return {
       id: existing.id!,
@@ -921,7 +952,7 @@ export function loadAdditionsWithSizes(): Addition[] {
       type: existing.type || 'application',
       category: existing.category!,
       file: existing.file,
-      sizes: fallbackSize || [],
+      sizes: fallbackSize || generatedSizes || [],
     };
   });
 }

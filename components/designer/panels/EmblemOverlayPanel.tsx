@@ -100,22 +100,6 @@ export default function EmblemOverlayPanel() {
           </span>
         </div>
 
-        {/* Actions */}
-        <div className="flex space-x-2">
-          <button
-            className="day:border-[#c99a3e] day:bg-[#f6efe3] day:text-[#795814] day:hover:bg-[#eddfc5] flex-1 cursor-pointer rounded-lg border border-[#D7B356]/60 bg-[#D7B356]/15 px-3 py-2 text-sm font-medium text-[#F2D58B] transition-colors hover:bg-[#D7B356]/25"
-            onClick={handleDuplicate}
-          >
-            Duplicate
-          </button>
-          <button
-            className="day:border-red-300 day:bg-red-50 day:text-red-700 day:hover:bg-red-100 flex-1 cursor-pointer rounded-lg border border-red-500/60 bg-red-600 px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-red-700"
-            onClick={handleDelete}
-          >
-            Delete
-          </button>
-        </div>
-
         {/* Size slider (fixed sizes) */}
         <TailwindSlider
           label={`Size ${formatDimensionPair(activeOffset.widthMm ?? 0, activeOffset.heightMm ?? 0, unitSystem)}`}
@@ -158,6 +142,22 @@ export default function EmblemOverlayPanel() {
             onClick={() => updateOffset({ flipY: !activeOffset.flipY })}
           >
             Flip Y
+          </button>
+        </div>
+
+        {/* Actions follow the controls so they stay visible without a large spacer. */}
+        <div className="day:border-gray-200 flex space-x-2 border-t border-white/10 pt-3">
+          <button
+            className="day:border-[#c99a3e] day:bg-[#f6efe3] day:text-[#795814] day:hover:bg-[#eddfc5] flex-1 cursor-pointer rounded-lg border border-[#D7B356]/60 bg-[#D7B356]/15 px-3 py-2 text-sm font-medium text-[#F2D58B] transition-colors hover:bg-[#D7B356]/25"
+            onClick={handleDuplicate}
+          >
+            Duplicate
+          </button>
+          <button
+            className="day:border-red-300 day:bg-red-50 day:text-red-700 day:hover:bg-red-100 flex-1 cursor-pointer rounded-lg border border-red-500/60 bg-red-600 px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-red-700"
+            onClick={handleDelete}
+          >
+            Delete
           </button>
         </div>
       </div>
