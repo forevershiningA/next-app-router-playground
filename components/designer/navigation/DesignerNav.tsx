@@ -3,6 +3,7 @@
 import React, { useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import * as THREE from 'three';
+import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import {
@@ -3553,7 +3554,7 @@ export default function DesignerNav() {
   return (
     <nav
       ref={navRef}
-      className="day:from-[#f4f1eb] day:via-[#f4f1eb] day:to-[#e7ded0] day:text-[#1d1a17] fs-designer-nav flex h-full min-h-0 flex-col overflow-hidden bg-gradient-to-br from-[#3d2817] via-[#2a1f14] to-[#1a1410] text-white"
+      className="day:bg-[#eee9df] day:text-[#1d1a17] fs-designer-nav flex h-full min-h-0 flex-col overflow-hidden bg-[#1d1a17] text-white"
     >
       {/* Full-Screen Panel Overlay */}
       {shouldShowFullscreenPanel ? (
@@ -3561,10 +3562,10 @@ export default function DesignerNav() {
           {/* Panel Header — desktop only. On mobile the step header floats over
               the canvas via a portal (see mobile step-header overlay below) so
               the bottom sheet holds just the controls. */}
-          <div className="day:border-[#ddd2c2] day:bg-[#f4f1eb] relative hidden border-b border-white/10 bg-[#1b1511] px-5 py-2.5 md:block md:py-3">
+          <div className="day:border-[#cfc5b7] day:bg-[#eee9df] relative hidden border-b border-white/10 bg-[#1d1a17] px-5 py-3 md:block">
             {/* Row 1: Guided Step label + step badge */}
             <div className="mb-1 flex items-center justify-center gap-2.5 md:mb-2">
-              <p className="day:text-[#9a876b] font-playfair-display text-xs tracking-[0.35em] text-[#aaaaaa] italic">
+              <p className="day:text-[#756c62] text-[11px] tracking-[0.08em] text-white/50">
                 Guided Step
               </p>
               {currentPanelIndex >= 0 && (
@@ -3580,21 +3581,16 @@ export default function DesignerNav() {
               )}
             </div>
             {/* Row 2: Section title centered */}
-            <h2 className="day:text-gray-900 my-2 text-center font-serif text-xl font-light tracking-tight text-white md:my-5 md:text-3xl">
+            <h2 className="day:text-[#1d1a17] my-4 text-center font-serif text-3xl font-normal tracking-[-0.02em] text-white">
               {fullscreenPanelTitle}
             </h2>
-            {/* Fancy divider */}
-            <div className="my-2 flex items-center gap-3">
-              <div className="to-primary/40 h-px flex-1 bg-gradient-to-r from-transparent via-white/20" />
-              <div className="bg-primary/50 h-1 w-1 rotate-45" />
-              <div className="to-primary/40 h-px flex-1 bg-gradient-to-l from-transparent via-white/20" />
-            </div>
+            <div className="day:bg-[#cfc5b7] my-3 h-px bg-white/10" />
             {/* Row 3: Menu left, Prev/Next right */}
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <button
                   onClick={handleBackToMenu}
-                  className="day:border-[#ddd2c2] day:bg-[#fbf9f5] day:text-[#302719] day:hover:border-[#cdbb9f] day:hover:bg-[#eee6d9] day:hover:text-[#1d1a17] inline-flex items-center gap-1.5 rounded-full border border-white/30 bg-white/10 px-3 py-1.5 text-xs font-medium text-white/80 transition-colors duration-200 hover:border-white/50 hover:bg-white/15 hover:text-white"
+                  className="day:border-[#bdb4a6] day:bg-white/25 day:text-[#302719] day:hover:border-[#9a742f] day:hover:bg-white/55 inline-flex items-center gap-1.5 rounded-sm border border-white/20 bg-white/[0.06] px-3 py-1.5 text-xs font-medium text-white/80 transition-colors hover:border-[#cfac6c]/70 hover:text-white"
                 >
                   <svg
                     className="h-3 w-3"
@@ -3636,7 +3632,7 @@ export default function DesignerNav() {
                       ? getPanelDisplayName(prevPanelSlug)
                       : undefined
                   }
-                  className="day:border-[#ddd2c2] day:bg-[#fbf9f5] day:text-[#302719] day:hover:border-[#cdbb9f] day:hover:bg-[#eee6d9] day:hover:text-[#1d1a17] inline-flex items-center gap-1.5 rounded-full border border-white/30 bg-white/10 px-3 py-1.5 text-xs font-medium text-white/80 transition-colors duration-200 hover:border-white/50 hover:bg-white/15 hover:text-white disabled:cursor-not-allowed disabled:opacity-30"
+                  className="day:border-[#bdb4a6] day:bg-white/25 day:text-[#302719] day:hover:border-[#9a742f] day:hover:bg-white/55 inline-flex items-center gap-1.5 rounded-sm border border-white/20 bg-white/[0.06] px-3 py-1.5 text-xs font-medium text-white/80 transition-colors hover:border-[#cfac6c]/70 hover:text-white disabled:cursor-not-allowed disabled:opacity-30"
                 >
                   <svg
                     className="h-3 w-3"
@@ -3663,7 +3659,7 @@ export default function DesignerNav() {
                       ? 'Add the cropped image to the headstone before continuing'
                       : nextPanelTitle
                   }
-                  className="animate-guided-next-gold-flash day:border-[#cdbb9f] day:bg-[#eee6d9] day:text-[#302719] day:hover:border-[#a77d32] day:hover:bg-[#e5d7c1] day:hover:text-[#1d1a17] inline-flex items-center gap-1.5 rounded-full border border-white/30 bg-white/10 px-3 py-1.5 text-xs font-medium text-white/80 transition-colors duration-200 hover:border-white/50 hover:bg-white/15 hover:text-white disabled:cursor-not-allowed disabled:opacity-30"
+                  className="animate-guided-next-gold-flash day:border-[#1d1a17] day:bg-[#1d1a17] day:text-white day:hover:bg-[#3a332c] inline-flex items-center gap-1.5 rounded-sm border border-[#cfac6c]/70 bg-transparent px-3 py-1.5 text-xs font-semibold text-[#f0d89f] transition-colors hover:bg-white/[0.06] disabled:cursor-not-allowed disabled:opacity-30"
                 >
                   {isImageCropActive ? 'Finish Crop First' : 'Next'}
                   <svg
@@ -4293,21 +4289,40 @@ export default function DesignerNav() {
       ) : (
         <>
           {/* Desktop Header */}
-          <div className="day:border-gray-200 hidden h-36 items-center justify-center border-b border-white/10 px-6 md:flex">
+          <div className="day:border-[#cfc5b7] hidden min-h-36 items-center justify-between border-b border-white/10 px-6 md:flex">
             <Link
               href="/"
-              className="flex h-full items-center justify-center transition-opacity hover:opacity-80"
+              className="transition-opacity hover:opacity-75"
+              aria-label="Forever Shining home"
             >
-              <img
-                src="/ico/forever-transparent-logo.png"
-                alt="Forever Logo"
-                className="h-28 w-auto object-contain"
+              <Image
+                src="/ico/forever-transparent-logo-bw.png"
+                alt="Forever Shining — Design Online"
+                width={400}
+                height={246}
+                className="h-32 w-auto object-contain"
+                priority
               />
             </Link>
+            <button
+              type="button"
+              onClick={toggleTheme}
+              aria-label={
+                isDayTheme ? 'Switch to night mode' : 'Switch to day mode'
+              }
+              title={isDayTheme ? 'Night mode' : 'Day mode'}
+              className="day:border-[#bdb4a6] day:bg-white/25 day:text-[#1d1a17] flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-white/15 bg-white/[0.06] text-white/75 transition-colors hover:border-[#cfac6c] hover:text-[#cfac6c]"
+            >
+              {isDayTheme ? (
+                <MoonIcon className="h-5 w-5" aria-hidden="true" />
+              ) : (
+                <SunIcon className="h-5 w-5" aria-hidden="true" />
+              )}
+            </button>
           </div>
 
           {/* Mobile Header */}
-          <div className="border-primary/10 day:border-[#DEBD68]/20 day:bg-stone-50 border-b bg-[#120c08]/95 px-5 py-4 shadow-[0_10px_25px_rgba(0,0,0,0.45)] md:hidden">
+          <div className="day:border-[#cfc5b7] day:bg-[#eee9df] border-b border-white/10 bg-[#1d1a17] px-5 py-4 md:hidden">
             <div className="flex items-center justify-between gap-4">
               <div className="flex items-center gap-3">
                 <button
@@ -4325,15 +4340,19 @@ export default function DesignerNav() {
                     <SunIcon className="h-4 w-4" />
                   )}
                 </button>
-                <p className="font-playfair-display text-primary/50 text-[10px] tracking-[0.45em] italic">
-                  Guided Studio
-                </p>
               </div>
-              <Link href="/" className="transition-opacity hover:opacity-80">
-                <img
-                  src="/ico/forever-transparent-logo.png"
-                  alt="Forever Logo"
-                  className="h-8 w-auto"
+              <Link
+                href="/"
+                className="transition-opacity hover:opacity-75"
+                aria-label="Forever Shining home"
+              >
+                <Image
+                  src="/ico/forever-transparent-logo-bw.png"
+                  alt="Forever Shining — Design Online"
+                  width={400}
+                  height={246}
+                  className="h-10 w-auto object-contain"
+                  priority
                 />
               </Link>
             </div>
@@ -4364,14 +4383,14 @@ export default function DesignerNav() {
           </div>
 
           {/* Menu Items */}
-          <div className="flex-1 space-y-6 overflow-y-auto px-5 py-6 md:space-y-0 md:p-4">
+          <div className="flex-1 space-y-6 overflow-y-auto px-5 py-6 md:space-y-0 md:px-5 md:py-6">
             {/* Primary/Secondary CTAs */}
             {hasCustomizations && (
               <div className="mb-5 flex flex-col gap-3 sm:flex-row">
                 {hasCustomizations && (
                   <button
                     onClick={handleNewDesign}
-                    className="inline-flex flex-1 items-center justify-center gap-3 rounded-lg bg-gradient-to-r from-[#f4d07e] to-[#d7b356] px-4 py-3 text-base font-medium text-gray-900 shadow-[0_12px_30px_rgba(0,0,0,0.25)] transition-all hover:from-[#ffe2a8] hover:to-[#e0c068] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#f4d07e]"
+                    className="day:bg-[#1d1a17] day:text-white day:hover:bg-[#3a332c] inline-flex flex-1 items-center justify-center gap-3 rounded-sm border border-[#cfac6c]/70 bg-transparent px-4 py-3 text-sm font-semibold text-[#f0d89f] transition-colors hover:bg-white/[0.06] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#cfac6c]"
                   >
                     <ArrowPathIcon className="h-5 w-5" />
                     <span>New Design</span>
@@ -4448,7 +4467,7 @@ export default function DesignerNav() {
             )}
 
             {/* Grouped Menu Navigation */}
-            <div className="flex flex-col gap-5">
+            <div className="flex flex-col gap-4">
               {menuGroups.map((group, groupIndex) => {
                 const isCurrentGroup = groupIndex === activeGroupIndex;
                 const isPastGroup = activeGroupIndex > groupIndex;
@@ -4466,21 +4485,21 @@ export default function DesignerNav() {
                     )}
 
                     <div
-                      className={`rounded-lg border p-3 shadow-[0_6px_18px_rgba(0,0,0,0.22)] transition-colors ${
+                      className={`rounded-sm border px-2 py-2 transition-colors ${
                         isCurrentGroup
-                          ? 'border-primary/45 bg-primary/[0.06] day:border-[#c59b49] day:bg-[#f5eddd]'
-                          : 'day:border-gray-200 day:bg-stone-50 border-white/10 bg-white/[0.03]'
+                          ? 'day:border-[#9a742f] day:bg-[#f7f4ee] border-[#cfac6c]/60 bg-white/[0.045]'
+                          : 'day:border-[#d8cdb9] day:bg-transparent border-white/10 bg-transparent'
                       }`}
                     >
                       <button
                         onClick={() => toggleGroup(groupIndex)}
                         aria-current={isCurrentGroup ? 'step' : undefined}
-                        className={`flex w-full cursor-pointer items-center gap-3 rounded-lg px-3 py-1.5 transition-colors duration-200 hover:bg-white/5 ${
+                        className={`day:hover:bg-white/45 flex w-full cursor-pointer items-center gap-3 rounded-sm px-3 py-2 transition-colors duration-200 hover:bg-white/5 ${
                           openGroup === groupIndex ? 'mb-3' : 'mb-0'
                         }`}
                       >
                         <span
-                          className={`font-playfair-display flex h-9 w-9 shrink-0 items-center justify-center rounded-full border text-[13px] font-normal tracking-wide ${
+                          className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full border font-serif text-[13px] font-normal tracking-wide ${
                             isPastGroup
                               ? 'border-emerald-400/40 bg-emerald-400/10 text-emerald-300'
                               : isCurrentGroup
@@ -4492,7 +4511,7 @@ export default function DesignerNav() {
                         </span>
                         <div className="flex min-w-0 flex-1 items-center justify-between gap-3">
                           <div className="min-w-0">
-                            <p className="font-playfair-display day:text-gray-900 text-[19px] font-normal tracking-wide text-white/90">
+                            <p className="day:text-[#1d1a17] font-serif text-[19px] font-normal tracking-[-0.01em] text-white/90">
                               {group.label}
                             </p>
                             {groupStatus !== 'Available' && (

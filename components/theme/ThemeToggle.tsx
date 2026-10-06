@@ -14,11 +14,8 @@ export function ThemeToggle({ inline = false }: { inline?: boolean }) {
   // Designs pages always use white background — toggle not needed and would overlap the sidebar logo
   if (pathname?.startsWith('/designs')) return null;
   if (pathname === '/' && !inline) return null;
+  if (isDesignerRoutePath(pathname) && pathname !== '/' && !inline) return null;
 
-  // On designer steps the day/night toggle lives inside the left sidebar on
-  // mobile/tablet, so hide the floating toggle below lg there (keep it on lg+).
-  const insideDesignerSidebarOnMobile =
-    isDesignerRoutePath(pathname) && pathname !== '/';
   const accountRoutePrefixes = [
     '/my-account',
     '/orders',
@@ -38,7 +35,7 @@ export function ThemeToggle({ inline = false }: { inline?: boolean }) {
       className={
         inline
           ? 'inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-[#bdb4a6] text-[#1d1a17] transition-colors hover:border-[#7b5a20] hover:bg-white/45'
-          : `fixed top-5 z-[9999] ${insideMemorialsOnMobile ? 'right-5 left-auto lg:right-auto lg:left-5' : 'left-5'} day:border-[#D7B356]/50 day:bg-white/90 day:text-amber-700 day:hover:border-[#D7B356]/80 day:hover:bg-white day:hover:text-amber-800 h-9 w-9 items-center justify-center rounded-full border border-white/20 bg-[#1a1208]/80 text-white/60 shadow-md backdrop-blur-sm transition-[background-color,border-color,color] duration-200 hover:border-white/40 hover:bg-[#1a1208]/95 hover:text-white ${insideDesignerSidebarOnMobile || insideAccountSidebarOnMobile || insideMemorialsOnMobile ? 'hidden lg:flex' : 'flex'}`
+          : `fixed top-5 z-[9999] ${insideMemorialsOnMobile ? 'right-5 left-auto lg:right-auto lg:left-5' : 'left-5'} day:border-[#D7B356]/50 day:bg-white/90 day:text-amber-700 day:hover:border-[#D7B356]/80 day:hover:bg-white day:hover:text-amber-800 h-9 w-9 items-center justify-center rounded-full border border-white/20 bg-[#1a1208]/80 text-white/60 shadow-md backdrop-blur-sm transition-[background-color,border-color,color] duration-200 hover:border-white/40 hover:bg-[#1a1208]/95 hover:text-white ${insideAccountSidebarOnMobile || insideMemorialsOnMobile ? 'hidden lg:flex' : 'flex'}`
       }
     >
       {isDay ? (

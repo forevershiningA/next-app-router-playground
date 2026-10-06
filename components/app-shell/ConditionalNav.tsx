@@ -328,7 +328,7 @@ function renderDesignerSidebar(
           // Mobile: bottom sheet docked to the bottom edge so the 3D product
           // stays visible above it (editing sub-panels), or a full-height drawer
           // for the main menu. Desktop (lg+): permanent left column.
-          'day:border-[#ddd2c2] day:bg-[#f4f1eb] fixed inset-x-0 bottom-0 z-40 flex w-full flex-col overflow-hidden rounded-t-3xl bg-[#1b1511] shadow-2xl transition-all duration-300 lg:pointer-events-auto lg:inset-auto lg:top-0 lg:left-0 lg:z-10 lg:h-full lg:max-h-none lg:w-[400px] lg:translate-y-0 lg:rounded-none lg:border-r lg:border-slate-200 lg:bg-white lg:shadow-none',
+          'day:border-[#cfc5b7] day:bg-[#eee9df] fixed inset-x-0 bottom-0 z-40 flex w-full flex-col overflow-hidden rounded-t-3xl bg-[#1d1a17] shadow-2xl transition-all duration-300 lg:pointer-events-auto lg:inset-auto lg:top-0 lg:left-0 lg:z-10 lg:h-full lg:max-h-none lg:w-[400px] lg:translate-y-0 lg:rounded-none lg:border-r lg:border-[#cfc5b7] lg:bg-[#1d1a17] lg:shadow-none',
           isMobileMenuOpen
             ? 'pointer-events-auto translate-y-0'
             : 'pointer-events-none translate-y-full',

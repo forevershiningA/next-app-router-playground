@@ -112,17 +112,16 @@ export default function ProductSelectionGrid({
     })
     .filter((group) => group.products.length > 0);
   return (
-    <div className="day:bg-stone-100 day:bg-none min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950">
+    <div className="day:bg-[#f7f4ee] min-h-screen bg-[#0c0b0a]">
       {/* Header Section */}
-      <div className="day:border-gray-200 day:bg-white day:bg-none relative overflow-hidden border-b border-white/10 bg-gradient-to-r from-gray-900/50 to-gray-800/50 backdrop-blur-sm">
-        <div className="day:hidden absolute inset-0 bg-gradient-to-br from-[#cfac6c]/5 via-transparent to-transparent" />
-        <div className="relative mx-auto max-w-7xl px-6 py-4 lg:px-8">
+      <div className="day:border-[#cfc5b7] day:bg-[#eee9df] relative overflow-hidden border-b border-white/10 bg-[#1d1a17]">
+        <div className="relative mx-auto max-w-7xl px-6 py-8 lg:px-8 lg:py-10">
           <UnitCurrencySelects className="mb-3 justify-end sm:absolute sm:top-4 sm:right-6 sm:mb-0 lg:right-8" />
           <div className="text-left sm:text-center">
-            <h1 className="day:text-gray-900 font-serif text-3xl font-light tracking-tight text-white sm:text-4xl lg:text-[2.5rem]">
+            <h1 className="day:text-[#1d1a17] font-serif text-3xl font-normal tracking-[-0.025em] text-white sm:text-4xl lg:text-[2.75rem]">
               Select Your Memorial Product
             </h1>
-            <p className="day:text-gray-600 mt-2 text-sm leading-6 text-gray-100 sm:mx-auto lg:whitespace-nowrap">
+            <p className="day:text-[#625a51] mt-3 text-sm leading-6 text-white/70 sm:mx-auto lg:whitespace-nowrap">
               Choose a memorial product to begin — then refine its shape,
               material and dimensions with transparent pricing.
             </p>
@@ -131,16 +130,15 @@ export default function ProductSelectionGrid({
       </div>
 
       {/* Category Filter */}
-      <div className="day:border-gray-200 day:bg-white relative border-b border-white/5 bg-gray-900/30">
-        <div className="day:hidden absolute inset-0 bg-gradient-to-r from-transparent via-[#cfac6c]/3 to-transparent" />
+      <div className="day:border-[#d8cdb9] day:bg-[#f7f4ee] relative border-b border-white/10 bg-[#15120f]">
         <div className="relative mx-auto max-w-7xl px-6 py-3.5 lg:px-8">
           <div className="-mx-6 flex snap-x gap-2 overflow-x-auto px-6 pr-12 [scrollbar-width:none] sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0 [&::-webkit-scrollbar]:hidden">
             <button
               onClick={() => setSelectedCategory('all')}
-              className={`shrink-0 snap-start rounded-full px-5 py-2.5 text-sm font-medium whitespace-nowrap transition-all ${
+              className={`shrink-0 snap-start rounded-sm border px-5 py-2.5 text-sm font-medium whitespace-nowrap transition-colors ${
                 selectedCategory === 'all'
-                  ? 'bg-[#cfac6c] text-slate-900 shadow-lg shadow-[#cfac6c]/20'
-                  : 'day:border-gray-300 day:text-gray-700 day:hover:bg-gray-100 border border-white/20 text-white hover:border-[#cfac6c]/30 hover:bg-white/10'
+                  ? 'day:border-[#1d1a17] day:bg-[#1d1a17] day:text-white border-[#cfac6c] bg-[#cfac6c] text-[#1d1a17]'
+                  : 'day:border-[#bdb4a6] day:text-[#514a43] day:hover:border-[#9a742f] day:hover:bg-white/55 border-white/20 text-white/80 hover:border-[#cfac6c]/70 hover:bg-white/[0.06]'
               }`}
             >
               All Products
@@ -149,10 +147,10 @@ export default function ProductSelectionGrid({
               <button
                 key={category.id}
                 onClick={() => setSelectedCategory(category.id)}
-                className={`shrink-0 snap-start rounded-full px-5 py-2.5 text-sm font-medium whitespace-nowrap transition-all ${
+                className={`shrink-0 snap-start rounded-sm border px-5 py-2.5 text-sm font-medium whitespace-nowrap transition-colors ${
                   selectedCategory === category.id
-                    ? 'bg-[#cfac6c] text-slate-900 shadow-lg shadow-[#cfac6c]/20'
-                    : 'day:border-gray-300 day:text-gray-700 day:hover:bg-gray-100 border border-white/20 text-white hover:border-[#cfac6c]/30 hover:bg-white/10'
+                    ? 'day:border-[#1d1a17] day:bg-[#1d1a17] day:text-white border-[#cfac6c] bg-[#cfac6c] text-[#1d1a17]'
+                    : 'day:border-[#bdb4a6] day:text-[#514a43] day:hover:border-[#9a742f] day:hover:bg-white/55 border-white/20 text-white/80 hover:border-[#cfac6c]/70 hover:bg-white/[0.06]'
                 }`}
               >
                 <span>{category.name}</span>
@@ -194,19 +192,19 @@ export default function ProductSelectionGrid({
                   key={group.id}
                   aria-labelledby={`product-group-${group.id}`}
                 >
-                  <div className="day:border-gray-200 mb-3 border-b border-white/10 pb-2">
+                  <div className="day:border-[#d8cdb9] mb-4 border-b border-white/10 pb-3">
                     <div>
                       <h2
                         id={`product-group-${group.id}`}
-                        className="day:text-gray-900 text-lg font-semibold text-white"
+                        className="day:text-[#1d1a17] font-serif text-2xl font-normal text-white"
                       >
                         {group.name}{' '}
-                        <span className="day:text-gray-500 text-sm font-medium text-gray-300">
+                        <span className="day:text-[#756c62] ml-1 font-sans text-sm font-medium text-white/55">
                           ({group.products.length} item
                           {group.products.length !== 1 ? 's' : ''})
                         </span>
                       </h2>
-                      <p className="day:text-gray-500 mt-0.5 text-sm text-gray-200">
+                      <p className="day:text-[#625a51] mt-1 text-sm text-white/60">
                         {group.description}
                       </p>
                     </div>
@@ -229,24 +227,24 @@ export default function ProductSelectionGrid({
                           key={product.id}
                           onClick={() => handleProductSelect(product)}
                           disabled={loadingProductId !== null}
-                          className="group day:border-gray-200 day:bg-white day:hover:border-[#cfac6c]/60 relative flex h-full cursor-pointer flex-col overflow-hidden rounded-lg border border-white/12 bg-[#171717] text-left transition-all hover:-translate-y-0.5 hover:border-[#cfac6c]/60 hover:shadow-lg hover:shadow-[#cfac6c]/10 disabled:cursor-wait disabled:opacity-70"
+                          className="group day:border-[#e4ddd2] day:bg-white day:shadow-[0_10px_30px_rgba(0,0,0,0.03)] day:hover:border-[#9a742f] relative flex h-full cursor-pointer flex-col overflow-hidden rounded-sm border border-white/12 bg-[#171717] text-left transition-colors hover:border-[#cfac6c]/60 disabled:cursor-wait disabled:opacity-70"
                         >
-                          <div className="relative aspect-square w-full overflow-hidden bg-[#101010]">
+                          <div className="day:border-[#e4ddd2] day:bg-[#f3f1ed] relative aspect-square w-full overflow-hidden border-b border-white/10 bg-[#101010]">
                             <Image
                               src={`/webp/products/${product.image}`}
                               alt={product.name}
                               fill
-                              className="object-contain p-2 transition-transform duration-300 group-hover:scale-105"
+                              className="object-contain p-3 sepia transition-all duration-700 ease-out will-change-transform group-hover:scale-[1.025] group-hover:sepia-0 motion-reduce:transition-none motion-reduce:group-hover:transform-none"
                               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 20vw"
                             />
                           </div>
 
                           <div className="flex flex-1 flex-col gap-2.5 p-3.5">
-                            <h3 className="day:text-gray-900 line-clamp-2 min-h-[2.5rem] text-base leading-tight font-semibold text-white">
+                            <h3 className="day:text-[#1d1a17] line-clamp-2 min-h-[2.5rem] font-serif text-lg leading-tight text-white">
                               {product.name}
                             </h3>
 
-                            <p className="day:text-gray-600 line-clamp-2 min-h-10 text-sm leading-5 text-gray-300">
+                            <p className="day:text-[#625a51] line-clamp-2 min-h-10 text-sm leading-5 text-gray-300">
                               {description}
                             </p>
 
@@ -282,7 +280,7 @@ export default function ProductSelectionGrid({
                             )}
 
                             <div className="mt-auto pt-1">
-                              <span className="inline-flex min-h-10 w-full items-center justify-center gap-2 rounded-lg border border-[#cfac6c] bg-transparent px-3 py-2 text-sm font-semibold text-[#cfac6c] transition-all duration-200 group-hover:bg-[#cfac6c] group-hover:text-slate-900 group-hover:shadow-lg group-hover:shadow-[#cfac6c]/30">
+                              <span className="day:border-[#1d1a17] day:bg-[#1d1a17] day:text-white inline-flex min-h-10 w-full items-center justify-between gap-2 rounded-sm border border-[#cfac6c]/70 bg-transparent px-3 py-2 text-sm font-semibold text-[#f0d89f] transition-colors group-hover:bg-[#cfac6c] group-hover:text-[#1d1a17]">
                                 <span>
                                   {loadingProductId === product.id
                                     ? 'Loading product…'

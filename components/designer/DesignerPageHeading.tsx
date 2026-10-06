@@ -23,7 +23,7 @@ export default function DesignerPageHeading({
 
   return (
     <div className={`flex flex-col ${alignment}`}>
-      <h1 className="day:text-[#8a672d] order-2 mt-5 text-lg font-semibold tracking-[0.2em] text-pretty text-[#cfac6c] uppercase sm:text-xl">
+      <h1 className="day:text-[#6f511c] order-2 mt-5 text-lg font-semibold tracking-[0.2em] text-pretty text-[#cfac6c] uppercase sm:text-xl">
         {productName}
       </h1>
       <h2 className="day:text-gray-900 order-1 font-serif text-3xl font-light tracking-tight text-pretty text-white sm:text-4xl lg:text-[2.75rem]">

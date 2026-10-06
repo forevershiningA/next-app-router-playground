@@ -134,6 +134,7 @@
 
 - The home page now uses an open-height editorial hero rather than the former fixed `400px` treatment. Content from the former introductory section has been consolidated into the hero so the page has one clear opening message.
 - The hero uses a warm cream background (`#eee9df`) without a decorative background image. Its desktop layout is an asymmetric two-column grid: concise copy and the primary CTA on the left, with a larger clickable 3D Designer screenshot (`/screenshots/designer-3d-preview.webp`) on the right.
+- The Designer screenshot uses a restrained `1.025×` hover zoom over `700ms` with `ease-out`; the transition is disabled for `prefers-reduced-motion`.
 - Current hero copy:
   - H1: **Design Custom Headstones & Memorial Plaques**
   - Supporting text: “Choose the stone, shape, inscription, and meaningful details in one guided designer. See every change and the price in 3D, then save or share your design when you are ready.”
@@ -158,7 +159,7 @@
 
 ### Supporting homepage polish
 
-- Product imagery is sepia by default and transitions to its original colour on card hover.
+- Product imagery is sepia by default and transitions to its original colour on card hover. It uses the same smooth `1.025×`, `700ms`, `ease-out` zoom as the hero screenshot, with `will-change-transform` and reduced-motion handling to avoid a jump at the start of the transition.
 - Product-card CTAs are consistently labelled **Design now** and include a right arrow.
 - FAQ question rows have additional horizontal padding (`px-4 sm:px-5`) for clearer alignment and more comfortable touch targets.
 - The global cursor reset in `styles/globals.css` explicitly excludes native `<summary>` controls and assigns pointer cursors to each summary and its descendants. This ensures the home FAQ and other disclosure controls show the expected hand cursor instead of being overridden by the site's non-editable-element cursor rule.
@@ -171,10 +172,30 @@
 - Gallery and product imagery is sepia by default and returns to full colour on hover. Product cards use subtle borders and day-mode shadows, serif titles, and a consistent **Design now** CTA with a right arrow.
 - Guidance sections and the category footer were brought into the same spacing, typography, border, and logo system used on the home page. The footer uses the text wordmark followed by `/webp/forever-logo.webp` at `100px` high.
 
+### 3D Designer navigation visual alignment
+
+- The shared left Designer navigation now follows the newer Forever Shining editorial system without changing its route, state, or editing behavior. Night mode uses solid dark brown (`#1d1a17`) instead of the former brown gradient; day mode uses the same warm cream (`#eee9df`) as the home hero.
+- The Designer header uses `/ico/forever-transparent-logo-bw.png`, matching the `/designs/` navigation. The desktop logo is `h-32`; the mobile version remains compact so it does not consume canvas space. Its original gold colour is preserved in both themes.
+- The header contains its own day/night control on desktop and mobile. The global floating `ThemeToggle` is suppressed on Designer routes to prevent duplicate controls and logo overlap.
+- Main menu groups use flatter, lightly bordered surfaces with reduced corner radius and no heavy card shadows. Current-step treatment, serif group titles, step numbering, and action hierarchy now use the same restrained brown, cream, and gold palette as the public pages.
+- Guided-panel headers use the same cream/dark surfaces, serif title hierarchy, simple hairline dividers, and compact rectangular Menu/Previous/Next controls. The underlying editor controls and navigation logic remain unchanged.
+- The right-hand `/select-product` and `/select-shape` content now uses the same visual tokens as the navigation: warm cream surfaces in day mode, solid brown-black surfaces in night mode, serif headings, thin warm borders, reduced corner radii, and restrained gold accents instead of grey gradients and heavy shadows.
+- Product filters and shape-category filters use compact rectangular states. Product cards use sepia imagery that returns to full colour with a smooth `1.025×`, `700ms` hover zoom and retain the dark **Select product** CTA with a right arrow. Standard shape cards intentionally have no repeated CTA because the complete card is the selection target.
+- The shape styling covers all branches of the selector, including standard memorial shapes, urn shapes, pet rock shapes, custom SVG upload, and selected-category information panels. Selection routing, catalog loading, dimensions, prices, and store updates are unchanged.
+- The standard shape grid no longer repeats a **Choose shape** button on every card. Each complete card remains a keyboard-focusable selection target and uses a subtle lift, border, and shadow response on hover/focus, reducing visual noise across the 71-shape catalog.
+- Shape filters display per-category counts and **All Shapes** displays the total. A name search filters the current category case-insensitively, supporting terms such as “Gable”, “Camber”, or “Heart”.
+- The shape search is aligned to the right of the results heading at a fixed `380px` width on larger screens and uses the explicit placeholder **Search shapes (e.g. Peak, Gable, Heart)…**. It remains full-width on small screens.
+- Clicking a standard shape immediately applies a selected state before navigation: gold border, stronger shadow, corner checkmark, and `aria-pressed`. A no-results search state quotes the entered term, suggests another query, and provides a **Reset search** action.
+- The results header explains that the current step chooses the outline and that dimensions and the base can be adjusted in the next step. The day-mode product-context label in `DesignerPageHeading` uses the darker brown `#6f511c` for better contrast on cream backgrounds.
+- Shape previews for products whose catalog or route product name contains **Black Granite** render as true black silhouettes on a warm light stone background in both themes. Product detection falls back to the product-prefixed URL via `getDesignerProductBySlug()`, so direct routes such as `/laser-etched-black-granite-headstone/select-shape` are correct before the client store finishes loading.
+
 ### Validation and maintenance notes
 
-- `pnpm type-check` passes after the homepage, review-slider, memorial-template, and theme-toggle changes.
+- `pnpm type-check` passes after the homepage, review-slider, memorial-template, Designer navigation, Select Product, and Select Shape changes.
 - Targeted ESLint checks pass for the shared memorial category page and gallery components.
+- The Designer navigation changes pass TypeScript checking and targeted ESLint with no errors. Existing warnings in the large `DesignerNav.tsx` module remain unrelated to this visual pass.
+- The refreshed `/select-product` and `/select-shape` views were browser-checked at `1440 × 1000`; both align correctly beside the `400px` desktop Designer navigation.
+- The direct `/laser-etched-black-granite-headstone/select-shape` route was browser-checked after URL fallback detection: category counts render, search remains aligned to the right, and the shape previews are black on the warm light background.
 - `HomeSplash.tsx`, the memorial category components, `styles/globals.css`, and this document are Prettier-compliant. `git diff --check` reports no whitespace errors apart from the repository's existing LF-to-CRLF warning.
 - The home page was browser-checked at desktop width: four review cards fit in the current viewport, day mode retains the intended card depth, and the carousel advances after the configured interval.
 - ESLint reports no new errors. One existing `react-hooks/exhaustive-deps` cleanup warning remains in `HomeSplash.tsx` around the captured menu button ref.

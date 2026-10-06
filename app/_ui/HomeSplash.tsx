@@ -569,7 +569,7 @@ export default function HomeSplash() {
                   alt="The Forever Shining 3D memorial designer showing a personalized headstone"
                   fill
                   sizes="(min-width: 1024px) 55vw, 100vw"
-                  className="object-cover"
+                  className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.025] motion-reduce:transition-none motion-reduce:group-hover:transform-none"
                 />
 
                 <div className="absolute top-4 right-4 border border-white/25 bg-[#17120d]/90 px-3 py-1.5 text-[10px] font-semibold tracking-[0.12em] text-[#e3c887] backdrop-blur-sm sm:top-5 sm:right-5">
@@ -733,7 +733,7 @@ export default function HomeSplash() {
                     alt={`${product.name} available to personalize online`}
                     fill
                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                    className="object-contain p-5 sepia transition-[filter,transform] duration-500 group-hover:scale-[1.025] group-hover:sepia-0 motion-reduce:transition-none motion-reduce:group-hover:transform-none"
+                    className="object-contain p-5 sepia transition-all duration-700 ease-out will-change-transform group-hover:scale-[1.025] group-hover:sepia-0 motion-reduce:transition-none motion-reduce:group-hover:transform-none"
                   />
                 </div>
 
