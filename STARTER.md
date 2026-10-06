@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-10-05
+**Last Updated:** 2026-10-06
 
 **Status entry order:** Add new dated status entries immediately after the table of contents, before the existing status entries. Keep status entries in reverse chronological order (newest first); do not append them to the end of this file.
 **Tech Stack:** Next.js 15.5.26, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots), **Vitest 4.1.8** (unit tests), **Playwright 1.59.1** (E2E tests)
@@ -124,6 +124,49 @@
 113. [October 3 Designer Flow, Shape Categories, Units, and Display Currencies](#current-status-2026-10-03--designer-flow-shape-categories-units-and-display-currencies)
 114. [October 4 Currency Symbols, Locale Defaults, and Automatic Units](#current-status-2026-10-04--currency-symbols-locale-defaults-and-automatic-units)
 115. [October 5 Fixed Addition Sizes, Designer Control Layout, and Home Hero Simplification](#current-status-2026-10-05--fixed-addition-sizes-designer-control-layout-and-home-hero-simplification)
+116. [October 6 Homepage Editorial Hero, Google Reviews Carousel, and Day and Night Polish](#current-status-2026-10-06--homepage-editorial-hero-google-reviews-carousel-and-day-and-night-polish)
+
+---
+
+## Current Status (2026-10-06) — Homepage Editorial Hero, Google Reviews Carousel, and Day and Night Polish
+
+### Homepage hero and navigation
+
+- The home page now uses an open-height editorial hero rather than the former fixed `400px` treatment. Content from the former introductory section has been consolidated into the hero so the page has one clear opening message.
+- The hero uses a warm cream background (`#eee9df`) without a decorative background image. Its desktop layout is an asymmetric two-column grid: concise copy and the primary CTA on the left, with a larger clickable 3D Designer screenshot (`/screenshots/designer-3d-preview.webp`) on the right.
+- Current hero copy:
+  - H1: **Design Custom Headstones & Memorial Plaques**
+  - Supporting text: “Choose the stone, shape, inscription, and meaningful details in one guided designer. See every change and the price in 3D, then save or share your design when you are ready.”
+  - CTA: **Start Designing in 3D**
+- The duplicate “Design a Personalized Memorial Online in 3D” section below the hero has been removed because its purpose and copy are now represented in the hero.
+- The home header uses a restrained serif text wordmark, **Forever Shining**, in dark grey. The image logo is no longer shown in the hero or navigation.
+- The supplied Forever Shining logo is displayed in the footer beneath the “Forever Shining” label at `100px` high.
+- On the home page, the day/night control is inline beside the search control. `ThemeToggle` accepts an optional `inline` prop; the original floating toggle remains available on other routes and is suppressed only on `/`.
+
+### Google review social proof
+
+- A compact review section now sits immediately below the hero and before the product cards, linking to the Forever Shining Google Maps reviews page.
+- It contains 20 concise review highlights based on the company's public testimonials. The section identifies the source as Google and currently shows **4.8 from 72 Google reviews**, with a **Read all reviews on Google** link that opens safely in a new tab.
+- The reviews form an endlessly looping horizontal carousel. It advances by one card every `10s`, supports manual scrolling and previous/next controls, pauses during hover, focus, and pointer interaction, and disables automatic movement when `prefers-reduced-motion` is enabled.
+- The carousel uses real element offsets for its loop boundary, keeping the reset accurate when card widths or gaps change. The second visual copy of the reviews is hidden from assistive technology.
+- Responsive sizing presents approximately one card on small screens, three on large screens, and four on extra-large desktop screens. A custom progress line and an accessible live position label indicate the current review.
+- Navigation buttons use `40px` hit areas, visible gold-toned outlines, `20px` chevrons, hover/focus states, and descriptive `aria-label` values.
+- Night mode uses a dark brown section (`#1d1a17`) with light text and gold accents. Supporting microcopy was brightened to improve contrast.
+- Day mode uses a warm off-white section (`#f7f4ee`) with pure white cards, a subtle `#e4ddd2` border, `16px` gaps, and `box-shadow: 0 10px 30px rgba(0,0,0,0.03)` to create separation without making the layout feel heavy.
+
+### Supporting homepage polish
+
+- Product imagery is sepia by default and transitions to its original colour on card hover.
+- Product-card CTAs are consistently labelled **Design now** and include a right arrow.
+- FAQ question rows have additional horizontal padding (`px-4 sm:px-5`) for clearer alignment and more comfortable touch targets.
+
+### Validation and maintenance notes
+
+- `pnpm type-check` passes after the homepage and theme-toggle changes.
+- `HomeSplash.tsx` is Prettier-compliant and `git diff --check` reports no whitespace errors (apart from the repository's existing line-ending warning).
+- The home page was browser-checked at desktop width: four review cards fit in the current viewport, day mode retains the intended card depth, and the carousel advances after the configured interval.
+- ESLint reports no new errors. One existing `react-hooks/exhaustive-deps` cleanup warning remains in `HomeSplash.tsx` around the captured menu button ref.
+- The October 5 homepage notes below are retained as historical context; where they conflict with this entry, this October 6 status describes the current implementation.
 
 ---
 
@@ -16095,6 +16138,6 @@ Both commands pass. Browser rendering still needs to be checked after the next l
 
 ---
 
-_End of STARTER.md - Last updated: 2026-10-04_
+_End of STARTER.md - Last updated: 2026-10-06_
 
 ---

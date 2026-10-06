@@ -6,10 +6,99 @@ import { useEffect, useRef, useState } from 'react';
 import {
   ArrowRightIcon,
   Bars3Icon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
   MagnifyingGlassIcon,
   XMarkIcon,
 } from '@heroicons/react/24/outline';
 import { homeFaqItems } from '#/app/_internal/home-content';
+import { ThemeToggle } from '#/components/theme/ThemeToggle';
+
+const GOOGLE_REVIEWS_URL =
+  'https://www.google.com/maps/place/Forever+Shining/@-32.1008719,115.8010523,17z/data=!4m8!3m7!1s0x2a329881c4e227b1:0xc1dcd9e0d4834beb!8m2!3d-32.1008719!4d115.8010523!9m1!1b1!16s%2Fg%2F1tcvf5g5?entry=ttu&g_ep=EgoyMDI2MDkzMC4wIKXMDSoASAFQAw%3D%3D';
+
+const GOOGLE_REVIEW_HIGHLIGHTS = [
+  {
+    author: 'Veronica Crawford',
+    text: 'Beautiful work that exceeded expectations, supported by exceptional customer care.',
+  },
+  {
+    author: 'Duncan Blake',
+    text: 'Responsive, compassionate help with a pet memorial during a difficult time.',
+  },
+  {
+    author: 'Marion Baumgarten',
+    text: 'Personal service and a finished memorial that made the family proud.',
+  },
+  {
+    author: 'Naser Soueid',
+    text: 'A challenging custom bronze plaque delivered beyond expectations.',
+  },
+  {
+    author: 'Dean W',
+    text: 'Excellent design guidance, turnaround time, and quality of workmanship.',
+  },
+  {
+    author: 'Tim dB',
+    text: 'The team listened carefully and communicated throughout the process.',
+  },
+  {
+    author: 'Janette Martin',
+    text: 'A unique family monument handled professionally from design to installation.',
+  },
+  {
+    author: 'Rose Ah Gee',
+    text: 'Thoughtful design alternatives and careful interstate delivery.',
+  },
+  {
+    author: 'Ebony Ristich',
+    text: 'Helpful service and a plaque that arrived exactly as imagined.',
+  },
+  {
+    author: 'Stathi Kossi',
+    text: 'The online designer made the finished result easy to picture.',
+  },
+  {
+    author: 'Gladwin Abrio',
+    text: 'Clear advice on materials, colours, pricing, and the available options.',
+  },
+  {
+    author: 'Joy Locker',
+    text: 'A beautiful proof, fast installation, and excellent value.',
+  },
+  {
+    author: 'Kate',
+    text: 'An informative website, transparent pricing, and an effortless process.',
+  },
+  {
+    author: 'Sandy Taylor',
+    text: 'A straightforward online design experience with kind, helpful support.',
+  },
+  {
+    author: 'Tracie Bromage',
+    text: 'Compassionate guidance and a memorial that captured her dad perfectly.',
+  },
+  {
+    author: 'Dee Gabrielle Ignacio-Godwin',
+    text: 'Professional support, careful delivery, and a result beyond expectations.',
+  },
+  {
+    author: 'Dean Haeusler',
+    text: 'Consistent communication and a quality product worth recommending.',
+  },
+  {
+    author: 'Kate Schofield',
+    text: 'An easy design system backed by patient phone support.',
+  },
+  {
+    author: 'David Clayton',
+    text: 'Reliable quality and service across more than 160 memorial plaques.',
+  },
+  {
+    author: 'Timur Golovinov',
+    text: 'A user-friendly design tool and an exceptional finished product.',
+  },
+] as const;
 
 const MEMORIAL_LINKS = [
   { label: 'Headstones', href: '/memorials/headstones' },
@@ -27,7 +116,6 @@ const HOME_PRODUCT_OPTIONS = [
       'Create a polished black granite headstone with a photographic portrait, personal inscription, and detailed laser-etched artwork.',
     image: '/webp/products/APP_ID_4-medium.webp',
     href: '/laser-etched-black-granite-headstone/select-shape',
-    designLabel: 'Design a headstone',
     learnMoreHref: '/memorials/headstones',
   },
   {
@@ -37,7 +125,6 @@ const HOME_PRODUCT_OPTIONS = [
       'Choose a traditional granite headstone shape, stone color, engraved wording, motifs, and coordinated memorial accessories.',
     image: '/webp/products/APP_ID_124-medium.webp',
     href: '/traditional-engraved-headstone/select-shape',
-    designLabel: 'Design a headstone',
     learnMoreHref: '/memorials/headstones',
   },
   {
@@ -47,7 +134,6 @@ const HOME_PRODUCT_OPTIONS = [
       'Design a cast bronze plaque with a custom border, background, raised inscription, emblems, motifs, and fixing system.',
     image: '/webp/products/APP_ID_5-medium.webp',
     href: '/bronze-plaque/select-shape',
-    designLabel: 'Design a bronze plaque',
     learnMoreHref: '/memorials/plaques',
   },
   {
@@ -57,7 +143,6 @@ const HOME_PRODUCT_OPTIONS = [
       'Combine photographs, color backgrounds, meaningful text, and decorative details in a durable personalized memorial plaque.',
     image: '/webp/products/APP_ID_32-medium.webp',
     href: '/full-colour-plaque/select-shape',
-    designLabel: 'Design a memorial plaque',
     learnMoreHref: '/memorials/plaques',
   },
   {
@@ -67,7 +152,6 @@ const HOME_PRODUCT_OPTIONS = [
       'Plan a complete granite monument with a headstone, bases, kerbs, cover, inscriptions, portraits, and coordinated additions.',
     image: '/webp/products/APP_ID_100-medium.webp',
     href: '/laser-etched-black-granite-full-monument/select-shape',
-    designLabel: 'Design a full monument',
     learnMoreHref: '/memorials/full-monuments',
   },
   {
@@ -77,7 +161,6 @@ const HOME_PRODUCT_OPTIONS = [
       'Personalize a stainless steel vitreous enamel inlaid urn with imagery, color, wording, and a carefully selected finish.',
     image: '/webp/products/APP_ID_2350-medium.webp',
     href: '/stainless-steel-vitreous-enamel-inlaid-urn/select-shape',
-    designLabel: 'Design a memorial urn',
     learnMoreHref: '/memorials/urns',
   },
   {
@@ -87,7 +170,6 @@ const HOME_PRODUCT_OPTIONS = [
       'Create a compact black granite memorial with a laser-etched portrait, inscription, and artwork for a garden or smaller resting place.',
     image: '/webp/products/APP_ID_22-medium.webp',
     href: '/laser-etched-black-granite-mini-headstone/select-shape',
-    designLabel: 'Design a mini headstone',
     learnMoreHref: '/memorials/headstones',
   },
   {
@@ -97,7 +179,6 @@ const HOME_PRODUCT_OPTIONS = [
       'Design a durable YAG-lasered stainless steel plaque with precise wording, imagery, motifs, and fixing options for indoor or outdoor display.',
     image: '/webp/products/APP_ID_52-medium.webp',
     href: '/yag-lasered-stainless-steel-plaque/select-shape',
-    designLabel: 'Design a steel plaque',
     learnMoreHref: '/memorials/plaques',
   },
   {
@@ -107,7 +188,6 @@ const HOME_PRODUCT_OPTIONS = [
       'Remember a beloved companion with a personalized black granite pet plaque featuring their portrait, name, dates, and a meaningful message.',
     image: '/webp/products/APP_ID_9-medium.webp',
     href: '/laser-etched-pet-plaque/select-shape',
-    designLabel: 'Design a pet plaque',
     learnMoreHref: '/memorials/pet-memorials',
   },
   {
@@ -117,7 +197,6 @@ const HOME_PRODUCT_OPTIONS = [
       'Create a contemporary stainless steel headstone with light-transmitting inscriptions and motifs, a glass backing, and a matching base.',
     image: '/webp/products/APP_ID_1-medium.webp',
     href: '/stainless-steel-light-transmitting-headstone/select-shape',
-    designLabel: 'Design a steel headstone',
     learnMoreHref: '/memorials/headstones',
   },
   {
@@ -127,7 +206,6 @@ const HOME_PRODUCT_OPTIONS = [
       'Choose a granite or stone finish and add deeply engraved lettering, borders, photographs, and motifs to a traditional memorial plaque.',
     image: '/webp/products/APP_ID_34-medium.webp',
     href: '/traditional-engraved-plaque/select-shape',
-    designLabel: 'Design an engraved plaque',
     learnMoreHref: '/memorials/plaques',
   },
   {
@@ -137,15 +215,17 @@ const HOME_PRODUCT_OPTIONS = [
       'Design a complete traditional monument with coordinated granite elements, engraved inscriptions, decorative motifs, and memorial accessories.',
     image: '/webp/products/APP_ID_101-medium.webp',
     href: '/traditional-engraved-full-monument/select-shape',
-    designLabel: 'Design a full monument',
     learnMoreHref: '/memorials/full-monuments',
   },
 ] as const;
 
 export default function HomeSplash() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [reviewsPaused, setReviewsPaused] = useState(false);
+  const [activeReviewIndex, setActiveReviewIndex] = useState(0);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const mobileMenuRef = useRef<HTMLDivElement>(null);
+  const reviewsTrackRef = useRef<HTMLDivElement>(null);
 
   // Mobile menu: close on Escape and lock body scroll while open
   useEffect(() => {
@@ -188,6 +268,89 @@ export default function HomeSplash() {
     };
   }, [mobileMenuOpen]);
 
+  useEffect(() => {
+    if (
+      reviewsPaused ||
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    ) {
+      return;
+    }
+
+    let resetTimeout: ReturnType<typeof setTimeout> | undefined;
+    const interval = window.setInterval(() => {
+      const track = reviewsTrackRef.current;
+      const firstReview = track?.firstElementChild as HTMLElement | null;
+      const secondReview = track?.children[1] as HTMLElement | undefined;
+      const loopStart = track?.children[GOOGLE_REVIEW_HIGHLIGHTS.length] as
+        | HTMLElement
+        | undefined;
+      if (!track || !firstReview || !secondReview || !loopStart) return;
+
+      const cardStep = secondReview.offsetLeft - firstReview.offsetLeft;
+      const loopWidth = loopStart.offsetLeft - firstReview.offsetLeft;
+      const nextPosition = track.scrollLeft + cardStep;
+      track.scrollTo({ left: nextPosition, behavior: 'smooth' });
+
+      if (nextPosition >= loopWidth) {
+        resetTimeout = setTimeout(() => {
+          track.scrollTo({ left: nextPosition - loopWidth, behavior: 'auto' });
+        }, 800);
+      }
+    }, 10_000);
+
+    return () => {
+      window.clearInterval(interval);
+      if (resetTimeout) clearTimeout(resetTimeout);
+    };
+  }, [reviewsPaused]);
+
+  const scrollReviews = (direction: -1 | 1) => {
+    const track = reviewsTrackRef.current;
+    const firstReview = track?.firstElementChild as HTMLElement | null;
+    const secondReview = track?.children[1] as HTMLElement | undefined;
+    const loopStart = track?.children[GOOGLE_REVIEW_HIGHLIGHTS.length] as
+      | HTMLElement
+      | undefined;
+    if (!track || !firstReview || !secondReview || !loopStart) return;
+
+    const cardStep = secondReview.offsetLeft - firstReview.offsetLeft;
+    const loopWidth = loopStart.offsetLeft - firstReview.offsetLeft;
+    let currentPosition = track.scrollLeft;
+
+    if (currentPosition >= loopWidth) {
+      currentPosition -= loopWidth;
+      track.scrollTo({ left: currentPosition, behavior: 'auto' });
+    }
+
+    if (direction === -1 && currentPosition <= 1) {
+      track.scrollTo({ left: loopWidth, behavior: 'auto' });
+      requestAnimationFrame(() => {
+        track.scrollTo({ left: loopWidth - cardStep, behavior: 'smooth' });
+      });
+      return;
+    }
+
+    const nextPosition = currentPosition + direction * cardStep;
+    track.scrollTo({ left: nextPosition, behavior: 'smooth' });
+
+    if (direction === 1 && nextPosition >= loopWidth) {
+      setTimeout(() => {
+        track.scrollTo({ left: nextPosition - loopWidth, behavior: 'auto' });
+      }, 800);
+    }
+  };
+
+  const handleReviewsScroll = () => {
+    const track = reviewsTrackRef.current;
+    const firstReview = track?.firstElementChild as HTMLElement | null;
+    const secondReview = track?.children[1] as HTMLElement | undefined;
+    if (!track || !firstReview || !secondReview) return;
+
+    const cardStep = secondReview.offsetLeft - firstReview.offsetLeft;
+    const index = Math.round(track.scrollLeft / cardStep);
+    setActiveReviewIndex(index % GOOGLE_REVIEW_HIGHLIGHTS.length);
+  };
+
   return (
     <main id="main-content" className="min-h-screen bg-[#0c0b0a]">
       <a
@@ -198,55 +361,52 @@ export default function HomeSplash() {
       </a>
 
       {/* Hero Section */}
-      <div className="relative flex flex-col overflow-hidden" role="banner">
+      <div
+        className="relative flex flex-col overflow-hidden border-b border-[#bdb4a6] bg-[#eee9df]"
+        role="banner"
+      >
         {/* Responsive Header - Absolute top */}
         <header
           className="absolute top-0 right-0 left-0 z-50 px-4 py-3 sm:px-6 sm:py-4"
           style={{ caretColor: 'transparent' }}
         >
-          <div className="mx-auto flex w-full max-w-7xl items-center justify-between gap-5 xl:gap-8">
-            {/* Logo - Responsive width, aligned left */}
-            <div
-              className="pointer-events-none w-52 shrink-0 select-none sm:w-56 md:w-64"
-              style={{ caretColor: 'transparent', userSelect: 'none' }}
+          <div className="mx-auto flex w-full max-w-7xl items-center justify-between gap-5 lg:px-8 xl:gap-8">
+            <Link
+              href="/"
+              aria-label="Forever Shining home"
+              className="shrink-0 font-serif text-xl leading-none tracking-[-0.015em] text-[#2b2926] transition-colors hover:text-[#7b5a20] sm:text-[1.6875rem]"
             >
-              <Image
-                src="/ico/forever-transparent-logo.png"
-                alt="Forever Shining - Design Online"
-                width={320}
-                height={100}
-                className="h-auto w-full select-none"
-                priority
-                quality={75}
-                sizes="(min-width: 768px) 288px, (min-width: 640px) 224px, 208px"
-                draggable={false}
-                style={{ userSelect: 'none', pointerEvents: 'none' }}
-              />
-            </div>
+              Forever Shining
+            </Link>
 
             <nav
-              className="hidden shrink-0 items-center gap-2 xl:flex"
+              className="ml-auto hidden shrink-0 items-center gap-2 xl:flex"
               aria-label="Design actions"
             >
+              <ThemeToggle inline />
               <Link
                 href="/designs"
-                className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-white/30 bg-white/[0.01] text-white transition-colors hover:border-[#ffffff]/80 hover:bg-white/15 hover:text-[#ffffff]"
+                className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-[#bdb4a6] text-[#1d1a17] transition-colors hover:border-[#7b5a20] hover:bg-white/45"
                 aria-label="Search memorial designs"
               >
                 <MagnifyingGlassIcon className="h-5 w-5" aria-hidden="true" />
               </Link>
               <Link
                 href="/designs"
-                className="inline-flex min-h-10 items-center justify-center rounded-lg border border-white/30 bg-white/[0.01] px-4 text-sm font-semibold text-white transition-colors hover:border-[#ffffff]/80 hover:bg-white/5 hover:text-[#ffffff]"
+                className="inline-flex min-h-10 items-center justify-center rounded-lg border border-[#bdb4a6] px-4 text-sm font-semibold text-[#1d1a17] transition-colors hover:border-[#7b5a20] hover:bg-white/45"
               >
                 Browse Designs
               </Link>
             </nav>
 
+            <div className="ml-auto xl:hidden">
+              <ThemeToggle inline />
+            </div>
+
             <Link
               href="/select-product"
               prefetch={false}
-              className="ml-auto hidden min-h-11 items-center justify-center rounded-lg bg-[#cfac6c] px-4 text-sm font-semibold text-slate-950 transition-colors hover:bg-[#d7b979] md:inline-flex xl:hidden"
+              className="hidden min-h-11 items-center justify-center rounded-sm bg-[#1d1a17] px-4 text-sm font-semibold text-white transition-colors hover:bg-[#3a332c] md:inline-flex xl:hidden"
             >
               Start Designing
             </Link>
@@ -256,7 +416,7 @@ export default function HomeSplash() {
               ref={menuButtonRef}
               type="button"
               onClick={() => setMobileMenuOpen(true)}
-              className="shrink-0 rounded-lg border border-white/30 bg-white/[0.08] p-2 text-white backdrop-blur-sm transition-colors hover:border-[#cfac6c]/80 xl:hidden"
+              className="shrink-0 rounded-lg border border-[#bdb4a6] bg-white/20 p-2 text-[#1d1a17] transition-colors hover:border-[#7b5a20] hover:bg-white/45 xl:hidden"
               aria-label="Open menu"
               aria-expanded={mobileMenuOpen}
             >
@@ -282,18 +442,7 @@ export default function HomeSplash() {
             <div className="absolute inset-x-0 top-0 max-h-[100dvh] overflow-y-auto border-b border-[#d4af37]/25 bg-[#0d0a06]/95 pb-6 shadow-2xl backdrop-blur-md">
               {/* Match the home header so the logo and close button stay in
                   exactly the same place when the mobile menu opens. */}
-              <div className="flex items-center justify-between gap-5 px-4 py-3">
-                <div className="pointer-events-none w-52 select-none">
-                  <Image
-                    src="/ico/forever-transparent-logo.png"
-                    alt="Forever Shining"
-                    width={320}
-                    height={100}
-                    className="h-auto w-full select-none"
-                    sizes="208px"
-                    draggable={false}
-                  />
-                </div>
+              <div className="flex items-center justify-end px-4 py-3">
                 <button
                   data-menu-close
                   type="button"
@@ -345,124 +494,33 @@ export default function HomeSplash() {
           </div>
         )}
 
-        {/* Background Layers */}
-        <Image
-          src="/backgrounds/tree-2916763_1920.webp"
-          alt=""
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover object-center [filter:brightness(0.6)]"
-          aria-hidden="true"
-        />
-
-        <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-col px-4 pt-[126px] pb-10 sm:px-6 sm:pt-[124px] sm:pb-12 lg:px-8">
-          <div className="flex flex-col text-center">
-            {/* Headline - Connect the live design to the crafted memorial */}
-            <h1
-              id="home-heading"
-              className="font-playfair-display order-1 !mb-0 scroll-mt-24 !pb-0 text-[1.9rem] leading-[1.12] tracking-[-0.025em] sm:text-[2.5rem]"
-            >
-              <span
-                className="mx-auto inline-block max-w-5xl font-semibold"
-                style={{
-                  color: '#FFFEF8',
-                  textShadow:
-                    '0 2px 3px rgba(0,0,0,.72), 0 6px 28px rgba(0,0,0,.4)',
-                }}
+        <div
+          id="how-it-works"
+          className="relative z-10 mx-auto w-full max-w-7xl scroll-mt-24 px-4 pt-[132px] pb-12 sm:px-6 sm:pt-[140px] sm:pb-14 lg:px-8 lg:pt-[136px] lg:pb-16"
+        >
+          <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,0.74fr)_minmax(0,1.26fr)] lg:gap-10">
+            <div className="flex max-w-xl flex-col items-start text-left">
+              <h1
+                id="home-heading"
+                className="!mb-0 scroll-mt-24 !pb-0 font-serif text-[2rem] leading-[1.12] tracking-[-0.025em] text-[#1d1a17] sm:text-[2.75rem] lg:text-5xl lg:leading-[1.08]"
               >
-                Design Custom Headstones, Grave Markers
+                Design Custom Headstones
                 <br className="hidden lg:block" /> &amp; Memorial Plaques
-              </span>
-            </h1>
-            <p
-              className="order-2 mx-auto mt-4 max-w-2xl text-base leading-7 font-normal text-pretty sm:text-xl sm:leading-8"
-              style={{
-                color: '#FFFFFF',
-                textShadow:
-                  '0 2px 3px rgba(0,0,0,.72), 0 4px 18px rgba(0,0,0,.38)',
-              }}
-            >
-              Personalize the stone, shape, inscription, and meaningful details.
-              Preview your memorial in 3D and see pricing as you design.
-            </p>
-
-            <div className="relative z-20 order-3 mt-5 flex flex-col items-center gap-3">
-              <Link
-                href="/select-product"
-                prefetch={false}
-                className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-sm bg-[#d0ad68] px-7 py-3.5 text-center text-sm font-semibold text-[#17120a] transition-colors hover:bg-[#e0c27f] sm:w-auto sm:px-10 sm:text-base"
-                aria-label="Design your memorial"
-                style={{ letterSpacing: '0.05em' }}
-              >
-                Design Your Memorial
-                <ArrowRightIcon
-                  className="relative top-px h-4 w-4 shrink-0"
-                  aria-hidden="true"
-                />
-              </Link>
-              <p className="text-center text-xs font-medium text-white/80 sm:text-sm">
-                Review your design and pricing before ordering. No commitment
-                required.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Features Section - How It Works */}
-      <section
-        id="how-it-works"
-        className="day:border-stone-200 day:bg-[#f7f4ee] relative scroll-mt-24 overflow-hidden border-t border-white/10 bg-[#11100e] py-20"
-      >
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="grid gap-12 lg:grid-cols-[minmax(0,0.78fr)_minmax(0,1.22fr)] lg:items-center">
-            <div>
-              <h2 className="day:text-stone-900 max-w-2xl font-serif text-3xl leading-[1.16] text-pretty text-white sm:text-5xl">
-                Design a Personalized Memorial Online in 3D
-              </h2>
-              <p className="day:text-amber-800 mt-6 text-sm font-semibold text-[#e3c887]">
-                Creating lasting tributes since 2005
-              </p>
-              <p className="day:text-gray-600 mt-4 max-w-xl text-base leading-7 text-gray-300">
-                Design a memorial with clarity and care, at a pace that feels
-                right for your family. See every decision in 3D before moving
-                forward.
+              </h1>
+              <p className="mt-5 max-w-lg text-base leading-7 text-pretty text-[#625a51] sm:text-lg sm:leading-8">
+                Choose the stone, shape, inscription, and meaningful details in
+                one guided designer. See every change and the price in 3D, then
+                save or share your design when you are ready.
               </p>
 
-              <ul className="day:text-gray-600 mt-5 space-y-3 text-sm font-medium text-gray-300">
-                {[
-                  'Begin without pressure',
-                  'See every change in 3D',
-                  'Save and share with family',
-                ].map((item) => (
-                  <li
-                    key={item}
-                    className="flex items-center gap-3.5 leading-5"
-                  >
-                    <span
-                      className="h-1.5 w-1.5 shrink-0 rounded-full bg-[#cfac6c]"
-                      aria-hidden="true"
-                    />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-
-              <div className="mt-7 flex flex-col gap-3 sm:flex-row">
+              <div className="relative z-20 mt-7 flex">
                 <Link
                   href="/select-product"
                   prefetch={false}
-                  className="inline-flex min-h-11 items-center justify-center gap-2 rounded-sm bg-[#d0ad68] px-5 py-2.5 text-sm font-semibold text-[#17120a] transition-colors hover:bg-[#e0c27f]"
+                  className="inline-flex min-h-12 w-full items-center justify-center rounded-sm bg-[#1d1a17] px-7 py-3 text-center text-sm font-semibold tracking-[0.015em] text-white transition-colors hover:bg-[#3a332c] sm:w-auto"
+                  aria-label="Design your memorial"
                 >
                   Start Designing in 3D
-                  <ArrowRightIcon className="h-4 w-4" aria-hidden="true" />
-                </Link>
-                <Link
-                  href="/designs"
-                  className="day:border-gray-300 day:text-gray-800 day:hover:bg-white inline-flex min-h-11 items-center justify-center rounded-lg border border-white/45 bg-white/[0.06] px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:border-[#cfac6c]/80 hover:bg-white/12"
-                >
-                  Browse Designs
                 </Link>
               </div>
             </div>
@@ -471,7 +529,7 @@ export default function HomeSplash() {
               href="/select-product"
               prefetch={false}
               aria-label="Open the 3D memorial designer"
-              className="group day:border-stone-300 relative block overflow-hidden rounded-sm border border-white/20 bg-[#17120d] shadow-[0_28px_70px_rgba(0,0,0,0.4)]"
+              className="group relative block overflow-hidden rounded-sm border border-[#d8cdb9] bg-[#17120d] shadow-[0_20px_50px_rgba(55,42,20,0.18)]"
             >
               <div className="relative aspect-[21/10] overflow-hidden">
                 <Image
@@ -487,6 +545,109 @@ export default function HomeSplash() {
                 </div>
               </div>
             </Link>
+          </div>
+        </div>
+      </div>
+
+      <section
+        aria-labelledby="google-reviews-heading"
+        className="day:border-[#d8cdb9] day:bg-[#f7f4ee] day:text-[#1d1a17] relative overflow-hidden border-b border-[#cfac6c]/20 bg-[#1d1a17] py-10 text-white lg:py-12"
+      >
+        <div className="mx-auto max-w-7xl px-6 lg:px-8">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <p className="day:text-[#8a651f] text-sm font-semibold text-[#d8b66f]">
+                ★★★★★{' '}
+                <span className="day:text-[#625a51] ml-2 text-white/70">
+                  4.8 from 72 Google reviews
+                </span>
+              </p>
+              <h2
+                id="google-reviews-heading"
+                className="mt-2 font-serif text-3xl leading-tight"
+              >
+                Words from families we have helped
+              </h2>
+            </div>
+            <a
+              href={GOOGLE_REVIEWS_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="day:border-[#9a742f] day:text-[#6f511c] day:hover:text-[#1d1a17] w-fit border-b border-[#d8b66f] pb-1 text-sm font-semibold text-[#f0d89f] transition-colors hover:text-white"
+            >
+              Read all reviews on Google
+            </a>
+          </div>
+
+          <div
+            ref={reviewsTrackRef}
+            tabIndex={0}
+            aria-label="Customer review highlights. Scroll horizontally to see more. Reviews advance automatically every 10 seconds."
+            onMouseEnter={() => setReviewsPaused(true)}
+            onMouseLeave={() => setReviewsPaused(false)}
+            onFocus={() => setReviewsPaused(true)}
+            onBlur={() => setReviewsPaused(false)}
+            onPointerDown={() => setReviewsPaused(true)}
+            onPointerUp={() => setReviewsPaused(false)}
+            onScroll={handleReviewsScroll}
+            className="day:gap-4 day:border-transparent day:py-3 mt-6 flex snap-x snap-mandatory overflow-x-auto border-t border-l border-white/20 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          >
+            {[0, 1].map((cycle) =>
+              GOOGLE_REVIEW_HIGHLIGHTS.map((review) => (
+                <figure
+                  key={`${cycle}-${review.author}`}
+                  aria-hidden={cycle === 1}
+                  className="day:rounded-sm day:border day:border-[#e4ddd2] day:bg-white day:shadow-[0_10px_30px_rgba(0,0,0,0.03)] day:lg:min-w-[calc((100%-2rem)/3)] day:xl:min-w-[calc((100%-3rem)/4)] flex min-h-40 min-w-[270px] snap-start flex-col justify-between border-r border-b border-white/20 p-5 sm:min-w-[310px] sm:p-6 lg:min-w-[33.333333%] xl:min-w-[25%]"
+                >
+                  <p className="day:text-[#1d1a17] font-serif text-xl leading-snug text-pretty text-white">
+                    {review.text}
+                  </p>
+                  <figcaption className="day:text-[#625a51] mt-6 flex flex-col gap-1 text-sm text-white/80">
+                    <span className="day:text-[#1d1a17] font-semibold text-white">
+                      {review.author}
+                    </span>
+                    <span>Google review highlight</span>
+                  </figcaption>
+                </figure>
+              )),
+            )}
+          </div>
+
+          <div
+            className="mt-4 flex items-center gap-4"
+            onMouseEnter={() => setReviewsPaused(true)}
+            onMouseLeave={() => setReviewsPaused(false)}
+            onFocus={() => setReviewsPaused(true)}
+            onBlur={() => setReviewsPaused(false)}
+          >
+            <button
+              type="button"
+              onClick={() => scrollReviews(-1)}
+              aria-label="Show previous review"
+              className="day:border-[#9a742f]/70 day:text-[#7b5a20] day:hover:border-[#7b5a20] day:hover:bg-[#eee9df] day:hover:text-[#1d1a17] day:focus-visible:ring-[#9a742f] inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[#d8b66f]/70 text-[#f0d89f] transition-colors hover:border-[#f0d89f] hover:bg-white/10 hover:text-white focus-visible:ring-2 focus-visible:ring-[#f0d89f] focus-visible:outline-none"
+            >
+              <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
+            </button>
+            <div className="day:bg-[#c9bead] relative h-px flex-1 overflow-hidden bg-white/20">
+              <span
+                className="day:bg-[#9a742f] absolute inset-y-0 left-0 bg-[#d8b66f] transition-[width] duration-500"
+                style={{
+                  width: `${((activeReviewIndex + 1) / GOOGLE_REVIEW_HIGHLIGHTS.length) * 100}%`,
+                }}
+              />
+            </div>
+            <span className="sr-only" aria-live="polite">
+              Review {activeReviewIndex + 1} of{' '}
+              {GOOGLE_REVIEW_HIGHLIGHTS.length}
+            </span>
+            <button
+              type="button"
+              onClick={() => scrollReviews(1)}
+              aria-label="Show next review"
+              className="day:border-[#9a742f]/70 day:text-[#7b5a20] day:hover:border-[#7b5a20] day:hover:bg-[#eee9df] day:hover:text-[#1d1a17] day:focus-visible:ring-[#9a742f] inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[#d8b66f]/70 text-[#f0d89f] transition-colors hover:border-[#f0d89f] hover:bg-white/10 hover:text-white focus-visible:ring-2 focus-visible:ring-[#f0d89f] focus-visible:outline-none"
+            >
+              <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
+            </button>
           </div>
         </div>
       </section>
@@ -527,7 +688,7 @@ export default function HomeSplash() {
                     alt={`${product.name} available to personalize online`}
                     fill
                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                    className="object-contain p-5 transition-transform duration-500 group-hover:scale-[1.025] motion-reduce:transition-none motion-reduce:group-hover:transform-none"
+                    className="object-contain p-5 sepia transition-[filter,transform] duration-500 group-hover:scale-[1.025] group-hover:sepia-0 motion-reduce:transition-none motion-reduce:group-hover:transform-none"
                   />
                 </div>
 
@@ -547,7 +708,7 @@ export default function HomeSplash() {
                       prefetch={false}
                       className="inline-flex min-h-11 items-center justify-center gap-1.5 rounded-sm bg-[#d0ad68] px-3 py-2.5 text-center text-sm font-semibold text-[#17120a] transition-colors hover:bg-[#e0c27f] focus-visible:ring-2 focus-visible:ring-[#f3d48f] focus-visible:outline-none"
                     >
-                      {product.designLabel}
+                      Design now
                       <ArrowRightIcon
                         className="h-4 w-4 shrink-0"
                         aria-hidden="true"
@@ -675,7 +836,7 @@ export default function HomeSplash() {
               <details
                 key={item.question}
                 open={index === 0}
-                className="group day:border-stone-200 day:bg-white border-b border-white/15 bg-transparent px-1 py-5 first:border-t"
+                className="group day:border-stone-200 day:bg-white border-b border-white/15 bg-transparent px-4 py-5 first:border-t sm:px-5"
               >
                 <summary className="day:text-gray-900 flex cursor-pointer list-none items-center justify-between gap-4 text-left text-base font-semibold text-white marker:content-none">
                   {item.question}
@@ -738,6 +899,15 @@ export default function HomeSplash() {
               <div className="flex items-center gap-3 font-serif text-2xl">
                 <span className="tracking-wide">Forever Shining</span>
               </div>
+              <Image
+                src="/webp/forever-logo.webp"
+                alt="Forever Shining - Design Online"
+                width={200}
+                height={120}
+                className="mt-4 h-[100px] w-auto select-none"
+                sizes="167px"
+                draggable={false}
+              />
               <p className="day:text-gray-600 mt-4 text-sm text-white/70">
                 Crafting lasting tributes for families around the world since
                 2005.

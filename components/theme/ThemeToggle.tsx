@@ -5,14 +5,15 @@ import { SunIcon, MoonIcon } from '@heroicons/react/24/outline';
 import { isDesignerRoutePath } from '#/lib/designer-route-state';
 import { useTheme } from './ThemeProvider';
 
-/** Fixed circle button — top-left corner, always on top. */
-export function ThemeToggle() {
+/** Theme control rendered globally or inline inside page navigation. */
+export function ThemeToggle({ inline = false }: { inline?: boolean }) {
   const { theme, toggleTheme } = useTheme();
   const pathname = usePathname();
   const isDay = theme === 'day';
 
   // Designs pages always use white background — toggle not needed and would overlap the sidebar logo
   if (pathname?.startsWith('/designs')) return null;
+  if (pathname === '/' && !inline) return null;
 
   // On designer steps the day/night toggle lives inside the left sidebar on
   // mobile/tablet, so hide the floating toggle below lg there (keep it on lg+).
@@ -34,7 +35,11 @@ export function ThemeToggle() {
       onClick={toggleTheme}
       aria-label={isDay ? 'Switch to night mode' : 'Switch to day mode'}
       title={isDay ? 'Night mode' : 'Day mode'}
-      className={`fixed top-5 z-[9999] ${insideMemorialsOnMobile ? 'right-5 left-auto lg:right-auto lg:left-5' : 'left-5'} day:border-[#D7B356]/50 day:bg-white/90 day:text-amber-700 day:hover:border-[#D7B356]/80 day:hover:bg-white day:hover:text-amber-800 h-9 w-9 items-center justify-center rounded-full border border-white/20 bg-[#1a1208]/80 text-white/60 shadow-md backdrop-blur-sm transition-[background-color,border-color,color] duration-200 hover:border-white/40 hover:bg-[#1a1208]/95 hover:text-white ${insideDesignerSidebarOnMobile || insideAccountSidebarOnMobile || insideMemorialsOnMobile ? 'hidden lg:flex' : 'flex'} `}
+      className={
+        inline
+          ? 'inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-[#bdb4a6] text-[#1d1a17] transition-colors hover:border-[#7b5a20] hover:bg-white/45'
+          : `fixed top-5 z-[9999] ${insideMemorialsOnMobile ? 'right-5 left-auto lg:right-auto lg:left-5' : 'left-5'} day:border-[#D7B356]/50 day:bg-white/90 day:text-amber-700 day:hover:border-[#D7B356]/80 day:hover:bg-white day:hover:text-amber-800 h-9 w-9 items-center justify-center rounded-full border border-white/20 bg-[#1a1208]/80 text-white/60 shadow-md backdrop-blur-sm transition-[background-color,border-color,color] duration-200 hover:border-white/40 hover:bg-[#1a1208]/95 hover:text-white ${insideDesignerSidebarOnMobile || insideAccountSidebarOnMobile || insideMemorialsOnMobile ? 'hidden lg:flex' : 'flex'}`
+      }
     >
       {isDay ? (
         <MoonIcon className="h-4 w-4" aria-hidden="true" />
