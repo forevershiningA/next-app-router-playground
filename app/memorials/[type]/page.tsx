@@ -2,7 +2,12 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { Bars3Icon } from '@heroicons/react/24/outline';
+import {
+  ArrowRightIcon,
+  Bars3Icon,
+  MagnifyingGlassIcon,
+} from '@heroicons/react/24/outline';
+import { ThemeToggle } from '#/components/theme/ThemeToggle';
 import {
   getMemorialTypePageData,
   isMemorialTypeSlug,
@@ -11,7 +16,6 @@ import {
 } from '#/lib/memorial-product-pages';
 import { getDesignerProductSlug } from '#/lib/designer-product-routes';
 import MemorialHeaderGallery from './MemorialHeaderGallery';
-import MemorialThemeToggle from './MemorialThemeToggle';
 
 type PageProps = { params: Promise<{ type: string }> };
 
@@ -48,8 +52,8 @@ const productCategoryLabels: Record<string, string> = {
 };
 
 const headerMemorialLinks: MemorialTypeSlug[] = [
-  'plaques',
   'headstones',
+  'plaques',
   'full-monuments',
   'urns',
   'pet-memorials',
@@ -245,7 +249,7 @@ export default async function MemorialTypePage({ params }: PageProps) {
 
   return (
     <main
-      className="day:bg-stone-100 day:text-gray-900 min-h-screen bg-[#0b0b0b] text-white"
+      className="day:bg-[#f7f4ee] day:text-[#1d1a17] min-h-screen bg-[#0c0b0a] text-white"
       data-seo-page="true"
       data-memorials-page="true"
     >
@@ -258,17 +262,11 @@ export default async function MemorialTypePage({ params }: PageProps) {
 
       <PublicHeader activeType={page.slug} />
 
-      <section className="day:border-gray-200 day:bg-white border-b border-white/10 bg-[#111]">
-        <div className="mx-auto max-w-7xl px-4 py-5 sm:px-6 sm:py-7 lg:px-8">
-          <div className="mb-3 flex items-center justify-between gap-4 sm:mb-5">
-            <nav
-              className="day:text-gray-500 text-sm text-gray-400"
-              aria-label="Breadcrumb"
-            >
-              <Link
-                href="/"
-                className="day:hover:text-gray-900 hover:text-white"
-              >
+      <section className="border-b border-[#bdb4a6] bg-[#eee9df] text-[#1d1a17]">
+        <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-10 lg:px-8 lg:py-14">
+          <div className="mb-6 flex items-center justify-between gap-4">
+            <nav className="text-sm text-[#756c62]" aria-label="Breadcrumb">
+              <Link href="/" className="transition-colors hover:text-[#6f511c]">
                 Home
               </Link>
               <span className="mx-2" aria-hidden="true">
@@ -276,25 +274,19 @@ export default async function MemorialTypePage({ params }: PageProps) {
               </span>
               <span>{page.title}</span>
             </nav>
-            <div className="sm:hidden">
-              <MemorialThemeToggle />
-            </div>
           </div>
 
-          <div className="grid gap-4 sm:gap-6 lg:grid-cols-2 lg:items-start">
-            <div className="flex flex-col gap-2 sm:gap-3">
-              <p className="m-0 text-xs font-semibold tracking-[0.24em] text-[#cfac6c] uppercase">
-                Product type
-              </p>
-              <h1 className="day:text-gray-900 m-0 max-w-3xl p-0 font-serif text-4xl leading-none text-white sm:text-5xl">
+          <div className="grid gap-8 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:items-center lg:gap-12">
+            <div className="flex max-w-xl flex-col items-start">
+              <h1 className="m-0 max-w-3xl p-0 font-serif text-[2.5rem] leading-[1.08] tracking-[-0.025em] text-[#1d1a17] sm:text-5xl lg:text-[3.5rem]">
                 {page.title}
               </h1>
-              <p className="day:text-gray-600 m-0 max-w-3xl text-base leading-7 text-gray-300">
+              <p className="mt-5 max-w-xl text-base leading-7 text-[#625a51] sm:text-lg sm:leading-8">
                 {page.intro}
               </p>
               <Link
                 href="#choose-product"
-                className="inline-flex min-h-12 items-center justify-center rounded-lg bg-[#cfac6c] px-5 py-3 text-sm font-semibold text-slate-950 transition-colors hover:bg-[#d7b979] sm:hidden"
+                className="mt-7 inline-flex min-h-12 items-center justify-center rounded-sm bg-[#1d1a17] px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#3a332c]"
               >
                 {mobileBrowseLabel}
               </Link>
@@ -305,24 +297,24 @@ export default async function MemorialTypePage({ params }: PageProps) {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-6 py-10 lg:px-8">
+      <section className="mx-auto max-w-7xl px-6 py-12 lg:px-8 lg:py-16">
         {guidance && (
           <section
             aria-labelledby="buying-guidance-heading"
-            className="day:border-gray-200 mb-10 border-b border-white/10 pb-10"
+            className="day:border-[#d8cdb9] mb-12 border-b border-white/10 pb-12"
           >
             <div className="max-w-4xl">
               <h2
                 id="buying-guidance-heading"
-                className="day:text-gray-900 text-2xl font-semibold text-white"
+                className="day:text-[#1d1a17] font-serif text-3xl text-white"
               >
                 What to compare before designing
               </h2>
-              <p className="day:text-gray-600 mt-3 text-base leading-7 text-gray-300">
+              <p className="day:text-[#625a51] mt-4 text-base leading-7 text-gray-300">
                 {guidance.summary}
               </p>
             </div>
-            <ul className="day:text-gray-600 mt-6 grid gap-4 text-sm leading-7 text-gray-300 md:grid-cols-3">
+            <ul className="day:text-[#625a51] mt-7 grid gap-5 text-sm leading-7 text-gray-300 md:grid-cols-3">
               {guidance.points.map((point) => (
                 <li key={point} className="border-l border-[#cfac6c] pl-4">
                   {point}
@@ -333,7 +325,7 @@ export default async function MemorialTypePage({ params }: PageProps) {
         )}
 
         <div id="choose-product" className="mb-5 scroll-mt-5">
-          <h2 className="day:text-gray-900 text-2xl font-semibold text-white">
+          <h2 className="day:text-[#1d1a17] font-serif text-3xl text-white">
             Choose a style
           </h2>
         </div>
@@ -342,35 +334,36 @@ export default async function MemorialTypePage({ params }: PageProps) {
           {page.products.map((product) => (
             <article
               key={product.id}
-              className="group day:border-gray-200 day:bg-white flex h-full flex-col overflow-hidden rounded-lg border border-white/10 bg-[#171717] transition-all hover:-translate-y-0.5 hover:border-[#cfac6c]/60 hover:shadow-lg hover:shadow-[#cfac6c]/10"
+              className="group day:border-[#e4ddd2] day:bg-white day:shadow-[0_10px_30px_rgba(0,0,0,0.03)] flex h-full flex-col overflow-hidden rounded-sm border border-white/10 bg-[#171717] transition-colors hover:border-[#cfac6c]/60"
             >
               <Link
                 href={productDesignerUrl(product.id)}
                 aria-label={`Design your own ${product.displayName}`}
-                className="day:border-gray-200 day:bg-gray-50 relative block aspect-[5/4] overflow-hidden border-b border-white/10 bg-[#101010] focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[#cfac6c] sm:aspect-[4/3]"
+                className="day:border-[#e4ddd2] day:bg-[#f5f1e9] relative block aspect-[5/4] overflow-hidden border-b border-white/10 bg-[#101010] focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[#cfac6c] sm:aspect-[4/3]"
               >
                 <Image
                   src={`/webp/products/${product.image}`}
                   alt=""
                   fill
-                  className="object-cover transition-transform duration-300 group-hover:scale-105 sm:object-contain sm:p-5"
+                  className="object-cover sepia transition-[filter,transform] duration-300 group-hover:scale-[1.02] group-hover:sepia-0 sm:object-contain sm:p-5"
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                 />
               </Link>
 
-              <div className="flex flex-1 flex-col gap-4 p-4">
-                <h3 className="day:text-gray-900 text-xl font-semibold text-white">
+              <div className="flex flex-1 flex-col gap-4 p-5">
+                <h3 className="day:text-[#1d1a17] font-serif text-xl text-white">
                   {product.displayName}
                 </h3>
-                <p className="day:text-gray-600 text-[15px] leading-6 text-gray-300">
+                <p className="day:text-[#625a51] text-[15px] leading-6 text-gray-300">
                   {product.description}
                 </p>
 
                 <Link
                   href={productDesignerUrl(product.id)}
-                  className="mt-auto inline-flex min-h-11 items-center justify-center rounded-lg bg-[#cfac6c] px-4 py-2 text-sm font-semibold text-slate-950 transition-colors hover:bg-[#d7b979]"
+                  className="day:border-[#bdb4a6] day:text-[#1d1a17] day:hover:border-[#7b5a20] day:hover:bg-[#f7f4ee] mt-auto inline-flex min-h-11 items-center justify-between gap-3 rounded-sm border border-[#cfac6c]/60 px-4 py-2 text-sm font-semibold text-[#f0d89f] transition-colors hover:bg-white/5"
                 >
-                  Design Your Own
+                  Design now
+                  <ArrowRightIcon className="h-4 w-4" aria-hidden="true" />
                 </Link>
               </div>
             </article>
@@ -379,18 +372,18 @@ export default async function MemorialTypePage({ params }: PageProps) {
       </section>
 
       {page.tutorialNotes.length > 0 ? (
-        <section className="day:border-gray-200 day:bg-white border-t border-white/10 bg-[#101010]">
-          <div className="mx-auto max-w-7xl px-6 py-10 lg:px-8">
-            <h2 className="day:text-gray-900 text-2xl font-semibold text-white">
+        <section className="day:border-[#d8cdb9] day:bg-[#eee9df] border-t border-white/10 bg-[#101010]">
+          <div className="mx-auto max-w-7xl px-6 py-12 lg:px-8 lg:py-16">
+            <h2 className="day:text-[#1d1a17] font-serif text-3xl text-white">
               Designer guidance from product data
             </h2>
             <div className="mt-5 grid grid-cols-1 gap-4 lg:grid-cols-2">
               {page.tutorialNotes.map((note, index) => (
                 <article
                   key={`${page.slug}-note-${index}`}
-                  className="day:border-gray-200 day:bg-gray-50 rounded-lg border border-white/10 bg-white/[0.03] p-4"
+                  className="day:border-[#e4ddd2] day:bg-white day:shadow-[0_10px_30px_rgba(0,0,0,0.03)] rounded-sm border border-white/10 bg-white/[0.03] p-5"
                 >
-                  <p className="day:text-gray-600 text-sm leading-6 text-gray-300">
+                  <p className="day:text-[#625a51] text-sm leading-6 text-gray-300">
                     {note}
                   </p>
                 </article>
@@ -406,70 +399,60 @@ export default async function MemorialTypePage({ params }: PageProps) {
 }
 
 function PublicHeader({ activeType }: { activeType: MemorialTypeSlug }) {
-  const baseLinkClass =
-    'rounded-lg border px-3 py-2 transition-colors hover:border-[#cfac6c]/60 hover:text-white day:hover:bg-gray-50';
-  const inactiveLinkClass =
-    'border-white/10 text-gray-200 day:border-gray-200 day:text-gray-700';
-  const activeLinkClass =
-    'border-[#cfac6c]/70 bg-[#cfac6c]/15 text-[#f3d48f] day:border-[#cfac6c] day:bg-[#fff7e6] day:text-gray-950';
-
   return (
-    <header className="day:border-gray-200 day:bg-white relative z-20 border-b border-white/10 bg-[#0b0b0b]/95">
-      <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3 sm:px-6 lg:px-8">
+    <header className="relative z-50 border-b border-[#bdb4a6] bg-[#eee9df] text-[#1d1a17]">
+      <div className="mx-auto flex h-[72px] max-w-7xl items-center justify-between gap-5 px-4 sm:px-6 lg:px-8">
         <Link
           href="/"
-          className="block w-40 sm:w-44"
+          className="shrink-0 font-serif text-xl leading-none tracking-[-0.015em] text-[#2b2926] transition-colors hover:text-[#7b5a20] sm:text-[1.6875rem]"
           aria-label="Forever Shining home"
         >
-          <Image
-            src="/ico/forever-transparent-logo.png"
-            alt="Forever Shining - Design Online"
-            width={320}
-            height={100}
-            className="h-auto w-full"
-            priority
-          />
+          Forever Shining
         </Link>
-        <nav className="hidden flex-wrap items-center gap-2 text-sm sm:flex">
+
+        <nav
+          className="ml-auto hidden items-center gap-2 xl:flex"
+          aria-label="Design actions"
+        >
+          <ThemeToggle inline />
           <Link
-            href="/"
-            className="day:border-gray-200 day:text-gray-700 day:hover:bg-gray-50 rounded-lg border border-white/10 px-3 py-2 text-gray-200 transition-colors hover:border-[#cfac6c]/60 hover:text-white"
+            href="/designs"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-[#bdb4a6] text-[#1d1a17] transition-colors hover:border-[#7b5a20] hover:bg-white/45"
+            aria-label="Search memorial designs"
           >
-            Home
+            <MagnifyingGlassIcon className="h-5 w-5" aria-hidden="true" />
           </Link>
-          {headerMemorialLinks.map((slug) => {
-            const isActive = slug === activeType;
-            return (
-              <Link
-                key={slug}
-                href={`/memorials/${slug}`}
-                aria-current={isActive ? 'page' : undefined}
-                className={`${baseLinkClass} ${isActive ? activeLinkClass : inactiveLinkClass}`}
-              >
-                {memorialTypePages[slug].navLabel}
-              </Link>
-            );
-          })}
           <Link
-            href="/select-product"
-            className="rounded-lg bg-[#cfac6c] px-4 py-2 font-semibold text-slate-950 transition-colors hover:bg-[#d7b979]"
+            href="/designs"
+            className="inline-flex min-h-10 items-center justify-center rounded-lg border border-[#bdb4a6] px-4 text-sm font-semibold transition-colors hover:border-[#7b5a20] hover:bg-white/45"
           >
-            Start Designing
+            Browse Designs
           </Link>
         </nav>
 
-        <details className="relative mr-12 sm:hidden">
-          <summary className="day:border-gray-300 day:text-gray-800 day:hover:bg-gray-50 flex cursor-pointer list-none items-center gap-2 rounded-lg border border-white/15 px-3 py-2 text-sm font-semibold text-white transition-colors hover:border-[#cfac6c]/60 hover:bg-white/5 [&::-webkit-details-marker]:hidden">
+        <div className="ml-auto xl:hidden">
+          <ThemeToggle inline />
+        </div>
+
+        <Link
+          href="/select-product"
+          className="hidden min-h-11 items-center justify-center rounded-sm bg-[#1d1a17] px-4 text-sm font-semibold text-white transition-colors hover:bg-[#3a332c] md:inline-flex xl:hidden"
+        >
+          Start Designing
+        </Link>
+
+        <details className="relative xl:hidden">
+          <summary className="flex cursor-pointer list-none items-center gap-2 rounded-lg border border-[#bdb4a6] bg-white/20 px-3 py-2 text-sm font-semibold transition-colors hover:border-[#7b5a20] hover:bg-white/45 [&::-webkit-details-marker]:hidden">
             <Bars3Icon className="h-5 w-5" aria-hidden="true" />
             Menu
           </summary>
           <nav
-            className="day:border-gray-200 day:bg-white absolute top-full right-0 mt-2 flex w-56 flex-col gap-1 rounded-lg border border-white/10 bg-[#111] p-2 shadow-xl"
+            className="absolute top-full right-0 mt-2 flex w-64 flex-col gap-1 rounded-sm border border-[#cfc5b7] bg-[#f7f4ee] p-2 text-[#1d1a17] shadow-xl"
             aria-label="Memorial product pages"
           >
             <Link
               href="/"
-              className="day:text-gray-700 day:hover:bg-gray-50 rounded-md px-3 py-2 text-sm text-gray-200 transition-colors hover:bg-white/5 hover:text-white"
+              className="rounded-sm px-3 py-2 text-sm transition-colors hover:bg-white"
             >
               Home
             </Link>
@@ -480,7 +463,7 @@ function PublicHeader({ activeType }: { activeType: MemorialTypeSlug }) {
                   key={slug}
                   href={`/memorials/${slug}`}
                   aria-current={isActive ? 'page' : undefined}
-                  className={`rounded-md px-3 py-2 text-sm transition-colors ${isActive ? 'day:bg-[#fff7e6] day:text-gray-950 bg-[#cfac6c]/15 text-[#f3d48f]' : 'day:text-gray-700 day:hover:bg-gray-50 text-gray-200 hover:bg-white/5 hover:text-white'}`}
+                  className={`rounded-sm px-3 py-2 text-sm transition-colors ${isActive ? 'bg-[#e8dfd0] font-semibold text-[#6f511c]' : 'hover:bg-white'}`}
                 >
                   {memorialTypePages[slug].navLabel}
                 </Link>
@@ -488,13 +471,34 @@ function PublicHeader({ activeType }: { activeType: MemorialTypeSlug }) {
             })}
             <Link
               href="/select-product"
-              className="mt-1 rounded-md bg-[#cfac6c] px-3 py-2 text-center text-sm font-semibold text-slate-950 transition-colors hover:bg-[#d7b979]"
+              className="mt-1 rounded-sm bg-[#1d1a17] px-3 py-2 text-center text-sm font-semibold text-white transition-colors hover:bg-[#3a332c]"
             >
               Start Designing
             </Link>
           </nav>
         </details>
       </div>
+
+      <nav
+        className="hidden border-t border-[#cfc5b7]/80 xl:block"
+        aria-label="Memorial categories"
+      >
+        <div className="mx-auto flex h-11 max-w-7xl items-center justify-center gap-9 px-8">
+          {headerMemorialLinks.map((slug) => {
+            const isActive = slug === activeType;
+            return (
+              <Link
+                key={slug}
+                href={`/memorials/${slug}`}
+                aria-current={isActive ? 'page' : undefined}
+                className={`relative flex h-full items-center text-[13px] font-medium tracking-[0.01em] transition-colors after:absolute after:right-0 after:bottom-0 after:left-0 after:h-px after:origin-center after:bg-[#8a651f] after:transition-transform ${isActive ? 'text-[#6f511c] after:scale-x-100' : 'text-[#514a43] after:scale-x-0 hover:text-[#6f511c] hover:after:scale-x-100'}`}
+              >
+                {memorialTypePages[slug].navLabel}
+              </Link>
+            );
+          })}
+        </div>
+      </nav>
     </header>
   );
 }
@@ -502,22 +506,25 @@ function PublicHeader({ activeType }: { activeType: MemorialTypeSlug }) {
 function PublicFooter() {
   return (
     <footer className="day:border-gray-200 day:bg-gray-100 border-t border-white/10 bg-[#050402]">
-      <div className="mx-auto max-w-7xl px-6 py-12 lg:px-8">
+      <div className="mx-auto max-w-7xl px-6 py-16 lg:px-8 lg:py-20">
         <div className="day:text-gray-900 grid grid-cols-1 gap-10 text-white sm:grid-cols-2 lg:grid-cols-[1fr_0.75fr_0.85fr_2.1fr]">
           <div>
             <Link
               href="/"
-              className="block w-52"
+              className="font-serif text-2xl tracking-wide"
               aria-label="Forever Shining home"
             >
-              <Image
-                src="/ico/forever-transparent-logo.png"
-                alt="Forever Shining - Design Online"
-                width={320}
-                height={100}
-                className="h-auto w-full"
-              />
+              Forever Shining
             </Link>
+            <Image
+              src="/webp/forever-logo.webp"
+              alt="Forever Shining - Design Online"
+              width={200}
+              height={120}
+              className="mt-4 h-[100px] w-auto select-none"
+              sizes="167px"
+              draggable={false}
+            />
             <p className="day:text-gray-600 mt-4 text-sm leading-6 text-white/70">
               Crafting lasting tributes for families around the world since
               2005.

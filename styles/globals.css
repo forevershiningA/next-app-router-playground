@@ -30,8 +30,8 @@ textarea,
 
 /* Prevent text cursor on non-editable elements */
 *:not(input):not(textarea):not([contenteditable='true']):not(button):not(a):not(
-    [role='button']
-  ) {
+    summary
+  ):not([role='button']) {
   cursor: default;
 }
 
@@ -39,6 +39,8 @@ button,
 button *,
 a,
 a *,
+summary,
+summary *,
 [role='button'],
 [role='button'] * {
   cursor: pointer !important;

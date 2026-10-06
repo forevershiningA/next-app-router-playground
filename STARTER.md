@@ -140,6 +140,7 @@
   - CTA: **Start Designing in 3D**
 - The duplicate “Design a Personalized Memorial Online in 3D” section below the hero has been removed because its purpose and copy are now represented in the hero.
 - The home header uses a restrained serif text wordmark, **Forever Shining**, in dark grey. The image logo is no longer shown in the hero or navigation.
+- On extra-large desktop screens, a slim category navigation bar sits directly below the primary header and links to **Headstones**, **Plaques**, **Full Monuments**, **Urns**, and **Pet Memorials** under `/memorials/*`. On smaller screens, the same links remain available in the existing menu drawer so the main header does not become crowded.
 - The supplied Forever Shining logo is displayed in the footer beneath the “Forever Shining” label at `100px` high.
 - On the home page, the day/night control is inline beside the search control. `ThemeToggle` accepts an optional `inline` prop; the original floating toggle remains available on other routes and is suppressed only on `/`.
 
@@ -148,6 +149,7 @@
 - A compact review section now sits immediately below the hero and before the product cards, linking to the Forever Shining Google Maps reviews page.
 - It contains 20 concise review highlights based on the company's public testimonials. The section identifies the source as Google and currently shows **4.8 from 72 Google reviews**, with a **Read all reviews on Google** link that opens safely in a new tab.
 - The reviews form an endlessly looping horizontal carousel. It advances by one card every `10s`, supports manual scrolling and previous/next controls, pauses during hover, focus, and pointer interaction, and disables automatic movement when `prefers-reduced-motion` is enabled.
+- The gold progress line is also an accessible range control: clicking or dragging it jumps to the corresponding review, with native keyboard support. The review track explicitly supports horizontal touch panning, iOS momentum scrolling, scroll snapping, and contained horizontal overscroll.
 - The carousel uses real element offsets for its loop boundary, keeping the reset accurate when card widths or gaps change. The second visual copy of the reviews is hidden from assistive technology.
 - Responsive sizing presents approximately one card on small screens, three on large screens, and four on extra-large desktop screens. A custom progress line and an accessible live position label indicate the current review.
 - Navigation buttons use `40px` hit areas, visible gold-toned outlines, `20px` chevrons, hover/focus states, and descriptive `aria-label` values.
@@ -159,11 +161,21 @@
 - Product imagery is sepia by default and transitions to its original colour on card hover.
 - Product-card CTAs are consistently labelled **Design now** and include a right arrow.
 - FAQ question rows have additional horizontal padding (`px-4 sm:px-5`) for clearer alignment and more comfortable touch targets.
+- The global cursor reset in `styles/globals.css` explicitly excludes native `<summary>` controls and assigns pointer cursors to each summary and its descendants. This ensures the home FAQ and other disclosure controls show the expected hand cursor instead of being overridden by the site's non-editable-element cursor rule.
+
+### Memorial category page visual alignment
+
+- The shared `/memorials/[type]` template now visually follows the home page across Headstones, Plaques, Full Monuments, Urns, and Pet Memorials while retaining each route's existing copy, product data, metadata, and structured data.
+- Category pages use the same cream editorial header, serif **Forever Shining** wordmark, inline day/night control, search action, Browse Designs action, and desktop category bar as the home page. The current category is indicated with a restrained gold underline; smaller screens use a compact menu containing the same routes.
+- Each category hero now uses the home page's warm cream palette, serif display typography, dark rectangular CTA, and asymmetric copy/gallery layout.
+- Gallery and product imagery is sepia by default and returns to full colour on hover. Product cards use subtle borders and day-mode shadows, serif titles, and a consistent **Design now** CTA with a right arrow.
+- Guidance sections and the category footer were brought into the same spacing, typography, border, and logo system used on the home page. The footer uses the text wordmark followed by `/webp/forever-logo.webp` at `100px` high.
 
 ### Validation and maintenance notes
 
-- `pnpm type-check` passes after the homepage and theme-toggle changes.
-- `HomeSplash.tsx` is Prettier-compliant and `git diff --check` reports no whitespace errors (apart from the repository's existing line-ending warning).
+- `pnpm type-check` passes after the homepage, review-slider, memorial-template, and theme-toggle changes.
+- Targeted ESLint checks pass for the shared memorial category page and gallery components.
+- `HomeSplash.tsx`, the memorial category components, `styles/globals.css`, and this document are Prettier-compliant. `git diff --check` reports no whitespace errors apart from the repository's existing LF-to-CRLF warning.
 - The home page was browser-checked at desktop width: four review cards fit in the current viewport, day mode retains the intended card depth, and the carousel advances after the configured interval.
 - ESLint reports no new errors. One existing `react-hooks/exhaustive-deps` cleanup warning remains in `HomeSplash.tsx` around the captured menu button ref.
 - The October 5 homepage notes below are retained as historical context; where they conflict with this entry, this October 6 status describes the current implementation.

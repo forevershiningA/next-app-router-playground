@@ -340,6 +340,21 @@ export default function HomeSplash() {
     }
   };
 
+  const scrollToReview = (index: number) => {
+    const track = reviewsTrackRef.current;
+    const firstReview = track?.firstElementChild as HTMLElement | null;
+    const targetReview = track?.children[index] as HTMLElement | undefined;
+    if (!track || !firstReview || !targetReview) return;
+
+    track.scrollTo({
+      left: targetReview.offsetLeft - firstReview.offsetLeft,
+      behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches
+        ? 'auto'
+        : 'smooth',
+    });
+    setActiveReviewIndex(index);
+  };
+
   const handleReviewsScroll = () => {
     const track = reviewsTrackRef.current;
     const firstReview = track?.firstElementChild as HTMLElement | null;
@@ -424,6 +439,23 @@ export default function HomeSplash() {
             </button>
           </div>
         </header>
+
+        <nav
+          aria-label="Memorial categories"
+          className="absolute top-[72px] right-0 left-0 z-40 hidden border-y border-[#cfc5b7]/80 bg-[#eee9df]/95 backdrop-blur-sm xl:block"
+        >
+          <div className="mx-auto flex h-11 max-w-7xl items-center justify-center gap-9 px-8">
+            {MEMORIAL_LINKS.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="relative flex h-full items-center text-[13px] font-medium tracking-[0.01em] text-[#514a43] transition-colors after:absolute after:right-0 after:bottom-0 after:left-0 after:h-px after:origin-center after:scale-x-0 after:bg-[#8a651f] after:transition-transform hover:text-[#6f511c] hover:after:scale-x-100 focus-visible:text-[#6f511c] focus-visible:outline-none focus-visible:after:scale-x-100"
+              >
+                {link.label}
+              </Link>
+            ))}
+          </div>
+        </nav>
 
         {/* Mobile Menu Drawer */}
         {mobileMenuOpen && (
@@ -590,7 +622,7 @@ export default function HomeSplash() {
             onPointerDown={() => setReviewsPaused(true)}
             onPointerUp={() => setReviewsPaused(false)}
             onScroll={handleReviewsScroll}
-            className="day:gap-4 day:border-transparent day:py-3 mt-6 flex snap-x snap-mandatory overflow-x-auto border-t border-l border-white/20 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+            className="day:gap-4 day:border-transparent day:py-3 mt-6 flex touch-pan-x snap-x snap-mandatory overflow-x-auto overscroll-x-contain scroll-smooth border-t border-l border-white/20 [-webkit-overflow-scrolling:touch] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
           >
             {[0, 1].map((cycle) =>
               GOOGLE_REVIEW_HIGHLIGHTS.map((review) => (
@@ -628,12 +660,25 @@ export default function HomeSplash() {
             >
               <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
             </button>
-            <div className="day:bg-[#c9bead] relative h-px flex-1 overflow-hidden bg-white/20">
-              <span
-                className="day:bg-[#9a742f] absolute inset-y-0 left-0 bg-[#d8b66f] transition-[width] duration-500"
-                style={{
-                  width: `${((activeReviewIndex + 1) / GOOGLE_REVIEW_HIGHLIGHTS.length) * 100}%`,
-                }}
+            <div className="group/slider relative flex h-10 flex-1 items-center focus-within:outline-none">
+              <div className="day:bg-[#c9bead] pointer-events-none absolute right-0 left-0 h-px overflow-hidden bg-white/20 group-focus-within/slider:h-0.5">
+                <span
+                  className="day:bg-[#9a742f] absolute inset-y-0 left-0 bg-[#d8b66f] transition-[width] duration-500"
+                  style={{
+                    width: `${((activeReviewIndex + 1) / GOOGLE_REVIEW_HIGHLIGHTS.length) * 100}%`,
+                  }}
+                />
+              </div>
+              <input
+                type="range"
+                min={0}
+                max={GOOGLE_REVIEW_HIGHLIGHTS.length - 1}
+                step={1}
+                value={activeReviewIndex}
+                onChange={(event) => scrollToReview(Number(event.target.value))}
+                aria-label="Choose a customer review"
+                aria-valuetext={`Review ${activeReviewIndex + 1} of ${GOOGLE_REVIEW_HIGHLIGHTS.length}`}
+                className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
               />
             </div>
             <span className="sr-only" aria-live="polite">
