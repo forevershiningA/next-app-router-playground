@@ -845,11 +845,7 @@ export default function DesignerNav() {
         setShowSaveDesignModal(true);
       } else if (slug === 'check-price') {
         setActivePanel('checkprice');
-      } else if (
-        slug === 'select-shape' &&
-        isCanvasVisible &&
-        designerStepSlug === 'select-shape'
-      ) {
+      } else if (slug === 'select-shape' && isCanvasVisible) {
         openFullscreenPanel(slug);
       } else if (designerStepSlug !== slug) {
         if (
@@ -1005,13 +1001,10 @@ export default function DesignerNav() {
       activeFullscreenPanel === 'select-shape' &&
       designerStepSlug !== 'select-shape'
     ) {
-      // If navigating to another panel route (e.g. /select-size after picking
-      // a shape), let the logic below transition to the new panel instead of
-      // keeping the stale select-shape panel open.
-      const currentSlug = designerStepSlug ?? '';
-      if (!fullscreenPanelSlugs.has(currentSlug)) {
-        return;
-      }
+      // Shape can be opened as an overlay from any canvas-visible step. Keep
+      // that explicit panel choice instead of immediately restoring the panel
+      // implied by the current route.
+      return;
     }
 
     const currentSlug = designerStepSlug ?? '';
@@ -3563,6 +3556,21 @@ export default function DesignerNav() {
               the canvas via a portal (see mobile step-header overlay below) so
               the bottom sheet holds just the controls. */}
           <div className="day:border-[#cfc5b7] day:bg-[#eee9df] relative hidden border-b border-white/10 bg-[#1d1a17] px-5 py-3 md:block">
+            <button
+              type="button"
+              onClick={toggleTheme}
+              aria-label={
+                isDayTheme ? 'Switch to night mode' : 'Switch to day mode'
+              }
+              title={isDayTheme ? 'Night mode' : 'Day mode'}
+              className="day:border-[#bdb4a6] day:bg-white/55 day:text-[#1d1a17] day:hover:bg-white absolute top-3 right-5 flex h-9 w-9 items-center justify-center rounded-lg border border-white/15 bg-white/[0.06] text-white/75 transition-colors hover:border-[#cfac6c] hover:text-[#cfac6c]"
+            >
+              {isDayTheme ? (
+                <MoonIcon className="h-4 w-4" aria-hidden="true" />
+              ) : (
+                <SunIcon className="h-4 w-4" aria-hidden="true" />
+              )}
+            </button>
             {/* Row 1: Guided Step label + step badge */}
             <div className="mb-1 flex items-center justify-center gap-2.5 md:mb-2">
               <p className="day:text-[#756c62] text-[11px] tracking-[0.08em] text-white/50">
@@ -3590,7 +3598,7 @@ export default function DesignerNav() {
               <div className="flex items-center gap-2">
                 <button
                   onClick={handleBackToMenu}
-                  className="day:border-[#bdb4a6] day:bg-white/25 day:text-[#302719] day:hover:border-[#9a742f] day:hover:bg-white/55 inline-flex items-center gap-1.5 rounded-sm border border-white/20 bg-white/[0.06] px-3 py-1.5 text-xs font-medium text-white/80 transition-colors hover:border-[#cfac6c]/70 hover:text-white"
+                  className="day:border-[#bdb4a6] day:bg-white/25 day:text-[#302719] day:hover:border-[#9a742f] day:hover:bg-white/55 day:hover:text-[#302719] inline-flex items-center gap-1.5 rounded-sm border border-white/20 bg-white/[0.06] px-3 py-1.5 text-xs font-medium text-white/80 transition-colors hover:border-[#cfac6c]/70 hover:text-white"
                 >
                   <svg
                     className="h-3 w-3"
@@ -3632,7 +3640,7 @@ export default function DesignerNav() {
                       ? getPanelDisplayName(prevPanelSlug)
                       : undefined
                   }
-                  className="day:border-[#bdb4a6] day:bg-white/25 day:text-[#302719] day:hover:border-[#9a742f] day:hover:bg-white/55 inline-flex items-center gap-1.5 rounded-sm border border-white/20 bg-white/[0.06] px-3 py-1.5 text-xs font-medium text-white/80 transition-colors hover:border-[#cfac6c]/70 hover:text-white disabled:cursor-not-allowed disabled:opacity-30"
+                  className="day:border-[#bdb4a6] day:bg-white/25 day:text-[#302719] day:hover:border-[#9a742f] day:hover:bg-white/55 day:hover:text-[#302719] inline-flex items-center gap-1.5 rounded-sm border border-white/20 bg-white/[0.06] px-3 py-1.5 text-xs font-medium text-white/80 transition-colors hover:border-[#cfac6c]/70 hover:text-white disabled:cursor-not-allowed disabled:opacity-30"
                 >
                   <svg
                     className="h-3 w-3"
@@ -3794,8 +3802,25 @@ export default function DesignerNav() {
                       {mobileFullscreenPanelTitle}
                     </p>
                   </div>
-                  <div className="flex justify-end">
+                  <div className="flex items-center justify-end gap-1.5">
                     <UnitCurrencySelects compact />
+                    <button
+                      type="button"
+                      onClick={toggleTheme}
+                      aria-label={
+                        isDayTheme
+                          ? 'Switch to night mode'
+                          : 'Switch to day mode'
+                      }
+                      title={isDayTheme ? 'Night mode' : 'Day mode'}
+                      className="day:border-[#ddd2c2] day:bg-[#fbf9f5] day:text-[#302719] day:hover:bg-[#eee6d9] inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-md border border-[#3a2a1c] bg-[#1b120c]/80 text-white transition-colors hover:border-[#D7B356]/45 hover:bg-[#24170f]"
+                    >
+                      {isDayTheme ? (
+                        <MoonIcon className="h-3.5 w-3.5" aria-hidden="true" />
+                      ) : (
+                        <SunIcon className="h-3.5 w-3.5" aria-hidden="true" />
+                      )}
+                    </button>
                   </div>
                 </div>
                 {currentPanelIndex >= 0 && (

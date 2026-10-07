@@ -31,6 +31,7 @@ import UnitCurrencySelects from '#/components/designer/navigation/UnitCurrencySe
 
 import {
   CAMERA_3D_POSITION_Z,
+  CAMERA_HEADSTONE_3D_POSITION_Z,
   CAMERA_FOV,
   CAMERA_NEAR,
   CAMERA_FAR,
@@ -216,7 +217,11 @@ function CameraController() {
     // little higher in the visible viewport instead of letting its base meet
     // the sheet edge.
     const targetY = window.innerWidth < 768 ? 3.55 : 3.8;
-    camera.position.set(0, 4.13, CAMERA_3D_POSITION_Z);
+    const cameraPositionZ =
+      productType === 'headstone'
+        ? CAMERA_HEADSTONE_3D_POSITION_Z
+        : CAMERA_3D_POSITION_Z;
+    camera.position.set(0, 4.13, cameraPositionZ);
     camera.lookAt(0, targetY, 0);
     camera.updateProjectionMatrix();
 
@@ -582,7 +587,7 @@ function ProductNameHeader() {
             type="button"
             onClick={() => setActivePanel('checkprice')}
             aria-label="Open check price breakdown"
-            className="day:border-[#d8cfc2] day:bg-[#fbf9f5]/95 day:text-[#2a2118] day:shadow-[#49392b]/15 day:hover:bg-[#f3eee6] flex h-12 w-full cursor-pointer items-center justify-between gap-1.5 rounded-full border border-white/10 bg-black/80 px-4 py-3 font-mono text-base text-white shadow-xl backdrop-blur-md transition-colors hover:bg-black/90 sm:gap-4 md:px-5"
+            className="day:border-[#d8cfc2] day:bg-[#fbf9f5]/95 day:text-[#2a2118] day:shadow-[#49392b]/15 day:hover:bg-[#f3eee6] flex h-12 w-full cursor-pointer items-center justify-between gap-1.5 rounded-full border border-white/10 bg-black/80 px-4 py-3 font-sans text-base text-white shadow-xl backdrop-blur-md transition-colors hover:bg-black/90 sm:gap-4 md:px-5"
           >
             <span className="day:text-[#62584d] flex min-w-0 flex-1 items-center gap-1 text-sm leading-none text-white/80 md:gap-1.5">
               <span className="truncate">{sizeLabel}</span>

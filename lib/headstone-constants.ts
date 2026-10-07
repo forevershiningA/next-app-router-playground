@@ -55,6 +55,11 @@ export const CAMERA_3D_POSITION_Y = 1;
 // Five wheel-in steps at OrbitControls zoomSpeed 0.8 from the former 10 m
 // default: 10 * 0.95^(0.8 * 5) \u2248 8.15 m.
 export const CAMERA_3D_POSITION_Z = 8.15;
+// Keep headstones about 27% larger than the shared default while leaving
+// plaques, urns, and other product types unchanged.
+export const HEADSTONE_DEFAULT_ZOOM = 1.3 * 1.3 * 0.75;
+export const CAMERA_HEADSTONE_3D_POSITION_Z =
+  CAMERA_3D_POSITION_Z / HEADSTONE_DEFAULT_ZOOM;
 export const CAMERA_FOV = 35; // Reduced FOV for more zoom
 export const CAMERA_NEAR = 0.1;
 export const CAMERA_FAR = 100;

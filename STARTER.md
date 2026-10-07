@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-10-06
+**Last Updated:** 2026-10-07
 
 **Status entry order:** Add new dated status entries immediately after the table of contents, before the existing status entries. Keep status entries in reverse chronological order (newest first); do not append them to the end of this file.
 **Tech Stack:** Next.js 15.5.26, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots), **Vitest 4.1.8** (unit tests), **Playwright 1.59.1** (E2E tests)
@@ -125,8 +125,83 @@
 114. [October 4 Currency Symbols, Locale Defaults, and Automatic Units](#current-status-2026-10-04--currency-symbols-locale-defaults-and-automatic-units)
 115. [October 5 Fixed Addition Sizes, Designer Control Layout, and Home Hero Simplification](#current-status-2026-10-05--fixed-addition-sizes-designer-control-layout-and-home-hero-simplification)
 116. [October 6 Homepage Editorial Hero, Google Reviews Carousel, and Day and Night Polish](#current-status-2026-10-06--homepage-editorial-hero-google-reviews-carousel-and-day-and-night-polish)
+117. [October 7 Designer UI Polish and Automated Homepage Hero Video](#current-status-2026-10-07--designer-ui-polish-and-automated-homepage-hero-video)
 
 ---
+
+## Current Status (2026-10-07) — Designer UI Polish and Automated Homepage Hero Video
+
+### Designer day mode, scale, and typography
+
+- Day-mode hover states for **Menu** and **Prev** no longer turn white. Their hover colours remain readable against the light navigation background.
+- The day/night toggle is available in the active designer step header again.
+- Traditional headstones use the shared `HEADSTONE_DEFAULT_ZOOM` constant. Its current value is `1.3 * 1.3 * 0.75` (approximately `1.27×` the original framing) and is consumed by `components/three/AutoFit.tsx` and `components/three/ThreeScene.tsx`.
+- The lower dimension/price chip and unit/currency selects use the same sans-serif type treatment as the upper product chip.
+- Relevant files:
+  - `components/designer/navigation/DesignerNav.tsx`
+  - `components/designer/navigation/UnitCurrencySelects.tsx`
+  - `components/three/AutoFit.tsx`
+  - `components/three/ThreeScene.tsx`
+  - `lib/headstone-constants.ts`
+
+### Automated configurator hero video
+
+- `scripts/record-hero-video.mjs` is the repeatable Playwright + FFmpeg capture pipeline for the homepage configurator demonstration.
+- Run it with:
+
+  ```bash
+  pnpm video:hero
+  ```
+
+- The script starts a dedicated Next.js development server on port `3100` unless `HERO_VIDEO_BASE_URL` already responds. Set that environment variable to capture another running instance.
+- Playwright records a `1440×900` light-theme browser session. FFmpeg exports a `1280×800`, 30 fps hero asset in both VP9 WebM and H.264 MP4, plus a WebP poster.
+- Generated assets:
+  - `public/videos/configurator-hero.webm`
+  - `public/videos/configurator-hero.mp4`
+  - `public/videos/configurator-hero-poster.webp`
+- Current demonstration is approximately 64 seconds and performs real UI actions:
+  1. opens the visible **Select Shape** panel over the live canvas;
+  2. selects Curved Peak, Cropped Peak, and Serpentine;
+  3. changes African Red and Blue Pearl materials;
+  4. adds an inscription, enlarges it by dragging the native size slider, and drags it upward on the canvas;
+  5. opens Birds, adds a motif, and drags it down and to the right;
+  6. clicks the right rotation arrow twice for a strong 60-degree presentation angle;
+  7. clicks the lower price chip and ends on the complete **Check Price Quote** modal.
+- The motif API is warmed before the capture start so development-time route compilation does not consume the visible recording.
+- A synthetic visible cursor is rendered only during capture. Native pointer interactions are still used, including incremental mouse movement for sliders and Three.js objects.
+- `ffmpeg-static` is a development dependency used to make the export reproducible without requiring a separately installed FFmpeg binary.
+
+### Homepage hero integration
+
+- `app/_ui/HomeSplash.tsx` displays the generated video in the clickable right side of the editorial hero.
+- Playback uses `autoPlay`, `muted`, `loop`, and `playsInline`.
+- WebM is the preferred source and MP4 is the compatibility fallback. The generated WebP is used as the poster while media loads.
+- With `prefers-reduced-motion: reduce`, the video is hidden and the existing static designer preview is shown instead.
+- The whole media card remains a link to `/select-product` with the accessible label **Open the 3D memorial designer**.
+
+### Shape overlay navigation fix
+
+- The desktop guided quick navigation can now open **Select Shape** as a fullscreen sidebar panel over any canvas-visible designer step. It no longer redirects from Material to the standalone shape route.
+- The route-sync effect preserves this explicit Shape overlay instead of immediately restoring the panel implied by the current URL.
+- `ShapeSelector` is rendered with `navigateAfterSelect={false}` in this overlay, so several shapes can be previewed against the live model without closing the panel.
+- This is normal product behaviour, not a capture-only workaround, and improves both the recorded demo and the interactive designer.
+
+### Capture reliability notes and future controller architecture
+
+- Three.js object dragging is coordinate-sensitive because the WebGL canvas begins behind/after the desktop sidebar and the exported video is scaled from `1440×900` to `1280×800`. Always derive coordinates from `canvas.boundingBox()` rather than hard-coding output-video pixels.
+- Motif hit testing respects texture alpha (`alphaTest`). Start a drag on an opaque part of the artwork, not the visual centre of a motif that may contain transparent space.
+- Large numbers of intermediate mouse events are expensive while R3F rerenders. The current helpers use a small number of incremental steps to remain visibly smooth without turning a short gesture into many seconds of footage.
+- Prefer real accessible controls where available:
+  - native `input[type="range"]` for size;
+  - `aria-label="Rotate left"` / `aria-label="Rotate right"` for camera rotation;
+  - `aria-label="Open check price breakdown"` for the bottom chip;
+  - roles/names or `data-quick-nav-slug` for guided navigation.
+- The capture script is an initial project-control layer — effectively a small internal automation API. A useful next refactor is to extract reusable commands such as `openStep`, `selectShape`, `dragRange`, `dragCanvasObject`, `rotateScene`, and `openPriceQuote` into a dedicated designer automation module usable by video capture and E2E tests.
+
+### Verification
+
+- The final video was inspected at multiple timestamps to confirm the visible Shape panel, slider movement, inscription position, motif movement, arrow-driven rotation, and quote modal.
+- `pnpm type-check`, targeted Prettier checks, and `git diff --check` pass after these changes.
 
 ## Current Status (2026-10-06) — Homepage Editorial Hero, Google Reviews Carousel, and Day and Night Polish
 
@@ -16171,6 +16246,6 @@ Both commands pass. Browser rendering still needs to be checked after the next l
 
 ---
 
-_End of STARTER.md - Last updated: 2026-10-06_
+_End of STARTER.md - Last updated: 2026-10-07_
 
 ---

@@ -8,6 +8,7 @@ import { usePathname } from 'next/navigation';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import { useMobileNavStore } from '#/lib/mobile-nav-store';
 import { getDesignerStepSlug } from '#/lib/designer-route-state';
+import { HEADSTONE_DEFAULT_ZOOM } from '#/lib/headstone-constants';
 
 type Props = {
   target: React.RefObject<THREE.Object3D>; // tablet/upright ONLY (no base/ground)
@@ -162,7 +163,11 @@ export default function AutoFit({
             ? 1.2
             : 1.85
       : 1;
-    const dist = Math.max(dX, dY) * Math.max(1, margin) * sheetMargin + pad;
+    const productZoom =
+      productType === 'headstone' ? HEADSTONE_DEFAULT_ZOOM : 1;
+    const dist =
+      (Math.max(dX, dY) * Math.max(1, margin) * sheetMargin) / productZoom +
+      pad;
 
     // The first fit deliberately starts en face. Later fits — after changing
     // either Headstone or Base dimensions — must not discard the angle the
@@ -269,6 +274,7 @@ export default function AutoFit({
     isMobileUprightOrBaseSizeSelection,
     isMobilePlaqueSizeSelection,
     isMobileSheetCompact,
+    productType,
   ]);
 
   /** Compute a deterministic pose given current camera view direction. */
