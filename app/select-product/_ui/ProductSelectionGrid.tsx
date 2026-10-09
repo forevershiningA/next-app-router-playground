@@ -234,7 +234,7 @@ export default function ProductSelectionGrid({
                               src={`/webp/products/${product.image}`}
                               alt={product.name}
                               fill
-                              className="object-contain p-3 sepia transition-all duration-700 ease-out will-change-transform group-hover:scale-[1.025] group-hover:sepia-0 motion-reduce:transition-none motion-reduce:group-hover:transform-none"
+                              className="object-contain p-3 contrast-[.96] saturate-[.5] sepia-[.1] transition-all duration-700 ease-out will-change-transform group-focus-within:scale-[1.025] group-focus-within:contrast-100 group-focus-within:saturate-100 group-focus-within:sepia-0 group-hover:scale-[1.025] group-hover:contrast-100 group-hover:saturate-100 group-hover:sepia-0 motion-reduce:transition-none motion-reduce:group-focus-within:transform-none motion-reduce:group-hover:transform-none"
                               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 20vw"
                             />
                           </div>

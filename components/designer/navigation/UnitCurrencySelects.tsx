@@ -19,8 +19,14 @@ export default function UnitCurrencySelects({
 
   return (
     <div className={`flex items-center gap-1.5 ${className}`}>
-      <label>
-        <span className="sr-only">Display currency</span>
+      <label className="flex items-center gap-1.5">
+        <span
+          className={`day:text-[#625a51] font-sans font-medium text-white/65 ${
+            compact ? 'text-[10px]' : 'text-xs'
+          }`}
+        >
+          Currency
+        </span>
         <select
           value={currency}
           onChange={(event) =>
