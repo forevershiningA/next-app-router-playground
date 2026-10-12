@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-10-10
+**Last Updated:** 2026-10-12
 
 **Status entry order:** Add new dated status entries immediately after the table of contents, before the existing status entries. Keep status entries in reverse chronological order (newest first); do not append them to the end of this file.
 **Tech Stack:** Next.js 15.5.26, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots), **Vitest 4.1.8** (unit tests), **Playwright 1.59.1** (E2E tests)
@@ -127,6 +127,109 @@
 116. [October 6 Homepage Editorial Hero, Google Reviews Carousel, and Day and Night Polish](#current-status-2026-10-06--homepage-editorial-hero-google-reviews-carousel-and-day-and-night-polish)
 117. [October 7 Designer UI Polish and Automated Homepage Hero Video](#current-status-2026-10-07--designer-ui-polish-and-automated-homepage-hero-video)
 118. [October 10 Polish Traditional Full Monument Demonstrator](#current-status-2026-10-10--polish-traditional-full-monument-demonstrator)
+119. [October 12 Production Audit Remediation, ISR, and Playground Cleanup](#current-status-2026-10-12--production-audit-remediation-isr-and-playground-cleanup)
+
+---
+
+## Current Status (2026-10-12) — Production Audit Remediation, ISR, and Playground Cleanup
+
+### Production verification and relevant commits
+
+- Three successive audits of `https://forevershining.org/` were recorded in `audyt.txt`, `audyt2.txt`, and `audyt3.txt`.
+- Commit `c514425598` (`Audit 3.8`) introduced the first security, legal, layout, catalog-loading, and unit-system fixes.
+- Commit `10ab850554` (`Audit 3.8 fixes`) removed the remaining demo navigation payload and enabled ISR/SSG for the public design catalog.
+- Production verification after `10ab850554` confirmed:
+  - the homepage initial HTML fell from approximately `141.3 KB` to `116.1 KB`;
+  - the starter phrase `Create Error UI for specific parts of an app` no longer appears in rendered HTML;
+  - product and category design pages return `X-Vercel-Cache: HIT` after generation;
+  - the public `/terms` route returns `200` and is linked from the homepage footer;
+  - all security headers listed below are present on live responses.
+
+### Security and legal changes
+
+- `next.config.ts` applies these headers globally:
+  - `X-Frame-Options: SAMEORIGIN`;
+  - `X-Content-Type-Options: nosniff`;
+  - `Referrer-Policy: strict-origin-when-cross-origin`;
+  - `Permissions-Policy: camera=(), microphone=(), geolocation=()`.
+- A strict Content Security Policy has **not** been introduced yet. The inline pre-paint theme script and external integrations must be inventoried before CSP is enforced; do not add a restrictive policy without browser regression testing.
+- `app/terms/page.tsx` contains the public Terms & Conditions page for custom memorial orders. It covers design proof approval, natural material variation, custom-order changes/cancellations, delivery, cemetery requirements, installation responsibility, defects, warranty claims, and customer-supplied content.
+- The terms copy is an implementation draft and should receive legal review before being treated as final legal advice.
+- The homepage footer now links directly to `/terms` instead of requesting terms through a `mailto:` link.
+
+### Root layout and designer catalog loading
+
+- `app/layout.tsx` no longer loads or serializes the complete materials, shapes, and borders catalogs into every RSC response.
+- `components/designer/catalog/DesignerCatalogLoader.tsx` requests designer options only after entering an actual designer route; the homepage does not make this request.
+- `app/api/catalog/designer-options/route.ts`:
+  - queries active materials and shapes when `DATABASE_URL` is available;
+  - falls back to `app/_internal/_data.ts` when the database is absent or unavailable;
+  - merges database shapes with locally shipped category-only shapes;
+  - returns borders from the local catalog;
+  - uses `Cache-Control: public, s-maxage=86400, stale-while-revalidate=604800`.
+- The catalog loader does not overwrite product-specific border options after a product has been selected.
+- Legacy `MaterialsLoader`, `ShapesLoader`, and `BordersLoader` files still exist but are no longer mounted by `RootLayout`. Do not reintroduce them globally.
+
+### Navigation mock removal
+
+- `app/layout.tsx` no longer imports the mock ORM or calls `db.demo.findMany()`.
+- `components/app-shell/ConditionalNav.tsx` and `ui/global-nav.tsx` no longer receive demo categories through server-component props.
+- `ui/global-nav.tsx` owns a small `navigationSections` structure containing only the section name, item slug, item name, and optional navigation title.
+- This deliberately excludes the long starter/demo descriptions that previously inflated every RSC payload.
+
+### Design gallery static generation and ISR
+
+- `app/designs/[productType]/page.tsx` generates the 11 indexable product routes at build time and uses `revalidate = 86400` with `dynamicParams = true`.
+- There are currently about 245 valid product/category combinations. Pre-rendering all of them would increase Vercel build time and risk static-generation timeouts.
+- `app/designs/[productType]/[category]/page.tsx` therefore returns an empty array from `generateStaticParams()`. Next.js generates each valid category on first request and retains it in ISR for 24 hours.
+- Detail pages continue to use on-demand ISR rather than pre-rendering all 3,100+ designs during deployment.
+- Local production verification for `/designs/laser-etched-headstone/biblical-memorial` returned:
+  - first request: `x-nextjs-cache: MISS`;
+  - second request: `x-nextjs-cache: HIT`;
+  - `x-nextjs-prerender: 1`;
+  - `Cache-Control: s-maxage=86400, stale-while-revalidate=31449600`;
+  - no `Set-Cookie` header.
+- `middleware.ts` must continue excluding public SEO routes through design-detail depth from unit-cookie writes; a `Set-Cookie` response would make an otherwise cacheable page private.
+
+### Units and public cache behavior
+
+- `resolveUnitSystemFromCountry()` defaults to `imperial` when the hosting platform does not provide a country header because the storefront currently targets the United States.
+- Explicit `US`, `LR`, and `MM` country codes use imperial units; other recognized countries use metric units.
+- Middleware does not add unit cookies to the homepage, memorial SEO pages, `/designs` pages through detail depth, or `/api/catalog/designer-options`.
+- Designer routes still set the geolocation-derived cookie when the visitor has not made an explicit unit selection.
+
+### Vercel and GitHub operational note
+
+- On 2026-10-12, Vercel temporarily stopped detecting a GitHub push because the GitHub integration received HTTP `403` with a **secondary rate limit** response.
+- This was unrelated to the source changes and unrelated to cancellation of GitHub Copilot. The limit expired and the deployment subsequently completed normally.
+- If this recurs, do not repeatedly refresh or reconnect the integration because repeated requests can extend the limit. Wait, verify Vercel Settings → Git, then redeploy or push an empty commit after GitHub access recovers.
+- `package.json` currently allows broad Node/pnpm versions (`node >=18`, `pnpm >=8`). Older Vercel logs selected Node 24 and pnpm 10 despite project settings. Pinning `packageManager` and a specific supported Node major remains a future hardening task, not a completed change.
+
+### Playground cleanup
+
+- The complete `app/_hooks` and `app/_patterns` starter trees were removed after confirming that production code had no imports from them.
+- This deleted 30 tracked template files (816 lines).
+- Their obsolete `Disallow: /_hooks/` and `Disallow: /_patterns/` rules were removed from `app/robots.ts`.
+- `docs/routes.md` was updated to stop listing the removed directories.
+- References may remain intentionally inside historical audit files, generated documentation, and `archive/`; these are not production imports.
+- At the time of this entry, the cleanup deletions and the `robots.ts`/`docs/routes.md` edits are working-tree changes and may still need to be committed and deployed.
+
+### Verification baseline
+
+- Full production build completed successfully with Next.js `15.5.26`.
+- Build compilation took approximately `5.3 min` locally and generated `132/132` static pages.
+- Build output classified product routes as SSG with one-day revalidation and category/detail routes as on-demand SSG/ISR.
+- `pnpm type-check` passes.
+- `pnpm lint` and targeted strict ESLint checks pass with zero errors.
+- Vitest baseline: `113/113` tests across 11 files pass.
+- `git diff --check` passes; CRLF conversion warnings on Windows are informational.
+
+### Remaining follow-ups
+
+- Do not replace contact addresses with `contact@forevershining.org` until that mailbox is created and delivery is verified.
+- The existing `@bronze-plaque.com`, `@forevershining.com`, and `@forevershining.com.au` addresses remain inconsistent and should eventually be consolidated as a deliberate operational migration.
+- CSP remains pending as described above.
+- The homepage HTML is materially smaller but still approximately `116 KB`; further reduction should be measured before removing additional shared client-shell components.
 
 ---
 
@@ -16332,6 +16435,6 @@ Both commands pass. Browser rendering still needs to be checked after the next l
 
 ---
 
-_End of STARTER.md - Last updated: 2026-10-10_
+_End of STARTER.md - Last updated: 2026-10-12_
 
 ---

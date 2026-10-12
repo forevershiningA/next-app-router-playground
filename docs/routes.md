@@ -97,8 +97,6 @@ app/layout.tsx (Root)
 |--------|----------|
 | `app/_internal/` | `_data.ts` (fallback catalog data), `_additions-loader.ts`, `_emblems-loader.ts` |
 | `app/_ui/` | `HomeSplash.tsx` |
-| `app/_hooks/` | Layout examples and documentation |
-| `app/_patterns/` | Pattern examples |
 | Route-level `_ui/` | Colocated selection grids (e.g., `select-product/_ui/ProductSelectionGrid.tsx`) |
 
 ## Error & Loading Boundaries

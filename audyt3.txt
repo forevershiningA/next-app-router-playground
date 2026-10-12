@@ -1,0 +1,62 @@
+  Zweryfikowałem najnowszą serię poprawek (commit 10ab850554: Audit 3.8 fixes) wdrożoną na serwerze produkcyjnym
+  https://forevershining.org/.
+  ──────
+  ### 1. Podsumowanie wyników weryfikacji na produkcji
+
+   Badany obszar / Poprawka        |      Przed zmianą      | Po wdrożeniu na live | Wynik testu na produkcji
+  ---------------------------------|------------------------|----------------------|---------------------------------
+   Usunięcie mocków db.demo z      |    🔴 Obecne w HTML    |     🟢 Usunięte      | Fraza "Create Error UI..."
+   layoutu                         |                        |                      | została w 100% wyeliminowana z
+                                   |                        |                      | wynikowego HTML
+   Odchudzenie początkowego HTML   |      🔴 141.3 KB       |     🟢 116.1 KB      | Łączny spadek o ponad 25 KB
+                                   |                        |                      | czystego initial payloadu
+   Buforowanie podstron            |  🔴 Zawsze MISS / no-  | 🟢 HIT (Edge Cache)  | generateStaticParams()
+   /designs/... (ISR)              |         store          |                      | wdrożone; podstrony trafiają do
+                                   |                        |                      | ISR i serwują się jako X-
+                                   |                        |                      | Vercel-Cache: HIT
+   Katalogi produktów              |     🔴 Dynamiczne      |  🟢 HIT (Prerender)  | Natychmiastowe serwowanie z
+   /designs/[productType]          |                        |                      | cache Vercel Edge (Age: 0/1,
+                                   |                        |                      | HIT)
+   Nawigacja boczna (GlobalNav)    | 🔴 Zależna od mocka DB | 🟢 Czysty komponent  | Wydzielono lokalną strukturę
+                                   |                        |                      | navigationSections bez
+                                   |                        |                      | odpytywania bazy demo
+   Jakość kodu (Linter & Type-     |           —            |     🟢 0 błędów      | tsc --noEmit oraz eslint
+   check)                          |                        |                      | przechodzą bez żadnych błędów
+  ──────
+  ### 2. Szczegóły testów na żywym środowisku
+  #### 1. Całkowite oczyszczenie mocków z layout.tsx i GlobalNav
+
+  • Z pliku layout.tsx usunięto wywołanie db.demo.findMany().
+  • Komponent global-nav.tsx korzysta teraz z czystej, jawnie zdefiniowanej struktury navigationSections.
+  • Weryfikacja curl: Test wyrażeniem regularnym (curl -s https://forevershining.org/) -match "Create Error UI"
+  zwrócił False – pozostałości z szablonu Next.js Playground nie trafiają już do klientów ani robotów Google.
+
+  #### 2. Uruchomienie buforowania ISR dla podstron katalogu
+
+  W plikach app/designs/[productType]/[category]/page.tsx file:///C:/Users/polcr/documents/github/next-app-router-
+  playground/app/designs/%5BproductType%5D/%5Bcategory%5D/page.tsx oraz app/designs/[productType]/page.tsx
+  file:///C:/Users/polcr/documents/github/next-app-router-playground/app/designs/%5BproductType%5D/page.tsx dodano:
+    export function generateStaticParams() {
+      return [];
+    }
+    export const dynamicParams = true;
+    export const revalidate = 86400;
+
+  • Weryfikacja curl:
+      • Pierwsze żądanie generuje podstronę i zapisuje ją w krawędzi CDN (MISS).
+      • Kolejne żądania zwracają natychmiast X-Vercel-Cache: HIT z nagłówkiem X-Nextjs-Prerender: 1.
+      • Zapytania od robotów wyszukiwarek nie obciążają już funkcji serverless (IAD1).
+
+
+  #### 3. Weryfikacja integralności kodu
+
+  • pnpm test (Vitest): 113/113 testów zaliczonych (11 plików testowych).
+  • pnpm type-check (tsc --noEmit): Zakończone kodem 0, zero błędów typowania.
+  • pnpm lint (eslint . --quiet): Zakończone kodem 0, brak naruszeń reguł lintera.
+  ──────
+  ### 3. Pozostałe drobne rekomendacje (na przyszłość)
+
+  1. Adres e-mail kontaktu w stopce: Zamiana admin@bronze-plaque.com na adres w domenie serwisu (np.
+  contact@forevershining.org), by domknąć pełną spójność brandingu.
+  2. Katalogi _patterns i _hooks w app/: Można je bezpiecznie usunąć z repozytorium w ramach wiosennych porządków
+  kodu, gdyż nie biorą już udziału w działaniu aplikacji.

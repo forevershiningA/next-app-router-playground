@@ -16,8 +16,6 @@ export default function robots(): MetadataRoute.Robots {
         '/login',
         '/select-size/checkout/',
         '/ml/',
-        '/_hooks/',
-        '/_patterns/',
       ],
     },
     sitemap: 'https://forevershining.org/sitemap.xml',
