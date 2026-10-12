@@ -16,6 +16,7 @@ const PRODUCT_SLUG_OVERRIDES: Record<string, string> = {
   '52': 'yag-lasered-stainless-steel-plaque',
   '100': 'laser-etched-black-granite-full-monument',
   '101': 'traditional-engraved-full-monument',
+  '103': 'polish-traditional-full-monument',
   '124': 'traditional-engraved-headstone',
   '135': 'laser-etched-pet-rock',
   '2350': 'stainless-steel-vitreous-enamel-inlaid-urn',

@@ -78,6 +78,8 @@ export interface CatalogData {
     border?: string;
     color?: string; // "0" = no color selection, "1" = allow color selection
     defaultColor?: string; // Default color for inscriptions/motifs (e.g., "#ffb35a")
+    /** Selects a dedicated 3D assembly without relying on the product name. */
+    assembly?: string;
     shapes: ShapeData[];
     additions: AdditionData[];
     priceModel: PriceModel;
@@ -470,6 +472,7 @@ export async function parseCatalogXML(
   const defaultColor = normalizeThreeColorAttribute(
     productElement.getAttribute('default-color') || undefined,
   );
+  const assembly = productElement.getAttribute('assembly') || undefined;
 
   // Parse shapes (headstone, plaque, full-monument, and urn types)
   const shapes: ShapeData[] = [];
@@ -609,7 +612,7 @@ export async function parseCatalogXML(
     if (el) kerbsetPriceModel = parsePriceModel(el);
   }
 
-  const catalogData = { product: { id, name, type, laser, retail, formula, border, color, defaultColor, shapes, additions, priceModel, basePriceModel, ledgerPriceModel, kerbsetPriceModel } };
+  const catalogData = { product: { id, name, type, laser, retail, formula, border, color, defaultColor, assembly, shapes, additions, priceModel, basePriceModel, ledgerPriceModel, kerbsetPriceModel } };
   catalogCache.set(productId, catalogData);
   return catalogData;
 }

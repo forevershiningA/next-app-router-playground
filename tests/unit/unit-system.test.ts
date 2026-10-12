@@ -40,12 +40,12 @@ describe('resolveUnitSystemFromCountry', () => {
     expect(resolveUnitSystemFromCountry('DE')).toBe('metric');
   });
 
-  it('returns metric for null', () => {
-    expect(resolveUnitSystemFromCountry(null)).toBe('metric');
+  it('defaults to imperial when the hosting platform provides no country', () => {
+    expect(resolveUnitSystemFromCountry(null)).toBe('imperial');
   });
 
-  it('returns metric for undefined', () => {
-    expect(resolveUnitSystemFromCountry(undefined)).toBe('metric');
+  it('defaults to imperial for undefined country', () => {
+    expect(resolveUnitSystemFromCountry(undefined)).toBe('imperial');
   });
 
   it('is case-insensitive', () => {

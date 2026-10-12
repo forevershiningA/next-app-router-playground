@@ -81,6 +81,7 @@ export const PRODUCT_TYPE_MAP: Record<string, 'headstone' | 'plaque' | 'monument
   '124': 'headstone', // Traditional Engraved Headstone
   '100': 'monument',  // Laser-etched Black Granite Full Monument
   '101': 'monument',  // Traditional Engraved Full Monument
+  '103': 'monument',  // Polish Traditional Full Monument
 };
 
 /**

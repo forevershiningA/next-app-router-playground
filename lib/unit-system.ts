@@ -6,15 +6,24 @@ export function resolveUnitSystemFromCurrency(currency: string): UnitSystem {
 
 const US_STYLE_COUNTRIES = new Set(['US', 'LR', 'MM']);
 
-export function resolveUnitSystemFromCountry(countryCode: string | null | undefined): UnitSystem {
-  if (!countryCode) return 'metric';
+export function resolveUnitSystemFromCountry(
+  countryCode: string | null | undefined,
+): UnitSystem {
+  // The storefront targets the United States. Local development, crawlers and
+  // platforms other than Vercel may not provide a country header, so use the
+  // US convention as the neutral default.
+  if (!countryCode) return 'imperial';
   const normalized = countryCode.trim().toUpperCase();
   return US_STYLE_COUNTRIES.has(normalized) ? 'imperial' : 'metric';
 }
 
-export function parseUnitSystemCookie(cookieHeader: string | null | undefined): UnitSystem | null {
+export function parseUnitSystemCookie(
+  cookieHeader: string | null | undefined,
+): UnitSystem | null {
   if (!cookieHeader) return null;
-  const match = cookieHeader.match(/(?:^|;\s*)unit_system=(metric|imperial)(?:;|$)/i);
+  const match = cookieHeader.match(
+    /(?:^|;\s*)unit_system=(metric|imperial)(?:;|$)/i,
+  );
   if (!match) return null;
   return match[1].toLowerCase() === 'imperial' ? 'imperial' : 'metric';
 }
@@ -43,7 +52,10 @@ export function formatImperialFractionFromMm(mm: number): string {
  * controls. Imperial controls intentionally use the same upward rounding as
  * the dimension labels, so the canvas never advertises a smaller size.
  */
-export function displayLengthValueFromMm(mm: number, unitSystem: UnitSystem): number {
+export function displayLengthValueFromMm(
+  mm: number,
+  unitSystem: UnitSystem,
+): number {
   if (unitSystem === 'imperial') {
     return Math.ceil(Math.max(0, mm) / 25.4 - 1e-9);
   }

@@ -73,6 +73,7 @@ export default function FullMonumentFit({ trigger }: FullMonumentFitProps) {
   const baseThickness = useHeadstoneStore((s) => s.baseThickness);
   const uprightThickness = useHeadstoneStore((s) => s.uprightThickness);
   const productId = useHeadstoneStore((s) => s.productId);
+  const assembly = useHeadstoneStore((s) => s.catalog?.product.assembly);
   const shapeUrl = useHeadstoneStore((s) => s.shapeUrl);
   const showLedger = useHeadstoneStore((s) => s.showLedger);
   const showKerbset = useHeadstoneStore((s) => s.showKerbset);
@@ -128,11 +129,13 @@ export default function FullMonumentFit({ trigger }: FullMonumentFitProps) {
   // selected line yet, but it still needs a close, readable upright view.
   // Otherwise frame the active size-panel tab.
   const focusedSurface =
-    selectedInscriptionSurface ??
-    selectedAdditionSurface ??
-    selectedMotifSurface ??
-    selectedImageSurface ??
-    (activePanel === 'inscription' ? 'headstone' : editingObject);
+    assembly === 'polish-traditional-double'
+      ? 'ledger'
+      : (selectedInscriptionSurface ??
+        selectedAdditionSurface ??
+        selectedMotifSurface ??
+        selectedImageSurface ??
+        (activePanel === 'inscription' ? 'headstone' : editingObject));
   const shouldFocusHeadstone = focusedSurface === 'headstone';
   const shouldFocusBase = focusedSurface === 'base';
   // Zoom in for headstone or base (both are on the upright assembly)
@@ -250,11 +253,14 @@ export default function FullMonumentFit({ trigger }: FullMonumentFitProps) {
       const distance = Math.max(distX, distY) + depthPad;
 
       const elevation = THREE.MathUtils.degToRad(zoomToHeadstone ? 10 : 12);
-      const fallbackDirection = new THREE.Vector3(
-        0,
-        Math.sin(elevation),
-        Math.cos(elevation),
-      );
+      const fallbackDirection =
+        assembly === 'polish-traditional-double'
+          ? new THREE.Vector3(0.48, Math.sin(elevation + 0.08), 0.88).normalize()
+          : new THREE.Vector3(
+              0,
+              Math.sin(elevation),
+              Math.cos(elevation),
+            );
       const dir =
         preferredDirection && preferredDirection.lengthSq() > 1e-6
           ? preferredDirection.clone().normalize()
@@ -542,6 +548,7 @@ export default function FullMonumentFit({ trigger }: FullMonumentFitProps) {
     baseThickness,
     uprightThickness,
     productId,
+    assembly,
     shapeUrl,
     showLedger,
     showKerbset,

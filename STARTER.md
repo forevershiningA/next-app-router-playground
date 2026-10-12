@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-10-07
+**Last Updated:** 2026-10-10
 
 **Status entry order:** Add new dated status entries immediately after the table of contents, before the existing status entries. Keep status entries in reverse chronological order (newest first); do not append them to the end of this file.
 **Tech Stack:** Next.js 15.5.26, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots), **Vitest 4.1.8** (unit tests), **Playwright 1.59.1** (E2E tests)
@@ -126,6 +126,92 @@
 115. [October 5 Fixed Addition Sizes, Designer Control Layout, and Home Hero Simplification](#current-status-2026-10-05--fixed-addition-sizes-designer-control-layout-and-home-hero-simplification)
 116. [October 6 Homepage Editorial Hero, Google Reviews Carousel, and Day and Night Polish](#current-status-2026-10-06--homepage-editorial-hero-google-reviews-carousel-and-day-and-night-polish)
 117. [October 7 Designer UI Polish and Automated Homepage Hero Video](#current-status-2026-10-07--designer-ui-polish-and-automated-homepage-hero-video)
+118. [October 10 Polish Traditional Full Monument Demonstrator](#current-status-2026-10-10--polish-traditional-full-monument-demonstrator)
+
+---
+
+## Current Status (2026-10-10) — Polish Traditional Full Monument Demonstrator
+
+### Product and commercial intent
+
+- Product `103`, **Polish Traditional Full Monument**, is the first Polish-style two-place full-monument demonstrator intended as a possible re-entry product for the `wiecznapamiec.pl` brand.
+- The current business decision is to stop at a credible interactive demonstrator until the Polish site shows meaningful demand. Do not build the complete three-surface personalization and checkout workflow without a fresh product decision.
+- Recommended public positioning is a concept/new collection with a consultation or enquiry CTA, a small curated granite selection, and an interactive 3D preview.
+- The source reference is the user-provided `screen.png`. It must not be reverted or deleted; it may change as the user replaces it with newer visual comparisons.
+
+### Catalog registration
+
+- The dedicated catalog is `public/xml/catalog-id-103.xml`.
+- Product registration and routing:
+  - `app/_internal/_data.ts`: product ID `103`, category `monuments`;
+  - `lib/designer-product-routes.ts`: slug `polish-traditional-full-monument`;
+  - `lib/product-utils.ts`: product type `monument`.
+- The catalog declares `type="full-monument"` and the explicit renderer discriminator:
+
+  ```xml
+  assembly="polish-traditional-double"
+  ```
+
+- `lib/xml-parser.ts` exposes this value as `catalog.product.assembly`. The renderer must use this field instead of product-name matching.
+- The catalog contains one intentionally controlled construction preset with:
+  - two ledger/lid sections (`split="2"`);
+  - three upright panels (`panels="3"`);
+  - nominal panel ratios `0.38,0.24,0.38`;
+  - separate base, ledger, and raised-body price models.
+- ID `102` already belongs to another historical catalog. Do not reuse or overwrite it.
+- Product 103 currently reuses `APP_ID_101-medium.webp` as its temporary product thumbnail.
+
+### Dedicated Three.js assembly
+
+- `components/three/headstone/PolishMonumentAssembly.tsx` is the parametric renderer for this product.
+- `components/three/headstone/HeadstoneAssembly.tsx` switches to it only when `catalog.product.assembly === 'polish-traditional-double'`. Other full monuments retain the existing renderer.
+- The assembly contains:
+  - two foundation courses;
+  - a raised solid tomb body;
+  - a dark shadow course;
+  - two independent horizontal lids;
+  - one upright plinth;
+  - two light side tablets;
+  - a taller contrasting Noble Black centre tablet.
+- Dimensions remain connected to the existing full-monument store values (`ledger*`, `kerb*`, headstone width/height/thickness and base height). This is not a fixed GLB model.
+- The side-tablet visual height is `72%` of the editable catalog headstone height to preserve the lower, wider Polish silhouette. The centre tablet is `1.18×` the side-tablet height.
+- All structural boxes share one `RoundedBoxGeometry`; meshes reuse three granite material families. Geometry, cloned maps, and materials are disposed on unmount.
+- The centre panel always uses `Noble-Black.webp`. Body/lids/uprights use the currently selected component materials.
+
+### Loading, controls, camera, and grounding fixes
+
+- The dedicated assembly bypasses `ShapeSwapper`. Therefore it must explicitly call `setLoading(false)` after its textures/materials are ready. Without this, `Scene.tsx` keeps `OrbitControls` disabled through `enabled={!baseSwapping && !loading}`.
+- Orbit rotation has been verified through a real Playwright/Chromium mouse drag over the WebGL canvas; the before/after camera views differed as expected.
+- Structural mesh click handlers ignore pointer gestures with `event.delta > 4`, so an orbit drag does not also change the selected monument part.
+- `components/three/FullMonumentFit.tsx` treats this assembly as a complete plot rather than zooming into the legacy single headstone. It also has a Polish-style three-quarter fallback direction.
+- The model group is lowered by `18 mm` so the bottom course meets the scene ground cleanly.
+- The legacy concrete `MemorialFoundation` is suppressed only for this assembly because the Polish model already has two visible foundation courses. Rendering both caused the dark detached slab/levitation effect.
+- The scene still renders a larger, stronger `FoundationContactShadow` for this product (`padding=0.5`, `opacity=0.7`) to anchor it against the studio backdrop.
+
+### Current limitations and intentional freeze point
+
+- The three upright tablets are currently structural meshes, not three independent editing surfaces.
+- Existing inscription, motif, image, and addition targets remain `headstone | base | ledger`; they do not yet support `left-tablet`, `centre-tablet`, or `right-tablet`.
+- Do not claim production-ready personalization for product 103. Before customer ordering is enabled, the next phase must add:
+  1. stable surface IDs and serialization for all three tablets;
+  2. independent inscriptions and ceramic portraits on both side tablets;
+  3. centre-panel motifs/cross support;
+  4. save/load migration and quote line items for the new surfaces;
+  5. responsive/mobile editing and full E2E coverage;
+  6. a dedicated product thumbnail and Polish-facing copy/pricing review.
+- Until traction justifies that work, use the model as an interactive concept with material comparison and an enquiry/consultation conversion path.
+
+### Verification completed
+
+- `pnpm type-check` passes.
+- `tests/unit/xml-parser-price.test.ts`: `18/18` tests pass.
+- Targeted ESLint has no new errors. Existing warnings remain in older scene/assembly code.
+- `git diff --check` passes.
+- The product route used for browser verification is:
+
+  ```text
+  /polish-traditional-full-monument/select-size
+  ```
 
 ---
 
@@ -16246,6 +16332,6 @@ Both commands pass. Browser rendering still needs to be checked after the next l
 
 ---
 
-_End of STARTER.md - Last updated: 2026-10-07_
+_End of STARTER.md - Last updated: 2026-10-10_
 
 ---

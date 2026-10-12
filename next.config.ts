@@ -12,7 +12,11 @@ const nextConfig = {
     // Re-enabled useCache as it's required by 'use cache' directives in code
     useCache: true,
     // Optimize for faster builds
-    optimizePackageImports: ['@react-three/drei', '@react-three/fiber', 'three'],
+    optimizePackageImports: [
+      '@react-three/drei',
+      '@react-three/fiber',
+      'three',
+    ],
   },
   webpack: (config) => {
     // Keep default parallelism unless explicitly overridden.
@@ -27,37 +31,31 @@ const nextConfig = {
   // NOTE: These files are still publicly accessible, just not bundled with serverless functions
   outputFileTracingExcludes: {
     '*': [
-       'public/ml/**/*',
-       'public/designs/**/*',      // Canonical rollout artifacts are static assets; do not bundle in functions
-       'public/shapes/**/*',
+      'public/ml/**/*',
+      'public/designs/**/*', // Canonical rollout artifacts are static assets; do not bundle in functions
+      'public/shapes/**/*',
       'public/additions/**/*',
-      'public/png/**/*',           // 343 MB motifs + 34 MB emblems
-      'public/emblems/**/*',       // 33 MB
-      'public/hdri/**/*',          // 27 MB HDR files
+      'public/png/**/*', // 343 MB motifs + 34 MB emblems
+      'public/emblems/**/*', // 33 MB
+      'public/hdri/**/*', // 27 MB HDR files
       'public/saved-designs/**/*', // 20 MB screenshots
-      'public/screenshots/**/*',   // 245 MB 3D screenshots + thumbnails
-      'public/textures/**/*',      // 17 MB
+      'public/screenshots/**/*', // 245 MB 3D screenshots + thumbnails
+      'public/textures/**/*', // 17 MB
       'public/json/firstnames_*.json', // 15 MB
-      'public/backgrounds/**/*',   // Large background images
-      'public/data/**/*',          // Design data
-      'node_modules/@img/**/*',    // Sharp dependencies (32 MB)
-      'node_modules/@swc/**/*',    // SWC compiler binaries
-      'node_modules/three/**/*',   // Three.js source (compiled separately)
+      'public/backgrounds/**/*', // Large background images
+      'public/data/**/*', // Design data
+      'node_modules/@img/**/*', // Sharp dependencies (32 MB)
+      'node_modules/@swc/**/*', // SWC compiler binaries
+      'node_modules/three/**/*', // Three.js source (compiled separately)
       'node_modules/esbuild/**/*', // esbuild binaries
-      '.next/cache/**/*',          // Build cache
+      '.next/cache/**/*', // Build cache
     ],
   },
   turbopack: { root: process.cwd() },
   images: {
     remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: '**.vercel.app',
-      },
-      {
-        protocol: 'https',
-        hostname: 'www.forevershining.com.au',
-      },
+      { protocol: 'https', hostname: '**.vercel.app' },
+      { protocol: 'https', hostname: 'www.forevershining.com.au' },
     ],
     formats: ['image/avif', 'image/webp'],
     qualities: [75, 90, 100],
@@ -65,22 +63,13 @@ const nextConfig = {
   // Enable compression
   compress: true,
   // Performance monitoring
-  logging: {
-    fetches: {
-      fullUrl: true,
-    },
-  },
+  logging: { fetches: { fullUrl: true } },
   // Headers for caching static assets
   async redirects() {
     return [
       {
         source: '/:path*',
-        has: [
-          {
-            type: 'host',
-            value: 'www.forevershining.org',
-          },
-        ],
+        has: [{ type: 'host', value: 'www.forevershining.org' }],
         destination: 'https://forevershining.org/:path*',
         permanent: true,
       },
@@ -88,6 +77,18 @@ const nextConfig = {
   },
   async headers() {
     return [
+      {
+        source: '/:path*',
+        headers: [
+          { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
+          { key: 'X-Content-Type-Options', value: 'nosniff' },
+          { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+          {
+            key: 'Permissions-Policy',
+            value: 'camera=(), microphone=(), geolocation=()',
+          },
+        ],
+      },
       {
         source: '/xml/:path*',
         headers: [

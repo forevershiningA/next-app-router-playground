@@ -9,12 +9,17 @@ const PROTECTED_API = ['/api/account', '/api/orders'];
 // Anonymized copies are served from html-anon/ — see scripts/anonymize-price-quotes.ts
 const BLOCKED_PATHS = /^\/ml\/[^/]+\/saved-designs\/html\/[^/]+\.html$/;
 
+// Do not attach Set-Cookie to public SEO pages. Doing so makes otherwise
+// static ISR responses private and prevents Vercel's edge cache from storing
+// them. These pages use the storefront's US/imperial default until a visitor
+// enters the designer.
 function isPublicSeoPath(pathname: string): boolean {
   if (pathname === '/' || pathname === '/designs') return true;
   if (pathname.startsWith('/memorials/')) return true;
+  if (pathname === '/api/catalog/designer-options') return true;
 
   const parts = pathname.split('/').filter(Boolean);
-  return parts[0] === 'designs' && parts.length <= 3;
+  return parts[0] === 'designs' && parts.length <= 4;
 }
 
 export async function middleware(request: NextRequest) {
@@ -34,14 +39,19 @@ export async function middleware(request: NextRequest) {
     request.headers.get('x-country-code');
   const resolvedUnitSystem = resolveUnitSystemFromCountry(countryHeader);
   const existingUnitSystem = request.cookies.get('unit_system')?.value;
-  const hasUserUnitSystem = request.cookies.get('unit_system_user')?.value === '1';
+  const hasUserUnitSystem =
+    request.cookies.get('unit_system_user')?.value === '1';
 
   if (!isProtected) {
     if (isBlocked) {
       return new NextResponse(null, { status: 404 });
     }
     const response = NextResponse.next();
-    if (!hasUserUnitSystem && !isPublicSeoPath(pathname) && existingUnitSystem !== resolvedUnitSystem) {
+    if (
+      !hasUserUnitSystem &&
+      !isPublicSeoPath(pathname) &&
+      existingUnitSystem !== resolvedUnitSystem
+    ) {
       response.cookies.set('unit_system', resolvedUnitSystem, {
         path: '/',
         sameSite: 'lax',
@@ -53,7 +63,10 @@ export async function middleware(request: NextRequest) {
 
   const session = await verifySessionFromRequest(request);
   if (!session) {
-    const unauthorised = NextResponse.json({ error: 'Unauthorised' }, { status: 401 });
+    const unauthorised = NextResponse.json(
+      { error: 'Unauthorised' },
+      { status: 401 },
+    );
     if (!hasUserUnitSystem && existingUnitSystem !== resolvedUnitSystem) {
       unauthorised.cookies.set('unit_system', resolvedUnitSystem, {
         path: '/',

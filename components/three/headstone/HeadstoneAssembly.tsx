@@ -14,6 +14,7 @@ import { useHeadstoneStore } from '#/lib/headstone-store';
 import { FULL_MONUMENT_GROUP_NAME, UPRIGHT_ASSEMBLY_NAME } from '../constants';
 import { data } from '#/app/_internal/_data';
 import LedgerSurfaceContent from './LedgerSurfaceContent';
+import PolishMonumentAssembly from './PolishMonumentAssembly';
 
 export default function HeadstoneAssembly() {
   const selected = useHeadstoneStore((s) => s.selected);
@@ -36,10 +37,12 @@ export default function HeadstoneAssembly() {
   const headstoneMaterialUrl = useHeadstoneStore((s) => s.headstoneMaterialUrl);
   const baseMaterialUrl = useHeadstoneStore((s) => s.baseMaterialUrl);
   const productType = useHeadstoneStore((s) => s.catalog?.product.type);
+  const assembly = useHeadstoneStore((s) => s.catalog?.product.assembly);
   const shapeUrl = useHeadstoneStore((s) => s.shapeUrl);
   const borderName = useHeadstoneStore((s) => s.borderName);
   const isPlaque = productType === 'plaque' || productType === 'bronze_plaque';
   const isFullMonument = productType === 'full-monument';
+  const isPolishMonument = assembly === 'polish-traditional-double';
   const isUrn = productType === 'urn';
   // Only oval and heart urn shapes get the landscape oval base disc
   const urnShapeCode = shapeUrl?.split('/').pop()?.replace('.svg', '') ?? '';
@@ -107,9 +110,17 @@ export default function HeadstoneAssembly() {
 
   useEffect(() => {
     if (!isFullMonument) return;
+    if (isPolishMonument) {
+      setSelected(null);
+      return;
+    }
     setEditingObject('ledger');
     setSelected('ledger');
-  }, [isFullMonument, setEditingObject, setSelected]);
+  }, [isFullMonument, isPolishMonument, setEditingObject, setSelected]);
+
+  if (isPolishMonument) {
+    return <PolishMonumentAssembly />;
+  }
 
   return (
     <group ref={monumentGroupRef} position={[0, 0, zGroupOffset]}>

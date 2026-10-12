@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data>
+  <!-- Dedicated two-place Polish monument preset. The assembly marker lets
+       the renderer select its fixed structural layout without name matching. -->
+  <product id="103" code="Polish Full Monument" base="1" holes="0" color="1"
+    force="1" fixed="0" granites="0" thickness="1" border="0" monument="1"
+    laser="0" biondan="0" price="1" formula="Engraved" formulaID="1600"
+    name="Polish Traditional Full Monument"
+    translate="POLISH_TRADITIONAL_FULL_MONUMENT" fontsize="50" bitmap-factor="3"
+    default-color="#c99d44" material="stones" materialID="17"
+    scenery="src/m3d/ground/groundF2F2F2.m3d" type="full-monument"
+    assembly="polish-traditional-double" retail="1.3" formula-multiplier="1.276"
+    description="A two-place Polish-style granite monument with a stepped plinth, raised tomb body, split lids and a three-panel upright arrangement.">
+    <shapes>
+      <!-- One controlled construction; material and dimension controls remain configurable. -->
+      <shape type="full-monument" name="Polish Traditional Double"
+        code="polish-traditional-double" layout="double" double="1" stand="1"
+        url="/webp/products/APP_ID_101-medium.webp">
+        <file type="base"
+          min_depth="1900" max_depth="2800" init_depth="2400"
+          min_width="1500" max_width="2600" init_width="2100"
+          min_height="100" max_height="350" init_height="180"
+          color="textures/forever/l/Blue-Pearl.webp"
+          color2="textures/forever/l/Blue-Pearl.webp" />
+        <file type="kerb"
+          min_depth="1800" max_depth="2700" init_depth="2250"
+          min_width="1400" max_width="2500" init_width="1950"
+          min_height="250" max_height="650" init_height="420"
+          color="textures/forever/l/Blue-Pearl.webp"
+          color2="textures/forever/l/Blue-Pearl.webp" />
+        <file type="lid"
+          min_depth="1700" max_depth="2600" init_depth="2120"
+          min_width="1300" max_width="2400" init_width="1820"
+          min_height="50" max_height="180" init_height="80"
+          split="2" gap="24"
+          color="textures/forever/l/Blue-Pearl.webp"
+          color2="textures/forever/l/Blue-Pearl.webp" />
+        <file type="stand"
+          min_depth="220" max_depth="500" init_depth="320"
+          min_width="1400" max_width="2500" init_width="1950"
+          min_height="180" max_height="500" init_height="300"
+          color="textures/forever/l/Blue-Pearl.webp"
+          color2="textures/forever/l/Blue-Pearl.webp" />
+        <file type="table"
+          min_width="1400" max_width="2400" init_width="1900"
+          min_depth="80" max_depth="180" init_depth="100"
+          min_height="650" max_height="1300" init_height="950"
+          panels="3" panel-ratios="0.38,0.24,0.38"
+          color="textures/forever/l/Blue-Pearl.webp"
+          color2="textures/forever/l/Noble-Black.webp" />
+      </shape>
+    </shapes>
+
+    <price_model id="103" code="H-TABLE" name="*" quantity_type="Width + Height" currency="Dollars">
+      <price id="2" nr="2" code="PRE_POLISH_TRADITIONAL_FULL_MONUMENT" name="*"
+        model="600.00+1.32($q-600)" start_quantity="600" end_quantity="1100"
+        quantity_type="Width + Height" retail_multiplier="1.2400" note="" />
+      <price id="3" nr="3" code="PRE_POLISH_TRADITIONAL_FULL_MONUMENT" name="*"
+        model="1260.00+2.8($q-1100)" start_quantity="1100" end_quantity="2400"
+        quantity_type="Width + Height" retail_multiplier="1.2680" note="" />
+    </price_model>
+
+    <additions>
+      <addition id="125" type="inscription" name="Inscription" />
+      <addition id="126" type="motif" name="Motif" formula="Engraved" />
+      <addition id="7" type="image" name="Ceramic Photo" />
+      <addition id="2300" type="image" name="Vitreous Enamel Image" />
+      <addition id="2400" type="image" name="Premium Plana" />
+      <addition id="48" type="base" name="Base" />
+      <addition id="49" type="ledger" name="Split Ledger" />
+      <addition id="50" type="kerbset" name="Raised Tomb Body" />
+    </additions>
+  </product>
+
+  <product id="48" code="Base" type="base" name="Stepped Base">
+    <price_model code="H-TABLE" name="*" quantity_type="Width" currency="Dollars">
+      <price id="1" nr="1" code="PRE_POLISH_MONUMENT_BASE" name="*"
+        model="294.00+0.34($q-300)" start_quantity="600" end_quantity="2600"
+        quantity_type="Width" retail_multiplier="1.2830" note="" />
+    </price_model>
+  </product>
+  <product id="49" code="Ledger" type="ledger" name="Split Ledger">
+    <price_model code="H-TABLE" name="*" quantity_type="Width" currency="Dollars">
+      <price id="1" nr="1" code="PRE_POLISH_MONUMENT_LEDGER" name="*"
+        model="294.00+0.34($q-300)" start_quantity="600" end_quantity="2400"
+        quantity_type="Width" retail_multiplier="1.2830" note="" />
+    </price_model>
+  </product>
+  <product id="50" code="Kerbset" type="kerbset" name="Raised Tomb Body">
+    <price_model code="H-TABLE" name="*" quantity_type="Width" currency="Dollars">
+      <price id="1" nr="1" code="PRE_POLISH_MONUMENT_BODY" name="*"
+        model="294.00+0.34($q-300)" start_quantity="600" end_quantity="2500"
+        quantity_type="Width" retail_multiplier="1.2830" note="" />
+    </price_model>
+  </product>
+</data>

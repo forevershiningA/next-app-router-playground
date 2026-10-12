@@ -1180,12 +1180,12 @@ export default function HomeSplash() {
                 Privacy Policy
               </Link>
               <span className="day:text-gray-300 text-white/40">|</span>
-              <a
-                href="mailto:admin@bronze-plaque.com?subject=Terms%20of%20Service%20Request"
+              <Link
+                href="/terms"
                 className="day:hover:text-gray-900 cursor-pointer transition-colors hover:text-white"
               >
-                Request Terms
-              </a>
+                Terms &amp; Conditions
+              </Link>
               <span className="day:text-gray-300 text-white/40">|</span>
               <a
                 href="/sitemap.xml"

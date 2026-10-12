@@ -1,0 +1,153 @@
+ Przeprowadziłem kompleksowy audyt serwisu forevershining.org https://forevershining.org/ – łączący analizę
+  działania witryny na żywo (nagłówki HTTP, metadane, Schema.org, sitemap, wydajność) oraz weryfikację architektury
+  kodu źródłowego.
+  ──────
+  ### 1. Podsumowanie wykonawcze (Executive Summary)
+  Forever Shining USA to zaawansowany serwis e-commerce z interaktywnym, trójwymiarowym konfiguratorem pomników i
+  tablic pamiątkowych (nagrobki granitowe, tablice z brązu, monumenty, urny).
+  • Główne atuty:
+      • Świetnie wdrożone dane strukturalne Schema.org JSON-LD (Organization, OnlineStore, FAQPage, Offer, WebSite).
+      • Interaktywny podgląd 3D (WebGL / Three.js / React Three Fiber) z bezpośrednią kalkulacją i personalizacją.
+      • Prawidłowa konfiguracja OpenGraph, Twitter Cards, canonical i hreflang.
+      • Dedykowany mechanizm przełączania motywów (day/dark) zapobiegający efektowi FOUC.
+  • Główne problemy i ryzyka:
+      • Nadmierna waga początkowego dokumentu HTML (~141 KB): wstrzykiwanie całego katalogu materiałów, kształtów i
+      obramowań do RootLayout na każdej podstronie.
+      • Brak cache CDN na tysiącach podstron katalogu: podstrony /designs/... zwracają Cache-Control: private, no-
+      cache, no-store, uderzając bezpośrednio w funkcje serverless.
+      • Niespójność wizerunkowa i zaufania (Trust Signals): pozycjonowanie na rynek USA vs kanadyjski adres i telefon
+      (kierunkowy Toronto) vs australijski profil Google Maps vs e-mail w domenie @bronze-plaque.com.
+      • Brak kluczowych nagłówków bezpieczeństwa (brak CSP, X-Frame-Options, X-Content-Type-Options).
+      • Dług techniczny: w kodzie produkcyjnym wciąż obecne są pozostałości po szablonie startowym Vercel App Router
+      Playground (mocki w layout.tsx, zbędne katalogi i paczki).
+  ──────
+  ### 2. Wydajność i Core Web Vitals (Performance)
+   Badany obszar               | Stan obecny                              | Ocena / Wpływ
+  -----------------------------|------------------------------------------|------------------------------------------
+   Rozmiar dokumentu HTML      | ~141 KB (czysty HTML + RSC payload)      | 🔴 Krytyczny – zbyt ciężki initial
+                               |                                          | document
+   Payload danych w RootLayout | Cała baza materiałów, kształtów i        | 🔴 Krytyczny – ładuje się nawet na
+                               | obramowań serializowana do HTML          | prostych landing page'ach
+   Cache podstron /designs/... | Cache-Control: private, no-cache, no-    | 🔴 Wysoki – brak cache na krawędzi CDN
+                               | store                                    | (MISS na Vercel)
+   Kompilacja i bundling 3D    | Dynamiczne wyłączenie ciężkich assetów w | 🟢 Dobry – zabezpiecza limit rozmiaru
+                               | tracingu (outputFileTracingExcludes)     | lambd Vercel
+   Optymalizacja multimediów   | Wideo Hero .webm/.mp4 + Next.js <Image>  | 🟡 Średni – wideo hero wczytuje się
+                               | (WebP/AVIF)                              | natychmiast na mobile
+  #### Szczegóły:
+  1. RSC State Bloat w app/layout.tsx:
+  W pliku layout.tsx przed wyrenderowaniem drzewa komponentów pobierane są dane:
+    <MaterialsLoader materials={materials} />
+    <ShapesLoader shapes={shapes} />
+    <BordersLoader borders={borders} />
+    <ConditionalNav items={demos} />
+  Wszystkie te rekordy (ponad 70 kształtów SVG, kilkadziesiąt tekstur granitów i tablic) są wstrzykiwane w strumień
+  HTML React Server Components (self.__next_f.push(...)). Sprawia to, że nawet użytkownik wchodzący na prostą stronę
+  główną pobiera 140+ KB tekstu, co opóźnia TTFB (Time to First Byte) i FCP (First Contentful Paint).
+  2. Katalog 3100+ podstron nie jest buforowany na CDN:
+  Strony takie jak https://forevershining.org/designs/laser-etched-headstone/biblical-memorial zwracają X-Vercel-
+  Cache: MISS. Zamiast statycznego serwowania z cache krawędziowego (ISR/Static), każde zapytanie od klienta lub
+  crawlera generuje odpowiedź w centrum danych Vercel (IAD1).
+  ──────
+  ### 3. SEO i Architektura Informacji
+
+   Element                     | Status | Uwagi
+  -----------------------------|--------|----------------------------------------------------------------------------
+   Meta Title / Description    |   🟢   | Precyzyjne, unikalne i nasycone frazami kluczowymi pod rynek US.
+   Canonical & Hreflang        |   🟢   | Zgodne: canonical: https://forevershining.org, en-US i x-default.
+   Dane strukturalne (JSON-LD) |   🟢   | Wzorcowe: Organization, OnlineStore, WebSite, FAQPage, Offer.
+   Sitemap.xml                 |   🟡   | Prawidłowa struktura (3 177 adresów), ale wymaga weryfikacji czy wszystkie
+                               |        | linki są aktywne.
+   Robots.txt                  |   🟡   | Poprawny, lecz zawiera reguły Disallow: /_hooks/ i Disallow: /_patterns/
+                               |        | (ślady szablonu).
+   Regulamin serwisu (/terms)  |   🔴   | Błąd 404! Link w stopce to mailto:admin@bronze-
+                               |        | plaque.com?subject=Terms....
+  #### Uwagi SEO:
+
+  • Brak publicznej podstrony Terms of Service (/terms):
+  Dla sklepów w USA operujących w koszykach powyżej $500–$5000 brak jawnego regulaminu obniża wskaźniki Google E-E-A-
+  T (Trust) oraz może powodować odrzucenie konta w Google Merchant Center czy blokady w Google Ads.
+  • Podwójny routing produktów:
+  W sitemapie widoczne są zarówno adresy /products/bronze-plaque, jak i /bronze-plaque/select-shape oraz
+  /designs/bronze-plaque. Warto upewnić się, że nie zachodzi kanibalizacja fraz i duplikacja treści.
+  ──────
+  ### 4. Bezpieczeństwo (Security & Headers)
+   Nagłówek / Parametr           | Wartość na live                         |                 Status
+  -------------------------------|-----------------------------------------|-----------------------------------------
+   HTTPS / HSTS                  | max-age=63072000                        |            🟢 Zabezpieczone
+   X-Frame-Options               | Brak                                    |         🔴 Ryzyko clickjackingu
+   X-Content-Type-Options        | Brak (powinno być nosniff)              |      🔴 Brak ochrony MIME-sniffing
+   Content-Security-Policy (CSP) | Brak                                    |     🟡 Ryzyko XSS przy dynamicznych
+                                 |                                         |                skryptach
+   Referrer-Policy               | Brak (zalecane: strict-origin-when-     |       🟡 Brak kontroli referrera
+                                 | cross-origin)                           |
+   Permissions-Policy            | Brak (aparat, mikrofon, geolokalizacja) |         🟡 Brak ograniczeń API
+   Access-Control-Allow-Origin   | * (zwracany na głównym dokumencie HTML) |       🔴 Zbyt luźna polityka CORS
+
+  • Zalecenie: Skonfigurować bezpieczne nagłówki w next.config.ts w sekcji headers() dla ścieżek /(.*).
+  ──────
+  ### 5. UX, Konwersja i Zaufanie (Trust & E-Commerce)
+
+  1. Konflikt tożsamości geograficznej i marki:
+      • Target: "Forever Shining USA".
+      • Domena: .org (często kojarzona z fundacjami/non-profit, a nie komercyjnym e-commerce premium).
+      • Adres w Ameryce Północnej: Oshawa, Ontario (Kanada) z kanadyjskim numerem +1-647-388-0931.
+      • Kontakt e-mail: admin@bronze-plaque.com (inna domena niż sklep).
+      • Opinie: Link w nagłówku opinii Google odsyła do fizycznej lokalizacji w Australii (Bibra Lake, WA).
+      • Rekomendacja: Ujednolicenie adresu e-mail (np. support@forevershining.org zamiast obcej domeny), jasne
+      wyjaśnienie: "International manufacturer serving North America with US & Canadian shipping".
+  2. Domyślna jednostka miar (Ciasteczko unit_system):
+      • Przy wejściu na stronę ustawiane jest ciasteczko unit_system=metric;.
+      • Dla klientów ze Stanów Zjednoczonych wymiary nagrobków i tablic podawane w milimetrach są nieintuicyjne (w
+      USA standardem są cale / inches). Mechanizm resolveUnitSystemFromCountry powinien domyślnie przypisywać
+      imperial dla ruchu z US.
+  3. Ścieżka zakupowa (Customer Journey):
+      • Model oparty o zaawansowany konfigurator 3D jest potężnym wyróżnikiem, ale dla części użytkowników
+      (szczególnie starszych osób zamawiających nagrobek) może być zbyt skomplikowany na telefonie.
+      • Warto wyeksponować opcję: "Need help? Request a free design proof by email".
+  ──────
+  ### 6. Czystość Kodu i Dług Techniczny (Code Hygiene)
+
+  Analiza repozytorium wskazuje, że projekt bazuje na szablonie vercel/next-app-router-playground, z którego nie
+  usunięto wszystkich pozostałości:
+  1. Mocki w app/layout.tsx:
+    const demos = db.demo.findMany();
+    // ...
+    <ConditionalNav items={demos} />
+  W wynikowym HTML przesyłany jest ciąg: "description": "Create Error UI for specific parts of an app".
+  2. Katalogi demonstracyjne:
+  W projekcie nadal istnieją katalogi app/_patterns/, app/_hooks/, które w robots.txt trzeba było ręcznie blokować
+  (Disallow: /_patterns/).
+  3. Zbędne zależności w package.json:
+  Pakiety codehike, recma-codehike, remark-codehike (używane w szablonie do prezentacji kodu) są instalowane i
+  konfigurowane w next.config.ts, mimo że serwis nie jest blogiem programistycznym.
+  ──────
+  ### 7. Plan Działań Naprawczych (Roadmap)
+
+  #### 🔴 Priorytet P0 (Natychmiast):
+  1. Uruchomić stronę /terms (Terms & Conditions) – zastąpić link mailto: formalną stroną regulaminu z polityką
+  zwrotów, gwarancją i warunkami montażu.
+  2. Wdrożyć nagłówki bezpieczeństwa w next.config.ts:
+      • X-Frame-Options: SAMEORIGIN
+      • X-Content-Type-Options: nosniff
+      • Referrer-Policy: strict-origin-when-cross-origin
+      • Usunąć nagłówek Access-Control-Allow-Origin: * z odpowiedzi dokumentów HTML.
+  3. Domyślne jednostki imperialne dla ruchu z USA: Zweryfikować middleware.ts i nagłówek x-vercel-ip-country, aby
+  dla US domyślnie serwować cale.
+
+  #### 🟡 Priorytet P1 (Krótkoterminowe / Wydajność):
+
+  4. Odchudzić RootLayout: Przenieść MaterialsLoader, ShapesLoader i BordersLoader z globalnego layoutu wyłącznie do
+  tras konfiguratora ([productSlug]/[designerStep] i powiązanych). Pozwoli to zredukować HTML strony głównej z 141 KB
+  do ~25–35 KB.
+  5. Włączyć Edge Caching / ISR dla podstron /designs/...: Zmienić politykę cache z no-store na public, s-
+  maxage=86400, stale-while-revalidate=604800.
+  6. Ujednolicić e-mail kontaktowy: Skonfigurować skrzynkę w domenie serwisu (np. contact@forevershining.org),
+  eliminując wrażenie zewnętrznego pośrednika (@bronze-plaque.com).
+
+  #### 🟢 Priorytet P2 (Optymalizacja i porządki):
+
+  7. Oczyszczenie kodu z szablonu playground: Usunąć katalogi _patterns, _hooks, odpiąć mocki db.demo oraz
+  odinstalować codehike.
+  8. Dedykowany formularz "Zamów projekt przez konsultanta" dla klientów rezygnujących z samodzielnego konfigurowania
+  3D na małych ekranach smartfonów.

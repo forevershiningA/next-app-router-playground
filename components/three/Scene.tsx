@@ -679,6 +679,7 @@ export default function Scene({
   const setSelectedImageId = useHeadstoneStore((s) => s.setSelectedImageId);
   const setSelectedEmblemId = useHeadstoneStore((s) => s.setSelectedEmblemId);
   const productType = useHeadstoneStore((s) => s.catalog?.product.type);
+  const assembly = useHeadstoneStore((s) => s.catalog?.product.assembly);
   const productId = useHeadstoneStore((s) => s.productId);
   const widthMm = useHeadstoneStore((s) => s.widthMm);
   const baseWidthMm = useHeadstoneStore((s) => s.baseWidthMm);
@@ -692,6 +693,7 @@ export default function Scene({
   const baseThickness = useHeadstoneStore((s) => s.baseThickness);
   const uprightThickness = useHeadstoneStore((s) => s.uprightThickness);
   const isFullMonument = productType === 'full-monument';
+  const isPolishMonument = assembly === 'polish-traditional-double';
   const isPlaque = productType === 'plaque' || productType === 'bronze_plaque';
   const isUrn = productType === 'urn';
   const isMiniHeadstone = productId === '22';
@@ -873,12 +875,16 @@ export default function Scene({
               width={kerbWidthMm / 1000 + 0.16}
               depth={foundationDepth}
               centerZ={foundationCenterZ}
+              padding={isPolishMonument ? 0.5 : undefined}
+              opacity={isPolishMonument ? 0.7 : undefined}
             />
-            <MemorialFoundation
-              width={kerbWidthMm / 1000 + 0.16}
-              depth={foundationDepth}
-              centerZ={foundationCenterZ}
-            />
+            {!isPolishMonument && (
+              <MemorialFoundation
+                width={kerbWidthMm / 1000 + 0.16}
+                depth={foundationDepth}
+                centerZ={foundationCenterZ}
+              />
+            )}
           </>
         )}
 
