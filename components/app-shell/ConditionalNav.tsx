@@ -6,7 +6,6 @@ import { GlobalNav } from '#/ui/global-nav';
 import DesignsTreeNav from '#/components/designs/DesignsTreeNav';
 import DesignerNav from '#/components/designer/navigation/DesignerNav';
 import AccountNav from '#/components/account/AccountNav';
-import { type DemoCategory } from '#/lib/db';
 import {
   isDesignerRoutePath,
   getDesignerStepSlug,
@@ -48,7 +47,7 @@ const DRAWER_PANEL_TITLES: Record<string, string> = {
   'select-emblems': 'Select Emblems',
 };
 
-export default function ConditionalNav({ items }: { items: DemoCategory[] }) {
+export default function ConditionalNav() {
   const pathname = usePathname();
   const router = useRouter();
   const isMobileMenuOpen = useMobileNavStore((s) => s.isOpen);
@@ -230,7 +229,7 @@ export default function ConditionalNav({ items }: { items: DemoCategory[] }) {
   }
 
   if (isProductsRoute) {
-    return <GlobalNav items={items} />;
+    return <GlobalNav />;
   }
 
   if (isDesignsRoute) {
@@ -278,7 +277,7 @@ export default function ConditionalNav({ items }: { items: DemoCategory[] }) {
     );
   }
 
-  return <GlobalNav items={items} />;
+  return <GlobalNav />;
 }
 
 function renderDesignerSidebar(

@@ -15,14 +15,20 @@ import {
 } from '#/lib/design-seo';
 
 interface CategoryPageProps {
-  params: Promise<{
-    productType: string;
-    category: string;
-  }>;
+  params: Promise<{ productType: string; category: string }>;
 }
 
 // Enable ISR - revalidate every 24 hours
 export const revalidate = 86400;
+
+// There are hundreds of valid product/category pairs. Returning an empty list
+// makes Next.js generate each category statically on first request and retain
+// it in the ISR cache without adding all categories to the deployment build.
+export function generateStaticParams() {
+  return [];
+}
+
+export const dynamicParams = true;
 
 function formatSlugForDisplay(slug: string): string {
   if (!slug) return 'Memorial Design';
@@ -44,12 +50,20 @@ function formatShapeName(shapeName: string): string {
     .join(' ');
 }
 
-function formatDesignTitle(design: { slug: string; shapeName?: string }): string {
+function formatDesignTitle(design: {
+  slug: string;
+  shapeName?: string;
+}): string {
   if (!design.shapeName) return formatSlugForDisplay(design.slug);
 
-  const shapeWords = design.shapeName.toLowerCase().replace(/[\s_]+/g, '-').split('-');
+  const shapeWords = design.shapeName
+    .toLowerCase()
+    .replace(/[\s_]+/g, '-')
+    .split('-');
   const slugWords = design.slug.split('-');
-  const hasShapePrefix = shapeWords.every((word, index) => slugWords[index] === word);
+  const hasShapePrefix = shapeWords.every(
+    (word, index) => slugWords[index] === word,
+  );
 
   if (!hasShapePrefix) return formatSlugForDisplay(design.slug);
 
@@ -71,8 +85,12 @@ function designDescription(
   categoryTitle: string,
   productKind: string,
 ): string {
-  const shapeName = design.shapeName ? formatShapeName(design.shapeName) : 'Classic';
-  const hash = design.id.split('').reduce((sum, char) => sum + char.charCodeAt(0), 0);
+  const shapeName = design.shapeName
+    ? formatShapeName(design.shapeName)
+    : 'Classic';
+  const hash = design.id
+    .split('')
+    .reduce((sum, char) => sum + char.charCodeAt(0), 0);
   const descriptions = [
     `A ${shapeName.toLowerCase()} ${finish} ${productKind} layout for ${categoryTitle.toLowerCase()} inscriptions and personal wording.`,
     `This ${shapeName.toLowerCase()} memorial design gives ${categoryTitle.toLowerCase()} tributes a balanced layout with space for names, dates and verses.`,
@@ -98,7 +116,9 @@ function getCategorySearchTitle(
   return fallback;
 }
 
-export async function generateMetadata({ params }: CategoryPageProps): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: CategoryPageProps): Promise<Metadata> {
   const { productType: productSlug, category } = await params;
 
   const categoryTitle = getCategoryTitle(category);
@@ -106,7 +126,8 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
 
   // Get designs count
   const designs = getSeoReadyDesigns().filter(
-    (design) => design.productSlug === productSlug && design.category === category,
+    (design) =>
+      design.productSlug === productSlug && design.category === category,
   );
   const designCount = designs.length;
 
@@ -140,7 +161,7 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
     'cemetery headstone',
     'grave marker',
     'memorial stone',
-    'headstone inscriptions'
+    'headstone inscriptions',
   ].join(', ');
 
   // Build canonical URL
@@ -153,10 +174,7 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
     keywords,
     alternates: {
       canonical: canonicalUrl,
-      languages: {
-        'x-default': canonicalUrl,
-        'en-US': canonicalUrl,
-      },
+      languages: { 'x-default': canonicalUrl, 'en-US': canonicalUrl },
     },
     openGraph: {
       title,
@@ -166,17 +184,10 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
       locale: 'en_US',
       type: 'website',
     },
-    twitter: {
-      card: 'summary_large_image',
-      title,
-      description,
-    },
+    twitter: { card: 'summary_large_image', title, description },
     robots: isIndexableCategoryDesignSet(designs)
       ? undefined
-      : {
-          index: false,
-          follow: true,
-        },
+      : { index: false, follow: true },
   };
 }
 
@@ -187,7 +198,10 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   const categoryDescription = getCategoryDescription(category);
   const categorySeoCopy = getCategorySeoCopy(category);
   const designs = getSeoReadyDesigns()
-    .filter((design) => design.productSlug === productSlug && design.category === category)
+    .filter(
+      (design) =>
+        design.productSlug === productSlug && design.category === category,
+    )
     .sort((a, b) => formatDesignTitle(a).localeCompare(formatDesignTitle(b)));
 
   if (!designs.length) {
@@ -198,51 +212,67 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
     <>
       <DesignsIndexMobileNavToggle />
       <aside
-        className="fixed left-0 top-0 z-10 hidden h-full flex-col border-r border-slate-200 md:block"
+        className="fixed top-0 left-0 z-10 hidden h-full flex-col border-r border-slate-200 md:block"
         style={{ width: '400px' }}
       >
         <ServerDesignsTreeNav maxDesignLinksPerCategory={0} />
       </aside>
 
-      <main className="bg-[#f7f5f0] overflow-y-auto min-h-screen md:ml-[400px]">
-        <div className="container mx-auto px-4 pb-14 pt-20 md:px-8 md:py-12 max-w-7xl">
-          <nav className="flex items-center gap-2 text-sm text-stone-500 mb-8" aria-label="Breadcrumb">
-            <Link href="/designs" className="hover:text-stone-950 transition-colors font-light tracking-wide">
+      <main className="min-h-screen overflow-y-auto bg-[#f7f5f0] md:ml-[400px]">
+        <div className="container mx-auto max-w-7xl px-4 pt-20 pb-14 md:px-8 md:py-12">
+          <nav
+            className="mb-8 flex items-center gap-2 text-sm text-stone-500"
+            aria-label="Breadcrumb"
+          >
+            <Link
+              href="/designs"
+              className="font-light tracking-wide transition-colors hover:text-stone-950"
+            >
               Memorial Designs
             </Link>
-            <ChevronRightIcon className="w-4 h-4" />
+            <ChevronRightIcon className="h-4 w-4" />
             <Link
               href={`/designs/${productSlug}`}
-              className="hover:text-stone-950 transition-colors font-light tracking-wide"
+              className="font-light tracking-wide transition-colors hover:text-stone-950"
             >
               {productInfo.name}
             </Link>
-            <ChevronRightIcon className="w-4 h-4" />
-            <span className="text-stone-950 font-medium tracking-wide">{categoryTitle}</span>
+            <ChevronRightIcon className="h-4 w-4" />
+            <span className="font-medium tracking-wide text-stone-950">
+              {categoryTitle}
+            </span>
           </nav>
 
           <header className="mb-12 max-w-4xl">
-            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.22em] text-[#9b7a24]">
+            <p className="mb-3 text-xs font-semibold tracking-[0.22em] text-[#9b7a24] uppercase">
               Choose a starting layout
             </p>
-            <h1 className="text-4xl md:text-6xl font-serif font-light text-stone-950 mb-5 tracking-tight">
+            <h1 className="mb-5 font-serif text-4xl font-light tracking-tight text-stone-950 md:text-6xl">
               {categoryTitle} {productInfo.shortName} Designs
             </h1>
-            <p className="text-lg md:text-xl text-stone-600 font-light max-w-3xl leading-relaxed">
-              {categoryDescription} These {productInfo.kind} templates can be personalized with names,
-              dates, verses, motifs and photos before ordering.
+            <p className="max-w-3xl text-lg leading-relaxed font-light text-stone-600 md:text-xl">
+              {categoryDescription} These {productInfo.kind} templates can be
+              personalized with names, dates, verses, motifs and photos before
+              ordering.
             </p>
-            <p className="text-sm text-stone-500 mt-5 font-light">
+            <p className="mt-5 text-sm font-light text-stone-500">
               {designs.length.toLocaleString()} design templates to personalize
             </p>
           </header>
 
           {categorySeoCopy && (
-            <section aria-labelledby="category-guide-heading" className="mb-12 max-w-4xl">
-              <h2 id="category-guide-heading" className="text-2xl font-serif font-light text-stone-950 mb-4">
-                Choosing {categoryTitle.toLowerCase()} {productInfo.kind} designs
+            <section
+              aria-labelledby="category-guide-heading"
+              className="mb-12 max-w-4xl"
+            >
+              <h2
+                id="category-guide-heading"
+                className="mb-4 font-serif text-2xl font-light text-stone-950"
+              >
+                Choosing {categoryTitle.toLowerCase()} {productInfo.kind}{' '}
+                designs
               </h2>
-              <p className="text-base leading-8 text-stone-600 font-light mb-5">
+              <p className="mb-5 text-base leading-8 font-light text-stone-600">
                 {categorySeoCopy.intro}
               </p>
               <ul className="grid gap-3 text-sm leading-7 text-stone-600 md:grid-cols-3">
@@ -259,7 +289,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
             <h2 id="category-designs-heading" className="sr-only">
               {categoryTitle} design templates
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
               {designs.map((design) => {
                 const title = formatDesignTitle(design);
                 const motifs = design.motifNames.slice(0, 4);
@@ -281,26 +311,32 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
                     </div>
 
                     <div className="p-6">
-                      <h3 className="font-serif font-light text-xl text-stone-950 mb-2 group-hover:text-[#8a6b1f] transition-colors">
+                      <h3 className="mb-2 font-serif text-xl font-light text-stone-950 transition-colors group-hover:text-[#8a6b1f]">
                         {title}
                       </h3>
-                      <p className="text-stone-600 font-light text-sm mb-4 leading-relaxed">
-                        {designDescription(design, productInfo.finish, categoryTitle, productInfo.kind)}
+                      <p className="mb-4 text-sm leading-relaxed font-light text-stone-600">
+                        {designDescription(
+                          design,
+                          productInfo.finish,
+                          categoryTitle,
+                          productInfo.kind,
+                        )}
                       </p>
 
                       {motifs.length > 0 && (
-                        <p className="text-sm text-stone-500 font-light mb-4">
+                        <p className="mb-4 text-sm font-light text-stone-500">
                           Motifs: {motifs.join(', ')}
                         </p>
                       )}
 
                       <div className="flex items-center justify-between gap-4 border-t border-stone-100 pt-4">
-                        <span className="text-xs text-stone-500 font-light">
-                          {design.inscriptionCount} inscription {design.inscriptionCount === 1 ? 'area' : 'areas'}
+                        <span className="text-xs font-light text-stone-500">
+                          {design.inscriptionCount} inscription{' '}
+                          {design.inscriptionCount === 1 ? 'area' : 'areas'}
                         </span>
-                        <span className="inline-flex items-center text-[#8a6b1f] font-light text-sm uppercase tracking-wider group-hover:translate-x-1 transition-transform">
+                        <span className="inline-flex items-center text-sm font-light tracking-wider text-[#8a6b1f] uppercase transition-transform group-hover:translate-x-1">
                           View Design
-                          <ChevronRightIcon className="w-4 h-4 ml-1" />
+                          <ChevronRightIcon className="ml-1 h-4 w-4" />
                         </span>
                       </div>
                     </div>

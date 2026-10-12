@@ -1,0 +1,69 @@
+ Sprawdziłem wdrożone poprawki na działającej witrynie https://forevershining.org/ oraz w kodzie produkcyjnym
+  (commit c514425598: Audit 3.8).
+
+  Poniżej znajduje się szczegółowy raport z weryfikacji poszczególnych obszarów:
+  ──────
+  ### 1. Podsumowanie wyników weryfikacji
+   Obszar / Rekomendacja z audytu    |    Status przed    | Status po wdrożeniu | Weryfikacja na produkcji
+  -----------------------------------|--------------------|---------------------|------------------------------------
+   Nagłówki bezpieczeństwa HTTP      |      🔴 Brak       |     🟢 Wdrożone     | Zwracane prawidłowo w
+                                     |                    |                     | odpowiedziach nagłówków HTTP
+   Dedykowany regulamin (/terms)     |  🔴 404 / mailto   |     🟢 Wdrożony     | Zwraca HTTP 200 OK, podpięty w
+                                     |                    |                     | stopce serwisu
+   Odchudzenie RootLayout            |    🔴 141.3 KB     |    🟢 Poprawione    | Spadek do 118.7 KB (redukcja o
+                                     |                    |                     | ~22.6 KB)
+   Ładowanie katalogu konfiguratora  | 🔴 Wstrzykiwane w  |   🟢 Wdrożone API   | Asynchroniczny endpoint z cache
+                                     |        SSR         |                     | krawędziowym 24h
+   Domyślne jednostki (USA /         |    🟡 Metryczne    |  🟢 Zaktualizowane  | Domyślne imperial + ochrona stron
+   Imperial)                         |                    |                     | SEO przed Set-Cookie
+   Testy jednostkowe (Vitest)        |         —          |  🟢 113/113 passed  | Wszystkie testy jednostkowe
+                                     |                    |                     | przechodzą pomyślnie
+  ──────
+  ### 2. Szczegółowa analiza wdrożonych poprawek
+  #### ✅ Bezpieczeństwo i nagłówki HTTP (next.config.ts)
+  Wszystkie kluczowe nagłówki ochronne są już serwowane na żywej produkcji:
+  • X-Frame-Options: SAMEORIGIN – ochrona przed atakami typu clickjacking.
+  • X-Content-Type-Options: nosniff – blokada MIME-sniffingu.
+  • Referrer-Policy: strict-origin-when-cross-origin – ochrona danych w nagłówkach odsyłających.
+  • Permissions-Policy: camera=(), microphone=(), geolocation=() – ograniczenie niepotrzebnych uprawnień sprzętowych
+  przeglądarki.
+  #### ✅ Dedykowana strona regulaminu (/terms) i aktualizacja stopki
+  • Utworzono pełną stronę page.tsx.
+  • Podstrona zwraca status 200 OK i jest poprawnie prerenderowana przez Vercel.
+  • Treść regulaminu została dopasowana do specyfiki produktów memorialnych (m.in. zgody administracji cmentarzy,
+  proces akceptacji proofów graficznych, naturalne tolerancje kamienia/odlewów, gwarancja i zgłaszanie wad).
+  • W HomeSplash.tsx link w stopce został zaktualizowany z mailto:admin@bronze-plaque.com na bezpośredni odnośnik
+  <Link href="/terms">Terms & Conditions</Link>.
+
+  #### ✅ Odchudzenie początkowego HTML i optymalizacja ładowania danych
+  • Z layout.tsx usunięto synchroniczne wstrzykiwanie MaterialsLoader, ShapesLoader oraz BordersLoader.
+  • Utworzono dedykowany endpoint /api/catalog/designer-options, który:
+      • Zwraca Cache-Control: public, s-maxage=86400, stale-while-revalidate=604800 (cache na krawędzi Vercel Edge).
+      • Jest odpytywany przez DesignerCatalogLoader.tsx wyłącznie wtedy, gdy użytkownik rzeczywiście wejdzie do
+      konfiguratora (pathname !== '/' && isDesignerRoutePath(pathname)).
+  • Dzięki temu użytkownicy wchodzący na landing page nie pobierają już w payloadzie dziesiątek kształtów i tekstur,
+  co zmniejszyło rozmiar początkowego dokumentu HTML o ~22.6 KB.
+
+  #### ✅ Jednostki miar i ciasteczka (lib/unit-system.ts, middleware.ts)
+
+  • W unit-system.ts wprowadzono fallback na imperial w przypadku braku geolokalizacji kraju (zgodnie z rynkiem
+  docelowym USA).
+  • W middleware.ts zaktualizowano isPublicSeoPath (obsługuje teraz segmenty designs do głębokości 4 oraz endpoint
+  opcji katalogu), co zapobiega dołączaniu Set-Cookie do stron katalogowych i nie unieważnia cache CDN dla botów
+  indeksujących.
+  ──────
+  ### 3. Rekomendacje do kolejnego etapu (Next Steps)
+
+  1. Usunięcie mocków db.demo.findMany() z layout.tsx:
+  W pliku app/layout.tsx nadal wywoływane jest:
+    const demos = db.demo.findMany();
+    <ConditionalNav items={demos} />
+  W strumieniu RSC nadal przesyłane są opisy z szablonu startowego ("Create Error UI for specific parts of an app").
+  Oczyszczenie tego komponentu pozwoli zaoszczędzić kolejne kilkanaście kilobajtów w początkowym HTML.
+  2. Statyczna generacja podstron /designs/...:
+  Podstrony /designs/[productType]/[category] nie posiadają funkcji generateStaticParams(), przez co Next.js 15
+  renderuje je dynamicznie per zapytanie (Cache-Control: private, no-cache, no-store). Dodanie generateStaticParams()
+  lub dyrektyw use cache pozwoli Vercelowi serwować cały katalog z pamięci podręcznej edge jako HIT.
+  3. Adres e-mail w stopce:
+  Warto docelowo zastąpić adres e-mail @bronze-plaque.com w stopce i danych kontaktowych skrzynką w domenie serwisu
+  (np. contact@forevershining.org), aby zachować 100% spójności brandingu.

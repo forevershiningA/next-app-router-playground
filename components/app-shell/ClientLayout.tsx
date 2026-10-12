@@ -9,16 +9,14 @@ import { NavigationProvider } from '#/contexts/NavigationContext';
 
 export default function ClientLayout({
   children,
-  demos,
 }: {
   children: React.ReactNode;
-  demos: any[];
 }) {
   return (
     <NavigationProvider>
       <RouterBinder />
       <DefaultDesignLoader />
-      <ConditionalNav items={demos} />
+      <ConditionalNav />
       <MainContent>
         <ConditionalCanvas />
         {children}

@@ -1,6 +1,5 @@
 import '#/styles/globals.css';
 
-import db from '#/lib/db';
 import type { Metadata, Viewport } from 'next';
 import { Geist, Geist_Mono, Playfair_Display } from 'next/font/google';
 import ErrorBoundary from '#/components/shared/ErrorBoundary';
@@ -52,8 +51,6 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const demos = db.demo.findMany();
-
   return (
     <html
       lang="en-US"
@@ -78,7 +75,7 @@ export default function RootLayout({
             <ClientShell />
             <DesignerCatalogLoader />
             <MobileHeader />
-            <ConditionalNav items={demos} />
+            <ConditionalNav />
             <MainContent>{children}</MainContent>
             <ThemeToggle />
           </ErrorBoundary>

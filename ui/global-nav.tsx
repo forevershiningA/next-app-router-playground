@@ -1,11 +1,9 @@
 'use client';
 
 import React, { type MouseEvent } from 'react';
-import { type Demo, type DemoCategory } from '#/lib/db';
 import { LinkStatus } from '#/ui/link-status';
-import { NextLogoDark } from '#/ui/logo-next';
-import { 
-  Bars3Icon, 
+import {
+  Bars3Icon,
   XMarkIcon,
   CubeIcon,
   Squares2X2Icon,
@@ -30,47 +28,78 @@ const menuIcons: Record<string, React.ComponentType<{ className?: string }>> = {
   'select-shape': Squares2X2Icon,
   'select-size': ArrowsPointingOutIcon,
   'select-material': SwatchIcon,
-  'inscriptions': DocumentTextIcon,
+  inscriptions: DocumentTextIcon,
   'select-additions': PlusCircleIcon,
   'select-motifs': SparklesIcon,
   'check-price': CurrencyDollarIcon,
-  'designs': LightBulbIcon,
+  designs: LightBulbIcon,
 };
 
-export function GlobalNav({ items }: { items: DemoCategory[] }) {
+type NavigationItem = { slug: string; name: string; nav_title?: string };
+
+type NavigationSection = { name: string; items: NavigationItem[] };
+
+const navigationSections: NavigationSection[] = [
+  {
+    name: 'Setup',
+    items: [
+      { slug: 'select-product', name: 'Select Product' },
+      { slug: 'select-shape', name: 'Select Shape' },
+      { slug: 'select-size', name: 'Select Size' },
+      { slug: 'select-material', name: 'Select Material' },
+    ],
+  },
+  {
+    name: 'Design',
+    items: [
+      { slug: 'inscriptions', name: 'Inscriptions' },
+      { slug: 'select-images', name: 'Add Your Image' },
+      { slug: 'select-motifs', name: 'Select Motifs' },
+      { slug: 'select-additions', name: 'Select Additions' },
+    ],
+  },
+  {
+    name: 'Finalize',
+    items: [
+      { slug: 'check-price', name: 'Check Price' },
+      { slug: 'designs', name: 'Design Ideas' },
+    ],
+  },
+];
+
+export function GlobalNav() {
   const [isOpen, setIsOpen] = useState(false); // Start with sidebar closed on mobile
   const segment = useSelectedLayoutSegment();
-  const [isDesktop, setIsDesktop] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const activePanel = useHeadstoneStore((s) => s.activePanel);
-  
+
   // Detect if we're on a design page
   const [isDesignPage, setIsDesignPage] = useState(false);
   const [isDesignListPage, setIsDesignListPage] = useState(false);
-  
+
   useEffect(() => {
     const checkIfDesignPage = () => {
       const path = window.location.pathname;
       const onDesignPath = path.startsWith('/designs/');
       setIsDesignPage(onDesignPath);
-      
+
       // Design list pages have 3 segments (/designs/product) or 4 segments (/designs/product/category)
-      const segments = path.split('/').filter(s => s);
-      const isListPage = onDesignPath && (segments.length === 2 || segments.length === 3);
+      const segments = path.split('/').filter((s) => s);
+      const isListPage =
+        onDesignPath && (segments.length === 2 || segments.length === 3);
       setIsDesignListPage(isListPage);
     };
-    
+
     checkIfDesignPage();
     // Listen for navigation changes
     window.addEventListener('popstate', checkIfDesignPage);
     return () => window.removeEventListener('popstate', checkIfDesignPage);
   }, []);
-  
+
   // Detect desktop and auto-open sidebar on desktop
   useEffect(() => {
     const checkDesktop = () => {
       const desktop = window.innerWidth >= 1024;
-      setIsDesktop(desktop);
       // Auto-open on desktop
       if (desktop) {
         setIsOpen(true);
@@ -80,17 +109,17 @@ export function GlobalNav({ items }: { items: DemoCategory[] }) {
     window.addEventListener('resize', checkDesktop);
     return () => window.removeEventListener('resize', checkDesktop);
   }, []);
-  
+
   const [activeSection, setActiveSection] = useState<string | null>(() => {
     // Initialize with current segment if it exists
     return segment || null;
   });
-  
+
   const [showAllSections, setShowAllSections] = useState(() => {
     // If we have a segment, show only that section, otherwise show all
     return !segment;
   });
-  
+
   const close = () => setIsOpen(false);
 
   // Update active section when URL changes and hide loader
@@ -114,7 +143,7 @@ export function GlobalNav({ items }: { items: DemoCategory[] }) {
     const handler = () => {
       handleBackToMenu();
     };
-    
+
     window.addEventListener('back-to-menu', handler);
     return () => window.removeEventListener('back-to-menu', handler);
   }, []);
@@ -124,12 +153,12 @@ export function GlobalNav({ items }: { items: DemoCategory[] }) {
     const handler = (e: Event) => {
       const customEvent = e as CustomEvent<{ slug: string }>;
       const newSlug = customEvent.detail.slug;
-      
+
       // Set active section and hide others
       setActiveSection(newSlug);
       setShowAllSections(false);
     };
-    
+
     window.addEventListener('nav-changed', handler);
     return () => window.removeEventListener('nav-changed', handler);
   }, []);
@@ -144,18 +173,18 @@ export function GlobalNav({ items }: { items: DemoCategory[] }) {
   // Hide/show overlays when mobile nav opens/closes
   useEffect(() => {
     if (typeof window === 'undefined') return;
-    
+
     const overlays = document.querySelectorAll('[data-scene-overlay]');
     const viewToggle = document.querySelector('[data-view-toggle]');
-    
+
     const hideOnMobile = isOpen && window.innerWidth < 1024; // lg breakpoint is 1024px
-    
+
     overlays.forEach((overlay) => {
       if (overlay instanceof HTMLElement) {
         overlay.style.display = hideOnMobile ? 'none' : '';
       }
     });
-    
+
     if (viewToggle instanceof HTMLElement) {
       viewToggle.style.display = hideOnMobile ? 'none' : '';
     }
@@ -175,7 +204,7 @@ export function GlobalNav({ items }: { items: DemoCategory[] }) {
       quantity = widthMm + heightMm;
     }
   }
-  
+
   let baseQuantity = 0;
   if (showBase && catalog?.product?.basePriceModel) {
     const qt = catalog.product.basePriceModel.quantityType;
@@ -185,13 +214,14 @@ export function GlobalNav({ items }: { items: DemoCategory[] }) {
       baseQuantity = baseWidthMm * baseHeightMm;
     }
   }
-  
+
   const headstonePrice = catalog
     ? calculatePrice(catalog.product.priceModel, quantity)
     : 0;
-  const basePrice = showBase && catalog?.product?.basePriceModel
-    ? calculatePrice(catalog.product.basePriceModel, baseQuantity)
-    : 0;
+  const basePrice =
+    showBase && catalog?.product?.basePriceModel
+      ? calculatePrice(catalog.product.basePriceModel, baseQuantity)
+      : 0;
   const price = headstonePrice + basePrice;
 
   // Hide entire sidebar on design list pages
@@ -205,10 +235,7 @@ export function GlobalNav({ items }: { items: DemoCategory[] }) {
       <div
         className={clsx(
           'fixed top-0 z-10 flex w-full flex-col border-b border-gray-800 lg:bottom-[30px] lg:z-auto lg:w-[400px] lg:border-r lg:border-b-0 lg:border-gray-800',
-          {
-            'bg-black': !isDesignListPage,
-            'hidden': isDesignListPage,
-          }
+          { 'bg-black': !isDesignListPage, hidden: isDesignListPage },
         )}
       >
         {/* Loader overlay - show when loading a section, positioned only in sidebar */}
@@ -216,7 +243,9 @@ export function GlobalNav({ items }: { items: DemoCategory[] }) {
           <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm">
             <div className="flex flex-col items-center gap-4">
               <div className="h-16 w-16 animate-spin rounded-full border-[6px] border-white/30 border-t-white" />
-              <div className="font-mono text-sm text-white">Loading section...</div>
+              <div className="font-mono text-sm text-white">
+                Loading section...
+              </div>
             </div>
           </div>
         )}
@@ -252,51 +281,68 @@ export function GlobalNav({ items }: { items: DemoCategory[] }) {
           className={clsx('overflow-y-auto lg:static lg:h-full', {
             'fixed inset-x-0 top-14 bottom-0 mt-px bg-black': isOpen,
             // Hide nav when a section is active (panel showing) OR when any panel is open (like motif editor)
-            hidden: !isOpen || (!showAllSections && activeSection && !isDesignPage) || (activePanel && isDesignPage),
-            'lg:block': (showAllSections || !activeSection || isDesignPage) && !activePanel,
+            hidden:
+              !isOpen ||
+              (!showAllSections && activeSection && !isDesignPage) ||
+              (activePanel && isDesignPage),
+            'lg:block':
+              (showAllSections || !activeSection || isDesignPage) &&
+              !activePanel,
           })}
         >
-        <nav className="space-y-8 px-2 pb-4 pt-4 lg:pt-2">
-          {items.map((section) => {
-            return (
-              <div key={section.name}>
-                <div className="mb-3 px-3 font-mono text-xs font-semibold tracking-wider text-gray-500 uppercase flex items-center justify-between">
-                  <div>{section.name}</div>
-                  {/* Back to Menu button - show when a section is active (mobile/tablet only) - BUT hide on design pages */}
-                  {!showAllSections && activeSection && !isDesignPage && (
-                    <button
-                      type="button"
-                      onClick={handleBackToMenu}
-                      className="rounded-md bg-gray-800 px-4 py-2 text-sm font-medium text-gray-200 hover:bg-gray-700 hover:text-white transition-colors normal-case lg:hidden cursor-pointer"
-                    >
-                      Back to menu
-                    </button>
-                  )}
-                </div>
+          <nav className="space-y-8 px-2 pt-4 pb-4 lg:pt-2">
+            {navigationSections.map((section) => {
+              return (
+                <div key={section.name}>
+                  <div className="mb-3 flex items-center justify-between px-3 font-mono text-xs font-semibold tracking-wider text-gray-500 uppercase">
+                    <div>{section.name}</div>
+                    {/* Back to Menu button - show when a section is active (mobile/tablet only) - BUT hide on design pages */}
+                    {!showAllSections && activeSection && !isDesignPage && (
+                      <button
+                        type="button"
+                        onClick={handleBackToMenu}
+                        className="cursor-pointer rounded-md bg-gray-800 px-4 py-2 text-sm font-medium text-gray-200 normal-case transition-colors hover:bg-gray-700 hover:text-white lg:hidden"
+                      >
+                        Back to menu
+                      </button>
+                    )}
+                  </div>
 
-                <div className="flex flex-col gap-1">
-                  {section.items.map((item) => {
-                    // Hide nav links when a section is active (showing panel) - BUT always show on design pages
-                    if (!showAllSections && activeSection && !isDesignPage) {
-                      return null;
-                    }
-                    
-                    return (
-                      <Fragment key={item.slug}>
-                        {/* Nav Item */}
-                        <Suspense fallback={<NavItem item={item} close={close} setIsLoading={setIsLoading} />}>
-                          <DynamicNavItem item={item} close={close} setIsLoading={setIsLoading} />
-                        </Suspense>
-                      </Fragment>
-                    );
-                  })}
+                  <div className="flex flex-col gap-1">
+                    {section.items.map((item) => {
+                      // Hide nav links when a section is active (showing panel) - BUT always show on design pages
+                      if (!showAllSections && activeSection && !isDesignPage) {
+                        return null;
+                      }
+
+                      return (
+                        <Fragment key={item.slug}>
+                          {/* Nav Item */}
+                          <Suspense
+                            fallback={
+                              <NavItem
+                                item={item}
+                                close={close}
+                                setIsLoading={setIsLoading}
+                              />
+                            }
+                          >
+                            <DynamicNavItem
+                              item={item}
+                              close={close}
+                              setIsLoading={setIsLoading}
+                            />
+                          </Suspense>
+                        </Fragment>
+                      );
+                    })}
+                  </div>
                 </div>
-              </div>
-            );
-          })}
-        </nav>
+              );
+            })}
+          </nav>
+        </div>
       </div>
-    </div>
     </>
   );
 }
@@ -306,14 +352,22 @@ function DynamicNavItem({
   close,
   setIsLoading,
 }: {
-  item: Demo;
+  item: NavigationItem;
   close: () => false | void;
   setIsLoading: (loading: boolean) => void;
 }) {
   const segment = useSelectedLayoutSegment();
   const isActive = item.slug === segment;
 
-  return <NavItem item={item} close={close} isActive={isActive} slug={item.slug} setIsLoading={setIsLoading} />;
+  return (
+    <NavItem
+      item={item}
+      close={close}
+      isActive={isActive}
+      slug={item.slug}
+      setIsLoading={setIsLoading}
+    />
+  );
 }
 
 function NavItem({
@@ -323,14 +377,14 @@ function NavItem({
   slug,
   setIsLoading,
 }: {
-  item: Demo;
+  item: NavigationItem;
   close: () => false | void;
   isActive?: boolean;
   slug?: string;
   setIsLoading?: (loading: boolean) => void;
 }) {
   const setActivePanel = useHeadstoneStore((s) => s.setActivePanel);
-  
+
   // Get the icon component for this menu item
   const IconComponent = slug ? menuIcons[slug] : null;
 
@@ -348,8 +402,10 @@ function NavItem({
       if (setIsLoading) {
         setIsLoading(true);
       }
-      window.dispatchEvent(new CustomEvent('nav-changed', { detail: { slug } }));
-      
+      window.dispatchEvent(
+        new CustomEvent('nav-changed', { detail: { slug } }),
+      );
+
       // Close menu after a short delay
       setTimeout(() => {
         close();
@@ -367,7 +423,7 @@ function NavItem({
         'flex items-center justify-between gap-3 rounded-md px-3 py-2 text-base font-medium transition-colors',
         {
           'text-gray-300 hover:bg-gray-800 hover:text-white': !isActive,
-          'text-[#cfac6c] bg-[#cfac6c]/10': isActive,
+          'bg-[#cfac6c]/10 text-[#cfac6c]': isActive,
         },
       )}
     >

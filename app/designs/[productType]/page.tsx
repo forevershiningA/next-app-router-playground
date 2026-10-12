@@ -16,22 +16,36 @@ import {
 } from '#/lib/design-seo';
 
 interface ProductPageProps {
-  params: Promise<{
-    productType: string;
-  }>;
+  params: Promise<{ productType: string }>;
 }
 
 // Enable ISR - revalidate every 24 hours
 export const revalidate = 86400;
 
-export async function generateMetadata({ params }: ProductPageProps): Promise<Metadata> {
+export function generateStaticParams() {
+  const productSlugs = new Set(
+    getSeoReadyDesigns()
+      .map((design) => design.productSlug)
+      .filter((productSlug) => INDEXABLE_PRODUCT_SLUGS.has(productSlug)),
+  );
+
+  return [...productSlugs].map((productType) => ({ productType }));
+}
+
+export const dynamicParams = true;
+
+export async function generateMetadata({
+  params,
+}: ProductPageProps): Promise<Metadata> {
   const { productType: productSlug } = await params;
-  
+
   const productInfo = getProductSeoInfo(productSlug);
-  const designs = getSeoReadyDesigns().filter((design) => design.productSlug === productSlug);
-  
+  const designs = getSeoReadyDesigns().filter(
+    (design) => design.productSlug === productSlug,
+  );
+
   // Get unique categories
-  const categories = Array.from(new Set(designs.map(d => d.category)));
+  const categories = Array.from(new Set(designs.map((d) => d.category)));
   const categoryCount = categories.length;
   const designCount = designs.length;
 
@@ -58,7 +72,7 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
     'headstone inscriptions',
     'memorial quotes',
     'headstone motifs',
-    ...categories.slice(0, 10).map(c => c.replace(/-/g, ' '))
+    ...categories.slice(0, 10).map((c) => c.replace(/-/g, ' ')),
   ].join(', ');
 
   // Build canonical URL
@@ -71,10 +85,7 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
     keywords,
     alternates: {
       canonical: canonicalUrl,
-      languages: {
-        'x-default': canonicalUrl,
-        'en-US': canonicalUrl,
-      },
+      languages: { 'x-default': canonicalUrl, 'en-US': canonicalUrl },
     },
     openGraph: {
       title,
@@ -84,31 +95,26 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
       locale: 'en_US',
       type: 'website',
     },
-    twitter: {
-      card: 'summary_large_image',
-      title,
-      description,
-    },
+    twitter: { card: 'summary_large_image', title, description },
     robots: INDEXABLE_PRODUCT_SLUGS.has(productSlug)
       ? undefined
-      : {
-          index: false,
-          follow: true,
-        },
+      : { index: false, follow: true },
   };
 }
 
 export default async function ProductTypePage({ params }: ProductPageProps) {
   const { productType: productSlug } = await params;
   const productInfo = getProductSeoInfo(productSlug);
-  const productDesigns = getSeoReadyDesigns().filter((design) => design.productSlug === productSlug);
+  const productDesigns = getSeoReadyDesigns().filter(
+    (design) => design.productSlug === productSlug,
+  );
 
   if (!productDesigns.length) {
     notFound();
   }
 
-  const categoryGroups = groupDesignsByCategory(productDesigns).filter(([, designs]) =>
-    isIndexableCategoryDesignSet(designs),
+  const categoryGroups = groupDesignsByCategory(productDesigns).filter(
+    ([, designs]) => isIndexableCategoryDesignSet(designs),
   );
 
   return (
@@ -117,48 +123,63 @@ export default async function ProductTypePage({ params }: ProductPageProps) {
         <ServerDesignsTreeNav />
       </MobileNavToggle>
       <aside
-        className="fixed left-0 top-0 z-10 hidden h-full flex-col border-r border-slate-200 md:block"
+        className="fixed top-0 left-0 z-10 hidden h-full flex-col border-r border-slate-200 md:block"
         style={{ width: '400px' }}
       >
         <ServerDesignsTreeNav />
       </aside>
 
-      <main className="bg-[#f7f5f0] overflow-y-auto min-h-screen md:ml-[400px]">
-        <div className="container mx-auto px-4 pb-14 pt-20 md:px-8 md:py-12 max-w-7xl">
-          <nav className="flex items-center gap-2 text-sm text-stone-500 mb-8" aria-label="Breadcrumb">
-            <Link href="/" className="hover:text-stone-950 transition-colors font-light tracking-wide">
+      <main className="min-h-screen overflow-y-auto bg-[#f7f5f0] md:ml-[400px]">
+        <div className="container mx-auto max-w-7xl px-4 pt-20 pb-14 md:px-8 md:py-12">
+          <nav
+            className="mb-8 flex items-center gap-2 text-sm text-stone-500"
+            aria-label="Breadcrumb"
+          >
+            <Link
+              href="/"
+              className="font-light tracking-wide transition-colors hover:text-stone-950"
+            >
               Home
             </Link>
-            <ChevronRightIcon className="w-4 h-4" />
-            <Link href="/designs" className="hover:text-stone-950 transition-colors font-light tracking-wide">
+            <ChevronRightIcon className="h-4 w-4" />
+            <Link
+              href="/designs"
+              className="font-light tracking-wide transition-colors hover:text-stone-950"
+            >
               Memorial Designs
             </Link>
-            <ChevronRightIcon className="w-4 h-4" />
-            <span className="text-stone-950 font-medium tracking-wide">{productInfo.name}</span>
+            <ChevronRightIcon className="h-4 w-4" />
+            <span className="font-medium tracking-wide text-stone-950">
+              {productInfo.name}
+            </span>
           </nav>
 
           <header className="mb-12 max-w-4xl">
-            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.22em] text-[#9b7a24]">
+            <p className="mb-3 text-xs font-semibold tracking-[0.22em] text-[#9b7a24] uppercase">
               Browse by memorial theme
             </p>
-            <h1 className="text-4xl md:text-6xl font-serif font-light text-stone-950 mb-5 tracking-tight">
+            <h1 className="mb-5 font-serif text-4xl font-light tracking-tight text-stone-950 md:text-6xl">
               {productInfo.name} Designs
             </h1>
-            <p className="text-lg md:text-xl text-stone-600 font-light max-w-3xl leading-relaxed">
-              {productInfo.description} Browse by memorial theme, then personalize a design with names,
-              dates, verses, motifs and photos.
+            <p className="max-w-3xl text-lg leading-relaxed font-light text-stone-600 md:text-xl">
+              {productInfo.description} Browse by memorial theme, then
+              personalize a design with names, dates, verses, motifs and photos.
             </p>
-            <p className="text-sm text-stone-500 mt-5 font-light">
-              {productDesigns.length.toLocaleString()} designs in {categoryGroups.length} strong categories
+            <p className="mt-5 text-sm font-light text-stone-500">
+              {productDesigns.length.toLocaleString()} designs in{' '}
+              {categoryGroups.length} strong categories
             </p>
           </header>
 
           <section aria-labelledby="product-categories-heading">
-            <h2 id="product-categories-heading" className="text-2xl font-serif font-light text-stone-950 mb-6">
+            <h2
+              id="product-categories-heading"
+              className="mb-6 font-serif text-2xl font-light text-stone-950"
+            >
               Browse {productInfo.shortName} Themes
             </h2>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {categoryGroups.map(([category, designs]) => {
                 const preview = designs[0];
                 return (
@@ -177,19 +198,19 @@ export default async function ProductTypePage({ params }: ProductPageProps) {
                       />
                     </div>
                     <div className="p-6">
-                      <h3 className="font-serif font-light text-xl text-stone-950 group-hover:text-[#8a6b1f] transition-colors mb-2">
+                      <h3 className="mb-2 font-serif text-xl font-light text-stone-950 transition-colors group-hover:text-[#8a6b1f]">
                         {getCategoryTitle(category)}
                       </h3>
-                      <p className="text-sm text-stone-600 font-light leading-relaxed mb-4">
+                      <p className="mb-4 text-sm leading-relaxed font-light text-stone-600">
                         {getCategoryDescription(category)}
                       </p>
                       <div className="flex items-center justify-between gap-4 text-sm">
-                        <span className="text-stone-500 font-light">
+                        <span className="font-light text-stone-500">
                           {designs.length.toLocaleString()} designs
                         </span>
-                        <span className="inline-flex items-center text-[#8a6b1f] font-light uppercase tracking-wider group-hover:translate-x-1 transition-transform">
+                        <span className="inline-flex items-center font-light tracking-wider text-[#8a6b1f] uppercase transition-transform group-hover:translate-x-1">
                           View Designs
-                          <ChevronRightIcon className="w-4 h-4 ml-1" />
+                          <ChevronRightIcon className="ml-1 h-4 w-4" />
                         </span>
                       </div>
                     </div>
