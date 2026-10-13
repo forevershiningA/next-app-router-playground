@@ -49,7 +49,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 
   return {
-    title: template.metadata.title + ' | DYO',
+    title: `${template.metadata.title} | Forever Shining`,
     description: template.metadata.description,
     keywords: template.metadata.keywords,
     openGraph: {

@@ -1032,6 +1032,14 @@ export default function HomeSplash() {
               <ul className="day:text-gray-600 mt-4 space-y-2 text-sm text-white/70">
                 <li>
                   <Link
+                    href="/memorials"
+                    className="day:hover:text-gray-900 cursor-pointer font-medium transition-colors hover:text-white"
+                  >
+                    All Memorials Catalog
+                  </Link>
+                </li>
+                <li>
+                  <Link
                     href="/memorials/headstones"
                     className="day:hover:text-gray-900 cursor-pointer transition-colors hover:text-white"
                   >

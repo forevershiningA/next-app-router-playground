@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   title: 'Terms & Conditions',
   description:
     'Terms and conditions for ordering custom memorial products from Forever Shining.',
-  alternates: { canonical: '/terms' },
+  alternates: { canonical: 'https://forevershining.org/terms' },
 };
 
 const sections = [

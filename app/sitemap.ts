@@ -34,6 +34,24 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'weekly',
       priority: 0.9,
     },
+    {
+      url: `${BASE_URL}/memorials`,
+      lastModified: SITE_LAUNCH_DATE,
+      changeFrequency: 'weekly',
+      priority: 0.85,
+    },
+    {
+      url: `${BASE_URL}/terms`,
+      lastModified: SITE_LAUNCH_DATE,
+      changeFrequency: 'monthly',
+      priority: 0.5,
+    },
+    {
+      url: `${BASE_URL}/privacy`,
+      lastModified: SITE_LAUNCH_DATE,
+      changeFrequency: 'monthly',
+      priority: 0.5,
+    },
   ];
 
   const guidePages: MetadataRoute.Sitemap = [

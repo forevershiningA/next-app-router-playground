@@ -208,8 +208,71 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
     notFound();
   }
 
+  const baseUrl = 'https://forevershining.org';
+  const canonicalUrl = `${baseUrl}/designs/${productSlug}/${category}`;
+  const structuredData = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'CollectionPage',
+        '@id': `${canonicalUrl}#collection`,
+        url: canonicalUrl,
+        name: `${categoryTitle} ${productInfo.shortName} Designs`,
+        description: categoryDescription,
+        isPartOf: { '@id': `${baseUrl}#website` },
+      },
+      {
+        '@type': 'BreadcrumbList',
+        '@id': `${canonicalUrl}#breadcrumb`,
+        itemListElement: [
+          {
+            '@type': 'ListItem',
+            position: 1,
+            name: 'Home',
+            item: baseUrl,
+          },
+          {
+            '@type': 'ListItem',
+            position: 2,
+            name: 'Memorial Designs',
+            item: `${baseUrl}/designs`,
+          },
+          {
+            '@type': 'ListItem',
+            position: 3,
+            name: productInfo.name,
+            item: `${baseUrl}/designs/${productSlug}`,
+          },
+          {
+            '@type': 'ListItem',
+            position: 4,
+            name: categoryTitle,
+            item: canonicalUrl,
+          },
+        ],
+      },
+      {
+        '@type': 'ItemList',
+        '@id': `${canonicalUrl}#itemlist`,
+        name: `${categoryTitle} ${productInfo.shortName} Designs`,
+        numberOfItems: designs.length,
+        itemListElement: designs.slice(0, 30).map((design, index) => ({
+          '@type': 'ListItem',
+          position: index + 1,
+          name: formatDesignTitle(design),
+          url: `${baseUrl}/designs/${design.productSlug}/${design.category}/${design.slug}`,
+          image: `${baseUrl}/screenshots/v2026-3d/${design.id}.png`,
+        })),
+      },
+    ],
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
       <DesignsIndexMobileNavToggle />
       <aside
         className="fixed top-0 left-0 z-10 hidden h-full flex-col border-r border-slate-200 md:block"

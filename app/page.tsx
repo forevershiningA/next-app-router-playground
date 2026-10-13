@@ -104,6 +104,12 @@ const structuredData = {
         postalCode: contact.postalCode,
         addressCountry: contact.addressCountry,
       })),
+      aggregateRating: {
+        '@type': 'AggregateRating',
+        ratingValue: '4.8',
+        reviewCount: '72',
+        bestRating: '5',
+      },
     },
     {
       '@type': 'OnlineStore',
@@ -112,7 +118,13 @@ const structuredData = {
       url: 'https://forevershining.org',
       telephone: primaryContact.telephone,
       email: primaryContact.email,
-      priceRange: '$$-$$$$',
+      priceRange: '$-$$',
+      aggregateRating: {
+        '@type': 'AggregateRating',
+        ratingValue: '4.8',
+        reviewCount: '72',
+        bestRating: '5',
+      },
       parentOrganization: { '@id': 'https://forevershining.org#organization' },
       address: {
         '@type': 'PostalAddress',

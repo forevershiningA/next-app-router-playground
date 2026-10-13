@@ -585,6 +585,14 @@ function PublicFooter() {
             <ul className="day:text-gray-600 mt-4 space-y-2 text-sm text-white/70">
               <li>
                 <Link
+                  href="/memorials"
+                  className="day:hover:text-gray-900 font-medium hover:text-white"
+                >
+                  All Memorials Catalog
+                </Link>
+              </li>
+              <li>
+                <Link
                   href="/memorials/headstones"
                   className="day:hover:text-gray-900 hover:text-white"
                 >
@@ -661,6 +669,22 @@ function PublicFooter() {
                   className="day:hover:text-gray-900 hover:text-white"
                 >
                   Buying Guide
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/terms"
+                  className="day:hover:text-gray-900 hover:text-white"
+                >
+                  Terms & Conditions
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/privacy"
+                  className="day:hover:text-gray-900 hover:text-white"
+                >
+                  Privacy Policy
                 </Link>
               </li>
             </ul>

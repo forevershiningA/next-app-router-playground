@@ -117,8 +117,64 @@ export default async function ProductTypePage({ params }: ProductPageProps) {
     ([, designs]) => isIndexableCategoryDesignSet(designs),
   );
 
+  const baseUrl = 'https://forevershining.org';
+  const canonicalUrl = `${baseUrl}/designs/${productSlug}`;
+  const structuredData = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'CollectionPage',
+        '@id': `${canonicalUrl}#collection`,
+        url: canonicalUrl,
+        name: `${productInfo.name} Designs`,
+        description: productInfo.description,
+        isPartOf: { '@id': `${baseUrl}#website` },
+      },
+      {
+        '@type': 'BreadcrumbList',
+        '@id': `${canonicalUrl}#breadcrumb`,
+        itemListElement: [
+          {
+            '@type': 'ListItem',
+            position: 1,
+            name: 'Home',
+            item: baseUrl,
+          },
+          {
+            '@type': 'ListItem',
+            position: 2,
+            name: 'Memorial Designs',
+            item: `${baseUrl}/designs`,
+          },
+          {
+            '@type': 'ListItem',
+            position: 3,
+            name: productInfo.name,
+            item: canonicalUrl,
+          },
+        ],
+      },
+      {
+        '@type': 'ItemList',
+        '@id': `${canonicalUrl}#itemlist`,
+        name: `${productInfo.name} Categories`,
+        numberOfItems: categoryGroups.length,
+        itemListElement: categoryGroups.map(([catSlug], index) => ({
+          '@type': 'ListItem',
+          position: index + 1,
+          name: getCategoryTitle(catSlug),
+          url: `${baseUrl}/designs/${productSlug}/${catSlug}`,
+        })),
+      },
+    ],
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
       <MobileNavToggle>
         <ServerDesignsTreeNav />
       </MobileNavToggle>

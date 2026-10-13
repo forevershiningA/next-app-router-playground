@@ -14,9 +14,18 @@ const BLOCKED_PATHS = /^\/ml\/[^/]+\/saved-designs\/html\/[^/]+\.html$/;
 // them. These pages use the storefront's US/imperial default until a visitor
 // enters the designer.
 function isPublicSeoPath(pathname: string): boolean {
-  if (pathname === '/' || pathname === '/designs') return true;
+  if (
+    pathname === '/' ||
+    pathname === '/designs' ||
+    pathname === '/memorials' ||
+    pathname === '/terms' ||
+    pathname === '/privacy' ||
+    pathname === '/api/catalog/designer-options'
+  ) {
+    return true;
+  }
   if (pathname.startsWith('/memorials/')) return true;
-  if (pathname === '/api/catalog/designer-options') return true;
+  if (pathname.startsWith('/products/')) return true;
 
   const parts = pathname.split('/').filter(Boolean);
   return parts[0] === 'designs' && parts.length <= 4;

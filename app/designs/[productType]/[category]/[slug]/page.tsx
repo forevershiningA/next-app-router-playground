@@ -1,5 +1,6 @@
 import { notFound, permanentRedirect } from 'next/navigation';
 import { Metadata } from 'next';
+import Image from 'next/image';
 import Link from 'next/link';
 import { getProductFromId } from '#/lib/product-utils';
 import { INDEXABLE_PRODUCT_SLUGS } from '#/lib/design-seo';
@@ -344,6 +345,16 @@ export default async function SavedDesignPage({ params }: SavedDesignPageProps) 
         "image": [`${baseUrl}/screenshots/v2026-3d/${design.id}.png`],
         "sku": sku,
         "mpn": sku,
+        "offers": {
+          "@type": "AggregateOffer",
+          "priceCurrency": "USD",
+          "lowPrice": design.productType === 'plaque' ? "255" : design.productType === 'monument' ? "966" : "603",
+          "highPrice": design.productType === 'plaque' ? "4418" : "11496",
+          "offerCount": "1",
+          "priceValidUntil": "2026-12-31",
+          "availability": "https://schema.org/InStock",
+          "url": canonicalUrl
+        },
       },
       // BreadcrumbList Schema
       {
@@ -412,48 +423,41 @@ export default async function SavedDesignPage({ params }: SavedDesignPageProps) 
     ]
   };
 
+  const faqItems = [
+    {
+      question: `What inscription length fits on the ${categoryTitle} ${shapeName ? `(${shapeName})` : ''}?`,
+      answer: `This ${categoryTitle.toLowerCase()} design accommodates ${design.inscriptionCount <= 2 ? 'short to medium' : design.inscriptionCount <= 4 ? 'medium length' : 'multiple'} inscriptions comfortably. You can add names, dates, verses, and personal messages. The design tool provides real-time preview so you can see exactly how your text will appear. We recommend keeping individual lines to 30-40 characters for optimal readability.`
+    },
+    {
+      question: "Can I change fonts and motifs on this design?",
+      answer: `Absolutely! This design is fully customizable. You can choose from 10+ professional fonts suitable for memorials, adjust text sizes, and select from over 5,000 motifs including religious symbols, flora, fauna, and custom imagery. ${design.hasMotifs ? 'This design already includes motifs which you can keep, replace, or remove.' : 'You can easily add motifs to personalize your memorial.'} All changes are made through our interactive design tool with instant preview.`
+    },
+    {
+      question: `How long does ${simplifiedProduct.toLowerCase().includes('laser') ? 'laser-etched black granite' : simplifiedProduct.toLowerCase().includes('bronze') ? 'bronze' : simplifiedProduct.toLowerCase()} last outdoors?`,
+      answer: simplifiedProduct.toLowerCase().includes('laser')
+        ? "Laser-etched black granite memorials are exceptionally durable with an expected lifespan exceeding 100-200 years. The laser etching penetrates 0.5-1mm deep into the granite surface, creating permanent markings that resist weathering, fading, and environmental damage. Granite has a Mohs hardness rating of 6-7, making it highly resistant to erosion. With minimal maintenance (annual gentle wash), your memorial will maintain its appearance for generations."
+        : simplifiedProduct.toLowerCase().includes('bronze')
+        ? "Bronze memorials can last 200+ years when properly maintained. Bronze naturally develops a protective patina over time that actually enhances longevity. The cast bronze construction is highly resistant to corrosion and weathering. Regular cleaning with mild soap maintains the finish, and professional refinishing services can restore original luster if desired."
+        : `${simplifiedProduct} memorials are built for lasting durability in outdoor conditions. With proper care and maintenance, expect a lifespan of 50+ years. The materials are selected specifically for weather resistance and longevity in cemetery environments.`
+    },
+    {
+      question: "What's the typical lead time and delivery process?",
+      answer: `Standard production time is 2-3 weeks for ${simplifiedProduct.toLowerCase().includes('laser') ? 'laser-etched granite' : simplifiedProduct.toLowerCase().includes('bronze') ? 'bronze' : 'this'} ${productTypeDisplay.toLowerCase()}s, with express 1-week service available where available. After you finalize your design online, we provide detailed proofs for your approval before manufacturing begins. Delivery and installation options are confirmed with your quote based on the memorial type and destination. We'll keep you updated throughout the entire process.`
+    }
+  ];
+
   // Generate FAQ Schema
   const faqSchema = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": `What inscription length fits on the ${categoryTitle} ${shapeName ? `(${shapeName})` : ''}?`,
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": `This ${categoryTitle.toLowerCase()} design accommodates ${design.inscriptionCount <= 2 ? 'short to medium' : design.inscriptionCount <= 4 ? 'medium length' : 'multiple'} inscriptions comfortably. You can add names, dates, verses, and personal messages. The design tool provides real-time preview so you can see exactly how your text will appear. We recommend keeping individual lines to 30-40 characters for optimal readability.`
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "Can I change fonts and motifs on this design?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": `Absolutely! This design is fully customizable. You can choose from 10+ professional fonts suitable for memorials, adjust text sizes, and select from over 5,000 motifs including religious symbols, flora, fauna, and custom imagery. ${design.hasMotifs ? 'This design already includes motifs which you can keep, replace, or remove.' : 'You can easily add motifs to personalize your memorial.'} All changes are made through our interactive design tool with instant preview.`
-        }
-      },
-      {
-        "@type": "Question",
-        "name": `How long does ${simplifiedProduct.toLowerCase().includes('laser') ? 'laser-etched black granite' : simplifiedProduct.toLowerCase().includes('bronze') ? 'bronze' : simplifiedProduct.toLowerCase()} last outdoors?`,
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": simplifiedProduct.toLowerCase().includes('laser')
-            ? "Laser-etched black granite memorials are exceptionally durable with an expected lifespan exceeding 100-200 years. The laser etching penetrates 0.5-1mm deep into the granite surface, creating permanent markings that resist weathering, fading, and environmental damage. Granite has a Mohs hardness rating of 6-7, making it highly resistant to erosion. With minimal maintenance (annual gentle wash), your memorial will maintain its appearance for generations."
-            : simplifiedProduct.toLowerCase().includes('bronze')
-            ? "Bronze memorials can last 200+ years when properly maintained. Bronze naturally develops a protective patina over time that actually enhances longevity. The cast bronze construction is highly resistant to corrosion and weathering. Regular cleaning with mild soap maintains the finish, and professional refinishing services can restore original luster if desired."
-            : `${simplifiedProduct} memorials are built for lasting durability in outdoor conditions. With proper care and maintenance, expect a lifespan of 50+ years. The materials are selected specifically for weather resistance and longevity in cemetery environments.`
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "What's the typical lead time and delivery process?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": `Standard production time is 2-3 weeks for ${simplifiedProduct.toLowerCase().includes('laser') ? 'laser-etched granite' : simplifiedProduct.toLowerCase().includes('bronze') ? 'bronze' : 'this'} ${productTypeDisplay.toLowerCase()}s, with express 1-week service available where available. After you finalize your design online, we provide detailed proofs for your approval before manufacturing begins. Delivery and installation options are confirmed with your quote based on the memorial type and destination. We'll keep you updated throughout the entire process.`
-        }
+    "mainEntity": faqItems.map((item) => ({
+      "@type": "Question",
+      "name": item.question,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": item.answer
       }
-    ]
+    }))
   };
 
   return (
@@ -511,14 +515,18 @@ export default async function SavedDesignPage({ params }: SavedDesignPageProps) 
         </div>
 
         <div className="container mx-auto px-4 md:px-8 py-8 max-w-7xl">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={previewScreenshotSrc}
-            alt={`${formattedH1} preview`}
-            className="mx-auto block h-auto w-auto max-w-full rounded-lg shadow-md"
-            style={{ maxHeight: '45vh' }}
-            loading="eager"
-          />
+          <div className="mx-auto mb-8 flex justify-center">
+            <div className="relative aspect-[1200/630] w-full max-w-3xl overflow-hidden rounded-lg shadow-md bg-stone-50">
+              <Image
+                src={previewScreenshotSrc}
+                alt={`${formattedH1} preview`}
+                fill
+                priority
+                className="object-contain"
+                sizes="(max-width: 768px) 100vw, 896px"
+              />
+            </div>
+          </div>
 
           <section aria-labelledby="about-design-heading" className="mb-8 max-w-3xl">
             <h2 id="about-design-heading" className="text-xl font-semibold text-slate-800 mb-3">
@@ -688,6 +696,24 @@ export default async function SavedDesignPage({ params }: SavedDesignPageProps) 
                   </tr>
                 </tbody>
               </table>
+            </div>
+          </section>
+
+          <section aria-labelledby="faq-heading-ssr" className="mb-8 max-w-3xl">
+            <h2 id="faq-heading-ssr" className="text-xl font-semibold text-slate-800 mb-4">
+              Frequently Asked Questions
+            </h2>
+            <div className="space-y-4">
+              {faqItems.map((item, idx) => (
+                <details key={idx} className="group rounded-lg border border-slate-200 bg-white p-4 transition-colors hover:border-slate-300" open={idx === 0}>
+                  <summary className="cursor-pointer font-medium text-slate-900 group-hover:text-amber-800">
+                    {item.question}
+                  </summary>
+                  <p className="mt-3 text-sm leading-relaxed text-slate-600">
+                    {item.answer}
+                  </p>
+                </details>
+              ))}
             </div>
           </section>
 
