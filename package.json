@@ -18,6 +18,8 @@
     "test:e2e:debug": "playwright test --debug",
     "test:e2e:report": "playwright show-report",
     "video:hero": "pnpm build && node scripts/record-hero-video.mjs",
+    "video:content": "pnpm build && node scripts/render-configurator-video.mjs --formats all",
+    "video:list": "node scripts/render-configurator-video.mjs --list",
     "validate": "pnpm type-check && pnpm lint && pnpm format:check",
     "cache:clear": "node scripts/clear-svg-cache.js",
     "cache:clear-all": "node scripts/clear-all-caches.js",

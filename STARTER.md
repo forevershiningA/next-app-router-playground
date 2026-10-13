@@ -395,8 +395,8 @@ Following the deployment of production ISR fixes, a comprehensive search engine 
   pnpm video:hero
   ```
 
-- The script starts a dedicated Next.js development server on port `3100` unless `HERO_VIDEO_BASE_URL` already responds. Set that environment variable to capture another running instance.
-- Playwright records a `1440×900` light-theme browser session. FFmpeg exports a `1280×800`, 30 fps hero asset in both VP9 WebM and H.264 MP4, plus a WebP poster.
+- The script starts a dedicated Next.js production server on port `3100` unless `HERO_VIDEO_BASE_URL` already responds. Set that environment variable to capture another running instance.
+- Playwright records a `1440×900` light-theme browser session. FFmpeg exports a `1280×800`, 25 fps hero asset in both VP9 WebM and H.264 MP4, plus a WebP poster.
 - Generated assets:
   - `public/videos/configurator-hero.webm`
   - `public/videos/configurator-hero.mp4`
@@ -412,6 +412,24 @@ Following the deployment of production ISR fixes, a comprehensive search engine 
 - The motif API is warmed before the capture start so development-time route compilation does not consume the visible recording.
 - A synthetic visible cursor is rendered only during capture. Native pointer interactions are still used, including incremental mouse movement for sliders and Three.js objects.
 - `ffmpeg-static` is a development dependency used to make the export reproducible without requiring a separately installed FFmpeg binary.
+
+### Reusable tutorial and social video pipeline
+
+- `scripts/render-configurator-video.mjs` is the scenario runner. It separates browser capture from individual stories and FFmpeg exports.
+- Scenario definitions live in `scripts/video/scenarios/`. Shared Playwright capture code lives in `scripts/video/capture-engine.mjs`; output profiles live in `scripts/video/formats.mjs`.
+- The first focused tutorial is `add-inscription`: a short guided film showing text entry, sizing, positioning, and 3D review. Its default output is vertical social video.
+- `peter-higgs-memorial` is an editorial social concept that builds a photographic black-granite tribute inside the real configurator. Its licensed portrait source and attribution are stored in `assets/video-sources/`.
+- List scenarios and formats with `pnpm video:list`.
+- Generate the existing web Hero assets with `pnpm video:hero`.
+- Generate the web asset and all social variants from one deterministic capture with `pnpm video:content`.
+- To render selected variants against an already running app, use:
+
+  ```bash
+  node scripts/render-configurator-video.mjs --scenario configurator-hero --formats vertical,square --base-url http://127.0.0.1:3000
+  ```
+
+- Profiles: `web` (`1280×800`), `landscape` (`1920×1080`), `vertical` (`1080×1920`), and `square` (`1080×1080`). Social MP4 files and posters go to `public/videos/social/`; legacy Hero filenames remain in `public/videos/`.
+- `HERO_VIDEO_BASE_URL` and `HERO_VIDEO_USE_SWIFTSHADER` remain supported. New automation should use `VIDEO_BASE_URL` and `VIDEO_USE_SWIFTSHADER=1` when hardware WebGL capture is unavailable.
 
 ### Homepage hero integration
 

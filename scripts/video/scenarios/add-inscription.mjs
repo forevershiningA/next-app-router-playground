@@ -1,0 +1,82 @@
+const role = (name) => ({ by: 'role', role: 'button', name, first: true });
+
+export const addInscriptionScenario = Object.freeze({
+  id: 'add-inscription',
+  title: 'How to add a personalised inscription',
+  route: '/traditional-engraved-headstone/inscriptions?capture=tutorial',
+  outputBaseName: 'tutorial-add-inscription',
+  defaultFormats: ['vertical'],
+  maxDurationSeconds: 32,
+  posterTimeSeconds: 1.2,
+  steps: [
+    { action: 'pause', ms: 900 },
+    {
+      action: 'caption',
+      eyebrow: '3D Memorial Designer',
+      title: 'Add a personal inscription',
+      body: 'Create and position a meaningful message in a few simple steps.',
+      afterMs: 1900,
+    },
+    {
+      action: 'caption',
+      eyebrow: 'Step 1',
+      title: 'Write your message',
+      body: 'Enter the wording exactly as you would like it to appear.',
+      afterMs: 500,
+    },
+    {
+      action: 'fill',
+      target: { by: 'css', selector: '#inscriptionTextInput' },
+      value: 'In Loving Memory\nForever in our hearts',
+      afterMs: 700,
+    },
+    { action: 'click', target: role('Add Inscription'), afterMs: 700 },
+    {
+      action: 'caption',
+      eyebrow: 'Step 2',
+      title: 'Choose the right size',
+      body: 'Use the slider to balance readability with the shape of the stone.',
+      afterMs: 500,
+    },
+    {
+      action: 'dragRange',
+      target: { by: 'css', selector: 'input[type="range"]', first: true },
+      fraction: 0.3,
+      afterMs: 900,
+    },
+    {
+      action: 'caption',
+      eyebrow: 'Step 3',
+      title: 'Position it naturally',
+      body: 'Drag the inscription directly on the 3D memorial.',
+      afterMs: 500,
+    },
+    {
+      action: 'dragCanvas',
+      from: { x: 0.57, y: 0.4 },
+      delta: { x: 0, y: -105 },
+      afterMs: 900,
+    },
+    {
+      action: 'caption',
+      eyebrow: 'Live 3D preview',
+      title: 'Review from every angle',
+      body: 'Your design updates instantly as you work.',
+      afterMs: 600,
+    },
+    { action: 'click', target: role('Rotate right'), fast: true, afterMs: 850 },
+    {
+      action: 'click',
+      target: role('Rotate right'),
+      fast: true,
+      afterMs: 1000,
+    },
+    {
+      action: 'caption',
+      eyebrow: 'Forever Shining',
+      title: 'Design a memorial online',
+      body: 'Explore materials, inscriptions and motifs in the 3D configurator.',
+      afterMs: 2300,
+    },
+  ],
+});

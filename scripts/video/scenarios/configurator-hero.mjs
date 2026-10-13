@@ -1,0 +1,98 @@
+const role = (name, options = {}) => ({
+  by: 'role',
+  role: 'button',
+  name,
+  first: true,
+  ...options,
+});
+const quickNav = (slug) => ({ by: 'quickNav', slug });
+
+export const configuratorHeroScenario = Object.freeze({
+  id: 'configurator-hero',
+  title: 'Create a personalised memorial',
+  route: '/traditional-engraved-headstone/select-material?capture=hero',
+  outputBaseName: 'configurator-hero',
+  defaultFormats: ['web'],
+  maxDurationSeconds: 64,
+  posterTimeSeconds: 1.5,
+  steps: [
+    {
+      action: 'request',
+      path: '/api/motifs/db?category=motif',
+      label: 'Motif warmup',
+    },
+    { action: 'pause', ms: 1800 },
+    { action: 'click', target: quickNav('select-shape') },
+    { action: 'click', target: role(/Curved Peak/i), afterMs: 650 },
+    { action: 'click', target: role(/Cropped Peak/i), afterMs: 650 },
+    { action: 'click', target: role(/Serpentine/i), afterMs: 650 },
+    { action: 'click', target: quickNav('select-material') },
+    { action: 'click', target: role(/African Red/i), afterMs: 800 },
+    { action: 'click', target: role(/Blue Pearl/i), afterMs: 800 },
+    { action: 'click', target: quickNav('inscriptions') },
+    { action: 'waitForUrl', url: /\/inscriptions(?:\?|$)/ },
+    {
+      action: 'waitForVisible',
+      target: { by: 'css', selector: '#inscriptionTextInput' },
+    },
+    { action: 'pause', ms: 700 },
+    {
+      action: 'fill',
+      target: { by: 'css', selector: '#inscriptionTextInput' },
+      value: 'In Loving Memory\nAlways in our hearts',
+      afterMs: 500,
+    },
+    { action: 'click', target: role('Add Inscription'), afterMs: 500 },
+    {
+      action: 'dragRange',
+      target: { by: 'css', selector: 'input[type="range"]', first: true },
+      fraction: 0.25,
+      afterMs: 700,
+    },
+    {
+      action: 'dragCanvas',
+      from: { x: 0.57, y: 0.4 },
+      delta: { x: 0, y: -125 },
+      afterMs: 700,
+    },
+    { action: 'click', target: quickNav('select-motifs') },
+    { action: 'waitForUrl', url: /\/select-motifs(?:\?|$)/ },
+    { action: 'pause', ms: 500 },
+    {
+      action: 'clickIfHidden',
+      target: role(/Birds/i),
+      fallbackTarget: quickNav('select-motifs'),
+    },
+    { action: 'click', target: role(/Birds/i) },
+    {
+      action: 'click',
+      target: {
+        by: 'css',
+        selector: 'div.grid.grid-cols-3 > button',
+        first: true,
+      },
+      afterMs: 900,
+    },
+    {
+      action: 'dragCanvas',
+      from: { x: 0.5, y: 0.41 },
+      delta: { x: 80, y: 135 },
+      afterMs: 700,
+    },
+    { action: 'pause', ms: 800 },
+    { action: 'click', target: role('Rotate right'), fast: true, afterMs: 850 },
+    {
+      action: 'click',
+      target: role('Rotate right'),
+      fast: true,
+      afterMs: 1100,
+    },
+    { action: 'click', target: role('Open check price breakdown'), fast: true },
+    {
+      action: 'waitForVisible',
+      target: { by: 'text', text: /price|estimate|total/i, first: true },
+      timeout: 10_000,
+    },
+    { action: 'pause', ms: 2600 },
+  ],
+});
