@@ -661,9 +661,11 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(
     const isSizeAdjustmentActive = useMobileNavStore(
       (state) => state.isSizeAdjustmentActive,
     );
-    // ShapeSwapper remounts this component for a different SVG. Keep the
-    // selected shape's geometry immutable between those swaps; size controls
-    // update only its transform.
+    // ShapeSwapper remounts this component for a different SVG. Simple/fixed
+    // shapes keep immutable geometry between swaps and resize via transforms.
+    // Classical profiles with preserveTop must rebuild from the requested
+    // width/height so their curved top scales uniformly instead of stretching
+    // independently on X and Y.
     const [geometryDimensions] = useState(() => ({
       targetWidth,
       targetHeight,
@@ -671,8 +673,12 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(
       slantThickness,
     }));
 
-    const geometryTargetWidth = geometryDimensions.targetWidth;
-    const geometryTargetHeight = geometryDimensions.targetHeight;
+    const geometryTargetWidth = preserveTop
+      ? targetWidth
+      : geometryDimensions.targetWidth;
+    const geometryTargetHeight = preserveTop
+      ? targetHeight
+      : geometryDimensions.targetHeight;
     const geometryDepth = geometryDimensions.depth;
     const geometrySlantThickness = geometryDimensions.slantThickness;
     const isGeometryPreviewActive =
@@ -2586,7 +2592,9 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(
         const nextRawDepth =
           dims.worldDepth / Math.max(EPS, Math.abs(meshScale[2]));
         const ratioX = previous.width / Math.max(EPS, nextRawWidth);
-        const ratioY = previous.height / Math.max(EPS, nextRawHeight);
+        const ratioY = preserveTop
+          ? ratioX
+          : previous.height / Math.max(EPS, nextRawHeight);
         const ratioZ = previous.depth / Math.max(EPS, nextRawDepth);
         stoneScaleRef.current?.scale.multiply(
           new THREE.Vector3(ratioX, ratioY, ratioZ),
@@ -2612,6 +2620,7 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(
       geometryTargetHeight,
       geometryTargetWidth,
       headstoneStyle,
+      preserveTop,
       slantThickness,
       targetHeight,
       targetWidth,
