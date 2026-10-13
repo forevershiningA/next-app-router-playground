@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-10-12
+**Last Updated:** 2026-10-13
 
 **Status entry order:** Add new dated status entries immediately after the table of contents, before the existing status entries. Keep status entries in reverse chronological order (newest first); do not append them to the end of this file.
 **Tech Stack:** Next.js 15.5.26, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots), **Vitest 4.1.8** (unit tests), **Playwright 1.59.1** (E2E tests)
@@ -128,6 +128,59 @@
 117. [October 7 Designer UI Polish and Automated Homepage Hero Video](#current-status-2026-10-07--designer-ui-polish-and-automated-homepage-hero-video)
 118. [October 10 Polish Traditional Full Monument Demonstrator](#current-status-2026-10-10--polish-traditional-full-monument-demonstrator)
 119. [October 12 Production Audit Remediation, ISR, and Playground Cleanup](#current-status-2026-10-12--production-audit-remediation-isr-and-playground-cleanup)
+120. [October 13 Comprehensive SEO Audit, Technical Remediation & Cleanups](#current-status-2026-10-13--comprehensive-seo-audit-technical-remediation--cleanups)
+
+---
+
+## Current Status (2026-10-13) — Comprehensive SEO Audit, Technical Remediation & Cleanups
+
+### Overview & Motivation
+Following the deployment of production ISR fixes, a comprehensive search engine optimization (SEO) audit and Google Search Console (GSC) evaluation was conducted on the entire codebase. The audit identified and resolved several critical indexation blockers, schema compliance risks, crawl budget leaks, and lingering Next.js Playground template residues.
+
+### Google Search Console (GSC) Data & Performance Insights
+- Exported search data in `gsc/` revealed strong organic traction in key target markets:
+  - **Geographic breakdown:** United States (3,536 impressions, 82 clicks), Australia (1,559 impressions, 34 clicks), Canada (369 impressions, 12 clicks), and United Kingdom (409 impressions, 8 clicks).
+  - **Device distribution:** Including tablets in the total, mobile devices represent **52.9% of impressions and 51.7% of clicks**. Their reported average SERP position was 7.75, compared with 15.85 for desktop; this is a descriptive comparison, not a significance test.
+  - **Rich Results (Search Appearance):** Review snippets (*"Fragment opinii"*) generated **19 clicks and 939 impressions** (CTR 2.02%, avg pos 18.66). Product snippets added 4 clicks and 316 impressions. These are observational segments, not evidence that either enhancement caused the clicks.
+  - **Top non-brand high-intent queries:** `flower headstone engraving designs` (pos 9.8), `headstones horse designs` (pos 10.6), `butterfly engraving headstone` (pos 13.2), `teddy bear headstone` (CTR 20%, pos 14.4), and `full colour memorial` (105 impressions, pos 11.1).
+
+### Critical Routing & 404 Resolution
+- **`/products` permanent redirect fix:** `app/products/page.tsx` was redirecting to `/memorials`, which did not exist as a physical route (returning HTTP 404).
+- **Created `app/memorials/page.tsx`:** Implemented a full-featured memorial category catalog covering Headstones, Plaques, Full Monuments, Urns, and Pet Memorials. The page includes canonical URL metadata, responsive product cards, and complete JSON-LD structured data (`CollectionPage`, `BreadcrumbList`, and `ItemList`).
+- **Internal PageRank distribution:** Added direct links to `/memorials` (*"All Memorials Catalog"*) in both the homepage footer (`app/_ui/HomeSplash.tsx`) and the memorial pages footer (`app/memorials/[type]/page.tsx`).
+
+### Template Cruft & Sandbox Cleanup
+- **Purged `app/select-size/` template leftovers:**
+  - Removed `app/select-size/(main)/` (which previously exposed an unblocked `/select-size/blog` placeholder with gray mock bars and a `/select-size` fake store selling demo mugs and hoodies).
+  - Removed `app/select-size/(checkout)/`.
+  - Removed `app/select-size/layout.tsx`, `size-selector.tsx`, and `readme.mdx`, eliminating legacy `db.demo.find()` queries.
+  - Replaced with a clean, headless `app/select-size/page.tsx` that safely returns `null` (matching `inscriptions`), as size adjustment controls are embedded directly in the designer drawer.
+
+### Schema.org (JSON-LD) Enhancements & Google Guidelines Compliance
+- **Removed ineligible design-detail FAQ markup:** The design-detail FAQ existed only inside an SSR fallback that is hidden after client hydration. Both the fallback FAQ and its `FAQPage` markup were removed so structured data does not describe content absent from the normal user experience.
+- **Removed unsupported product offers:** Generic price ranges and `AggregateOffer` objects with `offerCount: 1` were removed from design detail, memorial category, and generated product-template schemas. Offer markup will only be restored when a specific current price is visibly presented on the corresponding page.
+- **Category & Product Type Schemas:** Added `BreadcrumbList`, `CollectionPage`, and `ItemList` JSON-LD schemas to `app/designs/[productType]/[category]/page.tsx` and `app/designs/[productType]/page.tsx`.
+- **Homepage review policy:** Removed self-serving `aggregateRating` markup from `Organization` and `OnlineStore`. The visible Google review section remains as user-facing trust content, without claiming eligibility for organization review stars.
+
+### Crawl Budget, Robots.txt & Edge Caching
+- **`app/robots.ts` crawl budget protection:** Added `disallow` rules for interactive, state-dependent designer steps (`/select-shape`, `/select-border`, `/select-fastening`, `/select-material`, `/select-size`, `/select-motifs`, `/select-images`, `/select-emblems`, `/select-additions`, `/inscriptions`, `/check-price`, `/design-menu`). This prevents search engine bots from wasting crawl budget on empty canvas states.
+- **`app/sitemap.ts` updates:** Added `/memorials`, `/terms`, and `/privacy` to static pages.
+- **`middleware.ts` Edge Cache preservation:** Expanded `isPublicSeoPath` to include `/memorials`, `/terms`, `/privacy`, and `/products/*`, preventing `Set-Cookie: unit_system` from disabling Vercel Edge caching on static SEO routes.
+
+### OpenGraph, CWV & Trust Signals
+- **Fixed `/api/og` endpoint HTTP 500 error:** The route handler was attempting to load `./Inter-SemiBold.ttf` from root `process.cwd()`, causing an unhandled file not found exception on all social preview requests. Corrected path to `app/api/og/Inter-SemiBold.ttf` and updated fallback title from `'App Router Playground'` to `'Forever Shining | Custom Headstones & Memorials'`.
+- **Core Web Vitals LCP improvement:** Replaced unoptimized, un-dimensioned `<img>` tags on design detail pages with Next.js `<Image>` utilizing explicit aspect ratio containers, `priority`, `fill`, and responsive `sizes`.
+- **Responsive Viewport:** Added `width: 'device-width', initialScale: 1` to `viewport` in `app/layout.tsx`.
+- **Trust & Legal consistency:**
+  - `app/privacy/page.tsx`: Added meta description, canonical URL, and replaced orphaned `.eu` contact email.
+  - `app/terms/page.tsx`: Standardized canonical URL to absolute `https://forevershining.org/terms`.
+  - Dedication templates: Replaced legacy `| DYO` branding with `| Forever Shining`.
+  - Added legal links to `PublicFooter` across memorial pages.
+
+### Verification Baseline
+- `pnpm type-check` (`tsc --noEmit`): 0 errors.
+- `pnpm lint --quiet` (`eslint . --quiet`): 0 errors.
+- `pnpm test` (`vitest run`): 113/113 unit tests passed.
 
 ---
 

@@ -565,8 +565,9 @@ export default async function TemplatePage({ params }: Props) {
               <p className="text-gray-400">
                 We provide detailed installation instructions and all necessary
                 mounting hardware with your plaque. We also offer professional
-                delivery and installation coordination options across the United States. The plaque comes
-                pre-drilled for easy wall mounting at {venueDisplay}.
+                delivery and installation coordination options across the United
+                States. The plaque comes pre-drilled for easy wall mounting at{' '}
+                {venueDisplay}.
               </p>
             </div>
 
@@ -598,13 +599,6 @@ export default async function TemplatePage({ params }: Props) {
               material: 'Cast Bronze',
               width: '600mm',
               height: '400mm',
-              offers: {
-                '@type': 'Offer',
-                availability: 'https://schema.org/InStock',
-                priceCurrency: 'USD',
-                price: '1200',
-                priceValidUntil: '2026-12-31',
-              },
               breadcrumb: {
                 '@type': 'BreadcrumbList',
                 itemListElement: [
