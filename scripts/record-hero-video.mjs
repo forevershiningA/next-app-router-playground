@@ -14,6 +14,7 @@ const outputDir = path.join(rootDir, 'public', 'videos');
 const baseUrl = process.env.HERO_VIDEO_BASE_URL ?? 'http://127.0.0.1:3100';
 const route = '/traditional-engraved-headstone/select-material?capture=hero';
 const outputDurationSeconds = 64;
+const outputFps = 25;
 
 const pause = (page, milliseconds) => page.waitForTimeout(milliseconds);
 
@@ -37,7 +38,7 @@ async function waitForServer(timeoutMs = 120_000) {
   throw new Error(`Designer did not start at ${baseUrl} within ${timeoutMs}ms`);
 }
 
-function startDevServer() {
+function startProductionServer() {
   const nextBin = path.join(
     rootDir,
     'node_modules',
@@ -47,9 +48,9 @@ function startDevServer() {
     'next',
   );
   const port = new URL(baseUrl).port || '3100';
-  return spawn(process.execPath, [nextBin, 'dev', '--port', port], {
+  return spawn(process.execPath, [nextBin, 'start', '--port', port], {
     cwd: rootDir,
-    env: { ...process.env, NODE_ENV: 'development' },
+    env: { ...process.env, NODE_ENV: 'production' },
     stdio: ['ignore', 'pipe', 'pipe'],
   });
 }
@@ -316,6 +317,9 @@ async function recordDemo(page, recordingStartedAt) {
   await pause(page, 700);
 
   const rotateRight = page.getByRole('button', { name: 'Rotate right' });
+  // Let textures, geometry and demand-rendered updates settle before the most
+  // GPU-intensive part of the capture.
+  await pause(page, 800);
   await clickWithCursorFast(page, rotateRight);
   await pause(page, 850);
   await clickWithCursorFast(page, rotateRight);
@@ -341,16 +345,23 @@ async function main() {
 
   try {
     if (!(await isServerReady())) {
-      server = startDevServer();
+      server = startProductionServer();
       server.stdout.on('data', (chunk) => process.stdout.write(chunk));
       server.stderr.on('data', (chunk) => process.stderr.write(chunk));
       await waitForServer();
     }
 
-    browser = await chromium.launch({
-      headless: true,
-      args: ['--use-angle=swiftshader-webgl', '--enable-webgl'],
-    });
+    const useSoftwareRenderer = process.env.HERO_VIDEO_USE_SWIFTSHADER === '1';
+    const gpuArgs = useSoftwareRenderer
+      ? ['--use-angle=swiftshader-webgl', '--enable-webgl']
+      : [
+          '--enable-webgl',
+          '--enable-gpu-rasterization',
+          '--ignore-gpu-blocklist',
+          ...(process.platform === 'win32' ? ['--use-angle=d3d11'] : []),
+        ];
+
+    browser = await chromium.launch({ headless: true, args: gpuArgs });
     const context = await browser.newContext({
       viewport: { width: 1440, height: 900 },
       deviceScaleFactor: 1,
@@ -374,7 +385,8 @@ async function main() {
     const posterOutput = path.join(outputDir, 'configurator-hero-poster.webp');
 
     const videoFilter =
-      'fps=30,scale=1280:800:force_original_aspect_ratio=decrease,pad=1280:800:(ow-iw)/2:(oh-ih)/2';
+      `fps=${outputFps},scale=1280:800:force_original_aspect_ratio=decrease,` +
+      'pad=1280:800:(ow-iw)/2:(oh-ih)/2';
     await runFfmpeg([
       '-y',
       '-ss',

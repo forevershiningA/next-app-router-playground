@@ -70,7 +70,7 @@ export default function MemorialHeaderGallery({
                 src={image.src}
                 alt={image.alt}
                 fill
-                className="object-cover sepia transition-[filter,transform] duration-300 group-hover:scale-[1.02] group-hover:sepia-0"
+                className="object-cover transition-transform duration-300 group-hover:scale-[1.02]"
                 sizes="(max-width: 640px) 82vw, (max-width: 1024px) 30vw, 150px"
               />
             </button>

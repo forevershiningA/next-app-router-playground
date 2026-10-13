@@ -785,12 +785,19 @@ export default function Scene({
 
   // Smooth rotation animation — for full monument, rotate around the orbit target's Z pivot
   // so the monument spins around its visual centre rather than world origin.
-  useFrame((state) => {
+  useFrame((state, delta) => {
     if (groupRef.current && currentRotation) {
       const diff = targetRotation - currentRotation.current;
       
       if (Math.abs(diff) > 0.001) {
-        currentRotation.current += diff * 0.1;
+        // Keep the perceived rotation speed stable when rendering drops below
+        // 60 FPS (for example during video capture or on slower devices).
+        currentRotation.current = THREE.MathUtils.damp(
+          currentRotation.current,
+          targetRotation,
+          6.3,
+          delta,
+        );
         const angle = currentRotation.current;
         groupRef.current.rotation.y = angle;
 

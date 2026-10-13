@@ -302,7 +302,7 @@ export default async function MemorialTypePage({ params }: PageProps) {
                   src={`/webp/products/${product.image}`}
                   alt=""
                   fill
-                  className="object-cover sepia transition-[filter,transform] duration-300 group-hover:scale-[1.02] group-hover:sepia-0 sm:object-contain sm:p-5"
+                  className="object-cover transition-transform duration-300 group-hover:scale-[1.02] sm:object-contain sm:p-5"
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                 />
               </Link>
