@@ -179,6 +179,7 @@ export async function POST(request: NextRequest) {
           designName: project.title,
           screenshotUrl: project.screenshotPath ?? undefined,
           quoteItems: detailedQuoteItems({
+            quote,
             breakdown: quote.breakdown,
             designState: project.designState,
             totalCents,
@@ -210,6 +211,8 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       orderId: order.id,
       invoiceNumber: order.invoiceNumber,
+      totalCents,
+      currency: quote.currency,
     });
   } catch (error) {
     console.error('Error creating order:', error);

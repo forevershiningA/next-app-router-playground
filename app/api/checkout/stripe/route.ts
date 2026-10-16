@@ -5,6 +5,7 @@ import { getProjectRecord } from '#/lib/projects-db';
 import { db } from '#/lib/db/index';
 import { orders } from '#/lib/db/schema';
 import { and, eq } from 'drizzle-orm';
+import * as Sentry from '@sentry/nextjs';
 
 export async function POST(request: NextRequest) {
   const session = await getServerSession();
@@ -15,6 +16,10 @@ export async function POST(request: NextRequest) {
   const stripeKey = process.env.STRIPE_SECRET_KEY;
   if (!stripeKey) {
     console.error('STRIPE_SECRET_KEY is not set');
+    Sentry.captureMessage('Stripe checkout is not configured', {
+      level: 'error',
+      tags: { subsystem: 'checkout' },
+    });
     return NextResponse.json(
       { error: 'Payment not configured' },
       { status: 500 },
@@ -91,6 +96,13 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ sessionId: checkoutSession.id });
   } catch (err) {
     console.error('Stripe session error:', err);
+    Sentry.captureMessage('Stripe checkout session creation failed', {
+      level: 'error',
+      tags: {
+        subsystem: 'checkout',
+        error_type: err instanceof Error ? err.name.slice(0, 100) : 'Unknown',
+      },
+    });
     return NextResponse.json(
       { error: 'Failed to create payment session' },
       { status: 500 },

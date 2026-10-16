@@ -5,13 +5,155 @@ import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 export const metadata: Metadata = {
   title: 'Privacy Policy | Forever Shining',
   description:
-    'Privacy Policy outlining how Forever Shining collects, protects and manages personal information.',
+    'Learn how Forever Shining collects, uses, stores, and protects personal information.',
   alternates: {
     canonical: 'https://forevershining.org/privacy',
   },
 };
 
-const privacyHtml = `<p>Forever Shining is committed to providing quality services to you and this policy outlines our ongoing obligations to you in respect of how we manage your Personal Information. We have adopted the Australian Privacy Principles (APPs) contained in the Privacy Act 1988 (Cth) (the Privacy Act). The NPPs govern the way in which we collect, use, disclose, store, secure and dispose of your Personal Information. A copy of the Australian Privacy Principles may be obtained from the website of The Office of the Australian Information Commissioner at www.aoic.gov.au</p><h4>What is Personal Information and why do we collect it?</h4><p>Personal Information is information or an opinion that identifies an individual. Examples of Personal Information we collect include: names, addresses, email addresses, and phone. This Personal Information is obtained in many ways including current website and google analytics. We collect your Personal Information for the primary purpose of providing our services to you, providing information to our clients and marketing. We may also use your Personal Information for secondary purposes closely related to the primary purpose, in circumstances where you would reasonably expect such use or disclosure. You may unsubscribe from our mailing/marketing lists at any time by contacting us in writing. When we collect Personal Information we will, where appropriate and where possible, explain to you why we are collecting the information and how we plan to use it.</p><h4>Sensitive Information</h4><p>Sensitive information is defined in the Privacy Act to include information or opinion about such things as an individual's racial or ethnic origin, political opinions, membership of a political association, religious or philosophical beliefs, membership of a trade union or other professional body, criminal record or health information. Sensitive information will be used by us only: For the primary purpose for which it was obtained For a secondary purpose that is directly related to the primary purpose With your consent; or where required or authorised by law.</p><h4>Third Parties</h4><p>Where reasonable and practicable to do so, we will collect your Personal Information only from you. However, in some circumstances we may be provided with information by third parties. In such a case we will take reasonable steps to ensure that you are made aware of the information provided to us by the third party.</p><h4>Disclosure of Personal Information</h4><p>Your Personal Information may be disclosed in a number of circumstances including the following: Third parties where you consent to the use or disclosure; and Where required or authorised by law.</p><h4>Security of Personal Information</h4><p>Your Personal Information is stored in a manner that reasonably protects it from misuse and loss and from unauthorized access, modification or disclosure. When your Personal Information is no longer needed for the purpose for which it was obtained, we will take reasonable steps to destroy or permanently de-identify your Personal Information. However, most of the Personal Information is or will be stored in client files which will be kept by us for a minimum of 7 years.</p><h4>Access to your Personal Information</h4><p>You may access the Personal Information we hold about you and to update and/or correct it, subject to certain exceptions. If you wish to access your Personal Information, please contact us in writing. Forever Shining will not charge any fee for your access request, but may charge an administrative fee for providing a copy of your Personal Information. In order to protect your Personal Information we may require identification from you before releasing the requested information.</p><h4>Maintaining the Quality of your Personal Information</h4><p>It is an important to us that your Personal Information is up to date. We will take reasonable steps to make sure that your Personal Information is accurate, complete and up-to-date. If you find that the information we have is not up to date or is inaccurate, please advise us as soon as practicable so we can update our records and ensure we can continue to provide quality services to you.</p><h4>Cookie Policy</h4><p>BY CONTINUING TO USE OUR SITE AND SERVICES, YOU ARE AGREEING TO THE USE OF COOKIES AND SIMILAR TECHNOLOGIES FOR THE PURPOSES WE DESCRIBE IN THIS PRIVACY POLICY. IF YOU DO NOT ACCEPT THE USE OF COOKIES AND SIMILAR TECHNOLOGIES, DO NOT USE THIS SITE.</p><h4>What is a cookie?</h4><p>A cookie is a simple text file that is stored on your computer or mobile device by a website's server. Each cookie is unique to your web browser. It will contain some anonymous information such as a unique identifier and the site name and some digits and numbers. Most websites you visit use cookies to improve your user experience by allowing the website to 'remember' you, either for the duration of your visit (using a 'session cookie') or for repeat visits (using a 'persistent cookie'). Cookies may be set by the website you are visiting ('first party cookies') or they may be set by other websites who run content on the page you are viewing ('third party cookies').</p><h4>What do cookies do?</h4><p>Cookies have lots of different jobs, like letting you navigate between pages efficiently, storing your preferences, and improving your experience of a website. Cookies make the interaction between you and the website faster and easier. If a website doesn't use cookies, it will think you are a new visitor every time you move to a new page on the site, for example, even after you "log in," if you move to another page it won't recognise you and it won't be able to keep you logged in.</p><h4>How do we use cookies?</h4><p><strong>Security</strong></p><p>We use cookies to enable and support our security features, for example: to authenticate Members, prevent fraudulent use of login credentials, and protect Member data from unauthorized parties.</p><p><strong>Preferences</strong></p><p>When you are signed in to your account, cookies help us display the correct information and personalize your experience, by providing you with features, insights, and customized content. They can also help you fill out forms more easily. Loss of the information stored in a preference cookie may make the Site experience less functional, but should not prevent it from working.</p><p><strong>Session State</strong></p><p>We collect information about how our Users and Members use and interact with the Site. This may include the pages Members visit most often and when and where Members get error messages. We use these "session state cookies" to help us improve our Site and Services. Blocking or deleting these cookies will not prevent the Site from working.</p><p><strong>Analytics</strong></p><p>These cookies help us learn how our Site performs in different locations. We use cookies to understand and improve our Services and features.</p><p><strong>What third-party cookies do we use?</strong></p><p>Analytics companies like Google Analytics place cookies on your device.</p><p><strong>What should you do if you don't want cookies to be set?</strong></p><p>Some people find the idea of a website storing information on their computer or mobile device to be intrusive, particularly when this information is stored and used by a third party without them knowing. Although cookies are generally quite harmless, you may not, for example, want to see advertising that has been targeted to your interests using your browser history. If you prefer, you may choose to block some or all cookies, or even to delete cookies that have already been set; but you should be aware that you might lose some functions of the website. If you want to restrict or block the cookies that are set by our Site, or any other site, you can do so through your browser setting. The 'Help' function in your browser should explain how. Alternatively, you can visit www.aboutcookies.org, which contains comprehensive information on how to do this on a wide variety of browsers. You will find general information about cookies and details on how to delete cookies from your machine. To opt-out of third-parties collecting any data regarding your interaction on our Site, please refer to their websites for further information.</p><h4>Policy Updates</h4><p>This Policy may change from time to time and is available on our website.</p><h4>Privacy Policy Complaints and Enquiries</h4><p>If you have any queries or complaints about our Privacy Policy please contact us at: <a href="mailto:admin@forevershining.com.au">admin@forevershining.com.au</a> or (08) 6191 0396 or +61 86191 0396 for international callers</p>`;
+const sections = [
+  {
+    title: 'About this policy',
+    content: (
+      <p>
+        Stainless Steel Monument Company Pty Ltd operates ForeverShining.org.
+        We take privacy seriously and handle personal information for the
+        purposes described here and as required by applicable law. This policy
+        covers information collected through our website, account features,
+        design tools, and services.
+      </p>
+    ),
+  },
+  {
+    title: 'Information we collect',
+    content: (
+      <>
+        <p>
+          Depending on how you use the site, we may collect your name, email
+          address, telephone number, delivery and billing details, account
+          information, messages to our team, and information you add to a
+          memorial design. This can include inscriptions, uploaded images, and
+          saved design or order details.
+        </p>
+        <p>
+          When you browse the site, our systems may also process technical
+          information such as your IP address, browser and device details,
+          requested pages, referring page, and access time. We use this
+          information to operate and protect the service and to diagnose
+          technical problems.
+        </p>
+        <p>
+          Payments are handled by the payment provider shown at checkout. For
+          Stripe checkout, payment-card details are entered with Stripe; we
+          receive transaction and payment status information needed to process
+          your order, not your full card number.
+        </p>
+      </>
+    ),
+  },
+  {
+    title: 'How we use information',
+    content: (
+      <p>
+        We use information to provide and maintain the website, manage accounts
+        and saved designs, prepare quotations and orders, process payments,
+        respond to enquiries, provide customer support, prevent misuse, and meet
+        legal or record-keeping obligations. We may also send service updates
+        about an account or order. Where we send optional promotional messages,
+        you can ask us to stop.
+      </p>
+    ),
+  },
+  {
+    title: 'Service providers and disclosures',
+    content: (
+      <p>
+        We do not sell or rent customer lists. We may share the information
+        needed to provide a service with trusted providers, including payment,
+        hosting, database, email, delivery, and technical monitoring providers.
+        These providers may process information on our behalf or under their
+        own terms when you use their services. We may also disclose information
+        when required by law or when reasonably necessary to protect people,
+        the site, or our legal rights.
+      </p>
+    ),
+  },
+  {
+    title: 'Cookies and similar technologies',
+    content: (
+      <>
+        <p>
+          We use cookies needed for functions such as keeping you signed in,
+          protecting account sessions, and remembering site preferences such as
+          your selected measurement system. A payment provider may use its own
+          cookies on its checkout pages.
+        </p>
+        <p>
+          You can manage cookies through your browser settings. Blocking
+          essential cookies may prevent account, checkout, or preference
+          features from working correctly.
+        </p>
+      </>
+    ),
+  },
+  {
+    title: 'Diagnostics and security',
+    content: (
+      <p>
+        We use Sentry to monitor application errors and performance so we can
+        diagnose failures. The application is configured to avoid sending
+        account identifiers, cookies, request bodies, and URL query parameters
+        in Sentry events. Sentry may process technical request information,
+        including an IP address that can be used to infer an approximate
+        location. We use reasonable safeguards to protect information from
+        loss, misuse, and unauthorised access or disclosure.
+      </p>
+    ),
+  },
+  {
+    title: 'Access, correction, and retention',
+    content: (
+      <p>
+        You may contact us to request access to or correction of personal
+        information we hold about you. We may need to verify your identity
+        before responding and may retain records where required for legal,
+        accounting, security, or legitimate business purposes. We take
+        reasonable steps to delete or de-identify information when it is no
+        longer needed.
+      </p>
+    ),
+  },
+  {
+    title: 'Children',
+    content: (
+      <p>
+        Our services are not directed to children under 13, and we do not
+        knowingly collect their personal information. A parent or guardian who
+        believes a child has provided information to us can contact us to
+        request its removal.
+      </p>
+    ),
+  },
+  {
+    title: 'Changes and contact',
+    content: (
+      <>
+        <p>
+          We may update this policy as our services or practices change. The
+          current version will be published on this page.
+        </p>
+        <p>
+          For privacy questions, access or correction requests, or complaints,
+          contact us at{' '}
+          <a href="mailto:admin@forevershining.com.au">
+            admin@forevershining.com.au
+          </a>{' '}
+          or call (08) 6191 0396. We will review and respond to your enquiry.
+        </p>
+      </>
+    ),
+  },
+];
 
 export default function PrivacyPage() {
   return (
@@ -23,31 +165,31 @@ export default function PrivacyPage() {
       <div className="relative mx-auto w-full max-w-3xl px-4 py-8 sm:px-6 lg:px-10 lg:py-10">
         <Link
           href="/my-account"
-          className="mb-6 inline-flex items-center gap-2 text-sm text-white/70 hover:text-white transition day:text-gray-500 day:hover:text-gray-900"
+          className="mb-6 inline-flex items-center gap-2 text-sm text-white/70 transition hover:text-white day:text-gray-500 day:hover:text-gray-900"
         >
           <ArrowLeftIcon className="h-4 w-4" />
           Back to My Account
         </Link>
 
-        <div className="rounded-2xl border border-white/10 bg-[#0c0805]/85 px-4 pt-6 pb-32 shadow-[0_25px_65px_rgba(0,0,0,0.6)] backdrop-blur-2xl day:border-gray-200 day:bg-white day:shadow-lg sm:rounded-[32px] sm:px-6 lg:px-10 lg:pt-8">
+        <article className="rounded-2xl border border-white/10 bg-[#0c0805]/85 px-4 pt-6 pb-32 shadow-[0_25px_65px_rgba(0,0,0,0.6)] backdrop-blur-2xl day:border-gray-200 day:bg-white day:shadow-lg sm:rounded-[32px] sm:px-6 lg:px-10 lg:pt-8">
           <header className="mb-6 border-b border-white/10 pb-6 day:border-gray-200">
-            <h1 className="text-3xl font-semibold tracking-tight day:text-gray-900">Privacy Policy</h1>
+            <h1 className="text-3xl font-semibold tracking-tight day:text-gray-900">
+              Privacy Policy
+            </h1>
+            <p className="mt-2 text-sm text-white/60 day:text-gray-500">
+              How Forever Shining collects, uses, and protects your information
+            </p>
           </header>
 
-          <div
-            className="prose prose-invert max-w-none
-              prose-p:text-[#D1D1D6] prose-p:leading-relaxed
-              prose-h4:text-[#F2F2F7] prose-h4:text-lg prose-h4:font-semibold prose-h4:mt-9 prose-h4:mb-3
-              prose-a:text-[#D4A84F] prose-a:no-underline hover:prose-a:underline
-              prose-strong:text-[#F2F2F7]
-              day:prose-invert-none
-              day:prose-p:text-gray-600
-              day:prose-h4:text-gray-900
-              day:prose-a:text-amber-600
-              day:prose-strong:text-gray-800"
-            dangerouslySetInnerHTML={{ __html: privacyHtml }}
-          />
-        </div>
+          <div className="prose prose-invert max-w-none prose-p:leading-relaxed prose-p:text-[#D1D1D6] prose-h2:mt-9 prose-h2:mb-3 prose-h2:text-lg prose-h2:font-semibold prose-h2:text-[#F2F2F7] prose-a:text-[#D4A84F] prose-a:no-underline hover:prose-a:underline day:prose-invert-none day:prose-p:text-gray-600 day:prose-h2:text-gray-900 day:prose-a:text-amber-600">
+            {sections.map(({ title, content }) => (
+              <section key={title}>
+                <h2>{title}</h2>
+                {content}
+              </section>
+            ))}
+          </div>
+        </article>
       </div>
     </div>
   );

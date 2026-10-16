@@ -96,7 +96,7 @@ export default function LoginPage() {
               </Link>
               . Please{' '}
               <a
-                href="mailto:support@forevershining.com"
+                href="mailto:admin@forevershining.com.au"
                 className="underline text-[#D4A84F]/80 hover:text-[#D4A84F]"
               >
                 Contact Us
@@ -184,7 +184,7 @@ export default function LoginPage() {
 
         <p className="text-center text-white/30 text-xs mt-8">
           Need access?{' '}
-          <a href="mailto:support@forevershining.com" className="text-[#D4A84F]/70 hover:text-[#D4A84F]">
+          <a href="mailto:admin@forevershining.com.au" className="text-[#D4A84F]/70 hover:text-[#D4A84F]">
             Contact support
           </a>
         </p>

@@ -139,6 +139,7 @@ export type PricingBreakdown = {
   emblemsPrice?: number;
   inscriptionPrice?: number;
   imagePrice?: number;
+  borderPrice?: number;
   subtotal?: number;
   tax?: number;
   total?: number;

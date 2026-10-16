@@ -16,7 +16,7 @@ import re
 import sys
 import json
 
-DATA_FILE = "lib/saved-designs-data.ts"
+DATA_FILE = "lib/saved-designs-data.json"
 
 # Pet-related keywords for different fields
 MOTIF_KEYWORDS = {"dog", "cat", "horse", "paw", "kitten", "puppy", "pony", "rabbit", "hamster", "parrot", "guinea pig", "pet"}
@@ -123,33 +123,28 @@ def main():
     dry_run = "--dry-run" in sys.argv
 
     with open(DATA_FILE, "r", encoding="utf-8") as f:
-        content = f.read()
-
-    # Find all design entries
-    # Each entry looks like: "1742574117321": { ... },
-    entry_pattern = re.compile(r'("(\d+)":\s*\{[^}]+\})')
-    entries = entry_pattern.findall(content)
+        designs = json.load(f)
 
     already_pets = 0
     to_reassign = []
     pet_design_ids = set()
 
-    for full_match, design_id in entries:
-        reasons = is_pet_design(full_match)
+    for design_id, design in designs.items():
+        reasons = is_pet_design(json.dumps(design))
         if not reasons:
             continue
 
         pet_design_ids.add(design_id)
 
         # Check if already assigned to pets product
-        if '"productSlug": "pets"' in full_match:
+        if design.get("productSlug") == "pets":
             already_pets += 1
             # Still might need category fix
-            if '"category": "cat-memorial"' in full_match or '"category": "horse-memorial"' in full_match:
-                to_reassign.append((design_id, reasons, full_match))
+            if design.get("category") in {"cat-memorial", "horse-memorial"}:
+                to_reassign.append((design_id, reasons, design))
             continue
 
-        to_reassign.append((design_id, reasons, full_match))
+        to_reassign.append((design_id, reasons, design))
 
     print(f"\n{'=' * 60}")
     print(f"PET DESIGN SCAN RESULTS")
@@ -173,12 +168,9 @@ def main():
     print()
     print("Designs to reassign:")
     for did, reasons, entry in to_reassign[:30]:
-        slug_m = re.search(r'"slug":\s*"([^"]*)"', entry)
-        prod_m = re.search(r'"productSlug":\s*"([^"]*)"', entry)
-        cat_m = re.search(r'"category":\s*"([^"]*)"', entry)
-        slug = slug_m.group(1) if slug_m else "?"
-        prod = prod_m.group(1) if prod_m else "?"
-        cat = cat_m.group(1) if cat_m else "?"
+        slug = entry.get("slug", "?")
+        prod = entry.get("productSlug", "?")
+        cat = entry.get("category", "?")
         print(f"  {did}: {slug} [{prod}/{cat}] -> {', '.join(reasons)}")
 
     if len(to_reassign) > 30:
@@ -190,64 +182,24 @@ def main():
 
     # Apply changes
     changes = 0
-    for did, reasons, old_entry in to_reassign:
-        new_entry = old_entry
+    for did, reasons, design in to_reassign:
+        updated = dict(design)
+        updated["productSlug"] = "pets"
+        updated["productName"] = "Pets"
+        if updated.get("category") in {"cat-memorial", "horse-memorial", "dog-memorial"}:
+            updated["category"] = "pet-memorial"
 
-        # Update productSlug
-        new_entry = re.sub(r'"productSlug":\s*"[^"]*"', '"productSlug": "pets"', new_entry)
-        # Update productName
-        new_entry = re.sub(r'"productName":\s*"[^"]*"', '"productName": "Pets"', new_entry)
-        # Merge cat-memorial and horse-memorial into pet-memorial
-        new_entry = re.sub(r'"category":\s*"(cat-memorial|horse-memorial|dog-memorial)"', '"category": "pet-memorial"', new_entry)
-
-        if new_entry != old_entry:
-            content = content.replace(old_entry, new_entry)
+        if updated != design:
+            designs[did] = updated
             changes += 1
 
-    # Update CATEGORY_STATS - recalculate pet-memorial count
-    # Remove cat-memorial and horse-memorial from stats, add to pet-memorial
-    cat_count_m = re.search(r'"cat-memorial":\s*(\d+)', content)
-    horse_count_m = re.search(r'"horse-memorial":\s*(\d+)', content)
-    pet_count_m = re.search(r'"pet-memorial":\s*(\d+)', content)
-
-    cat_count = int(cat_count_m.group(1)) if cat_count_m else 0
-    horse_count = int(horse_count_m.group(1)) if horse_count_m else 0
-    pet_count = int(pet_count_m.group(1)) if pet_count_m else 0
-
-    # Count actual pet-memorial entries after changes
-    actual_pet_count = len(re.findall(r'"category":\s*"pet-memorial"', content))
+    actual_pet_count = sum(1 for design in designs.values() if design.get("category") == "pet-memorial")
     print(f"\nActual pet-memorial count after changes: {actual_pet_count}")
 
-    # Update pet-memorial stat
-    if pet_count_m:
-        content = content.replace(f'"pet-memorial": {pet_count}', f'"pet-memorial": {actual_pet_count}')
-
-    # Remove cat-memorial and horse-memorial from CATEGORY_STATS if all moved
-    remaining_cat = len(re.findall(r'"category":\s*"cat-memorial"', content))
-    remaining_horse = len(re.findall(r'"category":\s*"horse-memorial"', content))
-
-    if remaining_cat == 0 and cat_count_m:
-        content = re.sub(r'\s*"cat-memorial":\s*\d+,?\n?', '\n', content)
-    elif cat_count_m:
-        content = content.replace(f'"cat-memorial": {cat_count}', f'"cat-memorial": {remaining_cat}')
-
-    if remaining_horse == 0 and horse_count_m:
-        content = re.sub(r'\s*"horse-memorial":\s*\d+,?\n?', '\n', content)
-    elif horse_count_m:
-        content = content.replace(f'"horse-memorial": {horse_count}', f'"horse-memorial": {remaining_horse}')
-
-    # Update PRODUCT_STATS for pets
-    pets_stat_m = re.search(r'"pets":\s*(\d+)', content)
-    if pets_stat_m:
-        actual_pets_product = len(re.findall(r'"productSlug":\s*"pets"', content))
-        old_val = pets_stat_m.group(0)
-        content = content.replace(old_val, f'"pets": {actual_pets_product}')
-
     with open(DATA_FILE, "w", encoding="utf-8") as f:
-        f.write(content)
+        json.dump(designs, f, separators=(",", ":"))
 
     print(f"\n[APPLIED] {changes} design entries updated.")
-    print(f"Updated CATEGORY_STATS and PRODUCT_STATS.")
 
 
 if __name__ == "__main__":

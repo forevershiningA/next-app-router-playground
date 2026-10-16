@@ -113,7 +113,7 @@ export default function DesignDetailPage() {
   const thumbnail = project.thumbnailPath || project.screenshotPath || '/screen.png';
   const fullScreenshot = project.screenshotPath || '/screen.png';
   const priceLabel = project.totalPriceCents
-    ? currencyFormatter.format(project.totalPriceCents / 100)
+    ? `Estimated ${currencyFormatter.format(project.totalPriceCents / 100)}`
     : 'Price TBD';
   const productId = project.designState?.productId;
   const product = productId ? data.products.find((p: any) => p.id === productId) : null;

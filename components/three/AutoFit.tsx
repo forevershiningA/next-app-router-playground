@@ -76,6 +76,8 @@ export default function AutoFit({
   const animId = React.useRef<number | null>(null);
   const didFirst = React.useRef(false);
   const retryTimer = React.useRef<ReturnType<typeof setTimeout> | null>(null);
+  const lastShowBaseRef = React.useRef(showBase);
+  const baseFitFrameRef = React.useRef<number | null>(null);
 
   const easeInOutCubic = (x: number) =>
     x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
@@ -289,7 +291,25 @@ export default function AutoFit({
       retryTimer.current = null;
     }
 
+    const baseVisibilityChanged = lastShowBaseRef.current !== showBase;
+    lastShowBaseRef.current = showBase;
+
     const success = fitCamera();
+    if (baseVisibilityChanged) {
+      if (baseFitFrameRef.current !== null) {
+        cancelAnimationFrame(baseFitFrameRef.current);
+      }
+
+      // Adding the base mounts its textured mesh after this layout effect.
+      // Refit after that scene commit so bounds include the complete assembly.
+      baseFitFrameRef.current = requestAnimationFrame(() => {
+        baseFitFrameRef.current = requestAnimationFrame(() => {
+          baseFitFrameRef.current = null;
+          fitCamera();
+        });
+      });
+    }
+
     if (!success) {
       // Mesh not ready yet — retry up to 5 times with increasing delays
       let attempt = 0;
@@ -307,6 +327,10 @@ export default function AutoFit({
     }
 
     return () => {
+      if (baseFitFrameRef.current !== null) {
+        cancelAnimationFrame(baseFitFrameRef.current);
+        baseFitFrameRef.current = null;
+      }
       if (animId.current !== null) {
         cancelAnimationFrame(animId.current);
         animId.current = null;

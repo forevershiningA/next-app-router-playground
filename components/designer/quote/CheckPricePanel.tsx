@@ -11,7 +11,12 @@ import OverlayPortal from '#/components/shared/OverlayPortal';
 
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import { data } from '#/app/_internal/_data';
-import { calculateMotifPrice } from '#/lib/motif-pricing';
+import { getAdditionPricing } from '#/lib/addition-pricing';
+import {
+  calculateCheckPriceInscriptionPrice,
+  calculateCheckPriceMotifPrice,
+  calculateCheckPriceQuote,
+} from '#/lib/check-price-calculations';
 import {
   calculateImagePrice,
   fetchImagePricing,
@@ -19,18 +24,13 @@ import {
 } from '#/lib/image-pricing';
 import { getImageSizeOption } from '#/lib/image-size-config';
 import { EMBLEM_SIZES } from '#/app/_internal/_emblems-loader';
-import {
-  calculatePrice,
-  calculatePricePowerLaw,
-  computeQuantity,
-} from '#/lib/xml-parser';
+import type { CatalogData } from '#/lib/xml-parser';
 import {
   getCheckPriceMaterialName,
   getShapeNameFromUrl,
   isStainlessSteelHeadstoneProduct,
   loadCatalogForProduct,
 } from '#/lib/check-price-utils';
-import type { CatalogData } from '#/lib/xml-parser';
 import {
   formatDimensionPair,
   formatDimensionTriplet,
@@ -63,18 +63,17 @@ export default function CheckPricePanel() {
   const baseThickness = useHeadstoneStore((s) => s.baseThickness);
   const uprightThickness = useHeadstoneStore((s) => s.uprightThickness);
   const inscriptions = useHeadstoneStore((s) => s.inscriptions);
-  const inscriptionCost = useHeadstoneStore((s) => s.inscriptionCost);
   const selectedMotifs = useHeadstoneStore((s) => s.selectedMotifs);
   const motifOffsets = useHeadstoneStore((s) => s.motifOffsets);
-  const motifCost = useHeadstoneStore((s) => s.motifCost);
   const motifPriceModel = useHeadstoneStore((s) => s.motifPriceModel);
   const selectedImages = useHeadstoneStore((s) => s.selectedImages);
   const selectedEmblems = useHeadstoneStore((s) => s.selectedEmblems);
   const emblemOffsets = useHeadstoneStore((s) => s.emblemOffsets);
-  const emblemCost = useHeadstoneStore((s) => s.emblemCost);
   const selectedAdditions = useHeadstoneStore((s) => s.selectedAdditions);
   const additionOffsets = useHeadstoneStore((s) => s.additionOffsets);
   const showBase = useHeadstoneStore((s) => s.showBase);
+  const showInscriptionColor = useHeadstoneStore((s) => s.showInscriptionColor);
+  const inscriptionPriceModel = useHeadstoneStore((s) => s.inscriptionPriceModel);
   const baseOption = useHeadstoneStore((s) => s.baseOption);
   const baseLidFinish = useHeadstoneStore((s) => s.baseLidFinish);
   const activePanel = useHeadstoneStore((s) => s.activePanel);
@@ -176,120 +175,90 @@ export default function CheckPricePanel() {
   }, [activeCatalog, shapeUrl]);
 
   // Whether this is a full-monument product (has ledger + kerbset components)
-  const isFullMonument = activeCatalog?.product.type === 'full-monument';
-
   const isUrnProduct =
     activeCatalog?.product.type === 'urn' || productId === '2350';
-  const urnShapeCode =
-    isUrnProduct && shapeUrl
-      ? (shapeUrl.split('/').pop()?.replace('.svg', '') ?? null)
-      : null;
+  const isFullMonument = activeCatalog?.product.type === 'full-monument';
 
-  // Calculate headstone price from catalog price model
-  const headstonePrice = useMemo(() => {
-    // Product 52 (YAG Lasered Stainless Steel Plaque): formula-based pricing per finish.
-    // The formula uses cm² (Width_cm × Height_cm), so divide mm² by 100.
-    // The note field selects "brushed" or "polished" price row.
-    if (productId === '52' && activeCatalog) {
-      const pm = activeCatalog.product.priceModel;
-
-      const ssMaterial = headstoneMaterialUrl ?? '';
-      const ssNote = ssMaterial.includes('polished') ? 'polished' : 'brushed';
-      return calculatePricePowerLaw(pm, widthMm * heightMm, ssNote);
-    }
-    // Product 32 (Full Colour Plaque) uses fixed size-based pricing
-    if (productId === '32' && fixedSizes.length > 0) {
-      const isLandscape = widthMm > heightMm;
-      const matchW = isLandscape ? heightMm : widthMm;
-      const matchH = isLandscape ? widthMm : heightMm;
-      const match = fixedSizes.find(
-        (s) => s.width === matchW && s.height === matchH,
-      );
-      return match?.price ?? 0;
-    }
-    if (!activeCatalog) return 0;
-    const pm = activeCatalog.product.priceModel;
-    // Urns: quantity is always 1 unit, price entry matched by shape code note
-    if (isUrnProduct) {
-      return calculatePrice(pm, 1, urnShapeCode ?? undefined);
-    }
-    const quantity = computeQuantity(pm, {
-      width: widthMm,
-      height: heightMm,
-      depth: uprightThickness,
-    });
-    return calculatePrice(pm, quantity);
-  }, [
-    activeCatalog,
-    widthMm,
-    heightMm,
-    uprightThickness,
-    productId,
-    fixedSizes,
-    isUrnProduct,
-    urnShapeCode,
-    headstoneMaterialUrl,
-  ]);
-
-  // Calculate base (stand) price from catalog basePriceModel
-  const basePrice = useMemo(() => {
-    if (!showBase || !activeCatalog?.product.basePriceModel) return 0;
-    const pm = activeCatalog.product.basePriceModel;
-    const quantity = computeQuantity(pm, {
-      width: baseWidthMm,
-      height: baseHeightMm,
-      depth: baseThickness,
-    });
-    return calculatePrice(pm, quantity);
-  }, [showBase, activeCatalog, baseWidthMm, baseHeightMm, baseThickness]);
-
-  // Calculate ledger price (full-monument only)
-  const ledgerPrice = useMemo(() => {
-    if (!isFullMonument || !activeCatalog?.product.ledgerPriceModel) return 0;
-    const pm = activeCatalog.product.ledgerPriceModel;
-    const quantity = selectedShape?.lid?.initWidth || widthMm;
-    return calculatePrice(pm, quantity);
-  }, [isFullMonument, activeCatalog, selectedShape, widthMm]);
-
-  // Calculate kerbset price (full-monument only)
-  const kerbsetPrice = useMemo(() => {
-    if (!isFullMonument || !activeCatalog?.product.kerbsetPriceModel) return 0;
-    const pm = activeCatalog.product.kerbsetPriceModel;
-    const quantity = selectedShape?.kerb?.initWidth || widthMm;
-    return calculatePrice(pm, quantity);
-  }, [isFullMonument, activeCatalog, selectedShape, widthMm]);
+  const quoteTotals = useMemo(
+    () =>
+      calculateCheckPriceQuote({
+        productId,
+        catalog: activeCatalog,
+        shapeUrl,
+        widthMm,
+        heightMm,
+        uprightThickness,
+        headstoneMaterialUrl,
+        fixedSizes,
+        showBase,
+        baseWidthMm,
+        baseHeightMm,
+        baseThickness,
+        borderName,
+        showInscriptionColor,
+        inscriptionPriceModel,
+        inscriptions,
+        motifPriceModel,
+        selectedMotifs,
+        motifOffsets,
+        selectedAdditions,
+        additionOffsets,
+        selectedEmblemsCount: selectedEmblems.length,
+        selectedImages,
+        imagePricing: imagePricingData,
+      }),
+    [
+      productId,
+      activeCatalog,
+      shapeUrl,
+      widthMm,
+      heightMm,
+      uprightThickness,
+      headstoneMaterialUrl,
+      fixedSizes,
+      showBase,
+      baseWidthMm,
+      baseHeightMm,
+      baseThickness,
+      borderName,
+      showInscriptionColor,
+      inscriptionPriceModel,
+      inscriptions,
+      motifPriceModel,
+      selectedMotifs,
+      motifOffsets,
+      selectedAdditions,
+      additionOffsets,
+      selectedEmblems.length,
+      selectedImages,
+      imagePricingData,
+    ],
+  );
+  const {
+    headstonePrice = 0,
+    basePrice = 0,
+    ledgerPrice = 0,
+    kerbsetPrice = 0,
+    borderPrice = 0,
+  } = quoteTotals.breakdown;
 
   // Get addition details
   const additionItems = useMemo(() => {
     return selectedAdditions.map((addId) => {
-      // Extract base ID (remove timestamp if present)
-      const parts = addId.split('_');
-      const baseId =
-        parts.length > 1 && !isNaN(Number(parts[parts.length - 1]))
-          ? parts.slice(0, -1).join('_')
-          : addId;
-
-      const addition = data.additions.find((a) => a.id === baseId);
-      const sizeVariant = Math.max(
-        1,
-        Math.round(additionOffsets?.[addId]?.sizeVariant ?? 1),
+      const pricing = getAdditionPricing(
+        addId,
+        additionOffsets?.[addId]?.sizeVariant,
       );
-      const size = addition?.sizes?.[sizeVariant - 1] ?? addition?.sizes?.[0];
       return {
         id: addId,
-        baseId: baseId,
-        name: addition?.name || 'Addition',
-        type: addition?.type || 'application',
-        sizeVariant,
-        price: size?.retailPrice ?? 0,
+        baseId: pricing.baseId,
+        name: pricing.addition?.name || 'Addition',
+        type: pricing.addition?.type || 'application',
+        sizeVariant: pricing.variant,
+        price: pricing.price,
       };
     });
   }, [selectedAdditions, additionOffsets]);
-
-  const additionsPrice = useMemo(
-    () => additionItems.reduce((total, item) => total + item.price, 0),
-    [additionItems],
-  );
 
   const imageItems = useMemo(() => {
     if (!selectedImages.length) return [];
@@ -328,44 +297,7 @@ export default function CheckPricePanel() {
     });
   }, [selectedImages, imagePricingData, unitSystem]);
 
-  const imagePriceTotal = useMemo(() => {
-    return imageItems.reduce((sum, item) => sum + item.price, 0);
-  }, [imageItems]);
-
-  // Stainless steel border price (product 32 only, $299 fixed)
-  const ssBorderPrice = useMemo(() => {
-    if (productId === '32' && borderName?.toLowerCase().includes('stainless')) {
-      return 299;
-    }
-    return 0;
-  }, [productId, borderName]);
-
-  // Calculate total
-  const totalPrice = useMemo(() => {
-    return (
-      headstonePrice +
-      basePrice +
-      ledgerPrice +
-      kerbsetPrice +
-      inscriptionCost +
-      motifCost +
-      additionsPrice +
-      imagePriceTotal +
-      ssBorderPrice +
-      emblemCost
-    );
-  }, [
-    headstonePrice,
-    basePrice,
-    ledgerPrice,
-    kerbsetPrice,
-    inscriptionCost,
-    motifCost,
-    additionsPrice,
-    imagePriceTotal,
-    ssBorderPrice,
-    emblemCost,
-  ]);
+  const totalPrice = quoteTotals.subtotal;
 
   // Get detailed motif items
   const motifItems = useMemo(() => {
@@ -391,19 +323,14 @@ export default function CheckPricePanel() {
       const motifFileName =
         motif.svgPath.split('/').pop()?.replace('.svg', '') || 'unknown';
 
-      // Calculate individual motif price
       const isLaser = activeCatalog?.product.laser === '1';
-      let individualPrice = 0;
-
-      // Full Colour Plaque (product 32): motifs are free
-      if (productId !== '32' && !isLaser && motifPriceModel) {
-        individualPrice = calculateMotifPrice(
-          heightMm,
-          motif.color,
-          motifPriceModel.priceModel,
-          isLaser,
-        );
-      }
+      const individualPrice = calculateCheckPriceMotifPrice({
+        productId,
+        isLaser,
+        motifPriceModel,
+        heightMm,
+        color: motif.color,
+      });
 
       return {
         id: motif.id,
@@ -428,16 +355,11 @@ export default function CheckPricePanel() {
 
   // Get detailed inscription items
   const inscriptionItems = useMemo(() => {
-    const totalChars = inscriptions.reduce((sum, l) => sum + l.text.length, 0);
-    const pricePerChar = totalChars > 0 ? inscriptionCost / totalChars : 0;
-
     return inscriptions
       .filter((line) => line.text?.trim())
       .map((line) => {
         const colorName =
           data.colors.find((c) => c.hex === line.color)?.name || line.color;
-        const charCount = line.text.length;
-        const lineTotal = charCount * pricePerChar;
 
         return {
           id: line.id,
@@ -446,10 +368,20 @@ export default function CheckPricePanel() {
           sizeMm: line.sizeMm,
           color: line.color,
           colorName,
-          price: lineTotal,
+          price: calculateCheckPriceInscriptionPrice({
+            productId,
+            showInscriptionColor,
+            inscriptionPriceModel,
+            inscription: line,
+          }),
         };
       });
-  }, [inscriptions, inscriptionCost]);
+  }, [
+    inscriptions,
+    productId,
+    showInscriptionColor,
+    inscriptionPriceModel,
+  ]);
 
   const emblemItems = useMemo(() => {
     return selectedEmblems.map((emblem) => {
@@ -495,14 +427,14 @@ export default function CheckPricePanel() {
       },
     ];
 
-    if (ssBorderPrice > 0) {
+    if (borderPrice > 0) {
       rows.push({
         id: 'stainless-border',
         title: 'Product ID: 37 - Stainless Steel Border',
         details: [],
         qty: 1,
-        unitPrice: ssBorderPrice,
-        total: ssBorderPrice,
+        unitPrice: borderPrice,
+        total: borderPrice,
       });
     }
 
@@ -671,7 +603,6 @@ export default function CheckPricePanel() {
     imageItems,
     imagePricingData,
     inscriptionItems,
-    isFullMonument,
     isUrnProduct,
     kerbsetMaterialUrl,
     kerbsetPrice,
@@ -681,7 +612,8 @@ export default function CheckPricePanel() {
     selectedShape,
     shapeName,
     showBase,
-    ssBorderPrice,
+    borderPrice,
+    isFullMonument,
     unitSystem,
     uprightThickness,
     widthMm,
@@ -696,6 +628,10 @@ export default function CheckPricePanel() {
         onClick={handleClose}
       >
         <div
+          data-testid="designer-check-price-panel"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="check-price-dialog-title"
           className="check-price-panel__modal day:border-[#ded5c7] day:bg-[#fbf9f5] day:text-[#2a2118] day:shadow-[#49392b]/20 day:ring-[#eee7dc] relative flex max-h-[90vh] w-full max-w-[64rem] flex-col overflow-hidden rounded-lg border border-white/10 bg-[#120804] text-white shadow-2xl ring-1 shadow-black/50 ring-white/5"
           onClick={(e) => e.stopPropagation()}
         >
@@ -721,11 +657,15 @@ export default function CheckPricePanel() {
           </button>
 
           <div className="day:border-[#ded5c7] day:bg-[#f3eee6] border-b border-white/10 bg-white/[0.03] px-5 py-4 pr-14 md:px-6">
-            <h2 className="day:text-[#2a2118] font-serif text-2xl font-light text-white md:text-[1.75rem]">
+            <h2
+              id="check-price-dialog-title"
+              className="day:text-[#2a2118] font-serif text-2xl font-light text-white md:text-[1.75rem]"
+            >
               Check Price Quote
             </h2>
             <p className="day:text-[#756a5e] mt-1 text-sm text-white/65">
-              Current design itemisation
+              Estimated itemisation. The final price is confirmed securely when
+              you place the order.
             </p>
           </div>
 
@@ -864,7 +804,7 @@ export default function CheckPricePanel() {
               <span>{formatMoney(totalPrice)}</span>
             </div>
             <div className="day:border-[#ded5c7] mt-2 flex justify-between border-t border-white/10 pt-3 text-base font-semibold">
-              <span>Total</span>
+              <span>Estimated total</span>
               <span className="text-[#D4A84F]">{formatMoney(totalPrice)}</span>
             </div>
           </div>

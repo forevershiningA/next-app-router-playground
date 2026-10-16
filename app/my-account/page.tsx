@@ -238,7 +238,7 @@ function AuthGate({
               </button>
               . Please{' '}
               <a
-                href="mailto:support@forevershining.com"
+                href="mailto:admin@forevershining.com.au"
                 className="text-[#D4A84F]/80 underline hover:text-[#D4A84F]"
               >
                 Contact Us
@@ -363,7 +363,7 @@ function AuthGate({
         <p className="day:text-[#806f5d] mt-8 text-center text-xs text-white/50">
           Need help?{' '}
           <a
-            href="mailto:support@forevershining.com"
+            href="mailto:admin@forevershining.com.au"
             className="text-[#D4A84F] hover:text-[#e8bc5e]"
           >
             Contact support
@@ -985,7 +985,7 @@ function buildProjectCard(project: any): AccountDesignCard {
     title: project.title || 'Untitled Design',
     productName: productName,
     priceLabel: project.totalPriceCents
-      ? currencyFormatter.format(project.totalPriceCents / 100)
+      ? `Estimated ${currencyFormatter.format(project.totalPriceCents / 100)}`
       : 'Price TBD',
     createdLabel: formatDate(createdDate),
     relativeUpdated: formatRelativeTime(updatedDate),

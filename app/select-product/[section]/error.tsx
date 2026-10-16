@@ -2,11 +2,12 @@
 
 import { Boundary } from '#/ui/boundary';
 import Button from '#/ui/button';
+import * as Sentry from '@sentry/nextjs';
 import React from 'react';
 
 export default function Error({ error, reset }: any) {
   React.useEffect(() => {
-    // Log error for debugging
+    Sentry.captureException(error);
   }, [error]);
 
   return (

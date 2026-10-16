@@ -1,5 +1,5 @@
 /**
- * Generate saved-designs-data.ts from analyzed JSON
+ * Generate the typed saved-design data module and its JSON metadata table.
  */
 
 const fs = require('fs');
@@ -7,6 +7,7 @@ const path = require('path');
 
 const analyzedPath = path.join(__dirname, '../lib/saved-designs-analyzed.json');
 const outputPath = path.join(__dirname, '../lib/saved-designs-data.ts');
+const dataOutputPath = path.join(__dirname, '../lib/saved-designs-data.json');
 
 const analyzed = JSON.parse(fs.readFileSync(analyzedPath, 'utf8'));
 
@@ -20,6 +21,11 @@ analyzed.forEach(design => {
   byCategory[design.category] = (byCategory[design.category] || 0) + 1;
   byProductSlug[design.productSlug] = (byProductSlug[design.productSlug] || 0) + 1;
 });
+
+const savedDesigns = analyzed.reduce((acc, design) => {
+  acc[design.id] = design;
+  return acc;
+}, {});
 
 // Generate TypeScript content
 const content = `/**
@@ -96,14 +102,7 @@ ${Object.keys(byCategory).sort((a, b) => byCategory[b] - byCategory[a]).map(cat 
 /**
  * All saved designs indexed by ID
  */
-export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = ${JSON.stringify(
-  analyzed.reduce((acc, design) => {
-    acc[design.id] = design;
-    return acc;
-  }, {}),
-  null,
-  2
-)};
+export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = require('./saved-designs-data.json') as Record<string, SavedDesignMetadata>;
 
 /**
  * Get saved design by ID
@@ -198,12 +197,24 @@ export function searchDesigns(query: string): SavedDesignMetadata[] {
 /**
  * Category statistics
  */
-export const CATEGORY_STATS = ${JSON.stringify(byCategory, null, 2)};
+export const CATEGORY_STATS = Object.values(SAVED_DESIGNS).reduce<Record<string, number>>(
+  (stats, design) => {
+    stats[design.category] = (stats[design.category] ?? 0) + 1;
+    return stats;
+  },
+  {},
+);
 
 /**
  * Product statistics
  */
-export const PRODUCT_STATS = ${JSON.stringify(byProductSlug, null, 2)};
+export const PRODUCT_STATS = Object.values(SAVED_DESIGNS).reduce<Record<string, number>>(
+  (stats, design) => {
+    stats[design.productSlug] = (stats[design.productSlug] ?? 0) + 1;
+    return stats;
+  },
+  {},
+);
 
 /**
  * Extract design ID from old slug format (timestamp_description)
@@ -252,8 +263,10 @@ export function getCanonicalSlugForDesign(designId: string): string | null {
 `;
 
 fs.writeFileSync(outputPath, content);
+fs.writeFileSync(dataOutputPath, JSON.stringify(savedDesigns));
 
 console.log(`✅ Generated ${outputPath}`);
+console.log(`✅ Generated ${dataOutputPath}`);
 console.log(`\n📊 Statistics:`);
 console.log(`   Total designs: ${analyzed.length}`);
 console.log(`\n🏷️  By Category:`);

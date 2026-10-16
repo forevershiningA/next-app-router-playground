@@ -1209,8 +1209,7 @@ export default function ShapeSwapper({
         ) : (
           <AutoFit
             target={
-              isMobileDesignerStep &&
-              (editingObject === 'headstone' || editingObject === 'base')
+              isMobileDesignerStep && editingObject === 'headstone'
                 ? (resolvedHeadstoneMeshRef as React.RefObject<THREE.Object3D>)
                 : (fitTargetRef ?? tabletRef)
             }

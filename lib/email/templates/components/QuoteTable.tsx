@@ -1,6 +1,7 @@
 import { Section, Text } from '@react-email/components';
 import * as React from 'react';
 import type { QuoteLineItem } from '../../types';
+import type { QuoteAuthority } from '#/lib/pricing-contract';
 
 interface QuoteTableProps {
   items: QuoteLineItem[];
@@ -14,6 +15,7 @@ interface QuoteTableProps {
   totalLabel?: string;
   /** Plain ruled quote style used by saved design emails. */
   quoteStyle?: 'card' | 'ruled';
+  authority: QuoteAuthority;
 }
 
 function formatCurrency(
@@ -33,14 +35,23 @@ export function QuoteTable({
   currencySide = 0,
   subtotalCents,
   taxCents,
-  totalLabel = 'Total',
+  totalLabel,
   quoteStyle = 'card',
+  authority,
 }: QuoteTableProps) {
   if (items.length === 0) return null;
+  const isEstimate = authority === 'estimate';
+  const authorityLabel = isEstimate
+    ? 'Estimated pricing · final price confirmed when you order'
+    : 'Pricing confirmed for this order';
+  const taxLabel = isEstimate ? 'Estimated tax' : 'Tax';
+  const effectiveTotalLabel =
+    totalLabel ?? (isEstimate ? 'Estimated total' : 'Confirmed total');
 
   if (quoteStyle === 'ruled') {
     return (
       <Section style={ruledWrapper}>
+        <Text style={authorityNote}>{authorityLabel}</Text>
         <table style={ruledTable} cellPadding={0} cellSpacing={0}>
           <thead>
             <tr>
@@ -97,7 +108,9 @@ export function QuoteTable({
               <tr>
                 <td style={ruledSummarySpacer} />
                 <td style={ruledSummarySpacer} />
-                <td style={ruledSummaryLabel}>Subtotal</td>
+                <td style={ruledSummaryLabel}>
+                  {isEstimate ? 'Estimated subtotal' : 'Subtotal'}
+                </td>
                 <td style={ruledSummaryValue}>
                   {formatCurrency(subtotalCents, currencySymbol, currencySide)}
                 </td>
@@ -107,7 +120,7 @@ export function QuoteTable({
               <tr>
                 <td style={ruledSummarySpacer} />
                 <td style={ruledSummarySpacer} />
-                <td style={ruledSummaryLabel}>Tax</td>
+                <td style={ruledSummaryLabel}>{taxLabel}</td>
                 <td style={ruledSummaryValue}>
                   {formatCurrency(taxCents, currencySymbol, currencySide)}
                 </td>
@@ -116,22 +129,21 @@ export function QuoteTable({
             <tr>
               <td style={ruledSummarySpacer} />
               <td style={ruledSummarySpacer} />
-              <td style={ruledTotalLabel}>{totalLabel}</td>
+              <td style={ruledTotalLabel}>{effectiveTotalLabel}</td>
               <td style={ruledTotalValue}>
                 {formatCurrency(totalCents, currencySymbol, currencySide)}
               </td>
             </tr>
           </tfoot>
         </table>
-        <Text style={ruledDisclaimer}>
-          Price is in {currencyName(currency)}. Shipping inclusive
-        </Text>
+        <Text style={ruledDisclaimer}>Price is in {currencyName(currency)}.</Text>
       </Section>
     );
   }
 
   return (
     <Section style={wrapper}>
+      <Text style={authorityNote}>{authorityLabel}</Text>
       <Text style={sectionHeading}>Price Breakdown</Text>
       <table style={table} cellPadding={0} cellSpacing={0}>
         <thead>
@@ -164,7 +176,7 @@ export function QuoteTable({
           {subtotalCents != null && (
             <tr>
               <td colSpan={2} style={subtotalTd}>
-                Subtotal
+                {isEstimate ? 'Estimated subtotal' : 'Subtotal'}
               </td>
               <td style={{ ...subtotalTd, textAlign: 'right' }}>
                 {formatCurrency(subtotalCents, currencySymbol, currencySide)}
@@ -174,7 +186,7 @@ export function QuoteTable({
           {taxCents != null && taxCents > 0 && (
             <tr>
               <td colSpan={2} style={subtotalTd}>
-                Tax
+                {taxLabel}
               </td>
               <td style={{ ...subtotalTd, textAlign: 'right' }}>
                 {formatCurrency(taxCents, currencySymbol, currencySide)}
@@ -183,7 +195,7 @@ export function QuoteTable({
           )}
           <tr style={totalRow}>
             <td colSpan={2} style={totalTd}>
-              {totalLabel}
+              {effectiveTotalLabel}
             </td>
             <td style={{ ...totalTd, textAlign: 'right' }}>
               {formatCurrency(totalCents, currencySymbol, currencySide)}
@@ -233,6 +245,13 @@ function currencyName(currency: string): string {
 }
 
 const wrapper: React.CSSProperties = { margin: '30px 0' };
+
+const authorityNote: React.CSSProperties = {
+  color: '#625a51',
+  fontSize: '12px',
+  fontWeight: 600,
+  margin: '0 0 10px',
+};
 
 const sectionHeading: React.CSSProperties = {
   color: '#302719',

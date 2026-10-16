@@ -75,6 +75,7 @@ export default function FullMonumentFit({ trigger }: FullMonumentFitProps) {
   const productId = useHeadstoneStore((s) => s.productId);
   const assembly = useHeadstoneStore((s) => s.catalog?.product.assembly);
   const shapeUrl = useHeadstoneStore((s) => s.shapeUrl);
+  const showBase = useHeadstoneStore((s) => s.showBase);
   const showLedger = useHeadstoneStore((s) => s.showLedger);
   const showKerbset = useHeadstoneStore((s) => s.showKerbset);
   const selected = useHeadstoneStore((s) => s.selected);
@@ -160,6 +161,7 @@ export default function FullMonumentFit({ trigger }: FullMonumentFitProps) {
     uprightThickness,
     productId ?? '',
     shapeUrl ?? '',
+    showBase ? '1' : '0',
     showLedger ? '1' : '0',
     showKerbset ? '1' : '0',
     size.width,
@@ -550,6 +552,7 @@ export default function FullMonumentFit({ trigger }: FullMonumentFitProps) {
     productId,
     assembly,
     shapeUrl,
+    showBase,
     showLedger,
     showKerbset,
     selected,

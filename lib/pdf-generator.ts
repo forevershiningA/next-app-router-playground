@@ -24,6 +24,7 @@ const C = {
 
 export async function generateDesignPDF(design: DesignPDFData): Promise<void> {
   const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+  const isEstimate = design.quote?.authority !== 'confirmed';
   const W = pdf.internal.pageSize.getWidth(); // 210
   const H = pdf.internal.pageSize.getHeight(); // 297
   const M = 18; // margin
@@ -50,7 +51,11 @@ export async function generateDesignPDF(design: DesignPDFData): Promise<void> {
   pdf.setTextColor(...C.muted);
   pdf.setFontSize(8);
   pdf.setFont('helvetica', 'normal');
-  pdf.text('Memorial Design Quote', M, 16);
+  pdf.text(
+    isEstimate ? 'Memorial Design Estimate' : 'Confirmed Order Pricing',
+    M,
+    16,
+  );
 
   // Generated date - top right
   pdf.setTextColor(...C.muted);
@@ -187,7 +192,9 @@ export async function generateDesignPDF(design: DesignPDFData): Promise<void> {
     H - 4,
   );
   pdf.text(
-    'This quote is not a final invoice. Prices subject to confirmation.',
+    isEstimate
+      ? 'Estimate only. Final pricing is confirmed when the order is placed.'
+      : 'Pricing confirmed by the server for this order.',
     W - M,
     H - 4,
     { align: 'right' },
@@ -271,14 +278,20 @@ async function drawQuoteTable(
     y += rowH;
   }
 
+  const isEstimate = quote.authority === 'estimate';
   const totals = [
     ['Subtotal', quote.subtotal],
-    ['GST (10%)', quote.tax],
-    ['Total', quote.total],
+    [isEstimate ? 'Estimated GST (10%)' : 'GST (10%)', quote.tax],
+    [isEstimate ? 'Estimated total' : 'Confirmed total', quote.total],
   ] as const;
   for (const [label, value] of totals) {
     pdf.rect(x, y, width, rowH, 'S');
-    pdf.setFont('helvetica', label === 'Total' ? 'bold' : 'normal');
+    pdf.setFont(
+      'helvetica',
+      label === (isEstimate ? 'Estimated total' : 'Confirmed total')
+        ? 'bold'
+        : 'normal',
+    );
     pdf.text(label, x + itemW + 3, y + 5.5);
     pdf.text(formatCurrency(value, quote.currency), x + width - 3, y + 5.5, {
       align: 'right',

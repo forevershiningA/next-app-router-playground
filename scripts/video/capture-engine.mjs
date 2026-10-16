@@ -9,6 +9,19 @@ import { VIDEO_FORMATS, createVideoFilter } from './formats.mjs';
 const CAPTURE_VIEWPORT = Object.freeze({ width: 1440, height: 900 });
 const pause = (page, milliseconds) => page.waitForTimeout(milliseconds);
 
+function getCaptureProfile(formats) {
+  if (formats.length !== 1)
+    return { viewport: CAPTURE_VIEWPORT, mobile: false };
+  const format = VIDEO_FORMATS[formats[0]];
+  return {
+    viewport: {
+      width: format.captureWidth ?? CAPTURE_VIEWPORT.width,
+      height: format.captureHeight ?? CAPTURE_VIEWPORT.height,
+    },
+    mobile: format.mobile === true,
+  };
+}
+
 async function isServerReady(baseUrl) {
   try {
     const response = await fetch(baseUrl, {
@@ -97,6 +110,15 @@ async function installCaptureUi(page) {
       #video-capture-caption-body {
         margin: 8px 0 0; color: rgba(255,255,255,.78);
         font-size: 15px; line-height: 1.4;
+      }
+      @media (max-width: 600px) {
+        #video-capture-caption {
+          top: 76px; left: 12px; right: 12px; width: auto;
+          padding: 10px 14px; border-radius: 12px;
+        }
+        #video-capture-caption-eyebrow { margin-bottom: 3px; font-size: 9px; }
+        #video-capture-caption-title { font-size: 17px; line-height: 1.15; }
+        #video-capture-caption-body { display: none !important; }
       }
     `;
     document.head.append(style);
@@ -268,6 +290,12 @@ async function runStep(page, step, baseUrl, rootDir) {
         );
       return;
     }
+    case 'navigate':
+      await page.goto(`${baseUrl}${step.path}`, {
+        waitUntil: 'domcontentloaded',
+      });
+      if (step.waitForDesigner !== false) await waitForDesigner(page);
+      break;
     case 'click':
       await clickWithCursor(page, locator, step.fast);
       break;
@@ -456,11 +484,14 @@ export async function renderVideoScenario({
           ...(process.platform === 'win32' ? ['--use-angle=d3d11'] : []),
         ];
     browser = await chromium.launch({ headless: true, args: gpuArgs });
+    const captureProfile = getCaptureProfile(formats);
     const context = await browser.newContext({
-      viewport: CAPTURE_VIEWPORT,
+      viewport: captureProfile.viewport,
       deviceScaleFactor: 1,
+      isMobile: captureProfile.mobile,
+      hasTouch: captureProfile.mobile,
       colorScheme: 'light',
-      recordVideo: { dir: tempDir, size: CAPTURE_VIEWPORT },
+      recordVideo: { dir: tempDir, size: captureProfile.viewport },
     });
     await context.addInitScript(() =>
       localStorage.setItem('fs_ui_theme', 'day'),
@@ -477,8 +508,12 @@ export async function renderVideoScenario({
       0,
       (Date.now() - recordingStartedAt) / 1000,
     );
-    for (const step of scenario.steps)
+    for (const [index, step] of scenario.steps.entries()) {
+      console.log(
+        `  Step ${index + 1}/${scenario.steps.length}: ${step.action}`,
+      );
       await runStep(page, step, baseUrl, rootDir);
+    }
     await page.close();
     const rawVideoPath = await video.path();
     await context.close();

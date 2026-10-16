@@ -5,7 +5,7 @@ import SceneOverlayController from '#/components/designer/overlays/SceneOverlayC
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import TailwindSlider from '#/ui/TailwindSlider';
 import { data } from '#/app/_internal/_data';
-import { calculateMotifPrice } from '#/lib/motif-pricing';
+import { calculateCheckPriceMotifPrice } from '#/lib/check-price-calculations';
 
 export default function EditMotifPanel() {
   const selectedMotifId = useHeadstoneStore((s) => s.selectedMotifId);
@@ -57,14 +57,13 @@ export default function EditMotifPanel() {
 
   // Calculate individual motif price (free for laser products and Full Colour Plaque)
   const productId = useHeadstoneStore((s) => s.productId);
-  const motifPrice = motifPriceModel && productId !== '32'
-    ? calculateMotifPrice(
-        activeOffset?.heightMm ?? 100,
-        activeMotif?.color ?? '#c99d44',
-        motifPriceModel.priceModel,
-        isLaser
-      )
-    : 0;
+  const motifPrice = calculateCheckPriceMotifPrice({
+    productId,
+    isLaser,
+    motifPriceModel,
+    heightMm: activeOffset?.heightMm ?? 100,
+    color: activeMotif?.color ?? '#c99d44',
+  });
 
   const handleClose = useCallback(() => {
     setSelectedMotifId(null);

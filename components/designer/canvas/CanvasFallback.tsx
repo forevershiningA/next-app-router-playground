@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { reportWebGLEvent } from '#/lib/client-webgl-report';
 
 /**
  * Component that only shows children when canvas/WebGL is not supported
@@ -21,9 +22,11 @@ export default function CanvasFallback({
       
       // Show fallback only if WebGL is NOT supported
       setShowFallback(!gl);
+      if (!gl) reportWebGLEvent('unavailable');
     } catch (e) {
       // If there's an error, assume canvas is not supported
       setShowFallback(true);
+      reportWebGLEvent('unavailable');
     }
   }, []);
 

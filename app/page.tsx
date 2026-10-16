@@ -1,5 +1,10 @@
 import type { Metadata } from 'next';
 import HomeSplash from './_ui/HomeSplash';
+import HomeFooterSections from './_ui/HomeFooterSections';
+import HomeFooter from './_ui/HomeFooter';
+import HomeProductSection from './_ui/HomeProductSection';
+import HomeReviews from './_ui/HomeReviews';
+import HomeTutorial from './_ui/HomeTutorial';
 import { homeFaqItems } from './_internal/home-content';
 
 export const metadata: Metadata = {
@@ -199,7 +204,14 @@ export default function Page() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
-      <HomeSplash />
+      <main id="main-content" className="min-h-screen bg-[#0c0b0a]">
+        <HomeSplash />
+        <HomeReviews />
+        <HomeProductSection />
+        <HomeTutorial />
+        <HomeFooterSections />
+      </main>
+      <HomeFooter />
     </>
   );
 }

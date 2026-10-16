@@ -24,14 +24,15 @@ export default function SegmentedControl({
 }: SegmentedControlProps) {
   return (
     <div
+      role="group"
       className={cn(
         // Container / Track styling
-        'relative flex w-full items-center rounded-full bg-black/40 p-1 ring-1 ring-white/10 backdrop-blur-sm',
+        'relative flex w-full items-center rounded-full bg-[var(--designer-control)] p-1 ring-1 ring-[var(--designer-border)] backdrop-blur-sm',
         // Inner shadow for depth
         'shadow-[inset_0_2px_4px_rgba(0,0,0,0.5)]',
         // Day mode
-        'day:bg-gray-100 day:ring-gray-300 day:shadow-none',
-        className
+        'day:shadow-none',
+        className,
       )}
     >
       {options.map((option) => {
@@ -40,20 +41,25 @@ export default function SegmentedControl({
         return (
           <button
             key={option.value}
+            type="button"
+            aria-pressed={isActive}
             onClick={() => onChange(option.value)}
             className={cn(
-              'relative z-10 flex-1 py-2 text-sm font-medium transition-colors duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c99d44] focus-visible:ring-offset-2',
-              isActive ? 'text-black' : 'text-zinc-400 hover:text-zinc-200 day:text-gray-500 day:hover:text-gray-900'
+              'relative z-10 flex-1 py-2 text-sm font-medium transition-colors duration-200 ease-out focus-visible:ring-2 focus-visible:ring-[#c99d44] focus-visible:ring-offset-2 focus-visible:outline-none',
+              isActive
+                ? 'text-[var(--designer-accent-foreground)]'
+                : 'text-[var(--designer-text-muted)] hover:text-[var(--designer-text)]',
             )}
           >
             {isActive && (
               <motion.div
                 layoutId={`active-pill-${options[0].value}`} // unique ID per group
-                className="absolute inset-0 rounded-full bg-[#e3b85f] shadow-sm"
+                className="absolute inset-0 rounded-full bg-[var(--designer-accent)] shadow-sm"
                 transition={{ type: 'spring', stiffness: 300, damping: 30 }}
                 style={{
                   // Optional: Add a subtle gradient to the gold button
-                  backgroundImage: 'linear-gradient(to bottom, #e3b85f, #c99d44)',
+                  backgroundImage:
+                    'linear-gradient(to bottom, #e3b85f, #c99d44)',
                 }}
               />
             )}

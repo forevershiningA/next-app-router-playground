@@ -1,6 +1,31 @@
 import type { NextConfig } from 'next';
 import createMDX from '@next/mdx';
 import { type CodeHikeConfig } from 'codehike/mdx';
+import { createRequire } from 'node:module';
+
+const sentryConfig = createRequire(`${process.cwd()}/next.config.ts`)(
+  '@sentry/nextjs/config',
+) as {
+  withSentryConfig: (
+    config: NextConfig,
+    options: {
+      org: string;
+      project: string;
+      tunnelRoute: string;
+      authToken?: string;
+      silent: boolean;
+      release?: {
+        name?: string;
+        deploy?: false | { env: string; url?: string };
+      };
+    },
+  ) => NextConfig;
+};
+const { withSentryConfig } = sentryConfig;
+const sentryReleaseName =
+  process.env.SENTRY_RELEASE ||
+  process.env.VERCEL_GIT_COMMIT_SHA ||
+  process.env.GITHUB_SHA;
 
 const nextConfig = {
   pageExtensions: ['js', 'jsx', 'mdx', 'ts', 'tsx'],
@@ -80,6 +105,30 @@ const nextConfig = {
       {
         source: '/:path*',
         headers: [
+          {
+            key: 'Content-Security-Policy-Report-Only',
+            value: [
+              "default-src 'self'",
+              "base-uri 'self'",
+              "object-src 'none'",
+              "frame-ancestors 'self'",
+              "form-action 'self' https://checkout.stripe.com",
+              "script-src 'self' 'unsafe-inline' https://js.stripe.com",
+              "style-src 'self' 'unsafe-inline'",
+              "img-src 'self' data: blob: https:",
+              "font-src 'self' data:",
+              "connect-src 'self' https://api.stripe.com https://*.stripe.com",
+              "frame-src 'self' https://js.stripe.com https://hooks.stripe.com https://checkout.stripe.com",
+              "media-src 'self' blob:",
+              "worker-src 'self' blob:",
+              'report-uri /api/csp-report',
+              'report-to csp-endpoint',
+            ].join('; '),
+          },
+          {
+            key: 'Reporting-Endpoints',
+            value: 'csp-endpoint="/api/csp-report"',
+          },
           { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
           { key: 'X-Content-Type-Options', value: 'nosniff' },
           { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
@@ -140,4 +189,24 @@ const withMDX = createMDX({
   },
 });
 
-export default withMDX(nextConfig);
+export default withMDX(
+  withSentryConfig(nextConfig, {
+    org: 'forever-shining',
+    project: 'forever-shining-nextjs',
+    tunnelRoute: '/sentry-tunnel',
+    authToken: process.env.SENTRY_AUTH_TOKEN,
+    silent: !process.env.CI,
+    release: {
+      name: sentryReleaseName,
+      deploy:
+        process.env.VERCEL_ENV === 'production'
+          ? {
+              env: 'production',
+              url: process.env.VERCEL_URL
+                ? `https://${process.env.VERCEL_URL}`
+                : undefined,
+            }
+          : false,
+    },
+  }),
+);

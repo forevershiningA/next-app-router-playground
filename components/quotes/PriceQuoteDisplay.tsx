@@ -6,10 +6,32 @@ const fmt = (amount: number, currency: string) =>
   );
 
 export function PriceQuoteDisplay({ quote }: { quote: PDFQuote }) {
-  const { currency, items, additions, motifs, inscriptions, subtotal, tax, total, note } = quote;
+  const {
+    authority,
+    currency,
+    items,
+    additions,
+    motifs,
+    inscriptions,
+    subtotal,
+    tax,
+    total,
+    note,
+  } = quote;
+  const isEstimate = authority === 'estimate';
 
   return (
     <div className="space-y-4 rounded-xl border border-white/10 day:border-gray-200 bg-white/5 day:bg-gray-50 p-5 text-sm text-white day:text-gray-900">
+      <div className="rounded-lg border-l-2 border-[#D4A84F] bg-white/[0.04] px-3 py-2 day:bg-amber-50">
+        <p className="font-semibold text-white day:text-gray-900">
+          {isEstimate ? 'Estimated pricing' : 'Confirmed order pricing'}
+        </p>
+        {note && (
+          <p className="mt-0.5 text-xs text-white/60 day:text-gray-600">
+            {note}
+          </p>
+        )}
+      </div>
       {/* Line items */}
       <table className="w-full">
         <thead>
@@ -33,15 +55,15 @@ export function PriceQuoteDisplay({ quote }: { quote: PDFQuote }) {
       {/* Keep the tax calculation adjacent to the line-item amounts. */}
       <div className="space-y-1 border-t border-white/10 pt-3 day:border-gray-200">
         <div className="flex justify-between text-white/60 day:text-gray-500">
-          <span>Subtotal</span>
+          <span>{isEstimate ? 'Estimated subtotal' : 'Subtotal'}</span>
           <span>{fmt(subtotal, currency)}</span>
         </div>
         <div className="flex justify-between text-white/60 day:text-gray-500">
-          <span>Estimated tax (GST 10%)</span>
+          <span>{isEstimate ? 'Estimated tax (GST 10%)' : 'GST (10%)'}</span>
           <span>{fmt(tax, currency)}</span>
         </div>
         <div className="flex justify-between text-base font-semibold text-[#D4A84F]">
-          <span>Total</span>
+          <span>{isEstimate ? 'Estimated total' : 'Confirmed total'}</span>
           <span>{fmt(total, currency)}</span>
         </div>
       </div>
@@ -120,7 +142,6 @@ export function PriceQuoteDisplay({ quote }: { quote: PDFQuote }) {
         </div>
       )}
 
-      {note && <p className="text-xs text-white/30 day:text-gray-400">{note}</p>}
     </div>
   );
 }

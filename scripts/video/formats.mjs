@@ -18,6 +18,9 @@ export const VIDEO_FORMATS = Object.freeze({
   vertical: {
     width: 1080,
     height: 1920,
+    captureWidth: 432,
+    captureHeight: 768,
+    mobile: true,
     fps: 30,
     directory: 'social',
     suffix: '-vertical',

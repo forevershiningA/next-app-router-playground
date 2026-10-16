@@ -216,6 +216,15 @@ export async function POST(request: NextRequest) {
         designName: summary.title,
         screenshotUrl: screenshotDataUrl, // base64 data URI; sendEmail converts it to CID inline attachment
         quoteItems: detailedQuoteItems({
+          quote:
+            typeof summary.totalPriceCents === 'number'
+              ? {
+                  totalCents: summary.totalPriceCents,
+                  currency: summary.currency,
+                  breakdown: body.pricingBreakdown ?? {},
+                  authority: 'estimate',
+                }
+              : undefined,
           breakdown: body.pricingBreakdown,
           designState: cleanedDesignState,
           totalCents: summary.totalPriceCents,

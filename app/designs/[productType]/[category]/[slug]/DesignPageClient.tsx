@@ -11,7 +11,6 @@ import {
   fetchCanonicalDesign,
 } from '#/lib/saved-design-loader-utils';
 import { useHeadstoneStore } from '#/lib/headstone-store';
-import { calculateMotifPrice } from '#/lib/motif-pricing';
 import { data } from '#/app/_internal/_data';
 import {
   AdjustmentsHorizontalIcon,
@@ -2908,78 +2907,6 @@ export default function DesignPageClient({
     shapeDisplayName,
     simplifiedProductName,
   ]);
-  
-  // Get store state for price calculation
-  const catalog = useHeadstoneStore((s) => s.catalog);
-  const widthMm = useHeadstoneStore((s) => s.widthMm);
-  const heightMm = useHeadstoneStore((s) => s.heightMm);
-  const shapeUrl = useHeadstoneStore((s) => s.shapeUrl);
-  const headstoneMaterialUrl = useHeadstoneStore((s) => s.headstoneMaterialUrl);
-  const baseMaterialUrl = useHeadstoneStore((s) => s.baseMaterialUrl);
-  const inscriptions = useHeadstoneStore((s) => s.inscriptions);
-  const inscriptionCost = useHeadstoneStore((s) => s.inscriptionCost);
-  const selectedMotifs = useHeadstoneStore((s) => s.selectedMotifs);
-  const motifOffsets = useHeadstoneStore((s) => s.motifOffsets);
-  const motifCost = useHeadstoneStore((s) => s.motifCost);
-  const motifPriceModel = useHeadstoneStore((s) => s.motifPriceModel);
-  const selectedAdditions = useHeadstoneStore((s) => s.selectedAdditions);
-  const showBase = useHeadstoneStore((s) => s.showBase);
-  const showInscriptionColor = useHeadstoneStore((s) => s.showInscriptionColor);
-  
-  // Get shape name from URL (for store-based shapes)
-  const shapeNameFromUrl = useMemo(() => {
-    if (!shapeUrl) return 'Unknown';
-    const parts = shapeUrl.split('/');
-    const filename = parts[parts.length - 1];
-    return filename.replace('.svg', '').replace(/-/g, ' ');
-  }, [shapeUrl]);
-
-  // Get material name from URL
-  const getMaterialName = (url: string | null) => {
-    if (!url) return 'Unknown';
-    const parts = url.split('/');
-    const filename = parts[parts.length - 1];
-    return filename.replace('.jpg', '').replace('.png', '').replace(/-/g, ' ');
-  };
-
-  // Calculate headstone price (placeholder - would need actual catalog pricing)
-  const headstonePrice = useMemo(() => {
-    return 2565.95; // Placeholder
-  }, [catalog, widthMm, heightMm]);
-
-  // Calculate base price (placeholder)
-  const basePrice = useMemo(() => {
-    if (!showBase) return 0;
-    return 650.00; // Placeholder
-  }, [showBase]);
-
-  // Calculate additions price
-  const additionsPrice = useMemo(() => {
-    return selectedAdditions.length * 75;
-  }, [selectedAdditions]);
-
-  // Get addition details
-  const additionItems = useMemo(() => {
-    return selectedAdditions.map(addId => {
-      const parts = addId.split('_');
-      const baseId = parts.length > 1 && !isNaN(Number(parts[parts.length - 1]))
-        ? parts.slice(0, -1).join('_')
-        : addId;
-      
-      const addition = data.additions.find(a => a.id === baseId);
-      return {
-        id: addId,
-        baseId: baseId,
-        name: addition?.name || 'Addition',
-        type: addition?.type || 'application',
-      };
-    });
-  }, [selectedAdditions]);
-
-  // Calculate total
-  const totalPrice = useMemo(() => {
-    return headstonePrice + basePrice + inscriptionCost + motifCost + additionsPrice;
-  }, [headstonePrice, basePrice, inscriptionCost, motifCost, additionsPrice]);
   
   // Extract generic inscriptions (without personal names/dates)
   const genericInscriptions = designData

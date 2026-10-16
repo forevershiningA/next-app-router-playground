@@ -1,25 +1,18 @@
 import 'server-only';
 
-import { data } from '#/app/_internal/_data';
-import {
-  fetchAndParseMotifPricing,
-  calculateMotifPrice,
-} from '#/lib/motif-pricing';
-import type { DesignerSnapshot, PricingBreakdown } from '#/lib/project-schemas';
-import {
-  calculateCatalogPrice,
-  calculatePrice,
-  computeQuantity,
-  type CatalogData,
-} from '#/lib/xml-parser';
+import { calculateCheckPriceQuote } from '#/lib/check-price-calculations';
+import { fetchAndParseInscriptionDetails } from '#/lib/xml-parser';
+import { catalog as catalogDb } from '#/lib/catalog-db';
+import { fetchAndParseMotifPricing } from '#/lib/server/motif-pricing';
+import { calculateAuthoritativeImagePrice } from '#/lib/authoritative-image-pricing';
+import { fetchImagePricing } from '#/lib/image-pricing';
+import type { DesignerSnapshot } from '#/lib/project-schemas';
+import type { DesignQuote } from '#/lib/pricing-contract';
+import type { CatalogData } from '#/lib/xml-parser';
 import { ensureServerDomParser } from './dom-parser-polyfill';
 import { getCatalogData } from './xml-data';
 
-export type AuthoritativeQuote = {
-  totalCents: number;
-  currency: string;
-  breakdown: PricingBreakdown;
-};
+export type AuthoritativeQuote = DesignQuote<'confirmed'>;
 
 const money = (value: number) => Math.round(value * 100) / 100;
 const currencyCode = (value?: string) => {
@@ -50,52 +43,17 @@ export async function calculateAuthoritativeQuote(
 ): Promise<AuthoritativeQuote> {
   if (!snapshot.productId)
     throw new Error('A product is required before checkout');
-  if ((snapshot.selectedImages ?? []).length > 0) {
-    throw new Error('Image pricing must be reviewed before checkout');
-  }
 
   const catalog = await loadCatalog(snapshot.productId);
   const product = catalog.product;
   const width = number(snapshot.widthMm, 'width');
   const height = number(snapshot.heightMm, 'height');
   const depth = number(snapshot.uprightThickness, 'thickness');
-  const matchingShape = product.shapes.find((shape) =>
-    shape.url ? snapshot.shapeUrl?.endsWith(shape.url) : false,
-  );
-  const headstonePrice = calculateCatalogPrice(
-    product.id,
-    product.priceModel,
-    { width, height, depth },
-    matchingShape?.code,
-  );
-
-  const basePrice =
-    snapshot.showBase && product.basePriceModel
-      ? calculatePrice(
-          product.basePriceModel,
-          computeQuantity(product.basePriceModel, {
-            width: number(snapshot.baseWidthMm, 'base width'),
-            height: number(snapshot.baseHeightMm, 'base height'),
-            depth: number(snapshot.baseThickness, 'base thickness'),
-          }),
-        )
-      : 0;
-
-  const additionsPrice = (snapshot.selectedAdditions ?? []).reduce(
-    (total, additionId) => {
-      const addition = data.additions.find(
-        (item) => item.id === additionId.split('_')[0],
-      );
-      const sizes = addition?.sizes ?? [];
-      if (sizes.length === 0) return total;
-      const requested = Math.round(
-        snapshot.additionOffsets[additionId]?.sizeVariant ?? 1,
-      );
-      const variant = Math.min(sizes.length, Math.max(1, requested));
-      return total + (sizes[variant - 1]?.retailPrice ?? 0);
-    },
-    0,
-  );
+  if (snapshot.showBase && product.basePriceModel) {
+    number(snapshot.baseWidthMm, 'base width');
+    number(snapshot.baseHeightMm, 'base height');
+    number(snapshot.baseThickness, 'base thickness');
+  }
 
   const motifAddition = product.additions.find(
     (addition) => addition.type === 'motif',
@@ -109,68 +67,64 @@ export async function calculateAuthoritativeQuote(
           ? 'laser'
           : 'engraved';
   const motifPricing = await fetchAndParseMotifPricing(motifType);
-  if ((snapshot.selectedMotifs ?? []).length > 0 && !motifPricing) {
-    throw new Error('Motif pricing is unavailable');
+  for (const motif of snapshot.selectedMotifs ?? []) {
+    number(snapshot.motifOffsets[motif.id]?.heightMm ?? 100, 'motif height');
   }
-  const motifsPrice =
-    snapshot.productId === '32' || product.laser === '1'
-      ? 0
-      : (snapshot.selectedMotifs ?? []).reduce(
-          (total, motif) =>
-            total +
-            calculateMotifPrice(
-              number(
-                snapshot.motifOffsets[motif.id]?.heightMm ?? 100,
-                'motif height',
-              ),
-              motif.color,
-              motifPricing!.priceModel,
-            ),
-          0,
-        );
 
   const inscriptionProduct = product.additions.find(
     (addition) => addition.type === 'inscription',
   );
-  if (
-    (snapshot.inscriptions ?? []).some((line) => line.text.trim()) &&
-    !inscriptionProduct?.priceModel
-  ) {
-    throw new Error('Inscription pricing is unavailable');
+  const inscriptionDetails = inscriptionProduct
+    ? await fetchAndParseInscriptionDetails(inscriptionProduct.id)
+    : undefined;
+  for (const line of snapshot.inscriptions ?? []) {
+    if (line.text.trim()) number(line.sizeMm, 'inscription size');
   }
-  const inscriptionPrice =
-    snapshot.productId === '32'
-      ? 0
-      : (snapshot.inscriptions ?? [])
-          .filter((line) => line.text.trim())
-          .reduce((total, line) => {
-            const colorName = data.colors.find(
-              (color) => color.hex === line.color,
-            )?.name;
-            const note =
-              colorName &&
-              !['Gold Gilding', 'Silver Gilding'].includes(colorName)
-                ? 'Paint Fill'
-                : colorName;
-            return (
-              total +
-              calculatePrice(
-                inscriptionProduct!.priceModel!,
-                number(line.sizeMm, 'inscription size'),
-                note,
-              )
-            );
-          }, 0);
 
-  const emblemsPrice = (snapshot.selectedEmblems?.length ?? 0) * 109;
-  const subtotal = money(
-    headstonePrice +
-      basePrice +
-      additionsPrice +
-      motifsPrice +
-      inscriptionPrice +
-      emblemsPrice,
+  const imagePricing = await fetchImagePricing();
+  const imagePrice = calculateAuthoritativeImagePrice(
+    snapshot.selectedImages ?? [],
+    imagePricing,
   );
+  const fixedSizeRows =
+    product.id === '32'
+      ? await catalogDb.sizes.findMany({
+          where: { productCode: 'full-colour-plaque', isActive: true },
+        })
+      : [];
+  const checkPriceQuote = calculateCheckPriceQuote({
+    productId: product.id,
+    catalog,
+    shapeUrl: snapshot.shapeUrl,
+    widthMm: width,
+    heightMm: height,
+    uprightThickness: depth,
+    headstoneMaterialUrl: snapshot.headstoneMaterialUrl,
+    fixedSizes: fixedSizeRows.map((size) => ({
+      id: size.sortOrder,
+      width: size.widthMm,
+      height: size.heightMm,
+      price: size.priceCents / 100,
+    })),
+    showBase: snapshot.showBase,
+    baseWidthMm: snapshot.baseWidthMm,
+    baseHeightMm: snapshot.baseHeightMm,
+    baseThickness: snapshot.baseThickness,
+    borderName: snapshot.borderName,
+    showInscriptionColor: product.laser !== '1' && product.color !== '0',
+    inscriptionPriceModel: inscriptionDetails?.priceModel ?? null,
+    inscriptions: snapshot.inscriptions ?? [],
+    motifPriceModel: motifPricing,
+    selectedMotifs: snapshot.selectedMotifs ?? [],
+    motifOffsets: snapshot.motifOffsets,
+    selectedAdditions: snapshot.selectedAdditions ?? [],
+    additionOffsets: snapshot.additionOffsets,
+    selectedEmblemsCount: snapshot.selectedEmblems?.length ?? 0,
+    selectedImages: snapshot.selectedImages ?? [],
+    imagePricing,
+    imagePriceOverride: imagePrice,
+  });
+  const subtotal = money(checkPriceQuote.subtotal);
   const tax = money(subtotal * 0.1);
   const total = money(subtotal + tax);
   const currency = currencyCode(product.priceModel.currency);
@@ -178,13 +132,9 @@ export async function calculateAuthoritativeQuote(
   return {
     totalCents: Math.round(total * 100),
     currency,
+    authority: 'confirmed',
     breakdown: {
-      headstonePrice,
-      basePrice,
-      additionsPrice,
-      motifsPrice,
-      inscriptionPrice,
-      emblemsPrice,
+      ...checkPriceQuote.breakdown,
       subtotal,
       tax,
       total,

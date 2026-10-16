@@ -32,7 +32,7 @@ const { sanitizeInscription } = require('./utils/inscription-sanitizer');
 // ─── Config ──────────────────────────────────────────────────────────────────
 
 const ROOT = path.resolve(__dirname, '..');
-const DESIGNS_DATA_PATH = path.join(ROOT, 'lib', 'saved-designs-data.ts');
+const DESIGNS_DATA_PATH = path.join(ROOT, 'lib', 'saved-designs-data.json');
 const DEFAULT_OUTPUT_DIR = path.join(ROOT, 'public', 'screenshots', 'v2026-3d');
 const BASE_URL = process.env.BASE_URL || 'http://localhost:3001';
 const DESIGNER_PATH = '/select-size';
@@ -126,16 +126,17 @@ Options:
 
 // ─── Design Data Parser ──────────────────────────────────────────────────────
 
-function loadDesignIds(opts) {
-  const raw = fs.readFileSync(DESIGNS_DATA_PATH, 'utf8');
-
-  // Extract all design ID keys from the SAVED_DESIGNS object
-  const idRegex = /"(\d{10,15})":\s*\{/g;
-  const allIds = [];
-  let match;
-  while ((match = idRegex.exec(raw)) !== null) {
-    allIds.push(match[1]);
+let savedDesignsCache;
+function loadSavedDesigns() {
+  if (!savedDesignsCache) {
+    savedDesignsCache = JSON.parse(fs.readFileSync(DESIGNS_DATA_PATH, 'utf8'));
   }
+  return savedDesignsCache;
+}
+
+function loadDesignIds(opts) {
+  const designs = loadSavedDesigns();
+  const allIds = Object.keys(designs);
 
   let candidates = allIds;
 
@@ -147,29 +148,14 @@ function loadDesignIds(opts) {
   } else if (opts.ids) {
     candidates = opts.ids.filter(id => allIds.includes(id));
   } else if (opts.category) {
-    // Parse category for each design — look for category field near the ID
+    // Match the requested category against the structured metadata.
     const catLower = opts.category.toLowerCase();
-    const filtered = [];
-    for (const id of allIds) {
-      // Find the block for this ID and extract category
-      const idPos = raw.indexOf(`"${id}":`);
-      if (idPos === -1) continue;
-      const chunk = raw.substring(idPos, idPos + 800);
-      const catMatch = chunk.match(/"category":\s*"([^"]+)"/);
-      if (catMatch) {
-        const designCat = catMatch[1].toLowerCase();
-        // Match on slug or partial
-        if (designCat === catLower || designCat.includes(catLower)) {
-          filtered.push(id);
-        }
-      }
-      // Also check productSlug for product-level filtering
-      const prodMatch = chunk.match(/"productSlug":\s*"([^"]+)"/);
-      if (prodMatch && prodMatch[1].toLowerCase() === catLower) {
-        if (!filtered.includes(id)) filtered.push(id);
-      }
-    }
-    candidates = filtered;
+    candidates = allIds.filter((id) => {
+      const design = designs[id];
+      const category = design.category?.toLowerCase() ?? '';
+      const productSlug = design.productSlug?.toLowerCase() ?? '';
+      return category.includes(catLower) || productSlug === catLower;
+    });
   }
 
   // Filter to only designs that have a canonical JSON file on disk
@@ -200,15 +186,12 @@ function designJsonExists(designId) {
 }
 
 function loadDesignMetadata(designId) {
-  const raw = fs.readFileSync(DESIGNS_DATA_PATH, 'utf8');
-  const idPos = raw.indexOf(`"${designId}":`);
-  if (idPos === -1) return null;
-  const chunk = raw.substring(idPos, idPos + 1200);
-  const catMatch = chunk.match(/"category":\s*"([^"]+)"/);
-  const titleMatch = chunk.match(/"title":\s*"([^"]+)"/);
+  const designs = loadSavedDesigns();
+  const design = designs[designId];
+  if (!design) return null;
   return {
-    category: catMatch?.[1] || 'unknown',
-    title: titleMatch?.[1] || 'Unknown',
+    category: design.category || 'unknown',
+    title: design.title || 'Unknown',
   };
 }
 

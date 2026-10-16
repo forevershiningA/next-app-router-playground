@@ -3,6 +3,7 @@
  */
 
 import type { DesignerSnapshot, PricingBreakdown } from '#/lib/project-schemas';
+import type { DesignQuote } from '#/lib/pricing-contract';
 import { buildPdfQuoteFromProject } from '#/lib/design-quote';
 import type { QuoteLineItem } from './types';
 
@@ -26,6 +27,7 @@ export function breakdownToQuoteItems(
     { key: 'basePrice', label: 'Base' },
     { key: 'ledgerPrice', label: 'Ledger Slab' },
     { key: 'kerbsetPrice', label: 'Kerbset Border' },
+    { key: 'borderPrice', label: 'Stainless Steel Border' },
     { key: 'inscriptionPrice', label: 'Inscriptions' },
     { key: 'motifsPrice', label: 'Motifs' },
     { key: 'emblemsPrice', label: 'Emblems' },
@@ -54,25 +56,26 @@ export function breakdownToQuoteItems(
  * metadata such as text, size, colour, variant).
  */
 export function detailedQuoteItems(args: {
+  quote?: DesignQuote;
   breakdown: PricingBreakdown | null | undefined;
   designState: DesignerSnapshot | null | undefined;
   totalCents?: number | null;
   currency?: string | null;
 }): QuoteLineItem[] {
-  const { breakdown, designState, totalCents, currency } = args;
+  const { quote, breakdown, designState, totalCents, currency } = args;
   if (!designState) return breakdownToQuoteItems(breakdown);
 
-  const quote = buildPdfQuoteFromProject({
-    totalPriceCents: totalCents ?? null,
-    currency: currency ?? null,
-    pricingBreakdown: breakdown ?? null,
+  const detailedQuote = buildPdfQuoteFromProject({
+    totalPriceCents: quote?.totalCents ?? totalCents ?? null,
+    currency: quote?.currency ?? currency ?? null,
+    pricingBreakdown: quote?.breakdown ?? breakdown ?? null,
     designState: designState as unknown as Parameters<typeof buildPdfQuoteFromProject>[0]['designState'],
-  });
+  }, quote);
 
   const toCents = (v: number) => Math.round(v * 100);
   const items: QuoteLineItem[] = [];
 
-  const headstone = quote.items.find((i) => i.label === 'Headstone');
+  const headstone = detailedQuote.items.find((i) => i.label === 'Headstone');
   if (headstone && headstone.amount > 0) {
     items.push({
       description: 'Headstone',
@@ -82,7 +85,7 @@ export function detailedQuoteItems(args: {
     });
   }
 
-  const base = quote.items.find((i) => i.label === 'Base');
+  const base = detailedQuote.items.find((i) => i.label === 'Base');
   if (base && base.amount > 0) {
     items.push({
       description: 'Base',
@@ -92,7 +95,19 @@ export function detailedQuoteItems(args: {
     });
   }
 
-  for (const line of quote.inscriptions) {
+  for (const label of ['Ledger Slab', 'Kerbset Border', 'Stainless Steel Border']) {
+    const component = detailedQuote.items.find((item) => item.label === label);
+    if (!component || component.amount <= 0) continue;
+    const cents = toCents(component.amount);
+    items.push({
+      description: label,
+      quantity: component.quantity,
+      unitPriceCents: cents,
+      totalCents: cents,
+    });
+  }
+
+  for (const line of detailedQuote.inscriptions) {
     const meta = [line.font, line.sizeMm ? `${line.sizeMm}mm` : null, line.colorName]
       .filter(Boolean)
       .join(', ');
@@ -104,7 +119,7 @@ export function detailedQuoteItems(args: {
     });
   }
 
-  for (const motif of quote.motifs) {
+  for (const motif of detailedQuote.motifs) {
     const motifDetail = motif.colorName ? `${motif.detailLabel}: ${motif.colorName}` : null;
     const meta = [motif.heightMm ? `${motif.heightMm}mm` : null, motifDetail]
       .filter(Boolean)
@@ -117,7 +132,7 @@ export function detailedQuoteItems(args: {
     });
   }
 
-  for (const addition of quote.additions) {
+  for (const addition of detailedQuote.additions) {
     const meta = [addition.type, addition.variant ? `variant ${addition.variant}` : null]
       .filter(Boolean)
       .join(', ');
@@ -129,7 +144,7 @@ export function detailedQuoteItems(args: {
     });
   }
 
-  const imagesLine = quote.items.find((i) => i.label === 'Images');
+  const imagesLine = detailedQuote.items.find((i) => i.label === 'Images');
   if (imagesLine) {
     items.push({
       description: 'Images',

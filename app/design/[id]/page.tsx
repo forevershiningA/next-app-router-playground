@@ -43,7 +43,7 @@ export default async function DesignSharePage({ params }: Props) {
     maximumFractionDigits: 2,
   });
   const priceLabel = project.totalPriceCents
-    ? `From ${currencyFormatter.format(project.totalPriceCents / 100)}`
+    ? `Estimated from ${currencyFormatter.format(project.totalPriceCents / 100)}`
     : null;
 
   return (

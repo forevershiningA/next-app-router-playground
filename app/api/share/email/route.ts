@@ -72,6 +72,15 @@ export async function POST(request: NextRequest) {
             accessCode,
             screenshotUrl: project.screenshotPath ?? undefined,
             quoteItems: detailedQuoteItems({
+              quote:
+                typeof project.totalPriceCents === 'number'
+                  ? {
+                      totalCents: project.totalPriceCents,
+                      currency: project.currency ?? 'AUD',
+                      breakdown: project.pricingBreakdown ?? {},
+                      authority: 'estimate',
+                    }
+                  : undefined,
               breakdown: project.pricingBreakdown ?? null,
               designState: project.designState as DesignerSnapshot | null,
               totalCents: project.totalPriceCents ?? 0,

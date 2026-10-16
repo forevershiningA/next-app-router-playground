@@ -8,7 +8,7 @@ import { ChevronRightIcon, ChevronDownIcon } from '@heroicons/react/24/solid';
 import LoadDesignButton from '#/components/designer/actions/LoadDesignButton';
 import { getAllSavedDesigns } from '#/lib/saved-designs-data';
 import { useHeadstoneStore } from '#/lib/headstone-store';
-import { calculatePrice, computeQuantity } from '#/lib/xml-parser';
+import { calculateCheckPriceProductPrices } from '#/lib/check-price-calculations';
 import { data } from '#/app/_internal/_data';
 
 interface DesignTreeNode {
@@ -105,21 +105,23 @@ export default function DesignsTreeNav() {
   const baseThickness = useHeadstoneStore((s) => s.baseThickness);
   const uprightThickness = useHeadstoneStore((s) => s.uprightThickness);
   const showBase = useHeadstoneStore((s) => s.showBase);
-
-  let quantity = widthMm * heightMm;
-  if (catalog) {
-    quantity = computeQuantity(catalog.product.priceModel, { width: widthMm, height: heightMm, depth: uprightThickness });
-  }
-  
-  let baseQuantity = 0;
-  if (showBase && catalog?.product?.basePriceModel) {
-    baseQuantity = computeQuantity(catalog.product.basePriceModel, { width: baseWidthMm, height: baseHeightMm, depth: baseThickness });
-  }
-  
-  const headstonePrice = catalog ? calculatePrice(catalog.product.priceModel, quantity) : 0;
-  const basePrice = showBase && catalog?.product?.basePriceModel
-    ? calculatePrice(catalog.product.basePriceModel, baseQuantity)
-    : 0;
+  const shapeUrl = useHeadstoneStore((s) => s.shapeUrl);
+  const headstoneMaterialUrl = useHeadstoneStore((s) => s.headstoneMaterialUrl);
+  const fixedSizes = useHeadstoneStore((s) => s.fixedSizes);
+  const { headstonePrice, basePrice } = calculateCheckPriceProductPrices({
+    productId,
+    catalog,
+    shapeUrl,
+    widthMm,
+    heightMm,
+    uprightThickness,
+    headstoneMaterialUrl,
+    fixedSizes,
+    showBase,
+    baseWidthMm,
+    baseHeightMm,
+    baseThickness,
+  });
   const price = headstonePrice + basePrice;
   
   // Safe product name with ID check

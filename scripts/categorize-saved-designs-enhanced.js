@@ -8,7 +8,7 @@ const path = require('path');
 
 const MAIN_JSON_DIR = path.join(__dirname, '../public/ml/forevershining/saved-designs/json');
 const TF_DIR = path.join(MAIN_JSON_DIR, 'tf');
-const OUTPUT_FILE = path.join(__dirname, '../lib/saved-designs-data.ts');
+const OUTPUT_FILE = path.join(__dirname, '../lib/saved-designs-data.json');
 
 // Filename pattern mapping for tf directory
 // tf_{type}_{style}_{motif}.json
@@ -305,19 +305,9 @@ async function processMainDesigns() {
  * Generate TypeScript file with data
  */
 function generateTypeScriptFile(designs) {
-  console.log('\nGenerating TypeScript file...');
-  
-  const template = fs.readFileSync(OUTPUT_FILE, 'utf8');
-  
-  const designsJson = JSON.stringify(designs, null, 2);
-  
-  const pattern = /export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = \{[\s\S]*?\};/;
-  
-  const replacement = `export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = ${designsJson};`;
-  
-  const updatedContent = template.replace(pattern, replacement);
-  
-  fs.writeFileSync(OUTPUT_FILE, updatedContent, 'utf8');
+  console.log('\nGenerating saved design JSON...');
+
+  fs.writeFileSync(OUTPUT_FILE, JSON.stringify(designs), 'utf8');
   console.log(`Written ${Object.keys(designs).length} designs to: ${OUTPUT_FILE}`);
   
   const stats = fs.statSync(OUTPUT_FILE);

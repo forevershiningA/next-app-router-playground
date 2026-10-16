@@ -60,6 +60,7 @@ export default function BuyDesignPage() {
   const [loadingProject, setLoadingProject] = useState(true);
   const [placing, setPlacing] = useState(false);
   const [placed, setPlaced] = useState(false);
+  const [confirmedPrice, setConfirmedPrice] = useState<string | null>(null);
   const [error, setError] = useState('');
   const [isLocalhost, setIsLocalhost] = useState(false);
   const testOrderRef = useRef(false);
@@ -171,6 +172,8 @@ export default function BuyDesignPage() {
         const orderData = (await orderRes.json()) as {
           orderId?: string;
           error?: string;
+          totalCents?: number;
+          currency?: string;
         };
         if (!orderRes.ok || !orderData.orderId) {
           setError(orderData.error ?? 'Could not create your order');
@@ -227,10 +230,20 @@ export default function BuyDesignPage() {
         const orderData = (await orderRes.json()) as {
           orderId?: string;
           error?: string;
+          totalCents?: number;
+          currency?: string;
         };
         if (!orderRes.ok || !orderData.orderId) {
           setError(orderData.error ?? 'Could not create your order');
           return;
+        }
+        if (typeof orderData.totalCents === 'number') {
+          setConfirmedPrice(
+            new Intl.NumberFormat('en-AU', {
+              style: 'currency',
+              currency: orderData.currency || 'AUD',
+            }).format(orderData.totalCents / 100),
+          );
         }
         setPlaced(true);
         return;
@@ -268,6 +281,11 @@ export default function BuyDesignPage() {
             Thank you for your order. Our team will review your design and be in
             touch shortly to confirm production details.
           </p>
+          {confirmedPrice && (
+            <p className="mb-8 rounded-lg border border-[#D4A84F]/30 bg-[#D4A84F]/10 px-4 py-3 text-sm">
+              Confirmed order total: <strong>{confirmedPrice}</strong>
+            </p>
+          )}
           <Link
             href="/my-account"
             className="rounded-lg bg-[#D4A84F] px-6 py-2.5 text-sm font-semibold text-black transition hover:bg-[#e0b86a]"
@@ -352,10 +370,14 @@ export default function BuyDesignPage() {
                     </dd>
                   </div>
                   <div className="day:text-[#2a2118] flex items-center justify-between gap-4 pt-1 text-base font-semibold text-white">
-                    <dt>Total</dt>
+                    <dt>Estimated total</dt>
                     <dd className="text-[#D4A84F]">{price ?? 'Price TBD'}</dd>
                   </div>
                 </dl>
+                <p className="day:text-[#786a5a] mt-3 text-xs leading-relaxed text-white/50">
+                  Your final total is recalculated from the saved design on our
+                  server when you place the order, before payment begins.
+                </p>
               </section>
 
               {/* Shipping Details */}

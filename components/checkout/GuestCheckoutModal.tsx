@@ -20,6 +20,8 @@ export default function GuestCheckoutModal({
   const [phone, setPhone] = useState('');
   const [error, setError] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  const [mode, setMode] = useState<'contact' | 'sign-in'>('contact');
+  const [password, setPassword] = useState('');
   const emailRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -30,6 +32,8 @@ export default function GuestCheckoutModal({
   useEffect(() => {
     if (!isOpen) return;
     setError('');
+    setMode('contact');
+    setPassword('');
     setTimeout(() => emailRef.current?.focus(), 50);
   }, [isOpen]);
 
@@ -40,6 +44,23 @@ export default function GuestCheckoutModal({
     setError('');
     setSubmitting(true);
     try {
+      if (mode === 'sign-in') {
+        const response = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password }),
+        });
+        const result = (await response.json()) as { error?: string };
+        if (!response.ok) {
+          throw new Error(
+            result.error || 'Sign in failed. Check your password.',
+          );
+        }
+        window.dispatchEvent(new Event('session-changed'));
+        onSuccess();
+        return;
+      }
+
       const response = await fetch('/api/auth/guest-checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -48,9 +69,11 @@ export default function GuestCheckoutModal({
       const result = (await response.json()) as { status?: string };
       if (!response.ok) {
         if (result.status === 'account_exists') {
-          throw new Error(
-            'An account with this email already exists. Please sign in to continue.',
+          setMode('sign-in');
+          setError(
+            'This email already has an account. Enter your password to continue checkout.',
           );
+          return;
         }
         if (result.status === 'invalid_email')
           throw new Error('Enter a valid email address.');
@@ -75,7 +98,13 @@ export default function GuestCheckoutModal({
 
   return createPortal(
     <div className="day:bg-black/40 fixed inset-0 z-[9999] flex items-center justify-center bg-black/70 p-4">
-      <div className="day:border-gray-200 day:bg-none day:bg-white relative w-full max-w-md rounded-2xl border border-white/20 bg-gradient-to-br from-[#1a1410] to-[#0f0a07] p-6 shadow-2xl">
+      <div
+        data-testid="guest-checkout-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="guest-checkout-title"
+        className="day:border-gray-200 day:bg-none day:bg-white relative w-full max-w-md rounded-2xl border border-white/20 bg-gradient-to-br from-[#1a1410] to-[#0f0a07] p-6 shadow-2xl"
+      >
         <button
           type="button"
           onClick={onClose}
@@ -90,21 +119,31 @@ export default function GuestCheckoutModal({
             <ShoppingCartIcon className="text-primary h-5 w-5" />
           </div>
           <div>
-            <h2 className="font-playfair-display day:text-gray-900 text-lg font-semibold text-white">
+            <h2
+              id="guest-checkout-title"
+              className="font-playfair-display day:text-gray-900 text-lg font-semibold text-white"
+            >
               Proceed to Purchase
             </h2>
             <p className="day:text-gray-500 text-xs text-white/40">
-              Enter your contact details to continue securely.
+              {mode === 'sign-in'
+                ? 'Sign in here and continue without leaving your design.'
+                : 'Enter your contact details to continue securely.'}
             </p>
           </div>
         </div>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="day:text-gray-600 mb-1.5 block text-xs font-medium text-white/60">
+            <label
+              htmlFor="guest-checkout-email"
+              className="day:text-gray-600 mb-1.5 block text-xs font-medium text-white/60"
+            >
               Email
             </label>
             <input
               ref={emailRef}
+              id="guest-checkout-email"
+              name="email"
               type="email"
               required
               value={email}
@@ -113,20 +152,50 @@ export default function GuestCheckoutModal({
               autoComplete="email"
             />
           </div>
-          <div>
-            <label className="day:text-gray-600 mb-1.5 block text-xs font-medium text-white/60">
-              Phone
-            </label>
-            <input
-              type="tel"
-              required
-              value={phone}
-              onChange={(event) => setPhone(event.target.value)}
-              className={inputClass}
-              autoComplete="tel"
-            />
-          </div>
-          {error && <p className="text-xs text-red-400">{error}</p>}
+          {mode === 'sign-in' ? (
+            <div>
+              <label
+                htmlFor="guest-checkout-password"
+                className="day:text-gray-600 mb-1.5 block text-xs font-medium text-white/60"
+              >
+                Password
+              </label>
+              <input
+                id="guest-checkout-password"
+                name="password"
+                type="password"
+                required
+                value={password}
+                onChange={(event) => setPassword(event.target.value)}
+                className={inputClass}
+                autoComplete="current-password"
+              />
+            </div>
+          ) : (
+            <div>
+              <label
+                htmlFor="guest-checkout-phone"
+                className="day:text-gray-600 mb-1.5 block text-xs font-medium text-white/60"
+              >
+                Phone
+              </label>
+              <input
+                type="tel"
+                id="guest-checkout-phone"
+                name="phone"
+                required
+                value={phone}
+                onChange={(event) => setPhone(event.target.value)}
+                className={inputClass}
+                autoComplete="tel"
+              />
+            </div>
+          )}
+          {error && (
+            <p role="alert" className="text-xs text-red-400">
+              {error}
+            </p>
+          )}
           <div className="flex gap-3 pt-1">
             <button
               type="button"
@@ -141,7 +210,11 @@ export default function GuestCheckoutModal({
               disabled={submitting}
               className="border-primary/50 bg-primary/20 text-primary hover:bg-primary/30 flex-1 rounded-lg border px-4 py-2.5 text-sm font-semibold disabled:opacity-50"
             >
-              {submitting ? 'Preparing…' : 'Continue'}
+              {submitting
+                ? 'Preparing…'
+                : mode === 'sign-in'
+                  ? 'Sign in & continue'
+                  : 'Continue'}
             </button>
           </div>
         </form>

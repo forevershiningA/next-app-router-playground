@@ -852,10 +852,17 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
     const applyFixedSizeVariant = (variant: number) => {
       const newSize = Math.min(maxSize, Math.max(1, variant));
       const dims = sizeOptions[newSize - 1];
-      const selectedImg = selectedImages.find((img) => img.id === selectedImageId);
-      const sizeAspectRatio = selectedImg?.croppedAspectRatio || dims.width / dims.height;
+      const selectedImg = selectedImages.find(
+        (img) => img.id === selectedImageId,
+      );
+      const sizeAspectRatio =
+        selectedImg?.croppedAspectRatio || dims.width / dims.height;
       updateImageSizeVariant(selectedImageId, newSize);
-      updateImageSize(selectedImageId, dims.height * sizeAspectRatio, dims.height);
+      updateImageSize(
+        selectedImageId,
+        dims.height * sizeAspectRatio,
+        dims.height,
+      );
     };
     return (
       <div className="space-y-3">
@@ -867,13 +874,17 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
           onChange={handleUpdateUpload}
           className="hidden"
         />
-        <div className="px-1 pt-1 text-sm font-semibold text-white day:text-gray-900">
+        <div className="day:text-gray-900 px-1 pt-1 text-sm font-semibold text-white">
           {selectedImage.typeName}
         </div>
         <div className="flex items-center gap-3 px-1 pt-1">
           <label className={`${labelClass} shrink-0`}>Size</label>
           {hasFixedSizes ? (
-            <select value={currentSizeVariant} onChange={(e) => applyFixedSizeVariant(Number(e.target.value))} className="day:border-gray-300 day:bg-gray-100 day:text-gray-900 min-w-0 flex-1 rounded-md border border-white/10 bg-[#121212] px-3 py-2 text-sm font-semibold text-white outline-none focus:border-[#D7B356]">
+            <select
+              value={currentSizeVariant}
+              onChange={(e) => applyFixedSizeVariant(Number(e.target.value))}
+              className="day:border-gray-300 day:bg-gray-100 day:text-gray-900 min-w-0 flex-1 rounded-md border border-white/10 bg-[#121212] px-3 py-2 text-sm font-semibold text-white outline-none focus:border-[#D7B356]"
+            >
               {sizeOptions.map((size, index) => (
                 <option key={size.label} value={index + 1}>
                   {formatImageSize(size.height * aspectRatio, size.height)}
@@ -1175,8 +1186,12 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                     className={rangeInputClass}
                   />
                   <div className={rangeBoundsClass}>
-                    <span>{formatImageLength(flexibleMinHeight)} {lengthUnit}</span>
-                    <span>{formatImageLength(flexibleMaxHeight)} {lengthUnit}</span>
+                    <span>
+                      {formatImageLength(flexibleMinHeight)} {lengthUnit}
+                    </span>
+                    <span>
+                      {formatImageLength(flexibleMaxHeight)} {lengthUnit}
+                    </span>
                   </div>
                 </div>
               </>
@@ -1187,7 +1202,9 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
             <label className={labelClass}>Position</label>
             <button
               type="button"
-              onClick={() => updateSelectedImagePosition(0, selectedImage.yPos ?? 0)}
+              onClick={() =>
+                updateSelectedImagePosition(0, selectedImage.yPos ?? 0)
+              }
               className="mt-2 mb-3 flex w-full items-center justify-center gap-2 rounded-lg border border-[#D7B356]/70 bg-transparent px-3 py-2 text-sm font-semibold text-[#F2D58B] transition-colors hover:bg-[#D7B356]/15"
             >
               <span aria-hidden="true">↔</span>
@@ -1195,20 +1212,116 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
             </button>
             <div className="grid grid-cols-3 place-items-center gap-1">
               <span />
-              <button type="button" aria-label="Move image up" onClick={() => updateSelectedImagePosition(selectedImage.xPos ?? 0, (selectedImage.yPos ?? 0) + imagePositionStep)} className={`${controlButtonClass} active:scale-90 active:bg-[#D7B356]/20`}>
-                <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}><path d="m18 15-6-6-6 6" strokeLinecap="round" strokeLinejoin="round" /></svg>
+              <button
+                type="button"
+                aria-label="Move image up"
+                onClick={() =>
+                  updateSelectedImagePosition(
+                    selectedImage.xPos ?? 0,
+                    (selectedImage.yPos ?? 0) + imagePositionStep,
+                  )
+                }
+                className={`${controlButtonClass} active:scale-90 active:bg-[#D7B356]/20`}
+              >
+                <svg
+                  className="h-4 w-4"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth={2.5}
+                >
+                  <path
+                    d="m18 15-6-6-6 6"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
               </button>
               <span />
-              <button type="button" aria-label="Move image left" onClick={() => updateSelectedImagePosition((selectedImage.xPos ?? 0) - imagePositionStep, selectedImage.yPos ?? 0)} className={`${controlButtonClass} active:scale-90 active:bg-[#D7B356]/20`}>
-                <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}><path d="m15 18-6-6 6-6" strokeLinecap="round" strokeLinejoin="round" /></svg>
+              <button
+                type="button"
+                aria-label="Move image left"
+                onClick={() =>
+                  updateSelectedImagePosition(
+                    (selectedImage.xPos ?? 0) - imagePositionStep,
+                    selectedImage.yPos ?? 0,
+                  )
+                }
+                className={`${controlButtonClass} active:scale-90 active:bg-[#D7B356]/20`}
+              >
+                <svg
+                  className="h-4 w-4"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth={2.5}
+                >
+                  <path
+                    d="m15 18-6-6 6-6"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
               </button>
-              <button type="button" onClick={() => setNudgeStepIndex((index) => (index + 1) % nudgeSteps.length)} className="rounded px-1.5 py-1 text-xs font-semibold text-[#F2D58B] hover:bg-[#D7B356]/15">{nudgeStep.label}</button>
-              <button type="button" aria-label="Move image right" onClick={() => updateSelectedImagePosition((selectedImage.xPos ?? 0) + imagePositionStep, selectedImage.yPos ?? 0)} className={`${controlButtonClass} active:scale-90 active:bg-[#D7B356]/20`}>
-                <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}><path d="m9 18 6-6-6-6" strokeLinecap="round" strokeLinejoin="round" /></svg>
+              <button
+                type="button"
+                onClick={() =>
+                  setNudgeStepIndex((index) => (index + 1) % nudgeSteps.length)
+                }
+                className="rounded px-1.5 py-1 text-xs font-semibold text-[#F2D58B] hover:bg-[#D7B356]/15"
+              >
+                {nudgeStep.label}
+              </button>
+              <button
+                type="button"
+                aria-label="Move image right"
+                onClick={() =>
+                  updateSelectedImagePosition(
+                    (selectedImage.xPos ?? 0) + imagePositionStep,
+                    selectedImage.yPos ?? 0,
+                  )
+                }
+                className={`${controlButtonClass} active:scale-90 active:bg-[#D7B356]/20`}
+              >
+                <svg
+                  className="h-4 w-4"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth={2.5}
+                >
+                  <path
+                    d="m9 18 6-6-6-6"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
               </button>
               <span />
-              <button type="button" aria-label="Move image down" onClick={() => updateSelectedImagePosition(selectedImage.xPos ?? 0, (selectedImage.yPos ?? 0) - imagePositionStep)} className={`${controlButtonClass} active:scale-90 active:bg-[#D7B356]/20`}>
-                <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}><path d="m6 9 6 6 6-6" strokeLinecap="round" strokeLinejoin="round" /></svg>
+              <button
+                type="button"
+                aria-label="Move image down"
+                onClick={() =>
+                  updateSelectedImagePosition(
+                    selectedImage.xPos ?? 0,
+                    (selectedImage.yPos ?? 0) - imagePositionStep,
+                  )
+                }
+                className={`${controlButtonClass} active:scale-90 active:bg-[#D7B356]/20`}
+              >
+                <svg
+                  className="h-4 w-4"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth={2.5}
+                >
+                  <path
+                    d="m6 9 6 6 6-6"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
               </button>
               <span />
             </div>
@@ -1233,7 +1346,9 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                 <button
                   type="button"
                   onClick={() => {
-                    updateImageRotationDegrees(Math.max(-180, imageRotationDeg - 1));
+                    updateImageRotationDegrees(
+                      Math.max(-180, imageRotationDeg - 1),
+                    );
                   }}
                   className={controlButtonClass}
                   aria-label="Decrease rotation by 1 degree"
@@ -1276,7 +1391,9 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                 <button
                   type="button"
                   onClick={() => {
-                    updateImageRotationDegrees(Math.min(180, imageRotationDeg + 1));
+                    updateImageRotationDegrees(
+                      Math.min(180, imageRotationDeg + 1),
+                    );
                   }}
                   className={controlButtonClass}
                   aria-label="Increase rotation by 1 degree"
@@ -1356,7 +1473,10 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
   }
 
   return (
-    <div className="flex h-full flex-col gap-3">
+    <div
+      data-testid="designer-images-panel"
+      className="flex h-full flex-col gap-3"
+    >
       {/* Hidden file input for image update flow */}
       <input
         ref={updateFileInputRef}
@@ -1382,7 +1502,7 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
             <h3 className="day:text-gray-900 text-sm font-semibold text-white">
               Select image type
             </h3>
-            <span className="day:text-gray-500 text-sm text-white/50">
+            <span className="day:text-gray-600 text-sm text-white/60">
               {imageTypes.length} types
             </span>
           </div>
@@ -1413,7 +1533,7 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                       />
                     </div>
                     <div className="flex min-h-[66px] items-start p-3">
-                      <span className="day:text-gray-900 flex-1 whitespace-pre-line text-xs leading-snug font-semibold text-white">
+                      <span className="day:text-gray-900 flex-1 text-xs leading-snug font-semibold whitespace-pre-line text-white">
                         {getImageTypeLabel(imageType.name)}
                       </span>
                     </div>
@@ -1473,7 +1593,7 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                     <div className="day:text-gray-500 text-[10px] font-semibold tracking-wide text-[#D7B356] uppercase">
                       Selected
                     </div>
-                    <div className="day:text-gray-900 whitespace-pre-line text-sm leading-snug font-semibold text-white">
+                    <div className="day:text-gray-900 text-sm leading-snug font-semibold whitespace-pre-line text-white">
                       {getImageTypeLabel(selectedType.name)}
                     </div>
                   </div>

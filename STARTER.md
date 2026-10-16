@@ -1,9 +1,11 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-10-13
+**Last Updated:** 2026-10-16
 
 **Status entry order:** Add new dated status entries immediately after the table of contents, before the existing status entries. Keep status entries in reverse chronological order (newest first); do not append them to the end of this file.
 **Tech Stack:** Next.js 15.5.26, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots), **Vitest 4.1.8** (unit tests), **Playwright 1.59.1** (E2E tests)
+
+**Active backlog:** `docs/backlog/current.md`. Historical unchecked items below are context, not automatically current work.
 
 ---
 
@@ -129,27 +131,242 @@
 118. [October 10 Polish Traditional Full Monument Demonstrator](#current-status-2026-10-10--polish-traditional-full-monument-demonstrator)
 119. [October 12 Production Audit Remediation, ISR, and Playground Cleanup](#current-status-2026-10-12--production-audit-remediation-isr-and-playground-cleanup)
 120. [October 13 Comprehensive SEO Audit, Technical Remediation & Cleanups](#current-status-2026-10-13--comprehensive-seo-audit-technical-remediation--cleanups)
+121. [October 13 Video Tutorials and Social Content Pipeline](#current-status-2026-10-13--video-tutorials-and-social-content-pipeline)
+122. [October 14 Stage 3 Architecture and Performance Refactor](#current-status-2026-10-14--stage-3-architecture-and-performance-refactor)
+123. [October 16 Stage 5 CSP and Monitoring Foundation](#current-status-2026-10-16--stage-5-csp-and-monitoring-foundation)
+
+---
+
+## Current Status (2026-10-16) — Stage 5 CSP and Monitoring Foundation
+
+### Stage 3 and Stage 4 completion
+
+- The active backlog in `docs/backlog/current.md` marks the `DesignerNav` responsibility split (Stage 3) and the Zustand store domain split (Stage 4) complete.
+- `lib/headstone-store.ts` composes the domain slices. Product selection remains the async orchestration boundary; shared helpers now cover catalog/color normalization, product configuration and dimension derivation, material-option loading, and editing-object visibility fallback.
+- No behavior changes to the public store hook or quote authority were intended by these extractions.
+
+### Stage 5 progress
+
+- CSP is configured in source in **Report-Only** mode through `Content-Security-Policy-Report-Only` in `next.config.ts`. A public production header check on 16 October 2026 found neither `Content-Security-Policy-Report-Only` nor `Reporting-Endpoints`, so this configuration is not live yet. The initial policy includes the known Stripe checkout origins. `img-src` intentionally allows HTTPS origins while reports are collected; review and narrow sources before enforcing the policy.
+- `/api/csp-report` accepts legacy CSP reports and Reporting API payloads, caps request bodies at 16 KiB, and logs summaries with URL query strings removed. Report ingestion is best-effort and does not affect the page response.
+- `instrumentation.ts` uses Next.js `onRequestError` to emit structured runtime-log records for uncaught server request errors. Records include method, path, router/route context, error name, optional digest, and timestamp; they exclude query strings and exception messages.
+- Browser WebGL availability failures and context loss/restoration are reported to `/api/client-webgl-report`. The endpoint accepts only three event types, bounds request bodies to 1 KiB, and logs no URL or customer data.
+- The Sentry Agent Plugin (version 1.4.5) is installed for Codex, and the Sentry MCP is authenticated. The application now uses `@sentry/nextjs` 11.8.0 with client, Node.js, and Edge initialization, request-error capture, route-transition tracing, and a same-origin tunnel at `/sentry-tunnel`.
+- The `forever-shining-nextjs` project is provisioned in the `forever-shining` Sentry organization. `NEXT_PUBLIC_SENTRY_DSN` is documented in `.env.local.example`; `SENTRY_AUTH_TOKEN` is required in CI/deployment to upload source maps. SDK event collection disables user fields, cookies, headers, request bodies, query parameters, database payloads, queue arguments, and local stack variables. The verified event still contained Sentry-derived `user.geo` (city/country), so enable **Prevent Storing of IP Addresses** in the project's Security & Privacy settings before production telemetry if location data must not be retained.
+- Stripe checkout failures and client WebGL loss/unavailable reports send privacy-limited Sentry messages. Existing select-product error boundaries and the root error page report render failures. Other uncaught request errors use the Sentry `onRequestError` hook while retaining the existing structured runtime log.
+- A temporary local API failure was captured and confirmed in Sentry as `FOREVER-SHINING-NEXTJS-1`; the temporary route was removed and the test issue was resolved. Its first-party stack frame points to the application source. The active `Send a notification for high priority issues` workflow emails issue owners; no duplicate alert was created.
+- The verified local Sentry event carries the full Git SHA `558757f19d56fbb3fb66080a1816feb030a87899` as its release. `next.config.ts` now derives the release name from `SENTRY_RELEASE`, `VERCEL_GIT_COMMIT_SHA`, or `GITHUB_SHA`, and asks the Sentry build plugin to record a production deploy only for `VERCEL_ENV=production`. The verified release predates this configuration and currently has no associated commits or deploys. Sentry lists only the `development` environment; no `production` environment or production errors are present yet. Production release creation, source map upload, commit association, and deploy tracking still require `SENTRY_AUTH_TOKEN` in Vercel and verification on the next deploy.
+- `app/privacy/page.tsx` now has a Forever Shining policy draft based on the related Bronze Plaque policy, adapted for this application's account, design, order, Stripe, cookie, and Sentry data flows. `docs/legal/terms-review-prep.md` records counsel checks for the legal entity, contact details, provider disclosures, retention, IP-derived location, and market-specific obligations. Legal review and approval remain outstanding.
+- `docs/operations/email-domain-inventory.md` maps regional reply addresses, BCC routing, SMTP sender overrides, and hard-coded UI addresses. A public DNS spot-check found sender-policy/provider mismatches. The former `support@forevershining.com` links in login and account pages now point to `admin@forevershining.com.au` at the user's direction; ownership and support routing still need confirmation.
+
+### Verification at this checkpoint
+
+- `pnpm type-check`: passing after the browser WebGL reporting addition.
+- `git diff --check`: passing after the current implementation and documentation edits.
+- Targeted ESLint and Prettier checks, plus unit, E2E, and browser tests, were not run during this checkpoint.
+- The repository requires Node `>=22 <23`; this workspace currently runs Node 24.16.0, so pnpm reports an engine warning.
+
+### Remaining operational work
+
+1. Deploy the current CSP configuration, verify that production responses include the Report-Only and Reporting API headers, then review collected reports in production logs, update the policy to match legitimate resources, and decide separately whether to enforce it.
+2. Complete the Terms & Conditions review with qualified legal counsel and record the approved entity/market/version.
+3. Verify mailbox ownership, SMTP sender authorization, SPF/DKIM/DMARC, regional reply routing, and the internal BCC recipient before consolidating email identities.
+4. Enable **Prevent Storing of IP Addresses** in Sentry project Security & Privacy settings. Add `NEXT_PUBLIC_SENTRY_DSN` and `SENTRY_AUTH_TOKEN` to the Vercel production environment. The DSN is public; the auth token must remain a deployment secret. Verify on the next production deploy that source maps upload, commits associate with the full-SHA release, the deploy appears under `production`, and event privacy is correct. Decide whether more alert coverage is needed beyond the active high-priority issue workflow.
+
+---
+
+## Current Status (2026-10-14) — Stage 3 Architecture and Performance Refactor
+
+### Scope and status
+
+- Stage 3 is active. Its goal is to reduce coupling in the designer, establish clear pricing and persistence boundaries, split the Zustand store by domain, and reduce the amount of generated and interactive code compiled on initial page loads.
+- The active checklist is maintained in `docs/backlog/current.md`. This status entry records the architecture already implemented and the intended continuation path.
+- The first refactor deliberately preserves existing UI behaviour and API payloads. Large modules are being split incrementally, with type checking and regression tests after each extraction.
+
+### `DesignerNav` responsibility split
+
+- `components/designer/navigation/DesignerNav.tsx` no longer implements the complete price calculation, WebGL screenshot pipeline, response parsing, and project-save request inline.
+- `lib/estimated-design-pricing.ts` owns the typed client-side estimate used when saving a draft. It returns:
+  - `totalPriceCents`;
+  - the quote currency;
+  - a `PricingBreakdown` containing the headstone, base, additions, motifs, emblems, inscriptions, images, subtotal, tax, and total.
+- `lib/save-designer-project.ts` owns the save workflow:
+  - enables the clean screenshot mode;
+  - waits for the React/Three.js frame to render;
+  - captures the current design snapshot;
+  - calculates the draft estimate;
+  - submits the project to `/api/projects`;
+  - validates the response and returns a typed saved-project result.
+- `lib/designer-screenshot.ts` owns renderer capture, WebGL render-target pixel reading, vertical pixel correction, DOM-canvas fallback, blank-canvas detection, downscaling, white-background compositing, and JPEG encoding.
+- `DesignerNav` now keeps only UI orchestration for this flow: opening and closing the modal, displaying the pending state, and navigating to My Account or purchase after a successful save.
+- Base appearance and flower-pot options for the Select Size panel now live in `components/designer/panels/BaseConfigurationOptions.tsx`. The component reads and updates its own base-specific Zustand state; `DesignerNav` passes only product capability flags.
+- Fixed-size plaque pricing and dimension controls now live in `components/designer/navigation/FixedPlaqueSizeControl.tsx`; `DesignerNav` supplies the current dimensions, fixed-size list, currency, and shared control styles.
+- Shared Width/Height/Thickness/Length number-input and slider cards now live in `components/designer/navigation/DimensionRangeCard.tsx`; the typed props preserve the different mm/display-unit input formats, bounds, mobile range interaction, and compact styles.
+- Select Size target/style controls now live in `components/designer/navigation/SizeTargetSelector.tsx`; mobile adjustment state and range-pointer/focus handlers are isolated in `useSizeAdjustmentControls.ts`.
+- Guided navigation metadata is in `designer-navigation-config.ts`; `useGuidedNavigation.ts` derives product-aware steps, progress, Prev/Next targets, and quick-nav scrolling. Desktop/mobile quick-nav buttons are shared through `GuidedQuickNavItems.tsx`.
+- Fullscreen panel state and open/close browser events are isolated in `useDesignerNavPanelState.ts`. `DesignerNav` still owns product-specific route synchronization and the rendering of the broader desktop/mobile panel shell.
+- Removed dead sidebar-only price/label calculations, unused store selectors, and unconnected view state. Check Price remains the source of displayed quote calculations; no pricing authority changed in this cleanup.
+- `calculateCheckPriceProductPrices()` now returns a dedicated type with guaranteed numeric headstone/base/ledger/kerbset amounts. The function always produces numbers; reusing optional persistence fields from `PricingBreakdown` had incorrectly exposed these amounts as possibly undefined to display consumers.
+- Generated saved-design records now live in `lib/saved-designs-data.json`; the small TypeScript module retains the data types and query helpers. The generator and the categorization/audit/screenshot scripts have been updated to read or write the JSON table.
+- Pricing values/recalculation actions, general UI state/actions, catalog option collections, and monument dimensions/visibility rules have been extracted to `lib/headstone-store/pricing-slice.ts`, `lib/headstone-store/ui-slice.ts`, `lib/headstone-store/catalog-options-slice.ts`, and `lib/headstone-store/product-configuration-slice.ts`, then composed into the existing public store hook. Async product selection/catalog loading and content/scene state remain in the root store for incremental follow-up extraction.
+
+### Pricing boundary established so far
+
+- `lib/pricing-contract.ts` now defines one typed quote result (`totalCents`, currency, breakdown, and an explicit `estimate`/`confirmed` authority). Both designer estimates and server-confirmed order quotes use that contract; saved projects still map the estimate into the existing persistence fields for compatibility. Order and saved-design email paths pass the quote to the shared detailed-item/PDF formatter, while legacy project records continue through its compatibility adapter.
+- `lib/estimated-design-pricing.ts` is explicitly an estimated client-side quote. It is suitable for draft display and persistence but is not trusted for payment.
+- `lib/server/design-pricing.ts` remains the authoritative order-price boundary. It recalculates the order from the stored design snapshot before creating an order or Stripe Checkout session.
+- Uploaded-image prices are now calculated from server-owned XML rules through `lib/authoritative-image-pricing.ts`. Fixed image variants use canonical server dimensions; unknown image types and invalid flexible dimensions are rejected.
+- Addition variant prices are now calculated by `lib/addition-pricing.ts` and reused by the designer estimate, Zustand pricing slice, Check Price item list, and authoritative order quote. This also consistently handles addition IDs that contain underscores before their generated instance suffix.
+- Per-motif amounts and per-line inscription amounts now use shared Check Price helpers, including the free-motif rules for laser products and product 32. The motif editor, inscription editor cost, quote rows, and Zustand pricing slice therefore use the same per-item formulas as the quote total. The additions selector is selection-only and displays no price; selected variant prices appear in Check Price.
+- `lib/check-price-calculations.ts` exposes both focused product/base pricing and the full Check Price quote. The designer Check Price panel, `/check-price` summary, designer and saved-design navigation, 3D product-price label, saved-design estimate, and server-confirmed order quote now use those shared calculations for headstone/fixed-size/urn/stainless-steel pricing, base and full-monument components, additions, motifs, inscriptions, emblems, images, and the stainless border. The server still validates dimensions and image pricing before producing a confirmed quote; tax remains a separate server calculation. The `/check-price` summary itemizes ledger, kerbset, and border amounts and uses selected addition variant prices rather than a flat placeholder.
+- The PDF/email quote formatter now includes full-monument and stainless-border rows from the shared breakdown, and addition rows use their selected size-variant prices rather than a fixed placeholder.
+- Quote authority now remains visible across quote presentations: saved-design pages, PDFs, and saved-design emails say the price is estimated, while confirmed order pricing and invoice emails say it is confirmed. The shared quote display, PDF formatter, and email table all receive or preserve the `estimate`/`confirmed` discriminator.
+- Checkout UI distinguishes `Estimated total` from the server-confirmed order total. `/api/orders` returns the confirmed `totalCents` and currency.
+- Remaining Stage 3 work includes auditing lower-level display-only pricing consumers and moving more designer/store responsibilities behind module boundaries. Do not replace authoritative server calculation with the estimated client module.
+
+### Related conversion-path foundation
+
+- Existing-account customers can sign in inside `GuestCheckoutModal` and continue checkout without leaving the active design.
+- Designer navigation uses contextual previous/next labels.
+- The current design is automatically persisted to IndexedDB by `lib/use-local-design-draft.ts`; an unfinished write activates the browser unload warning.
+- The `No Base` → `Base` camera regression was corrected: mobile Base editing now frames the entire upright assembly rather than only the headstone mesh.
+
+### Verification at this checkpoint
+
+```bash
+pnpm type-check
+pnpm lint
+pnpm test
+pnpm exec playwright test --project=visual-mobile --grep "@smoke"
+git diff --check
+```
+
+- TypeScript: passing after tightening the `calculateCheckPriceProductPrices()` return type to its guaranteed numeric contract and in the latest incremental `DesignerNav` extraction pass.
+- Latest targeted ESLint: no errors; three remaining warnings in `DesignerNav.tsx` (two hook dependency warnings and one `<img>` optimization warning). The project currently declares Node `>=22 <23`; this workspace has Node 24, so pnpm reports an engine warning.
+- Vitest: **122/122 tests passing across 14 files**.
+- Mobile Playwright smoke/accessibility suite: **5/5 passing**.
+- `git diff --check`: passing.
+- The Vitest and Playwright counts above are the last recorded full run; they were not rerun after the most recent incremental navigation extractions. Latest incremental checks were TypeScript, targeted ESLint, and `git diff --check`.
+- New focused coverage is in `tests/unit/estimated-design-pricing.test.ts` and `tests/unit/authoritative-image-pricing.test.ts`.
+
+### Remaining Stage 3 work
+
+1. Continue splitting `DesignerNav.tsx` by extracting the remaining Select Size controls and guided navigation state. Base options, fixed-plaque sizing, shared dimension cards, the Headstone/Base/Ledger/Kerbset plus Upright/Slant selector, mobile size-adjustment state/handlers, guided-navigation metadata, product-aware step derivation, desktop/mobile quick-nav items, and fullscreen-panel route/event state are separate modules. Product-specific route synchronization and the overall panel shell remain in `DesignerNav`; further extraction should preserve their coupling to current route and product conditions. Stale sidebar-only calculations and unused view state were removed.
+2. Split `lib/headstone-store.ts` into product, content, scene, UI, and pricing slices while preserving the public Zustand hook during migration. Pricing, general UI, catalog options, and monument configuration are extracted; async product selection, content, and scene remain in the root store.
+3. Verify and consolidate any remaining quote consumers (notably legacy `ProjectActions` and saved-project totals) against `lib/check-price-calculations.ts`. Authority is now shown in quote displays, saved-design pages, PDFs, and quote/order emails; continue checking any newly discovered presentation paths.
+4. Keep the generated saved-design table in JSON, outside the TypeScript source compilation path. (Done; the current client-side data-loading strategy may still bundle records where a client imports the module.)
+5. Separate static homepage content from interactive client islands and measure the resulting bundle and hydration changes.
+
+### Migration rules
+
+- Keep `calculateEstimatedDesignPricing` and the authoritative server quote visibly distinct until all consumers use the shared quote contract.
+- Preserve existing Zustand selectors while introducing slices; do not require a flag-day rewrite of all components.
+- Keep screenshot work client-only. Modules accessing `window`, canvas, WebGL, or `requestAnimationFrame` must retain the `'use client'` boundary.
+- Validate every extracted slice with TypeScript, targeted ESLint, unit tests, and the designer smoke suite before removing the old implementation.
+
+## Current Status (2026-10-13) — Video Tutorials and Social Content Pipeline
+
+### Purpose and current direction
+
+- The project now has a reusable Playwright/FFmpeg pipeline for recording real interactions in the 3D configurator. It replaces one-off hero-video scripting and supports website tutorials as well as social content.
+- Social content should show real memorial-design use cases, not only generic feature walkthroughs. The first pilot commemorates Peter Higgs by uploading a portrait, adding an inscription, positioning the design, and presenting it with 3D rotation.
+- Reels and other portrait social videos must be captured from the actual mobile UI. Do not record the 1440×900 desktop interface and place it inside a 9:16 frame; that produces small controls and large empty bands.
+
+### Commands and architecture
+
+```bash
+# List registered scenarios
+pnpm video:list
+
+# Render the scenario's default formats
+pnpm video:content -- --scenario peter-higgs-memorial
+
+# Explicit native-mobile social render
+node scripts/render-configurator-video.mjs \
+  --scenario peter-higgs-memorial \
+  --formats vertical \
+  --base-url http://127.0.0.1:3000
+
+# Legacy-compatible homepage hero wrapper
+pnpm video:hero
+```
+
+- `scripts/render-configurator-video.mjs` is the scenario CLI.
+- `scripts/video/capture-engine.mjs` owns browser launch, stable locator-based interaction, cursor/caption overlays, video recording, FFmpeg export, posters, and step diagnostics.
+- `scripts/video/formats.mjs` defines web, landscape, square, and vertical outputs.
+- `scripts/video/scenarios/*.mjs` contains declarative video stories. Registered scenarios currently include the homepage configurator hero, adding an inscription, and the Peter Higgs memorial pilot.
+- `scripts/record-hero-video.mjs` remains as a compatibility wrapper around the shared engine.
+
+### Native portrait capture rules
+
+- The `vertical` format records with a real `432×768` mobile viewport (`isMobile` and touch enabled), then exports to `1080×1920` H.264 MP4 at 30 fps.
+- `public/videos/social/` contains social exports and their WebP posters. The current pilot is `social-peter-higgs-memorial-vertical.mp4`.
+- Mobile and desktop interaction paths can differ. For example, the desktop quick-navigation row is hidden on mobile; use visible mobile navigation controls such as `Previous`/`Next` so client-side design state is preserved.
+- Do not replace client-side navigation with `page.goto()` in the middle of a design scenario when the design exists only in the active Zustand session; a full navigation can lose uploaded images.
+- Keep scenarios below their configured `maxDurationSeconds`. The Peter Higgs scenario uses 50 seconds so the positioning and rotation outro are not truncated.
+
+### Caption and composition rules
+
+- Captions are narrative interstitials, not permanent overlays. Show them briefly between actions and call `hideCaption` before cropping, dragging, editing, or presenting the final design.
+- On viewports below 600 px, capture captions use a compact single-line treatment; the body copy is hidden. A large desktop-style card obscures too much of the mobile configurator.
+- Always inspect representative frames from the actual encoded MP4. At minimum verify crop interaction, object placement, and the final unselected frame; a successful automation run does not guarantee good visual composition.
+- Prefer accessible controls over approximate canvas gestures. The memorial pilot changes the movement increment from 5 mm to 10 mm and repeatedly uses `Move inscription down 10 mm` to place the inscription beneath the portrait. This is more deterministic than dragging at viewport-relative coordinates.
+
+### Mobile rotation controls
+
+- `components/three/ThreeScene.tsx` now exposes the left and right scene-rotation arrow buttons on mobile as well as desktop.
+- Video scenarios should demonstrate rotation by clicking the accessible `Rotate right` and `Rotate left` buttons. This makes the action understandable to viewers and avoids unreliable free-form orbit gestures.
+- Keep the arrows clear of the mobile sheet and use a short pause between clicks so the camera animation is visible in the final recording.
+
+### Tutorial and homepage assets
+
+- The first website tutorial demonstrates adding an inscription. Assets are stored as:
+  - `public/videos/tutorial-add-inscription.webm`
+  - `public/videos/tutorial-add-inscription.mp4`
+  - `public/videos/tutorial-add-inscription-poster.webp`
+- A vertical version and poster are stored in `public/videos/social/`.
+- The homepage tutorial section in `app/_ui/HomeSplash.tsx` uses the real tutorial asset and chapter copy rather than a placeholder.
+
+### Licensed source media
+
+- Source media used by automated scenarios belongs in `assets/video-sources/`, with licensing recorded in `assets/video-sources/README.md`.
+- The Peter Higgs pilot uses `assets/video-sources/peter-higgs.jpg`, sourced from Wikimedia Commons (`DIMG 7516 (11253404824).jpg`, Bengt Nyman, CC BY 2.0). Preserve the attribution if the video is published.
+- User-provided `screen.png` is a visual QA reference. Do not overwrite or revert it as part of automated video generation.
+
+### Verification checklist
+
+```bash
+pnpm exec prettier --check scripts/video scripts/render-configurator-video.mjs
+pnpm type-check
+git diff --check
+```
+
+- Also play the exported MP4 or extract review frames with FFmpeg. Confirm: native 9:16 UI, no desktop letterboxing, captions hidden during interaction, portrait visible, inscription below the portrait, mobile rotation arrows visible, and the complete outro retained.
 
 ---
 
 ## Current Status (2026-10-13) — Comprehensive SEO Audit, Technical Remediation & Cleanups
 
 ### Overview & Motivation
+
 Following the deployment of production ISR fixes, a comprehensive search engine optimization (SEO) audit and Google Search Console (GSC) evaluation was conducted on the entire codebase. The audit identified and resolved several critical indexation blockers, schema compliance risks, crawl budget leaks, and lingering Next.js Playground template residues.
 
 ### Google Search Console (GSC) Data & Performance Insights
+
 - Exported search data in `gsc/` revealed strong organic traction in key target markets:
   - **Geographic breakdown:** United States (3,536 impressions, 82 clicks), Australia (1,559 impressions, 34 clicks), Canada (369 impressions, 12 clicks), and United Kingdom (409 impressions, 8 clicks).
   - **Device distribution:** Including tablets in the total, mobile devices represent **52.9% of impressions and 51.7% of clicks**. Their reported average SERP position was 7.75, compared with 15.85 for desktop; this is a descriptive comparison, not a significance test.
-  - **Rich Results (Search Appearance):** Review snippets (*"Fragment opinii"*) generated **19 clicks and 939 impressions** (CTR 2.02%, avg pos 18.66). Product snippets added 4 clicks and 316 impressions. These are observational segments, not evidence that either enhancement caused the clicks.
+  - **Rich Results (Search Appearance):** Review snippets (_"Fragment opinii"_) generated **19 clicks and 939 impressions** (CTR 2.02%, avg pos 18.66). Product snippets added 4 clicks and 316 impressions. These are observational segments, not evidence that either enhancement caused the clicks.
   - **Top non-brand high-intent queries:** `flower headstone engraving designs` (pos 9.8), `headstones horse designs` (pos 10.6), `butterfly engraving headstone` (pos 13.2), `teddy bear headstone` (CTR 20%, pos 14.4), and `full colour memorial` (105 impressions, pos 11.1).
 
 ### Critical Routing & 404 Resolution
+
 - **`/products` permanent redirect fix:** `app/products/page.tsx` was redirecting to `/memorials`, which did not exist as a physical route (returning HTTP 404).
 - **Created `app/memorials/page.tsx`:** Implemented a full-featured memorial category catalog covering Headstones, Plaques, Full Monuments, Urns, and Pet Memorials. The page includes canonical URL metadata, responsive product cards, and complete JSON-LD structured data (`CollectionPage`, `BreadcrumbList`, and `ItemList`).
-- **Internal PageRank distribution:** Added direct links to `/memorials` (*"All Memorials Catalog"*) in both the homepage footer (`app/_ui/HomeSplash.tsx`) and the memorial pages footer (`app/memorials/[type]/page.tsx`).
+- **Internal PageRank distribution:** Added direct links to `/memorials` (_"All Memorials Catalog"_) in both the homepage footer (`app/_ui/HomeSplash.tsx`) and the memorial pages footer (`app/memorials/[type]/page.tsx`).
 
 ### Template Cruft & Sandbox Cleanup
+
 - **Purged `app/select-size/` template leftovers:**
   - Removed `app/select-size/(main)/` (which previously exposed an unblocked `/select-size/blog` placeholder with gray mock bars and a `/select-size` fake store selling demo mugs and hoodies).
   - Removed `app/select-size/(checkout)/`.
@@ -157,17 +374,20 @@ Following the deployment of production ISR fixes, a comprehensive search engine 
   - Replaced with a clean, headless `app/select-size/page.tsx` that safely returns `null` (matching `inscriptions`), as size adjustment controls are embedded directly in the designer drawer.
 
 ### Schema.org (JSON-LD) Enhancements & Google Guidelines Compliance
+
 - **Removed ineligible design-detail FAQ markup:** The design-detail FAQ existed only inside an SSR fallback that is hidden after client hydration. Both the fallback FAQ and its `FAQPage` markup were removed so structured data does not describe content absent from the normal user experience.
 - **Removed unsupported product offers:** Generic price ranges and `AggregateOffer` objects with `offerCount: 1` were removed from design detail, memorial category, and generated product-template schemas. Offer markup will only be restored when a specific current price is visibly presented on the corresponding page.
 - **Category & Product Type Schemas:** Added `BreadcrumbList`, `CollectionPage`, and `ItemList` JSON-LD schemas to `app/designs/[productType]/[category]/page.tsx` and `app/designs/[productType]/page.tsx`.
 - **Homepage review policy:** Removed self-serving `aggregateRating` markup from `Organization` and `OnlineStore`. The visible Google review section remains as user-facing trust content, without claiming eligibility for organization review stars.
 
 ### Crawl Budget, Robots.txt & Edge Caching
+
 - **`app/robots.ts` crawl budget protection:** Added `disallow` rules for interactive, state-dependent designer steps (`/select-shape`, `/select-border`, `/select-fastening`, `/select-material`, `/select-size`, `/select-motifs`, `/select-images`, `/select-emblems`, `/select-additions`, `/inscriptions`, `/check-price`, `/design-menu`). This prevents search engine bots from wasting crawl budget on empty canvas states.
 - **`app/sitemap.ts` updates:** Added `/memorials`, `/terms`, and `/privacy` to static pages.
 - **`middleware.ts` Edge Cache preservation:** Expanded `isPublicSeoPath` to include `/memorials`, `/terms`, `/privacy`, and `/products/*`, preventing `Set-Cookie: unit_system` from disabling Vercel Edge caching on static SEO routes.
 
 ### OpenGraph, CWV & Trust Signals
+
 - **Fixed `/api/og` endpoint HTTP 500 error:** The route handler was attempting to load `./Inter-SemiBold.ttf` from root `process.cwd()`, causing an unhandled file not found exception on all social preview requests. Corrected path to `app/api/og/Inter-SemiBold.ttf` and updated fallback title from `'App Router Playground'` to `'Forever Shining | Custom Headstones & Memorials'`.
 - **Core Web Vitals LCP improvement:** Replaced unoptimized, un-dimensioned `<img>` tags on design detail pages with Next.js `<Image>` utilizing explicit aspect ratio containers, `priority`, `fill`, and responsive `sizes`.
 - **Responsive Viewport:** Added `width: 'device-width', initialScale: 1` to `viewport` in `app/layout.tsx`.
@@ -178,6 +398,7 @@ Following the deployment of production ISR fixes, a comprehensive search engine 
   - Added legal links to `PublicFooter` across memorial pages.
 
 ### Verification Baseline
+
 - `pnpm type-check` (`tsc --noEmit`): 0 errors.
 - `pnpm lint --quiet` (`eslint . --quiet`): 0 errors.
 - `pnpm test` (`vitest run`): 113/113 unit tests passed.
@@ -16506,6 +16727,6 @@ Both commands pass. Browser rendering still needs to be checked after the next l
 
 ---
 
-_End of STARTER.md - Last updated: 2026-10-12_
+_End of STARTER.md - Last updated: 2026-10-14_
 
 ---

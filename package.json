@@ -1,5 +1,6 @@
 {
   "private": true,
+  "packageManager": "pnpm@9.6.0",
   "scripts": {
     "dev": "next dev",
     "build": "cross-env NODE_OPTIONS=--max-old-space-size=4096 next build",
@@ -53,6 +54,7 @@
     "@react-three/drei": "10.7.4",
     "@react-three/fiber": "9.3.0",
     "@react-three/postprocessing": "3.0.4",
+    "@sentry/nextjs": "11.8.0",
     "@tensorflow/tfjs": "4.22.0",
     "@types/bcryptjs": "2.4.6",
     "@types/mdx": "2.0.13",
@@ -91,6 +93,7 @@
     "zustand": "5.0.8"
   },
   "devDependencies": {
+    "@axe-core/playwright": "4.11.1",
     "@eslint/eslintrc": "3.3.5",
     "@playwright/test": "1.59.1",
     "@tailwindcss/forms": "0.5.10",
@@ -117,7 +120,7 @@
     "vitest": "4.1.8"
   },
   "engines": {
-    "node": ">=18.0.0",
-    "pnpm": ">=8.0.0"
+    "node": ">=22.0.0 <23.0.0",
+    "pnpm": "9.6.0"
   }
 }

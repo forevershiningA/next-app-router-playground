@@ -1,5 +1,7 @@
 import type { PricingBreakdown } from '#/lib/project-schemas';
+import type { DesignQuote, QuoteAuthority } from '#/lib/pricing-contract';
 import { data } from '#/app/_internal/_data';
+import { getAdditionPricing } from '#/lib/addition-pricing';
 import { getMaterialNameFromUrl } from '#/lib/material-utils';
 
 export type PDFQuoteItem = {
@@ -9,6 +11,7 @@ export type PDFQuoteItem = {
 };
 
 export type PDFQuote = {
+  authority: QuoteAuthority;
   currency: string;
   items: PDFQuoteItem[];
   additions: Array<{
@@ -52,6 +55,8 @@ type MinimalProject = {
     productId?: string | null;
     headstoneMaterialUrl?: string | null;
     showBase?: boolean;
+    showLedger?: boolean;
+    showKerbset?: boolean;
     selectedAdditions?: string[];
     additionOffsets?: Record<string, { sizeVariant?: number }>;
     selectedMotifs?: Array<{ id: string; svgPath?: string; color?: string }>;
@@ -70,11 +75,15 @@ const toAssetPath = (path?: string) =>
 const isStainlessSteelHeadstoneProduct = (productId: string | null | undefined) =>
   productId === '1' || productId === '23';
 
-export function buildPdfQuoteFromProject(project: MinimalProject): PDFQuote {
-  const breakdown = project.pricingBreakdown ?? {};
+export function buildPdfQuoteFromProject(
+  project: MinimalProject,
+  quote?: DesignQuote,
+): PDFQuote {
+  const breakdown = quote?.breakdown ?? project.pricingBreakdown ?? {};
   const legacyBreakdown = breakdown as PricingBreakdown & { imagePriceTotal?: number };
-  const totalFromProject = numberOrUndefined(project.totalPriceCents)
-    ? round2((project.totalPriceCents as number) / 100)
+  const totalCents = quote?.totalCents ?? project.totalPriceCents;
+  const totalFromProject = numberOrUndefined(totalCents)
+    ? round2((totalCents as number) / 100)
     : undefined;
 
   const additionsCount = project.designState?.selectedAdditions?.length ?? 0;
@@ -91,6 +100,9 @@ export function buildPdfQuoteFromProject(project: MinimalProject): PDFQuote {
     numberOrUndefined(legacyBreakdown.imagePriceTotal) ??
     0;
   const basePrice = numberOrUndefined(breakdown.basePrice) ?? 0;
+  const ledgerPrice = numberOrUndefined(breakdown.ledgerPrice) ?? 0;
+  const kerbsetPrice = numberOrUndefined(breakdown.kerbsetPrice) ?? 0;
+  const borderPrice = numberOrUndefined(breakdown.borderPrice) ?? 0;
 
   const explicitHeadstonePrice = numberOrUndefined(breakdown.headstonePrice);
   const explicitSubtotal = numberOrUndefined(breakdown.subtotal);
@@ -108,6 +120,9 @@ export function buildPdfQuoteFromProject(project: MinimalProject): PDFQuote {
     const knownWithoutMotifs =
       (numberOrUndefined(breakdown.headstonePrice) ?? 0) +
       basePrice +
+      ledgerPrice +
+      kerbsetPrice +
+      borderPrice +
       additionsPrice +
       inscriptionPrice +
       imagePrice;
@@ -118,20 +133,45 @@ export function buildPdfQuoteFromProject(project: MinimalProject): PDFQuote {
   const derivedSubtotal =
     explicitSubtotal ??
     fallbackSubtotalFromTotal ??
-    round2(basePrice + additionsPrice + motifsPrice + inscriptionPrice + imagePrice);
+      round2(
+        basePrice +
+          ledgerPrice +
+          kerbsetPrice +
+          borderPrice +
+          additionsPrice +
+          motifsPrice +
+          inscriptionPrice +
+          imagePrice,
+      );
 
   const headstonePrice =
     explicitHeadstonePrice ??
     round2(
       Math.max(
         0,
-        derivedSubtotal - (basePrice + additionsPrice + motifsPrice + inscriptionPrice + imagePrice),
+        derivedSubtotal -
+          (basePrice +
+            ledgerPrice +
+            kerbsetPrice +
+            borderPrice +
+            additionsPrice +
+            motifsPrice +
+            inscriptionPrice +
+            imagePrice),
       ),
     );
 
   const subtotal = round2(
     explicitSubtotal ??
-      headstonePrice + basePrice + additionsPrice + motifsPrice + inscriptionPrice + imagePrice,
+      headstonePrice +
+        basePrice +
+        ledgerPrice +
+        kerbsetPrice +
+        borderPrice +
+        additionsPrice +
+        motifsPrice +
+        inscriptionPrice +
+        imagePrice,
   );
   const derivedTaxFromTotal =
     explicitTotal !== undefined ? round2(explicitTotal - subtotal) : undefined;
@@ -148,6 +188,9 @@ export function buildPdfQuoteFromProject(project: MinimalProject): PDFQuote {
   const items: PDFQuoteItem[] = [
     { label: 'Headstone', quantity: 1, amount: headstonePrice },
     ...(project.designState?.showBase ? [{ label: 'Base', quantity: 1, amount: basePrice }] : []),
+    ...(project.designState?.showLedger ? [{ label: 'Ledger Slab', quantity: 1, amount: ledgerPrice }] : []),
+    ...(project.designState?.showKerbset ? [{ label: 'Kerbset Border', quantity: 1, amount: kerbsetPrice }] : []),
+    ...(borderPrice > 0 ? [{ label: 'Stainless Steel Border', quantity: 1, amount: borderPrice }] : []),
     ...(additionsCount > 0 ? [{ label: 'Additions', quantity: additionsCount, amount: additionsPrice }] : []),
     ...(motifsCount > 0 ? [{ label: 'Motifs', quantity: motifsCount, amount: motifsPrice }] : []),
     ...(inscriptionCount > 0
@@ -167,6 +210,7 @@ export function buildPdfQuoteFromProject(project: MinimalProject): PDFQuote {
     const thumbnail =
       dirName && addition?.image ? `/additions/${dirName}/${addition.image}` : undefined;
     const variant = project.designState?.additionOffsets?.[addId]?.sizeVariant ?? 1;
+    const pricing = getAdditionPricing(addId, variant);
     return {
       id: addId,
       productId: baseId,
@@ -174,7 +218,7 @@ export function buildPdfQuoteFromProject(project: MinimalProject): PDFQuote {
       type: addition?.type || 'application',
       variant,
       thumbnail,
-      amount: 75,
+      amount: pricing.price,
     };
   });
 
@@ -223,7 +267,8 @@ export function buildPdfQuoteFromProject(project: MinimalProject): PDFQuote {
     });
 
   return {
-    currency: (project.currency || 'AUD').toUpperCase(),
+    authority: quote?.authority ?? 'estimate',
+    currency: (quote?.currency || project.currency || 'AUD').toUpperCase(),
     items,
     additions,
     motifs,
@@ -231,6 +276,9 @@ export function buildPdfQuoteFromProject(project: MinimalProject): PDFQuote {
     subtotal,
     tax,
     total,
-    note: 'Estimate only. Final pricing may vary based on approvals and production details.',
+    note:
+      quote?.authority === 'confirmed'
+        ? 'Pricing confirmed by the server for this order.'
+        : 'Estimated pricing only. Final pricing is confirmed when the order is placed.',
   };
 }

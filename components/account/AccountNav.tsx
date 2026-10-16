@@ -206,7 +206,7 @@ export default function AccountNav() {
       </div>
       <div className="border-t border-white/8 day:border-gray-200 px-6 py-5 text-sm text-white/70 day:text-gray-600">
         Need assistance?{' '}
-        <a href="mailto:support@forevershining.com" className="text-amber-200 day:text-amber-700 hover:text-white day:hover:text-amber-900">
+        <a href="mailto:admin@forevershining.com.au" className="text-amber-200 day:text-amber-700 hover:text-white day:hover:text-amber-900">
           Email support
         </a>
       </div>

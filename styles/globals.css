@@ -14,6 +14,40 @@
 /* Day/light mode: toggled by setting data-theme="day" on <html> */
 @custom-variant day (&:where([data-theme=day], [data-theme=day] *));
 
+/* Designer UI tokens. Components should consume these semantic values instead
+   of pairing dark utilities with one-off day:* overrides. */
+:root {
+  --designer-surface: #1d1a17;
+  --designer-surface-raised: #29241f;
+  --designer-control: rgba(255, 255, 255, 0.06);
+  --designer-control-hover: rgba(255, 255, 255, 0.11);
+  --designer-text: #f8f4ed;
+  --designer-text-muted: #aaa198;
+  --designer-text-selected: #f3d48f;
+  --designer-border: rgba(255, 255, 255, 0.14);
+  --designer-border-strong: rgba(255, 255, 255, 0.24);
+  --designer-accent: #d7b356;
+  --designer-accent-soft: rgba(215, 179, 86, 0.15);
+  --designer-accent-foreground: #1a1308;
+  --designer-focus: #f3d48f;
+}
+
+html[data-theme='day'] {
+  --designer-surface: #eee9df;
+  --designer-surface-raised: #fbf9f5;
+  --designer-control: #ffffff;
+  --designer-control-hover: #f3ead8;
+  --designer-text: #302719;
+  --designer-text-muted: #6b645c;
+  --designer-text-selected: #6f511c;
+  --designer-border: #d6cec2;
+  --designer-border-strong: #bdb4a6;
+  --designer-accent: #d7b356;
+  --designer-accent-soft: rgba(215, 179, 86, 0.2);
+  --designer-accent-foreground: #1d1a17;
+  --designer-focus: #8a651f;
+}
+
 /* CRITICAL: Prevent text cursor (caret) from appearing anywhere except inputs */
 *,
 *::before,

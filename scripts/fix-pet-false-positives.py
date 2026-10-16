@@ -9,8 +9,9 @@ in inscriptions should NOT be in Pets, even if they have animal motifs.
 
 import re
 import sys
+import json
 
-DATA_FILE = "lib/saved-designs-data.ts"
+DATA_FILE = "lib/saved-designs-data.json"
 
 PRODUCTS = {
     '4': ('Laser-etched Black Granite Headstone', 'laser-etched-headstone'),
@@ -78,32 +79,25 @@ def main():
     dry_run = "--dry-run" in sys.argv
 
     with open(DATA_FILE, "r", encoding="utf-8") as f:
-        content = f.read()
-
-    entry_pattern = re.compile(r'("(\d+)":\s*\{[^}]+\})')
-    entries = entry_pattern.findall(content)
+        designs = json.load(f)
 
     reverted = 0
     kept_pets = 0
 
-    for full_match, design_id in entries:
+    for design_id, design in designs.items():
         # Only check designs currently in pets
-        if '"productSlug": "pets"' not in full_match:
+        if design.get("productSlug") != "pets":
             continue
 
-        pid_m = re.search(r'"productId":\s*"([^"]*)"', full_match)
-        product_id = pid_m.group(1) if pid_m else ""
+        product_id = design.get("productId", "")
 
         # Original pets product (135) stays
         if product_id == "135":
             kept_pets += 1
             continue
 
-        insc_m = re.search(r'"inscriptions":\s*"([^"]*)"', full_match)
-        inscriptions = insc_m.group(1) if insc_m else ""
-        
-        title_m = re.search(r'"title":\s*"([^"]*)"', full_match)
-        title = title_m.group(1) if title_m else ""
+        inscriptions = design.get("inscriptions", "")
+        title = design.get("title", "")
 
         has_family = bool(FAMILY_WORDS.search(inscriptions)) or bool(FAMILY_WORDS.search(title))
 
@@ -116,16 +110,14 @@ def main():
         correct_category = determine_human_category(inscriptions)
 
         if not dry_run:
-            new_entry = full_match
-            new_entry = re.sub(r'"productSlug":\s*"pets"', f'"productSlug": "{orig_slug}"', new_entry)
-            new_entry = re.sub(r'"productName":\s*"Pets"', f'"productName": "{orig_name}"', new_entry)
-            new_entry = re.sub(r'"category":\s*"pet-memorial"', f'"category": "{correct_category}"', new_entry)
-            content = content.replace(full_match, new_entry)
+            designs[design_id] = {
+                **design,
+                "productSlug": orig_slug,
+                "productName": orig_name,
+                "category": correct_category,
+            }
 
-        slug_m = re.search(r'"slug":\s*"([^"]*)"', full_match)
-        slug = slug_m.group(1) if slug_m else "?"
-        cat_m = re.search(r'"category":\s*"([^"]*)"', full_match)
-        old_cat = cat_m.group(1) if cat_m else "?"
+        slug = design.get("slug", "?")
 
         if reverted < 30:
             family_words = FAMILY_WORDS.findall(inscriptions) + FAMILY_WORDS.findall(title)
@@ -145,21 +137,12 @@ def main():
         print(f"\n[DRY RUN] No changes made.")
         return
 
-    # Update stats
-    pets_count = len(re.findall(r'"productSlug":\s*"pets"', content))
-    pet_mem_count = len(re.findall(r'"category":\s*"pet-memorial"', content))
-
-    # Update PRODUCT_STATS for pets
-    content = re.sub(r'"pets":\s*\d+', f'"pets": {pets_count}', content)
-    # Update CATEGORY_STATS for pet-memorial
-    content = re.sub(r'"pet-memorial":\s*\d+', f'"pet-memorial": {pet_mem_count}', content)
-
     with open(DATA_FILE, "w", encoding="utf-8") as f:
-        f.write(content)
+        json.dump(designs, f, separators=(",", ":"))
 
     print(f"\n[APPLIED] {reverted} designs reverted.")
-    print(f"Pets product now has {pets_count} designs.")
-    print(f"pet-memorial category now has {pet_mem_count} designs.")
+    print(f"Pets product now has {sum(1 for design in designs.values() if design.get('productSlug') == 'pets')} designs.")
+    print(f"pet-memorial category now has {sum(1 for design in designs.values() if design.get('category') == 'pet-memorial')} designs.")
 
 
 if __name__ == "__main__":

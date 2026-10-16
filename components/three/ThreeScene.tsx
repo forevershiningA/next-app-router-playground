@@ -14,13 +14,11 @@ import { PerspectiveCamera } from '@react-three/drei';
 import { usePathname } from 'next/navigation';
 import Scene from './Scene';
 import { useHeadstoneStore } from '#/lib/headstone-store';
+import type { CatalogData } from '#/lib/xml-parser';
 import {
-  calculateCatalogPrice,
-  calculatePrice,
-  calculatePricePowerLaw,
-  computeQuantity,
-  type CatalogData,
-} from '#/lib/xml-parser';
+  calculateCheckPriceBorderPrice,
+  calculateCheckPriceProductPrices,
+} from '#/lib/check-price-calculations';
 import { data } from '#/app/_internal/_data';
 import { loadCatalogForProduct } from '#/lib/check-price-utils';
 import { formatDimensionPair } from '#/lib/unit-system';
@@ -38,6 +36,7 @@ import {
 } from '#/lib/headstone-constants';
 import { logger } from '#/lib/logger';
 import { getDesignerStepSlug } from '#/lib/designer-route-state';
+import { reportWebGLEvent } from '#/lib/client-webgl-report';
 
 const STUDIO_BACKDROP_PATHS: Record<string, string> = {
   '#f8f8f8': '/visuals/designer-studio-cyclorama-gallery-white.webp',
@@ -260,6 +259,7 @@ function ProductNameHeader() {
   const imageCost = useHeadstoneStore((s) => s.imageCost);
   const additionCost = useHeadstoneStore((s) => s.additionCost);
   const emblemCost = useHeadstoneStore((s) => s.emblemCost);
+  const borderName = useHeadstoneStore((s) => s.borderName);
   const fixedSizes = useHeadstoneStore((s) => s.fixedSizes);
   const shapes = useHeadstoneStore((s) => s.shapes);
   const setActivePanel = useHeadstoneStore((s) => s.setActivePanel);
@@ -276,13 +276,6 @@ function ProductNameHeader() {
     activeCatalog?.product.type === 'plaque' ||
     activeCatalog?.product.type === 'bronze_plaque' ||
     productId === '5';
-  const selectedShape = useMemo(
-    () =>
-      activeCatalog?.product.shapes.find((shape) => shape.url === shapeUrl) ??
-      activeCatalog?.product.shapes[0] ??
-      null,
-    [activeCatalog, shapeUrl],
-  );
 
   useEffect(() => {
     let cancelled = false;
@@ -330,120 +323,56 @@ function ProductNameHeader() {
     );
   }, [activeCatalog, productId, fallbackProductId, catalog]);
 
-  // Calculate quantity based on catalog's quantity type
-  const quantity = useMemo(() => {
-    if (!activeCatalog) return widthMm * heightMm;
-    return computeQuantity(activeCatalog.product.priceModel, {
-      width: widthMm,
-      height: heightMm,
-      depth: uprightThickness,
-    });
-  }, [activeCatalog, widthMm, heightMm, uprightThickness]);
-
-  // Calculate base quantity
-  const baseQuantity = useMemo(() => {
-    if (!showBase || !activeCatalog?.product?.basePriceModel) return 0;
-    return computeQuantity(activeCatalog.product.basePriceModel, {
-      width: baseWidthMm,
-      height: baseHeightMm,
-      depth: baseThickness,
-    });
-  }, [activeCatalog, baseWidthMm, baseHeightMm, baseThickness, showBase]);
-
-  const isUrnProduct =
-    activeCatalog?.product.type === 'urn' || productId === '2350';
-  const urnShapeCode =
-    isUrnProduct && shapeUrl
-      ? (shapeUrl.split('/').pop()?.replace('.svg', '') ?? null)
-      : null;
-
-  // Calculate total price including inscriptions and motifs
-  const totalPrice = useMemo(() => {
-    let headstonePrice = 0;
-    // Product 52 (YAG Lasered Stainless Steel Plaque): formula-based pricing per finish.
-    // The formula uses cm² (Width_cm × Height_cm), so divide mm² by 100.
-    // The note field selects "brushed" or "polished" price row.
-    if (productId === '52' && activeCatalog) {
-      const pm = activeCatalog.product.priceModel;
-
-      const ssMaterial = headstoneMaterialUrl ?? '';
-      const ssNote = ssMaterial.includes('polished') ? 'polished' : 'brushed';
-      headstonePrice = calculatePricePowerLaw(pm, widthMm * heightMm, ssNote);
-    } else if (productId === '32' && fixedSizes.length > 0) {
-      const isLandscape = widthMm > heightMm;
-      const matchW = isLandscape ? heightMm : widthMm;
-      const matchH = isLandscape ? widthMm : heightMm;
-      headstonePrice =
-        matchW === 200 && matchH === 250
-          ? 648
-          : (fixedSizes.find((s) => s.width === matchW && s.height === matchH)
-              ?.price ?? 0);
-    } else if (activeCatalog) {
-      // Urns: quantity is always 1, price matched by shape code note
-      if (isUrnProduct) {
-        headstonePrice = calculatePrice(
-          activeCatalog.product.priceModel,
-          1,
-          urnShapeCode ?? undefined,
-        );
-      } else {
-        headstonePrice = calculateCatalogPrice(
-          activeCatalog.product.id,
-          activeCatalog.product.priceModel,
-          { width: widthMm, height: heightMm, depth: uprightThickness },
-        );
-      }
-    }
-    const basePrice =
-      showBase && activeCatalog?.product?.basePriceModel
-        ? calculatePrice(activeCatalog.product.basePriceModel, baseQuantity)
-        : 0;
-    const isFullMonument = activeCatalog?.product.type === 'full-monument';
-    const ledgerPrice =
-      isFullMonument && activeCatalog?.product.ledgerPriceModel
-        ? calculatePrice(
-            activeCatalog.product.ledgerPriceModel,
-            selectedShape?.lid?.initWidth || widthMm,
-          )
-        : 0;
-    const kerbsetPrice =
-      isFullMonument && activeCatalog?.product.kerbsetPriceModel
-        ? calculatePrice(
-            activeCatalog.product.kerbsetPriceModel,
-            selectedShape?.kerb?.initWidth || widthMm,
-          )
-        : 0;
-
-    return (
-      headstonePrice +
-      basePrice +
-      ledgerPrice +
-      kerbsetPrice +
-      inscriptionCost +
-      motifCost +
-      imageCost +
-      additionCost +
-      emblemCost
-    );
-  }, [
-    activeCatalog,
-    productId,
-    fixedSizes,
-    quantity,
-    baseQuantity,
-    inscriptionCost,
-    motifCost,
-    imageCost,
-    additionCost,
-    emblemCost,
-    showBase,
-    selectedShape,
-    widthMm,
-    heightMm,
-    isUrnProduct,
-    urnShapeCode,
-    headstoneMaterialUrl,
-  ]);
+  const totalPrice = useMemo(
+    () => {
+      const productPrices = calculateCheckPriceProductPrices({
+        productId,
+        catalog: activeCatalog,
+        shapeUrl,
+        widthMm,
+        heightMm,
+        uprightThickness,
+        headstoneMaterialUrl,
+        fixedSizes,
+        showBase,
+        baseWidthMm,
+        baseHeightMm,
+        baseThickness,
+      });
+      return (
+        productPrices.headstonePrice +
+        productPrices.basePrice +
+        productPrices.ledgerPrice +
+        productPrices.kerbsetPrice +
+        calculateCheckPriceBorderPrice(productId, borderName) +
+        imageCost +
+        inscriptionCost +
+        motifCost +
+        additionCost +
+        emblemCost
+      );
+    },
+    [
+      productId,
+      borderName,
+      activeCatalog,
+      shapeUrl,
+      widthMm,
+      heightMm,
+      uprightThickness,
+      headstoneMaterialUrl,
+      fixedSizes,
+      showBase,
+      baseWidthMm,
+      baseHeightMm,
+      baseThickness,
+      imageCost,
+      inscriptionCost,
+      motifCost,
+      additionCost,
+      emblemCost,
+    ],
+  );
 
   const activeDimension = useMemo(() => {
     switch (editingObject) {
@@ -886,9 +815,11 @@ export default function ThreeScene() {
                 contextLostHandler.current = (event: Event) => {
                   event.preventDefault();
                   console.warn('WebGL context lost, attempting to restore...');
+                  reportWebGLEvent('context-lost');
                 };
 
                 contextRestoredHandler.current = () => {
+                  reportWebGLEvent('context-restored');
                   // Force a re-render
                   window.dispatchEvent(new Event('resize'));
                 };
@@ -939,7 +870,7 @@ export default function ThreeScene() {
               {/* Left Arrow */}
               <button
                 onClick={rotateLeft}
-                className="absolute top-[45%] left-6 hidden h-10 w-10 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full border border-white/20 bg-white/10 shadow-lg backdrop-blur-sm transition-all hover:scale-110 hover:bg-white/20 hover:shadow-xl hover:shadow-[#cfac6c]/50 md:top-1/2 md:left-8 md:flex md:h-12 md:w-12"
+                className="absolute top-[45%] left-3 flex h-10 w-10 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full border border-white/20 bg-white/10 shadow-lg backdrop-blur-sm transition-all hover:scale-110 hover:bg-white/20 hover:shadow-xl hover:shadow-[#cfac6c]/50 md:top-1/2 md:left-8 md:h-12 md:w-12"
                 aria-label="Rotate left"
               >
                 <svg
@@ -960,7 +891,7 @@ export default function ThreeScene() {
               {/* Right Arrow */}
               <button
                 onClick={rotateRight}
-                className="absolute top-[45%] right-6 hidden h-10 w-10 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full border border-white/20 bg-white/10 shadow-lg backdrop-blur-sm transition-all hover:scale-110 hover:bg-white/20 hover:shadow-xl hover:shadow-[#cfac6c]/50 md:top-1/2 md:right-8 md:flex md:h-12 md:w-12"
+                className="absolute top-[45%] right-3 flex h-10 w-10 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full border border-white/20 bg-white/10 shadow-lg backdrop-blur-sm transition-all hover:scale-110 hover:bg-white/20 hover:shadow-xl hover:shadow-[#cfac6c]/50 md:top-1/2 md:right-8 md:h-12 md:w-12"
                 aria-label="Rotate right"
               >
                 <svg

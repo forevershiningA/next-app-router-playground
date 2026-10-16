@@ -59,7 +59,8 @@ export function OrderInvoiceEmail({
             currencySymbol={config.currencySymbol}
             subtotalCents={data.subtotalCents}
             taxCents={data.taxCents}
-            totalLabel={t('total') || 'Total'}
+            authority="confirmed"
+            totalLabel="Confirmed order total"
           />
         </>
       )}

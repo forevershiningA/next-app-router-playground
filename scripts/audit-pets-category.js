@@ -9,7 +9,7 @@
  * Usage:
  *   node scripts/audit-pets-category.js                 # text-only analysis + report
  *   node scripts/audit-pets-category.js --with-images   # also run image classification
- *   node scripts/audit-pets-category.js --apply          # apply reclassification to saved-designs-data.ts
+ *   node scripts/audit-pets-category.js --apply          # apply reclassification to saved-designs-data.json
  */
 
 const fs = require('fs');
@@ -19,59 +19,16 @@ const path = require('path');
 const WITH_IMAGES = process.argv.includes('--with-images');
 const APPLY = process.argv.includes('--apply');
 
-const DATA_FILE = path.join(__dirname, '..', 'lib', 'saved-designs-data.ts');
+const DATA_FILE = path.join(__dirname, '..', 'lib', 'saved-designs-data.json');
 const REPORT_FILE = path.join(__dirname, '..', 'database-exports', 'pets-audit-report.json');
 
-// ── 1. Parse saved-designs-data.ts ──────────────────────────────────────────
+// ── 1. Load generated JSON metadata ─────────────────────────────────────────
 
 function parsePetsDesigns() {
-  const content = fs.readFileSync(DATA_FILE, 'utf-8');
-  const designs = [];
-
-  // Match full design blocks that have productName "Pets"
-  // Each block looks like:  "1673880911330": { ... },
-  const blockRe = /"(\d+)":\s*\{([^}]*"productName":\s*"Pets"[^}]*)\}/g;
-  let m;
-  while ((m = blockRe.exec(content)) !== null) {
-    const id = m[1];
-    const block = m[2];
-    const field = (name) => {
-      const r = new RegExp(`"${name}":\\s*"([^"]*)"`, 's');
-      const fm = block.match(r);
-      return fm ? fm[1] : '';
-    };
-    const boolField = (name) => {
-      const r = new RegExp(`"${name}":\\s*(true|false)`);
-      const fm = block.match(r);
-      return fm ? fm[1] === 'true' : false;
-    };
-    const arrayField = (name) => {
-      const r = new RegExp(`"${name}":\\s*\\[([^\\]]*)\\]`);
-      const fm = block.match(r);
-      if (!fm) return [];
-      return fm[1].match(/"([^"]*)"/g)?.map(s => s.replace(/"/g, '')) || [];
-    };
-
-    designs.push({
-      id,
-      productId: field('productId'),
-      productName: field('productName'),
-      productType: field('productType'),
-      productSlug: field('productSlug'),
-      category: field('category'),
-      slug: field('slug'),
-      title: field('title'),
-      inscriptions: field('inscriptions').replace(/&apos;/g, "'").replace(/&amp;/g, '&'),
-      shapeName: field('shapeName'),
-      preview: field('preview'),
-      mlDir: field('mlDir'),
-      hasPhoto: boolField('hasPhoto'),
-      hasMotifs: boolField('hasMotifs'),
-      motifNames: arrayField('motifNames'),
-    });
-  }
-
-  return designs;
+  const savedDesigns = JSON.parse(fs.readFileSync(DATA_FILE, 'utf-8'));
+  return Object.values(savedDesigns)
+    .filter((design) => design.productName === 'Pets')
+    .map((design) => ({ ...design, inscriptions: design.inscriptions ?? '' }));
 }
 
 // ── 2. Text-based classification ────────────────────────────────────────────
@@ -450,64 +407,27 @@ function determineNewProduct(design) {
   return { productId: '4', productName: 'Laser-etched Black Granite Headstone', productSlug: 'laser-etched-headstone', productType: 'headstone' };
 }
 
-// ── 5. Apply reclassification to saved-designs-data.ts ──────────────────────
+// ── 5. Apply reclassification to saved-designs-data.json ────────────────────
 
 function applyReclassification(reclassifications) {
-  let content = fs.readFileSync(DATA_FILE, 'utf-8');
+  const savedDesigns = JSON.parse(fs.readFileSync(DATA_FILE, 'utf-8'));
   let changeCount = 0;
 
   for (const item of reclassifications) {
     const { id, newCategory, newProduct } = item;
-
-    // Replace category
-    const catRe = new RegExp(
-      `("${id}":\\s*\\{[^}]*"category":\\s*)"([^"]*)"`,
-      's'
-    );
-    if (catRe.test(content)) {
-      content = content.replace(catRe, `$1"${newCategory}"`);
-    }
-
-    // Replace productName
-    const pnRe = new RegExp(
-      `("${id}":\\s*\\{[^}]*"productName":\\s*)"([^"]*)"`,
-      's'
-    );
-    if (pnRe.test(content)) {
-      content = content.replace(pnRe, `$1"${newProduct.productName}"`);
-    }
-
-    // Replace productSlug
-    const psRe = new RegExp(
-      `("${id}":\\s*\\{[^}]*"productSlug":\\s*)"([^"]*)"`,
-      's'
-    );
-    if (psRe.test(content)) {
-      content = content.replace(psRe, `$1"${newProduct.productSlug}"`);
-    }
-
-    // Replace productType
-    const ptRe = new RegExp(
-      `("${id}":\\s*\\{[^}]*"productType":\\s*)"([^"]*)"`,
-      's'
-    );
-    if (ptRe.test(content)) {
-      content = content.replace(ptRe, `$1"${newProduct.productType}"`);
-    }
-
-    // Replace productId
-    const piRe = new RegExp(
-      `("${id}":\\s*\\{[^}]*"productId":\\s*)"([^"]*)"`,
-      's'
-    );
-    if (piRe.test(content)) {
-      content = content.replace(piRe, `$1"${newProduct.productId}"`);
-    }
-
+    if (!savedDesigns[id]) continue;
+    savedDesigns[id] = {
+      ...savedDesigns[id],
+      category: newCategory,
+      productName: newProduct.productName,
+      productSlug: newProduct.productSlug,
+      productType: newProduct.productType,
+      productId: newProduct.productId,
+    };
     changeCount++;
   }
 
-  fs.writeFileSync(DATA_FILE, content, 'utf-8');
+  fs.writeFileSync(DATA_FILE, JSON.stringify(savedDesigns), 'utf-8');
   return changeCount;
 }
 
@@ -654,7 +574,7 @@ async function main() {
   if (APPLY) {
     console.log(`\n── Applying ${reclassifications.length} reclassifications ────────────────`);
     const changed = applyReclassification(reclassifications);
-    console.log(`  ✅ Updated ${changed} designs in saved-designs-data.ts`);
+    console.log(`  ✅ Updated ${changed} designs in saved-designs-data.json`);
     console.log(`  Reclassified from "Pets" → appropriate product/category`);
   } else {
     console.log(`\nTo apply changes, run:  node scripts/audit-pets-category.js --apply`);

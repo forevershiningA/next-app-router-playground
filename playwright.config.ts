@@ -30,20 +30,22 @@ export default defineConfig({
 
   projects: [
     // 1. Auth setup — runs first, saves storageState
-    {
-      name: 'setup',
-      testMatch: /auth\.setup\.ts/,
-    },
+    { name: 'setup', testMatch: /auth\.setup\.ts/ },
 
     // 2. Authenticated tests — depend on auth setup
     {
       name: 'chromium',
-      use: {
-        ...devices['Desktop Chrome'],
-        storageState: AUTH_FILE,
-      },
-      testIgnore: ['**/*.unauth.spec.ts'],
+      use: { ...devices['Desktop Chrome'], storageState: AUTH_FILE },
+      testIgnore: ['**/*.unauth.spec.ts', '**/*.visual.spec.ts'],
       dependencies: ['setup'],
+    },
+
+    // Stable, unauthenticated mobile UI checks. Canvas is excluded from visual
+    // snapshots so WebGL/GPU differences do not make the suite flaky.
+    {
+      name: 'visual-mobile',
+      testMatch: /.*\.visual\.spec\.ts/,
+      use: { ...devices['Pixel 5'], viewport: { width: 357, height: 800 } },
     },
 
     // 3. Unauthenticated tests (API boundary checks, no auth needed)
@@ -59,8 +61,6 @@ export default defineConfig({
     url: BASE_URL,
     reuseExistingServer: !process.env.CI,
     timeout: 120_000,
-    env: {
-      NODE_ENV: 'test',
-    },
+    env: { NODE_ENV: 'test' },
   },
 });

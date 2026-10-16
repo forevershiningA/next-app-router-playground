@@ -7,7 +7,7 @@ const fs = require('fs');
 const path = require('path');
 
 const SAVED_DESIGNS_DIR = path.join(__dirname, '../public/ml/forevershining/saved-designs/json');
-const OUTPUT_FILE = path.join(__dirname, '../lib/saved-designs-data.ts');
+const OUTPUT_FILE = path.join(__dirname, '../lib/saved-designs-data.json');
 
 // Keywords to categorize designs
 const CATEGORY_KEYWORDS = {
@@ -238,21 +238,9 @@ async function processDesigns() {
  * Generate TypeScript file with data
  */
 function generateTypeScriptFile(designs) {
-  console.log('\nGenerating TypeScript file...');
-  
-  const template = fs.readFileSync(OUTPUT_FILE, 'utf8');
-  
-  // Find where to insert the data (replace the entire SAVED_DESIGNS const)
-  const designsJson = JSON.stringify(designs, null, 2);
-  
-  // Match the entire SAVED_DESIGNS declaration including comments
-  const pattern = /export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = \{[\s\S]*?\};/;
-  
-  const replacement = `export const SAVED_DESIGNS: Record<string, SavedDesignMetadata> = ${designsJson};`;
-  
-  const updatedContent = template.replace(pattern, replacement);
-  
-  fs.writeFileSync(OUTPUT_FILE, updatedContent, 'utf8');
+  console.log('\nGenerating saved design JSON...');
+
+  fs.writeFileSync(OUTPUT_FILE, JSON.stringify(designs), 'utf8');
   console.log(`Written ${Object.keys(designs).length} designs to: ${OUTPUT_FILE}`);
   
   // Check file size

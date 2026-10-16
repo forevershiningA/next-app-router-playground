@@ -12,6 +12,7 @@ import {
   getLengthUnitLabel,
 } from '#/lib/unit-system';
 import { useUnitSystem } from '#/lib/use-unit-system';
+import { DesignerOptionButton } from '#/components/designer/ui/DesignerControl';
 
 const FONTS = data.fonts;
 
@@ -260,8 +261,11 @@ export default function InscriptionEditPanel() {
   };
 
   return (
-    <div className="flex flex-col gap-3">
-      <div className="px-1 pt-1 text-sm font-semibold text-slate-100 day:text-gray-800">
+    <div
+      data-testid="designer-inscriptions-panel"
+      className="flex flex-col gap-3"
+    >
+      <div className="day:text-gray-800 px-1 pt-1 text-sm font-semibold text-slate-100">
         {inscriptionPriceModel?.name ?? 'Inscription'}
       </div>
       <div className={`${sectionCardClass} order-1`}>
@@ -330,22 +334,17 @@ export default function InscriptionEditPanel() {
               {availableFonts.map((font) => {
                 const isSelected = (active?.font ?? selectedFont) === font.name;
                 return (
-                  <button
+                  <DesignerOptionButton
                     key={font.id}
-                    type="button"
+                    selected={isSelected}
                     onClick={() => {
                       if (active) updateLine(active.id, { font: font.name });
                       else setSelectedFont(font.name);
                     }}
-                    className={`shrink-0 rounded-lg border px-4 py-2 text-sm transition-colors ${
-                      isSelected
-                        ? 'border-2 border-[#D7B356] bg-[#D7B356]/15 text-[#f3d48f]'
-                        : 'border-white/15 bg-white/[0.05] text-white/75'
-                    }`}
                     style={{ fontFamily: font.name }}
                   >
                     {font.name}
-                  </button>
+                  </DesignerOptionButton>
                 );
               })}
             </div>

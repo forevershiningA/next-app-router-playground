@@ -1,5 +1,4 @@
 const role = (name) => ({ by: 'role', role: 'button', name, first: true });
-const quickNav = (slug) => ({ by: 'quickNav', slug });
 
 export const peterHiggsMemorialScenario = Object.freeze({
   id: 'peter-higgs-memorial',
@@ -7,7 +6,7 @@ export const peterHiggsMemorialScenario = Object.freeze({
   route: '/laser-etched-black-granite-headstone/select-images?capture=social',
   outputBaseName: 'social-peter-higgs-memorial',
   defaultFormats: ['vertical'],
-  maxDurationSeconds: 40,
+  maxDurationSeconds: 50,
   posterTimeSeconds: 1.4,
   steps: [
     { action: 'pause', ms: 900 },
@@ -18,13 +17,15 @@ export const peterHiggsMemorialScenario = Object.freeze({
       body: 'A concept created in the Forever Shining 3D memorial designer.',
       afterMs: 1900,
     },
+    { action: 'hideCaption', afterMs: 300 },
     {
       action: 'caption',
       eyebrow: 'Step 1',
       title: 'Choose a lasting portrait',
       body: 'Laser etching transforms a photograph into a permanent granite image.',
-      afterMs: 400,
+      afterMs: 1000,
     },
+    { action: 'hideCaption', afterMs: 300 },
     { action: 'click', target: role('Granite Image'), afterMs: 500 },
     {
       action: 'upload',
@@ -41,8 +42,9 @@ export const peterHiggsMemorialScenario = Object.freeze({
       eyebrow: 'Step 2',
       title: 'Frame the portrait',
       body: 'The crop and finish are previewed before the image is placed.',
-      afterMs: 500,
+      afterMs: 1200,
     },
+    { action: 'hideCaption', afterMs: 300 },
     { action: 'click', target: role(/^Square$/i), afterMs: 500 },
     {
       action: 'dragRange',
@@ -67,18 +69,19 @@ export const peterHiggsMemorialScenario = Object.freeze({
     },
     {
       action: 'dragCanvas',
-      from: { x: 0.57, y: 0.72 },
-      delta: { x: 0, y: -125 },
-      afterMs: 800,
+      from: { x: 0.5, y: 0.62 },
+      delta: { x: 0, y: -70 },
+      afterMs: 700,
     },
     {
       action: 'caption',
       eyebrow: 'Step 3',
       title: 'Tell the story in a few words',
       body: 'A name, a lifetime and a line that reflects what they gave the world.',
-      afterMs: 500,
+      afterMs: 1200,
     },
-    { action: 'click', target: quickNav('inscriptions') },
+    { action: 'hideCaption', afterMs: 300 },
+    { action: 'click', target: role(/^Previous$/i) },
     { action: 'waitForUrl', url: /\/inscriptions(?:\?|$)/ },
     {
       action: 'waitForVisible',
@@ -99,15 +102,28 @@ export const peterHiggsMemorialScenario = Object.freeze({
       afterMs: 700,
     },
     {
+      action: 'click',
+      target: role(/^Change movement step, currently 5 mm$/i),
+      afterMs: 350,
+    },
+    {
+      action: 'repeatClick',
+      target: role(/^Move inscription down 10 mm$/i),
+      count: 10,
+      intervalMs: 90,
+      afterMs: 700,
+    },
+    {
       action: 'caption',
       eyebrow: 'Created in 3D',
       title: 'Every life deserves a personal tribute',
       body: 'Design, refine and view the memorial from every angle.',
-      afterMs: 600,
+      afterMs: 1800,
     },
-    { action: 'click', target: role('Rotate right'), fast: true, afterMs: 900 },
-    { action: 'click', target: role('Rotate left'), fast: true, afterMs: 800 },
     { action: 'hideCaption', afterMs: 400 },
+    { action: 'click', target: role('Rotate right'), fast: true, afterMs: 700 },
+    { action: 'click', target: role('Rotate right'), fast: true, afterMs: 700 },
+    { action: 'click', target: role('Rotate left'), fast: true, afterMs: 700 },
     { action: 'clickCanvas', at: { x: 0.92, y: 0.18 }, afterMs: 2600 },
   ],
 });

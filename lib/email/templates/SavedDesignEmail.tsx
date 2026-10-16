@@ -57,7 +57,7 @@ export function SavedDesignEmail({
         </Text>
         <Text style={heroCopy}>
           We&apos;ve saved <strong>&ldquo;{data.designName}&rdquo;</strong> to
-          your account. Your personalised quote is below. You can return to it
+          your account. Your personalised estimate is below. You can return to it
           whenever you are ready.
         </Text>
       </Section>
@@ -98,7 +98,8 @@ export function SavedDesignEmail({
           currency={data.currency}
           currencySymbol={config.currencySymbol}
           currencySide={config.currencySide}
-          totalLabel={t('total') || 'Total'}
+          authority="estimate"
+          totalLabel="Estimated total"
           quoteStyle="ruled"
         />
       )}
