@@ -12,6 +12,11 @@ export const configuratorHeroScenario = Object.freeze({
   title: 'Create a personalised memorial',
   route: '/traditional-engraved-headstone/select-material?capture=hero',
   outputBaseName: 'configurator-hero',
+  zoomPhases: [
+    { start: 50, inEnd: 75, outStart: 160, end: 185 },
+    { start: 280, inEnd: 310, outStart: 390, end: 420 },
+    { start: 625, inEnd: 655, outStart: 755, end: 785 },
+  ],
   defaultFormats: ['web'],
   maxDurationSeconds: 64,
   posterTimeSeconds: 1.5,

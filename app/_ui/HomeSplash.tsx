@@ -234,8 +234,8 @@ export default function HomeSplash() {
                 id="home-heading"
                 className="!mb-0 scroll-mt-24 !pb-0 font-serif text-[2rem] leading-[1.12] tracking-[-0.025em] text-[#1d1a17] sm:text-[2.75rem] lg:text-5xl lg:leading-[1.08]"
               >
-                Design Custom Headstones
-                <br className="hidden lg:block" /> &amp; Memorial Plaques
+                Design a Custom Headstone
+                <br className="hidden lg:block" /> or Memorial Plaque
               </h1>
               <p className="mt-5 max-w-lg text-base leading-7 text-pretty text-[#625a51] sm:text-lg sm:leading-8">
                 Choose the stone, shape, inscription, and meaningful details in

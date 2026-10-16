@@ -54,12 +54,27 @@ export function parseFormats(value, defaults = ['web']) {
   return formats;
 }
 
-export function createVideoFilter(formatName) {
+export function createVideoFilter(formatName, options = {}) {
   const format = VIDEO_FORMATS[formatName];
   if (!format) throw new Error(`Unknown video format: ${formatName}`);
   const { width, height, fps } = format;
-  return (
+  const fitFilter =
     `fps=${fps},scale=${width}:${height}:force_original_aspect_ratio=decrease,` +
-    `pad=${width}:${height}:(ow-iw)/2:(oh-ih)/2:color=17130f`
+    `pad=${width}:${height}:(ow-iw)/2:(oh-ih)/2:color=17130f`;
+  if (!options.zoomPhases?.length) return fitFilter;
+
+  const escapeExpression = (expression) => expression.replaceAll(',', '\\,');
+  const phaseExpressions = options.zoomPhases.map(
+    ({ start, inEnd, outStart, end }) => {
+      const progress = `((on-${start})/(${inEnd}-${start}))`;
+      const retreat = `((${end}-on)/(${end}-${outStart}))`;
+      const easeIn = `(${progress}*${progress}*(3-2*${progress}))`;
+      const easeOut = `(${retreat}*${retreat}*(3-2*${retreat}))`;
+      return `if(lt(on,${start}),0,if(lt(on,${inEnd}),${easeIn},if(lt(on,${outStart}),1,if(lt(on,${end}),${easeOut},0))))`;
+    },
   );
+  const zoom = `1+0.42*(${phaseExpressions.join('+')})`;
+  const previewPhase = phaseExpressions[1] ?? '0';
+  const panX = `(iw-iw/zoom)*0.94*${previewPhase}`;
+  return `${fitFilter},zoompan=z='${escapeExpression(zoom)}':x='${escapeExpression(panX)}':y='(ih-ih/zoom)/2':d=1:s=${width}x${height}:fps=${fps},setsar=1`;
 }

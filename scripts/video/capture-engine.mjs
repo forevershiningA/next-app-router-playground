@@ -393,7 +393,9 @@ async function exportFormat({
   const baseName = `${scenario.outputBaseName}${format.suffix}`;
   const mp4Output = path.join(targetDir, `${baseName}.mp4`);
   const posterOutput = path.join(targetDir, `${baseName}-poster.webp`);
-  const videoFilter = createVideoFilter(formatName);
+  const videoFilter = createVideoFilter(formatName, {
+    zoomPhases: scenario.zoomPhases,
+  });
   const commonInput = [
     '-y',
     '-ss',

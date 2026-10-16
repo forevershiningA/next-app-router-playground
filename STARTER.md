@@ -133,7 +133,26 @@
 120. [October 13 Comprehensive SEO Audit, Technical Remediation & Cleanups](#current-status-2026-10-13--comprehensive-seo-audit-technical-remediation--cleanups)
 121. [October 13 Video Tutorials and Social Content Pipeline](#current-status-2026-10-13--video-tutorials-and-social-content-pipeline)
 122. [October 14 Stage 3 Architecture and Performance Refactor](#current-status-2026-10-14--stage-3-architecture-and-performance-refactor)
-123. [October 16 Stage 5 CSP and Monitoring Foundation](#current-status-2026-10-16--stage-5-csp-and-monitoring-foundation)
+123. [October 16 Homepage Hero Copy, Cinematic Preview, and Runtime](#current-status-2026-10-16--homepage-hero-copy-cinematic-preview-and-runtime)
+124. [October 16 Stage 5 CSP and Monitoring Foundation](#current-status-2026-10-16--stage-5-csp-and-monitoring-foundation)
+
+---
+
+## Current Status (2026-10-16) — Homepage Hero Copy, Cinematic Preview, and Runtime
+
+### Homepage hero and configurator video
+
+- The hero headline now reads “Design a Custom Headstone or Memorial Plaque” to describe designing one product at a time.
+- The hero video keeps its full frame at rest; the temporary always-on CSS zoom was removed. Reduced-motion users see the static designer preview image.
+- `scripts/video/scenarios/configurator-hero.mjs` defines three smooth zoom-and-return phases: the shape controls, the 3D headstone preview, and the controls again. `scripts/video/formats.mjs` builds the FFmpeg `zoompan` filter, and `scripts/video/capture-engine.mjs` applies scenario zoom phases during video and poster export.
+- `pnpm video:hero` completed successfully and regenerated `public/videos/configurator-hero.mp4`, `.webm`, and `-poster.webp`. The captured clip is about 38 seconds after startup footage is trimmed. Sample frames were reviewed to confirm the full view and the control/3D close-ups.
+- The production build completed with existing `jose` Edge Runtime warnings about `CompressionStream` and `DecompressionStream`; static generation completed for all 123 pages.
+
+### Vercel runtime and package manager checkpoint
+
+- The app declares Node `>=22 <23` and `pnpm@9.6.0` in `package.json`. Vercel's earlier Node 20 deprecation warning prompted the Node runtime update; a later build log used Node 22 and the user confirmed the Vercel build passed.
+- An earlier Vercel install failed because it used pnpm 9.15.9 while the project requires 9.6.0. A later build succeeded, but the exact dashboard or project-setting change was not confirmed; verify Vercel continues to use pnpm 9.6.0 on subsequent builds.
+- This Windows workspace currently uses Node 24.16.0, outside the declared engine range, so local pnpm commands may print an engine warning. The production build and hero-video generation nevertheless completed successfully here.
 
 ---
 
@@ -147,7 +166,7 @@
 
 ### Stage 5 progress
 
-- CSP is configured in source in **Report-Only** mode through `Content-Security-Policy-Report-Only` in `next.config.ts`. A public production header check on 16 October 2026 found neither `Content-Security-Policy-Report-Only` nor `Reporting-Endpoints`, so this configuration is not live yet. The initial policy includes the known Stripe checkout origins. `img-src` intentionally allows HTTPS origins while reports are collected; review and narrow sources before enforcing the policy.
+- CSP is deployed in **Report-Only** mode through `Content-Security-Policy-Report-Only` in `next.config.ts`. A public production header check on 16 October 2026 now confirms both `Content-Security-Policy-Report-Only` and `Reporting-Endpoints`. The initial policy includes the known Stripe checkout origins. `img-src` intentionally allows HTTPS origins while reports are collected; review and narrow sources before enforcing the policy.
 - `/api/csp-report` accepts legacy CSP reports and Reporting API payloads, caps request bodies at 16 KiB, and logs summaries with URL query strings removed. Report ingestion is best-effort and does not affect the page response.
 - `instrumentation.ts` uses Next.js `onRequestError` to emit structured runtime-log records for uncaught server request errors. Records include method, path, router/route context, error name, optional digest, and timestamp; they exclude query strings and exception messages.
 - Browser WebGL availability failures and context loss/restoration are reported to `/api/client-webgl-report`. The endpoint accepts only three event types, bounds request bodies to 1 KiB, and logs no URL or customer data.
@@ -155,7 +174,7 @@
 - The `forever-shining-nextjs` project is provisioned in the `forever-shining` Sentry organization. `NEXT_PUBLIC_SENTRY_DSN` is documented in `.env.local.example`; `SENTRY_AUTH_TOKEN` is required in CI/deployment to upload source maps. SDK event collection disables user fields, cookies, headers, request bodies, query parameters, database payloads, queue arguments, and local stack variables. The verified event still contained Sentry-derived `user.geo` (city/country), so enable **Prevent Storing of IP Addresses** in the project's Security & Privacy settings before production telemetry if location data must not be retained.
 - Stripe checkout failures and client WebGL loss/unavailable reports send privacy-limited Sentry messages. Existing select-product error boundaries and the root error page report render failures. Other uncaught request errors use the Sentry `onRequestError` hook while retaining the existing structured runtime log.
 - A temporary local API failure was captured and confirmed in Sentry as `FOREVER-SHINING-NEXTJS-1`; the temporary route was removed and the test issue was resolved. Its first-party stack frame points to the application source. The active `Send a notification for high priority issues` workflow emails issue owners; no duplicate alert was created.
-- The verified local Sentry event carries the full Git SHA `558757f19d56fbb3fb66080a1816feb030a87899` as its release. `next.config.ts` now derives the release name from `SENTRY_RELEASE`, `VERCEL_GIT_COMMIT_SHA`, or `GITHUB_SHA`, and asks the Sentry build plugin to record a production deploy only for `VERCEL_ENV=production`. The verified release predates this configuration and currently has no associated commits or deploys. Sentry lists only the `development` environment; no `production` environment or production errors are present yet. Production release creation, source map upload, commit association, and deploy tracking still require `SENTRY_AUTH_TOKEN` in Vercel and verification on the next deploy.
+- The verified local Sentry event carries the full Git SHA `558757f19d56fbb3fb66080a1816feb030a87899` as its release. `next.config.ts` derives release names from `SENTRY_RELEASE`, `VERCEL_GIT_COMMIT_SHA`, or `GITHUB_SHA`, and records deploys only for `VERCEL_ENV=production`. The 16 October production build created release `c7cc87a72bdf6338db9bad7ee285871b996cb539`; `build-logs.txt` confirms successful Node.js, Edge, and Client source map uploads. After GitHub integration was added and the production deployment was repeated, Sentry associated ten commits with this release and recorded a second production deploy. The Vercel Sentry auth token and release commit association are working. Source-map symbolication still needs confirmation against a production event.
 - `app/privacy/page.tsx` now has a Forever Shining policy draft based on the related Bronze Plaque policy, adapted for this application's account, design, order, Stripe, cookie, and Sentry data flows. `docs/legal/terms-review-prep.md` records counsel checks for the legal entity, contact details, provider disclosures, retention, IP-derived location, and market-specific obligations. Legal review and approval remain outstanding.
 - `docs/operations/email-domain-inventory.md` maps regional reply addresses, BCC routing, SMTP sender overrides, and hard-coded UI addresses. A public DNS spot-check found sender-policy/provider mismatches. The former `support@forevershining.com` links in login and account pages now point to `admin@forevershining.com.au` at the user's direction; ownership and support routing still need confirmation.
 
@@ -168,10 +187,10 @@
 
 ### Remaining operational work
 
-1. Deploy the current CSP configuration, verify that production responses include the Report-Only and Reporting API headers, then review collected reports in production logs, update the policy to match legitimate resources, and decide separately whether to enforce it.
+1. Review collected CSP reports in production logs, update the policy to match legitimate resources, and decide separately whether to enforce it. The production response headers were verified on 16 October 2026.
 2. Complete the Terms & Conditions review with qualified legal counsel and record the approved entity/market/version.
 3. Verify mailbox ownership, SMTP sender authorization, SPF/DKIM/DMARC, regional reply routing, and the internal BCC recipient before consolidating email identities.
-4. Enable **Prevent Storing of IP Addresses** in Sentry project Security & Privacy settings. Add `NEXT_PUBLIC_SENTRY_DSN` and `SENTRY_AUTH_TOKEN` to the Vercel production environment. The DSN is public; the auth token must remain a deployment secret. Verify on the next production deploy that source maps upload, commits associate with the full-SHA release, the deploy appears under `production`, and event privacy is correct. Decide whether more alert coverage is needed beyond the active high-priority issue workflow.
+4. Enable **Prevent Storing of IP Addresses** in Sentry project Security & Privacy settings. Keep `SENTRY_AUTH_TOKEN` in Vercel as a deployment secret. Source maps uploaded successfully for Node.js, Edge, and Client, and the production release now has ten associated commits. Verify source-map symbolication when a production event is available, and confirm event privacy. Decide whether more alert coverage is needed beyond the active high-priority issue workflow.
 
 ---
 

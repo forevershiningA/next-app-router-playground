@@ -1,0 +1,352 @@
+13:13:03.076 Running build in Cleveland, USA (East) – cle1
+13:13:03.077 Build machine configuration: 4 cores, 8 GB
+13:13:03.091 Cloning github.com/forevershiningA/next-app-router-playground (Branch: main, Commit: c7cc87a)
+13:13:03.092 Skipping build cache, deployment was triggered without cache.
+13:17:11.298 Cloning completed: 4:08.207 (m:ss.mmm)
+13:17:16.049 Found .vercelignore
+13:17:24.581 Removed 132471 ignored files defined in .vercelignore
+13:17:24.581   /.env.test.local.example
+13:17:24.581   /.github/copilot-instructions.md
+13:17:24.581   /app/designs/[productType]/[category]/[slug]/DesignPageClient.tsx.backup
+13:17:24.581   /archive/app/_hooks/_components/router-context-layout.tsx
+13:17:24.581   /archive/app/_hooks/_components/router-context.tsx
+13:17:24.581   /archive/app/_hooks/[section]/[category]/page.tsx
+13:17:24.581   /archive/app/_hooks/[section]/layout.tsx
+13:17:24.581   /archive/app/_hooks/[section]/page.tsx
+13:17:24.581   /archive/app/_hooks/[section]/template.tsx
+13:17:24.581   /archive/app/_hooks/layout.tsx
+13:17:28.490 Running "vercel build"
+13:17:28.498 Vercel CLI 64.0.2
+13:17:42.459 > Detected ENABLE_EXPERIMENTAL_COREPACK=1 and "pnpm@9.6.0" in package.json
+13:17:43.686 Installing dependencies...
+13:17:43.990 ! Corepack is about to download https://registry.npmjs.org/pnpm/-/pnpm-9.6.0.tgz
+13:17:44.836 Lockfile is up to date, resolution step is skipped
+13:17:44.899 Progress: resolved 1, reused 0, downloaded 0, added 0
+13:17:44.977 Packages: +872
+13:17:44.978 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+13:17:45.899 Progress: resolved 872, reused 0, downloaded 167, added 152
+13:17:46.901 Progress: resolved 872, reused 0, downloaded 272, added 259
+13:17:47.901 Progress: resolved 872, reused 0, downloaded 329, added 329
+13:17:48.901 Progress: resolved 872, reused 0, downloaded 340, added 341
+13:17:49.902 Progress: resolved 872, reused 0, downloaded 368, added 357
+13:17:50.902 Progress: resolved 872, reused 0, downloaded 379, added 367
+13:17:51.901 Progress: resolved 872, reused 0, downloaded 393, added 376
+13:17:52.902 Progress: resolved 872, reused 0, downloaded 396, added 380
+13:17:53.902 Progress: resolved 872, reused 0, downloaded 440, added 428
+13:17:54.902 Progress: resolved 872, reused 0, downloaded 513, added 503
+13:17:55.904 Progress: resolved 872, reused 0, downloaded 786, added 773
+13:17:56.359 Progress: resolved 872, reused 0, downloaded 871, added 872, done
+13:17:56.557 .../node_modules/@tailwindcss/oxide postinstall$ node ./scripts/install.js
+13:17:56.594 .../esbuild@0.27.3/node_modules/esbuild postinstall$ node install.js
+13:17:56.594 .../esbuild@0.18.20/node_modules/esbuild postinstall$ node install.js
+13:17:56.595 .../esbuild@0.25.12/node_modules/esbuild postinstall$ node install.js
+13:17:56.618 .../node_modules/unrs-resolver postinstall$ napi-postinstall unrs-resolver 1.11.1 check
+13:17:56.687 .../esbuild@0.27.3/node_modules/esbuild postinstall: Done
+13:17:56.716 .../node_modules/@tailwindcss/oxide postinstall: Done
+13:17:56.724 .../esbuild@0.18.20/node_modules/esbuild postinstall: Done
+13:17:56.725 .../node_modules/ffmpeg-static install$ node install.js
+13:17:56.794 .../node_modules/unrs-resolver postinstall: Done
+13:17:56.794 .../esbuild@0.25.12/node_modules/esbuild postinstall: Done
+13:17:56.801 .../sharp@0.34.5/node_modules/sharp install$ node install/check.js || npm run build
+13:17:56.843 .../core-js@3.29.1/node_modules/core-js postinstall$ node -e "try{require('./postinstall')}catch(e){}"
+13:17:56.847 .../core-js@3.48.0/node_modules/core-js postinstall$ node -e "try{require('./postinstall')}catch(e){}"
+13:17:56.934 .../core-js@3.29.1/node_modules/core-js postinstall: Done
+13:17:56.954 .../core-js@3.48.0/node_modules/core-js postinstall: Done
+13:17:57.008 .../sharp@0.34.5/node_modules/sharp install: Done
+13:17:57.657 .../node_modules/ffmpeg-static install: Done
+13:17:58.157 
+13:17:58.157 dependencies:
+13:17:58.157 + @heroicons/react 2.2.0
+13:17:58.157 + @mdx-js/loader 3.1.1
+13:17:58.157 + @mdx-js/react 3.1.1
+13:17:58.157 + @neondatabase/serverless 1.1.0
+13:17:58.157 + @next/mdx 15.5.26
+13:17:58.157 + @react-email/components 1.0.12
+13:17:58.157 + @react-three/drei 10.7.4
+13:17:58.157 + @react-three/fiber 9.3.0
+13:17:58.157 + @react-three/postprocessing 3.0.4
+13:17:58.157 + @sentry/nextjs 11.8.0
+13:17:58.157 + @tensorflow/tfjs 4.22.0
+13:17:58.157 + @types/bcryptjs 2.4.6
+13:17:58.157 + @types/mdx 2.0.13
+13:17:58.157 + @types/three 0.180.0
+13:17:58.157 + @xmldom/xmldom 0.8.11
+13:17:58.157 + bcryptjs 3.0.3
+13:17:58.157 + clsx 2.1.1
+13:17:58.158 + codehike 1.0.7
+13:17:58.158 + date-fns 4.1.0
+13:17:58.158 + dinero.js 2.0.0-alpha.10
+13:17:58.158 + dotenv 17.3.1
+13:17:58.158 + drizzle-orm 0.45.1
+13:17:58.158 + flowbite 3.1.2
+13:17:58.158 + framer-motion 12.23.28
+13:17:58.158 + jose 6.2.0
+13:17:58.158 + jspdf 4.2.0
+13:17:58.158 + linkedom 0.18.12
+13:17:58.158 + ms 3.0.0-canary.1
+13:17:58.158 + next 15.5.26
+13:17:58.158 + nodemailer 8.0.5
+13:17:58.158 + pg 8.19.0
+13:17:58.158 + pngjs 7.0.0
+13:17:58.158 + postgres 3.4.8
+13:17:58.158 + react 19.1.2
+13:17:58.158 + react-dom 19.1.2
+13:17:58.158 + recharts 3.8.1
+13:17:58.158 + recma-codehike 0.0.1
+13:17:58.158 + remark-codehike 0.0.1
+13:17:58.158 + server-only 0.0.1
+13:17:58.158 + sharp 0.34.5
+13:17:58.158 + stripe 22.1.1
+13:17:58.158 + tailwind-merge 3.4.0
+13:17:58.158 + three 0.180.0
+13:17:58.158 + use-count-up 3.0.1
+13:17:58.158 + zod 4.1.5
+13:17:58.158 + zustand 5.0.8
+13:17:58.158 
+13:17:58.158 devDependencies:
+13:17:58.158 + @axe-core/playwright 4.11.1
+13:17:58.158 + @eslint/eslintrc 3.3.5
+13:17:58.158 + @playwright/test 1.59.1
+13:17:58.159 + @tailwindcss/forms 0.5.10
+13:17:58.159 + @tailwindcss/postcss 4.1.13
+13:17:58.159 + @tailwindcss/typography 0.5.16
+13:17:58.159 + @types/ms 2.1.0
+13:17:58.159 + @types/node 24.3.1
+13:17:58.159 + @types/nodemailer 8.0.0
+13:17:58.159 + @types/react 19.1.12
+13:17:58.159 + @types/react-dom 19.1.9
+13:17:58.159 + @vitest/coverage-v8 4.1.8
+13:17:58.159 + cross-env 10.1.0
+13:17:58.159 + drizzle-kit 0.31.9
+13:17:58.159 + eslint 9.18.0
+13:17:58.159 + eslint-config-next 16.2.1
+13:17:58.159 + ffmpeg-static 5.3.0
+13:17:58.159 + playwright 1.59.1
+13:17:58.159 + postcss 8.5.6
+13:17:58.159 + prettier 3.6.2
+13:17:58.159 + prettier-plugin-tailwindcss 0.6.14
+13:17:58.159 + tailwindcss 4.1.13
+13:17:58.159 + tsx 4.21.0
+13:17:58.159 + typescript 5.9.2
+13:17:58.159 + vitest 4.1.8
+13:17:58.159 
+13:17:58.199 Done in 13.7s
+13:17:58.270 Detected Next.js version: 15.5.26
+13:17:58.285 Running "pnpm run build"
+13:17:58.655 
+13:17:58.655 > @ build /vercel/path0
+13:17:58.655 > cross-env NODE_OPTIONS=--max-old-space-size=4096 next build
+13:17:58.655 
+13:18:00.324 Attention: Next.js now collects completely anonymous telemetry regarding usage.
+13:18:00.325 This information is used to shape Next.js' roadmap and prioritize features.
+13:18:00.325 You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
+13:18:00.325 https://nextjs.org/telemetry
+13:18:00.325 
+13:18:00.438    ▲ Next.js 15.5.26
+13:18:00.438    - Experiments (use with caution):
+13:18:00.438      ✓ useCache
+13:18:00.438      · clientTraceMetadata
+13:18:00.438      · optimizePackageImports
+13:18:00.438 
+13:18:00.533    Creating an optimized production build ...
+13:18:01.000 [@sentry/nextjs - Node.js] Info: Sending telemetry data on issues and performance to Sentry. To disable telemetry, set `options.telemetry` to `false`.
+13:22:26.120 (node:202) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+13:22:26.120 (Use `node --trace-warnings ...` to show where the warning was created)
+13:22:34.377 [@sentry/nextjs - Node.js] Info: Successfully uploaded source maps to Sentry
+13:22:53.289 [@sentry/nextjs - Edge] Info: Sending telemetry data on issues and performance to Sentry. To disable telemetry, set `options.telemetry` to `false`.
+13:23:05.336 [@sentry/nextjs - Edge] Info: Successfully uploaded source maps to Sentry
+13:23:06.268 [@sentry/nextjs - Client] Info: Sending telemetry data on issues and performance to Sentry. To disable telemetry, set `options.telemetry` to `false`.
+13:23:43.546 (node:202) MaxListenersExceededWarning: Possible EventEmitter memory leak detected. 11 SIGTERM listeners added to [process]. MaxListeners is 10. Use emitter.setMaxListeners() to increase limit
+13:23:51.914 [@sentry/nextjs - Client] Info: Successfully uploaded source maps to Sentry
+13:24:03.818  ⚠ Compiled with warnings in 6.0min
+13:24:03.819 
+13:24:03.819 ./node_modules/.pnpm/jose@6.2.0/node_modules/jose/dist/webapi/lib/deflate.js
+13:24:03.819 A Node.js API is used (CompressionStream at line: 10) which is not supported in the Edge Runtime.
+13:24:03.819 Learn more: https://nextjs.org/docs/api-reference/edge-runtime
+13:24:03.819 
+13:24:03.819 Import trace for requested module:
+13:24:03.819 ./node_modules/.pnpm/jose@6.2.0/node_modules/jose/dist/webapi/lib/deflate.js
+13:24:03.819 ./node_modules/.pnpm/jose@6.2.0/node_modules/jose/dist/webapi/jwe/flattened/decrypt.js
+13:24:03.819 ./node_modules/.pnpm/jose@6.2.0/node_modules/jose/dist/webapi/index.js
+13:24:03.819 ./lib/auth/session.ts
+13:24:03.819 
+13:24:03.819 ./node_modules/.pnpm/jose@6.2.0/node_modules/jose/dist/webapi/lib/deflate.js
+13:24:03.819 A Node.js API is used (DecompressionStream at line: 26) which is not supported in the Edge Runtime.
+13:24:03.819 Learn more: https://nextjs.org/docs/api-reference/edge-runtime
+13:24:03.819 
+13:24:03.819 Import trace for requested module:
+13:24:03.819 ./node_modules/.pnpm/jose@6.2.0/node_modules/jose/dist/webapi/lib/deflate.js
+13:24:03.819 ./node_modules/.pnpm/jose@6.2.0/node_modules/jose/dist/webapi/jwe/flattened/decrypt.js
+13:24:03.819 ./node_modules/.pnpm/jose@6.2.0/node_modules/jose/dist/webapi/index.js
+13:24:03.819 ./lib/auth/session.ts
+13:24:03.819 
+13:24:03.825    Skipping linting
+13:24:03.825    Checking validity of types ...
+13:24:38.916    Collecting page data ...
+13:25:06.125    Generating static pages (0/123) ...
+13:25:07.542    Generating static pages (30/123) 
+13:25:08.377    Generating static pages (61/123) 
+13:25:08.686    Generating static pages (92/123) 
+13:25:11.765  ✓ Generating static pages (123/123)
+13:25:16.707    Finalizing page optimization ...
+13:25:16.707    Collecting build traces ...
+13:25:46.843 
+13:25:46.862 Route (app)                                                                                       Size  First Load JS  Revalidate  Expire
+13:25:46.862 ┌ ○ /                                                                                          9.24 kB         190 kB
+13:25:46.862 ├ ○ /_not-found                                                                                  494 B         173 kB
+13:25:46.863 ├ ƒ /[productSlug]/[designerStep]                                                              1.65 kB         377 kB
+13:25:46.863 ├ ƒ /[productSlug]/select-shape                                                                1.18 kB         315 kB
+13:25:46.863 ├ ○ /account/details                                                                           4.09 kB         312 kB
+13:25:46.863 ├ ○ /account/invoices                                                                          4.16 kB         312 kB
+13:25:46.863 ├ ƒ /admin                                                                                      123 kB         299 kB
+13:25:46.863 ├ ƒ /admin/customers                                                                             356 B         176 kB
+13:25:46.863 ├ ƒ /admin/customers/[id]                                                                        357 B         176 kB
+13:25:46.863 ├ ƒ /admin/customers/new                                                                       2.63 kB         178 kB
+13:25:46.863 ├ ƒ /admin/designs                                                                             3.56 kB         308 kB
+13:25:46.863 ├ ƒ /admin/enquiries                                                                             395 B         176 kB
+13:25:46.863 ├ ƒ /admin/orders                                                                              1.02 kB         177 kB
+13:25:46.863 ├ ƒ /admin/orders/[id]                                                                           396 B         176 kB
+13:25:46.863 ├ ƒ /admin/orders/[id]/edit                                                                    3.36 kB         179 kB
+13:25:46.863 ├ ƒ /admin/orders/[id]/invoice                                                                 1.16 kB         177 kB
+13:25:46.863 ├ ƒ /admin/orders/new                                                                          4.38 kB         180 kB
+13:25:46.863 ├ ƒ /admin/payments                                                                              356 B         176 kB
+13:25:46.863 ├ ƒ /admin/payments/new                                                                        2.18 kB         178 kB
+13:25:46.863 ├ ƒ /admin/system                                                                                395 B         176 kB
+13:25:46.863 ├ ƒ /api/account/invoice                                                                         496 B         173 kB
+13:25:46.863 ├ ƒ /api/account/profile                                                                         494 B         173 kB
+13:25:46.863 ├ ƒ /api/admin/customers                                                                         496 B         173 kB
+13:25:46.863 ├ ƒ /api/admin/customers/search                                                                  495 B         173 kB
+13:25:46.863 ├ ƒ /api/admin/orders                                                                            494 B         173 kB
+13:25:46.864 ├ ƒ /api/admin/payments                                                                          496 B         173 kB
+13:25:46.864 ├ ƒ /api/auth/forgot-password                                                                    495 B         173 kB
+13:25:46.864 ├ ƒ /api/auth/guest-checkout                                                                     496 B         173 kB
+13:25:46.864 ├ ƒ /api/auth/login                                                                              495 B         173 kB
+13:25:46.864 ├ ƒ /api/auth/logout                                                                             495 B         173 kB
+13:25:46.864 ├ ƒ /api/auth/register                                                                           495 B         173 kB
+13:25:46.864 ├ ƒ /api/auth/reset-password                                                                     497 B         173 kB
+13:25:46.864 ├ ƒ /api/auth/session                                                                            495 B         173 kB
+13:25:46.864 ├ ƒ /api/cache-svg                                                                               496 B         173 kB
+13:25:46.864 ├ ƒ /api/catalog/backgrounds                                                                     497 B         173 kB
+13:25:46.864 ├ ○ /api/catalog/designer-options                                                                495 B         173 kB          1d      1y
+13:25:46.864 ├ ƒ /api/catalog/sizes                                                                           495 B         173 kB
+13:25:46.864 ├ ƒ /api/checkout/stripe                                                                         495 B         173 kB
+13:25:46.864 ├ ƒ /api/client-webgl-report                                                                     493 B         173 kB
+13:25:46.864 ├ ƒ /api/csp-report                                                                              496 B         173 kB
+13:25:46.864 ├ ƒ /api/design/[id]                                                                             495 B         173 kB
+13:25:46.864 ├ ƒ /api/email                                                                                   496 B         173 kB
+13:25:46.864 ├ ƒ /api/enquiries                                                                               494 B         173 kB
+13:25:46.864 ├ ƒ /api/exchange-rates                                                                          495 B         173 kB
+13:25:46.864 ├ ƒ /api/favorite-designs                                                                        495 B         173 kB
+13:25:46.864 ├ ƒ /api/hidden-designs                                                                          495 B         173 kB
+13:25:46.865 ├ ƒ /api/motifs/[...path]                                                                        495 B         173 kB
+13:25:46.865 ├ ƒ /api/motifs/db                                                                               496 B         173 kB
+13:25:46.865 ├ ƒ /api/og                                                                                      496 B         173 kB
+13:25:46.865 ├ ƒ /api/orders                                                                                  496 B         173 kB
+13:25:46.865 ├ ƒ /api/orders/[id]                                                                             496 B         173 kB
+13:25:46.865 ├ ƒ /api/orders/[id]/export-svg                                                                  496 B         173 kB
+13:25:46.865 ├ ƒ /api/orders/[id]/items/[itemId]                                                              395 B         176 kB
+13:25:46.865 ├ ƒ /api/orders/[id]/send-supplier                                                               395 B         176 kB
+13:25:46.865 ├ ƒ /api/projects                                                                                495 B         173 kB
+13:25:46.865 ├ ƒ /api/projects/[id]                                                                           495 B         173 kB
+13:25:46.865 ├ ƒ /api/seed-materials                                                                          496 B         173 kB
+13:25:46.865 ├ ƒ /api/share/[token]/verify                                                                    496 B         173 kB
+13:25:46.865 ├ ƒ /api/share/create                                                                            495 B         173 kB
+13:25:46.865 ├ ƒ /api/share/email                                                                             495 B         173 kB
+13:25:46.865 ├ ƒ /api/upload-background                                                                       494 B         173 kB
+13:25:46.865 ├ ƒ /api/upload-image                                                                            495 B         173 kB
+13:25:46.865 ├ ƒ /api/upload/crop                                                                             495 B         173 kB
+13:25:46.865 ├ ƒ /api/upload/image                                                                            496 B         173 kB
+13:25:46.865 ├ ƒ /api/webhooks/stripe                                                                         494 B         173 kB
+13:25:46.865 ├ ○ /apple-icon.png                                                                                0 B            0 B
+13:25:46.865 ├ ○ /check-price                                                                                 773 B         322 kB
+13:25:46.865 ├ ○ /design-menu                                                                                 494 B         173 kB
+13:25:46.865 ├ ƒ /design/[id]                                                                               3.33 kB         308 kB
+13:25:46.865 ├ ƒ /designs                                                                                   1.53 kB         183 kB
+13:25:46.865 ├ ● /designs/[productType]                                                                     1.04 kB         182 kB          1d      1y
+13:25:46.865 ├   ├ /designs/laser-etched-headstone                                                                                          1d      1y
+13:25:46.865 ├   ├ /designs/traditional-headstone                                                                                           1d      1y
+13:25:46.865 ├   ├ /designs/bronze-plaque                                                                                                   1d      1y
+13:25:46.865 ├   └ [+8 more paths]
+13:25:46.865 ├ ● /designs/[productType]/[category]                                                          1.53 kB         183 kB
+13:25:46.865 ├ ● /designs/[productType]/[category]/[slug]                                                     31 kB         820 kB
+13:25:46.865 ├ ○ /designs/guide/buying-guide                                                                  395 B         176 kB
+13:25:46.865 ├ ○ /designs/guide/cemetery-regulations                                                          395 B         176 kB
+13:25:46.865 ├ ○ /designs/guide/design-your-own                                                               394 B         176 kB
+13:25:46.865 ├ ○ /designs/guide/pricing                                                                       395 B         176 kB
+13:25:46.865 ├ ○ /icon.png                                                                                      0 B            0 B
+13:25:46.865 ├ ○ /inscriptions                                                                                395 B         172 kB
+13:25:46.865 ├ ƒ /inscriptions/[section]                                                                    2.65 kB         309 kB
+13:25:46.865 ├ ƒ /inscriptions/[section]/[category]                                                         2.65 kB         309 kB
+13:25:46.865 ├ ○ /login                                                                                     2.13 kB         178 kB
+13:25:46.865 ├ ○ /memorials                                                                                   362 B         181 kB
+13:25:46.866 ├ ● /memorials/[type]                                                                          3.52 kB         185 kB
+13:25:46.866 ├   ├ /memorials/headstones
+13:25:46.866 ├   ├ /memorials/plaques
+13:25:46.866 ├   ├ /memorials/full-monuments
+13:25:46.866 ├   └ [+2 more paths]
+13:25:46.866 ├ ○ /my-account                                                                                 9.3 kB         318 kB
+13:25:46.866 ├ ƒ /my-account/designs/[id]                                                                    137 kB         446 kB
+13:25:46.866 ├ ƒ /my-account/designs/[id]/buy                                                               7.26 kB         183 kB
+13:25:46.866 ├ ○ /my-account/details                                                                        3.81 kB         179 kB
+13:25:46.866 ├ ○ /my-account/invoice                                                                        3.06 kB         179 kB
+13:25:46.866 ├ ○ /orders                                                                                    3.68 kB         179 kB
+13:25:46.866 ├ ○ /privacy                                                                                     395 B         176 kB
+13:25:46.866 ├ ○ /products                                                                                    495 B         173 kB
+13:25:46.866 ├ ● /products/[productSlug]                                                                      396 B         176 kB
+13:25:46.866 ├   ├ /products/bronze-plaque
+13:25:46.866 ├   ├ /products/laser-etched-black-granite-headstone
+13:25:46.866 ├   └ /products/traditional-engraved-headstone
+13:25:46.866 ├ ● /products/[productSlug]/[templateType]/[venue]/[inscription]                                 396 B         176 kB
+13:25:46.866 ├   ├ /products/bronze-plaque/dedication/the-science-hall/knowledge-is-the-seed-of-progress
+13:25:46.866 ├   ├ /products/bronze-plaque/dedication/memorial-garden/in-loving-memory-of-those-who-served
+13:25:46.866 ├   ├ /products/bronze-plaque/dedication/community-center/built-with-pride-for-our-community
+13:25:46.866 ├   └ [+7 more paths]
+13:25:46.866 ├ ○ /robots.txt                                                                                  495 B         173 kB
+13:25:46.866 ├ ○ /select-additions                                                                            496 B         173 kB
+13:25:46.867 ├ ○ /select-border                                                                               609 B         173 kB
+13:25:46.867 ├ ○ /select-emblems                                                                            2.64 kB         309 kB
+13:25:46.867 ├ ○ /select-fastening                                                                            394 B         172 kB
+13:25:46.867 ├ ○ /select-images                                                                               495 B         173 kB
+13:25:46.867 ├ ƒ /select-material                                                                           1.83 kB         359 kB
+13:25:46.867 ├ ƒ /select-material/[section]                                                                 2.65 kB         309 kB
+13:25:46.867 ├ ○ /select-motifs                                                                               495 B         173 kB
+13:25:46.867 ├ ○ /select-product                                                                            6.19 kB         313 kB         15m      1y
+13:25:46.867 ├ ● /select-product/[section]                                                                  2.65 kB         309 kB         15m      1y
+13:25:46.867 ├   ├ /select-product/shapes                                                                                                  15m      1y
+13:25:46.867 ├   ├ /select-product/materials                                                                                               15m      1y
+13:25:46.867 ├   ├ /select-product/motifs                                                                                                  15m      1y
+13:25:46.867 ├   └ [+2 more paths]
+13:25:46.867 ├ ● /select-product/[section]/[category]                                                       2.65 kB         309 kB         15m      1y
+13:25:46.867 ├   ├ /select-product/1/shapes                                                                                                15m      1y
+13:25:46.867 ├   ├ /select-product/2/materials                                                                                             15m      1y
+13:25:46.867 ├   ├ /select-product/3/motifs                                                                                                15m      1y
+13:25:46.867 ├   └ [+2 more paths]
+13:25:46.867 ├ ƒ /select-shape                                                                              1.18 kB         315 kB
+13:25:46.867 ├ ƒ /select-shape/[section]                                                                    2.65 kB         309 kB
+13:25:46.867 ├ ○ /select-size                                                                                 394 B         172 kB
+13:25:46.867 ├ ○ /seo                                                                                         495 B         173 kB
+13:25:46.867 ├ ƒ /shared/[token]                                                                            1.66 kB         177 kB
+13:25:46.867 ├ ○ /sitemap.xml                                                                                 495 B         173 kB          1d      1y
+13:25:46.867 └ ○ /terms                                                                                       395 B         176 kB
+13:25:46.867 + First Load JS shared by all                                                                   172 kB
+13:25:46.867   ├ chunks/2384-046133bfa9194a9f.js                                                             112 kB
+13:25:46.868   ├ chunks/e048b936-784212dddf769218.js                                                        54.4 kB
+13:25:46.868   └ other shared chunks (total)                                                                5.23 kB
+13:25:46.868 
+13:25:46.868 
+13:25:46.868 ƒ Middleware                                                                                   92.8 kB
+13:25:46.868 
+13:25:46.868 ○  (Static)   prerendered as static content
+13:25:46.868 ●  (SSG)      prerendered as static HTML (uses generateStaticParams)
+13:25:46.868 ƒ  (Dynamic)  server-rendered on demand
+13:25:46.868 
+13:25:47.526 Traced Next.js server files in: 225.861ms
+13:25:54.063 Created all serverless functions in: 6.536s
+13:26:05.629 Collected static files (public/, static/, .next/static): 11.234s
+13:28:41.522 Build Completed in /vercel/output [11m]
+13:28:41.652 Deploying outputs...
+13:30:39.961 Deployment completed
+13:30:40.671 Creating build cache...
+13:31:23.472 Created build cache: 43s
+13:31:23.472 Uploading build cache [699.22 MB]
+13:31:33.122 Build cache uploaded: 9.650s
