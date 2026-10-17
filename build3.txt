@@ -1,0 +1,80 @@
+19:31:18.049 Running build in Cleveland, USA (East) – cle1
+19:31:18.050 Build machine configuration: 4 cores, 8 GB
+19:31:18.147 Cloning github.com/forevershiningA/next-app-router-playground (Branch: main, Commit: fd35840)
+19:35:27.611 Cloning completed: 4:09.464 (m:ss.mmm)
+19:35:31.928 Found .vercelignore
+19:35:39.497 Removed 132747 ignored files defined in .vercelignore
+19:35:39.497   /.env.test.local.example
+19:35:39.497   /.github/copilot-instructions.md
+19:35:39.497   /app/designs/[productType]/[category]/[slug]/DesignPageClient.tsx.backup
+19:35:39.497   /archive/app/_hooks/_components/router-context-layout.tsx
+19:35:39.497   /archive/app/_hooks/_components/router-context.tsx
+19:35:39.497   /archive/app/_hooks/[section]/[category]/page.tsx
+19:35:39.497   /archive/app/_hooks/[section]/layout.tsx
+19:35:39.497   /archive/app/_hooks/[section]/page.tsx
+19:35:39.497   /archive/app/_hooks/[section]/template.tsx
+19:35:39.497   /archive/app/_hooks/layout.tsx
+19:35:40.560 Restored build cache from previous deployment (GkpUHvYeGNXHsBhPthiFo2KhYrt5)
+19:35:43.101 Running "vercel build"
+19:35:43.112 Vercel CLI 64.0.2
+19:35:52.951 > Detected ENABLE_EXPERIMENTAL_COREPACK=1 and "pnpm@9.6.0" in package.json
+19:35:53.145 Installing dependencies...
+19:35:53.749 Lockfile is up to date, resolution step is skipped
+19:35:54.027 Already up to date
+19:35:55.107 
+19:35:55.148 Done in 1.9s
+19:35:55.173 Detected Next.js version: 15.5.26
+19:35:55.197 Running "pnpm run build"
+19:35:55.567 
+19:35:55.567 > @ build /vercel/path0
+19:35:55.567 > cross-env NODE_OPTIONS=--max-old-space-size=4096 next build
+19:35:55.567 
+19:35:57.445    ▲ Next.js 15.5.26
+19:35:57.445    - Experiments (use with caution):
+19:35:57.445      ✓ useCache
+19:35:57.445      · clientTraceMetadata
+19:35:57.445      · optimizePackageImports
+19:35:57.445 
+19:35:57.586    Creating an optimized production build ...
+19:35:58.070 [@sentry/nextjs - Node.js] Info: Sending telemetry data on issues and performance to Sentry. To disable telemetry, set `options.telemetry` to `false`.
+19:39:46.774 (node:96) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+19:39:46.775 (Use `node --trace-warnings ...` to show where the warning was created)
+19:39:53.352 [@sentry/nextjs - Node.js] Info: Successfully uploaded source maps to Sentry
+19:40:11.560 [@sentry/nextjs - Edge] Info: Sending telemetry data on issues and performance to Sentry. To disable telemetry, set `options.telemetry` to `false`.
+19:40:19.182 [@sentry/nextjs - Edge] Info: Successfully uploaded source maps to Sentry
+19:40:19.711 [@sentry/nextjs - Client] Info: Sending telemetry data on issues and performance to Sentry. To disable telemetry, set `options.telemetry` to `false`.
+19:40:41.184 (node:96) MaxListenersExceededWarning: Possible EventEmitter memory leak detected. 11 SIGTERM listeners added to [process]. MaxListeners is 10. Use emitter.setMaxListeners() to increase limit
+19:40:44.169 [@sentry/nextjs - Client] Info: Successfully uploaded source maps to Sentry
+19:40:54.895  ⚠ Compiled with warnings in 4.9min
+19:40:54.895 
+19:40:54.895 ./node_modules/.pnpm/jose@6.2.0/node_modules/jose/dist/webapi/lib/deflate.js
+19:40:54.895 A Node.js API is used (CompressionStream at line: 10) which is not supported in the Edge Runtime.
+19:40:54.895 Learn more: https://nextjs.org/docs/api-reference/edge-runtime
+19:40:54.895 
+19:40:54.895 Import trace for requested module:
+19:40:54.895 ./node_modules/.pnpm/jose@6.2.0/node_modules/jose/dist/webapi/lib/deflate.js
+19:40:54.895 ./node_modules/.pnpm/jose@6.2.0/node_modules/jose/dist/webapi/jwe/flattened/decrypt.js
+19:40:54.895 ./node_modules/.pnpm/jose@6.2.0/node_modules/jose/dist/webapi/index.js
+19:40:54.895 ./lib/auth/session.ts
+19:40:54.895 
+19:40:54.895 ./node_modules/.pnpm/jose@6.2.0/node_modules/jose/dist/webapi/lib/deflate.js
+19:40:54.896 A Node.js API is used (DecompressionStream at line: 26) which is not supported in the Edge Runtime.
+19:40:54.896 Learn more: https://nextjs.org/docs/api-reference/edge-runtime
+19:40:54.896 
+19:40:54.896 Import trace for requested module:
+19:40:54.896 ./node_modules/.pnpm/jose@6.2.0/node_modules/jose/dist/webapi/lib/deflate.js
+19:40:54.896 ./node_modules/.pnpm/jose@6.2.0/node_modules/jose/dist/webapi/jwe/flattened/decrypt.js
+19:40:54.896 ./node_modules/.pnpm/jose@6.2.0/node_modules/jose/dist/webapi/index.js
+19:40:54.896 ./lib/auth/session.ts
+19:40:54.896 
+19:40:54.900    Skipping linting
+19:40:54.901    Checking validity of types ...
+19:48:44.312  ELIFECYCLE  Command failed with exit code 1.
+19:48:44.379 Error: [BUILD_UTILS_SPAWN_1] Command "pnpm run build" exited with 1
+19:48:48.735 ▲ Build system report
+19:48:48.735 ▲ To always completely log this report, add VERCEL_BUILD_SYSTEM_REPORT=1 as an Environment Variable to your project.
+19:48:48.735 • At least one "Out of Memory" ("OOM") event was detected during the build.
+19:48:48.735   • This occurs when processes or applications running during the build completely fill up the available memory (RAM) in the build container. When this happens, the build container terminates one of the processes during the build with a SIGKILL signal.
+19:48:48.735   • Read this troubleshooting guide for more information: https://vercel.link/troubleshoot-build-errors
+19:48:48.735 
+19:48:48.735 To expand your machine size to get additional memory and disk space, consider enabling Enhanced Builds: https://vercel.com/docs/builds/managing-builds#enhanced-build-machines

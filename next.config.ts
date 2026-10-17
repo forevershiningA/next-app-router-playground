@@ -39,6 +39,10 @@ const nextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
   experimental: {
+    // A custom webpack hook disables this worker by default. Release its heap
+    // before TypeScript checking instead of keeping both in the 8 GB build container.
+    webpackBuildWorker: true,
+    webpackMemoryOptimizations: true,
     // Re-enabled useCache as it's required by 'use cache' directives in code
     useCache: true,
     // Optimize for faster builds
