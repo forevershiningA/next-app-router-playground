@@ -63,6 +63,7 @@ const nextConfig = {
     '*': [
       'public/ml/**/*',
       'public/designs/**/*', // Canonical rollout artifacts are static assets; do not bundle in functions
+      'public/gallery/**/*', // Memorial gallery photos are served statically, never read by functions
       'public/shapes/**/*',
       'public/additions/**/*',
       'public/png/**/*', // 343 MB motifs + 34 MB emblems

@@ -1,0 +1,236 @@
+18:54:26.185 Running build in Cleveland, USA (East) – cle1
+18:54:26.186 Build machine configuration: 4 cores, 8 GB
+18:54:26.269 Cloning github.com/forevershiningA/next-app-router-playground (Branch: main, Commit: 0e91e5b)
+18:58:37.021 Cloning completed: 4:10.752 (m:ss.mmm)
+18:58:42.038 Found .vercelignore
+18:58:50.846 Removed 132746 ignored files defined in .vercelignore
+18:58:50.846   /.env.test.local.example
+18:58:50.846   /.github/copilot-instructions.md
+18:58:50.846   /app/designs/[productType]/[category]/[slug]/DesignPageClient.tsx.backup
+18:58:50.846   /archive/app/_hooks/_components/router-context-layout.tsx
+18:58:50.846   /archive/app/_hooks/_components/router-context.tsx
+18:58:50.846   /archive/app/_hooks/[section]/[category]/page.tsx
+18:58:50.847   /archive/app/_hooks/[section]/layout.tsx
+18:58:50.847   /archive/app/_hooks/[section]/page.tsx
+18:58:50.847   /archive/app/_hooks/[section]/template.tsx
+18:58:50.847   /archive/app/_hooks/layout.tsx
+18:58:52.094 Restored build cache from previous deployment (GkpUHvYeGNXHsBhPthiFo2KhYrt5)
+18:58:54.803 Running "vercel build"
+18:58:54.812 Vercel CLI 64.0.2
+18:59:06.599 > Detected ENABLE_EXPERIMENTAL_COREPACK=1 and "pnpm@9.6.0" in package.json
+18:59:06.840 Installing dependencies...
+18:59:07.935 Lockfile is up to date, resolution step is skipped
+18:59:08.165 Already up to date
+18:59:09.110 
+18:59:09.160 Done in 2.2s
+18:59:09.182 Detected Next.js version: 15.5.26
+18:59:09.200 Running "pnpm run build"
+18:59:09.617 
+18:59:09.617 > @ build /vercel/path0
+18:59:09.617 > cross-env NODE_OPTIONS=--max-old-space-size=4096 next build
+18:59:09.617 
+18:59:11.850    ▲ Next.js 15.5.26
+18:59:11.850    - Experiments (use with caution):
+18:59:11.850      ✓ useCache
+18:59:11.850      · clientTraceMetadata
+18:59:11.850      · optimizePackageImports
+18:59:11.850 
+18:59:11.964    Creating an optimized production build ...
+18:59:12.518 [@sentry/nextjs - Node.js] Info: Sending telemetry data on issues and performance to Sentry. To disable telemetry, set `options.telemetry` to `false`.
+19:04:28.916 (node:95) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+19:04:28.916 (Use `node --trace-warnings ...` to show where the warning was created)
+19:04:44.177 [@sentry/nextjs - Node.js] Info: Successfully uploaded source maps to Sentry
+19:05:10.467 [@sentry/nextjs - Edge] Info: Sending telemetry data on issues and performance to Sentry. To disable telemetry, set `options.telemetry` to `false`.
+19:05:23.561 [@sentry/nextjs - Edge] Info: Successfully uploaded source maps to Sentry
+19:05:24.418 [@sentry/nextjs - Client] Info: Sending telemetry data on issues and performance to Sentry. To disable telemetry, set `options.telemetry` to `false`.
+19:06:03.850 (node:95) MaxListenersExceededWarning: Possible EventEmitter memory leak detected. 11 SIGTERM listeners added to [process]. MaxListeners is 10. Use emitter.setMaxListeners() to increase limit
+19:06:07.160 [@sentry/nextjs - Client] Info: Successfully uploaded source maps to Sentry
+19:06:21.801  ⚠ Compiled with warnings in 7.2min
+19:06:21.802 
+19:06:21.802 ./node_modules/.pnpm/jose@6.2.0/node_modules/jose/dist/webapi/lib/deflate.js
+19:06:21.802 A Node.js API is used (CompressionStream at line: 10) which is not supported in the Edge Runtime.
+19:06:21.802 Learn more: https://nextjs.org/docs/api-reference/edge-runtime
+19:06:21.802 
+19:06:21.802 Import trace for requested module:
+19:06:21.803 ./node_modules/.pnpm/jose@6.2.0/node_modules/jose/dist/webapi/lib/deflate.js
+19:06:21.803 ./node_modules/.pnpm/jose@6.2.0/node_modules/jose/dist/webapi/jwe/flattened/decrypt.js
+19:06:21.803 ./node_modules/.pnpm/jose@6.2.0/node_modules/jose/dist/webapi/index.js
+19:06:21.803 ./lib/auth/session.ts
+19:06:21.803 
+19:06:21.803 ./node_modules/.pnpm/jose@6.2.0/node_modules/jose/dist/webapi/lib/deflate.js
+19:06:21.803 A Node.js API is used (DecompressionStream at line: 26) which is not supported in the Edge Runtime.
+19:06:21.803 Learn more: https://nextjs.org/docs/api-reference/edge-runtime
+19:06:21.804 
+19:06:21.804 Import trace for requested module:
+19:06:21.804 ./node_modules/.pnpm/jose@6.2.0/node_modules/jose/dist/webapi/lib/deflate.js
+19:06:21.804 ./node_modules/.pnpm/jose@6.2.0/node_modules/jose/dist/webapi/jwe/flattened/decrypt.js
+19:06:21.804 ./node_modules/.pnpm/jose@6.2.0/node_modules/jose/dist/webapi/index.js
+19:06:21.804 ./lib/auth/session.ts
+19:06:21.804 
+19:06:21.812    Skipping linting
+19:06:21.812    Checking validity of types ...
+19:20:04.001    Collecting page data ...
+19:20:46.847    Generating static pages (0/124) ...
+19:20:48.650    Generating static pages (31/124) 
+19:20:49.810    Generating static pages (62/124) 
+19:20:50.337    Generating static pages (93/124) 
+19:20:55.172  ✓ Generating static pages (124/124)
+19:21:02.298    Finalizing page optimization ...
+19:21:02.298    Collecting build traces ...
+19:21:45.834 
+19:21:45.855 Route (app)                                                                                       Size  First Load JS  Revalidate  Expire
+19:21:45.855 ┌ ○ /                                                                                          7.61 kB         200 kB
+19:21:45.855 ├ ○ /_not-found                                                                                  494 B         173 kB
+19:21:45.855 ├ ƒ /[productSlug]/[designerStep]                                                              1.65 kB         382 kB
+19:21:45.855 ├ ƒ /[productSlug]/select-shape                                                                1.61 kB         320 kB
+19:21:45.855 ├ ○ /account/details                                                                           6.65 kB         311 kB
+19:21:45.855 ├ ○ /account/invoices                                                                          6.74 kB         312 kB
+19:21:45.855 ├ ƒ /admin                                                                                      123 kB         299 kB
+19:21:45.855 ├ ƒ /admin/customers                                                                             356 B         176 kB
+19:21:45.855 ├ ƒ /admin/customers/[id]                                                                        357 B         176 kB
+19:21:45.855 ├ ƒ /admin/customers/new                                                                       2.63 kB         178 kB
+19:21:45.856 ├ ƒ /admin/designs                                                                             1.81 kB         309 kB
+19:21:45.856 ├ ƒ /admin/enquiries                                                                             395 B         176 kB
+19:21:45.856 ├ ƒ /admin/orders                                                                              1.02 kB         177 kB
+19:21:45.856 ├ ƒ /admin/orders/[id]                                                                           396 B         176 kB
+19:21:45.856 ├ ƒ /admin/orders/[id]/edit                                                                    3.36 kB         179 kB
+19:21:45.856 ├ ƒ /admin/orders/[id]/invoice                                                                 1.16 kB         177 kB
+19:21:45.856 ├ ƒ /admin/orders/new                                                                          4.38 kB         180 kB
+19:21:45.856 ├ ƒ /admin/payments                                                                              356 B         176 kB
+19:21:45.856 ├ ƒ /admin/payments/new                                                                        2.18 kB         178 kB
+19:21:45.856 ├ ƒ /admin/system                                                                                395 B         176 kB
+19:21:45.856 ├ ƒ /api/account/invoice                                                                         496 B         173 kB
+19:21:45.856 ├ ƒ /api/account/profile                                                                         494 B         173 kB
+19:21:45.856 ├ ƒ /api/admin/customers                                                                         496 B         173 kB
+19:21:45.856 ├ ƒ /api/admin/customers/search                                                                  495 B         173 kB
+19:21:45.856 ├ ƒ /api/admin/orders                                                                            494 B         173 kB
+19:21:45.856 ├ ƒ /api/admin/payments                                                                          496 B         173 kB
+19:21:45.856 ├ ƒ /api/auth/forgot-password                                                                    495 B         173 kB
+19:21:45.856 ├ ƒ /api/auth/guest-checkout                                                                     496 B         173 kB
+19:21:45.856 ├ ƒ /api/auth/login                                                                              495 B         173 kB
+19:21:45.856 ├ ƒ /api/auth/logout                                                                             495 B         173 kB
+19:21:45.857 ├ ƒ /api/auth/register                                                                           495 B         173 kB
+19:21:45.857 ├ ƒ /api/auth/reset-password                                                                     497 B         173 kB
+19:21:45.857 ├ ƒ /api/auth/session                                                                            495 B         173 kB
+19:21:45.857 ├ ƒ /api/cache-svg                                                                               496 B         173 kB
+19:21:45.857 ├ ƒ /api/catalog/backgrounds                                                                     497 B         173 kB
+19:21:45.857 ├ ○ /api/catalog/designer-options                                                                495 B         173 kB          1d      1y
+19:21:45.857 ├ ƒ /api/catalog/sizes                                                                           495 B         173 kB
+19:21:45.857 ├ ƒ /api/checkout/stripe                                                                         495 B         173 kB
+19:21:45.857 ├ ƒ /api/client-webgl-report                                                                     493 B         173 kB
+19:21:45.857 ├ ƒ /api/csp-report                                                                              496 B         173 kB
+19:21:45.857 ├ ƒ /api/design/[id]                                                                             495 B         173 kB
+19:21:45.857 ├ ƒ /api/email                                                                                   496 B         173 kB
+19:21:45.857 ├ ƒ /api/enquiries                                                                               494 B         173 kB
+19:21:45.859 ├ ƒ /api/exchange-rates                                                                          495 B         173 kB
+19:21:45.860 ├ ƒ /api/favorite-designs                                                                        495 B         173 kB
+19:21:45.860 ├ ƒ /api/hidden-designs                                                                          495 B         173 kB
+19:21:45.860 ├ ƒ /api/motifs/[...path]                                                                        495 B         173 kB
+19:21:45.860 ├ ƒ /api/motifs/db                                                                               496 B         173 kB
+19:21:45.860 ├ ƒ /api/og                                                                                      496 B         173 kB
+19:21:45.860 ├ ƒ /api/orders                                                                                  496 B         173 kB
+19:21:45.860 ├ ƒ /api/orders/[id]                                                                             496 B         173 kB
+19:21:45.860 ├ ƒ /api/orders/[id]/export-svg                                                                  496 B         173 kB
+19:21:45.860 ├ ƒ /api/orders/[id]/items/[itemId]                                                              395 B         176 kB
+19:21:45.860 ├ ƒ /api/orders/[id]/send-supplier                                                               395 B         176 kB
+19:21:45.861 ├ ƒ /api/projects                                                                                495 B         173 kB
+19:21:45.861 ├ ƒ /api/projects/[id]                                                                           495 B         173 kB
+19:21:45.861 ├ ƒ /api/seed-materials                                                                          496 B         173 kB
+19:21:45.861 ├ ƒ /api/share/[token]/verify                                                                    496 B         173 kB
+19:21:45.861 ├ ƒ /api/share/create                                                                            495 B         173 kB
+19:21:45.861 ├ ƒ /api/share/email                                                                             495 B         173 kB
+19:21:45.861 ├ ƒ /api/upload-background                                                                       494 B         173 kB
+19:21:45.861 ├ ƒ /api/upload-image                                                                            495 B         173 kB
+19:21:45.861 ├ ƒ /api/upload/crop                                                                             495 B         173 kB
+19:21:45.862 ├ ƒ /api/upload/image                                                                            496 B         173 kB
+19:21:45.862 ├ ƒ /api/webhooks/stripe                                                                         494 B         173 kB
+19:21:45.862 ├ ○ /apple-icon.png                                                                                0 B            0 B
+19:21:45.862 ├ ○ /check-price                                                                               2.38 kB         334 kB
+19:21:45.862 ├ ○ /design-menu                                                                                 494 B         173 kB
+19:21:45.862 ├ ƒ /design/[id]                                                                               1.59 kB         309 kB
+19:21:45.862 ├ ƒ /designs                                                                                   1.53 kB         183 kB
+19:21:45.862 ├ ● /designs/[productType]                                                                     1.04 kB         182 kB          1d      1y
+19:21:45.862 ├   ├ /designs/laser-etched-headstone                                                                                          1d      1y
+19:21:45.862 ├   ├ /designs/traditional-headstone                                                                                           1d      1y
+19:21:45.862 ├   ├ /designs/bronze-plaque                                                                                                   1d      1y
+19:21:45.862 ├   └ [+8 more paths]
+19:21:45.863 ├ ● /designs/[productType]/[category]                                                          1.53 kB         183 kB
+19:21:45.863 ├ ● /designs/[productType]/[category]/[slug]                                                   31.2 kB         865 kB
+19:21:45.863 ├ ○ /designs/guide/buying-guide                                                                  395 B         176 kB
+19:21:45.863 ├ ○ /designs/guide/cemetery-regulations                                                          395 B         176 kB
+19:21:45.863 ├ ○ /designs/guide/design-your-own                                                               394 B         176 kB
+19:21:45.863 ├ ○ /designs/guide/pricing                                                                       395 B         176 kB
+19:21:45.863 ├ ○ /icon.png                                                                                      0 B            0 B
+19:21:45.863 ├ ○ /inscriptions                                                                                395 B         172 kB
+19:21:45.863 ├ ƒ /inscriptions/[section]                                                                    2.65 kB         309 kB
+19:21:45.863 ├ ƒ /inscriptions/[section]/[category]                                                         2.65 kB         309 kB
+19:21:45.863 ├ ○ /login                                                                                     2.13 kB         178 kB
+19:21:45.863 ├ ○ /memorials                                                                                   362 B         181 kB
+19:21:45.863 ├ ● /memorials/[type]                                                                          3.52 kB         185 kB
+19:21:45.863 ├   ├ /memorials/headstones
+19:21:45.863 ├   ├ /memorials/plaques
+19:21:45.863 ├   ├ /memorials/full-monuments
+19:21:45.863 ├   └ [+2 more paths]
+19:21:45.863 ├ ƒ /memorials/gallery                                                                           381 B         193 kB
+19:21:45.863 ├ ○ /my-account                                                                                  11 kB         318 kB
+19:21:45.863 ├ ƒ /my-account/designs/[id]                                                                    139 kB         446 kB
+19:21:45.863 ├ ƒ /my-account/designs/[id]/buy                                                               7.26 kB         183 kB
+19:21:45.864 ├ ○ /my-account/details                                                                        3.81 kB         179 kB
+19:21:45.864 ├ ○ /my-account/invoice                                                                        3.06 kB         179 kB
+19:21:45.864 ├ ○ /orders                                                                                    3.68 kB         179 kB
+19:21:45.864 ├ ○ /privacy                                                                                     395 B         176 kB
+19:21:45.864 ├ ○ /products                                                                                    495 B         173 kB
+19:21:45.864 ├ ● /products/[productSlug]                                                                      396 B         176 kB
+19:21:45.864 ├   ├ /products/bronze-plaque
+19:21:45.864 ├   ├ /products/laser-etched-black-granite-headstone
+19:21:45.864 ├   └ /products/traditional-engraved-headstone
+19:21:45.864 ├ ● /products/[productSlug]/[templateType]/[venue]/[inscription]                                 396 B         176 kB
+19:21:45.864 ├   ├ /products/bronze-plaque/dedication/the-science-hall/knowledge-is-the-seed-of-progress
+19:21:45.864 ├   ├ /products/bronze-plaque/dedication/memorial-garden/in-loving-memory-of-those-who-served
+19:21:45.864 ├   ├ /products/bronze-plaque/dedication/community-center/built-with-pride-for-our-community
+19:21:45.864 ├   └ [+7 more paths]
+19:21:45.864 ├ ○ /robots.txt                                                                                  495 B         173 kB
+19:21:45.864 ├ ○ /select-additions                                                                            496 B         173 kB
+19:21:45.864 ├ ○ /select-border                                                                               609 B         173 kB
+19:21:45.864 ├ ○ /select-emblems                                                                            2.66 kB         309 kB
+19:21:45.864 ├ ○ /select-fastening                                                                            394 B         172 kB
+19:21:45.864 ├ ○ /select-images                                                                               495 B         173 kB
+19:21:45.864 ├ ƒ /select-material                                                                           3.12 kB         364 kB
+19:21:45.864 ├ ƒ /select-material/[section]                                                                 2.65 kB         309 kB
+19:21:45.864 ├ ○ /select-motifs                                                                               495 B         173 kB
+19:21:45.864 ├ ○ /select-product                                                                            6.19 kB         313 kB         15m      1y
+19:21:45.864 ├ ● /select-product/[section]                                                                  2.65 kB         309 kB         15m      1y
+19:21:45.864 ├   ├ /select-product/shapes                                                                                                  15m      1y
+19:21:45.864 ├   ├ /select-product/materials                                                                                               15m      1y
+19:21:45.864 ├   ├ /select-product/motifs                                                                                                  15m      1y
+19:21:45.864 ├   └ [+2 more paths]
+19:21:45.864 ├ ● /select-product/[section]/[category]                                                       2.65 kB         309 kB         15m      1y
+19:21:45.864 ├   ├ /select-product/1/shapes                                                                                                15m      1y
+19:21:45.864 ├   ├ /select-product/2/materials                                                                                             15m      1y
+19:21:45.865 ├   ├ /select-product/3/motifs                                                                                                15m      1y
+19:21:45.865 ├   └ [+2 more paths]
+19:21:45.865 ├ ƒ /select-shape                                                                              1.61 kB         320 kB
+19:21:45.865 ├ ƒ /select-shape/[section]                                                                    2.65 kB         309 kB
+19:21:45.865 ├ ○ /select-size                                                                                 394 B         172 kB
+19:21:45.865 ├ ○ /seo                                                                                         495 B         173 kB
+19:21:45.865 ├ ƒ /shared/[token]                                                                            1.66 kB         177 kB
+19:21:45.865 ├ ○ /sitemap.xml                                                                                 495 B         173 kB          1d      1y
+19:21:45.865 └ ○ /terms                                                                                       395 B         176 kB
+19:21:45.865 + First Load JS shared by all                                                                   172 kB
+19:21:45.865   ├ chunks/2384-82e0337b4066ef98.js                                                             112 kB
+19:21:45.865   ├ chunks/e048b936-784212dddf769218.js                                                        54.4 kB
+19:21:45.865   └ other shared chunks (total)                                                                5.24 kB
+19:21:45.865 
+19:21:45.865 
+19:21:45.865 ƒ Middleware                                                                                   92.8 kB
+19:21:45.866 
+19:21:45.866 ○  (Static)   prerendered as static content
+19:21:45.866 ●  (SSG)      prerendered as static HTML (uses generateStaticParams)
+19:21:45.866 ƒ  (Dynamic)  server-rendered on demand
+19:21:45.866 
+19:21:46.779 Traced Next.js server files in: 262.139ms
+19:21:52.600 Created all serverless functions in: 5.820s
+19:22:09.001 Collected static files (public/, static/, .next/static): 16.016s
+19:25:19.563 Build Completed in /vercel/output [26m]
+19:25:19.956 Deploying outputs...
+19:25:27.443 The Vercel Function "api/orders/[id]/export-svg" is 256.71mb uncompressed which exceeds the maximum uncompressed size limit of 250mb. Your project is eligible for the large functions beta, which raises this limit — set VERCEL_SUPPORT_LARGE_FUNCTIONS=1 in your environment variables and redeploy. To view a detailed report, set VERCEL_ANALYZE_BUILD_OUTPUT=1 in your environment variables and redeploy.
