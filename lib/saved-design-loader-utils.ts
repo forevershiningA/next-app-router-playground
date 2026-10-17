@@ -8,6 +8,8 @@ import type { SavedDesignData } from '#/components/projects/SavedDesignLoader';
 import type { Line } from '#/lib/headstone-store';
 import type { Group } from 'three';
 import { logger } from '#/lib/logger';
+import { usesMillimetreCompanionLayout } from './design-layout-contracts';
+import { resolveLegacyPhotoSize } from './legacy-photo-size';
 
 export interface LoadDesignOptions {
   clearExisting?: boolean; // Whether to clear existing inscriptions first
@@ -151,93 +153,35 @@ const MIN_CANONICAL_ROTATION = -45;
 const MAX_CANONICAL_ROTATION = 45;
 const DEFAULT_CANONICAL_FONT = 'Garamond';
 const DEFAULT_CANONICAL_COLOR = '#000000';
-export const DEFAULT_CANONICAL_DESIGN_VERSION = 'v2026-rollout-full-20260324-190828';
-export const DEFAULT_CANONICAL_DESIGN_BASE_PATH = '/designs';
-const DEFAULT_CANONICAL_LEGACY_BASE_PATH = '/canonical-designs';
-const DEFAULT_CANONICAL_LEGACY_VERSION = 'v2026';
-const DESIGN_SOURCE_OVERRIDES: Record<string, { basePath: string; version: string }> = {
-  // Keep known-good stable canonical payload for this design.
-  '1725769905504': {
-    basePath: DEFAULT_CANONICAL_LEGACY_BASE_PATH,
-    version: DEFAULT_CANONICAL_LEGACY_VERSION,
-  },
-};
-const ROLLOUT_FULL_SKIPPED_IDS_PATH = '/database-exports/rollout-full-skipped-ids-20260324-190828.json';
-
-type RolloutSkippedIdsArtifact = {
-  skipped?: Array<{
-    id?: string;
-    reason?: string;
-  }>;
-};
-
-let skippedDesignReasonLookupPromise: Promise<Map<string, string>> | null = null;
-
-export const getCanonicalDesignUrl = (designId: string) => {
-  const override = DESIGN_SOURCE_OVERRIDES[designId];
-  if (override) {
-    return `${override.basePath}/${override.version}/${designId}.json`;
-  }
-  return `${DEFAULT_CANONICAL_DESIGN_BASE_PATH}/${DEFAULT_CANONICAL_DESIGN_VERSION}/${designId}.json`;
-};
-
-/**
- * Fetch canonical design JSON, preferring p3d-converted data when available.
- * Tries v2026-p3d/ first (correct positions for full monuments), then
- * falls back to the main rollout directory.
- */
+export {
+  DEFAULT_CANONICAL_DESIGN_VERSION,
+  DEFAULT_CANONICAL_DESIGN_BASE_PATH,
+  getCanonicalDesignUrl,
+} from './canonical-design-source';
+import {
+  getCanonicalDesignCandidateUrls,
+  normalizeCanonicalDesignSource,
+} from './canonical-design-source';
+/** Fetch the first valid payload in the shared source order. */
 export const fetchCanonicalDesign = async (
   designId: string,
 ): Promise<CanonicalDesignData | null> => {
-  const p3dUrl = `${DEFAULT_CANONICAL_DESIGN_BASE_PATH}/v2026-p3d/${designId}.json`;
-  try {
-    const response = await fetch(p3dUrl, { cache: 'no-store' });
-    if (response.ok) {
-      return (await response.json()) as CanonicalDesignData;
-    }
-  } catch {
-    // p3d not available, continue to fallback
-  }
-
-  const mainUrl = getCanonicalDesignUrl(designId);
-  try {
-    const response = await fetch(mainUrl, { cache: 'no-store' });
-    if (response.ok) {
-      return (await response.json()) as CanonicalDesignData;
-    }
-  } catch {
-    // main canonical not available either
-  }
-
-  return null;
-};
-
-const getSkippedDesignReasonLookup = async (): Promise<Map<string, string>> => {
-  if (skippedDesignReasonLookupPromise) {
-    return skippedDesignReasonLookupPromise;
-  }
-  skippedDesignReasonLookupPromise = (async () => {
+  for (const url of getCanonicalDesignCandidateUrls(designId)) {
     try {
-      const response = await fetch(ROLLOUT_FULL_SKIPPED_IDS_PATH, { cache: 'force-cache' });
-      if (!response.ok) {
-        console.warn(
-          `[resolveCanonicalLoadPolicy] Failed to load skipped-ID artifact (${response.status}); continuing without skipped-ID routing.`,
-        );
-        return new Map<string, string>();
-      }
-      const payload = (await response.json()) as RolloutSkippedIdsArtifact;
-      const lookup = new Map<string, string>();
-      for (const entry of payload.skipped ?? []) {
-        if (!entry?.id) continue;
-        lookup.set(entry.id, entry.reason || 'unknown');
-      }
-      return lookup;
-    } catch (error) {
-      console.warn('[resolveCanonicalLoadPolicy] Failed to parse skipped-ID artifact:', error);
-      return new Map<string, string>();
+      const response = await fetch(url, { cache: 'no-store' });
+      if (
+        !response.ok ||
+        response.headers.get('content-type')?.includes('text/html')
+      )
+        continue;
+      const payload: unknown = await response.json();
+      const normalized = normalizeCanonicalDesignSource(payload, designId);
+      if (normalized) return normalized as CanonicalDesignData;
+    } catch {
+      // A missing or invalid candidate must not prevent trying the stable source.
     }
-  })();
-  return skippedDesignReasonLookupPromise;
+  }
+  return null;
 };
 
 export const resolveCanonicalLoadPolicy = async (
@@ -245,19 +189,15 @@ export const resolveCanonicalLoadPolicy = async (
   fallbackReason?: string | null,
 ): Promise<CanonicalLoadPolicyDecision> => {
   const conversionConfidence = designData.migration?.confidence;
-  const skippedLookup = await getSkippedDesignReasonLookup();
-  const skippedReason = designData.source?.id ? skippedLookup.get(designData.source.id) : null;
 
   return {
     mode: 'canonical',
     reason:
       fallbackReason
         ? `canonical-only mode enabled (ignoring legacy fallback trigger: ${fallbackReason})`
-        : skippedReason
-          ? `canonical-only mode enabled (ignoring skipped-id fallback trigger: ${skippedReason})`
-          : conversionConfidence
-            ? `canonical-only mode enabled (conversion confidence: ${conversionConfidence})`
-            : 'canonical-only mode enabled',
+        : conversionConfidence
+          ? `canonical-only mode enabled (conversion confidence: ${conversionConfidence})`
+          : 'canonical-only mode enabled',
   };
 };
 
@@ -1186,6 +1126,7 @@ export async function loadCanonicalDesignIntoEditor(
   const headstoneHalf = headstone?.height_mm ? headstone.height_mm / 2 : null;
   const normalizedMlDir = (designData.source?.mlDir ?? '').toLowerCase();
   const isForevershining = normalizedMlDir === 'forevershining';
+  const isMillimetreCompanion = usesMillimetreCompanionLayout(designData);
   const coordinateSystem = designData.scene?.coordinateSystem;
   const positionMode = coordinateSystem?.positionMode ?? 'legacy-stage-px';
   const isP3dDesign = positionMode === 'p3d-mm-center';
@@ -1744,6 +1685,7 @@ export async function loadCanonicalDesignIntoEditor(
 
     const xPx = position?.x_px ?? 0;
     const yPx = position?.y_px ?? 0;
+    if (isMillimetreCompanion) return { xMm: xPx, yMm: -yPx };
     // Legacy parser applies ratio_height to both X and Y for loaded items.
     const replayRatioHeight = shouldApplyLegacyReplayRatioHeight
       ? legacyReplayRatios.ratioHeight
@@ -1779,6 +1721,7 @@ export async function loadCanonicalDesignIntoEditor(
     canonicalInscriptionId?: string,
   ) {
     if (typeof font?.size_mm === 'number') return font.size_mm;
+    if (isMillimetreCompanion && typeof font?.size_px === 'number') return font.size_px;
     const sizePx =
       (canonicalInscriptionId
         ? legacyInscriptionFontPxByCanonicalId.get(canonicalInscriptionId)
@@ -1811,6 +1754,7 @@ export async function loadCanonicalDesignIntoEditor(
     targetSurface: 'headstone' | 'base' | 'ledger',
   ) {
     if (typeof motif?.height_mm === 'number') return motif.height_mm;
+    if (isMillimetreCompanion && typeof motif?.height_px === 'number') return motif.height_px;
     if (typeof motif?.height_px === 'number') {
       // Forevershining legacy stores motif heights in mm (product catalog units),
       // not CSS pixels. The converter misnamed them as height_px.
@@ -2195,10 +2139,9 @@ export async function loadCanonicalDesignIntoEditor(
                 (item.type === 'Photo' || item.type === 'Picture'),
             )
             .map((item) => {
-              const sizeStr = typeof item.size === 'string' ? item.size : '';
-              const sizeMatch = sizeStr.match(/([\d.]+)\s*x\s*([\d.]+)/i);
-              const widthMm = sizeMatch ? Number(sizeMatch[1]) : undefined;
-              const heightMm = sizeMatch ? Number(sizeMatch[2]) : undefined;
+              const size = resolveLegacyPhotoSize(item.size, item.productid, item.width, item.height);
+              const widthMm = size?.width;
+              const heightMm = size?.height;
               const partStr = typeof item.part === 'string' ? item.part.toLowerCase() : 'headstone';
               const sideStr = typeof item.side === 'string' ? item.side.toLowerCase() : 'front';
               return {
@@ -2364,6 +2307,9 @@ export async function loadCanonicalDesignIntoEditor(
     };
   });
 
+  // A new imported layout already uses the target shape's coordinate system.
+  // ShapeSwapper must not remap it from the previous shape after async mounting.
+  store.markLayoutReplacement();
   store.setInscriptions(canonicalLines);
   store.setActiveInscriptionText(canonicalLines[0]?.text ?? '');
   store.setSelectedInscriptionId(null);

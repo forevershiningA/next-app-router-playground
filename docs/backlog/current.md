@@ -33,6 +33,19 @@ Last reviewed: 2026-10-16
 - [x] Move generated saved-design records out of the TypeScript source into JSON; keep TypeScript types and query helpers in the module.
 - [x] Separate static homepage sections from interactive client islands. The page is a server composition; product catalog, process overview, FAQ, support CTA, and footer are server components, while the hero menu, review carousel, and tutorial chapter controls are isolated client components.
 
+## Planned — design discovery and personalization
+
+The staged implementation plan is in [designs-improvement-plan.md](designs-improvement-plan.md), dated 2026-10-16. It covers `/designs`, product collections, category galleries, individual design pages, preview assets, SEO, and loading the chosen template into the 3D Designer. Stages 1–2 are complete for inventory, data contracts and publication decisions. Source repairs and visual/content approvals remain scheduled for stages 3, 5 and 6. Personalization is held for 148 records, including 64 published gallery designs; URLs remain available. See [stage 2 report](../audits/2026-10-16-designs/stage-2.md). Stage 3 is in progress; stages 4–8 remain pending. The [baseline report](../audits/2026-10-16-designs/README.md) covers all 3114 records, the new GSC export through 14 October, eight live page observations and three editor-entry checks. The 36-project pilot remains provisional. The full candidate review found 20 compositions requiring repair, four requiring closer review, ten needing detail/legibility review and two blocked dimension mismatches; editor parity remains unresolved.
+
+- [x] Stage 1: Inventory the catalog and establish current visual and search baselines. Conversion-funnel, Google Images, and indexing-report data gaps are documented explicitly.
+- [x] Stage 2: Full-route identity, source/presentation contract, publication policy and explicit per-record review decisions. Holds are enforced by detail CTAs and the shared loader; all 36 pilot sources remain available. [Progress](../audits/2026-10-16-designs/stage-2.md).
+- [ ] Stage 3 (in progress): Preview standard and candidate pipeline implemented. All 36 pilot records processed: 34 projects rendered (204 variants), two blocked by dimension mismatches. Fixed base readiness for five projects. Overview review: 20 composition repairs, four composition reviews, eight detail reviews, two legibility reviews. One byte-budget overrun, one edge error and one project with fetch errors remain. No publication approval. [Report](../audits/2026-10-16-designs/stage-3-full-pilot.md).
+- [ ] Stage 4: Improve gallery layouts, cards, navigation, filtering, and crawlable pagination.
+- [ ] Stage 5: Build a unified design detail page and reliable, draft-safe personalization flow.
+- [ ] Stage 6: Complete useful content, internal linking, metadata, indexing rules, and truthful structured data.
+- [ ] Stage 7: Validate performance, accessibility, SEO, and design-to-editor behavior.
+- [ ] Stage 8: Deploy the pilot, monitor outcomes, and roll out approved assets and content across the published catalog.
+
 ## Operational follow-ups
 
 - [x] Implement and deploy Content Security Policy in Report-Only mode first. Production headers now include the policy and Reporting API endpoint; review violation reports in production logs before narrowing or enforcing the policy.

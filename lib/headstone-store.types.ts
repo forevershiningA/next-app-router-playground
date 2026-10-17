@@ -279,6 +279,8 @@ export type HeadstoneState = {
   setProductId: (id: string) => Promise<void>;
 
   currentProjectId: string | null;
+  layoutRevision: number;
+  markLayoutReplacement: () => void;
   currentProjectTitle: string | null;
   setProjectMeta: (meta: { projectId?: string | null; title?: string | null }) => void;
 

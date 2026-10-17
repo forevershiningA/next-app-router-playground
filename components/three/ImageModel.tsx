@@ -676,6 +676,8 @@ export default function ImageModel({
   const safeUnitsPerMeter =
     Math.abs(unitsPerMeter) > 1e-6 ? Math.abs(unitsPerMeter) : 1000;
   const mmToLocalUnits = safeUnitsPerMeter / 1000;
+  const depthUnitsPerMeter = headstone?.depthUnitsPerMeter ?? safeUnitsPerMeter;
+  const mmToLocalDepth = Math.abs(depthUnitsPerMeter) / 1000;
   const width = widthMm * mmToLocalUnits;
   const height = heightMm * mmToLocalUnits;
   const placeholderSize = 55 * mmToLocalUnits;
@@ -684,10 +686,10 @@ export default function ImageModel({
   
   // Get headstone frontZ position (same as motifs/inscriptions)
   const frontZ = headstone?.frontZ ?? 0;
-  const layerLift = layer * 0.0002;
+  const layerLift = layer * 0.2 * mmToLocalDepth;
   const elementRenderOrder = 100 + layer;
-  const frontSurfaceLift = 0.05 * mmToLocalUnits;
-  const stackOffset = (index ?? 0) * 0.00002; // Stable intra-type lift for legacy designs without layer
+  const frontSurfaceLift = 0.05 * mmToLocalDepth;
+  const stackOffset = (index ?? 0) * 0.02 * mmToLocalDepth;
   const groupZ = frontZ + frontSurfaceLift + layerLift + stackOffset;
   
   // Determine if this image needs a ceramic/enamel base
@@ -697,7 +699,7 @@ export default function ImageModel({
   // Ceramic base parameters
   const ceramicDepthMm = 1; // Very thin ceramic layer - just 1mm depth
   const borderPercentage = 0.05; // 5% border around photo
-  const ceramicDepthUnits = ceramicDepthMm * mmToLocalUnits;
+  const ceramicDepthUnits = ceramicDepthMm * mmToLocalDepth;
   
   // Calculate correct scale for ceramic base to match image dimensions
   let ceramicScaleX = 1;
@@ -710,9 +712,11 @@ export default function ImageModel({
     ceramicScaleX = (displayWidth * (1 + borderPercentage)) / ceramicBaseData.svgWidth;
     ceramicScaleY = (displayHeight * (1 + borderPercentage)) / ceramicBaseData.svgHeight;
     
-    // Z scale to get actual 1mm depth
-    const avgScale = (ceramicScaleX + ceramicScaleY) / 2;
-    ceramicScaleZ = avgScale * (ceramicDepthUnits / 2);
+    // XY photo size must not change the physical thickness. SVG wrappers can
+    // have different XY/Z scales, so use the API's depth conversion explicitly.
+    const bounds = ceramicBaseData.geometry.boundingBox;
+    const sourceDepth = bounds ? bounds.max.z - bounds.min.z : 0;
+    ceramicScaleZ = sourceDepth > 0 ? ceramicDepthUnits / sourceDepth : 1;
     
   }
 
@@ -762,8 +766,10 @@ export default function ImageModel({
     groupRotation = [0, 0, rotationZ];
   }
 
-  const photoZ = needsCeramicBase ? 0.00008 : 0.00006;
-  const selectionZ = needsCeramicBase ? 0.00012 : 0.0001;
+  const ceramicBackOffset = ceramicBaseData?.geometry.boundingBox
+    ? -ceramicBaseData.geometry.boundingBox.min.z * ceramicScaleZ : 0;
+  const photoZ = (needsCeramicBase ? ceramicDepthUnits : 0) + 0.05 * mmToLocalDepth;
+  const selectionZ = photoZ + 0.05 * mmToLocalDepth;
   const guideBounds = isBaseSurface
     ? {
         minX: stone.position.x - stone.scale.x / 2,
@@ -783,7 +789,7 @@ export default function ImageModel({
       };
 
   return (
-    <group ref={ref} position={groupPosition} rotation={groupRotation}>
+    <group ref={ref} name={`image-${id}`} position={groupPosition} rotation={groupRotation}>
       {!isLedgerSurface && centerGuideProgress > 0.01 && (
         <Line
           points={[
@@ -837,7 +843,7 @@ export default function ImageModel({
       {needsCeramicBase && ceramicBaseData && (
         <mesh
           geometry={ceramicBaseData.geometry}
-          position={[0, 0, 0]} // Back face at z=0 (parent is at frontZ)
+          position={[0, 0, ceramicBackOffset]}
           scale={[ceramicScaleX, -ceramicScaleY, ceramicScaleZ]} // Negative Y to flip SVG coordinate system
           rotation={[0, 0, 0]}
           renderOrder={elementRenderOrder - 1}

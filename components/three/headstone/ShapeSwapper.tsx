@@ -170,12 +170,15 @@ export default function ShapeSwapper({
   const pendingRemapRef = React.useRef<{
     oldBox: THREE.Box3;
     targetShapeUrl: string;
+    layoutRevision: number;
   } | null>(null);
   const prevShapeUrlRef = React.useRef<string | null>(null);
 
   const heightMm = useHeadstoneStore((s) => s.heightMm);
   const widthMm = useHeadstoneStore((s) => s.widthMm);
   const shapeUrl = useHeadstoneStore((s) => s.shapeUrl);
+  const layoutRevision = useHeadstoneStore((s) => s.layoutRevision);
+  const observedLayoutRevision = React.useRef(layoutRevision);
   const headstoneMaterialUrl = useHeadstoneStore((s) => s.headstoneMaterialUrl);
   const borderName = useHeadstoneStore((s) => s.borderName);
   const setBorderName = useHeadstoneStore((s) => s.setBorderName);
@@ -724,6 +727,12 @@ export default function ShapeSwapper({
   React.useEffect(() => {
     if (!shapeUrl) return;
     if (loading) return;
+    if (observedLayoutRevision.current !== layoutRevision) {
+      observedLayoutRevision.current = layoutRevision;
+      pendingRemapRef.current = null;
+      prevShapeUrlRef.current = shapeUrl;
+      return;
+    }
     const state = useHeadstoneStore.getState();
     const hasExistingHeadstoneLayout =
       state.inscriptions.some(
@@ -747,21 +756,26 @@ export default function ShapeSwapper({
       pendingRemapRef.current = {
         oldBox: currentBoundingBoxRef.current.clone(),
         targetShapeUrl: shapeUrl,
+        layoutRevision,
       };
     }
     prevShapeUrlRef.current = shapeUrl;
-  }, [shapeUrl, loading]);
+  }, [shapeUrl, loading, layoutRevision]);
 
   React.useEffect(() => {
     if (loading) return;
     const pending = pendingRemapRef.current;
     if (!pending) return;
+    if (pending.layoutRevision !== layoutRevision) {
+      pendingRemapRef.current = null;
+      return;
+    }
     if (visibleUrl !== pending.targetShapeUrl) return;
     const newBox = currentBoundingBoxRef.current;
     if (!newBox) return;
     remapLayoutsBetweenBoxes(pending.oldBox, newBox);
     pendingRemapRef.current = null;
-  }, [visibleUrl, remapLayoutsBetweenBoxes, bboxVersion, loading]);
+  }, [visibleUrl, remapLayoutsBetweenBoxes, bboxVersion, loading, layoutRevision]);
 
   const renderUnscaledDesign = (api: HeadstoneAPI) => (
     <>

@@ -2,6 +2,12 @@
   "private": true,
   "packageManager": "pnpm@9.6.0",
   "scripts": {
+    "designs:preview:dev": "cross-env DESIGN_PREVIEW_CAPTURE=1 next dev --port 3002",
+    "designs:preview:sample": "node scripts/render-design-preview-candidates.mjs --ids=1755892723342,1657160536159,1614353841893",
+    "designs:preview:report": "node scripts/report-design-preview-candidates.mjs",
+    "designs:manifests": "tsx scripts/generate-design-preview-manifest.ts && tsx scripts/generate-design-source-manifest.ts",
+    "designs:manifests:check": "tsx scripts/generate-design-preview-manifest.ts --check && tsx scripts/generate-design-source-manifest.ts --check",
+    "designs:publication-report": "tsx scripts/report-design-publication.ts",
     "dev": "next dev",
     "build": "cross-env NODE_OPTIONS=--max-old-space-size=4096 next build",
     "start": "next start",

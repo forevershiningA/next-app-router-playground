@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 /**
  * Batch Screenshot Generator
+ * Legacy bulk exporter. For new gallery approval, use
+ * scripts/render-design-preview-candidates.mjs (strict readiness and framing).
  *
  * Uses Playwright to load each design in the 3D designer,
  * anonymize inscription text via route interception, wait for the

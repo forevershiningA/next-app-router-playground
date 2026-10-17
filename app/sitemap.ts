@@ -23,6 +23,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
   // Static pages
   const staticPages: MetadataRoute.Sitemap = [
     {
+      url: `${BASE_URL}/memorials/gallery`,
+      changeFrequency: 'monthly',
+      priority: 0.75,
+    },
+    {
       url: BASE_URL,
       lastModified: SITE_LAUNCH_DATE,
       changeFrequency: 'weekly',

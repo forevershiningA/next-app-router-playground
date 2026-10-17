@@ -28,6 +28,11 @@ const sentryReleaseName =
   process.env.GITHUB_SHA;
 
 const nextConfig = {
+  // Isolate local asset generation from other dev/build processes.
+  distDir:
+    process.env.DESIGN_PREVIEW_CAPTURE === '1'
+      ? '.next-design-previews'
+      : '.next',
   pageExtensions: ['js', 'jsx', 'mdx', 'ts', 'tsx'],
   eslint: { ignoreDuringBuilds: true },
   // Optimize production build

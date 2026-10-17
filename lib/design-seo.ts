@@ -1,25 +1,10 @@
-import fs from 'fs';
-import path from 'path';
+import { getPublishedDesigns, getPublishedPreviewIds, INDEXABLE_PRODUCT_SLUGS } from './design-publication';
+export { INDEXABLE_PRODUCT_SLUGS } from './design-publication';
 import {
   DESIGN_CATEGORIES,
-  getAllSavedDesigns,
   type DesignCategory,
   type SavedDesignMetadata,
 } from '#/lib/saved-designs-data';
-
-export const INDEXABLE_PRODUCT_SLUGS = new Set([
-  'laser-etched-headstone',
-  'traditional-headstone',
-  'bronze-plaque',
-  'traditional-plaque',
-  'laser-colour-plaque',
-  'stainless-steel-plaque',
-  'mini-headstone',
-  'full-colour-plaque',
-  'traditional-monument',
-  'laser-monument',
-  'pets',
-]);
 
 export const MIN_INDEXABLE_CATEGORY_DESIGNS = 5;
 
@@ -236,24 +221,11 @@ export function getCategorySeoCopy(category: string): CategorySeoCopy | undefine
 }
 
 export function getScreenshotIds(): Set<string> {
-  const dir = path.join(process.cwd(), 'public', 'screenshots', 'v2026-3d');
-  if (!fs.existsSync(dir)) return new Set();
-
-  return new Set(
-    fs
-      .readdirSync(dir)
-      .filter((file) => file.endsWith('.png') && !file.includes('_small'))
-      .map((file) => file.replace('.png', '')),
-  );
+  return getPublishedPreviewIds();
 }
 
 export function getSeoReadyDesigns(): SavedDesignMetadata[] {
-  const screenshotIds = getScreenshotIds();
-  return getAllSavedDesigns().filter(
-    (design) =>
-      INDEXABLE_PRODUCT_SLUGS.has(design.productSlug) &&
-      (screenshotIds.size === 0 || screenshotIds.has(design.id)),
-  );
+  return getPublishedDesigns();
 }
 
 export function groupDesignsByProduct(designs: SavedDesignMetadata[]) {

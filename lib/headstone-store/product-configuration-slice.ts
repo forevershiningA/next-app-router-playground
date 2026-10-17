@@ -102,8 +102,12 @@ export const createProductConfigurationSlice: StateCreator<
         showKerbset: state.showKerbset,
       });
       return editingObject === state.editingObject
-        ? { showBase }
-        : { showBase, editingObject };
+        ? { showBase, ...(!showBase && { baseSwapping: false }) }
+        : {
+            showBase,
+            editingObject,
+            ...(!showBase && { baseSwapping: false }),
+          };
     }),
 
   showLedger: false,

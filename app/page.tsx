@@ -5,6 +5,7 @@ import HomeFooter from './_ui/HomeFooter';
 import HomeProductSection from './_ui/HomeProductSection';
 import HomeReviews from './_ui/HomeReviews';
 import HomeTutorial from './_ui/HomeTutorial';
+import HomeGallery from './_ui/HomeGallery';
 import { homeFaqItems } from './_internal/home-content';
 
 export const metadata: Metadata = {
@@ -208,6 +209,7 @@ export default function Page() {
         <HomeSplash />
         <HomeReviews />
         <HomeProductSection />
+        <HomeGallery />
         <HomeTutorial />
         <HomeFooterSections />
       </main>

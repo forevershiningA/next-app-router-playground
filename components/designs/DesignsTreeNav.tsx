@@ -6,7 +6,7 @@ import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
 import { ChevronRightIcon, ChevronDownIcon } from '@heroicons/react/24/solid';
 import LoadDesignButton from '#/components/designer/actions/LoadDesignButton';
-import { getAllSavedDesigns } from '#/lib/saved-designs-data';
+import { getPublishedDesigns } from '#/lib/design-publication';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import { calculateCheckPriceProductPrices } from '#/lib/check-price-calculations';
 import { data } from '#/app/_internal/_data';
@@ -131,7 +131,7 @@ export default function DesignsTreeNav() {
 
   useEffect(() => {
     // Load all designs and organize into tree structure
-    const allDesigns = getAllSavedDesigns();
+    const allDesigns = getPublishedDesigns();
     
     // Group by productSlug and category
     const tree: { [productSlug: string]: DesignTreeNode } = {};

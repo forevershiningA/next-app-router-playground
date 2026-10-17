@@ -138,6 +138,52 @@
 
 ---
 
+## Current Status (2026-10-16) — Full preview pilot review
+
+- This is the current handoff for the `/designs` improvement plan. Stages 1–2 are complete within their documented scope; stage 3 is in progress; stages 4–8 are pending. Earlier status entries below describe historical batches, not the current repair queue.
+- Processed all 36 pilot IDs: 34 have six WebP candidates each (204 files); two bronze plaques are blocked because source heights 406.4/432 mm load as 400 mm. See `docs/audits/2026-10-16-designs/stage-3-full-pilot.md`.
+- Fixed base readiness in product appearance/configuration slices: unchanged textures start no new swap, and hidden bases do not leave a pending swap. All five previously stalled captures completed after this fix.
+- Overview review covers all 34 rendered candidates: 20 composition repairs, four composition reviews, eight detail reviews, two legibility reviews. No images have publication approval. Synthetic words preserve lengths, not glyph metrics; do not assume every text collision is a source defect.
+- One detail exceeds its byte budget, one project reaches the overview edge, and one reports fetch errors. Review individual evidence in `preview-candidates/review.json`; six compact review sheets are available. Previous three-project review is preserved separately.
+- Capture manifests now retain other batches and replace only requested IDs. Each record carries its own runtime fingerprint, including the two updated store modules. Preserve evaluated images/reports before rerendering.
+- Stage 3 remains open. Next: investigate layout units/shape orientation and the two dimension mismatches, then rerender affected IDs, review useful details and natural demonstration wording, and approve privacy/editor parity before publishing.
+- Prioritized IDs: dimension mismatches `1699465479477` (406.4 → 400 mm) and `1667393544888` (432 → 400 mm); portrait outside frame `1650336552725`; fetch errors `1715466300935`; oversized detail `1718041672695`. Check landscape/portrait mapping for `1681861707101`, `1665542626618` and `1681860302781`. Investigate source units, product limits and import order before changing geometry or constraints.
+- Current assets total 15,656,216 bytes. Evidence lives under `docs/audits/2026-10-16-designs/preview-candidates/`: `manifest.json`, `review.json`, `asset-budget.json`, `comparison.webp` and `review-sheet-1.webp` through `review-sheet-6.webp`. The previous three-project review is `review-three-project-sample.json`; earlier images remain in `preview-before-layout-repair/`.
+- Resume capture with `pnpm designs:preview:dev`, then `pnpm exec node scripts/render-design-preview-candidates.mjs --ids=<comma-separated-pilot-IDs>` and `pnpm designs:preview:report`. Do application/config edits before starting a batch: watched repo writes can trigger Fast Refresh during capture. Output is staged outside the repo and copied after capture. Retained records may carry older runtime fingerprints; rerendering does not imply publication approval.
+- TypeScript, ESLint for both changed store slices and both capture/report scripts (scripts require `--no-ignore`), and `git diff --check` passed. No unit/E2E suite or full build was run. The local capture server is stopped; its generated `next-env.d.ts` reference was restored to `.next/types/routes.d.ts`. No commit, deployment or gallery asset replacement was performed.
+
+## Current Status (2026-10-16) — Pilot layout import repairs
+
+- Three representative designs now render with corrected layout inputs. Evidence and before/after images: `docs/audits/2026-10-16-designs/stage-3-layout-repair.md`. Stage 3 remains in progress; these images have no publication approval.
+- Normalize component/canvas dimension strings at the canonical JSON boundary before passing values to finite-number store setters. Otherwise the bronze source silently fell back to 100 x 60 mm instead of 508 x 400 mm. Runtime, source manifest and audit share the normalizer.
+- The reviewed 1.45 companion contract is scoped to ID 1755892723342 in `lib/design-layout-contracts.ts`. Its misnamed px fields contain millimetres with Y down. Do not infer the units of all historical bronze-plaque files from the directory name.
+- Photo size parsing is shared with the asset generator. Fixed catalog quantities require a unique width+height match; laser image type 21 uses physical height and saved bitmap aspect. The pilot laser image is 132.5 x 120 mm, replacing the incorrect default 180 x 240 mm.
+- Image ceramic thickness uses depthUnitsPerMeter independently of XY size. A 1 mm ceramic must not change thickness when the photograph gets wider.
+- `layoutRevision` / `markLayoutReplacement` distinguish canonical layout replacement from an interactive shape change. ShapeSwapper cancels remaps queued against an older imported layout. HeadstoneInscription may legitimately convert mm-center values to geometry-local coordinates; diagnostic Y positions are not all millimetres.
+- Candidate export validates product dimensions within rounding tolerance and encodes from the original PNG at quality 86/82/78/74 until the draft byte budget is met. Manifest records quality and runtime source fingerprint as well as canonical source hash.
+- Latest sample: 18 WebP variants, all frame/dimension checks and byte budgets pass. Preserve the previous sample in `preview-before-layout-repair`; current review remains pending for wording, materials, composition and detail choice. Next: review the remaining 33 pilot records before publishing new gallery assets.
+
+## Current Status (2026-10-16) — Preview standard and first 3D candidate batch
+
+- Stage 3 is in progress. Standard: `docs/backlog/design-preview-standard.md`; findings: `docs/audits/2026-10-16-designs/stage-3.md`.
+- Run `pnpm designs:preview:dev` for an isolated Next cache on port 3002, then `pnpm designs:preview:sample` and `pnpm designs:preview:report`. `.next-design-previews` is excluded from git and Vercel.
+- The candidate renderer uses real canonical configurations, controlled demonstration inscriptions and a neutral portrait fixture. It preserves runtime source order, waits for readiness without clearing flags, fits a camera to product geometry and exports overview/detail WebP at 480/960/1600px.
+- Stage files outside the watched repo during capture to avoid Fast Refresh corrupting a batch. Output remains in the audit directory, not the gallery. Legacy bulk screenshot generation is not the approval pipeline.
+- Three projects produced 18 files; use current asset-budget.json for measured sizes and budgets. All three overviews were rejected for layout issues: oversize flower, portrait/text overlap, portrait occluding bronze plaque. No gallery image was replaced or approved.
+- Effective photo counts now include legacy Photo/Picture fallback records. Structural availability still does not certify layout or privacy approval.
+- Next: repair source/editor coordinate and image sizing issues on the three-project sample, rerender and review; then expand to all 36 pilot designs. No full build or automated test suite was run for this asset work.
+
+## Current Status (2026-10-16) — Design publication and personalization data
+
+- Design stages 1–2 now have baseline and publication reports under `docs/audits/2026-10-16-designs/`. The active plan is `docs/backlog/designs-improvement-plan.md`; publication rules are in `docs/backlog/design-publication-policy.md`.
+- Full route context resolves all 3114 records, including duplicate clean slugs. Existing canonical URLs and legacy redirects remain supported.
+- Gallery, navigation, sitemap and detail robots share the committed preview eligibility manifest: 2967 eligible records. Runtime filesystem absence must not expand publication.
+- Source and presentation contracts include configuration version, dimensions, material facts, element counts and legacy product evidence without inscription text or image payloads. `source-ready` certifies basic data consistency, not visual/editor parity.
+- 126 product inconsistencies and 22 missing/invalid sources have explicit personalization holds, affecting 64 gallery records. CTAs and `loadDesignById` enforce holds before changing the editor. All 36 pilot records pass basic source/identity checks; composition and editor-coordinate problems remain open.
+- Regenerate committed inputs after catalog/source/preview changes: `pnpm designs:manifests`, `pnpm designs:manifests:check`, `pnpm designs:publication-report`. Full source facts stay server-side; client loading uses a compact status manifest.
+- New preview/content approval remains separate from historical publication. Review public configuration JSON as well as rendered text/photos before approving a new template version. No automatic privacy approval was granted.
+- Next: stage 3 preview standard and pilot assets; stage 5 source/editor repairs; stage 6 reviewed copy and SEO; stage 7 functional validation before rollout.
+
 ## Current Status (2026-10-16) — Homepage Hero Copy, Cinematic Preview, and Runtime
 
 ### Homepage hero and configurator video

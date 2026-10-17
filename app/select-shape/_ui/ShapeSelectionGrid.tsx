@@ -228,7 +228,10 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
         <div className="day:border-[#cfc5b7] day:bg-[#eee9df] relative overflow-hidden border-b border-white/10 bg-[#1d1a17]">
           <div className="relative mx-auto max-w-7xl px-6 py-8 lg:px-8 lg:py-10">
             <div className="text-left sm:text-center">
-              <DesignerPageHeading sectionTitle="Select Your Shape" />
+              <DesignerPageHeading
+                sectionTitle="Select Your Shape"
+                showProductThumbnail
+              />
               <p className="day:text-[#625a51] mt-3 max-w-3xl text-base leading-7 text-white/70 sm:mx-auto">
                 Choose from the fixed pet rock shapes available for this laser
                 etched black granite plaque.
@@ -363,7 +366,10 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
         <div className="day:border-[#cfc5b7] day:bg-[#eee9df] relative overflow-hidden border-b border-white/10 bg-[#1d1a17]">
           <div className="relative mx-auto max-w-7xl px-6 py-8 lg:px-8 lg:py-10">
             <div className="text-left sm:text-center">
-              <DesignerPageHeading sectionTitle="Select Your Shape" />
+              <DesignerPageHeading
+                sectionTitle="Select Your Shape"
+                showProductThumbnail
+              />
               <p className="day:text-[#625a51] mt-3 max-w-3xl text-base leading-7 text-white/70 sm:mx-auto">
                 Choose the shape for your urn. Each shape has its own dimensions
                 and unique character.
@@ -520,7 +526,10 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
       <div className="day:border-[#cfc5b7] day:bg-[#eee9df] relative overflow-hidden border-b border-white/10 bg-[#1d1a17]">
         <div className="relative mx-auto max-w-7xl px-6 py-8 lg:px-8 lg:py-10">
           <div className="text-left sm:text-center">
-            <DesignerPageHeading sectionTitle="Select Your Shape" />
+            <DesignerPageHeading
+              sectionTitle="Select Your Shape"
+              showProductThumbnail
+            />
             <p className="day:text-[#625a51] mt-3 max-w-3xl text-base leading-7 text-white/70 sm:mx-auto">
               {isTraditionalShapesOnly
                 ? `Choose from the first 11 traditional shapes available for this${

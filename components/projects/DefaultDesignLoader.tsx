@@ -7,6 +7,7 @@ import {
   type CanonicalDesignData,
 } from '#/lib/saved-design-loader-utils';
 import { logger } from '#/lib/logger';
+import { getDesignPersonalizationHold, getExpectedDesignProductId } from '#/lib/design-personalization';
 const isDevEnvironment = process.env.NODE_ENV !== 'production';
 const DEFAULT_DESIGN_ID = '1725769905504';
 
@@ -20,7 +21,9 @@ export default function DefaultDesignLoader() {
   return null;
 }
 
-export async function loadDesignById(designId: string) {
+export async function loadDesignById(designId: string, options?: { expectedProductId: string }) {
+  const hold = getDesignPersonalizationHold(designId);
+  if (hold) return { success: false, message: hold.message ?? 'Template unavailable' };
   try {
     if (isDevEnvironment) {
       logger.log(`[loadDesignById] Loading canonical design: ${designId}`);
@@ -34,6 +37,10 @@ export async function loadDesignById(designId: string) {
       return { success: false, message: 'Failed to fetch design' };
     }
 
+    const actualProductId = String(canonicalData.product?.id);
+    if (actualProductId !== getExpectedDesignProductId(designId) || (options && actualProductId !== options.expectedProductId)) {
+      return { success: false, message: 'This template is being checked. Please choose another design.' };
+    }
     await loadCanonicalDesignIntoEditor(canonicalData, { clearExisting: true });
 
     if (isDevEnvironment) {

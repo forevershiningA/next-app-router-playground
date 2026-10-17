@@ -3,7 +3,8 @@ import { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import { getProductFromId } from '#/lib/product-utils';
-import { INDEXABLE_PRODUCT_SLUGS } from '#/lib/design-seo';
+import { isDesignIndexable } from '#/lib/design-publication';
+import { getDesignPresentation } from '#/lib/design-presentation';
 import StartSavedDesignButton from './StartSavedDesignButton';
 import DesignPageClient from './DesignPageClient';
 
@@ -136,13 +137,13 @@ export const dynamicParams = true;
 export async function generateMetadata({
   params,
 }: SavedDesignPageProps): Promise<Metadata> {
-  const { category, slug } = await params;
+  const { productType: productSlug, category, slug } = await params;
 
   // Try new slug lookup first, then fall back to old format
   const { getDesignFromSlug, DESIGN_CATEGORIES } = await import(
     '#/lib/saved-designs-data'
   );
-  const design = getDesignFromSlug(slug);
+  const design = getDesignFromSlug(slug, { productSlug, category });
 
   if (!design) {
     return { title: 'Design Not Found' };
@@ -239,7 +240,7 @@ export async function generateMetadata({
       description,
       images: [`/screenshots/v2026-3d/${design.id}.png`],
     },
-    robots: INDEXABLE_PRODUCT_SLUGS.has(design.productSlug)
+    robots: isDesignIndexable(design)
       ? undefined
       : { index: false, follow: true },
   };
@@ -254,7 +255,7 @@ export default async function SavedDesignPage({
   const { getDesignFromSlug, DESIGN_CATEGORIES } = await import(
     '#/lib/saved-designs-data'
   );
-  const design = getDesignFromSlug(slug);
+  const design = getDesignFromSlug(slug, { productSlug, category });
 
   if (!design) {
     notFound();
@@ -268,6 +269,7 @@ export default async function SavedDesignPage({
   }
 
   const designId = design.id;
+  const presentation = getDesignPresentation(design);
 
   // Generate structured data for SEO
   const product = getProductFromId(design.productId);
@@ -793,6 +795,8 @@ export default async function SavedDesignPage({
 
           <StartSavedDesignButton
             designId={designId}
+            expectedProductId={String(design.productId)}
+            personalization={presentation.personalization}
             className="inline-block rounded-lg bg-slate-900 px-6 py-3 font-medium text-white transition-colors hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60"
           >
             Personalize This Design
@@ -806,6 +810,7 @@ export default async function SavedDesignPage({
         slug={slug}
         designId={designId}
         design={design}
+        personalization={presentation.personalization}
       />
     </>
   );

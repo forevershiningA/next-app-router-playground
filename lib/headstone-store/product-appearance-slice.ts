@@ -144,7 +144,13 @@ export const createProductAppearanceSlice: StateCreator<
   baseMaterialUrl: `${TEX_BASE}${DEFAULT_TEX}`,
   setBaseMaterialUrl(url) {
     const normalized = normalizeTextureUrl(url) ?? `${TEX_BASE}${DEFAULT_TEX}`;
-    set({ baseMaterialUrl: normalized, baseSwapping: true });
+    set((state) => ({
+      baseMaterialUrl: normalized,
+      // An unchanged texture starts no load; a hidden base has no loader.
+      baseSwapping:
+        state.showBase &&
+        (state.baseSwapping || state.baseMaterialUrl !== normalized),
+    }));
   },
 
   ledgerMaterialUrl: `${TEX_BASE}${DEFAULT_TEX}`,

@@ -217,6 +217,7 @@ function getPredominantMotifCategory(designData: any[]): string | null {
 }
 
 interface DesignPageClientProps {
+  personalization: import('#/lib/design-personalization').DesignPersonalization;
   productSlug: string;  // e.g., 'bronze-plaque'
   category: string;     // e.g., 'memorial', 'in-loving-memory'
   slug: string;         // e.g., '1724060510093_memorial-with-motifs'
@@ -1173,6 +1174,7 @@ export default function DesignPageClient({
   category,
   slug,
   designId,
+  personalization,
   design: designMetadata
 }: DesignPageClientProps) {
   const router = useRouter();
@@ -1228,7 +1230,7 @@ export default function DesignPageClient({
   }, []);
   
   useEffect(() => {
-    if (!designId) return;
+    if (!designId || personalization.state !== 'available') return;
     let cancelled = false;
 
     if (!canonicalDesignUrl) return;
@@ -1240,6 +1242,9 @@ export default function DesignPageClient({
         const canonicalData = await fetchCanonicalDesign(designId);
         if (!canonicalData) {
           throw new Error(`No canonical design found for ${designId}`);
+        }
+        if (String(canonicalData.product?.id) !== String(designMetadata.productId)) {
+          throw new Error('Template product does not match this collection');
         }
         if (cancelled) return;
         await loadCanonicalDesignIntoEditor(canonicalData, { clearExisting: true });
@@ -1259,10 +1264,11 @@ export default function DesignPageClient({
     return () => {
       cancelled = true;
     };
-  }, [designId, canonicalDesignUrl]);
+  }, [designId, canonicalDesignUrl, personalization.state, designMetadata.productId]);
   
   useEffect(() => {
     if (
+      personalization.state !== 'available' ||
       canonicalLoadState !== 'failed' ||
       !designId ||
       !designData ||
@@ -1275,6 +1281,9 @@ export default function DesignPageClient({
     let cancelled = false;
     (async () => {
       try {
+        if (String(designData[0]?.productid) !== String(designMetadata.productId)) {
+          throw new Error('Legacy template product does not match this collection');
+        }
         await loadSavedDesignIntoEditor(designData, designId);
         if (!cancelled) {
           legacyLoadedRef.current = true;
@@ -1289,7 +1298,7 @@ export default function DesignPageClient({
     return () => {
       cancelled = true;
     };
-  }, [canonicalLoadState, designId, designData]);
+  }, [canonicalLoadState, designId, designData, personalization.state, designMetadata.productId]);
   
   // Load screenshot dimensions from metadata JSON; avoid image probing for dimensions.
   useEffect(() => {
@@ -2969,7 +2978,7 @@ export default function DesignPageClient({
     );
   }
 
-  const canStartPersonalising = canonicalLoadState === 'success' || legacyLoadedRef.current;
+  const canStartPersonalising = personalization.state === 'available' && (canonicalLoadState === 'success' || legacyLoadedRef.current);
   const startPersonalising = () => {
     if (!canStartPersonalising) return;
     setLoadingIntoEditor(true);
@@ -3102,6 +3111,7 @@ export default function DesignPageClient({
                     </>
                   )}
                 </button>
+                {personalization.message ? <p className="mt-3 text-sm text-stone-600" role="status">{personalization.message}</p> : null}
                 <a
                   href="#price-guide"
                   className="mt-3 inline-flex w-full items-center justify-center rounded-lg border border-stone-300 bg-white px-5 py-3 text-sm font-medium text-stone-800 transition-colors hover:bg-stone-50"
@@ -3260,7 +3270,7 @@ export default function DesignPageClient({
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
               </svg>
-              Start with this design
+              {personalization.state === 'available' ? 'Start with this design' : 'Personalization unavailable'}
             </>
           )}
         </button>

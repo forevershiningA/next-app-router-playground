@@ -16,6 +16,7 @@ const MEMORIAL_LINKS = [
   { label: 'Full Monuments', href: '/memorials/full-monuments' },
   { label: 'Urns', href: '/memorials/urns' },
   { label: 'Pet Memorials', href: '/memorials/pet-memorials' },
+  { label: 'Gallery', href: '/memorials/gallery' },
 ] as const;
 
 export default function HomeSplash() {
