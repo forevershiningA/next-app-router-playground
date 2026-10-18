@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import HomeSplash from './_ui/HomeSplash';
+import HomeTrustBar from './_ui/HomeTrustBar';
 import HomeFooterSections from './_ui/HomeFooterSections';
 import HomeFooter from './_ui/HomeFooter';
 import HomeProductSection from './_ui/HomeProductSection';
@@ -207,6 +208,7 @@ export default function Page() {
       />
       <main id="main-content" className="min-h-screen bg-[#0c0b0a]">
         <HomeSplash />
+        <HomeTrustBar />
         <HomeReviews />
         <HomeProductSection />
         <HomeGallery />

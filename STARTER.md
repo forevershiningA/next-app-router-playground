@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-10-16
+**Last Updated:** 2026-10-17
 
 **Status entry order:** Add new dated status entries immediately after the table of contents, before the existing status entries. Keep status entries in reverse chronological order (newest first); do not append them to the end of this file.
 **Tech Stack:** Next.js 15.5.26, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots), **Vitest 4.1.8** (unit tests), **Playwright 1.59.1** (E2E tests)
@@ -135,8 +135,22 @@
 122. [October 14 Stage 3 Architecture and Performance Refactor](#current-status-2026-10-14--stage-3-architecture-and-performance-refactor)
 123. [October 16 Homepage Hero Copy, Cinematic Preview, and Runtime](#current-status-2026-10-16--homepage-hero-copy-cinematic-preview-and-runtime)
 124. [October 16 Stage 5 CSP and Monitoring Foundation](#current-status-2026-10-16--stage-5-csp-and-monitoring-foundation)
+125. [October 17 Memorial Photo Gallery, Shape Previews, and Vercel Build Recovery](#current-status-2026-10-17--memorial-photo-gallery-shape-previews-and-vercel-build-recovery)
 
 ---
+
+## Current Status (2026-10-17) — Memorial photo gallery, shape previews, and Vercel build recovery
+
+- `/memorials/gallery` is the memorial **photo** gallery; `/designs/*` remains the saved-design/template catalog. This photo work does not approve or publish any stage-3 pilot design previews described below.
+- Imported all 349 photos in nine categories from `https://www.forevershining.com.au/memorial-gallery/`. `app/_internal/home-gallery.json` retains source URLs, captions, local paths and dimensions. `public/gallery/` contains 698 WebP files (full images up to 1600 px and thumbnails up to 600 px), totaling 148,012,684 bytes (~141 MiB). Refresh with `pnpm exec node scripts/import-memorial-gallery.mjs`; it downloads and overwrites assets and the manifest, so review source changes and the resulting diff before publishing.
+- `app/_ui/HomeGallery.tsx` serves both the preserved homepage section and the dedicated gallery page. It offers category filters, 12 initial photos, batches of 24 more, and a native-dialog full-size viewer with arrow-key navigation, Escape, scroll locking and focus restoration. `app/memorials/gallery/page.tsx` validates `?category=...` on the server, falls back to `all`, and keys the component by the initial category. The route has canonical/Open Graph metadata and a sitemap entry.
+- The homepage desktop/mobile `Gallery` menu link points to `/memorials/gallery`, not the homepage anchor. `components/MemorialPublicHeader.tsx` is shared by the gallery and `/memorials/[type]`, including a Gallery link and active-page indication.
+- All three Select Shape header variants use `DesignerPageHeading` with a product thumbnail (64 px mobile, 80 px larger screens). `components/designer/ProductGalleryThumbnail.tsx` shows four category examples on hover or focus in a viewport-positioned portal, above the header's clipped container. The product thumbnail and all four example photos link to the same filtered gallery. Mapping: `headstones → headstones`, `plaques → plaques`, `monuments → full-monuments`, `urns → urns`, `pet-memorials → pet-memorials`. This is category-level filtering, not an exact product/material filter. Preview thumbnails currently use examples 001–004 of the mapped category; preserve those paths or update the component when replacing imported assets.
+- The interactive preview uses a non-modal dialog role. ArrowDown from the product link focuses its first example link; Escape closes the preview and restores focus to the product link when necessary. Moving into the preview keeps it open; scroll/resize closes it. A mobile tap on the product thumbnail navigates directly to the filtered gallery.
+- `build2.txt`: Next.js compilation/static generation completed, but Vercel rejected `api/orders/[id]/export-svg` at **256.71 MB uncompressed**, above the reported **250 MB** limit. The existing function trace contained all 698 gallery files because the export route dynamically reads paths below `public`. Added `public/gallery/**/*` to `outputFileTracingExcludes['*']`; these images remain static public assets. Do not remove them from the deployment via `.vercelignore`.
+- `build3.txt`: a separate failure, **OOM during TypeScript checking** on the 4-core/8-GB Vercel machine. It did not reach function packaging, so neither successful deployment nor the reduced function size is confirmed. Enabled `experimental.webpackBuildWorker` and `experimental.webpackMemoryOptimizations` in `next.config.ts`. The custom Webpack hook otherwise disables the build worker by default in Next.js 15.5.26. Keep type checking enabled and preserve the Webpack filesystem cache. Default module parallelism remains unchanged unless `WEBPACK_PARALLELISM` is explicitly set.
+- Validation: changed UI files passed ESLint and type checking; targeted Chromium checks covered five category mappings, all four preview links, filtered gallery navigation, desktop/mobile menus, mobile tap, gallery filters/load-more/viewer, and keyboard/focus behavior. Screenshots from the initial gallery review are in `docs/audits/2026-10-17-gallery/`. Full uncached `tsc --noEmit --incremental false --extendedDiagnostics` passed after the memory-config change (4705 files, ~1.1 GB compiler memory, ~19 s locally). Production config loading confirmed both memory flags remain enabled through MDX/Sentry and TypeScript errors are not ignored.
+- Pending: rerun the Vercel build and confirm no OOM, successful function packaging below the limit, deployment and production gallery/Select Shape smoke checks. No full production build or deployment was run locally after the memory flags changed. `jose` CompressionStream/DecompressionStream Edge warnings and a SIGTERM MaxListeners warning also appear in the logs; they are not the reported fatal cause. Local checks used Node 24.16.0 with a package-engine warning; the project's supported Node version remains 22.
 
 ## Current Status (2026-10-16) — Full preview pilot review
 
@@ -15496,10 +15510,11 @@ npm run db:studio
 ### Build Notes
 
 - Build script: `NODE_OPTIONS='--max-old-space-size=4096' next build` — caps heap at 4 GB (Vercel container has 8 GB)
-- `webpack.parallelism = 2` — limits concurrent module compilation to prevent OOM
+- Webpack keeps its default parallelism; set `WEBPACK_PARALLELISM` only when an explicit override is needed. The former hard cap of 2 is no longer the current configuration.
+- `experimental.webpackBuildWorker: true` isolates compilation from later type checking; `experimental.webpackMemoryOptimizations: true` reduces Webpack peak memory. These were enabled after the 2026-10-17 Vercel OOM and still need confirmation in a successful remote build. Type checking remains enabled.
 - `ConditionalCanvas` dynamically imports `ThreeScene`/`CropCanvas` with `ssr: false` so static generation does not render the heavy 3D canvas on the server
 - **Do NOT set `config.cache = false`** — disabling webpack cache causes 30+ minute builds (Three.js/R3F must recompile from scratch every time)
-- **`outputFileTracingExcludes`** in `next.config.ts` excludes `public/screenshots/**/*` (~245 MB) from serverless function bundling. Without this, the function exceeds Vercel's 300 MB limit.
+- **`outputFileTracingExcludes`** in `next.config.ts` excludes large static directories, including `public/screenshots/**/*` and `public/gallery/**/*`, from serverless function bundling while preserving their public URLs. The 2026-10-17 Vercel log reports a **250 MB uncompressed function limit**; verify the export-SVG function after deployment rather than relying on historical limit estimates.
 
 ### Building for Production
 
@@ -16792,6 +16807,6 @@ Both commands pass. Browser rendering still needs to be checked after the next l
 
 ---
 
-_End of STARTER.md - Last updated: 2026-10-14_
+_End of STARTER.md - Last updated: 2026-10-17_
 
 ---

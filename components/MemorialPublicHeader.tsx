@@ -17,7 +17,7 @@ const headerMemorialLinks: MemorialTypeSlug[] = [
 export default function MemorialPublicHeader({
   activeType,
 }: {
-  activeType: MemorialTypeSlug | 'gallery';
+  activeType: MemorialTypeSlug | 'gallery' | 'contact';
 }) {
   return (
     <header className="relative z-50 border-b border-[#bdb4a6] bg-[#eee9df] text-[#1d1a17]">
@@ -97,6 +97,13 @@ export default function MemorialPublicHeader({
               Gallery
             </Link>
             <Link
+              href="/contact"
+              aria-current={activeType === 'contact' ? 'page' : undefined}
+              className={`rounded-sm px-3 py-2 text-sm ${activeType === 'contact' ? 'bg-[#e8dfd0] font-semibold text-[#6f511c]' : 'hover:bg-white'}`}
+            >
+              Contact
+            </Link>
+            <Link
               href="/select-product"
               className="mt-1 rounded-sm bg-[#1d1a17] px-3 py-2 text-center text-sm font-semibold text-white transition-colors hover:bg-[#3a332c]"
             >
@@ -111,6 +118,12 @@ export default function MemorialPublicHeader({
         aria-label="Memorial categories"
       >
         <div className="mx-auto flex h-11 max-w-7xl items-center justify-center gap-9 px-8">
+          <Link
+            href="/"
+            className="relative flex h-full items-center text-[13px] font-medium tracking-[0.01em] text-[#514a43] transition-colors after:absolute after:right-0 after:bottom-0 after:left-0 after:h-px after:origin-center after:scale-x-0 after:bg-[#8a651f] after:transition-transform hover:text-[#6f511c] hover:after:scale-x-100"
+          >
+            Home
+          </Link>
           {headerMemorialLinks.map((slug) => {
             const isActive = slug === activeType;
             return (
@@ -130,6 +143,13 @@ export default function MemorialPublicHeader({
             className={`relative flex h-full items-center text-[13px] font-medium ${activeType === 'gallery' ? 'border-b border-[#8a651f] text-[#6f511c]' : 'text-[#514a43] hover:text-[#6f511c]'}`}
           >
             Gallery
+          </Link>
+          <Link
+            href="/contact"
+            aria-current={activeType === 'contact' ? 'page' : undefined}
+            className={`relative flex h-full items-center text-[13px] font-medium ${activeType === 'contact' ? 'border-b border-[#8a651f] text-[#6f511c]' : 'text-[#514a43] hover:text-[#6f511c]'}`}
+          >
+            Contact
           </Link>
         </div>
       </nav>

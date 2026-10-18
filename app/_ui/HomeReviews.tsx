@@ -158,13 +158,20 @@ export default function HomeReviews() {
                 aria-hidden={cycle === 1}
                 className="day:rounded-sm day:border day:border-[#e4ddd2] day:bg-white day:shadow-[0_10px_30px_rgba(0,0,0,0.03)] day:lg:min-w-[calc((100%-2rem)/3)] day:xl:min-w-[calc((100%-3rem)/4)] flex min-h-40 min-w-[270px] snap-start flex-col justify-between border-r border-b border-white/20 p-5 sm:min-w-[310px] sm:p-6 lg:min-w-[33.333333%] xl:min-w-[25%]"
               >
-                <p className="day:text-[#1d1a17] font-serif text-xl leading-snug text-pretty text-white">
+                <span
+                  aria-hidden="true"
+                  className="day:text-[#9a742f] mb-2 block h-8 font-serif text-5xl leading-none text-[#d8b66f]"
+                >
+                  “
+                </span>
+                <p className="day:text-[#1d1a17] font-sans text-base leading-7 text-pretty text-white">
                   {review.text}
                 </p>
                 <figcaption className="day:text-[#625a51] mt-6 flex flex-col gap-1 text-sm text-white/80">
                   <span className="day:text-[#1d1a17] font-semibold text-white">
                     {review.author}
                   </span>
+                  {'category' in review && <span>{review.category}</span>}
                   <span>Google review highlight</span>
                 </figcaption>
               </figure>

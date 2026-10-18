@@ -3,7 +3,24 @@
 This is the active backlog. Historical status notes remain in `STARTER.md`,
 but unfinished items there are not automatically current requirements.
 
-Last reviewed: 2026-10-16
+Last reviewed: 2026-10-17
+
+## Now — Vercel build recovery
+
+- [x] Exclude `public/gallery/**/*` from serverless output tracing while retaining static photo URLs. `build2.txt` rejected `api/orders/[id]/export-svg` at 256.71 MB against the reported 250 MB limit; its local trace included 698 gallery files (~141 MiB).
+- [x] Enable `experimental.webpackBuildWorker` and `experimental.webpackMemoryOptimizations` after `build3.txt` reported OOM during TypeScript checking on the 8-GB build machine. The custom Webpack hook otherwise disables the default worker. Keep type checks and filesystem caching enabled; do not restore the old hard cap of 2 on module parallelism by default.
+- [ ] Run the next Vercel build and verify both fixes: no OOM during type checking and export-SVG packaging below 250 MB, followed by successful deployment. `build3.txt` never reached packaging, so the gallery exclusion is not yet remotely confirmed. Local uncached TypeScript validation passed (~1.1 GB compiler memory); both memory flags are present in the final MDX/Sentry-wrapped production config. No full build/deployment was run after enabling them.
+- [ ] After deployment, smoke-test `/memorials/gallery`, a category deep link, desktop/mobile Gallery menu links, and Select Shape previews/photo links. Check that static photos load and the export-SVG endpoint still works for an authorized admin order.
+
+## Completed locally — memorial photo gallery and shape discovery
+
+- [x] Add `/memorials/gallery` and keep the homepage gallery section. Import all 349 Australian gallery photos into 698 local WebP files across nine categories, retaining source provenance in `app/_internal/home-gallery.json` and a refresh script at `scripts/import-memorial-gallery.mjs`.
+- [x] Point desktop/mobile Gallery menus to the dedicated page, including shared category-page navigation in `components/MemorialPublicHeader.tsx`; add canonical/Open Graph metadata and sitemap coverage.
+- [x] Support category filtering, load-more batches, full-size viewing, arrow keys, Escape, scroll locking and focus restoration. Validate category deep links on the server and fall back to all photos for unknown categories.
+- [x] Add 64/80-px product thumbnails to Select Shape headers with four-photo hover/focus previews. The product and preview photos link to the mapped category (`monuments` maps to `full-monuments`); filtering is by category, not exact product/material. Preserve gallery examples 001–004 used by previews when refreshing imported assets.
+- [x] Validate five product-category mappings, four preview links per category, mobile tap, desktop/mobile navigation and keyboard behavior with targeted Chromium checks; ESLint, formatting and type checks passed. Initial gallery screenshots: `docs/audits/2026-10-17-gallery/`. Production verification remains in the build-recovery checklist above.
+
+The memorial photo gallery is separate from `/designs/*`; this work does not change the preview approval status or completion of the staged design-discovery plan below.
 
 ## Now — UI foundation
 

@@ -49,6 +49,7 @@ export default function ConditionalCanvas() {
 
   // Check if we're on the homepage
   const isHomePage = pathname === '/';
+  const isContactPage = pathname === '/contact';
 
   // Hide canvas on select-product page
   const isSelectProductPage = designerStepSlug === 'select-product';
@@ -105,6 +106,7 @@ export default function ConditionalCanvas() {
     if (
       !pathname ||
       ((isHomePage ||
+        isContactPage ||
         isDesignPage ||
         isMemorialsPage ||
         isProductsPage ||
@@ -129,6 +131,7 @@ export default function ConditionalCanvas() {
   }, [
     pathname,
     isHomePage,
+    isContactPage,
     isDesignPage,
     isMemorialsPage,
     isProductsPage,
@@ -154,6 +157,7 @@ export default function ConditionalCanvas() {
   if (
     !pathname ||
     ((isHomePage ||
+      isContactPage ||
       isDesignPage ||
       isMemorialsPage ||
       isProductsPage ||

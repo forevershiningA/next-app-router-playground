@@ -8,6 +8,7 @@ export const GOOGLE_REVIEW_HIGHLIGHTS = [
   },
   {
     author: 'Duncan Blake',
+    category: 'Pet Memorial',
     text: 'Responsive, compassionate help with a pet memorial during a difficult time.',
   },
   {
@@ -16,6 +17,7 @@ export const GOOGLE_REVIEW_HIGHLIGHTS = [
   },
   {
     author: 'Naser Soueid',
+    category: 'Custom Bronze Plaque',
     text: 'A challenging custom bronze plaque delivered beyond expectations.',
   },
   {
@@ -28,6 +30,7 @@ export const GOOGLE_REVIEW_HIGHLIGHTS = [
   },
   {
     author: 'Janette Martin',
+    category: 'Family Monument',
     text: 'A unique family monument handled professionally from design to installation.',
   },
   {
@@ -36,6 +39,7 @@ export const GOOGLE_REVIEW_HIGHLIGHTS = [
   },
   {
     author: 'Ebony Ristich',
+    category: 'Memorial Plaque',
     text: 'Helpful service and a plaque that arrived exactly as imagined.',
   },
   {
@@ -76,6 +80,7 @@ export const GOOGLE_REVIEW_HIGHLIGHTS = [
   },
   {
     author: 'David Clayton',
+    category: 'Memorial Plaques',
     text: 'Reliable quality and service across more than 160 memorial plaques.',
   },
   {

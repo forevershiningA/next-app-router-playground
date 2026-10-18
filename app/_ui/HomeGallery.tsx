@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 import {
   ArrowLeftIcon,
@@ -51,29 +52,73 @@ export default function HomeGallery({
     <section
       id="gallery"
       aria-labelledby="gallery-heading"
-      className="day:border-stone-200 day:bg-[#f3f1ed] scroll-mt-8 border-y border-white/10 bg-[#151412] py-20"
+      className={
+        standalone
+          ? 'scroll-mt-8 bg-white text-[#1d1a17]'
+          : 'day:border-stone-200 day:bg-[#f3f1ed] scroll-mt-8 border-y border-white/10 bg-[#151412] py-20'
+      }
     >
-      <div className="mx-auto max-w-7xl px-6 lg:px-8">
-        <div className="max-w-3xl">
-          <Heading
-            id="gallery-heading"
-            className="day:text-stone-900 font-serif text-4xl text-white sm:text-5xl"
-          >
-            Gallery
-          </Heading>
-          <p className="day:text-stone-600 mt-5 max-w-2xl text-base leading-7 text-gray-300">
-            Explore memorials created by Forever Shining in Australia. Find
-            inspiration in the shapes, portraits, inscriptions, and details
-            chosen to remember a loved one.
-          </p>
-        </div>
+      <div
+        className={
+          standalone
+            ? 'border-b border-[#bdb4a6] bg-[#eee9df] text-[#1d1a17]'
+            : ''
+        }
+      >
         <div
-          role="group"
-          aria-label="Filter gallery by memorial type"
-          className="mt-8 flex flex-wrap gap-2"
+          className={
+            standalone
+              ? 'mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-10 lg:px-8 lg:py-14'
+              : 'mx-auto max-w-7xl px-6 lg:px-8'
+          }
         >
-          {[{ id: 'all', name: 'All memorials' }, ...categories].map(
-            (group) => (
+          {standalone && (
+            <nav
+              className="mb-6 text-sm text-[#756c62]"
+              aria-label="Breadcrumb"
+            >
+              <Link href="/" className="transition-colors hover:text-[#6f511c]">
+                Home
+              </Link>
+              <span className="mx-2" aria-hidden="true">
+                /
+              </span>
+              <span>Gallery</span>
+            </nav>
+          )}
+          <div className={standalone ? 'max-w-none' : 'max-w-3xl'}>
+            <Heading
+              id="gallery-heading"
+              className={
+                standalone
+                  ? 'm-0 max-w-3xl p-0 font-serif text-[2.5rem] leading-[1.08] tracking-[-0.025em] text-[#1d1a17] sm:text-5xl lg:text-[3.5rem]'
+                  : 'day:text-stone-900 font-serif text-4xl text-white sm:text-5xl'
+              }
+            >
+              Gallery
+            </Heading>
+            <p
+              className={
+                standalone
+                  ? 'mt-5 text-base leading-7 text-[#625a51] sm:text-lg sm:leading-8'
+                  : 'day:text-stone-600 mt-5 max-w-2xl text-base leading-7 text-gray-300'
+              }
+            >
+              Find inspiration in the shapes, portraits, inscriptions, and
+              details chosen to remember a loved one.
+            </p>
+          </div>
+          <div
+            role="group"
+            aria-label="Filter gallery by memorial type"
+            className="mt-8 flex flex-wrap gap-2"
+          >
+            {[
+              { id: 'all', name: 'All memorials' },
+              ...categories.filter(
+                (group) => !['pinnaroo', 'images'].includes(group.id),
+              ),
+            ].map((group) => (
               <button
                 key={group.id}
                 type="button"
@@ -82,16 +127,28 @@ export default function HomeGallery({
                   setCategory(group.id);
                   setVisibleCount(12);
                 }}
-                className={`min-h-11 rounded-sm border px-4 py-2 text-sm transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#cfac6c] ${category === group.id ? 'border-[#cfac6c] bg-[#cfac6c] text-[#17120a]' : 'day:border-stone-300 day:text-stone-700 border-white/20 text-white/80 hover:border-[#cfac6c]'}`}
+                className={`min-h-11 rounded-sm border px-4 py-2 text-sm transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#cfac6c] ${category === group.id ? (standalone ? 'border-[#1d1a17] bg-[#1d1a17] text-white' : 'border-[#cfac6c] bg-[#cfac6c] text-[#17120a]') : standalone ? 'border-[#bdb4a6] text-[#625a51] hover:border-[#6f511c] hover:text-[#1d1a17]' : 'day:border-stone-300 day:text-stone-700 border-white/20 text-white/80 hover:border-[#cfac6c]'}`}
               >
                 {group.name}
               </button>
-            ),
-          )}
+            ))}
+          </div>
         </div>
+      </div>
+      <div
+        className={
+          standalone
+            ? 'mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 lg:py-12'
+            : 'mx-auto max-w-7xl px-6 lg:px-8'
+        }
+      >
         <p
           aria-live="polite"
-          className="day:text-stone-600 mt-5 text-sm text-white/60"
+          className={
+            standalone
+              ? 'text-sm text-[#625a51]'
+              : 'day:text-stone-600 mt-5 text-sm text-white/60'
+          }
         >
           {photos.length} photos · Select a photo to enlarge
         </p>
@@ -119,7 +176,7 @@ export default function HomeGallery({
             <button
               type="button"
               onClick={() => setVisibleCount((count) => count + 24)}
-              className="day:text-[#6f511c] min-h-11 rounded-sm border border-[#cfac6c] px-6 py-3 text-sm font-semibold text-[#e3c887] hover:bg-[#cfac6c] hover:text-[#17120a] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#cfac6c]"
+              className={`min-h-11 rounded-sm border border-[#cfac6c] px-6 py-3 text-sm font-semibold hover:bg-[#cfac6c] hover:text-[#17120a] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#cfac6c] ${standalone ? 'text-[#6f511c]' : 'day:text-[#6f511c] text-[#e3c887]'}`}
             >
               Show more photos ({photos.length - visibleCount} remaining)
             </button>

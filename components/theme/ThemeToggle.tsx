@@ -14,6 +14,7 @@ export function ThemeToggle({ inline = false }: { inline?: boolean }) {
   // Designs pages always use white background — toggle not needed and would overlap the sidebar logo
   if (pathname?.startsWith('/designs')) return null;
   if (pathname === '/' && !inline) return null;
+  if (pathname === '/contact' && !inline) return null;
   if (isDesignerRoutePath(pathname) && pathname !== '/' && !inline) return null;
 
   const accountRoutePrefixes = [

@@ -11,12 +11,14 @@ import {
 import { ThemeToggle } from '#/components/theme/ThemeToggle';
 
 const MEMORIAL_LINKS = [
+  { label: 'Home', href: '/' },
   { label: 'Headstones', href: '/memorials/headstones' },
   { label: 'Plaques', href: '/memorials/plaques' },
   { label: 'Full Monuments', href: '/memorials/full-monuments' },
   { label: 'Urns', href: '/memorials/urns' },
   { label: 'Pet Memorials', href: '/memorials/pet-memorials' },
   { label: 'Gallery', href: '/memorials/gallery' },
+  { label: 'Contact', href: '/contact' },
 ] as const;
 
 export default function HomeSplash() {
@@ -148,7 +150,7 @@ export default function HomeSplash() {
               <Link
                 key={link.href}
                 href={link.href}
-                className="relative flex h-full items-center text-[13px] font-medium tracking-[0.01em] text-[#514a43] transition-colors after:absolute after:right-0 after:bottom-0 after:left-0 after:h-px after:origin-center after:scale-x-0 after:bg-[#8a651f] after:transition-transform hover:text-[#6f511c] hover:after:scale-x-100 focus-visible:text-[#6f511c] focus-visible:outline-none focus-visible:after:scale-x-100"
+                className="relative flex h-full items-center text-[15px] font-medium tracking-[0.01em] text-[#514a43] transition-colors after:absolute after:right-0 after:bottom-0 after:left-0 after:h-px after:origin-center after:scale-x-0 after:bg-[#8a651f] after:transition-transform hover:text-[#6f511c] hover:after:scale-x-100 focus-visible:text-[#6f511c] focus-visible:outline-none focus-visible:after:scale-x-100"
               >
                 {link.label}
               </Link>
@@ -244,16 +246,25 @@ export default function HomeSplash() {
                 save or share your design when you are ready.
               </p>
 
-              <div className="relative z-20 mt-7 flex">
+              <div className="relative z-20 mt-7 flex w-full flex-col gap-3 sm:flex-row sm:flex-wrap">
                 <Link
                   href="/select-product"
                   prefetch={false}
-                  className="inline-flex min-h-12 w-full items-center justify-center rounded-sm bg-[#1d1a17] px-7 py-3 text-center text-sm font-semibold tracking-[0.015em] text-white transition-colors hover:bg-[#3a332c] sm:w-auto"
+                  className="inline-flex min-h-12 w-full items-center justify-center rounded-sm bg-[#1d1a17] px-5 py-3 text-center text-sm font-semibold tracking-[0.015em] text-white transition-colors hover:bg-[#3a332c] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#6f511c] sm:w-auto"
                   aria-label="Design your memorial"
                 >
                   Start Designing in 3D
                 </Link>
+                <Link
+                  href="/designs"
+                  className="inline-flex min-h-12 w-full items-center justify-center rounded-sm border border-[#bdb4a6] px-4 py-3 text-center text-sm font-semibold text-[#1d1a17] transition-colors hover:border-[#7b5a20] hover:bg-white/45 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#6f511c] sm:w-auto"
+                >
+                  Browse Ready Designs
+                </Link>
               </div>
+              <p className="mt-3 text-xs leading-6 text-[#625a51]">
+                Free to use • No account needed • Instant price estimate
+              </p>
             </div>
 
             <Link

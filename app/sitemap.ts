@@ -22,6 +22,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   // Static pages
   const staticPages: MetadataRoute.Sitemap = [
+    { url: `${BASE_URL}/contact`, changeFrequency: 'monthly', priority: 0.5 },
     {
       url: `${BASE_URL}/memorials/gallery`,
       changeFrequency: 'monthly',

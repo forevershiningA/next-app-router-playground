@@ -45,6 +45,7 @@ export default function MainContent({
         !isMemorialsRoute &&
         !isProductsRoute &&
         !isHomepage &&
+        pathname !== '/contact' &&
         isSidebarOpen
           ? 'lg:pl-[400px]'
           : ''

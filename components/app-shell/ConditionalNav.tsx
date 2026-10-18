@@ -223,6 +223,7 @@ export default function ConditionalNav() {
     isAdminRoute ||
     isDesignShareRoute ||
     isMemorialsRoute ||
+    pathname === '/contact' ||
     isSeoDesignsListingRoute
   ) {
     return null;

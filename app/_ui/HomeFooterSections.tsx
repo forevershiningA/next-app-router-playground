@@ -134,12 +134,12 @@ export default function HomeFooterSections() {
             </div>
 
             <div className="flex flex-col gap-3 sm:flex-row lg:items-center">
-              <a
-                href="mailto:admin@bronze-plaque.com?subject=Memorial%20Design%20Help"
+              <Link
+                href="/contact"
                 className="inline-flex min-h-11 items-center justify-center rounded-lg bg-[#cfac6c] px-5 py-2.5 text-sm font-semibold text-slate-950 transition-colors hover:bg-[#d7b979]"
               >
                 Contact us
-              </a>
+              </Link>
               <Link
                 href="/designs"
                 className="day:border-gray-300 day:text-gray-800 day:hover:bg-gray-50 inline-flex min-h-11 items-center justify-center rounded-lg border border-white/15 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:border-[#cfac6c]/60 hover:bg-white/5"
