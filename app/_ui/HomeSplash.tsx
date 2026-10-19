@@ -273,36 +273,30 @@ export default function HomeSplash() {
               aria-label="Open the 3D memorial designer"
               className="group relative block overflow-hidden rounded-sm border border-[#d8cdb9] bg-[#17120d] shadow-[0_20px_50px_rgba(55,42,20,0.18)]"
             >
-              <div className="relative aspect-[21/10] overflow-hidden">
+              <div className="relative aspect-video overflow-hidden">
                 <video
                   autoPlay
                   muted
                   loop
                   playsInline
                   preload="metadata"
-                  poster="/videos/configurator-hero-poster.webp"
+                  poster="/videos/hero-garden-v3-poster.webp"
                   aria-hidden="true"
-                  className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.025] motion-reduce:hidden"
+                  className="h-full w-full object-cover motion-reduce:hidden"
                 >
-                  <source
-                    src="/videos/configurator-hero.webm"
-                    type="video/webm"
-                  />
-                  <source
-                    src="/videos/configurator-hero.mp4"
-                    type="video/mp4"
-                  />
+                  <source src="/videos/hero-garden-v3.webm" type="video/webm" />
+                  <source src="/videos/hero-garden-v3.mp4" type="video/mp4" />
                 </video>
                 <Image
-                  src="/screenshots/designer-3d-preview.webp"
-                  alt="The Forever Shining 3D memorial designer showing a personalized headstone"
+                  src="/videos/hero-garden-v3-poster.webp"
+                  alt="A laptop showing the 3D memorial designer beside a headstone in a garden"
                   fill
                   sizes="(min-width: 1024px) 55vw, 100vw"
                   className="hidden object-cover motion-reduce:block"
                 />
 
                 <div className="absolute top-4 right-4 border border-white/25 bg-[#17120d]/90 px-3 py-1.5 text-[10px] font-semibold tracking-[0.12em] text-[#e3c887] backdrop-blur-sm sm:top-5 sm:right-5">
-                  Live 3D preview
+                  From design to memorial
                 </div>
               </div>
             </Link>

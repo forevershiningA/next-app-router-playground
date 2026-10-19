@@ -1,0 +1,113 @@
+{
+  "productId": "124",
+  "shape": "/shapes/headstones/serpentine.svg",
+  "material": "/textures/forever/l/Blue-Pearl.webp",
+  "baseMaterial": "/textures/forever/l/Blue-Pearl.webp",
+  "widthMm": 600,
+  "heightMm": 600,
+  "inscriptions": [
+    {
+      "id": "l-a063af3a-3cf2-4b51-8d4e-b8575a5990ac",
+      "text": "In Loving Memory",
+      "font": "Garamond",
+      "sizeMm": 42,
+      "rotationDeg": 0,
+      "xPos": 0,
+      "yPos": 200.02499389648438,
+      "color": "#e7d9b5",
+      "target": "headstone",
+      "textAlign": "center",
+      "layer": 1,
+      "baseWidthMm": 600,
+      "baseHeightMm": 600
+    },
+    {
+      "id": "l-17d1a6bb-e0cd-4efb-86eb-fe28651843ff",
+      "text": "Always in our hearts",
+      "font": "Garamond",
+      "sizeMm": 30,
+      "rotationDeg": 0,
+      "xPos": 0,
+      "yPos": 156.68624389648437,
+      "color": "#e7d9b5",
+      "target": "headstone",
+      "textAlign": "center",
+      "layer": 2,
+      "baseWidthMm": 600,
+      "baseHeightMm": 600
+    }
+  ],
+  "motifs": [
+    {
+      "id": "motif-185c6f40-7077-4966-8520-cc4e00d56eaa",
+      "svgPath": "/shapes/motifs/dove_01.svg",
+      "color": "#e7d9b5"
+    },
+    {
+      "id": "motif-7a5d9d6b-9f54-4f50-88d6-0b687bcf099d",
+      "svgPath": "/shapes/motifs/branch_001 [przekonwertowany].svg",
+      "color": "#e7d9b5"
+    },
+    {
+      "id": "motif-081d689a-63ee-4fec-9a1a-5edfab68ced1",
+      "svgPath": "/shapes/motifs/branch_001 [przekonwertowany].svg",
+      "color": "#e7d9b5"
+    }
+  ],
+  "motifOffsets": {
+    "motif-185c6f40-7077-4966-8520-cc4e00d56eaa": {
+      "xPos": 0,
+      "yPos": 160,
+      "scale": 1,
+      "rotationZ": 0,
+      "heightMm": 130,
+      "target": "headstone",
+      "coordinateSpace": "mm-center",
+      "flipX": false,
+      "flipY": false,
+      "layer": 3,
+      "baseWidthMm": 600,
+      "baseHeightMm": 600
+    },
+    "motif-7a5d9d6b-9f54-4f50-88d6-0b687bcf099d": {
+      "xPos": -205,
+      "yPos": -160,
+      "scale": 1,
+      "rotationZ": 0,
+      "heightMm": 200,
+      "target": "headstone",
+      "coordinateSpace": "mm-center",
+      "flipX": false,
+      "flipY": false,
+      "layer": 4,
+      "baseWidthMm": 600,
+      "baseHeightMm": 600
+    },
+    "motif-081d689a-63ee-4fec-9a1a-5edfab68ced1": {
+      "xPos": 205,
+      "yPos": -160,
+      "scale": 1,
+      "rotationZ": 0,
+      "heightMm": 200,
+      "target": "headstone",
+      "coordinateSpace": "mm-center",
+      "flipX": true,
+      "flipY": false,
+      "layer": 5,
+      "baseWidthMm": 600,
+      "baseHeightMm": 600
+    }
+  },
+  "bounds": {
+    "min": [
+      -0.35,
+      0.0010000000000000009,
+      -0.05
+    ],
+    "max": [
+      0.35,
+      0.6999999816917416,
+      0.2
+    ]
+  }
+}

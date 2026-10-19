@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="pl">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="robots" content="noindex,nofollow" />
+  <title>Podgląd hero — ogród, wersja 1</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      background: #eee9df;
+      color: #29251f;
+      font:
+        16px/1.6 system-ui,
+        sans-serif;
+    }
+    main {
+      max-width: 1440px;
+      margin: auto;
+      padding: 28px 24px;
+    }
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+    h1 {
+      font:
+        400 28px Georgia,
+        serif;
+      margin: 0;
+    }
+    p {
+      margin: 8px 0 20px;
+      color: #665e53;
+    }
+    a {
+      color: inherit;
+      text-underline-offset: 4px;
+    }
+    .stage {
+      position: relative;
+      background: #102019;
+      overflow: hidden;
+      border-radius: 4px;
+    }
+    video {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    .copy {
+      position: absolute;
+      inset: 0 0 auto;
+      padding: 25px 25px 70px;
+      text-align: center;
+      color: #fff8eb;
+      background: linear-gradient(#07110ccf, #07110c55, transparent);
+      pointer-events: none;
+    }
+    .copy small {
+      color: #dfc58b;
+      letter-spacing: 0.2em;
+      font-size: 10px;
+    }
+    .copy h2 {
+      font:
+        400 clamp(20px, 3.1vw, 44px) / 1.15 Georgia,
+        serif;
+      margin: 9px auto;
+      max-width: 1000px;
+    }
+    .copy em {
+      color: #dfc58b;
+      font-style: normal;
+    }
+    .copy button {
+      background: #c7a864;
+      color: #1b2119;
+      border: 0;
+      border-radius: 3px;
+      padding: 10px 24px;
+      font: 600 11px system-ui;
+      letter-spacing: 0.1em;
+      margin-top: 8px;
+    }
+    .links {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin: 20px 0;
+    }
+    label {
+      font-size: 14px;
+    }
+    footer {
+      font-size: 13px;
+      color: #665e53;
+      max-width: 950px;
+    }
+    .hidden {
+      display: none;
+    }
+    @media (max-width: 640px) {
+      main {
+        padding: 20px 12px;
+      }
+      .copy {
+        padding: 12px 10px 40px;
+      }
+      .copy small {
+        font-size: 7px;
+      }
+      .copy h2 {
+        font-size: 18px;
+        margin: 5px auto;
+      }
+      .copy button {
+        display: none;
+      }
+    }
+  </style>
+  <main>
+    <header>
+      <h1>Hero · ogród · wersja 1</h1>
+      <label
+        ><input type="checkbox" id="toggle" checked /> Pokaż przykładowy
+        nagłówek</label
+      >
+    </header>
+    <p>
+      12 sekund · bez dźwięku · zapętlony film z prawdziwym nagraniem
+      konfiguratora.
+    </p>
+    <div class="stage">
+      <video
+        autoplay
+        muted
+        loop
+        playsinline
+        controls
+        preload="metadata"
+        poster="hero-garden-v1-poster.webp"
+      >
+        <source src="hero-garden-v1.webm" type="video/webm" />
+        <source src="hero-garden-v1.mp4" type="video/mp4" />
+      </video>
+      <div class="copy" id="copy">
+        <small>DESIGNED BY YOU · CRAFTED WITH CARE</small>
+        <h2>A personal tribute.<br /><em>Designed your way.</em></h2>
+        <button tabindex="-1">START DESIGNING IN 3D</button>
+      </div>
+    </div>
+    <div class="links">
+      <a href="hero-garden-v1.mp4">Otwórz film MP4</a
+      ><a href="hero-garden-v1.mp4" download>Pobierz MP4</a
+      ><a href="hero-garden-v1-poster.webp">Zobacz kadr</a>
+    </div>
+    <footer>
+      Prototyp kompozycji: sceneria wygenerowana jako obraz, animowany kadr i
+      nagranie istniejącego konfiguratora na ekranie laptopa. Roślinność i
+      nagrobek są nieruchome; ten etap pokazuje kierunek wizualny. Detale
+      nagrobka w scenerii są ilustracją i nie odwzorowują dokładnie projektu na
+      ekranie. Bieżąca strona główna zachowuje swój film.
+    </footer>
+  </main>
+  <script>
+    document
+      .getElementById('toggle')
+      .addEventListener('change', (event) =>
+        document
+          .getElementById('copy')
+          .classList.toggle('hidden', !event.target.checked),
+      );
+  </script>
+</html>

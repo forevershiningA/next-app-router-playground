@@ -1,0 +1,348 @@
+{
+  "productId": "124",
+  "shape": "/shapes/headstones/serpentine.svg",
+  "material": "/textures/forever/l/Blue-Pearl.webp",
+  "baseMaterial": "/textures/forever/l/Blue-Pearl.webp",
+  "widthMm": 600,
+  "heightMm": 600,
+  "inscriptions": [
+    {
+      "id": "l-4b128311-741f-45a8-a0ec-3db6422e2b46",
+      "text": "In Loving Memory",
+      "font": "Garamond",
+      "sizeMm": 42,
+      "rotationDeg": 0,
+      "xPos": 0,
+      "yPos": 200.02499389648438,
+      "color": "#e7d9b5",
+      "target": "headstone",
+      "textAlign": "center",
+      "layer": 1,
+      "baseWidthMm": 600,
+      "baseHeightMm": 600
+    },
+    {
+      "id": "l-b67728d3-0d44-492c-8e5f-05bb0395b308",
+      "text": "Always in our hearts",
+      "font": "Garamond",
+      "sizeMm": 30,
+      "rotationDeg": 0,
+      "xPos": 0,
+      "yPos": 156.68624389648437,
+      "color": "#e7d9b5",
+      "target": "headstone",
+      "textAlign": "center",
+      "layer": 2,
+      "baseWidthMm": 600,
+      "baseHeightMm": 600
+    }
+  ],
+  "motifs": [
+    {
+      "id": "motif-7d1a05af-2e92-43e7-8df8-613065c0f81a",
+      "svgPath": "/shapes/motifs/dove_01.svg",
+      "color": "#e7d9b5"
+    },
+    {
+      "id": "motif-0e926510-b8d2-4fbd-a5c6-64f1e2a7c1cd",
+      "svgPath": "/shapes/motifs/branch_001 [przekonwertowany].svg",
+      "color": "#e7d9b5"
+    },
+    {
+      "id": "motif-869e02ed-5903-4539-9b88-3feaac1b5ace",
+      "svgPath": "/shapes/motifs/branch_001 [przekonwertowany].svg",
+      "color": "#e7d9b5"
+    }
+  ],
+  "motifOffsets": {
+    "motif-7d1a05af-2e92-43e7-8df8-613065c0f81a": {
+      "xPos": 0,
+      "yPos": 160,
+      "scale": 1,
+      "rotationZ": 0,
+      "heightMm": 130,
+      "target": "headstone",
+      "coordinateSpace": "mm-center",
+      "flipX": false,
+      "flipY": false,
+      "layer": 3,
+      "baseWidthMm": 600,
+      "baseHeightMm": 600
+    },
+    "motif-0e926510-b8d2-4fbd-a5c6-64f1e2a7c1cd": {
+      "xPos": -205,
+      "yPos": -160,
+      "scale": 1,
+      "rotationZ": 0,
+      "heightMm": 200,
+      "target": "headstone",
+      "coordinateSpace": "mm-center",
+      "flipX": false,
+      "flipY": false,
+      "layer": 4,
+      "baseWidthMm": 600,
+      "baseHeightMm": 600
+    },
+    "motif-869e02ed-5903-4539-9b88-3feaac1b5ace": {
+      "xPos": 205,
+      "yPos": -160,
+      "scale": 1,
+      "rotationZ": 0,
+      "heightMm": 200,
+      "target": "headstone",
+      "coordinateSpace": "mm-center",
+      "flipX": true,
+      "flipY": false,
+      "layer": 5,
+      "baseWidthMm": 600,
+      "baseHeightMm": 600
+    }
+  },
+  "bounds": {
+    "min": [
+      -0.35,
+      0.0010000000000000009,
+      -0.05
+    ],
+    "max": [
+      0.35,
+      0.6999999816917416,
+      0.2
+    ]
+  },
+  "stages": [
+    {
+      "name": "blank",
+      "inscriptions": 0,
+      "motifs": 0,
+      "state": {
+        "inscriptions": [],
+        "motifs": []
+      },
+      "camera": {
+        "position": [
+          0.035859406378957064,
+          0.38123662488497684,
+          1.78280422879783
+        ],
+        "projection": [
+          2.744649348198934,
+          0,
+          0,
+          0,
+          0,
+          3.1715948023632126,
+          0,
+          0,
+          0,
+          0,
+          -1.0000200002000021,
+          -1,
+          0,
+          0,
+          -0.0020000200002000023,
+          0
+        ]
+      },
+      "productSize": "728x703"
+    },
+    {
+      "name": "dedication",
+      "inscriptions": 1,
+      "motifs": 0,
+      "state": {
+        "inscriptions": [
+          "In Loving Memory"
+        ],
+        "motifs": []
+      },
+      "camera": {
+        "position": [
+          0.035859406378957064,
+          0.38123662488497684,
+          1.78280422879783
+        ],
+        "projection": [
+          2.744649348198934,
+          0,
+          0,
+          0,
+          0,
+          3.1715948023632126,
+          0,
+          0,
+          0,
+          0,
+          -1.0000200002000021,
+          -1,
+          0,
+          0,
+          -0.0020000200002000023,
+          0
+        ]
+      },
+      "productSize": "728x703"
+    },
+    {
+      "name": "remembrance",
+      "inscriptions": 2,
+      "motifs": 0,
+      "state": {
+        "inscriptions": [
+          "In Loving Memory",
+          "Always in our hearts"
+        ],
+        "motifs": []
+      },
+      "camera": {
+        "position": [
+          0.035859406378957064,
+          0.38123662488497684,
+          1.78280422879783
+        ],
+        "projection": [
+          2.744649348198934,
+          0,
+          0,
+          0,
+          0,
+          3.1715948023632126,
+          0,
+          0,
+          0,
+          0,
+          -1.0000200002000021,
+          -1,
+          0,
+          0,
+          -0.0020000200002000023,
+          0
+        ]
+      },
+      "productSize": "728x703"
+    },
+    {
+      "name": "dove",
+      "inscriptions": 2,
+      "motifs": 1,
+      "state": {
+        "inscriptions": [
+          "In Loving Memory",
+          "Always in our hearts"
+        ],
+        "motifs": [
+          "/shapes/motifs/dove_01.svg"
+        ]
+      },
+      "camera": {
+        "position": [
+          0.035859406378957064,
+          0.38123662488497684,
+          1.78280422879783
+        ],
+        "projection": [
+          2.744649348198934,
+          0,
+          0,
+          0,
+          0,
+          3.1715948023632126,
+          0,
+          0,
+          0,
+          0,
+          -1.0000200002000021,
+          -1,
+          0,
+          0,
+          -0.0020000200002000023,
+          0
+        ]
+      },
+      "productSize": "728x703"
+    },
+    {
+      "name": "left-branch",
+      "inscriptions": 2,
+      "motifs": 2,
+      "state": {
+        "inscriptions": [
+          "In Loving Memory",
+          "Always in our hearts"
+        ],
+        "motifs": [
+          "/shapes/motifs/dove_01.svg",
+          "/shapes/motifs/branch_001 [przekonwertowany].svg"
+        ]
+      },
+      "camera": {
+        "position": [
+          0.035859406378957064,
+          0.38123662488497684,
+          1.78280422879783
+        ],
+        "projection": [
+          2.744649348198934,
+          0,
+          0,
+          0,
+          0,
+          3.1715948023632126,
+          0,
+          0,
+          0,
+          0,
+          -1.0000200002000021,
+          -1,
+          0,
+          0,
+          -0.0020000200002000023,
+          0
+        ]
+      },
+      "productSize": "728x703"
+    },
+    {
+      "name": "finished",
+      "inscriptions": 2,
+      "motifs": 3,
+      "state": {
+        "inscriptions": [
+          "In Loving Memory",
+          "Always in our hearts"
+        ],
+        "motifs": [
+          "/shapes/motifs/dove_01.svg",
+          "/shapes/motifs/branch_001 [przekonwertowany].svg",
+          "/shapes/motifs/branch_001 [przekonwertowany].svg"
+        ]
+      },
+      "camera": {
+        "position": [
+          0.035859406378957064,
+          0.38123662488497684,
+          1.78280422879783
+        ],
+        "projection": [
+          2.744649348198934,
+          0,
+          0,
+          0,
+          0,
+          3.1715948023632126,
+          0,
+          0,
+          0,
+          0,
+          -1.0000200002000021,
+          -1,
+          0,
+          0,
+          -0.0020000200002000023,
+          0
+        ]
+      },
+      "productSize": "728x703"
+    }
+  ]
+}
