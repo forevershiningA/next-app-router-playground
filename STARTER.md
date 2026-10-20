@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-10-19
+**Last Updated:** 2026-10-20
 
 **Status entry order:** Add new dated status entries immediately after the table of contents, before the existing status entries. Keep status entries in reverse chronological order (newest first); do not append them to the end of this file.
 **Tech Stack:** Next.js 15.5.26, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots), **Vitest 4.1.8** (unit tests), **Playwright 1.59.1** (E2E tests)
@@ -140,6 +140,13 @@
 127. [October 19 Progressive Garden Hero Video](#current-status-2026-10-19--progressive-garden-hero-video)
 
 ---
+
+## Current Status (2026-10-20) — Photographic monument hero alternative
+
+- Homepage hero now uses `hero-garden-v4` (WebM, MP4 and reduced-motion poster). Earlier videos are retained.
+- The original v1 photographic-style garden monument remains unchanged on the right. The laptop shows six progressive real configurator states recreating its Blue Pearl design, with a wider 800 × 600 mm Serpentine upright, two inscriptions and new outline dove/botanical SVG motifs.
+- Capture/rebuild: existing scripts accept `--photographic`; packaged stages and design manifest are in `assets/video-sources/hero-garden-v4/`. Details and validation: `docs/hero-garden-v4.md`.
+- Chromium verified both codecs, autoplay, looping, mobile overflow and reduced-motion fallback. The right side is pixel-identical across all six source stages. No deployment performed.
 
 ## Current Status (2026-10-19) — Progressive garden hero video
 

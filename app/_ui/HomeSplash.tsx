@@ -280,15 +280,15 @@ export default function HomeSplash() {
                   loop
                   playsInline
                   preload="metadata"
-                  poster="/videos/hero-garden-v3-poster.webp"
+                  poster="/videos/hero-garden-v4-poster.webp"
                   aria-hidden="true"
                   className="h-full w-full object-cover motion-reduce:hidden"
                 >
-                  <source src="/videos/hero-garden-v3.webm" type="video/webm" />
-                  <source src="/videos/hero-garden-v3.mp4" type="video/mp4" />
+                  <source src="/videos/hero-garden-v4.webm" type="video/webm" />
+                  <source src="/videos/hero-garden-v4.mp4" type="video/mp4" />
                 </video>
                 <Image
-                  src="/videos/hero-garden-v3-poster.webp"
+                  src="/videos/hero-garden-v4-poster.webp"
                   alt="A laptop showing the 3D memorial designer beside a headstone in a garden"
                   fill
                   sizes="(min-width: 1024px) 55vw, 100vw"

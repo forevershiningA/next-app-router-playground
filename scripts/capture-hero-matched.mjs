@@ -5,8 +5,13 @@ import sharp from 'sharp';
 
 // Local-only development capture uses the existing automation store/renderer.
 const progressive = process.argv.includes('--progressive');
+const photographic = process.argv.includes('--photographic');
 const destination = path.resolve(
-  progressive ? 'output/hero-progressive' : 'output/hero-matched',
+  photographic
+    ? 'output/hero-photographic'
+    : progressive
+      ? 'output/hero-progressive'
+      : 'output/hero-matched',
 );
 const base = process.env.HERO_MATCHED_BASE_URL ?? 'http://localhost:3102';
 if (!['localhost', '127.0.0.1'].includes(new URL(base).hostname))
@@ -21,6 +26,13 @@ try {
     viewport: { width: 1440, height: 900 },
   });
   page.on('pageerror', (error) => console.error('Browser:', error.message));
+  page.on('requestfailed', (request) =>
+    console.error(
+      'Request failed:',
+      request.url(),
+      request.failure()?.errorText,
+    ),
+  );
   await page.addInitScript(() => localStorage.setItem('fs_ui_theme', 'day'));
   await page.goto(
     `${base}/traditional-engraved-headstone/select-material?capture=hero`,
@@ -46,16 +58,20 @@ try {
     { timeout: 60000 },
   );
   console.log('Product ready');
-  await page.evaluate(() => {
+  await page.evaluate((photographic) => {
     const store = window.__headstoneStore;
     const s = store.getState();
     s.setShapeUrl('/shapes/headstones/serpentine.svg');
     s.setHeadstoneMaterialUrl('/textures/forever/l/Blue-Pearl.webp');
     s.setBaseMaterialUrl('/textures/forever/l/Blue-Pearl.webp');
+    if (photographic) {
+      s.setWidthMm(800);
+      s.setHeightMm(600);
+    }
     s.setInscriptions([]);
     for (const [text, sizeMm, yPos] of [
-      ['In Loving Memory', 42, 0],
-      ['Always in our hearts', 30, -65],
+      ['In Loving Memory', photographic ? 58 : 42, 0],
+      ['Always in our hearts', photographic ? 42 : 30, -65],
     ]) {
       const id = store
         .getState()
@@ -70,7 +86,13 @@ try {
         .updateInscription(id, { xPos: 0, yPos, coordinateSpace: 'mm-center' });
     }
     for (const motif of s.selectedMotifs) s.removeMotif(motif.id);
-    store.getState().addMotif('/shapes/motifs/dove_01.svg');
+    store
+      .getState()
+      .addMotif(
+        photographic
+          ? '/shapes/motifs/hero-dove-outline.svg'
+          : '/shapes/motifs/dove_01.svg',
+      );
     const motif = store.getState().selectedMotifs.at(-1);
     store.getState().setMotifColor(motif.id, '#e7d9b5');
     store
@@ -81,18 +103,22 @@ try {
         heightMm: 130,
         coordinateSpace: 'mm-center',
       });
-    for (const xPos of [-205, 205]) {
+    for (const xPos of photographic ? [-310, 310] : [-205, 205]) {
       store
         .getState()
-        .addMotif('/shapes/motifs/branch_001 [przekonwertowany].svg');
+        .addMotif(
+          photographic
+            ? '/shapes/motifs/hero-botanical-outline.svg'
+            : '/shapes/motifs/branch_001 [przekonwertowany].svg',
+        );
       const branch = store.getState().selectedMotifs.at(-1);
       store.getState().setMotifColor(branch.id, '#e7d9b5');
       store
         .getState()
         .setMotifOffset(branch.id, {
           xPos,
-          yPos: -160,
-          heightMm: 200,
+          yPos: photographic ? -20 : -160,
+          heightMm: photographic ? 430 : 200,
           coordinateSpace: 'mm-center',
           flipX: xPos > 0,
         });
@@ -103,7 +129,7 @@ try {
       selectedMotifId: null,
       activePanel: null,
     });
-  });
+  }, photographic);
   console.log('Applied matched design');
   await page.waitForFunction(
     () => {
@@ -246,11 +272,32 @@ try {
     for (const [index, stage] of stages.entries()) {
       if (index === 1 || index === 3) {
         const slug = index === 1 ? 'inscriptions' : 'select-motifs';
-        await page.locator(`[data-quick-nav-slug="${slug}"]`).first().click();
-        await page.waitForFunction(
-          (slug) => location.pathname.endsWith('/' + slug),
-          slug,
-        );
+        if (photographic) {
+          // These capture-only stages share the mounted scene. Native history
+          // updates Next's pathname subscribers without remounting the renderer.
+          await page.evaluate((slug) => {
+            window.history.pushState(
+              null,
+              '',
+              `/traditional-engraved-headstone/${slug}?capture=hero`,
+            );
+          }, slug);
+        } else {
+          await page.locator(`[data-quick-nav-slug="${slug}"]`).first().click();
+        }
+        await page
+          .waitForFunction(
+            (slug) => location.pathname.replace(/\/$/, '').endsWith('/' + slug),
+            slug,
+            { timeout: 60000, polling: 100 },
+          )
+          .catch(async (error) => {
+            console.error('Navigation stalled at', page.url());
+            await page.screenshot({
+              path: path.join(destination, 'navigation-error.png'),
+            });
+            throw error;
+          });
         console.log('Capture route:', page.url());
       }
       const state = await page.evaluate(({ inscriptions, motifs }) => {

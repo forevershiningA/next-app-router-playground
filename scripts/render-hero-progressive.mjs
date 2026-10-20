@@ -6,10 +6,14 @@ import sharp from 'sharp';
 import ffmpeg from 'ffmpeg-static';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const source = path.join(root, 'assets/video-sources/hero-garden-v3');
-const raw = path.join(root, 'output/hero-progressive');
+const photographic = process.argv.includes('--photographic');
+const name = photographic ? 'hero-garden-v4' : 'hero-garden-v3';
+const source = path.join(root, 'assets/video-sources', name);
+const raw = path.join(
+  root,
+  photographic ? 'output/hero-photographic' : 'output/hero-progressive',
+);
 const output = path.join(root, 'public/videos');
-const name = 'hero-garden-v3';
 const duration = 18;
 const transition = 0.4;
 const offsets = [2, 4.4, 6.8, 9.2, 11.6, 16.8];
@@ -41,9 +45,14 @@ if (process.argv.includes('--package')) {
     '<svg xmlns="http://www.w3.org/2000/svg" width="1672" height="941"><defs><filter id="b"><feGaussianBlur stdDeviation="20"/></filter></defs><ellipse cx="1282" cy="766" rx="310" ry="33" fill="#0b140d" opacity=".55" filter="url(#b)"/></svg>',
   );
   const plate = await sharp(
-    path.join(root, 'assets/video-sources/hero-garden-v2/garden-plate.webp'),
+    path.join(
+      root,
+      photographic
+        ? 'public/videos/hero-garden-scene-v1.webp'
+        : 'assets/video-sources/hero-garden-v2/garden-plate.webp',
+    ),
   )
-    .composite([{ input: shadow }])
+    .composite(photographic ? [] : [{ input: shadow }])
     .png()
     .toBuffer();
   for (let index = 0; index < 6; index++) {
@@ -58,7 +67,7 @@ if (process.argv.includes('--package')) {
       .toBuffer();
     const composed = await sharp(plate)
       .composite([
-        { input: product, left: 970, top: 165 },
+        ...(!photographic ? [{ input: product, left: 970, top: 165 }] : []),
         { input: ui, left: 156, top: 311 },
       ])
       .png()
@@ -177,5 +186,5 @@ await run([
   path.join(output, `${name}-poster.webp`),
 ]);
 console.log(
-  `Created ${name}: ${duration}s, fixed camera, synchronized assembly`,
+  `Created ${name}: ${duration}s, fixed camera, ${photographic ? 'original monument with progressive laptop design' : 'synchronized assembly'}`,
 );
