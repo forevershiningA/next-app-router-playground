@@ -5,16 +5,19 @@ import sharp from 'sharp';
 
 // Local-only development capture uses the existing automation store/renderer.
 const intro = process.argv.includes('--intro');
+const finale = process.argv.includes('--finale');
 const progressive = intro || process.argv.includes('--progressive');
-const photographic = intro || process.argv.includes('--photographic');
+const photographic = finale || intro || process.argv.includes('--photographic');
 const destination = path.resolve(
-  intro
-    ? 'output/hero-intro'
-    : photographic
-      ? 'output/hero-photographic'
-      : progressive
-        ? 'output/hero-progressive'
-        : 'output/hero-matched',
+  finale
+    ? 'output/hero-finale'
+    : intro
+      ? 'output/hero-intro'
+      : photographic
+        ? 'output/hero-photographic'
+        : progressive
+          ? 'output/hero-progressive'
+          : 'output/hero-matched',
 );
 const base = process.env.HERO_MATCHED_BASE_URL ?? 'http://localhost:3102';
 if (!['localhost', '127.0.0.1'].includes(new URL(base).hostname))
@@ -487,23 +490,34 @@ try {
       JSON.stringify({ ...manifest, stages }, null, 2) + '\n',
     );
   } else {
+    if (finale) {
+      await page.evaluate(() =>
+        window.history.pushState(
+          null,
+          '',
+          '/traditional-engraved-headstone/select-motifs?capture=hero',
+        ),
+      );
+      await page.waitForTimeout(1500);
+    }
     const product = await captureProduct();
     await sharp(Buffer.from(product, 'base64'))
       .trim()
       .png()
       .toFile(path.join(destination, 'product.png'));
-    const frames = process.argv.includes('--still') ? 1 : 120;
+    const frames = process.argv.includes('--still') ? 1 : finale ? 130 : 120;
     for (let frame = 0; frame < frames; frame++) {
       await page.evaluate(
-        ({ frame }) => {
+        ({ frame, finale }) => {
           const { gl, body, center, camera, distance } = window.__heroCapture;
           const aspect = gl.domElement.clientWidth / gl.domElement.clientHeight;
           camera.aspect = aspect;
-          const phase = (2 * Math.PI * frame) / 120;
+          const phase = (2 * Math.PI * frame) / (finale ? 129 : 120);
           const direction = body.position
             .clone()
-            .set(0.14 + 0.075 * Math.sin(phase), 0.12, 1)
-            .transformDirection(body.matrixWorld);
+            .set(0.14 + (finale ? 0 : 0.075) * Math.sin(phase), 0.12, 1)
+            .transformDirection(body.matrixWorld)
+            .applyAxisAngle(camera.up, finale ? 0.22 * Math.sin(phase) : 0);
           camera.position
             .copy(center)
             .addScaledVector(direction, distance * 0.95);
@@ -513,7 +527,7 @@ try {
           window.__heroUiCamera = camera;
           gl.render(window.__heroCapture.scene, camera);
         },
-        { frame },
+        { frame, finale },
       );
       await page.evaluate(
         () =>

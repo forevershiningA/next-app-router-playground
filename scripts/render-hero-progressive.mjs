@@ -6,13 +6,16 @@ import sharp from 'sharp';
 import ffmpeg from 'ffmpeg-static';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const intro = process.argv.includes('--intro');
+const productIntro = process.argv.includes('--product-intro');
+const intro = productIntro || process.argv.includes('--intro');
 const photographic = intro || process.argv.includes('--photographic');
-const name = intro
-  ? 'hero-garden-v5'
-  : photographic
-    ? 'hero-garden-v4'
-    : 'hero-garden-v3';
+const name = productIntro
+  ? 'hero-garden-v6'
+  : intro
+    ? 'hero-garden-v5'
+    : photographic
+      ? 'hero-garden-v4'
+      : 'hero-garden-v3';
 const source = path.join(root, 'assets/video-sources', name);
 const raw = path.join(
   root,
@@ -23,9 +26,10 @@ const raw = path.join(
       : 'output/hero-progressive',
 );
 const output = path.join(root, 'public/videos');
-const duration = intro ? 24 : 18;
+const duration = productIntro ? 26 : intro ? 24 : 18;
 const transition = 0.4;
 const lengths = [
+  ...(productIntro ? [2.4] : []),
   ...(intro ? [2.4, 2.4, 2.4] : []),
   2.4,
   2.8,
@@ -44,7 +48,76 @@ const offsets = lengths.slice(0, -1).map((length) => {
 await mkdir(source, { recursive: true });
 await mkdir(output, { recursive: true });
 
-if (process.argv.includes('--package')) {
+if (process.argv.includes('--package') && productIntro) {
+  const previous = path.join(root, 'assets/video-sources/hero-garden-v5');
+  const design = JSON.parse(
+    await readFile(path.join(previous, 'design.json'), 'utf8'),
+  );
+  if (
+    design.stages.length !== 9 ||
+    design.stages[0].name !== 'choose-shape' ||
+    design.stages.at(-1).name !== 'finished'
+  )
+    throw new Error('Expected the complete v5 sequence');
+  const capture = JSON.parse(
+    await readFile(
+      path.join(root, 'output/hero-product-intro/capture.json'),
+      'utf8',
+    ),
+  );
+  if (capture.route !== '/select-product' || capture.errors.length)
+    throw new Error('Invalid product capture');
+  const ui = await sharp(
+    path.join(root, 'output/hero-product-intro/product-ui.png'),
+  )
+    .resize(576, 338, { fit: 'contain', background: '#171819' })
+    .modulate({ brightness: 0.975, saturation: 0.92 })
+    .png()
+    .toBuffer();
+  const composed = await sharp(
+    path.join(root, 'public/videos/hero-garden-scene-v1.webp'),
+  )
+    .composite([{ input: ui, left: 156, top: 311 }])
+    .png()
+    .toBuffer();
+  await sharp(composed)
+    .extract({ left: 0, top: 0, width: 1672, height: 940 })
+    .resize(1280, 720)
+    .webp({ lossless: true })
+    .toFile(path.join(source, 'stage-0.webp'));
+  for (let index = 0; index < 9; index++)
+    await copyFile(
+      path.join(previous, `stage-${index}.webp`),
+      path.join(source, `stage-${index + 1}.webp`),
+    );
+  design.stages.unshift({
+    name: 'choose-product',
+    route: '/select-product',
+    capture,
+    state: { inscriptions: [], motifs: [] },
+    camera: null,
+  });
+  await writeFile(
+    path.join(source, 'design.json'),
+    JSON.stringify(design, null, 2) + '\n',
+  );
+  await writeFile(
+    path.join(source, 'timeline.json'),
+    JSON.stringify(
+      {
+        duration,
+        transition,
+        offsets,
+        stages: design.stages.map((stage) => stage.name),
+        camera: 'fixed; no orbit, pan or zoom',
+      },
+      null,
+      2,
+    ) + '\n',
+  );
+}
+
+if (process.argv.includes('--package') && !productIntro) {
   const design = JSON.parse(
     await readFile(path.join(raw, 'design.json'), 'utf8'),
   );
@@ -230,7 +303,7 @@ await run([
 ]);
 await run([
   '-ss',
-  intro ? '20' : '14',
+  productIntro ? '22' : intro ? '20' : '14',
   '-i',
   path.join(output, `${name}.mp4`),
   '-frames:v',

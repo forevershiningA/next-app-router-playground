@@ -138,15 +138,19 @@
 125. [October 17 Memorial Photo Gallery, Shape Previews, and Vercel Build Recovery](#current-status-2026-10-17--memorial-photo-gallery-shape-previews-and-vercel-build-recovery)
 126. [October 18 Homepage Trust Bar, Contact Page, Gallery Layout, and Designer Isolation](#current-status-2026-10-18--homepage-trust-bar-contact-page-gallery-layout-and-designer-isolation)
 127. [October 19 Progressive Garden Hero Video](#current-status-2026-10-19--progressive-garden-hero-video)
+128. [October 20 Photographic Hero, Product Selection, Cursor, and Model Orbit](#current-status-2026-10-20--photographic-hero-product-selection-cursor-and-model-orbit)
 
 ---
 
-## Current Status (2026-10-20) — Photographic monument hero alternative
+## Current Status (2026-10-20) — Photographic hero, product selection, cursor, and model orbit
 
-- Homepage hero now uses the 24-second `hero-garden-v5` (WebM, MP4 and reduced-motion poster). It begins with the shape catalog and compares African Black, African Red and Blue Pearl before adding inscriptions and motifs. Earlier videos, including v4, are retained.
+- Homepage hero now uses the 26-second `hero-garden-v7` (WebM, MP4 and reduced-motion poster). It retains v6's product/shape/granite/engraving sequence, adding a white pointer, gold click pulses, a real model orbit on the laptop and the closing title “Your design. A lasting tribute.” The outdoor reference stays static. The HTML badge moves to the bottom right so it does not overlap the title on mobile. Earlier videos are retained.
 - The original v1 photographic-style garden monument remains unchanged on the right. The laptop shows six progressive real configurator states recreating its Blue Pearl design, with a wider 800 × 600 mm Serpentine upright, two inscriptions and new outline dove/botanical SVG motifs.
-- Capture/rebuild: existing scripts accept `--intro` for v5 and `--photographic` for v4; nine packaged stages and the design manifest are in `assets/video-sources/hero-garden-v5/`. Details and validation: `docs/hero-garden-v5.md` and `docs/hero-garden-v4.md`.
-- Chromium verified both codecs, autoplay, looping, mobile overflow and reduced-motion fallback. The right side is pixel-identical across all nine v5 source stages; the configured model remains 800 × 600 mm during granite changes. No deployment performed.
+- Complete sequence: `/select-product` with Headstones selected and the Traditional Engraved Headstone card highlighted → Serpentine shape catalog → African Black → African Red → Blue Pearl → “In Loving Memory” → “Always in our hearts” → outline dove → left botanical sprig → mirrored right sprig → completed model orbit. Product 124 uses Garamond inscriptions and the reusable `public/shapes/motifs/hero-dove-outline.svg` / `hero-botanical-outline.svg` assets. The outdoor stone is the original generated photographic-style reference; the configurator design is a close recreation.
+- Runtime assets: `app/_ui/HomeSplash.tsx` loads `/videos/hero-garden-v7.webm`, falls back to `/videos/hero-garden-v7.mp4`, and uses `/videos/hero-garden-v7-poster.webp` for reduced motion. The film is silent, 1280 × 720, 25 fps, muted, autoplaying, looping and inline. The pointer/click pulses are explanatory video overlays. From 20 seconds, the laptop model orbits about ±13°; the closing title fades in at 21 seconds and clears before the loop boundary. The homepage uses ordinary video playback without an additional live 3D canvas.
+- V7 capture/rebuild: `node scripts/capture-hero-matched.mjs --finale`, then `node scripts/render-hero-polished.mjs --package`. Saved orbit video, manifest and overlay timeline are in `assets/video-sources/hero-garden-v7/`. Without recapture, `node scripts/render-hero-polished.mjs` uses these sources and the retained v6 MP4. Details: `docs/hero-garden-v7.md`. Earlier v6/v5/v4 scripts and sources remain available.
+- For recapture, start an isolated local server with `DESIGN_PREVIEW_CAPTURE=1` on port 3102 from the canonical Windows project path (`C:\Users\polcr\Documents\GitHub\next-app-router-playground`). `HERO_MATCHED_BASE_URL` can override the local URL; remote hosts are refused. Raw orbit frames and temporary compositions/overlays stay in ignored `output/hero-finale/` and `output/hero-polished/`. Preserve `public/videos/hero-garden-v6.mp4`: it is the base input for v7 rebuilds. `pnpm video:hero` records the older configurator scenario and does not rebuild v7.
+- Chromium verified both v7 codecs, autoplay, the 26-second loop, mobile overflow and reduced-motion fallback with no page errors. Pointer, model orbit, closing title and mobile badge placement were inspected. Overlay boundaries are fully transparent; packaging checks the finale design against v6. The configured model remains 800 × 600 mm. No deployment performed.
 
 ## Current Status (2026-10-19) — Progressive garden hero video
 
@@ -16841,6 +16845,6 @@ Both commands pass. Browser rendering still needs to be checked after the next l
 
 ---
 
-_End of STARTER.md - Last updated: 2026-10-19_
+_End of STARTER.md - Last updated: 2026-10-20_
 
 ---
