@@ -143,10 +143,10 @@
 
 ## Current Status (2026-10-20) — Photographic monument hero alternative
 
-- Homepage hero now uses `hero-garden-v4` (WebM, MP4 and reduced-motion poster). Earlier videos are retained.
+- Homepage hero now uses the 24-second `hero-garden-v5` (WebM, MP4 and reduced-motion poster). It begins with the shape catalog and compares African Black, African Red and Blue Pearl before adding inscriptions and motifs. Earlier videos, including v4, are retained.
 - The original v1 photographic-style garden monument remains unchanged on the right. The laptop shows six progressive real configurator states recreating its Blue Pearl design, with a wider 800 × 600 mm Serpentine upright, two inscriptions and new outline dove/botanical SVG motifs.
-- Capture/rebuild: existing scripts accept `--photographic`; packaged stages and design manifest are in `assets/video-sources/hero-garden-v4/`. Details and validation: `docs/hero-garden-v4.md`.
-- Chromium verified both codecs, autoplay, looping, mobile overflow and reduced-motion fallback. The right side is pixel-identical across all six source stages. No deployment performed.
+- Capture/rebuild: existing scripts accept `--intro` for v5 and `--photographic` for v4; nine packaged stages and the design manifest are in `assets/video-sources/hero-garden-v5/`. Details and validation: `docs/hero-garden-v5.md` and `docs/hero-garden-v4.md`.
+- Chromium verified both codecs, autoplay, looping, mobile overflow and reduced-motion fallback. The right side is pixel-identical across all nine v5 source stages; the configured model remains 800 × 600 mm during granite changes. No deployment performed.
 
 ## Current Status (2026-10-19) — Progressive garden hero video
 

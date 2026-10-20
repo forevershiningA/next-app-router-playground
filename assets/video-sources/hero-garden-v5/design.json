@@ -1,0 +1,478 @@
+{
+  "productId": "124",
+  "shape": "/shapes/headstones/serpentine.svg",
+  "material": "/textures/forever/l/Blue-Pearl.webp",
+  "baseMaterial": "/textures/forever/l/Blue-Pearl.webp",
+  "widthMm": 800,
+  "heightMm": 600,
+  "inscriptions": [
+    {
+      "id": "l-9db5aa0c-d410-490e-86db-1903cb0768c7",
+      "text": "In Loving Memory",
+      "font": "Garamond",
+      "sizeMm": 58,
+      "rotationDeg": 0,
+      "xPos": -0.024993896484375,
+      "yPos": 150.01874999999995,
+      "color": "#e7d9b5",
+      "target": "headstone",
+      "textAlign": "center",
+      "layer": 1,
+      "baseWidthMm": 800,
+      "baseHeightMm": 600
+    },
+    {
+      "id": "l-88755b39-ff0b-4cf6-97b6-139fc6f09e0b",
+      "text": "Always in our hearts",
+      "font": "Garamond",
+      "sizeMm": 42,
+      "rotationDeg": 0,
+      "xPos": -0.024993896484375,
+      "yPos": 117.51468749999995,
+      "color": "#e7d9b5",
+      "target": "headstone",
+      "textAlign": "center",
+      "layer": 2,
+      "baseWidthMm": 800,
+      "baseHeightMm": 600
+    }
+  ],
+  "motifs": [
+    {
+      "id": "motif-e2a4a970-d690-43ae-873b-9a2ac69a8424",
+      "svgPath": "/shapes/motifs/hero-dove-outline.svg",
+      "color": "#e7d9b5"
+    },
+    {
+      "id": "motif-8f93ee5f-624c-4838-b88f-2ba545e9fe81",
+      "svgPath": "/shapes/motifs/hero-botanical-outline.svg",
+      "color": "#e7d9b5"
+    },
+    {
+      "id": "motif-5835b75b-2911-4b0e-a669-a15fcc108674",
+      "svgPath": "/shapes/motifs/hero-botanical-outline.svg",
+      "color": "#e7d9b5"
+    }
+  ],
+  "motifOffsets": {
+    "motif-e2a4a970-d690-43ae-873b-9a2ac69a8424": {
+      "xPos": 0,
+      "yPos": 160,
+      "scale": 1,
+      "rotationZ": 0,
+      "heightMm": 130,
+      "target": "headstone",
+      "coordinateSpace": "mm-center",
+      "flipX": false,
+      "flipY": false,
+      "layer": 3,
+      "baseWidthMm": 800,
+      "baseHeightMm": 600
+    },
+    "motif-8f93ee5f-624c-4838-b88f-2ba545e9fe81": {
+      "xPos": -310,
+      "yPos": -20,
+      "scale": 1,
+      "rotationZ": 0,
+      "heightMm": 430,
+      "target": "headstone",
+      "coordinateSpace": "mm-center",
+      "flipX": false,
+      "flipY": false,
+      "layer": 4,
+      "baseWidthMm": 800,
+      "baseHeightMm": 600
+    },
+    "motif-5835b75b-2911-4b0e-a669-a15fcc108674": {
+      "xPos": 310,
+      "yPos": -20,
+      "scale": 1,
+      "rotationZ": 0,
+      "heightMm": 430,
+      "target": "headstone",
+      "coordinateSpace": "mm-center",
+      "flipX": true,
+      "flipY": false,
+      "layer": 5,
+      "baseWidthMm": 800,
+      "baseHeightMm": 600
+    }
+  },
+  "bounds": {
+    "min": [
+      -0.49999999275764917,
+      0.0010000000000000009,
+      -0.05
+    ],
+    "max": [
+      0.49999999275764917,
+      0.7000000122055055,
+      0.2
+    ]
+  },
+  "stages": [
+    {
+      "name": "choose-shape",
+      "inscriptions": 0,
+      "motifs": 0,
+      "route": "select-shape",
+      "shape": "serpentine",
+      "material": "African-Black",
+      "state": {
+        "shape": "/shapes/headstones/serpentine.svg",
+        "inscriptions": [],
+        "motifs": []
+      },
+      "camera": null
+    },
+    {
+      "name": "serpentine-selected",
+      "inscriptions": 0,
+      "motifs": 0,
+      "route": "select-material",
+      "shape": "serpentine",
+      "material": "African-Black",
+      "state": {
+        "shape": "/shapes/headstones/serpentine.svg",
+        "widthMm": 800,
+        "heightMm": 600,
+        "material": "/textures/forever/l/African-Black.webp",
+        "baseMaterial": "/textures/forever/l/African-Black.webp",
+        "inscriptions": [],
+        "motifs": []
+      },
+      "camera": {
+        "position": [
+          0.0583426847387976,
+          0.4005080215931507,
+          2.158927770513927
+        ],
+        "projection": [
+          2.744649348198934,
+          0,
+          0,
+          0,
+          0,
+          3.1715948023632126,
+          0,
+          0,
+          0,
+          0,
+          -1.0000200002000021,
+          -1,
+          0,
+          0,
+          -0.0020000200002000023,
+          0
+        ]
+      },
+      "productSize": "840x575"
+    },
+    {
+      "name": "compare-granite",
+      "inscriptions": 0,
+      "motifs": 0,
+      "route": "select-material",
+      "shape": "serpentine",
+      "material": "African-Red",
+      "state": {
+        "shape": "/shapes/headstones/serpentine.svg",
+        "widthMm": 800,
+        "heightMm": 600,
+        "material": "/textures/forever/l/African-Red.webp",
+        "baseMaterial": "/textures/forever/l/African-Red.webp",
+        "inscriptions": [],
+        "motifs": []
+      },
+      "camera": {
+        "position": [
+          0.0583426847387976,
+          0.4005080215931507,
+          2.158927770513927
+        ],
+        "projection": [
+          2.744649348198934,
+          0,
+          0,
+          0,
+          0,
+          3.1715948023632126,
+          0,
+          0,
+          0,
+          0,
+          -1.0000200002000021,
+          -1,
+          0,
+          0,
+          -0.0020000200002000023,
+          0
+        ]
+      },
+      "productSize": "840x575"
+    },
+    {
+      "name": "blank",
+      "inscriptions": 0,
+      "motifs": 0,
+      "state": {
+        "shape": "/shapes/headstones/serpentine.svg",
+        "widthMm": 800,
+        "heightMm": 600,
+        "material": "/textures/forever/l/Blue-Pearl.webp",
+        "baseMaterial": "/textures/forever/l/Blue-Pearl.webp",
+        "inscriptions": [],
+        "motifs": []
+      },
+      "camera": {
+        "position": [
+          0.0583426847387976,
+          0.4005080215931507,
+          2.158927770513927
+        ],
+        "projection": [
+          2.744649348198934,
+          0,
+          0,
+          0,
+          0,
+          3.1715948023632126,
+          0,
+          0,
+          0,
+          0,
+          -1.0000200002000021,
+          -1,
+          0,
+          0,
+          -0.0020000200002000023,
+          0
+        ]
+      },
+      "productSize": "840x575"
+    },
+    {
+      "name": "dedication",
+      "inscriptions": 1,
+      "motifs": 0,
+      "state": {
+        "shape": "/shapes/headstones/serpentine.svg",
+        "widthMm": 800,
+        "heightMm": 600,
+        "material": "/textures/forever/l/Blue-Pearl.webp",
+        "baseMaterial": "/textures/forever/l/Blue-Pearl.webp",
+        "inscriptions": [
+          "In Loving Memory"
+        ],
+        "motifs": []
+      },
+      "camera": {
+        "position": [
+          0.0583426847387976,
+          0.4005080215931507,
+          2.158927770513927
+        ],
+        "projection": [
+          2.744649348198934,
+          0,
+          0,
+          0,
+          0,
+          3.1715948023632126,
+          0,
+          0,
+          0,
+          0,
+          -1.0000200002000021,
+          -1,
+          0,
+          0,
+          -0.0020000200002000023,
+          0
+        ]
+      },
+      "productSize": "840x575"
+    },
+    {
+      "name": "remembrance",
+      "inscriptions": 2,
+      "motifs": 0,
+      "state": {
+        "shape": "/shapes/headstones/serpentine.svg",
+        "widthMm": 800,
+        "heightMm": 600,
+        "material": "/textures/forever/l/Blue-Pearl.webp",
+        "baseMaterial": "/textures/forever/l/Blue-Pearl.webp",
+        "inscriptions": [
+          "In Loving Memory",
+          "Always in our hearts"
+        ],
+        "motifs": []
+      },
+      "camera": {
+        "position": [
+          0.0583426847387976,
+          0.4005080215931507,
+          2.158927770513927
+        ],
+        "projection": [
+          2.744649348198934,
+          0,
+          0,
+          0,
+          0,
+          3.1715948023632126,
+          0,
+          0,
+          0,
+          0,
+          -1.0000200002000021,
+          -1,
+          0,
+          0,
+          -0.0020000200002000023,
+          0
+        ]
+      },
+      "productSize": "840x575"
+    },
+    {
+      "name": "dove",
+      "inscriptions": 2,
+      "motifs": 1,
+      "state": {
+        "shape": "/shapes/headstones/serpentine.svg",
+        "widthMm": 800,
+        "heightMm": 600,
+        "material": "/textures/forever/l/Blue-Pearl.webp",
+        "baseMaterial": "/textures/forever/l/Blue-Pearl.webp",
+        "inscriptions": [
+          "In Loving Memory",
+          "Always in our hearts"
+        ],
+        "motifs": [
+          "/shapes/motifs/hero-dove-outline.svg"
+        ]
+      },
+      "camera": {
+        "position": [
+          0.0583426847387976,
+          0.4005080215931507,
+          2.158927770513927
+        ],
+        "projection": [
+          2.744649348198934,
+          0,
+          0,
+          0,
+          0,
+          3.1715948023632126,
+          0,
+          0,
+          0,
+          0,
+          -1.0000200002000021,
+          -1,
+          0,
+          0,
+          -0.0020000200002000023,
+          0
+        ]
+      },
+      "productSize": "840x575"
+    },
+    {
+      "name": "left-branch",
+      "inscriptions": 2,
+      "motifs": 2,
+      "state": {
+        "shape": "/shapes/headstones/serpentine.svg",
+        "widthMm": 800,
+        "heightMm": 600,
+        "material": "/textures/forever/l/Blue-Pearl.webp",
+        "baseMaterial": "/textures/forever/l/Blue-Pearl.webp",
+        "inscriptions": [
+          "In Loving Memory",
+          "Always in our hearts"
+        ],
+        "motifs": [
+          "/shapes/motifs/hero-dove-outline.svg",
+          "/shapes/motifs/hero-botanical-outline.svg"
+        ]
+      },
+      "camera": {
+        "position": [
+          0.0583426847387976,
+          0.4005080215931507,
+          2.158927770513927
+        ],
+        "projection": [
+          2.744649348198934,
+          0,
+          0,
+          0,
+          0,
+          3.1715948023632126,
+          0,
+          0,
+          0,
+          0,
+          -1.0000200002000021,
+          -1,
+          0,
+          0,
+          -0.0020000200002000023,
+          0
+        ]
+      },
+      "productSize": "840x575"
+    },
+    {
+      "name": "finished",
+      "inscriptions": 2,
+      "motifs": 3,
+      "state": {
+        "shape": "/shapes/headstones/serpentine.svg",
+        "widthMm": 800,
+        "heightMm": 600,
+        "material": "/textures/forever/l/Blue-Pearl.webp",
+        "baseMaterial": "/textures/forever/l/Blue-Pearl.webp",
+        "inscriptions": [
+          "In Loving Memory",
+          "Always in our hearts"
+        ],
+        "motifs": [
+          "/shapes/motifs/hero-dove-outline.svg",
+          "/shapes/motifs/hero-botanical-outline.svg",
+          "/shapes/motifs/hero-botanical-outline.svg"
+        ]
+      },
+      "camera": {
+        "position": [
+          0.0583426847387976,
+          0.4005080215931507,
+          2.158927770513927
+        ],
+        "projection": [
+          2.744649348198934,
+          0,
+          0,
+          0,
+          0,
+          3.1715948023632126,
+          0,
+          0,
+          0,
+          0,
+          -1.0000200002000021,
+          -1,
+          0,
+          0,
+          -0.0020000200002000023,
+          0
+        ]
+      },
+      "productSize": "840x575"
+    }
+  ]
+}

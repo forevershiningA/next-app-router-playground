@@ -6,17 +6,41 @@ import sharp from 'sharp';
 import ffmpeg from 'ffmpeg-static';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const photographic = process.argv.includes('--photographic');
-const name = photographic ? 'hero-garden-v4' : 'hero-garden-v3';
+const intro = process.argv.includes('--intro');
+const photographic = intro || process.argv.includes('--photographic');
+const name = intro
+  ? 'hero-garden-v5'
+  : photographic
+    ? 'hero-garden-v4'
+    : 'hero-garden-v3';
 const source = path.join(root, 'assets/video-sources', name);
 const raw = path.join(
   root,
-  photographic ? 'output/hero-photographic' : 'output/hero-progressive',
+  intro
+    ? 'output/hero-intro'
+    : photographic
+      ? 'output/hero-photographic'
+      : 'output/hero-progressive',
 );
 const output = path.join(root, 'public/videos');
-const duration = 18;
+const duration = intro ? 24 : 18;
 const transition = 0.4;
-const offsets = [2, 4.4, 6.8, 9.2, 11.6, 16.8];
+const lengths = [
+  ...(intro ? [2.4, 2.4, 2.4] : []),
+  2.4,
+  2.8,
+  2.8,
+  2.8,
+  2.8,
+  5.6,
+  1.2,
+];
+const stageCount = lengths.length - 1;
+let elapsed = 0;
+const offsets = lengths.slice(0, -1).map((length) => {
+  elapsed += length - transition;
+  return Number(elapsed.toFixed(2));
+});
 await mkdir(source, { recursive: true });
 await mkdir(output, { recursive: true });
 
@@ -25,6 +49,13 @@ if (process.argv.includes('--package')) {
     await readFile(path.join(raw, 'design.json'), 'utf8'),
   );
   const expected = [
+    ...(intro
+      ? [
+          [0, 0],
+          [0, 0],
+          [0, 0],
+        ]
+      : []),
     [0, 0],
     [1, 0],
     [2, 0],
@@ -32,12 +63,36 @@ if (process.argv.includes('--package')) {
     [2, 2],
     [2, 3],
   ];
+  if (design.stages.length !== stageCount)
+    throw new Error('Unexpected stage count');
   for (const [index, stage] of design.stages.entries()) {
+    if (
+      intro &&
+      index > 0 &&
+      (stage.state.widthMm !== 800 || stage.state.heightMm !== 600)
+    )
+      throw new Error(`Product dimensions changed at stage ${index}`);
+    if (intro && index > 0) {
+      const expectedMaterial =
+        index === 1
+          ? 'African-Black'
+          : index === 2
+            ? 'African-Red'
+            : 'Blue-Pearl';
+      if (
+        stage.state.material !==
+          `/textures/forever/l/${expectedMaterial}.webp` ||
+        stage.state.baseMaterial !== stage.state.material
+      )
+        throw new Error(`Incorrect granite at stage ${index}`);
+    }
     const actual = [stage.state.inscriptions.length, stage.state.motifs.length];
     if (String(actual) !== String(expected[index]))
       throw new Error(`Incorrect stage ${index}: ${actual}`);
     if (
-      JSON.stringify(stage.camera) !== JSON.stringify(design.stages[0].camera)
+      !(intro && index === 0) &&
+      JSON.stringify(stage.camera) !==
+        JSON.stringify(design.stages[intro ? 1 : 0].camera)
     )
       throw new Error(`Camera changed at stage ${index}`);
   }
@@ -55,11 +110,13 @@ if (process.argv.includes('--package')) {
     .composite(photographic ? [] : [{ input: shadow }])
     .png()
     .toBuffer();
-  for (let index = 0; index < 6; index++) {
-    const product = await sharp(path.join(raw, `${index}-product.png`))
-      .resize(640, 600, { fit: 'inside' })
-      .png()
-      .toBuffer();
+  for (let index = 0; index < stageCount; index++) {
+    const product = photographic
+      ? null
+      : await sharp(path.join(raw, `${index}-product.png`))
+          .resize(640, 600, { fit: 'inside' })
+          .png()
+          .toBuffer();
     const ui = await sharp(path.join(raw, `${index}-ui.png`))
       .resize(576, 338, { fit: 'contain', background: '#171819' })
       .modulate({ brightness: 0.975, saturation: 0.92 })
@@ -115,7 +172,6 @@ async function run(args) {
 // Both sides are composited into each stage before its transition. They can
 // never drift out of sync. The final transition returns to the same blank
 // first frame, giving the finished memorial five seconds of uninterrupted hold.
-const lengths = [2.4, 2.8, 2.8, 2.8, 2.8, 5.6, 1.2];
 const inputs = lengths.flatMap((length, index) => [
   '-loop',
   '1',
@@ -124,13 +180,13 @@ const inputs = lengths.flatMap((length, index) => [
   '-t',
   String(length),
   '-i',
-  path.join(source, `stage-${index === 6 ? 0 : index}.webp`),
+  path.join(source, `stage-${index === stageCount ? 0 : index}.webp`),
 ]);
 const filters = lengths.map(
   (_, i) =>
     `[${i}:v]fps=25,format=yuv420p,settb=AVTB,setpts=PTS-STARTPTS[s${i}]`,
 );
-for (let i = 1; i < 7; i++) {
+for (let i = 1; i <= stageCount; i++) {
   filters.push(
     `[${i === 1 ? 's0' : `mix${i - 1}`}][s${i}]xfade=transition=fade:duration=${transition}:offset=${offsets[i - 1]}[mix${i}]`,
   );
@@ -142,7 +198,7 @@ await run([
   '-filter_complex',
   filters.join(';'),
   '-map',
-  '[mix6]',
+  `[mix${stageCount}]`,
   '-t',
   String(duration),
   '-an',
@@ -174,7 +230,7 @@ await run([
 ]);
 await run([
   '-ss',
-  '14',
+  intro ? '20' : '14',
   '-i',
   path.join(output, `${name}.mp4`),
   '-frames:v',

@@ -4,14 +4,17 @@ import path from 'node:path';
 import sharp from 'sharp';
 
 // Local-only development capture uses the existing automation store/renderer.
-const progressive = process.argv.includes('--progressive');
-const photographic = process.argv.includes('--photographic');
+const intro = process.argv.includes('--intro');
+const progressive = intro || process.argv.includes('--progressive');
+const photographic = intro || process.argv.includes('--photographic');
 const destination = path.resolve(
-  photographic
-    ? 'output/hero-photographic'
-    : progressive
-      ? 'output/hero-progressive'
-      : 'output/hero-matched',
+  intro
+    ? 'output/hero-intro'
+    : photographic
+      ? 'output/hero-photographic'
+      : progressive
+        ? 'output/hero-progressive'
+        : 'output/hero-matched',
 );
 const base = process.env.HERO_MATCHED_BASE_URL ?? 'http://localhost:3102';
 if (!['localhost', '127.0.0.1'].includes(new URL(base).hostname))
@@ -261,6 +264,34 @@ try {
     });
   if (progressive) {
     const stages = [
+      ...(intro
+        ? [
+            {
+              name: 'choose-shape',
+              inscriptions: 0,
+              motifs: 0,
+              route: 'select-shape',
+              shape: 'serpentine',
+              material: 'African-Black',
+            },
+            {
+              name: 'serpentine-selected',
+              inscriptions: 0,
+              motifs: 0,
+              route: 'select-material',
+              shape: 'serpentine',
+              material: 'African-Black',
+            },
+            {
+              name: 'compare-granite',
+              inscriptions: 0,
+              motifs: 0,
+              route: 'select-material',
+              shape: 'serpentine',
+              material: 'African-Red',
+            },
+          ]
+        : []),
       { name: 'blank', inscriptions: 0, motifs: 0 },
       { name: 'dedication', inscriptions: 1, motifs: 0 },
       { name: 'remembrance', inscriptions: 2, motifs: 0 },
@@ -270,8 +301,61 @@ try {
     ];
     let productSize;
     for (const [index, stage] of stages.entries()) {
-      if (index === 1 || index === 3) {
-        const slug = index === 1 ? 'inscriptions' : 'select-motifs';
+      if (intro && index === 0) {
+        // Shape selection has its own full-screen catalog and unmounts WebGL.
+        // Capture it separately so the demonstration retains one fitted camera.
+        const shapesPage = await browser.newPage({
+          viewport: { width: 1440, height: 900 },
+        });
+        await shapesPage.addInitScript(() =>
+          localStorage.setItem('fs_ui_theme', 'day'),
+        );
+        await shapesPage.goto(
+          `${base}/traditional-engraved-headstone/select-shape?capture=hero`,
+          { waitUntil: 'domcontentloaded', timeout: 120000 },
+        );
+        await shapesPage
+          .getByRole('button', { name: /Serpentine/i })
+          .first()
+          .waitFor({ timeout: 60000 });
+        await shapesPage.waitForFunction(
+          () => !!window.__headstoneStore?.getState().catalog,
+          undefined,
+          { timeout: 60000 },
+        );
+        await shapesPage.evaluate(() =>
+          window.__headstoneStore
+            .getState()
+            .setShapeUrl('/shapes/headstones/serpentine.svg'),
+        );
+        await shapesPage.addStyleTag({
+          content:
+            'nextjs-portal{display:none!important}*{cursor:none!important}',
+        });
+        await shapesPage
+          .getByRole('button', { name: /Serpentine/i })
+          .first()
+          .hover();
+        await shapesPage.waitForTimeout(1000);
+        await shapesPage.screenshot({
+          path: path.join(destination, `${index}-ui.png`),
+        });
+        stage.state = {
+          shape: '/shapes/headstones/serpentine.svg',
+          inscriptions: [],
+          motifs: [],
+        };
+        stage.camera = null;
+        await shapesPage.close();
+        console.log('Captured shape catalog');
+        continue;
+      }
+      const designIndex = index - (intro ? 3 : 0);
+      const route =
+        stage.route ?? (intro && designIndex === 0 ? 'select-material' : null);
+      if (route || designIndex === 1 || designIndex === 3) {
+        const slug =
+          route ?? (designIndex === 1 ? 'inscriptions' : 'select-motifs');
         if (photographic) {
           // These capture-only stages share the mounted scene. Native history
           // updates Next's pathname subscribers without remounting the renderer.
@@ -300,28 +384,47 @@ try {
           });
         console.log('Capture route:', page.url());
       }
-      const state = await page.evaluate(({ inscriptions, motifs }) => {
-        const full = window.__heroDesign;
-        const store = window.__headstoneStore;
-        store.setState({
-          inscriptions: full.inscriptions.slice(0, inscriptions),
-          selectedMotifs: full.selectedMotifs.slice(0, motifs),
-          motifOffsets: full.motifOffsets,
-          selected: null,
-          selectedInscriptionId: null,
-          selectedMotifId: null,
-          activePanel: null,
-        });
-        store.getState().calculateInscriptionCost();
-        store.getState().calculateMotifCost();
-        return {
-          inscriptions: store.getState().inscriptions.map((line) => line.text),
-          motifs: store.getState().selectedMotifs.map((motif) => motif.svgPath),
-        };
-      }, stage);
-      await page.waitForFunction(
-        () => !window.__headstoneStore.getState().fontLoading,
+      const state = await page.evaluate(
+        ({ inscriptions, motifs, shape, material }) => {
+          const full = window.__heroDesign;
+          const store = window.__headstoneStore;
+          const shapeUrl = `/shapes/headstones/${shape ?? 'serpentine'}.svg`;
+          if (store.getState().shapeUrl !== shapeUrl)
+            store.getState().setShapeUrl(shapeUrl);
+          const materialUrl = `/textures/forever/l/${material ?? 'Blue-Pearl'}.webp`;
+          store.getState().setHeadstoneMaterialUrl(materialUrl);
+          store.getState().setBaseMaterialUrl(materialUrl);
+          store.setState({
+            inscriptions: full.inscriptions.slice(0, inscriptions),
+            selectedMotifs: full.selectedMotifs.slice(0, motifs),
+            motifOffsets: full.motifOffsets,
+            selected: null,
+            selectedInscriptionId: null,
+            selectedMotifId: null,
+            activePanel: null,
+          });
+          store.getState().calculateInscriptionCost();
+          store.getState().calculateMotifCost();
+          return {
+            shape: store.getState().shapeUrl,
+            widthMm: store.getState().widthMm,
+            heightMm: store.getState().heightMm,
+            material: store.getState().headstoneMaterialUrl,
+            baseMaterial: store.getState().baseMaterialUrl,
+            inscriptions: store
+              .getState()
+              .inscriptions.map((line) => line.text),
+            motifs: store
+              .getState()
+              .selectedMotifs.map((motif) => motif.svgPath),
+          };
+        },
+        stage,
       );
+      await page.waitForFunction(() => {
+        const s = window.__headstoneStore.getState();
+        return !s.fontLoading && !s.loading && !s.baseSwapping;
+      });
       await page.waitForTimeout(1200);
       const product = Buffer.from(await captureProduct(), 'base64');
       const trimmed = await sharp(product)
@@ -329,7 +432,7 @@ try {
         .png()
         .toBuffer({ resolveWithObject: true });
       const size = [trimmed.info.width, trimmed.info.height].join('x');
-      if (productSize && size !== productSize)
+      if (!intro && productSize && size !== productSize)
         throw new Error(`Product framing changed: ${size} vs ${productSize}`);
       productSize = size;
       await writeFile(
