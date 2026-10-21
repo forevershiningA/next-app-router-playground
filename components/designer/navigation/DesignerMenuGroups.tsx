@@ -74,7 +74,7 @@ export default function DesignerMenuGroups({
   const { getItemStatus, getItemCount } = useDesignerNavigationItemStatus();
   const hasCustomizations = useHasDesignerCustomizations();
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-3">
       <DesignerNewDesignAction
         isVisible={hasCustomizations}
         onNewDesign={handleNewDesign}
@@ -112,7 +112,7 @@ export default function DesignerMenuGroups({
                 aria-label={group.label}
                 aria-hidden={openGroup !== groupIndex}
                 inert={openGroup !== groupIndex}
-                className={`flex flex-col gap-2 overflow-hidden ${
+                className={`flex flex-col gap-1.5 overflow-hidden ${
                   openGroup !== groupIndex
                     ? 'max-h-0 opacity-0'
                     : 'max-h-[2000px] opacity-100'
@@ -204,7 +204,7 @@ export default function DesignerMenuGroups({
                             caretColor: 'transparent',
                             userSelect: 'none',
                           }}
-                          className={`flex w-full cursor-pointer items-center gap-3 rounded-lg px-4 py-3 text-left text-base font-light transition-all ${
+                          className={`flex w-full cursor-pointer items-center gap-2 rounded-lg px-3 py-2.5 text-left text-sm font-light transition-all ${
                             isActive
                               ? 'day:border-[#D7B356]/40 day:bg-[#DEBD68]/10 day:text-[#3d2817] border border-white/30 bg-white/15 text-white shadow-lg backdrop-blur-sm'
                               : 'day:border-gray-200 day:text-gray-700 day:hover:border-gray-300 day:hover:bg-gray-100 border border-white/10 text-gray-200 hover:border-white/20 hover:bg-white/10'

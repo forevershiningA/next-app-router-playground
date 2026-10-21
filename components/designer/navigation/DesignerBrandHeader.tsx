@@ -16,7 +16,7 @@ export default function DesignerBrandHeader({
   return (
     <>
       {/* Desktop Header */}
-      <div className="day:border-[#cfc5b7] hidden min-h-36 items-center justify-between border-b border-white/10 px-6 md:flex">
+      <div className="day:border-[#cfc5b7] hidden h-36 shrink-0 items-center justify-between border-b border-white/10 px-6 md:flex">
         <Link
           href="/"
           className="transition-opacity hover:opacity-75"

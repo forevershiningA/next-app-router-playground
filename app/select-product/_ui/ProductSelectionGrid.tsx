@@ -63,6 +63,34 @@ const productGroups: ProductCategory[] = [
   ...productCategories.filter((category) => category.id === 'pet-memorials'),
 ];
 
+const productSummaries: Record<string, { name: string; description: string }> =
+  {
+    '4': {
+      name: 'Laser-etched Granite',
+      description:
+        'Black granite with detailed portraits, lettering and artwork.',
+    },
+    '124': {
+      name: 'Traditional Engraved',
+      description:
+        'Engraved lettering and motifs on granite, marble or sandstone.',
+    },
+    '22': {
+      name: 'Mini Headstone',
+      description:
+        'A compact black granite memorial with laser-etched details.',
+    },
+    '1': {
+      name: 'Light-transmitting Steel',
+      description: 'Cut-through lettering with glass-backed motif options.',
+    },
+    '23': {
+      name: 'Light-reflective Steel',
+      description:
+        'Polished stainless steel with reflective lettering and motifs.',
+    },
+  };
+
 type ProductGridProps = {
   products: Product[];
   priceMap: Record<string, ProductPriceSample | undefined>;
@@ -112,18 +140,18 @@ export default function ProductSelectionGrid({
     })
     .filter((group) => group.products.length > 0);
   return (
-    <div className="day:bg-[#f7f4ee] min-h-screen bg-[#0c0b0a]">
+    <div className="day:bg-[#f7f4ee] @container/products min-h-screen bg-[#0c0b0a]">
       {/* Header Section */}
-      <div className="day:border-[#cfc5b7] day:bg-[#eee9df] relative overflow-hidden border-b border-white/10 bg-[#1d1a17]">
-        <div className="relative mx-auto max-w-7xl px-6 py-8 lg:px-8 lg:py-10">
+      <div className="day:border-[#cfc5b7] day:bg-[#eee9df] relative overflow-hidden border-b border-white/10 bg-[#1d1a17] lg:flex lg:h-36 lg:items-center">
+        <div className="relative mx-auto w-full max-w-7xl px-6 py-8 lg:px-8 lg:py-0">
           <UnitCurrencySelects className="mb-3 justify-end sm:absolute sm:top-4 sm:right-6 sm:mb-0 lg:right-8" />
-          <div className="text-left sm:text-center">
+          <div className="text-left sm:pr-44">
             <h1 className="day:text-[#1d1a17] font-serif text-3xl font-normal tracking-[-0.025em] text-white sm:text-4xl lg:text-[2.75rem]">
-              Select Your Memorial Product
+              Choose your memorial
             </h1>
-            <p className="day:text-[#625a51] mt-3 text-sm leading-6 text-white/70 sm:mx-auto lg:whitespace-nowrap">
-              Choose a memorial product to begin — then refine its shape,
-              material and dimensions with transparent pricing.
+            <p className="day:text-[#625a51] mt-3 max-w-xl text-sm leading-6 text-white/70">
+              Compare materials and styles to find the right starting point.
+              Next: choose the shape.
             </p>
           </div>
         </div>
@@ -132,10 +160,11 @@ export default function ProductSelectionGrid({
       {/* Category Filter */}
       <div className="day:border-[#d8cdb9] day:bg-[#f7f4ee] relative border-b border-white/10 bg-[#15120f]">
         <div className="relative mx-auto max-w-7xl px-6 py-3.5 lg:px-8">
-          <div className="-mx-6 flex snap-x gap-2 overflow-x-auto px-6 pr-12 [scrollbar-width:none] sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0 [&::-webkit-scrollbar]:hidden">
+          <div className="-mx-6 flex snap-x gap-2 overflow-x-auto px-6 [scrollbar-width:none] sm:mx-0 sm:px-0 [&::-webkit-scrollbar]:hidden">
             <button
               onClick={() => setSelectedCategory('all')}
-              className={`shrink-0 snap-start rounded-sm border px-5 py-2.5 text-sm font-medium whitespace-nowrap transition-colors ${
+              aria-pressed={selectedCategory === 'all'}
+              className={`shrink-0 snap-start rounded-sm border px-3 py-2.5 text-sm font-medium whitespace-nowrap transition-colors ${
                 selectedCategory === 'all'
                   ? 'day:border-[#1d1a17] day:bg-[#1d1a17] day:text-white border-[#cfac6c] bg-[#cfac6c] text-[#1d1a17]'
                   : 'day:border-[#bdb4a6] day:text-[#514a43] day:hover:border-[#9a742f] day:hover:bg-white/55 border-white/20 text-white/80 hover:border-[#cfac6c]/70 hover:bg-white/[0.06]'
@@ -147,7 +176,8 @@ export default function ProductSelectionGrid({
               <button
                 key={category.id}
                 onClick={() => setSelectedCategory(category.id)}
-                className={`shrink-0 snap-start rounded-sm border px-5 py-2.5 text-sm font-medium whitespace-nowrap transition-colors ${
+                aria-pressed={selectedCategory === category.id}
+                className={`shrink-0 snap-start rounded-sm border px-3 py-2.5 text-sm font-medium whitespace-nowrap transition-colors ${
                   selectedCategory === category.id
                     ? 'day:border-[#1d1a17] day:bg-[#1d1a17] day:text-white border-[#cfac6c] bg-[#cfac6c] text-[#1d1a17]'
                     : 'day:border-[#bdb4a6] day:text-[#514a43] day:hover:border-[#9a742f] day:hover:bg-white/55 border-white/20 text-white/80 hover:border-[#cfac6c]/70 hover:bg-white/[0.06]'
@@ -182,11 +212,7 @@ export default function ProductSelectionGrid({
           </div>
         ) : (
           <>
-            <div
-              className={`grid gap-8 ${
-                selectedCategory === 'all' ? 'lg:grid-cols-2' : 'lg:grid-cols-1'
-              }`}
-            >
+            <div className="grid gap-10">
               {groupedProducts.map((group) => (
                 <section
                   key={group.id}
@@ -210,16 +236,12 @@ export default function ProductSelectionGrid({
                     </div>
                   </div>
 
-                  <div
-                    className={`grid grid-cols-1 items-stretch gap-4 sm:grid-cols-2 ${
-                      selectedCategory === 'all'
-                        ? ''
-                        : 'lg:grid-cols-3 xl:grid-cols-5'
-                    }`}
-                  >
+                  <div className="grid grid-cols-1 items-stretch gap-5 @min-[38rem]/products:grid-cols-2 @min-[60rem]/products:grid-cols-3">
                     {group.products.map((product) => {
                       const priceRange = priceMap[product.id];
+                      const summary = productSummaries[product.id];
                       const description =
+                        summary?.description ??
                         descriptionMap[product.id] ??
                         'Fully customizable memorial with premium materials and finishes.';
                       return (
@@ -227,7 +249,8 @@ export default function ProductSelectionGrid({
                           key={product.id}
                           onClick={() => handleProductSelect(product)}
                           disabled={loadingProductId !== null}
-                          className="group day:border-[#e4ddd2] day:bg-white day:shadow-[0_10px_30px_rgba(0,0,0,0.03)] day:hover:border-[#9a742f] relative flex h-full cursor-pointer flex-col overflow-hidden rounded-sm border border-white/12 bg-[#171717] text-left transition-colors hover:border-[#cfac6c]/60 disabled:cursor-wait disabled:opacity-70"
+                          aria-label={`Select ${product.name}`}
+                          className="group day:border-[#e4ddd2] day:bg-white day:shadow-[0_10px_30px_rgba(0,0,0,0.03)] day:hover:border-[#9a742f] relative flex h-full min-w-0 cursor-pointer flex-col overflow-hidden rounded-sm border border-white/12 bg-[#171717] text-left transition-colors hover:border-[#cfac6c]/60 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#9a742f] disabled:cursor-wait disabled:opacity-70"
                         >
                           <div className="day:border-[#e4ddd2] day:bg-[#f3f1ed] relative aspect-square w-full overflow-hidden border-b border-white/10 bg-[#101010]">
                             <Image
@@ -235,35 +258,22 @@ export default function ProductSelectionGrid({
                               alt={product.name}
                               fill
                               className="object-contain p-3 transition-transform duration-700 ease-out will-change-transform group-focus-within:scale-[1.025] group-hover:scale-[1.025] motion-reduce:transition-none motion-reduce:group-focus-within:transform-none motion-reduce:group-hover:transform-none"
-                              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 20vw"
+                              sizes="(min-width: 1300px) 30vw, (min-width: 1024px) 45vw, (min-width: 608px) 50vw, 100vw"
                             />
                           </div>
 
-                          <div className="flex flex-1 flex-col gap-2.5 p-3.5">
-                            <h3 className="day:text-[#1d1a17] line-clamp-2 min-h-[2.5rem] font-serif text-lg leading-tight text-white">
-                              {product.name}
+                          <div className="flex flex-1 flex-col gap-3 p-5">
+                            <h3 className="day:text-[#1d1a17] font-serif text-xl leading-tight text-white">
+                              {summary?.name ?? product.name}
                             </h3>
 
-                            <p className="day:text-[#625a51] line-clamp-2 min-h-10 text-sm leading-5 text-gray-300">
+                            <p className="day:text-[#625a51] text-sm leading-6 text-gray-300">
                               {description}
                             </p>
 
                             {priceRange ? (
-                              <div className="day:border-gray-200 day:bg-gray-50 rounded-lg border border-white/10 bg-white/[0.03] px-2.5 py-2">
-                                <div className="flex items-baseline gap-2 whitespace-nowrap">
-                                  <span className="day:text-gray-500 text-[11px] font-medium tracking-[0.12em] text-gray-400 uppercase">
-                                    Sample size
-                                  </span>
-                                  <span className="text-gray-500">·</span>
-                                  <span className="day:text-gray-500 text-xs text-gray-400">
-                                    {formatDimensionPair(
-                                      priceRange.width,
-                                      priceRange.height,
-                                      unitSystem,
-                                    )}
-                                  </span>
-                                </div>
-                                <span className="day:text-gray-900 mt-0.5 block text-base font-semibold text-white">
+                              <div className="mt-auto pt-2">
+                                <span className="day:text-[#1d1a17] block text-2xl font-semibold text-white">
                                   {formatAudPrice(
                                     priceRange.price,
                                     currency,
@@ -271,15 +281,23 @@ export default function ProductSelectionGrid({
                                     0,
                                   )}
                                 </span>
+                                <span className="day:text-[#756c62] mt-1 block text-xs leading-5 text-white/60">
+                                  Example price ·{' '}
+                                  {formatDimensionPair(
+                                    priceRange.width,
+                                    priceRange.height,
+                                    unitSystem,
+                                  )}
+                                </span>
                               </div>
                             ) : (
-                              <p className="day:border-gray-200 day:bg-gray-50 day:text-gray-600 rounded-lg border border-white/10 bg-white/[0.03] px-3 py-2.5 text-sm text-gray-300">
+                              <p className="day:text-[#625a51] mt-auto pt-2 text-sm text-gray-300">
                                 Select product to configure options and view
                                 pricing
                               </p>
                             )}
 
-                            <div className="mt-auto pt-1">
+                            <div className="pt-1">
                               <span className="day:border-[#1d1a17] day:bg-[#1d1a17] day:text-white inline-flex min-h-10 w-full items-center justify-between gap-2 rounded-sm border border-[#cfac6c]/70 bg-transparent px-3 py-2 text-sm font-semibold text-[#f0d89f] transition-colors group-hover:bg-[#cfac6c] group-hover:text-[#1d1a17]">
                                 <span>
                                   {loadingProductId === product.id

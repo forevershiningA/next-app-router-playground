@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-10-20
+**Last Updated:** 2026-10-21
 
 **Status entry order:** Add new dated status entries immediately after the table of contents, before the existing status entries. Keep status entries in reverse chronological order (newest first); do not append them to the end of this file.
 **Tech Stack:** Next.js 15.5.26, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots), **Vitest 4.1.8** (unit tests), **Playwright 1.59.1** (E2E tests)
@@ -139,8 +139,19 @@
 126. [October 18 Homepage Trust Bar, Contact Page, Gallery Layout, and Designer Isolation](#current-status-2026-10-18--homepage-trust-bar-contact-page-gallery-layout-and-designer-isolation)
 127. [October 19 Progressive Garden Hero Video](#current-status-2026-10-19--progressive-garden-hero-video)
 128. [October 20 Photographic Hero, Product Selection, Cursor, and Model Orbit](#current-status-2026-10-20--photographic-hero-product-selection-cursor-and-model-orbit)
+129. [October 21 Shared Public Menu, Hero Captions, and Product Selection Layout](#current-status-2026-10-21--shared-public-menu-hero-captions-and-product-selection-layout)
 
 ---
+
+## Current Status (2026-10-21) — Shared public menu, hero captions, and product selection layout
+
+- **Public category menu:** `components/MemorialCategoryNav.tsx` is shared by `app/_ui/HomeSplash.tsx` and `components/MemorialPublicHeader.tsx`, covering the homepage, memorial product/gallery pages and contact page. Desktop links use 15 px text. Only the category strip has the horizontal white gradient: transparent edges, white at 40% opacity between 25% and 75%. The upper logo/action strip has no gradient. Exact-path `aria-current="page"` keeps the active link in the hover colour with its underline visible. Hover, focus and active underlines sit 10 px above the bottom edge (`after:bottom-2.5`), separated from the strip's border. Mobile menus remain separate implementations.
+- **Hero video v8:** `HomeSplash.tsx` now loads `/videos/hero-garden-v8.webm`, MP4 fallback and `hero-garden-v8-poster.webp`. The 26-second film has English captions for product, shape and granite selection, dedication, remembrance, dove, branches and the final 3D view. Captions use the closing title's cream Georgia lettering, dark shadow and gentle fades; the original closing title remains. These are baked video overlays, not playback timers in React. Rebuild with `node scripts/render-hero-polished.mjs`; it outputs v8 while reusing `public/videos/hero-garden-v6.mp4` and `assets/video-sources/hero-garden-v7/finale.mp4`. Its `captions` array defines timings and copy, and is written into the existing v7 source `timeline.json`. `--package` still repackages finale capture sources; `pnpm video:hero` remains the older capture pipeline. Both new codecs and poster were generated, and a rendered caption frame was visually inspected.
+- **Development CSP:** `next.config.ts` adds `unsafe-eval` to the report-only `script-src` only when `NODE_ENV === 'development'`, supporting Next.js development debugging without repeated evaluation reports. Production retains the previous directive. Restart the dev server and reload after changing headers.
+- **Traditional gallery preview:** `components/designer/ProductGalleryThumbnail.tsx` now reads actual image entries from `app/_internal/home-gallery.json`. For the exact product name `Traditional Engraved Headstone` in category `headstones` (product 124), the overlay uses headstone photos 014, 034, 041 and 061: Quinn, Phillips, Nowland and Irving. Its heading is “Traditional Engraved Headstones gallery”. Other products retain the first four images of their category. Preview links still open the overall category gallery, not a separate traditional-only filter.
+- **Product selection:** `app/select-product/_ui/ProductSelectionGrid.tsx` uses the heading “Choose your memorial” and explains that shape selection comes next. Category buttons stay on one horizontally scrollable row and expose `aria-pressed`. Product groups stack vertically, including “All Products”; each group uses a named container query with one column below 38 rem of content width, two from 38 rem and three from 60 rem. Cards no longer truncate names or descriptions. `productSummaries` supplies concise comparison copy for headstone products 4, 124, 22, 1 and 23; other products retain catalogue names and descriptions. Prices are prominent, with wrapping “Example price” dimensions below instead of a boxed, non-wrapping sample-size row. Currency conversion, unit formatting, sample-price calculation and selection routing are retained.
+- **Sidebar and header geometry:** on the `select-product` designer step, `ConditionalNav.tsx` uses a 336 px desktop sidebar and `MainContent.tsx` matches it with 336 px left padding; other steps retain 400 px. Keep these values synchronized. The product page header and desktop `DesignerBrandHeader.tsx` are both `h-36` (144 px), with the logo header prevented from shrinking, so their bottom borders align. Shared menu components have smaller group gaps, padding, item text and step circles; `DesignerMainMenuView.tsx` retains vertical overflow for short windows or expanded sections rather than hiding content.
+- **Verification:** targeted ESLint and `pnpm type-check` passed after the layout changes. Chromium confirmed three equal-width cards at 1590 px, both header borders at y=144, no mobile page overflow at 390 px, and no sidebar overflow at 1590×857, 1366×768 or 1024×720 with the default Setup section open. Local screenshots are in `output/select-product-review/`; these are review artifacts, not runtime assets. No production build or deployment was performed for this update. Preserve the user-provided `screen.png`.
 
 ## Current Status (2026-10-20) — Photographic hero, product selection, cursor, and model orbit
 
@@ -16845,6 +16856,6 @@ Both commands pass. Browser rendering still needs to be checked after the next l
 
 ---
 
-_End of STARTER.md - Last updated: 2026-10-20_
+_End of STARTER.md - Last updated: 2026-10-21_
 
 ---

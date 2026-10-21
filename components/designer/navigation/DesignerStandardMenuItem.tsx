@@ -29,7 +29,7 @@ export default function DesignerStandardMenuItem({
   if (isDisabled) {
     return (
       <div
-        className="flex cursor-not-allowed items-center gap-3 rounded-lg border border-white/5 px-4 py-3 text-base font-light opacity-40"
+        className="flex cursor-not-allowed items-center gap-2 rounded-lg border border-white/5 px-3 py-2.5 text-sm font-light opacity-40"
         title="Please select a product first"
       >
         <Icon
@@ -45,13 +45,13 @@ export default function DesignerStandardMenuItem({
     <Link
       href={`/${slug}`}
       onClick={onClick}
-      className={`flex cursor-pointer items-center justify-between gap-3 rounded-lg px-4 py-3 text-base font-light transition-all ${
+      className={`flex cursor-pointer items-center justify-between gap-2 rounded-lg px-3 py-2.5 text-sm font-light transition-all ${
         isActive
           ? 'day:border-[#b88a32] day:bg-[#f3e6c9] day:text-[#3d2817] border border-white/30 bg-white/15 text-white shadow-sm'
           : 'day:border-gray-200 day:text-gray-700 day:hover:border-gray-300 day:hover:bg-gray-100 border border-white/10 text-gray-200 hover:border-white/20 hover:bg-white/10'
       }`}
     >
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-2">
         <Icon className="h-5 w-5 flex-shrink-0" aria-hidden="true" />
         <span>{label}</span>
       </div>

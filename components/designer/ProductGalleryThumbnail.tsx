@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useId, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
+import galleries from '#/app/_internal/home-gallery.json';
 
 const galleryCategories: Record<string, { id: string; name: string }> = {
   headstones: { id: 'headstones', name: 'Headstones' },
@@ -19,6 +20,25 @@ export default function ProductGalleryThumbnail({
   product: { name: string; image: string; category: string };
 }) {
   const category = galleryCategories[product.category];
+  const isTraditionalHeadstone =
+    product.category === 'headstones' &&
+    product.name === 'Traditional Engraved Headstone';
+  const galleryImages =
+    galleries.find((gallery) => gallery.id === category?.id)?.images ?? [];
+  // Quinn, Phillips, Nowland and Irving: traditional lettering on granite,
+  // rather than the laser-etched portraits at the beginning of this gallery.
+  const previewImages = isTraditionalHeadstone
+    ? galleryImages.filter((image) =>
+        [14, 34, 41, 61].some(
+          (index) =>
+            image.src ===
+            `/gallery/headstones-${String(index).padStart(3, '0')}.webp`,
+        ),
+      )
+    : galleryImages.slice(0, 4);
+  const previewName = isTraditionalHeadstone
+    ? 'Traditional Engraved Headstones'
+    : category?.name;
   const tooltipId = useId();
   const triggerRef = useRef<HTMLAnchorElement>(null);
   const tooltipRef = useRef<HTMLSpanElement>(null);
@@ -127,7 +147,7 @@ export default function ProductGalleryThumbnail({
             ref={tooltipRef}
             id={tooltipId}
             role="dialog"
-            aria-label={`${category.name} gallery preview`}
+            aria-label={`${previewName} gallery preview`}
             aria-modal={false}
             onMouseEnter={cancelClose}
             onMouseLeave={scheduleClose}
@@ -137,20 +157,20 @@ export default function ProductGalleryThumbnail({
             className="day:border-stone-300 day:bg-[#f7f4ee] day:text-stone-900 fixed z-[10000] block w-[min(360px,calc(100vw-24px))] rounded-sm border border-[#cfac6c]/50 bg-[#1d1a17] p-4 text-left text-sm font-normal tracking-normal text-white normal-case shadow-xl"
           >
             <span className="mb-3 block font-semibold">
-              {category.name} gallery
+              {previewName} gallery
             </span>
             <span className="grid grid-cols-2 gap-2">
-              {[1, 2, 3, 4].map((index) => (
+              {previewImages.map((image) => (
                 <Link
-                  key={index}
+                  key={image.src}
                   href={`/memorials/gallery?category=${category.id}`}
-                  aria-label={`Explore ${category.name.toLowerCase()} gallery, example ${index}`}
+                  aria-label={`Explore gallery: ${image.alt}`}
                   onClick={() => setPosition(null)}
                   className="relative block aspect-square overflow-hidden rounded-sm bg-[#eee9df] hover:ring-2 hover:ring-[#cfac6c] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#cfac6c]"
                 >
                   <Image
-                    src={`/gallery/${category.id}-${String(index).padStart(3, '0')}-thumb.webp`}
-                    alt={`${category.name} gallery example ${index}`}
+                    src={image.thumbnail}
+                    alt={image.alt}
                     fill
                     sizes="155px"
                     className="object-contain"

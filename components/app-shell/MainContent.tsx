@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
+import { getDesignerStepSlug } from '#/lib/designer-route-state';
 
 export default function MainContent({
   children,
@@ -47,7 +48,9 @@ export default function MainContent({
         !isHomepage &&
         pathname !== '/contact' &&
         isSidebarOpen
-          ? 'lg:pl-[400px]'
+          ? getDesignerStepSlug(pathname) === 'select-product'
+            ? 'lg:pl-[336px]'
+            : 'lg:pl-[400px]'
           : ''
       }
     >

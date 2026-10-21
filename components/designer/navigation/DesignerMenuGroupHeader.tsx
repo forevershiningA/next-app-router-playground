@@ -28,12 +28,12 @@ export default function DesignerMenuGroupHeader({
       aria-current={isCurrent ? 'step' : undefined}
       aria-expanded={isOpen}
       aria-controls={`designer-menu-group-${index}-items`}
-      className={`day:hover:bg-white/45 flex w-full cursor-pointer items-center gap-3 rounded-sm px-3 py-2 transition-colors duration-200 hover:bg-white/5 ${
-        isOpen ? 'mb-3' : 'mb-0'
+      className={`day:hover:bg-white/45 flex w-full cursor-pointer items-center gap-2 rounded-sm px-2 py-1.5 transition-colors duration-200 hover:bg-white/5 ${
+        isOpen ? 'mb-2' : 'mb-0'
       }`}
     >
       <span
-        className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full border font-serif text-[13px] font-normal tracking-wide ${
+        className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full border font-serif text-[13px] font-normal tracking-wide ${
           isPast
             ? 'border-emerald-400/40 bg-emerald-400/10 text-emerald-300'
             : isCurrent
@@ -45,7 +45,7 @@ export default function DesignerMenuGroupHeader({
       </span>
       <div className="flex min-w-0 flex-1 items-center justify-between gap-3">
         <div className="min-w-0">
-          <p className="day:text-[#1d1a17] font-serif text-[19px] font-normal tracking-[-0.01em] text-white/90">
+          <p className="day:text-[#1d1a17] font-serif text-lg font-normal tracking-[-0.01em] text-white/90">
             {label}
           </p>
           {status !== 'Available' && (

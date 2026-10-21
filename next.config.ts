@@ -123,7 +123,8 @@ const nextConfig = {
               "object-src 'none'",
               "frame-ancestors 'self'",
               "form-action 'self' https://checkout.stripe.com",
-              "script-src 'self' 'unsafe-inline' https://js.stripe.com",
+              // Next.js development bundles evaluate source maps for debugging.
+              `script-src 'self' 'unsafe-inline'${process.env.NODE_ENV === 'development' ? " 'unsafe-eval'" : ''} https://js.stripe.com`,
               "style-src 'self' 'unsafe-inline'",
               "img-src 'self' data: blob: https:",
               "font-src 'self' data:",

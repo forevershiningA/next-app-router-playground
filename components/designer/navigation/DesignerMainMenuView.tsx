@@ -51,7 +51,7 @@ export default function DesignerMainMenuView({
   return (
     <>
       <DesignerBrandHeader isDayTheme={isDayTheme} toggleTheme={toggleTheme} />
-      <div className="flex-1 space-y-6 overflow-y-auto px-5 py-6 md:space-y-0 md:px-5 md:py-6">
+      <div className="flex-1 space-y-4 overflow-y-auto px-4 py-3 md:space-y-0">
         <ProductConversionPanel
           isOpen={showConvertPanel}
           productId={productId}
