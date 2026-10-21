@@ -8,6 +8,7 @@ const root = process.cwd();
 const raw = path.join(root, 'output/hero-polished');
 const source = path.join(root, 'assets/video-sources/hero-garden-v7');
 const output = path.join(root, 'public/videos');
+const outputName = 'hero-garden-v8';
 await mkdir(source, { recursive: true });
 await mkdir(path.join(raw, 'overlays'), { recursive: true });
 async function run(args) {
@@ -110,10 +111,24 @@ const actions = [
   { time: 7.6, ...uiPoint(70, 650) },
   { time: 9.6, ...uiPoint(294, 200) },
 ];
+const captions = [
+  { start: 0.2, end: 2, text: 'Choose your memorial' },
+  { start: 2.1, end: 4, text: 'Explore headstone shapes' },
+  { start: 4.1, end: 6, text: 'Select your preferred shape' },
+  { start: 6.1, end: 8, text: 'Compare granite colours' },
+  { start: 8.1, end: 10, text: 'Choose Blue Pearl granite' },
+  { start: 10.1, end: 12.4, text: 'Add a personal dedication' },
+  { start: 12.5, end: 14.8, text: 'Write a message of remembrance' },
+  { start: 14.9, end: 17.2, text: 'Add a symbolic dove' },
+  { start: 17.3, end: 19.6, text: 'Add decorative branches' },
+  { start: 19.7, end: 21, text: 'View your memorial in 3D' },
+  { start: 21, end: 25.1, text: 'Your design. A lasting tribute.' },
+];
 const timeline = {
   duration: 26,
   fps: 25,
   actions,
+  captions,
   orbit: { start: 20, duration: 5.2, amplitude: 0.22 },
   title: { text: 'Your design. A lasting tribute.', start: 21, fadeOut: 24.6 },
 };
@@ -140,14 +155,18 @@ for (let frame = 0; frame < 650; frame++) {
     (action) => t >= action.time && t < action.time + 0.5,
   );
   const pulse = click ? (t - click.time) / 0.5 : 0;
-  const titleOpacity = Math.max(
-    0,
-    Math.min(1, (t - 21) / 0.5, (25.1 - t) / 0.5),
-  );
+  const caption = captions.find(({ start, end }) => t >= start && t < end);
+  const titleOpacity = caption
+    ? Math.max(
+        0,
+        Math.min(1, (t - caption.start) / 0.2, (caption.end - t) / 0.2),
+      )
+    : 0;
+  const captionText = caption?.text ?? '';
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720">
     ${click ? `<circle cx="${click.x}" cy="${click.y}" r="${5 + pulse * 17}" fill="#d7b356" fill-opacity="${0.16 * (1 - pulse)}" stroke="#f3d58d" stroke-width="2.5" opacity="${1 - pulse}"/>` : ''}
     <path transform="translate(${x} ${y})" d="M0 0L0 23L6 17L11 28L16 26L11 15L20 15Z" fill="white" stroke="#17120d" stroke-width="1.7" stroke-linejoin="round" opacity="${cursorOpacity}"/>
-    <g opacity="${titleOpacity}" font-family="Georgia,serif" font-size="38" text-anchor="middle"><text x="641" y="97" fill="#08120c" stroke="#08120c" stroke-width="3" opacity=".7">Your design. A lasting tribute.</text><text x="640" y="96" fill="#f5ead4">Your design. A lasting tribute.</text></g>
+    <g opacity="${titleOpacity}" font-family="Georgia,serif" font-size="38" text-anchor="middle"><text x="641" y="97" fill="#08120c" stroke="#08120c" stroke-width="3" opacity=".7">${captionText}</text><text x="640" y="96" fill="#f5ead4">${captionText}</text></g>
   </svg>`;
   await sharp(Buffer.from(svg))
     .png()
@@ -183,11 +202,11 @@ await run([
   'yuv420p',
   '-movflags',
   '+faststart',
-  path.join(output, 'hero-garden-v7.mp4'),
+  path.join(output, `${outputName}.mp4`),
 ]);
 await run([
   '-i',
-  path.join(output, 'hero-garden-v7.mp4'),
+  path.join(output, `${outputName}.mp4`),
   '-an',
   '-c:v',
   'libvpx-vp9',
@@ -197,21 +216,21 @@ await run([
   '0',
   '-row-mt',
   '1',
-  path.join(output, 'hero-garden-v7.webm'),
+  path.join(output, `${outputName}.webm`),
 ]);
 await run([
   '-ss',
   '22',
   '-i',
-  path.join(output, 'hero-garden-v7.mp4'),
+  path.join(output, `${outputName}.mp4`),
   '-frames:v',
   '1',
   '-c:v',
   'libwebp',
   '-quality',
   '86',
-  path.join(output, 'hero-garden-v7-poster.webp'),
+  path.join(output, `${outputName}-poster.webp`),
 ]);
 console.log(
-  'Created hero-garden-v7: cursor, click pulses, model orbit and closing title; 26 seconds',
+  `Created ${outputName}: cursor, click pulses, action captions, model orbit and closing title; 26 seconds`,
 );
