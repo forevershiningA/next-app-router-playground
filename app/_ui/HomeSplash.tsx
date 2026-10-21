@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
+import MemorialCategoryNav from '#/components/MemorialCategoryNav';
 import { useEffect, useRef, useState } from 'react';
 import {
   Bars3Icon,
@@ -141,22 +142,7 @@ export default function HomeSplash() {
           </div>
         </header>
 
-        <nav
-          aria-label="Memorial categories"
-          className="absolute top-[72px] right-0 left-0 z-40 hidden border-y border-[#cfc5b7]/80 bg-[#eee9df]/95 backdrop-blur-sm xl:block"
-        >
-          <div className="mx-auto flex h-11 max-w-7xl items-center justify-center gap-9 px-8">
-            {MEMORIAL_LINKS.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="relative flex h-full items-center text-[15px] font-medium tracking-[0.01em] text-[#514a43] transition-colors after:absolute after:right-0 after:bottom-0 after:left-0 after:h-px after:origin-center after:scale-x-0 after:bg-[#8a651f] after:transition-transform hover:text-[#6f511c] hover:after:scale-x-100 focus-visible:text-[#6f511c] focus-visible:outline-none focus-visible:after:scale-x-100"
-              >
-                {link.label}
-              </Link>
-            ))}
-          </div>
-        </nav>
+        <MemorialCategoryNav className="absolute top-[72px] right-0 left-0 z-40" />
 
         {/* Mobile Menu Drawer */}
         {mobileMenuOpen && (

@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import MemorialCategoryNav from '#/components/MemorialCategoryNav';
 import { Bars3Icon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import { ThemeToggle } from '#/components/theme/ThemeToggle';
 import {
@@ -113,46 +114,7 @@ export default function MemorialPublicHeader({
         </details>
       </div>
 
-      <nav
-        className="hidden border-t border-[#cfc5b7]/80 xl:block"
-        aria-label="Memorial categories"
-      >
-        <div className="mx-auto flex h-11 max-w-7xl items-center justify-center gap-9 px-8">
-          <Link
-            href="/"
-            className="relative flex h-full items-center text-[13px] font-medium tracking-[0.01em] text-[#514a43] transition-colors after:absolute after:right-0 after:bottom-0 after:left-0 after:h-px after:origin-center after:scale-x-0 after:bg-[#8a651f] after:transition-transform hover:text-[#6f511c] hover:after:scale-x-100"
-          >
-            Home
-          </Link>
-          {headerMemorialLinks.map((slug) => {
-            const isActive = slug === activeType;
-            return (
-              <Link
-                key={slug}
-                href={`/memorials/${slug}`}
-                aria-current={isActive ? 'page' : undefined}
-                className={`relative flex h-full items-center text-[13px] font-medium tracking-[0.01em] transition-colors after:absolute after:right-0 after:bottom-0 after:left-0 after:h-px after:origin-center after:bg-[#8a651f] after:transition-transform ${isActive ? 'text-[#6f511c] after:scale-x-100' : 'text-[#514a43] after:scale-x-0 hover:text-[#6f511c] hover:after:scale-x-100'}`}
-              >
-                {memorialTypePages[slug].navLabel}
-              </Link>
-            );
-          })}
-          <Link
-            href="/memorials/gallery"
-            aria-current={activeType === 'gallery' ? 'page' : undefined}
-            className={`relative flex h-full items-center text-[13px] font-medium ${activeType === 'gallery' ? 'border-b border-[#8a651f] text-[#6f511c]' : 'text-[#514a43] hover:text-[#6f511c]'}`}
-          >
-            Gallery
-          </Link>
-          <Link
-            href="/contact"
-            aria-current={activeType === 'contact' ? 'page' : undefined}
-            className={`relative flex h-full items-center text-[13px] font-medium ${activeType === 'contact' ? 'border-b border-[#8a651f] text-[#6f511c]' : 'text-[#514a43] hover:text-[#6f511c]'}`}
-          >
-            Contact
-          </Link>
-        </div>
-      </nav>
+      <MemorialCategoryNav />
     </header>
   );
 }
