@@ -34,7 +34,7 @@ export const createSceneSlice: StateCreator<
 
   hideScenery: true,
   setHideScenery: (hideScenery) => set({ hideScenery }),
-  solidBgColor: '#787878',
+  solidBgColor: '#2c2c2c',
   setSolidBgColor: (solidBgColor) => set({ solidBgColor }),
   sceneryVariant: 'day',
   setSceneryVariant: (sceneryVariant) => set({ sceneryVariant }),

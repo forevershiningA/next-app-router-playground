@@ -59,6 +59,8 @@ export default function DesignerFullscreenPanelView({
   return (
     <div className="flex h-full min-h-0 flex-col">
       <GuidedDesktopHeader
+        isDayTheme={isDayTheme}
+        toggleTheme={toggleTheme}
         title={title}
         activeFullscreenPanel={activeFullscreenPanel}
         currentSlugFromPathname={navigation.currentSlugFromPathname}

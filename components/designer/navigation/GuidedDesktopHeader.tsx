@@ -5,10 +5,14 @@ import {
   ChevronLeftIcon,
   ChevronRightIcon,
   Squares2X2Icon,
+  MoonIcon,
+  SunIcon,
 } from '@heroicons/react/24/outline';
 import { GuidedQuickNavItems } from '#/components/designer/navigation/GuidedQuickNavItems';
 
 type GuidedDesktopHeaderProps = {
+  isDayTheme: boolean;
+  toggleTheme: () => void;
   title: string | undefined;
   activeFullscreenPanel: string | null;
   currentSlugFromPathname: string;
@@ -28,6 +32,8 @@ type GuidedDesktopHeaderProps = {
 };
 
 export default function GuidedDesktopHeader({
+  isDayTheme,
+  toggleTheme,
   title,
   activeFullscreenPanel,
   currentSlugFromPathname,
@@ -72,7 +78,7 @@ export default function GuidedDesktopHeader({
 
   return (
     <div className="day:border-[#cfc5b7] day:bg-[#eee9df] relative hidden border-b border-white/10 bg-[#1d1a17] px-5 py-3 md:block">
-      <div className="mb-1 flex items-center justify-center gap-2.5 md:mb-2">
+      <div className="relative mb-1 flex min-h-9 items-center justify-center gap-2.5 px-10 md:mb-2">
         <p className="day:text-[#756c62] text-[11px] tracking-[0.08em] text-white/50">
           Guided Step
         </p>
@@ -87,6 +93,21 @@ export default function GuidedDesktopHeader({
             </span>
           </span>
         )}
+        <button
+          type="button"
+          onClick={toggleTheme}
+          aria-label={
+            isDayTheme ? 'Switch to night mode' : 'Switch to day mode'
+          }
+          title={isDayTheme ? 'Night mode' : 'Day mode'}
+          className="day:border-[#bdb4a6] day:bg-white/25 day:text-[#1d1a17] absolute top-1/2 right-0 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-lg border border-white/15 bg-white/[0.06] text-white/75 transition-colors hover:border-[#cfac6c] hover:text-[#cfac6c]"
+        >
+          {isDayTheme ? (
+            <MoonIcon className="h-5 w-5" aria-hidden="true" />
+          ) : (
+            <SunIcon className="h-5 w-5" aria-hidden="true" />
+          )}
+        </button>
       </div>
       <h2 className="day:text-[#1d1a17] my-4 text-center font-serif text-3xl font-normal tracking-[-0.02em] text-white">
         {title}

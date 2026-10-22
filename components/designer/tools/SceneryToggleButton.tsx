@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { PhotoIcon, SunIcon } from '@heroicons/react/24/outline';
 import { useHeadstoneStore } from '#/lib/headstone-store';
+import { useTheme } from '#/components/theme/ThemeProvider';
 
 const LS_KEY = 'fs_scene_bg';
 
@@ -13,12 +14,36 @@ interface StoredPref {
 }
 
 const COLORS = [
-  { label: 'Gallery White', value: '#f8f8f8', preview: 'linear-gradient(135deg, #ffffff, #d7d2c9)' },
-  { label: 'Soft Gray',     value: '#d8d8d8', preview: 'linear-gradient(135deg, #f0f0ee, #a8a8a5)' },
-  { label: 'Warm Stone',    value: '#d4c5a9', preview: 'linear-gradient(135deg, #eee4d4, #a99779)' },
-  { label: 'Slate Studio',  value: '#787878', preview: 'linear-gradient(135deg, #a6a6a3, #4d4d4a)' },
-  { label: 'Charcoal',      value: '#2c2c2c', preview: 'linear-gradient(135deg, #55524e, #191817)' },
-  { label: 'Midnight',      value: '#0d1b2a', preview: 'linear-gradient(135deg, #28435a, #09121e)' },
+  {
+    label: 'Gallery White',
+    value: '#f8f8f8',
+    preview: 'linear-gradient(135deg, #ffffff, #d7d2c9)',
+  },
+  {
+    label: 'Soft Gray',
+    value: '#d8d8d8',
+    preview: 'linear-gradient(135deg, #f0f0ee, #a8a8a5)',
+  },
+  {
+    label: 'Warm Stone',
+    value: '#d4c5a9',
+    preview: 'linear-gradient(135deg, #eee4d4, #a99779)',
+  },
+  {
+    label: 'Slate Studio',
+    value: '#787878',
+    preview: 'linear-gradient(135deg, #a6a6a3, #4d4d4a)',
+  },
+  {
+    label: 'Charcoal',
+    value: '#2c2c2c',
+    preview: 'linear-gradient(135deg, #55524e, #191817)',
+  },
+  {
+    label: 'Midnight',
+    value: '#0d1b2a',
+    preview: 'linear-gradient(135deg, #28435a, #09121e)',
+  },
 ] as const;
 
 const SCENERY_OPTIONS = [
@@ -39,40 +64,57 @@ const SCENERY_OPTIONS = [
 ] as const;
 
 export default function SceneryToggleButton() {
-  const hideScenery       = useHeadstoneStore((s) => s.hideScenery);
-  const solidBgColor      = useHeadstoneStore((s) => s.solidBgColor);
-  const sceneryVariant    = useHeadstoneStore((s) => s.sceneryVariant);
-  const setHideScenery    = useHeadstoneStore((s) => s.setHideScenery);
-  const setSolidBgColor   = useHeadstoneStore((s) => s.setSolidBgColor);
+  const { theme } = useTheme();
+  const storageKey = theme === 'day' ? `${LS_KEY}_day` : LS_KEY;
+  const hideScenery = useHeadstoneStore((s) => s.hideScenery);
+  const solidBgColor = useHeadstoneStore((s) => s.solidBgColor);
+  const sceneryVariant = useHeadstoneStore((s) => s.sceneryVariant);
+  const setHideScenery = useHeadstoneStore((s) => s.setHideScenery);
+  const setSolidBgColor = useHeadstoneStore((s) => s.setSolidBgColor);
   const setSceneryVariant = useHeadstoneStore((s) => s.setSceneryVariant);
 
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
-  // Restore preference from localStorage on mount
+  // Keep each theme's selected backdrop; day mode starts in Gallery White.
   useEffect(() => {
+    let pref: Partial<StoredPref> = {};
     try {
-      const raw = localStorage.getItem(LS_KEY);
-      if (raw) {
-        const pref: StoredPref = JSON.parse(raw);
-        if (typeof pref.color === 'string') setSolidBgColor(pref.color);
-        if (typeof pref.hideScenery === 'boolean') setHideScenery(pref.hideScenery);
-        if (pref.sceneryVariant === 'day' || pref.sceneryVariant === 'outback') setSceneryVariant(pref.sceneryVariant);
-      }
+      const raw = localStorage.getItem(storageKey);
+      if (raw) pref = JSON.parse(raw) ?? {};
     } catch {
-      // ignore malformed data
+      // Ignore malformed data and use the theme default.
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    // Replace the previous night default while retaining other saved backdrops.
+    if (theme === 'dark' && pref.color === '#787878') pref.color = '#2c2c2c';
+    useHeadstoneStore.setState({
+      solidBgColor:
+        typeof pref.color === 'string'
+          ? pref.color
+          : theme === 'day'
+            ? '#f8f8f8'
+            : '#2c2c2c',
+      hideScenery:
+        typeof pref.hideScenery === 'boolean' ? pref.hideScenery : true,
+      sceneryVariant: pref.sceneryVariant === 'outback' ? 'outback' : 'day',
+    });
+  }, [storageKey, theme]);
 
-  // Persist to localStorage whenever preferences change
-  useEffect(() => {
+  const persistSelection = () => {
+    const {
+      hideScenery,
+      solidBgColor: color,
+      sceneryVariant,
+    } = useHeadstoneStore.getState();
     try {
-      localStorage.setItem(LS_KEY, JSON.stringify({ hideScenery, color: solidBgColor, sceneryVariant }));
+      localStorage.setItem(
+        storageKey,
+        JSON.stringify({ hideScenery, color, sceneryVariant }),
+      );
     } catch {
-      // ignore (private browsing, storage quota)
+      // Ignore unavailable storage.
     }
-  }, [hideScenery, solidBgColor, sceneryVariant]);
+  };
 
   // Close popover when clicking outside
   useEffect(() => {
@@ -89,12 +131,14 @@ export default function SceneryToggleButton() {
   const selectScenery = (variant: 'day' | 'outback') => {
     setSceneryVariant(variant);
     setHideScenery(false);
+    persistSelection();
     setOpen(false);
   };
 
   const selectColor = (color: string) => {
     setSolidBgColor(color);
     setHideScenery(true);
+    persistSelection();
     setOpen(false);
   };
 
@@ -109,7 +153,7 @@ export default function SceneryToggleButton() {
       {/* Popover */}
       {open && (
         <div className="mb-1 rounded-2xl border border-white/15 bg-[#191108]/90 p-3 shadow-2xl backdrop-blur-sm">
-          <p className="mb-2.5 px-0.5 text-[10px] font-semibold uppercase tracking-widest text-white/50">
+          <p className="mb-2.5 px-0.5 text-[10px] font-semibold tracking-widest text-white/50 uppercase">
             Background
           </p>
 
@@ -128,18 +172,22 @@ export default function SceneryToggleButton() {
                       : 'text-white/60 hover:bg-white/8 hover:text-white'
                   }`}
                 >
-                  <span className={`flex h-6 w-6 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-gradient-to-b ${gradient}`}>
+                  <span
+                    className={`flex h-6 w-6 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-gradient-to-b ${gradient}`}
+                  >
                     <Icon className="h-3.5 w-3.5 text-white drop-shadow" />
                   </span>
                   {label}
-                  {isActive && <span className="ml-auto text-[#d4af37]">✓</span>}
+                  {isActive && (
+                    <span className="ml-auto text-[#d4af37]">✓</span>
+                  )}
                 </button>
               );
             })}
           </div>
 
           {/* Studio backdrops */}
-          <p className="mb-1.5 px-0.5 text-[10px] font-semibold uppercase tracking-widest text-white/50">
+          <p className="mb-1.5 px-0.5 text-[10px] font-semibold tracking-widest text-white/50 uppercase">
             Studio backdrop
           </p>
           <div className="flex gap-1.5">
