@@ -145,11 +145,11 @@ export default function ProductSelectionGrid({
       <div className="day:border-[#cfc5b7] day:bg-[#eee9df] relative overflow-hidden border-b border-white/10 bg-[#1d1a17] lg:flex lg:h-36 lg:items-center">
         <div className="relative mx-auto w-full max-w-7xl px-6 py-8 lg:px-8 lg:py-0">
           <UnitCurrencySelects className="mb-3 justify-end sm:absolute sm:top-4 sm:right-6 sm:mb-0 lg:right-8" />
-          <div className="text-left sm:pr-44">
-            <h1 className="day:text-[#1d1a17] font-serif text-3xl font-normal tracking-[-0.025em] text-white sm:text-4xl lg:text-[2.75rem]">
+          <div className="text-center sm:px-20">
+            <h1 className="day:text-[#1d1a17] font-serif text-3xl font-normal tracking-[-0.025em] text-white sm:text-4xl lg:text-3xl">
               Choose your memorial
             </h1>
-            <p className="day:text-[#625a51] mt-3 max-w-xl text-sm leading-6 text-white/70">
+            <p className="day:text-[#625a51] mx-auto mt-3 max-w-xl text-sm leading-6 text-white/70">
               Compare materials and styles to find the right starting point.
               Next: choose the shape.
             </p>
@@ -236,7 +236,7 @@ export default function ProductSelectionGrid({
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 items-stretch gap-5 @min-[38rem]/products:grid-cols-2 @min-[60rem]/products:grid-cols-3">
+                  <div className="grid grid-cols-1 items-stretch gap-5 @min-[38rem]/products:grid-cols-2 @min-[60rem]/products:grid-cols-4">
                     {group.products.map((product) => {
                       const priceRange = priceMap[product.id];
                       const summary = productSummaries[product.id];
@@ -258,7 +258,7 @@ export default function ProductSelectionGrid({
                               alt={product.name}
                               fill
                               className="object-contain p-3 transition-transform duration-700 ease-out will-change-transform group-focus-within:scale-[1.025] group-hover:scale-[1.025] motion-reduce:transition-none motion-reduce:group-focus-within:transform-none motion-reduce:group-hover:transform-none"
-                              sizes="(min-width: 1300px) 30vw, (min-width: 1024px) 45vw, (min-width: 608px) 50vw, 100vw"
+                              sizes="(min-width: 1360px) 25vw, (min-width: 1024px) 45vw, (min-width: 608px) 50vw, 100vw"
                             />
                           </div>
 

@@ -10,12 +10,14 @@ type DesignerPageHeadingProps = {
   sectionTitle: React.ReactNode;
   align?: 'left' | 'center';
   showProductThumbnail?: boolean;
+  compactDesktop?: boolean;
 };
 
 export default function DesignerPageHeading({
   sectionTitle,
   align = 'center',
   showProductThumbnail = false,
+  compactDesktop = false,
 }: DesignerPageHeadingProps) {
   const pathname = usePathname();
   const catalog = useHeadstoneStore((state) => state.catalog);
@@ -33,18 +35,30 @@ export default function DesignerPageHeading({
   const alignment = align === 'center' ? 'sm:text-center' : 'text-left';
 
   return (
-    <div className={`flex flex-col ${alignment}`}>
-      <h1 className="day:text-[#6f511c] order-2 mt-5 text-lg font-semibold tracking-[0.2em] text-pretty text-[#cfac6c] uppercase sm:text-xl">
+    <div
+      className={`flex flex-col ${alignment} ${compactDesktop ? 'lg:relative lg:px-24 lg:text-center' : ''}`}
+    >
+      <h1
+        className={`day:text-[#6f511c] order-2 mt-5 text-lg font-semibold tracking-[0.2em] text-pretty text-[#cfac6c] uppercase sm:text-xl ${compactDesktop ? 'lg:mt-1 lg:text-sm lg:tracking-[0.12em]' : ''}`}
+      >
         <span
           className={`inline-flex items-center gap-3 ${align === 'center' ? 'sm:justify-center' : ''}`}
         >
           {showProductThumbnail && fallbackProduct?.image && (
-            <ProductGalleryThumbnail product={fallbackProduct} />
+            <span
+              className={
+                compactDesktop ? 'lg:absolute lg:top-0 lg:left-0' : undefined
+              }
+            >
+              <ProductGalleryThumbnail product={fallbackProduct} />
+            </span>
           )}
           <span>{productName}</span>
         </span>
       </h1>
-      <h2 className="day:text-gray-900 order-1 font-serif text-3xl font-light tracking-tight text-pretty text-white sm:text-4xl lg:text-[2.75rem]">
+      <h2
+        className={`day:text-gray-900 order-1 font-serif text-3xl font-light tracking-tight text-pretty text-white sm:text-4xl ${compactDesktop ? 'lg:text-3xl' : 'lg:text-[2.75rem]'}`}
+      >
         {sectionTitle}
       </h2>
     </div>

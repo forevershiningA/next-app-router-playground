@@ -22,6 +22,7 @@ import {
   type StainlessFinish,
 } from '#/lib/stainless-texture';
 import { POLISHED_GRANITE_TINT } from '#/lib/granite-material';
+import { applyPlanarCapProjection } from '#/lib/planar-cap-projection';
 import { useMobileNavStore } from '#/lib/mobile-nav-store';
 
 const DEFAULT_FACE_FALLBACK = '/textures/forever/l/Imperial-Red.webp';
@@ -182,47 +183,6 @@ const EPS = 1e-9;
 // Keep Fast Refresh from retaining geometry built by an older contour or
 // normal-generation implementation in the live 3D Designer.
 const GEOMETRY_BUILD_VERSION = 13;
-// Bump this when changing cap shader construction so Fast Refresh does not
-// preserve a previously compiled material in the live Designer canvas.
-const CAP_PROJECTION_VERSION = 3;
-
-function applyPlanarCapProjection(
-  material: THREE.MeshPhysicalMaterial,
-  bounds: THREE.Box3,
-  repeatX: number,
-  repeatY: number,
-) {
-  const width = Math.max(EPS, bounds.max.x - bounds.min.x);
-  const height = Math.max(EPS, bounds.max.y - bounds.min.y);
-  const uvInjection = `
-    vec2 planarCapUv = vec2(
-      ((position.x - ${bounds.min.x.toFixed(8)}) / ${width.toFixed(8)}) * ${repeatX.toFixed(8)},
-      ((position.y - ${bounds.min.y.toFixed(8)}) / ${height.toFixed(8)}) * ${repeatY.toFixed(8)}
-    );
-    #ifdef USE_MAP
-      vMapUv = planarCapUv;
-    #endif
-    #ifdef USE_BUMPMAP
-      vBumpMapUv = planarCapUv;
-    #endif
-    #ifdef USE_EMISSIVEMAP
-      vEmissiveMapUv = planarCapUv;
-    #endif
-    #ifdef USE_ROUGHNESSMAP
-      vRoughnessMapUv = planarCapUv;
-    #endif
-  `;
-
-  material.onBeforeCompile = (shader) => {
-    shader.vertexShader = shader.vertexShader.replace(
-      '#include <uv_vertex>',
-      `#include <uv_vertex>\n${uvInjection}`,
-    );
-  };
-  material.customProgramCacheKey = () =>
-    `planar-cap:${bounds.min.x}:${bounds.min.y}:${width}:${height}:${repeatX}:${repeatY}`;
-}
-
 type Props = {
   url: string;
   depth: number;
@@ -2160,7 +2120,8 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(
       GEOMETRY_BUILD_VERSION,
     ]);
 
-    // 4. Handle Repeats via Texture Matrix (Just like the old version)
+    // Repeat changes only update UV matrices. needsUpdate would re-upload the
+    // raster and regenerate mipmaps on every dimension slider event.
     useLayoutEffect(() => {
       if (!dims) return;
 
@@ -2182,37 +2143,30 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(
       // Cap repeats are baked into geometry UVs. Keeping these maps at 1:1
       // avoids cap seams on complex modern headstone contours.
       clonedFaceMap.repeat.set(1, 1);
-      clonedFaceMap.needsUpdate = true;
       faceDetailMap.repeat.set(1, 1);
-      faceDetailMap.needsUpdate = true;
 
       if (clonedSideMap) {
         clonedSideMap.repeat.set(
           headstoneStyle === 'slant' ? repSideX : 1,
           headstoneStyle === 'slant' ? repSideY : 1,
         );
-        clonedSideMap.needsUpdate = true;
       }
       if (sideDetailMap) {
         sideDetailMap.repeat.set(
           headstoneStyle === 'slant' ? repSideX : 1,
           headstoneStyle === 'slant' ? repSideY : 1,
         );
-        sideDetailMap.needsUpdate = true;
       }
 
       if (clonedBackMap) {
         clonedBackMap.repeat.set(1, 1);
-        clonedBackMap.needsUpdate = true;
       }
       if (backDetailMap) {
         backDetailMap.repeat.set(1, 1);
-        backDetailMap.needsUpdate = true;
       }
 
       if (headstoneStyle === 'slant' && rockNormalTexture) {
         rockNormalTexture.repeat.set(1, 1);
-        rockNormalTexture.needsUpdate = true;
       }
     }, [
       dims,
@@ -2246,30 +2200,6 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(
     // 5. Create Materials (FIX: Return data from useMemo, not JSX)
     const materials = useMemo(() => {
       const isSlant = headstoneStyle === 'slant';
-      const capBounds = geometries[0]?.boundingBox ?? null;
-      const capWorldWidth = dims?.worldW ?? 1;
-      const capWorldHeight = dims?.worldH ?? 1;
-      const usePhysicalCapRepeat =
-        autoRepeat || tileSize != null || sideTileSize != null;
-      const faceTileSize = Math.max(0.001, tileSize ?? 0.1);
-      const backTileSize = Math.max(0.001, sideTileSize ?? tileSize ?? 0.1);
-      const faceCapRepeatX = stretchFace
-        ? 1
-        : usePhysicalCapRepeat
-          ? Math.max(1, capWorldWidth / faceTileSize)
-          : (faceRepeatX ?? 6);
-      const faceCapRepeatY = stretchFace
-        ? 1
-        : usePhysicalCapRepeat
-          ? Math.max(1, capWorldHeight / faceTileSize)
-          : (faceRepeatY ?? 6);
-      const backCapRepeatX = usePhysicalCapRepeat
-        ? Math.max(1, capWorldWidth / backTileSize)
-        : (sideRepeatX ?? 8);
-      const backCapRepeatY = usePhysicalCapRepeat
-        ? Math.max(1, capWorldHeight / backTileSize)
-        : (sideRepeatY ?? 1);
-
       // Full Colour Plaque: unlit face so the background image renders without
       // lighting influence. The color multiplier tames brightness so highlights
       // don't wash out to white.
@@ -2472,24 +2402,6 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(
           })
         : sideMat;
 
-      // Ignore the SVG cap UVs for upright granite headstones. The shader uses
-      // local X/Y projection, so complex concave outlines cannot split the
-      // face or back texture along their triangulation seams.
-      if (!isSlant && capBounds) {
-        applyPlanarCapProjection(
-          faceMat,
-          capBounds,
-          faceCapRepeatX,
-          faceCapRepeatY,
-        );
-        applyPlanarCapProjection(
-          backMat,
-          capBounds,
-          backCapRepeatX,
-          backCapRepeatY,
-        );
-      }
-
       return [faceMat, sideMat, backMat];
     }, [
       clonedFaceMap,
@@ -2506,26 +2418,85 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(
       showStainlessRim,
       ssFinish,
       stainlessMaps,
+    ]);
+
+    // Keep the material instances and GPU programs alive while resizing. Only
+    // the projection uniforms depend on the current geometry dimensions.
+    useLayoutEffect(() => {
+      if (
+        headstoneStyle === 'slant' ||
+        isFullColourPlaque ||
+        isStainlessSteel ||
+        isUrn
+      )
+        return;
+      const capBounds = geometries[0]?.boundingBox ?? null;
+      const capWorldWidth = dims?.worldW ?? 1;
+      const capWorldHeight = dims?.worldH ?? 1;
+      const usePhysicalCapRepeat =
+        autoRepeat || tileSize != null || sideTileSize != null;
+      const faceTileSize = Math.max(0.001, tileSize ?? 0.1);
+      const backTileSize = Math.max(0.001, sideTileSize ?? tileSize ?? 0.1);
+      const faceCapRepeatX = stretchFace
+        ? 1
+        : usePhysicalCapRepeat
+          ? Math.max(1, capWorldWidth / faceTileSize)
+          : (faceRepeatX ?? 6);
+      const faceCapRepeatY = stretchFace
+        ? 1
+        : usePhysicalCapRepeat
+          ? Math.max(1, capWorldHeight / faceTileSize)
+          : (faceRepeatY ?? 6);
+      const backCapRepeatX = usePhysicalCapRepeat
+        ? Math.max(1, capWorldWidth / backTileSize)
+        : (sideRepeatX ?? 8);
+      const backCapRepeatY = usePhysicalCapRepeat
+        ? Math.max(1, capWorldHeight / backTileSize)
+        : (sideRepeatY ?? 1);
+
+      if (!capBounds) return;
+      applyPlanarCapProjection(
+        materials[0] as THREE.MeshPhysicalMaterial,
+        capBounds,
+        faceCapRepeatX,
+        faceCapRepeatY,
+      );
+      applyPlanarCapProjection(
+        materials[2] as THREE.MeshPhysicalMaterial,
+        capBounds,
+        backCapRepeatX,
+        backCapRepeatY,
+      );
+    }, [
+      materials,
       geometries,
       dims,
+      headstoneStyle,
+      isFullColourPlaque,
+      isStainlessSteel,
+      isUrn,
       autoRepeat,
       tileSize,
       sideTileSize,
+      stretchFace,
       faceRepeatX,
       faceRepeatY,
-      stretchFace,
       sideRepeatX,
       sideRepeatY,
-      CAP_PROJECTION_VERSION,
     ]);
 
-    // 5a. Dispose geometries and materials on cleanup
-    React.useEffect(() => {
-      return () => {
-        geometries.forEach((geom) => geom.dispose());
-        materials.forEach((mat) => mat.dispose());
-      };
-    }, [geometries, materials]);
+    React.useEffect(
+      () => () => {
+        geometries.forEach((geometry) => geometry.dispose());
+      },
+      [geometries],
+    );
+    React.useEffect(
+      () => () => {
+        new Set(materials).forEach((material) => material.dispose());
+      },
+      [materials],
+    );
 
     const meshRef = useRef<THREE.Mesh>(null!);
     const groupRef = useRef<THREE.Group>(null!);

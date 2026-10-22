@@ -50,10 +50,10 @@ export default function SceneOverlayController({
   const setActivePanel = useHeadstoneStore((s) => s.setActivePanel);
   const activePanel = useHeadstoneStore((s) => s.activePanel);
   const loading = useHeadstoneStore((s) => s.loading);
-  
+
   // Determine if this panel is the currently active one
   const isActivePanel = activePanel === section;
-  
+
   // Detect client-side mounting and wait for loading to complete
   React.useEffect(() => {
     setIsClient(true);
@@ -247,19 +247,21 @@ export default function SceneOverlayController({
         // Dynamic z-index: active panel gets highest z-index to appear above nav
         isActivePanel ? 'z-[99999]' : 'z-[99998]',
         // Stick to bottom, full width on all screens
-        '!left-0 !bottom-0 !top-auto !w-full !max-w-full',
+        '!top-auto !bottom-0 !left-0 !w-full !max-w-full',
         // On desktop, left margin for sidebar
-        'md:!left-[400px] md:!w-[calc(100%-400px)]',
+        'lg:!left-[var(--designer-sidebar-width,400px)] lg:!w-[calc(100%-var(--designer-sidebar-width,400px))]',
         isVisible ? 'opacity-100' : 'opacity-0',
-        className
+        className,
       )}
-      style={{ 
-        // Don't use inline positioning on all screens now
-      }}
+      style={
+        {
+          // Don't use inline positioning on all screens now
+        }
+      }
     >
       <div
         className={clsx(
-          'md:bg-[#C3DCF4] bg-[rgba(0,0,0,0.79)]',
+          'bg-[rgba(0,0,0,0.79)] md:bg-[#C3DCF4]',
           collapsed ? 'opacity-80' : 'opacity-100',
         )}
       >
@@ -273,7 +275,7 @@ export default function SceneOverlayController({
         </div>
 
         {/* Body */}
-        <div className="px-4 pt-2 pb-4 max-h-[30vh] overflow-auto md:text-gray-900">
+        <div className="max-h-[30vh] overflow-auto px-4 pt-2 pb-4 md:text-gray-900">
           {children}
         </div>
       </div>

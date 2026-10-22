@@ -258,6 +258,7 @@ function BaseMesh({
     topDetailTexture,
   ]);
 
+  // Repeat changes update UV matrices without re-uploading the texture.
   // 2. Manage the base texture's independent repeat settings.
   useLayoutEffect(() => {
     if (materialTexture) {
@@ -276,12 +277,6 @@ function BaseMesh({
       faceDetailTexture.repeat.copy(materialTexture.repeat);
       sideDetailTexture.repeat.copy(sideMaterialTexture.repeat);
       topDetailTexture.repeat.copy(topMaterialTexture.repeat);
-      materialTexture.needsUpdate = true;
-      sideMaterialTexture.needsUpdate = true;
-      topMaterialTexture.needsUpdate = true;
-      faceDetailTexture.needsUpdate = true;
-      sideDetailTexture.needsUpdate = true;
-      topDetailTexture.needsUpdate = true;
     }
   }, [
     materialTexture,

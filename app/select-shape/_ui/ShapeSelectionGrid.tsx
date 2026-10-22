@@ -225,14 +225,15 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
 
     return (
       <div className="day:bg-[#f7f4ee] min-h-screen bg-[#0c0b0a]">
-        <div className="day:border-[#cfc5b7] day:bg-[#eee9df] relative overflow-hidden border-b border-white/10 bg-[#1d1a17]">
-          <div className="relative mx-auto max-w-7xl px-6 py-8 lg:px-8 lg:py-10">
+        <div className="day:border-[#cfc5b7] day:bg-[#eee9df] relative overflow-hidden border-b border-white/10 bg-[#1d1a17] lg:flex lg:h-36 lg:items-center">
+          <div className="relative mx-auto w-full max-w-7xl px-6 py-8 lg:px-8 lg:py-0">
             <div className="text-left sm:text-center">
               <DesignerPageHeading
                 sectionTitle="Select Your Shape"
                 showProductThumbnail
+                compactDesktop
               />
-              <p className="day:text-[#625a51] mt-3 max-w-3xl text-base leading-7 text-white/70 sm:mx-auto">
+              <p className="day:text-[#625a51] mt-3 max-w-3xl text-base leading-7 text-white/70 sm:mx-auto lg:mt-2 lg:px-24 lg:text-sm lg:leading-5">
                 Choose from the fixed pet rock shapes available for this laser
                 etched black granite plaque.
               </p>
@@ -363,14 +364,15 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
     return (
       <div className="day:bg-[#f7f4ee] min-h-screen bg-[#0c0b0a]">
         {/* Header Section */}
-        <div className="day:border-[#cfc5b7] day:bg-[#eee9df] relative overflow-hidden border-b border-white/10 bg-[#1d1a17]">
-          <div className="relative mx-auto max-w-7xl px-6 py-8 lg:px-8 lg:py-10">
+        <div className="day:border-[#cfc5b7] day:bg-[#eee9df] relative overflow-hidden border-b border-white/10 bg-[#1d1a17] lg:flex lg:h-36 lg:items-center">
+          <div className="relative mx-auto w-full max-w-7xl px-6 py-8 lg:px-8 lg:py-0">
             <div className="text-left sm:text-center">
               <DesignerPageHeading
                 sectionTitle="Select Your Shape"
                 showProductThumbnail
+                compactDesktop
               />
-              <p className="day:text-[#625a51] mt-3 max-w-3xl text-base leading-7 text-white/70 sm:mx-auto">
+              <p className="day:text-[#625a51] mt-3 max-w-3xl text-base leading-7 text-white/70 sm:mx-auto lg:mt-2 lg:px-24 lg:text-sm lg:leading-5">
                 Choose the shape for your urn. Each shape has its own dimensions
                 and unique character.
               </p>
@@ -523,14 +525,15 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
   return (
     <div className="day:bg-[#f7f4ee] min-h-screen bg-[#0c0b0a]">
       {/* Header Section */}
-      <div className="day:border-[#cfc5b7] day:bg-[#eee9df] relative overflow-hidden border-b border-white/10 bg-[#1d1a17]">
-        <div className="relative mx-auto max-w-7xl px-6 py-8 lg:px-8 lg:py-10">
+      <div className="day:border-[#cfc5b7] day:bg-[#eee9df] relative overflow-hidden border-b border-white/10 bg-[#1d1a17] lg:flex lg:h-36 lg:items-center">
+        <div className="relative mx-auto w-full max-w-7xl px-6 py-8 lg:px-8 lg:py-0">
           <div className="text-left sm:text-center">
             <DesignerPageHeading
               sectionTitle="Select Your Shape"
               showProductThumbnail
+              compactDesktop
             />
-            <p className="day:text-[#625a51] mt-3 max-w-3xl text-base leading-7 text-white/70 sm:mx-auto">
+            <p className="day:text-[#625a51] mt-3 max-w-3xl text-base leading-7 text-white/70 sm:mx-auto lg:mt-2 lg:px-24 lg:text-sm lg:leading-5">
               {isTraditionalShapesOnly
                 ? `Choose from the first 11 traditional shapes available for this${
                     isPetMiniHeadstone
