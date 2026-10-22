@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-10-21
+**Last Updated:** 2026-10-22
 
 **Status entry order:** Add new dated status entries immediately after the table of contents, before the existing status entries. Keep status entries in reverse chronological order (newest first); do not append them to the end of this file.
 **Tech Stack:** Next.js 15.5.26, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots), **Vitest 4.1.8** (unit tests), **Playwright 1.59.1** (E2E tests)
@@ -140,8 +140,38 @@
 127. [October 19 Progressive Garden Hero Video](#current-status-2026-10-19--progressive-garden-hero-video)
 128. [October 20 Photographic Hero, Product Selection, Cursor, and Model Orbit](#current-status-2026-10-20--photographic-hero-product-selection-cursor-and-model-orbit)
 129. [October 21 Shared Public Menu, Hero Captions, and Product Selection Layout](#current-status-2026-10-21--shared-public-menu-hero-captions-and-product-selection-layout)
+130. [October 22 Designer Resizing, Dimension Performance, Theme Backdrops, and Hero Video v9](#current-status-2026-10-22--designer-resizing-dimension-performance-theme-backdrops-and-hero-video-v9)
 
 ---
+
+## Current Status (2026-10-22) — Designer resizing, dimension performance, theme backdrops, and hero video v9
+
+### Shared Designer sidebar and product grid
+
+- `components/app-shell/DesignerSidebarResize.tsx` controls a common desktop sidebar width: 400 px by default, clamped to 300–500 px (100 px either side). The sidebar, main-content padding, canvas and scene overlay use `--designer-sidebar-width` through `ConditionalNav.tsx`, `MainContent.tsx`, `ConditionalCanvas.tsx` and `SceneOverlayController.tsx`. Product selection no longer has the former 336 px sidebar exception. The resize handle is visible at `lg` and above; mobile keeps its drawer/bottom-sheet layout.
+- Width is retained across Designer steps and reloads in the same tab using sessionStorage key `designer:sidebar-width`. The handle supports pointer capture, Left/Right arrows in 10 px increments, Home/End for limits and double-click to restore 400 px. Use the native `col-resize` cursor, with no floating drag icon. Its inline `cursor` declaration is intentional: the unlayered global non-editable-element `cursor: default` rule in `styles/globals.css` otherwise overrides the Tailwind cursor utility.
+- `/select-product` now uses four product cards per row from 60 rem of **container** width, two from 38 rem and one below that. See the named `@container/products` queries in `app/select-product/_ui/ProductSelectionGrid.tsx`; these are content-width thresholds, not viewport breakpoints. Image `sizes` was also adjusted for the four-column layout.
+
+### Dimension slider performance and shape preservation
+
+- Width/height changes previously rebuilt granite materials and generated GLSL containing numeric bounds and repeat values. Each dimension change therefore created distinct shader programs. The texture-repeat layout effects also set `Texture.needsUpdate`, causing repeated GPU texture uploads and mipmap generation. This explained why OrbitControls stayed responsive while resizing was slow even for a rectangle.
+- `lib/planar-cap-projection.ts` now provides planar cap mapping through a mutable `Vector4` uniform and a stable program cache key (`planar-cap:uniforms-v1`). `SvgHeadstone.tsx` retains material instances across dimension changes, updates projection uniforms in a layout effect, and disposes geometries independently of materials. Do not put physical dimensions back into shader source/cache keys or material-creation dependencies.
+- Repeat-only updates in `SvgHeadstone.tsx` and `HeadstoneBaseAuto.tsx` no longer set texture `needsUpdate`: changing `repeat` updates the UV matrix without replacing pixel data. Initial texture setup still marks textures for upload. Reserve `needsUpdate` for actual texture data/configuration changes that require it.
+- Preserve the existing `preserveTop` geometry path. Classical profiles still rebuild geometry from requested width/height so the upper detail scales uniformly and the straight lower portion absorbs the height change. Do not optimize these profiles by independently scaling the entire mesh on X/Y; that earlier approach distorted the top detail. This performance fix changed materials/texture handling, not the shape algorithm.
+- Local Playwright profiling of 40 width/height updates on the serpentine profile recorded 240 shader compilations and 81 texture/mipmap updates before the fix, versus zero of each afterward. Captured cap and wall vertex positions matched exactly before/after. The square profile and base width/height changes also produced zero shader compilations or texture uploads during the measured updates. The user confirmed the improved responsiveness. Local diagnostic artifacts are `output/size-slider-profile.cjs` and `output/size-slider-{before,after,square}.json`; timings from headless rendering are environment-specific and are not a hardware FPS guarantee.
+- Regression coverage: `tests/unit/planar-cap-projection.test.ts` verifies that dimension updates mutate the compiled shader's existing uniform while preserving its source, program cache key and material version. TypeScript, targeted ESLint and this Vitest test passed during the performance work.
+
+### Day/night backgrounds and theme controls
+
+- `SceneryToggleButton.tsx` restores backgrounds separately for each UI theme: day mode defaults to **Gallery White** (`#f8f8f8`), night mode to **Charcoal** (`#2c2c2c`). The initial `scene-slice.ts` background is also Charcoal. These are studio backdrops (`hideScenery: true`), not the outdoor `sceneryVariant: 'day'` meadow option. `ThreeScene.tsx` maps backdrop colours to the studio image assets.
+- Explicit background selections persist to localStorage: `fs_scene_bg_day` for day mode, the existing `fs_scene_bg` key for night mode. Theme changes restore the corresponding preference or default. A stored night colour of `#787878` (the previous Slate Studio default) is remapped to Charcoal on restoration; other saved colours remain. This migration also means a manually saved Slate Studio night selection currently restores as Charcoal. UI theme storage remains `fs_ui_theme`.
+- `GuidedDesktopHeader.tsx` now includes the sun/moon button in the top-right beside the guided-step indicator. `DesignerFullscreenPanelView.tsx` passes `isDayTheme` and `toggleTheme` to it, restoring switching inside Select Size and the other guided panels. The main menu still has its existing `DesignerBrandHeader` controls. TypeScript checks passed after the theme-default and guided-header changes.
+
+### Current homepage hero: v9
+
+- `app/_ui/HomeSplash.tsx` loads `/videos/hero-garden-v9.webm`, MP4 fallback and `hero-garden-v9-poster.webp` (also used for reduced-motion fallback). These supersede v8 from the October 21 entry. The 26-second video omits the caption **Choose Blue Pearl granite**, leaving its former 8.1–10 second interval without a caption. Other captions, cursor actions, material-selection footage, model orbit and closing title remain. The intent is to avoid recommending a particular granite.
+- Regenerate with `node scripts/render-hero-polished.mjs`. The script now outputs v9 and reuses `public/videos/hero-garden-v6.mp4` plus `assets/video-sources/hero-garden-v7/finale.mp4`; no new browser capture is needed for caption-only edits. It writes caption/timing metadata to the existing `assets/video-sources/hero-garden-v7/timeline.json`. `--package` remains the optional finale repackaging path. `pnpm video:hero` invokes the older capture pipeline and does not rebuild this polished hero.
+- Both video codecs and the poster were generated successfully; a frame at 9 seconds was visually inspected and had no granite recommendation caption. Script syntax and `git diff --check` passed. No production build or deployment was performed for this caption-only revision.
 
 ## Current Status (2026-10-21) — Shared public menu, hero captions, and product selection layout
 
@@ -16856,6 +16886,6 @@ Both commands pass. Browser rendering still needs to be checked after the next l
 
 ---
 
-_End of STARTER.md - Last updated: 2026-10-21_
+_End of STARTER.md - Last updated: 2026-10-22_
 
 ---

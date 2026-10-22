@@ -8,7 +8,7 @@ const root = process.cwd();
 const raw = path.join(root, 'output/hero-polished');
 const source = path.join(root, 'assets/video-sources/hero-garden-v7');
 const output = path.join(root, 'public/videos');
-const outputName = 'hero-garden-v8';
+const outputName = 'hero-garden-v9';
 await mkdir(source, { recursive: true });
 await mkdir(path.join(raw, 'overlays'), { recursive: true });
 async function run(args) {
@@ -116,7 +116,6 @@ const captions = [
   { start: 2.1, end: 4, text: 'Explore headstone shapes' },
   { start: 4.1, end: 6, text: 'Select your preferred shape' },
   { start: 6.1, end: 8, text: 'Compare granite colours' },
-  { start: 8.1, end: 10, text: 'Choose Blue Pearl granite' },
   { start: 10.1, end: 12.4, text: 'Add a personal dedication' },
   { start: 12.5, end: 14.8, text: 'Write a message of remembrance' },
   { start: 14.9, end: 17.2, text: 'Add a symbolic dove' },
