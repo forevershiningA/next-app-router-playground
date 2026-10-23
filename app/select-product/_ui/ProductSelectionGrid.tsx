@@ -327,25 +327,34 @@ export default function ProductSelectionGrid({
               {groupedProducts.map((group) => (
                 <section
                   key={group.id}
-                  aria-labelledby={`product-group-${group.id}`}
+                  aria-labelledby={
+                    selectedCategory === 'all'
+                      ? `product-group-${group.id}`
+                      : undefined
+                  }
+                  aria-label={
+                    selectedCategory === 'all' ? undefined : group.name
+                  }
                 >
-                  <div className="day:border-[#d8cdb9] mb-4 border-b border-white/10 pb-3">
-                    <div>
-                      <h2
-                        id={`product-group-${group.id}`}
-                        className="day:text-[#1d1a17] font-serif text-2xl font-normal text-white"
-                      >
-                        {group.name}{' '}
-                        <span className="day:text-[#756c62] ml-1 font-sans text-sm font-medium text-white/55">
-                          ({group.products.length} item
-                          {group.products.length !== 1 ? 's' : ''})
-                        </span>
-                      </h2>
-                      <p className="day:text-[#625a51] mt-1 text-sm text-white/60">
-                        {group.description}
-                      </p>
+                  {selectedCategory === 'all' && (
+                    <div className="day:border-[#d8cdb9] mb-4 border-b border-white/10 pb-3">
+                      <div>
+                        <h2
+                          id={`product-group-${group.id}`}
+                          className="day:text-[#1d1a17] font-serif text-2xl font-normal text-white"
+                        >
+                          {group.name}{' '}
+                          <span className="day:text-[#756c62] ml-1 font-sans text-sm font-medium text-white/55">
+                            ({group.products.length} item
+                            {group.products.length !== 1 ? 's' : ''})
+                          </span>
+                        </h2>
+                        <p className="day:text-[#625a51] mt-1 text-sm text-white/60">
+                          {group.description}
+                        </p>
+                      </div>
                     </div>
-                  </div>
+                  )}
 
                   <ProductCarousel label={group.name}>
                     {group.products.map((product) => {

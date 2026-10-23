@@ -53,12 +53,16 @@ const nextConfig = {
     ],
   },
   webpack: (config) => {
-    // Keep default parallelism unless explicitly overridden.
-    // Hard-capping to 2 significantly slows large builds on Vercel.
+    // Bound concurrent module work on Vercel's 8 GB builders. Webpack's
+    // default (100) can exhaust container memory even with a 4 GB JS heap.
+    // Keep the filesystem cache and allow tuning for larger builders.
     const override = Number(process.env.WEBPACK_PARALLELISM || '');
-    if (Number.isFinite(override) && override > 0) {
-      config.parallelism = override;
-    }
+    config.parallelism =
+      Number.isInteger(override) && override > 0
+        ? override
+        : process.env.VERCEL === '1'
+          ? 4
+          : config.parallelism;
     return config;
   },
   // Exclude large static assets from serverless functions
