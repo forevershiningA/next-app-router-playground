@@ -1,9 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { ArrowRightIcon } from '@heroicons/react/24/outline';
+import { ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/24/outline';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import { Product } from '#/lib/db';
 import type { ProductPriceSample } from '#/lib/types/pricing';
@@ -63,8 +63,43 @@ const productGroups: ProductCategory[] = [
   ...productCategories.filter((category) => category.id === 'pet-memorials'),
 ];
 
-const productSummaries: Record<string, { name: string; description: string }> =
+const productSummaries: Record<string, { name?: string; description: string }> =
   {
+    '5': {
+      description: 'Cast bronze with raised lettering and memorial motifs.',
+    },
+    '8': {
+      description: 'A compact granite pet headstone with laser-etched details.',
+    },
+    '9': {
+      description:
+        'A granite pet plaque with laser-etched portraits and lettering.',
+    },
+    '135': {
+      description:
+        'A pet memorial rock with laser-etched portraits and lettering.',
+    },
+    '30': {
+      description: 'Black granite with laser-etched portraits and lettering.',
+    },
+    '32': {
+      description: 'Full-colour portraits and artwork on a memorial plaque.',
+    },
+    '34': { description: 'Engraved lettering and motifs on natural stone.' },
+    '52': {
+      description: 'Stainless steel with laser-marked lettering and artwork.',
+    },
+    '100': {
+      description: 'A complete granite memorial with laser-etched details.',
+    },
+    '101': {
+      description:
+        'A complete stone memorial with engraved lettering and motifs.',
+    },
+    '103': {
+      description: 'A traditional Polish-style full memorial in natural stone.',
+    },
+    '2350': { description: 'Stainless steel urn with vitreous enamel inlay.' },
     '4': {
       name: 'Laser-etched Granite',
       description:
@@ -96,6 +131,82 @@ type ProductGridProps = {
   priceMap: Record<string, ProductPriceSample | undefined>;
   descriptionMap: Record<string, string | undefined>;
 };
+
+function ProductCarousel({
+  children,
+  label,
+}: {
+  children: ReactNode;
+  label: string;
+}) {
+  const trackRef = useRef<HTMLDivElement>(null);
+  const [canScrollBack, setCanScrollBack] = useState(false);
+  const [canScrollForward, setCanScrollForward] = useState(false);
+
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track) return;
+    const update = () => {
+      setCanScrollBack(track.scrollLeft > 1);
+      setCanScrollForward(
+        track.scrollLeft + track.clientWidth < track.scrollWidth - 1,
+      );
+    };
+    const observer = new ResizeObserver(update);
+    observer.observe(track);
+    track.addEventListener('scroll', update, { passive: true });
+    update();
+    return () => {
+      observer.disconnect();
+      track.removeEventListener('scroll', update);
+    };
+  }, [children]);
+
+  const scroll = (direction: number) => {
+    const track = trackRef.current;
+    if (!track) return;
+    track.scrollBy({
+      left: direction * (track.clientWidth + 20),
+      behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches
+        ? 'instant'
+        : 'smooth',
+    });
+  };
+
+  return (
+    <div>
+      {(canScrollBack || canScrollForward) && (
+        <div className="mb-3 flex justify-end gap-2">
+          {[-1, 1].map((direction) => (
+            <button
+              key={direction}
+              type="button"
+              aria-label={`${direction === -1 ? 'Previous' : 'Next'} products in ${label}`}
+              disabled={direction === -1 ? !canScrollBack : !canScrollForward}
+              onClick={() => scroll(direction)}
+              className="day:border-[#bdb4a6] day:text-[#514a43] flex size-10 items-center justify-center rounded-sm border border-white/20 text-white/80 hover:border-[#cfac6c] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#9a742f] disabled:cursor-default disabled:opacity-30"
+            >
+              {direction === -1 ? (
+                <ArrowLeftIcon className="size-4" />
+              ) : (
+                <ArrowRightIcon className="size-4" />
+              )}
+            </button>
+          ))}
+        </div>
+      )}
+      <div
+        ref={trackRef}
+        role="region"
+        aria-label={`${label} products`}
+        tabIndex={0}
+        className="grid snap-x snap-mandatory auto-cols-[100%] grid-flow-col items-stretch gap-5 overflow-x-auto overscroll-x-contain p-1 pb-3 focus-visible:outline-2 focus-visible:outline-[#9a742f] @min-[38rem]/products:auto-cols-[calc((100%-20px)/2)] @min-[60rem]/products:auto-cols-[calc((100%-60px)/4)]"
+      >
+        {children}
+      </div>
+    </div>
+  );
+}
 
 export default function ProductSelectionGrid({
   products,
@@ -236,7 +347,7 @@ export default function ProductSelectionGrid({
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 items-stretch gap-5 @min-[38rem]/products:grid-cols-2 @min-[60rem]/products:grid-cols-4">
+                  <ProductCarousel label={group.name}>
                     {group.products.map((product) => {
                       const priceRange = priceMap[product.id];
                       const summary = productSummaries[product.id];
@@ -250,7 +361,7 @@ export default function ProductSelectionGrid({
                           onClick={() => handleProductSelect(product)}
                           disabled={loadingProductId !== null}
                           aria-label={`Select ${product.name}`}
-                          className="group day:border-[#e4ddd2] day:bg-white day:shadow-[0_10px_30px_rgba(0,0,0,0.03)] day:hover:border-[#9a742f] relative flex h-full min-w-0 cursor-pointer flex-col overflow-hidden rounded-sm border border-white/12 bg-[#171717] text-left transition-colors hover:border-[#cfac6c]/60 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#9a742f] disabled:cursor-wait disabled:opacity-70"
+                          className="group day:border-[#e4ddd2] day:bg-white day:shadow-[0_10px_30px_rgba(0,0,0,0.03)] day:hover:border-[#9a742f] relative flex h-full min-w-0 cursor-pointer snap-start flex-col overflow-hidden rounded-sm border border-white/12 bg-[#171717] text-left transition-colors hover:border-[#cfac6c]/60 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#9a742f] disabled:cursor-wait disabled:opacity-70"
                         >
                           <div className="day:border-[#e4ddd2] day:bg-[#f3f1ed] relative aspect-square w-full overflow-hidden border-b border-white/10 bg-[#101010]">
                             <Image
@@ -311,7 +422,7 @@ export default function ProductSelectionGrid({
                         </button>
                       );
                     })}
-                  </div>
+                  </ProductCarousel>
                 </section>
               ))}
             </div>

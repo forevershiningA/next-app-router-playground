@@ -13,8 +13,8 @@ export default function UnitCurrencySelects({
   const setCurrency = useSetCurrency();
   const selectClass = `cursor-pointer border border-white/20 bg-[#17120d] font-sans font-semibold uppercase text-white shadow-sm outline-none [color-scheme:dark] transition-colors hover:border-[#cfac6c]/60 focus:border-[#cfac6c] focus:ring-2 focus:ring-[#cfac6c]/30 day:border-[#cfc4b4] day:bg-[#fbf9f5] day:text-[#2a2118] day:[color-scheme:light] day:hover:border-[#9f7d43] ${
     compact
-      ? 'h-7 rounded-md px-1.5 text-[10px]'
-      : 'h-9 rounded-lg px-2.5 text-xs'
+      ? 'h-7 min-w-[3.25rem] rounded-md pr-3 pl-1.5 text-[10px]'
+      : 'h-9 min-w-[4rem] rounded-lg pr-4 pl-2.5 text-xs'
   }`;
 
   return (

@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-10-22
+**Last Updated:** 2026-10-23
 
 **Status entry order:** Add new dated status entries immediately after the table of contents, before the existing status entries. Keep status entries in reverse chronological order (newest first); do not append them to the end of this file.
 **Tech Stack:** Next.js 15.5.26, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots), **Vitest 4.1.8** (unit tests), **Playwright 1.59.1** (E2E tests)
@@ -141,8 +141,16 @@
 128. [October 20 Photographic Hero, Product Selection, Cursor, and Model Orbit](#current-status-2026-10-20--photographic-hero-product-selection-cursor-and-model-orbit)
 129. [October 21 Shared Public Menu, Hero Captions, and Product Selection Layout](#current-status-2026-10-21--shared-public-menu-hero-captions-and-product-selection-layout)
 130. [October 22 Designer Resizing, Dimension Performance, Theme Backdrops, and Hero Video v9](#current-status-2026-10-22--designer-resizing-dimension-performance-theme-backdrops-and-hero-video-v9)
+131. [October 23 Product Selection Summaries and Category Carousels](#current-status-2026-10-23--product-selection-summaries-and-category-carousels)
 
 ---
+
+## Current Status (2026-10-23) — Product selection summaries and category carousels
+
+- `/select-product` now keeps each category in one horizontal carousel instead of wrapping excess products into a second row. In `app/select-product/_ui/ProductSelectionGrid.tsx`, `ProductCarousel` uses CSS grid auto-columns with one visible card below 38 rem of container width, two from 38 rem and a maximum of four from 60 rem. These remain named `@container/products` thresholds based on available content width, including changes from sidebar resizing. This supersedes the wrapping grid described in earlier entries.
+- Carousels support native horizontal scrolling, touch gestures and mandatory snapping to cards. Previous/next buttons appear only when content overflows; unavailable directions are disabled. A scroll listener and `ResizeObserver` keep button availability synchronized. The track is keyboard-focusable and labelled by category; arrow buttons have accessible labels. Programmatic scrolling respects reduced-motion preferences. Categories remain vertically stacked, and cards retain their existing appearance, prices and selection actions.
+- `productSummaries` now supplies short, single-sentence descriptions for Plaques (5, 30, 32, 34, 52), Full Monuments (100, 101, 103), Urns (2350) and Pet Memorials (8, 9, 135), matching the concise style already used for Headstones. The summary `name` field is optional: these added entries preserve catalogue product names while overriding descriptions. Existing headstone summary names and descriptions remain. For future catalogue products, add an explicit summary here to avoid falling back to longer XML descriptions from `descriptionMap`.
+- Verification: targeted ESLint, `pnpm type-check`, Prettier formatting and `git diff --check` passed. No browser verification, production build or deployment was performed for these changes.
 
 ## Current Status (2026-10-22) — Designer resizing, dimension performance, theme backdrops, and hero video v9
 
@@ -16886,6 +16894,6 @@ Both commands pass. Browser rendering still needs to be checked after the next l
 
 ---
 
-_End of STARTER.md - Last updated: 2026-10-22_
+_End of STARTER.md - Last updated: 2026-10-23_
 
 ---
