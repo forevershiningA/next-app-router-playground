@@ -35,7 +35,7 @@ export function ThemeToggle({ inline = false }: { inline?: boolean }) {
       title={isDay ? 'Night mode' : 'Day mode'}
       className={
         inline
-          ? 'inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-[#bdb4a6] text-[#1d1a17] transition-colors hover:border-[#7b5a20] hover:bg-white/45'
+          ? 'day:border-[#bdb4a6] day:text-[#1d1a17] day:hover:border-[#7b5a20] day:hover:bg-white/45 inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-white/20 text-[#f4eee4] transition-colors hover:border-[#cfac6c] hover:bg-white/10'
           : `fixed top-5 z-[9999] ${insideMemorialsOnMobile ? 'right-5 left-auto lg:right-auto lg:left-5' : 'left-5'} day:border-[#D7B356]/50 day:bg-white/90 day:text-amber-700 day:hover:border-[#D7B356]/80 day:hover:bg-white day:hover:text-amber-800 h-9 w-9 items-center justify-center rounded-full border border-white/20 bg-[#1a1208]/80 text-white/60 shadow-md backdrop-blur-sm transition-[background-color,border-color,color] duration-200 hover:border-white/40 hover:bg-[#1a1208]/95 hover:text-white ${insideAccountSidebarOnMobile || insideMemorialsOnMobile ? 'hidden lg:flex' : 'flex'}`
       }
     >

@@ -10,6 +10,7 @@ import {
   XMarkIcon,
 } from '@heroicons/react/24/outline';
 import { ThemeToggle } from '#/components/theme/ThemeToggle';
+import HomeBrandCard from './HomeBrandCard';
 
 const MEMORIAL_LINKS = [
   { label: 'Home', href: '/' },
@@ -79,7 +80,7 @@ export default function HomeSplash() {
 
       {/* Hero Section */}
       <div
-        className="relative flex flex-col overflow-hidden border-b border-[#bdb4a6] bg-[#eee9df]"
+        className="day:border-[#bdb4a6] day:bg-[#eee9df] relative flex flex-col overflow-hidden border-b border-[#cfac6c]/20 bg-[#100d09]"
         role="banner"
       >
         {/* Responsive Header - Absolute top */}
@@ -88,13 +89,7 @@ export default function HomeSplash() {
           style={{ caretColor: 'transparent' }}
         >
           <div className="mx-auto flex w-full max-w-7xl items-center justify-between gap-5 lg:px-8 xl:gap-8">
-            <Link
-              href="/"
-              aria-label="Forever Shining home"
-              className="shrink-0 font-serif text-xl leading-none tracking-[-0.015em] text-[#2b2926] transition-colors hover:text-[#7b5a20] sm:text-[1.6875rem]"
-            >
-              Forever Shining
-            </Link>
+            <HomeBrandCard />
 
             <nav
               className="ml-auto hidden shrink-0 items-center gap-2 xl:flex"
@@ -103,14 +98,14 @@ export default function HomeSplash() {
               <ThemeToggle inline />
               <Link
                 href="/designs"
-                className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-[#bdb4a6] text-[#1d1a17] transition-colors hover:border-[#7b5a20] hover:bg-white/45"
+                className="day:border-[#bdb4a6] day:text-[#1d1a17] day:hover:border-[#7b5a20] day:hover:bg-white/45 inline-flex h-10 w-10 items-center justify-center rounded-lg border border-white/20 text-[#f4eee4] transition-colors hover:border-[#cfac6c] hover:bg-white/10"
                 aria-label="Search memorial designs"
               >
                 <MagnifyingGlassIcon className="h-5 w-5" aria-hidden="true" />
               </Link>
               <Link
                 href="/designs"
-                className="inline-flex min-h-10 items-center justify-center rounded-lg border border-[#bdb4a6] px-4 text-sm font-semibold text-[#1d1a17] transition-colors hover:border-[#7b5a20] hover:bg-white/45"
+                className="day:border-[#bdb4a6] day:text-[#1d1a17] day:hover:border-[#7b5a20] day:hover:bg-white/45 inline-flex min-h-10 items-center justify-center rounded-lg border border-white/20 px-4 text-sm font-semibold text-[#f4eee4] transition-colors hover:border-[#cfac6c] hover:bg-white/10"
               >
                 Browse Designs
               </Link>
@@ -123,7 +118,7 @@ export default function HomeSplash() {
             <Link
               href="/select-product"
               prefetch={false}
-              className="hidden min-h-11 items-center justify-center rounded-sm bg-[#1d1a17] px-4 text-sm font-semibold text-white transition-colors hover:bg-[#3a332c] md:inline-flex xl:hidden"
+              className="day:bg-[#1d1a17] day:text-white day:hover:bg-[#3a332c] hidden min-h-11 items-center justify-center rounded-sm bg-[#cfac6c] px-4 text-sm font-semibold text-[#1d1a17] transition-colors hover:bg-[#e0c48c] md:inline-flex xl:hidden"
             >
               Start Designing
             </Link>
@@ -133,7 +128,7 @@ export default function HomeSplash() {
               ref={menuButtonRef}
               type="button"
               onClick={() => setMobileMenuOpen(true)}
-              className="shrink-0 rounded-lg border border-[#bdb4a6] bg-white/20 p-2 text-[#1d1a17] transition-colors hover:border-[#7b5a20] hover:bg-white/45 xl:hidden"
+              className="day:border-[#bdb4a6] day:bg-white/20 day:text-[#1d1a17] day:hover:border-[#7b5a20] day:hover:bg-white/45 shrink-0 rounded-lg border border-white/20 bg-white/5 p-2 text-[#f4eee4] transition-colors hover:border-[#cfac6c] hover:bg-white/10 xl:hidden"
               aria-label="Open menu"
               aria-expanded={mobileMenuOpen}
             >
@@ -142,7 +137,7 @@ export default function HomeSplash() {
           </div>
         </header>
 
-        <MemorialCategoryNav className="absolute top-[72px] right-0 left-0 z-40" />
+        <MemorialCategoryNav className="day:!border-[#cfc5b7]/80 day:!bg-[linear-gradient(to_right,transparent,rgba(255,255,255,0.4)_25%,rgba(255,255,255,0.4)_75%,transparent)] day:[&_a]:text-[#514a43] day:[&_a]:after:bg-[#8a651f] day:[&_a:hover]:text-[#6f511c] day:[&_a:focus-visible]:text-[#6f511c] day:[&_a[aria-current=page]]:text-[#6f511c] absolute top-[72px] right-0 left-0 z-40 !border-white/15 !bg-none [&_a]:text-[#d8cfc1] [&_a]:after:bg-[#cfac6c] [&_a:focus-visible]:text-[#f3d48f] [&_a:hover]:text-[#f3d48f] [&_a[aria-current=page]]:text-[#f3d48f]" />
 
         {/* Mobile Menu Drawer */}
         {mobileMenuOpen && (
@@ -221,12 +216,12 @@ export default function HomeSplash() {
             <div className="flex max-w-xl flex-col items-start text-left">
               <h1
                 id="home-heading"
-                className="!mb-0 scroll-mt-24 !pb-0 font-serif text-[2rem] leading-[1.12] tracking-[-0.025em] text-[#1d1a17] sm:text-[2.75rem] lg:text-5xl lg:leading-[1.08]"
+                className="day:text-[#1d1a17] !mb-0 scroll-mt-24 !pb-0 font-serif text-[2rem] leading-[1.12] tracking-[-0.025em] text-[#f4eee4] sm:text-[2.75rem] lg:text-5xl lg:leading-[1.08]"
               >
                 Design a Custom Headstone
                 <br className="hidden lg:block" /> or Memorial Plaque
               </h1>
-              <p className="mt-5 max-w-lg text-base leading-7 text-pretty text-[#625a51] sm:text-lg sm:leading-8">
+              <p className="day:text-[#625a51] mt-5 max-w-lg text-base leading-7 text-pretty text-[#bdb3a5] sm:text-lg sm:leading-8">
                 Choose the stone, shape, inscription, and meaningful details in
                 one guided designer. See every change and the price in 3D, then
                 save or share your design when you are ready.
@@ -236,19 +231,19 @@ export default function HomeSplash() {
                 <Link
                   href="/select-product"
                   prefetch={false}
-                  className="inline-flex min-h-12 w-full items-center justify-center rounded-sm bg-[#1d1a17] px-5 py-3 text-center text-sm font-semibold tracking-[0.015em] text-white transition-colors hover:bg-[#3a332c] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#6f511c] sm:w-auto"
+                  className="day:bg-[#1d1a17] day:text-white day:hover:bg-[#3a332c] inline-flex min-h-12 w-full items-center justify-center rounded-sm bg-[#cfac6c] px-5 py-3 text-center text-sm font-semibold tracking-[0.015em] text-[#1d1a17] transition-colors hover:bg-[#e0c48c] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#6f511c] sm:w-auto"
                   aria-label="Design your memorial"
                 >
                   Start Designing in 3D
                 </Link>
                 <Link
                   href="/designs"
-                  className="inline-flex min-h-12 w-full items-center justify-center rounded-sm border border-[#bdb4a6] px-4 py-3 text-center text-sm font-semibold text-[#1d1a17] transition-colors hover:border-[#7b5a20] hover:bg-white/45 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#6f511c] sm:w-auto"
+                  className="day:border-[#bdb4a6] day:text-[#1d1a17] day:hover:border-[#7b5a20] day:hover:bg-white/45 inline-flex min-h-12 w-full items-center justify-center rounded-sm border border-white/25 px-4 py-3 text-center text-sm font-semibold text-[#f4eee4] transition-colors hover:border-[#cfac6c] hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#6f511c] sm:w-auto"
                 >
                   Browse Ready Designs
                 </Link>
               </div>
-              <p className="mt-3 text-xs leading-6 text-[#625a51]">
+              <p className="day:text-[#625a51] mt-3 text-xs leading-6 text-[#bdb3a5]">
                 Free to use • No account needed • Instant price estimate
               </p>
             </div>
@@ -257,7 +252,7 @@ export default function HomeSplash() {
               href="/select-product"
               prefetch={false}
               aria-label="Open the 3D memorial designer"
-              className="group relative block overflow-hidden rounded-sm border border-[#d8cdb9] bg-[#17120d] shadow-[0_20px_50px_rgba(55,42,20,0.18)]"
+              className="group day:border-[#d8cdb9] relative block overflow-hidden rounded-sm border border-[#cfac6c]/25 bg-[#17120d] shadow-[0_20px_50px_rgba(55,42,20,0.18)]"
             >
               <div className="relative aspect-video overflow-hidden">
                 <video
