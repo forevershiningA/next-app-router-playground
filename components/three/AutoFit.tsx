@@ -9,6 +9,7 @@ import { useHeadstoneStore } from '#/lib/headstone-store';
 import { useMobileNavStore } from '#/lib/mobile-nav-store';
 import { getDesignerStepSlug } from '#/lib/designer-route-state';
 import { HEADSTONE_DEFAULT_ZOOM } from '#/lib/headstone-constants';
+import { fitMobilePreview } from './mobile-preview-framing';
 
 type Props = {
   target: React.RefObject<THREE.Object3D>; // tablet/upright ONLY (no base/ground)
@@ -16,7 +17,7 @@ type Props = {
   margin?: number; // >=1, extra room from exact fit
   duration?: number; // seconds for the move animation
   pad?: number; // extra distance in front (scene units)
-  readyTimeoutMs?: number; // wait up to this long for a stable first fit
+  readyTimeoutMs?: number; // minimum settling wait for asynchronous scene commits
   resizeDebounceMs?: number; // debounce for resize refit
   trigger?: unknown; // bump to force a refit (e.g. after texture/shape is ready)
 };
@@ -69,15 +70,12 @@ export default function AutoFit({
   const isBottomSheetCollapsed = useMobileNavStore(
     (s) => s.isBottomSheetCollapsed,
   );
+  const isMobileNavOpen = useMobileNavStore((s) => s.isOpen);
   const isMobileSheetCompact =
     isSizeAdjustmentCompact || isBottomSheetCollapsed;
 
-  const lastDims = React.useRef({ h: heightMm, w: widthMm });
   const animId = React.useRef<number | null>(null);
   const didFirst = React.useRef(false);
-  const retryTimer = React.useRef<ReturnType<typeof setTimeout> | null>(null);
-  const lastShowBaseRef = React.useRef(showBase);
-  const baseFitFrameRef = React.useRef<number | null>(null);
 
   const easeInOutCubic = (x: number) =>
     x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
@@ -167,9 +165,17 @@ export default function AutoFit({
       : 1;
     const productZoom =
       productType === 'headstone' ? HEADSTONE_DEFAULT_ZOOM : 1;
-    const dist =
+    const fittedDistance =
       (Math.max(dX, dY) * Math.max(1, margin) * sheetMargin) / productZoom +
       pad;
+    // A narrow matching base reduces the bounding sphere substantially. Keep
+    // vertical room for the complete assembly and the desktop header/footer
+    // rather than zooming a tall tablet up behind those controls.
+    const desktopHeadstoneDistance =
+      productType === 'headstone' && !isMobileDesignerStep
+        ? boxSize.y / 2 / Math.tan(vFov / 2) / 0.78 + boxSize.z / 2
+        : 0;
+    let dist = Math.max(fittedDistance, desktopHeadstoneDistance);
 
     // The first fit deliberately starts en face. Later fits — after changing
     // either Headstone or Base dimensions — must not discard the angle the
@@ -184,6 +190,20 @@ export default function AutoFit({
       }
     }
 
+    if (isMobileDesignerStep && isMobileNavOpen && window.innerWidth < 768) {
+      const mobile = fitMobilePreview(
+        sphere,
+        dir,
+        camera.fov,
+        size.width,
+        size.height,
+        isBottomSheetCollapsed,
+        isSizeAdjustmentCompact,
+        designerStepSlug === 'select-material' ? 0.48 : 0.75,
+      );
+      dist = mobile.distance;
+      toTgt.copy(mobile.target);
+    }
     const toPos = toTgt.clone().addScaledVector(dir, dist);
     const near = Math.max(0.01, dist * 0.01);
     const far = Math.max(dist * 10, camera.far);
@@ -212,6 +232,13 @@ export default function AutoFit({
       controls.minDistance = dist * 0.6;
       controls.maxDistance = dist * 1.5;
     };
+
+    // The expanded phone sheet needs a much wider camera distance. Update
+    // limits before applying it, otherwise OrbitControls clamps the new pose
+    // to the previous preview's zoom range during the transition.
+    if (isMobileDesignerStep && isMobileNavOpen && window.innerWidth < 768) {
+      setControlDistanceLimits();
+    }
 
     if (animId.current !== null) {
       cancelAnimationFrame(animId.current);
@@ -273,9 +300,13 @@ export default function AutoFit({
     showBase,
     invalidate,
     isMobileDesignerStep,
+    isMobileNavOpen,
+    isBottomSheetCollapsed,
+    isSizeAdjustmentCompact,
     isMobileUprightOrBaseSizeSelection,
     isMobilePlaqueSizeSelection,
     isMobileSheetCompact,
+    designerStepSlug,
     productType,
   ]);
 
@@ -285,59 +316,52 @@ export default function AutoFit({
     // model supplies the live visual feedback; one final fit runs on release.
     if (isSizeAdjustmentActive) return;
 
-    // Clear any pending retry
-    if (retryTimer.current) {
-      clearTimeout(retryTimer.current);
-      retryTimer.current = null;
-    }
+    // SVG and base meshes ease to their new dimensions in useFrame. Measuring
+    // in this layout effect captures the previous/intermediate geometry and
+    // leaves the camera fitted to the wrong size once the mesh settles.
+    // Wait for stable world bounds, including newly mounted bases, then fit
+    // once. Invalidate only during this bounded settling period.
+    let fitFrame: number | null = null;
+    const previousBox = new THREE.Box3();
+    const currentBox = new THREE.Box3();
+    let stableFrames = 0;
+    const startedAt = performance.now();
+    const maxWaitMs = Math.max(1500, readyTimeoutMs);
 
-    const baseVisibilityChanged = lastShowBaseRef.current !== showBase;
-    lastShowBaseRef.current = showBase;
-
-    const success = fitCamera();
-    if (baseVisibilityChanged) {
-      if (baseFitFrameRef.current !== null) {
-        cancelAnimationFrame(baseFitFrameRef.current);
+    const fitWhenSettled = (now: number) => {
+      fitFrame = null;
+      const object = target.current;
+      if (object) {
+        object.updateWorldMatrix(true, true);
+        currentBox.setFromObject(object);
+        if (!currentBox.isEmpty()) {
+          const unchanged =
+            !previousBox.isEmpty() &&
+            previousBox.min.distanceToSquared(currentBox.min) < 1e-10 &&
+            previousBox.max.distanceToSquared(currentBox.max) < 1e-10;
+          stableFrames = unchanged ? stableFrames + 1 : 0;
+          previousBox.copy(currentBox);
+          if (
+            (stableFrames >= 3 && now - startedAt >= readyTimeoutMs) ||
+            now - startedAt >= maxWaitMs
+          ) {
+            fitCamera();
+            return;
+          }
+        }
       }
-
-      // Adding the base mounts its textured mesh after this layout effect.
-      // Refit after that scene commit so bounds include the complete assembly.
-      baseFitFrameRef.current = requestAnimationFrame(() => {
-        baseFitFrameRef.current = requestAnimationFrame(() => {
-          baseFitFrameRef.current = null;
-          fitCamera();
-        });
-      });
-    }
-
-    if (!success) {
-      // Mesh not ready yet — retry up to 5 times with increasing delays
-      let attempt = 0;
-      const MAX_RETRIES = 5;
-      const scheduleRetry = () => {
-        if (attempt >= MAX_RETRIES) return;
-        attempt++;
-        const delay = attempt * 100; // 100ms, 200ms, 300ms, 400ms, 500ms
-        retryTimer.current = setTimeout(() => {
-          if (fitCamera()) return;
-          scheduleRetry();
-        }, delay);
-      };
-      scheduleRetry();
-    }
+      if (now - startedAt >= maxWaitMs) return;
+      invalidate();
+      fitFrame = requestAnimationFrame(fitWhenSettled);
+    };
+    invalidate();
+    fitFrame = requestAnimationFrame(fitWhenSettled);
 
     return () => {
-      if (baseFitFrameRef.current !== null) {
-        cancelAnimationFrame(baseFitFrameRef.current);
-        baseFitFrameRef.current = null;
-      }
+      if (fitFrame !== null) cancelAnimationFrame(fitFrame);
       if (animId.current !== null) {
         cancelAnimationFrame(animId.current);
         animId.current = null;
-      }
-      if (retryTimer.current) {
-        clearTimeout(retryTimer.current);
-        retryTimer.current = null;
       }
     };
   }, [
@@ -353,6 +377,9 @@ export default function AutoFit({
     headstoneStyle,
     showBase,
     isSizeAdjustmentActive,
+    target,
+    invalidate,
+    readyTimeoutMs,
   ]);
 
   return null;

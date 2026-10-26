@@ -743,15 +743,6 @@ export default function Scene({
     contactWidth > 0 &&
     contactDepth > 0;
 
-  // For full monument the whole assembly is shifted back by ledgerDepthMm/1000 in Z.
-  // The camera target needs to follow: lower Y (ledger is at ground level, not 3.8m up)
-  // and negative Z to orbit around the centre of the grave plot.
-  // For plaques: they sit near ground level (Y≈0.1m), so target much lower than headstones.
-  const orbitTarget: [number, number, number] = isFullMonument
-    ? [0, 0.8, -(ledgerDepthMm / 1000) * 0.55]
-    : isPlaque
-      ? [0, 0.15, 0]
-      : [0, 3.8, 0];
   const viewportWidth = useThree((state) => state.size.width);
   const isMobileViewport = viewportWidth < 1024;
   // Keep the meadow texture density stable across products so the floor does
@@ -802,7 +793,7 @@ export default function Scene({
         groupRef.current.rotation.y = angle;
 
         if (isFullMonument) {
-          // Pivot at the same Z as orbitTarget so arrow rotation matches orbit behaviour.
+          // Pivot at the plot centre so arrow rotation matches orbit behaviour.
           // To keep world point [0,0,p] stationary while rotating by angle:
           //   position.x = -p * sin(angle)
           //   position.z =  p * (1 - cos(angle))
@@ -1022,10 +1013,9 @@ export default function Scene({
         panSpeed={0.8}
         minPolarAngle={isFullMonument ? Math.PI / 6 : Math.PI / 3.5}
         maxPolarAngle={Math.PI / 2 - 0.05}
-        // FullMonumentFit animates both camera position and target when an
-        // upright/base is selected. A declarative fixed target here can win a
-        // later React commit and produce a final-frame snap back to the plot.
-        target={isFullMonument ? undefined : orbitTarget}
+        // AutoFit and FullMonumentFit own the target as dimensions change.
+        // A declarative fixed target would overwrite their fitted centre on
+        // the next React commit and shift the resized model off screen.
       />
     </>
   );

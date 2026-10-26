@@ -15,6 +15,7 @@ import { DimensionRangeCard } from '#/components/designer/navigation/DimensionRa
 import { FixedPlaqueSizeControl } from '#/components/designer/navigation/FixedPlaqueSizeControl';
 import { SizeTargetSelector } from '#/components/designer/navigation/SizeTargetSelector';
 import { useSizeAdjustmentControls } from '#/components/designer/navigation/useSizeAdjustmentControls';
+import StandardSizePresets from '#/components/designer/navigation/StandardSizePresets';
 
 type SelectSizePanelProps = {
   isPlaque: boolean;
@@ -195,20 +196,20 @@ export default function SelectSizePanel({
   };
 
   const dimensionCardClass =
-    'min-h-[98px] border-t border-white/10 px-3 py-3 day:border-gray-200 md:min-h-0 md:px-3.5 md:py-3.5';
+    'min-h-[88px] border-t border-white/10 px-3 py-2 day:border-gray-200 md:min-h-0 md:px-3.5 md:py-2';
   const dimensionHeaderClass =
     'flex min-h-8 items-center justify-between gap-2';
   const dimensionLabelClass =
     'text-sm font-semibold text-slate-100 day:text-gray-800';
   const controlButtonClass =
-    'flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-white/10 bg-white/[0.08] text-white transition-colors hover:border-[#D7B356]/50 hover:bg-white/[0.13] disabled:cursor-not-allowed disabled:opacity-50 day:border-gray-200 day:bg-gray-100 day:text-gray-700 day:hover:bg-gray-200';
+    'flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-white/10 bg-white/[0.08] text-white transition-colors hover:border-[#D7B356]/50 hover:bg-white/[0.13] disabled:cursor-not-allowed disabled:opacity-30 day:border-gray-200 day:bg-gray-100 day:text-gray-700 day:hover:bg-gray-200';
   const numberInputBaseClass =
     'h-8 w-16 rounded-md border bg-white/[0.08] px-2 text-right text-sm font-semibold text-white transition-colors focus:ring-2 focus:outline-none day:bg-gray-100 day:text-gray-900';
   const rangeInputClass =
-    'fs-range h-1.5 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-moz-range-thumb]:h-[20px] [&::-moz-range-thumb]:w-[20px] [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-[#171717] [&::-moz-range-thumb]:bg-[#D7B356] [&::-moz-range-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.35),0_0_0_3px_rgba(0,0,0,0.25)] [&::-webkit-slider-thumb]:h-[20px] [&::-webkit-slider-thumb]:w-[20px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#171717] [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.35),0_0_0_3px_rgba(0,0,0,0.25)] [&::-webkit-slider-thumb]:transition-shadow [&::-webkit-slider-thumb]:hover:shadow-[0_0_12px_rgba(215,179,86,0.55),0_0_0_3px_rgba(0,0,0,0.25)]';
-  const rangeBlockClass = 'relative mt-2 h-[31px] md:mt-3 md:h-[35px]';
+    'fs-range h-1.5 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-moz-range-thumb]:h-[20px] [&::-moz-range-thumb]:w-[20px] [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-[#171717] [&::-moz-range-thumb]:bg-[#D7B356] [&::-moz-range-thumb]:shadow-sm [&::-webkit-slider-thumb]:h-[20px] [&::-webkit-slider-thumb]:w-[20px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#171717] [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-sm [&::-webkit-slider-thumb]:transition-shadow [&::-webkit-slider-thumb]:hover:shadow-md';
+  const rangeBlockClass = 'relative mt-1.5 h-[31px]';
   const rangeBoundsClass =
-    'mt-1 flex h-4 w-full justify-between text-xs leading-4 text-white/35 day:text-gray-400';
+    'mt-1 flex h-4 w-full justify-between text-xs leading-4 tabular-nums text-white/60 day:text-gray-600';
   // Which dimension controls exist for the current editing target. Width and
   // Height always exist; the third (depth) is Thickness or Length depending on
   // the target.
@@ -241,7 +242,7 @@ export default function SelectSizePanel({
   return (
     <div
       data-testid="designer-size-panel"
-      className={`fs-size-panel flex flex-col rounded-lg p-3 shadow-xl backdrop-blur-sm md:gap-4 md:p-3.5 ${isSizeAdjustmentCompact ? 'gap-1.5' : 'gap-3'} ${extraClassName}`}
+      className={`fs-size-panel flex flex-col rounded-lg p-3 shadow-xl backdrop-blur-sm md:gap-2 md:p-3 ${isSizeAdjustmentCompact ? 'gap-1.5' : 'gap-2'} ${extraClassName}`}
     >
       <SizeTargetSelector
         isFullMonument={isFullMonument}
@@ -257,6 +258,13 @@ export default function SelectSizePanel({
         setHeadstoneStyle={setHeadstoneStyle}
         setSizeAdjustmentCompact={setSizeAdjustmentCompact}
       />
+
+      {!isSizeAdjustmentCompact &&
+        !isPlaque &&
+        (catalog?.product?.type === 'headstone' || isFullMonument) &&
+        (editingObject === 'headstone' || editingObject === 'base') && (
+          <StandardSizePresets target={editingObject} />
+        )}
 
       {/* Fixed size slider for Full Colour Plaque (product 32) */}
       {catalog?.product?.id === '32' &&

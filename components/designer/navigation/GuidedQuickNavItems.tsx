@@ -66,13 +66,13 @@ export function GuidedQuickNavItems({
         data-quick-nav-slug={slug}
         aria-current={isCurrent ? 'step' : undefined}
         title={`Go to ${label}`}
-        className={`group flex min-h-16 snap-start flex-col items-center justify-center gap-1 rounded-md px-1.5 py-2 text-[11px] font-semibold transition-colors ${
+        className={`group flex h-12 snap-start flex-col items-center justify-center gap-1 rounded-md px-1.5 py-1 text-[11px] font-semibold transition-colors ${
           isCurrent
             ? 'bg-[#D7B356] text-slate-950 shadow-sm'
             : 'day:text-gray-600 day:hover:bg-white day:hover:text-gray-900 text-white/60 hover:bg-white/10 hover:text-white'
         }`}
       >
-        <Icon className="h-6 w-6" aria-hidden="true" />
+        <Icon className="h-5 w-5" aria-hidden="true" />
         <span className="truncate">{label}</span>
       </button>
     );

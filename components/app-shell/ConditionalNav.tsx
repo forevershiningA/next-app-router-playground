@@ -5,6 +5,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { GlobalNav } from '#/ui/global-nav';
 import DesignsTreeNav from '#/components/designs/DesignsTreeNav';
 import DesignerSidebarResize from '#/components/app-shell/DesignerSidebarResize';
+import MobileSheetHandle from '#/components/designer/navigation/MobileSheetHandle';
 import DesignerNav from '#/components/designer/navigation/DesignerNav';
 import AccountNav from '#/components/account/AccountNav';
 import {
@@ -254,6 +255,7 @@ export default function ConditionalNav() {
       setIsMobileMenuOpen,
       useBottomSheet,
       mobileSheetTitle,
+      isImageCropActive,
       isFixedSizeSheet,
       isSizeAdjustmentCompact,
       setSizeAdjustmentCompact,
@@ -270,6 +272,7 @@ export default function ConditionalNav() {
       setIsMobileMenuOpen,
       useBottomSheet,
       mobileSheetTitle,
+      isImageCropActive,
       isFixedSizeSheet,
       isSizeAdjustmentCompact,
       setSizeAdjustmentCompact,
@@ -287,6 +290,7 @@ function renderDesignerSidebar(
   setIsMobileMenuOpen: (v: boolean) => void,
   useBottomSheet: boolean,
   mobileSheetTitle: string,
+  isImageCropActive: boolean,
   isFixedSizeSheet: boolean,
   isSizeAdjustmentCompact: boolean,
   setSizeAdjustmentCompact: (v: boolean) => void,
@@ -303,7 +307,11 @@ function renderDesignerSidebar(
       : isFixedSizeSheet && isSizeAdjustmentCompact
         ? 'h-40 max-h-40'
         : useBottomSheet
-          ? 'h-[44dvh] max-h-[44dvh]'
+          ? (mobileSheetTitle === 'Select Material' ||
+              mobileSheetTitle === 'Select Background') &&
+            !isImageCropActive
+            ? 'h-[48dvh] max-h-[48dvh] md:h-[44dvh] md:max-h-[44dvh]'
+            : 'h-[75dvh] max-h-[75dvh] md:h-[44dvh] md:max-h-[44dvh]'
           : 'h-[100dvh]';
   return (
     <>
@@ -326,6 +334,7 @@ function renderDesignerSidebar(
           canvas above it interactive (orbit/tap) while editing. Close via the
           sheet's ✕. */}
       <div
+        data-testid="designer-mobile-sheet"
         className={clsx(
           // Mobile: bottom sheet docked to the bottom edge so the 3D product
           // stays visible above it (editing sub-panels), or a full-height drawer
@@ -340,7 +349,19 @@ function renderDesignerSidebar(
       >
         {/* The compact slider mode deliberately leaves only an expand handle,
             so no header competes with the 3D preview. */}
-        {isFixedSizeSheet && isSizeAdjustmentCompact ? (
+        {useBottomSheet && !(isFixedSizeSheet && isSizeAdjustmentCompact) ? (
+          <div className="lg:hidden">
+            <MobileSheetHandle
+              title={
+                mobileSheetTitle === 'Inscriptions'
+                  ? 'Add inscription'
+                  : mobileSheetTitle
+              }
+              collapsed={isBottomSheetCollapsed}
+              onChange={setBottomSheetCollapsed}
+            />
+          </div>
+        ) : isFixedSizeSheet && isSizeAdjustmentCompact ? (
           <button
             type="button"
             onClick={() => setSizeAdjustmentCompact(false)}

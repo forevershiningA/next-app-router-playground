@@ -1,18 +1,32 @@
 'use client';
 
-import { useLayoutEffect, useState } from 'react';
+import { useCallback, useLayoutEffect, useRef, useState } from 'react';
 
 export function useDesignerPanelLoadingState(
   pathname: string | null,
   activeFullscreenPanel: string | null,
 ) {
-  const [isLoadingPanel, setIsLoadingPanel] = useState(false);
+  const [isLoadingPanel, setLoading] = useState(false);
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const setIsLoadingPanel = useCallback((loading: boolean) => {
+    if (timerRef.current !== null) clearTimeout(timerRef.current);
+    timerRef.current = null;
+    setLoading(loading);
+    if (loading) {
+      timerRef.current = setTimeout(() => {
+        timerRef.current = null;
+        setLoading(false);
+      }, 300);
+    }
+  }, []);
 
   useLayoutEffect(() => {
     setIsLoadingPanel(true);
-    const timer = setTimeout(() => setIsLoadingPanel(false), 300);
-    return () => clearTimeout(timer);
-  }, [pathname, activeFullscreenPanel]);
+    return () => {
+      if (timerRef.current !== null) clearTimeout(timerRef.current);
+    };
+  }, [pathname, activeFullscreenPanel, setIsLoadingPanel]);
 
   return { isLoadingPanel, setIsLoadingPanel };
 }

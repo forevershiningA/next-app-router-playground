@@ -11,6 +11,7 @@ type DesignerPageHeadingProps = {
   align?: 'left' | 'center';
   showProductThumbnail?: boolean;
   compactDesktop?: boolean;
+  compactMobile?: boolean;
 };
 
 export default function DesignerPageHeading({
@@ -18,6 +19,7 @@ export default function DesignerPageHeading({
   align = 'center',
   showProductThumbnail = false,
   compactDesktop = false,
+  compactMobile = false,
 }: DesignerPageHeadingProps) {
   const pathname = usePathname();
   const catalog = useHeadstoneStore((state) => state.catalog);
@@ -36,19 +38,17 @@ export default function DesignerPageHeading({
 
   return (
     <div
-      className={`flex flex-col ${alignment} ${compactDesktop ? 'lg:relative lg:px-24 lg:text-center' : ''}`}
+      className={`flex flex-col ${alignment} ${compactMobile ? 'max-md:text-center' : ''} ${compactDesktop ? 'lg:relative lg:px-24 lg:text-center' : ''}`}
     >
       <h1
-        className={`day:text-[#6f511c] order-2 mt-5 text-lg font-semibold tracking-[0.2em] text-pretty text-[#cfac6c] uppercase sm:text-xl ${compactDesktop ? 'lg:mt-1 lg:text-sm lg:tracking-[0.12em]' : ''}`}
+        className={`day:text-[#6f511c] order-2 mt-5 text-lg font-semibold tracking-[0.2em] text-pretty text-[#cfac6c] uppercase sm:text-xl ${compactMobile ? 'max-md:mt-1 max-md:text-xs max-md:font-medium max-md:tracking-normal max-md:normal-case' : ''} ${compactDesktop ? 'lg:mt-1 lg:text-sm lg:tracking-[0.12em]' : ''}`}
       >
         <span
           className={`inline-flex items-center gap-3 ${align === 'center' ? 'sm:justify-center' : ''}`}
         >
           {showProductThumbnail && fallbackProduct?.image && (
             <span
-              className={
-                compactDesktop ? 'lg:absolute lg:top-0 lg:left-0' : undefined
-              }
+              className={`${compactMobile ? 'max-md:hidden' : ''} ${compactDesktop ? 'lg:absolute lg:top-0 lg:left-0' : ''}`}
             >
               <ProductGalleryThumbnail product={fallbackProduct} />
             </span>
@@ -57,7 +57,7 @@ export default function DesignerPageHeading({
         </span>
       </h1>
       <h2
-        className={`day:text-gray-900 order-1 font-serif text-3xl font-light tracking-tight text-pretty text-white sm:text-4xl ${compactDesktop ? 'lg:text-3xl' : 'lg:text-[2.75rem]'}`}
+        className={`day:text-gray-900 order-1 font-serif text-3xl font-light tracking-tight text-pretty text-white sm:text-4xl ${compactMobile ? 'max-md:text-[28px]' : ''} ${compactDesktop ? 'lg:text-3xl' : 'lg:text-[2.75rem]'}`}
       >
         {sectionTitle}
       </h2>

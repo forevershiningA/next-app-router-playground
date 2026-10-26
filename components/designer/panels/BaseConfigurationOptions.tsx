@@ -27,9 +27,7 @@ export default function BaseConfigurationOptions({
   const baseOption = useHeadstoneStore((state) => state.baseOption);
   const setBaseOption = useHeadstoneStore((state) => state.setBaseOption);
   const baseLidFinish = useHeadstoneStore((state) => state.baseLidFinish);
-  const setBaseLidFinish = useHeadstoneStore(
-    (state) => state.setBaseLidFinish,
-  );
+  const setBaseLidFinish = useHeadstoneStore((state) => state.setBaseLidFinish);
 
   const isStainlessSteelBase =
     showBase && (baseMaterialUrl ?? '').includes('ss-swatch');
@@ -37,11 +35,18 @@ export default function BaseConfigurationOptions({
 
   return (
     <div className="contents">
-      <div className="flex gap-2">
+      <div
+        role="group"
+        aria-label="Base style"
+        className="flex items-center gap-2 px-1 py-1"
+      >
+        <span className="mr-auto text-xs font-medium text-[var(--designer-text-muted)]">
+          Style
+        </span>
         <DesignerOptionButton
           selected={!showBase}
           onClick={() => setShowBase(false)}
-          className="flex-1 rounded-md px-3 py-1.5 font-medium"
+          className="min-w-20 rounded-md px-3 py-1.5 text-xs font-semibold"
         >
           No Base
         </DesignerOptionButton>
@@ -54,7 +59,7 @@ export default function BaseConfigurationOptions({
                 setBaseMaterialUrl(STAINLESS_STEEL_BASE_TEX);
                 setShowBase(true);
               }}
-              className="flex-1 rounded-md px-3 py-1.5 font-medium"
+              className="min-w-20 rounded-md px-3 py-1.5 text-xs font-semibold"
             >
               Stainless
             </DesignerOptionButton>
@@ -65,7 +70,7 @@ export default function BaseConfigurationOptions({
                 setBaseMaterialUrl(GRANITE_BASE_TEX);
                 setShowBase(true);
               }}
-              className="flex-1 rounded-md px-3 py-1.5 font-medium"
+              className="min-w-20 rounded-md px-3 py-1.5 text-xs font-semibold"
             >
               Granite
             </DesignerOptionButton>
@@ -78,7 +83,7 @@ export default function BaseConfigurationOptions({
                 setBaseFinish('default');
                 setShowBase(true);
               }}
-              className="flex-1 rounded-md px-3 py-1.5 font-medium"
+              className="min-w-20 rounded-md px-3 py-1.5 text-xs font-semibold"
             >
               Polished
             </DesignerOptionButton>
@@ -88,7 +93,7 @@ export default function BaseConfigurationOptions({
                 setBaseFinish('rock-pitch');
                 setShowBase(true);
               }}
-              className="flex-1 rounded-md px-3 py-1.5 font-medium"
+              className="min-w-20 rounded-md px-3 py-1.5 text-xs font-semibold"
             >
               Rockface
             </DesignerOptionButton>

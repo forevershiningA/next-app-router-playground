@@ -1,5 +1,7 @@
 'use client';
 
+import DesignerRangeInput from '#/components/designer/ui/DesignerRangeInput';
+
 import { data } from '#/app/_internal/_data';
 import AdditionSelector from '#/components/designer/selectors/AdditionSelector';
 import { formatDimensionTriplet } from '#/lib/unit-system';
@@ -76,7 +78,7 @@ export default function SelectAdditionsPanel({
   const additionRangeInputClass =
     'fs-range h-1.5 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-moz-range-thumb]:h-[20px] [&::-moz-range-thumb]:w-[20px] [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-[#171717] [&::-moz-range-thumb]:bg-[#D7B356] [&::-moz-range-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.35),0_0_0_3px_rgba(0,0,0,0.25)] [&::-webkit-slider-thumb]:h-[20px] [&::-webkit-slider-thumb]:w-[20px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#171717] [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.35),0_0_0_3px_rgba(0,0,0,0.25)] [&::-webkit-slider-thumb]:transition-shadow [&::-webkit-slider-thumb]:hover:shadow-[0_0_12px_rgba(215,179,86,0.55),0_0_0_3px_rgba(0,0,0,0.25)]';
   const additionRangeBoundsClass =
-    'mt-1 flex w-full justify-between text-xs text-white/35 day:text-gray-400';
+    'mt-1 flex w-full justify-between text-xs text-white/60 day:text-gray-600';
 
   return (
     <div className="flex h-full min-h-0 flex-col gap-3">
@@ -222,7 +224,7 @@ export default function SelectAdditionsPanel({
                     </div>
                   </div>
                   <div className="relative mt-3">
-                    <input
+                    <DesignerRangeInput
                       type="range"
                       min={-180}
                       max={180}

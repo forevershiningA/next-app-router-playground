@@ -29,8 +29,7 @@ export function parseUnitSystemCookie(
 }
 
 export function formatImperialFromMm(mm: number): string {
-  const inches = Math.max(0, mm) / 25.4;
-  return `${Math.ceil(inches - 1e-9)}"`;
+  return `${displayLengthValueFromMm(mm, 'imperial')}"`;
 }
 
 /** Formats a millimetre measurement as the nearest eighth of an inch. */
@@ -57,7 +56,13 @@ export function displayLengthValueFromMm(
   unitSystem: UnitSystem,
 ): number {
   if (unitSystem === 'imperial') {
-    return Math.ceil(Math.max(0, mm) / 25.4 - 1e-9);
+    const inches = Math.max(0, mm) / 25.4;
+    const nearestWhole = Math.round(inches);
+    // Dimension setters store whole millimetres: 24 inches becomes 610 mm.
+    // Allow that half-millimetre rounding error before rounding inches up.
+    return Math.abs(Math.max(0, mm) - nearestWhole * 25.4) <= 0.5
+      ? nearestWhole
+      : Math.ceil(inches - 1e-9);
   }
   return Math.round(mm);
 }

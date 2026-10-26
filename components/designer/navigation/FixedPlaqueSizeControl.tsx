@@ -1,3 +1,4 @@
+import DesignerRangeInput from '#/components/designer/ui/DesignerRangeInput';
 import type React from 'react';
 import type { AudExchangeRates, SupportedCurrency } from '#/lib/currency';
 import { formatAudPrice } from '#/lib/currency';
@@ -124,7 +125,7 @@ export function FixedPlaqueSizeControl({
           </div>
         </div>
         <div className="relative">
-          <input
+          <DesignerRangeInput
             type="range"
             min={1}
             max={maxSize}
@@ -136,10 +137,12 @@ export function FixedPlaqueSizeControl({
           />
           <div className={rangeBoundsClass}>
             <span>
-              {sizes[0].width}×{sizes[0].height}mm
+              {sizes[0].width}×{sizes[0].height}
+              {'\u00a0'}mm
             </span>
             <span>
-              {sizes[maxSize - 1].width}×{sizes[maxSize - 1].height}mm
+              {sizes[maxSize - 1].width}×{sizes[maxSize - 1].height}
+              {'\u00a0'}mm
             </span>
           </div>
         </div>

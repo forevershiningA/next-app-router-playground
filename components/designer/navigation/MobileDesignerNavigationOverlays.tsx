@@ -4,7 +4,6 @@ import React from 'react';
 import { createPortal } from 'react-dom';
 import { MoonIcon, Squares2X2Icon, SunIcon } from '@heroicons/react/24/outline';
 import { GuidedQuickNavItems } from '#/components/designer/navigation/GuidedQuickNavItems';
-import UnitCurrencySelects from '#/components/designer/navigation/UnitCurrencySelects';
 import { useMobileNavStore } from '#/lib/mobile-nav-store';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 
@@ -69,11 +68,11 @@ export default function MobileDesignerNavigationOverlays({
     <>
       {createPortal(
         <div className="day:border-[#ddd2c2] day:bg-[#f4f1eb]/95 fixed inset-x-0 top-0 z-[45] border-b border-[#3a2a1c] bg-[#120c08]/90 px-3.5 py-2.5 shadow-xl shadow-black/25 backdrop-blur-md md:hidden">
-          <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-2">
+          <div className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2">
             <div className="flex min-w-0 items-center justify-start gap-1.5">
               <button
                 onClick={handleBackToMenu}
-                className="day:border-[#ddd2c2] day:bg-[#fbf9f5] day:text-[#302719] day:hover:bg-[#eee6d9] inline-flex items-center gap-1 rounded-md border border-[#3a2a1c] bg-[#1b120c]/80 px-2.5 py-1.5 text-xs font-medium text-white transition-colors hover:border-[#D7B356]/45 hover:bg-[#24170f]"
+                className="day:border-[#ddd2c2] day:bg-[#fbf9f5] day:text-[#302719] day:hover:bg-[#eee6d9] inline-flex min-h-11 items-center gap-1 rounded-md border border-[#3a2a1c] bg-[#1b120c]/80 px-2.5 py-1.5 text-xs font-medium text-white transition-colors hover:border-[#D7B356]/45 hover:bg-[#24170f]"
               >
                 <svg
                   className="h-3 w-3"
@@ -96,7 +95,7 @@ export default function MobileDesignerNavigationOverlays({
                 onClick={() => setIsQuickNavOpen((open) => !open)}
                 aria-label="Show design sections"
                 aria-expanded={isQuickNavOpen}
-                className={`inline-flex h-7 w-7 items-center justify-center rounded-md border transition-colors hover:border-[#D7B356]/45 hover:bg-[#24170f] ${
+                className={`inline-flex h-11 w-11 items-center justify-center rounded-md border transition-colors hover:border-[#D7B356]/45 hover:bg-[#24170f] ${
                   isQuickNavOpen
                     ? 'day:bg-[#D7B356] day:text-slate-950 border-[#D7B356] bg-[#D7B356] text-slate-950'
                     : 'day:border-[#ddd2c2] day:bg-[#fbf9f5] day:text-[#302719] day:hover:bg-[#eee6d9] border-[#3a2a1c] bg-[#1b120c]/80 text-white'
@@ -106,18 +105,11 @@ export default function MobileDesignerNavigationOverlays({
               </button>
             </div>
             <div className="min-w-0 px-1">
-              <p className="day:text-[#8c7657] truncate text-center text-[9px] font-semibold tracking-[0.18em] text-white/75 uppercase">
-                Step{' '}
-                {currentPanelIndex >= 0
-                  ? `${currentPanelIndex + 1} of ${panelCount}`
-                  : ''}
-              </p>
-              <p className="day:text-[#1d1a17] mt-0.5 truncate text-center text-xs font-semibold text-white">
+              <p className="day:text-[#1d1a17] truncate text-center text-sm font-semibold text-white">
                 {title}
               </p>
             </div>
             <div className="flex items-center justify-end gap-1.5">
-              <UnitCurrencySelects compact />
               <button
                 type="button"
                 onClick={toggleTheme}
@@ -125,7 +117,7 @@ export default function MobileDesignerNavigationOverlays({
                   isDayTheme ? 'Switch to night mode' : 'Switch to day mode'
                 }
                 title={isDayTheme ? 'Night mode' : 'Day mode'}
-                className="day:border-[#ddd2c2] day:bg-[#fbf9f5] day:text-[#302719] day:hover:bg-[#eee6d9] inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-md border border-[#3a2a1c] bg-[#1b120c]/80 text-white transition-colors hover:border-[#D7B356]/45 hover:bg-[#24170f]"
+                className="day:border-[#ddd2c2] day:bg-[#fbf9f5] day:text-[#302719] day:hover:bg-[#eee6d9] inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-md border border-[#3a2a1c] bg-[#1b120c]/80 text-white transition-colors hover:border-[#D7B356]/45 hover:bg-[#24170f]"
               >
                 {isDayTheme ? (
                   <MoonIcon className="h-3.5 w-3.5" aria-hidden="true" />
@@ -166,7 +158,7 @@ export default function MobileDesignerNavigationOverlays({
       {!isSizeAdjustmentCompact &&
         !isBottomSheetCollapsed &&
         createPortal(
-          <div className="day:border-[#ddd2c2] day:bg-[#f4f1eb]/95 fixed inset-x-0 bottom-0 z-[46] flex gap-2 border-t border-[#3a2a1c] bg-[#120c08]/95 px-3 py-2.5 shadow-[0_-10px_24px_rgba(0,0,0,0.3)] backdrop-blur-md md:hidden">
+          <div className="day:border-[#ddd2c2] day:bg-[#f4f1eb]/95 fixed inset-x-0 bottom-0 z-[46] flex gap-2 border-t border-[#3a2a1c] bg-[#120c08]/95 px-3 py-2.5 pb-[max(0.625rem,env(safe-area-inset-bottom))] shadow-[0_-10px_24px_rgba(0,0,0,0.3)] backdrop-blur-md md:hidden">
             <button
               type="button"
               onClick={() => prevPanelSlug && onNavigate(prevPanelSlug)}
@@ -174,7 +166,10 @@ export default function MobileDesignerNavigationOverlays({
               className="day:border-[#cdbb9f] day:bg-[#fbf9f5] day:text-[#302719] day:hover:bg-[#eee6d9] flex min-h-11 flex-1 items-center justify-center gap-1.5 rounded-lg border border-white/20 bg-white/5 px-3 text-sm font-semibold text-white disabled:opacity-30"
             >
               <span aria-hidden="true">←</span>
-              {prevPanelTitle ? `Back: ${prevPanelTitle}` : 'Previous'}
+              <span className="truncate">
+                {prevPanelTitle?.replace(/^(Select|Add Your)\s+/i, '') ??
+                  'Previous'}
+              </span>
             </button>
             <button
               type="button"
@@ -182,23 +177,14 @@ export default function MobileDesignerNavigationOverlays({
               disabled={!nextPanelSlug || isImageCropActive}
               className="day:disabled:bg-[#e5ded3] day:disabled:text-[#8c7657] flex min-h-11 flex-[1.35] items-center justify-center gap-1.5 rounded-lg bg-[#D7B356] px-3 text-sm font-semibold text-slate-950 disabled:bg-white/10 disabled:text-white/40"
             >
-              {isImageCropActive
-                ? 'Finish crop'
-                : designerStepSlug === 'select-images' && !hasSelectedImages
-                  ? 'Skip / Next'
-                  : nextPanelSlug === 'inscriptions'
-                    ? 'Next: Inscriptions'
-                    : nextPanelSlug === 'select-images'
-                      ? 'Next: Images'
-                      : nextPanelSlug === 'select-additions'
-                        ? 'Next: Additions'
-                        : nextPanelSlug === 'select-motifs'
-                          ? 'Next: Motifs'
-                          : nextPanelSlug === 'save-design'
-                            ? 'Next: Save Design'
-                            : nextPanelSlug === 'select-size'
-                              ? 'Next: Select Size'
-                              : `Next: ${nextPanelTitle ?? 'Continue'}`}
+              <span className="truncate">
+                {isImageCropActive
+                  ? 'Finish crop'
+                  : designerStepSlug === 'select-images' && !hasSelectedImages
+                    ? 'Skip'
+                    : (nextPanelTitle?.replace(/^(Select|Add Your)\s+/i, '') ??
+                      'Continue')}
+              </span>
               <span aria-hidden="true">→</span>
             </button>
           </div>,

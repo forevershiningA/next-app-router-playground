@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-10-23
+**Last Updated:** 2026-10-26
 
 **Status entry order:** Add new dated status entries immediately after the table of contents, before the existing status entries. Keep status entries in reverse chronological order (newest first); do not append them to the end of this file.
 **Tech Stack:** Next.js 15.5.26, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots), **Vitest 4.1.8** (unit tests), **Playwright 1.59.1** (E2E tests)
@@ -142,6 +142,35 @@
 129. [October 21 Shared Public Menu, Hero Captions, and Product Selection Layout](#current-status-2026-10-21--shared-public-menu-hero-captions-and-product-selection-layout)
 130. [October 22 Designer Resizing, Dimension Performance, Theme Backdrops, and Hero Video v9](#current-status-2026-10-22--designer-resizing-dimension-performance-theme-backdrops-and-hero-video-v9)
 131. [October 23 Product Selection, Currency Controls, and Build Memory](#current-status-2026-10-23--product-selection-currency-controls-and-build-memory)
+132. [October 25 Compact Guided Navigation and Size Panel](#current-status-2026-10-25--compact-guided-navigation-and-size-panel)
+133. [October 26 Mobile Designer, Product and Shape Selection, and Draft Startup](#current-status-2026-10-26--mobile-designer-product-and-shape-selection-and-draft-startup)
+
+---
+
+## Current Status (2026-10-26) — Mobile designer, product and shape selection, and draft startup
+
+- **Guided navigation:** `GuidedDesktopHeader.tsx` now presents the shared section title without the old “Guided Step” label or desktop step counter; the header title is 20 px. Mobile navigation in `MobileDesignerNavigationOverlays.tsx` also omits the step counter, shortens Back/Next labels, and keeps currency controls in Menu. The mobile sheet handle in `MobileSheetHandle.tsx` toggles on tap and supports vertical drag. General editing sheets occupy 75dvh on phones; material selection uses 48dvh so more of the 3D preview remains visible. Desktop sidebar sizing and desktop section navigation remain unchanged.
+- **Mobile material selection:** For granite/material swatches, `MaterialSelector.tsx` renders one horizontally scrollable, touch-friendly row instead of a three-column grid. Backgrounds and bronze options retain their grid layouts. The smaller mobile sheet height is matched by `fitMobilePreview()` in `components/three/mobile-preview-framing.ts`, used by both `AutoFit.tsx` and `FullMonumentFit.tsx`; its camera framing accounts for the mobile header, sheet height, and collapsed/compact positions. The material preview was checked in a 390 × 844 browser viewport; the sheet measured about 405 px and the swatch row scrolled horizontally.
+- **Mobile product selection:** `app/select-product/_ui/ProductSelectionGrid.tsx` uses a compact header with currency beside Menu, a shorter mobile description, compact category chips and headings, category arrows beside headings, and shorter product images/cards. The carousel exposes part of the next card. The desktop layout keeps its existing sizes and flow.
+- **Mobile shape selection:** `app/select-shape/_ui/ShapeSelectionGrid.tsx` uses the shared `compactMobile` option in `DesignerPageHeading.tsx`, places currency beside Menu, reduces category and grid spacing, and keeps the two-column shape comparison. Shape descriptions are hidden on phones to bring the search and shapes higher on screen. Search remains visible when there are no matches; the search field uses 16 px text on phones to avoid iOS auto-zoom.
+- **Homepage hero on phones:** In `app/_ui/HomeSplash.tsx`, the existing hero video appears before the headline on mobile and returns to its existing desktop order at `lg`. Mobile top padding is 96 px, reduced from 132 px; larger breakpoint spacing remains as before.
+- **New-project startup:** `useLocalDesignDraft()` in `lib/use-local-design-draft.ts` no longer silently restores the IndexedDB draft on an ordinary visit or reload. It restores only for the explicit `action=save-design` or `action=proceed-purchase` return paths, preserving a design across authentication. IndexedDB drafts survive a server restart and normal browser-cache clearing, so those actions are required to resume one.
+- **Standard memorial sizes:** `StandardSizePresets.tsx` and `lib/standard-memorial-sizes.ts` provide 3–5 representative Headstone and Base presets for USD, GBP, EUR, AUD and CAD. The selected currency chooses the offered sizes while existing dimensions stay unchanged; selecting a headstone preset also picks a compatible base when a base is enabled. Sources and the limits of these representative regional lists are documented in `docs/standard-memorial-sizes.md`. Unit formatting in `lib/unit-system.ts` rounds millimetre values equivalent to whole inches back to the matching inch value.
+- **Epitaph library and inscription editor:** `EpitaphLibrary.tsx` and `lib/epitaphs.ts` provide 30 editable sample epitaphs in five categories. Text is inserted into the current draft, with Replace/Append choices for non-empty drafts; it becomes a scene inscription only when the user adds it. In `InscriptionEditPanel.tsx`, font and colour controls now appear above the library, and a new draft uses the selected font and alignment. The shared guided panel title is reduced to 20 px.
+- **Earlier guided-panel refinements:** `select-shape` previews use black silhouettes on light backgrounds. Shape-category text and the panel loading message remain readable in day mode. Inset Contour is shown only for supported shapes, so it returns when the user selects a compatible outline. The mobile section/navigation and overlay changes are isolated from the desktop styles.
+- **Verification during this work:** `pnpm type-check` passed after the mobile material and camera changes. Targeted ESLint reported no errors; existing warnings remain in `AutoFit.tsx`, `FullMonumentFit.tsx`, `ThreeScene.tsx` and `MaterialSelector.tsx`. Browser checks covered mobile product/shape selection, search and filtering, epitaph insertion, mobile panel expansion, and mobile/desktop camera framing at the time of those changes. The latest material carousel was visually checked on mobile; a full end-to-end suite was not run after that final change. Preserve `screen.png`, which is a user-provided screenshot.
+
+---
+
+## Current Status (2026-10-25) — Compact guided navigation and size panel
+
+- Guided desktop/sidebar navigation in `components/designer/navigation/GuidedDesktopHeader.tsx` now places **Menu** on the left, **Guided Step** with previous/next arrows around the step counter in the middle, and the theme toggle on the right. The separate Menu / Prev / Next row and its divider have been removed. The title and direct-access Shape / Material / Size / Inscription strip remain. This is the shared guided header, so the navigation change applies across its steps, not only `/select-size`; the separate mobile navigation overlays remain unchanged.
+- The header is a non-shrinking container. Its center group places Guided Step alongside the arrows/counter when the container content width reaches 390 px; narrower panels retain the two-line group. Reduced title margins keep both layouts compact. Previous/next arrows retain accessible labels, unavailable-step disabling, and the next-step crop guard. The contextual List action remains below the title when required.
+- Desktop quick-navigation tiles in `GuidedQuickNavItems.tsx` now use a fixed 48 px height and 20 px icons, retaining text labels and the gold active state. The mobile variant remains unchanged.
+- `SelectSizePanel.tsx` uses smaller panel gaps, dimension-card padding and slider spacing. `SizeTargetSelector.tsx` no longer inserts an extra divider after Upright / Slant, avoiding duplicate separation and wasted space before Width. `DesignerFullscreenPanelView.tsx` uses 12 px content padding and an explicit day/night background throughout the panel. A local 400 px-wide sidebar showed all three headstone dimensions without scrolling and no white gap at the bottom; the original screenshot's white-area cause was not independently established.
+- **Superseded by 2026-10-26:** standard-size presets for **USD, GBP, EUR, AUD and CAD** are now implemented. See the latest status entry and `docs/standard-memorial-sizes.md` for the representative market lists, base matching behavior, and source limitations.
+- Current units still come from `lib/use-unit-system.ts` / `lib/unit-system.ts`: USD displays inches; GBP, EUR, AUD and CAD display millimetres. **Known unresolved issue:** thickness fields (and ledger/kerbset length) in `SelectSizePanel.tsx` override number conversion with raw millimetres while using the active unit label. In imperial mode this can display a millimetre number beside `in`; review input, slider and label conversions together before adding presets. The existing fixed-size control for Full Colour Plaque (product 32) remains separate.
+- Verification: `pnpm type-check`, targeted ESLint for the five changed navigation/panel components, Prettier and `git diff --check` passed. A headless Playwright check opened `/select-size` in day mode at a 1440 × 900 viewport with a 400 px sidebar. Screenshot: `output/select-size-compact-header.png`; header height was about 190 px. This verifies the panel layout, not completed 3D scene loading or a full end-to-end regression suite. The temporary Next.js server on port 3103 was stopped afterward. `screen.png` is the user's comparison image; preserve it.
 
 ---
 
@@ -16898,6 +16927,6 @@ Both commands pass. Browser rendering still needs to be checked after the next l
 
 ---
 
-_End of STARTER.md - Last updated: 2026-10-23_
+_End of STARTER.md - Last updated: 2026-10-25_
 
 ---

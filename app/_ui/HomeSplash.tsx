@@ -210,7 +210,7 @@ export default function HomeSplash() {
 
         <div
           id="how-it-works"
-          className="relative z-10 mx-auto w-full max-w-7xl scroll-mt-24 px-4 pt-[132px] pb-12 sm:px-6 sm:pt-[140px] sm:pb-14 lg:px-8 lg:pt-[136px] lg:pb-16"
+          className="relative z-10 mx-auto w-full max-w-7xl scroll-mt-24 px-4 pt-24 pb-12 sm:px-6 sm:pt-[140px] sm:pb-14 lg:px-8 lg:pt-[136px] lg:pb-16"
         >
           <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,0.74fr)_minmax(0,1.26fr)] lg:gap-10">
             <div className="flex max-w-xl flex-col items-start text-left">
@@ -252,7 +252,7 @@ export default function HomeSplash() {
               href="/select-product"
               prefetch={false}
               aria-label="Open the 3D memorial designer"
-              className="group day:border-[#d8cdb9] relative block overflow-hidden rounded-sm border border-[#cfac6c]/25 bg-[#17120d] shadow-[0_20px_50px_rgba(55,42,20,0.18)]"
+              className="group day:border-[#d8cdb9] relative order-first block overflow-hidden rounded-sm border border-[#cfac6c]/25 bg-[#17120d] shadow-[0_20px_50px_rgba(55,42,20,0.18)] lg:order-none"
             >
               <div className="relative aspect-video overflow-hidden">
                 <video

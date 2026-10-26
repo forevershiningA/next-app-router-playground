@@ -20,6 +20,7 @@ import {
   getDesignerProductStepHref,
 } from '#/lib/designer-product-routes';
 import { useMobileNavStore } from '#/lib/mobile-nav-store';
+import UnitCurrencySelects from '#/components/designer/navigation/UnitCurrencySelects';
 import DesignerPageHeading from '#/components/designer/DesignerPageHeading';
 
 type ShapeCategory = { id: string; name: string; description: string };
@@ -140,6 +141,8 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
     fallbackProduct?.category === 'monuments';
   const hasBorder =
     catalog?.product?.border === '1' || (catalog === null && productId === '5');
+  const useBlackShapePreview =
+    canUseShapeCategoryFilters || isBlackGraniteProduct;
 
   useEffect(() => {
     if (!canUseShapeCategoryFilters && selectedCategory !== 'all') {
@@ -226,14 +229,16 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
     return (
       <div className="day:bg-[#f7f4ee] min-h-screen bg-[#0c0b0a]">
         <div className="day:border-[#cfc5b7] day:bg-[#eee9df] relative overflow-hidden border-b border-white/10 bg-[#1d1a17] lg:flex lg:h-36 lg:items-center">
-          <div className="relative mx-auto w-full max-w-7xl px-6 py-8 lg:px-8 lg:py-0">
-            <div className="text-left sm:text-center">
+          <div className="relative mx-auto w-full max-w-7xl px-4 pt-3 pb-4 md:px-6 md:py-8 lg:px-8 lg:py-0">
+            <UnitCurrencySelects className="mb-3 justify-end md:hidden" />
+            <div className="text-center">
               <DesignerPageHeading
                 sectionTitle="Select Your Shape"
                 showProductThumbnail
+                compactMobile
                 compactDesktop
               />
-              <p className="day:text-[#625a51] mt-3 max-w-3xl text-base leading-7 text-white/70 sm:mx-auto lg:mt-2 lg:px-24 lg:text-sm lg:leading-5">
+              <p className="day:text-[#625a51] mt-3 hidden max-w-3xl text-base leading-7 text-white/70 sm:mx-auto md:block lg:mt-2 lg:px-24 lg:text-sm lg:leading-5">
                 Choose from the fixed pet rock shapes available for this laser
                 etched black granite plaque.
               </p>
@@ -241,7 +246,7 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
           </div>
         </div>
 
-        <div className="mx-auto max-w-7xl px-6 py-6 lg:px-8">
+        <div className="mx-auto max-w-7xl px-4 py-4 md:px-6 md:py-6 lg:px-8">
           {isLoadingCatalog ? (
             <div className="py-20 text-center">
               <p className="day:text-gray-500 text-gray-400">
@@ -259,7 +264,7 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
             </div>
           ) : (
             <>
-              <div className="mb-6 flex items-center justify-between gap-4">
+              <div className="mb-3 flex items-center justify-between gap-4 md:mb-6">
                 <h2 className="day:text-gray-600 text-sm font-medium text-gray-300">
                   Pet Rock Shapes · {formatShapeCount(catalogShapes.length)}
                 </h2>
@@ -267,7 +272,7 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
                   Select one to continue
                 </div>
               </div>
-              <div className="grid grid-cols-2 items-stretch gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+              <div className="grid grid-cols-2 items-stretch gap-3 sm:grid-cols-3 md:gap-4 lg:grid-cols-4 xl:grid-cols-5">
                 {catalogShapes.map((catalogShape) => {
                   const previewSrc = getPetRockPreviewSrc(catalogShape);
                   const usesOriginalPreviewColors =
@@ -279,8 +284,8 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
                       className="group day:border-[#e4ddd2] day:bg-white day:shadow-[0_10px_30px_rgba(0,0,0,0.03)] day:hover:border-[#9a742f] relative flex h-full cursor-pointer flex-col overflow-hidden rounded-sm border border-white/12 bg-[#171717] text-left transition-colors hover:border-[#cfac6c]/60"
                     >
                       <div
-                        className={`day:border-[#e4ddd2] relative aspect-square w-full overflow-hidden border-b border-white/10 ${
-                          isBlackGraniteProduct
+                        className={`day:border-[#e4ddd2] relative aspect-[4/3] w-full overflow-hidden border-b border-white/10 md:aspect-square ${
+                          useBlackShapePreview
                             ? 'bg-[#eee9df]'
                             : 'day:bg-[#f3f1ed] bg-[#101010]'
                         }`}
@@ -289,7 +294,7 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
                           src={previewSrc}
                           alt={catalogShape.name}
                           fill
-                          className={`object-contain p-8 transition-transform duration-300 group-hover:scale-105 ${
+                          className={`object-contain p-4 transition-transform duration-300 group-hover:scale-105 md:p-8 ${
                             isBlackGraniteProduct
                               ? 'brightness-0'
                               : usesOriginalPreviewColors
@@ -365,14 +370,16 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
       <div className="day:bg-[#f7f4ee] min-h-screen bg-[#0c0b0a]">
         {/* Header Section */}
         <div className="day:border-[#cfc5b7] day:bg-[#eee9df] relative overflow-hidden border-b border-white/10 bg-[#1d1a17] lg:flex lg:h-36 lg:items-center">
-          <div className="relative mx-auto w-full max-w-7xl px-6 py-8 lg:px-8 lg:py-0">
-            <div className="text-left sm:text-center">
+          <div className="relative mx-auto w-full max-w-7xl px-4 pt-3 pb-4 md:px-6 md:py-8 lg:px-8 lg:py-0">
+            <UnitCurrencySelects className="mb-3 justify-end md:hidden" />
+            <div className="text-center">
               <DesignerPageHeading
                 sectionTitle="Select Your Shape"
                 showProductThumbnail
+                compactMobile
                 compactDesktop
               />
-              <p className="day:text-[#625a51] mt-3 max-w-3xl text-base leading-7 text-white/70 sm:mx-auto lg:mt-2 lg:px-24 lg:text-sm lg:leading-5">
+              <p className="day:text-[#625a51] mt-3 hidden max-w-3xl text-base leading-7 text-white/70 sm:mx-auto md:block lg:mt-2 lg:px-24 lg:text-sm lg:leading-5">
                 Choose the shape for your urn. Each shape has its own dimensions
                 and unique character.
               </p>
@@ -381,7 +388,7 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
         </div>
 
         {/* Urn Shapes Grid */}
-        <div className="mx-auto max-w-7xl px-6 py-6 lg:px-8">
+        <div className="mx-auto max-w-7xl px-4 py-4 md:px-6 md:py-6 lg:px-8">
           {isLoadingCatalog ? (
             <div className="py-20 text-center">
               <p className="day:text-gray-500 text-gray-400">
@@ -399,7 +406,7 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
             </div>
           ) : (
             <>
-              <div className="mb-6 flex items-center justify-between gap-4">
+              <div className="mb-3 flex items-center justify-between gap-4 md:mb-6">
                 <h2 className="day:text-gray-600 text-sm font-medium text-gray-300">
                   Urn Shapes · {formatShapeCount(catalogShapes.length)}
                 </h2>
@@ -407,7 +414,7 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
                   Select one to continue
                 </div>
               </div>
-              <div className="grid grid-cols-2 items-stretch gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+              <div className="grid grid-cols-2 items-stretch gap-3 sm:grid-cols-3 md:gap-4 lg:grid-cols-4 xl:grid-cols-5">
                 {catalogShapes.map((catalogShape) => {
                   const svgPath = `/shapes/urns/${(catalogShape.code ?? catalogShape.name).toLowerCase()}.svg`;
                   return (
@@ -417,8 +424,8 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
                       className="group day:border-[#e4ddd2] day:bg-white day:shadow-[0_10px_30px_rgba(0,0,0,0.03)] day:hover:border-[#9a742f] relative flex h-full cursor-pointer flex-col overflow-hidden rounded-sm border border-white/12 bg-[#171717] text-left transition-colors hover:border-[#cfac6c]/60"
                     >
                       <div
-                        className={`day:border-[#e4ddd2] relative aspect-square w-full overflow-hidden border-b border-white/10 ${
-                          isBlackGraniteProduct
+                        className={`day:border-[#e4ddd2] relative aspect-[4/3] w-full overflow-hidden border-b border-white/10 md:aspect-square ${
+                          useBlackShapePreview
                             ? 'bg-[#eee9df]'
                             : 'day:bg-[#f3f1ed] bg-[#101010]'
                         }`}
@@ -427,7 +434,7 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
                           src={svgPath}
                           alt={catalogShape.name}
                           fill
-                          className="day:brightness-100 day:invert-0 object-contain p-8 brightness-0 invert-[60%] transition-transform duration-300 group-hover:scale-105"
+                          className="day:brightness-100 day:invert-0 object-contain p-4 brightness-0 invert-[60%] transition-transform duration-300 group-hover:scale-105 md:p-8"
                           sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
                         />
                       </div>
@@ -526,14 +533,16 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
     <div className="day:bg-[#f7f4ee] min-h-screen bg-[#0c0b0a]">
       {/* Header Section */}
       <div className="day:border-[#cfc5b7] day:bg-[#eee9df] relative overflow-hidden border-b border-white/10 bg-[#1d1a17] lg:flex lg:h-36 lg:items-center">
-        <div className="relative mx-auto w-full max-w-7xl px-6 py-8 lg:px-8 lg:py-0">
-          <div className="text-left sm:text-center">
+        <div className="relative mx-auto w-full max-w-7xl px-4 pt-3 pb-4 md:px-6 md:py-8 lg:px-8 lg:py-0">
+          <UnitCurrencySelects className="mb-3 justify-end md:hidden" />
+          <div className="text-center">
             <DesignerPageHeading
               sectionTitle="Select Your Shape"
               showProductThumbnail
+              compactMobile
               compactDesktop
             />
-            <p className="day:text-[#625a51] mt-3 max-w-3xl text-base leading-7 text-white/70 sm:mx-auto lg:mt-2 lg:px-24 lg:text-sm lg:leading-5">
+            <p className="day:text-[#625a51] mt-3 hidden max-w-3xl text-base leading-7 text-white/70 sm:mx-auto md:block lg:mt-2 lg:px-24 lg:text-sm lg:leading-5">
               {isTraditionalShapesOnly
                 ? `Choose from the first 11 traditional shapes available for this${
                     isPetMiniHeadstone
@@ -551,11 +560,12 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
       {/* Shape categories only apply to headstones and full monuments. */}
       {canUseShapeCategoryFilters && (
         <div className="day:border-[#d8cdb9] day:bg-[#f7f4ee] relative border-b border-white/10 bg-[#15120f]">
-          <div className="relative mx-auto max-w-7xl px-6 py-3.5 lg:px-8">
-            <div className="-mx-6 flex snap-x gap-2 overflow-x-auto px-6 pr-12 [scrollbar-width:none] sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0 [&::-webkit-scrollbar]:hidden">
+          <div className="relative mx-auto max-w-7xl px-4 py-2 md:px-6 md:py-3.5 lg:px-8">
+            <div className="-mx-4 flex snap-x gap-2 overflow-x-auto px-4 pr-12 [scrollbar-width:none] sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0 [&::-webkit-scrollbar]:hidden">
               <button
                 onClick={() => setSelectedCategory('all')}
-                className={`shrink-0 snap-start rounded-sm border px-5 py-2.5 text-sm font-medium whitespace-nowrap transition-colors ${
+                aria-pressed={selectedCategory === 'all'}
+                className={`min-h-10 shrink-0 snap-start rounded-sm border px-3 py-2 text-xs font-medium whitespace-nowrap transition-colors md:min-h-0 md:px-5 md:py-2.5 md:text-sm ${
                   selectedCategory === 'all'
                     ? 'day:border-[#1d1a17] day:bg-[#1d1a17] day:text-white border-[#cfac6c] bg-[#cfac6c] text-[#1d1a17]'
                     : 'day:border-[#bdb4a6] day:text-[#514a43] day:hover:border-[#9a742f] day:hover:bg-white/55 border-white/20 text-white/80 hover:border-[#cfac6c]/70 hover:bg-white/[0.06]'
@@ -570,7 +580,8 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
                 <button
                   key={category.id}
                   onClick={() => setSelectedCategory(category.id)}
-                  className={`shrink-0 snap-start rounded-sm border px-5 py-2.5 text-sm font-medium whitespace-nowrap transition-colors ${
+                  aria-pressed={selectedCategory === category.id}
+                  className={`min-h-10 shrink-0 snap-start rounded-sm border px-3 py-2 text-xs font-medium whitespace-nowrap transition-colors md:min-h-0 md:px-5 md:py-2.5 md:text-sm ${
                     selectedCategory === category.id
                       ? 'day:border-[#1d1a17] day:bg-[#1d1a17] day:text-white border-[#cfac6c] bg-[#cfac6c] text-[#1d1a17]'
                       : 'day:border-[#bdb4a6] day:text-[#514a43] day:hover:border-[#9a742f] day:hover:bg-white/55 border-white/20 text-white/80 hover:border-[#cfac6c]/70 hover:bg-white/[0.06]'
@@ -590,7 +601,34 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
       )}
 
       {/* Shapes Grid */}
-      <div className="mx-auto max-w-7xl px-6 pt-6 pb-12 lg:px-8">
+      <div className="mx-auto max-w-7xl px-4 pt-4 pb-12 md:px-6 md:pt-6 lg:px-8">
+        {selectedCategory !== 'custom' && (
+          <div className="mb-3 grid gap-3 sm:grid-cols-[minmax(0,1fr)_minmax(260px,360px)] sm:items-end md:mb-6 md:gap-4">
+            <div>
+              <h2 className="day:text-[#1d1a17] font-serif text-2xl text-white">
+                {resultsHeading}
+              </h2>
+              <p className="day:text-[#625a51] mt-1 hidden text-sm leading-6 text-white/60 md:block">
+                Choose the outline now. You can adjust its dimensions and select
+                a base in the next step.
+              </p>
+            </div>
+            <label className="relative block w-full sm:ml-auto sm:max-w-[380px]">
+              <span className="sr-only">Search shapes by name</span>
+              <MagnifyingGlassIcon
+                className="day:text-[#756c62] pointer-events-none absolute top-1/2 left-4 h-5 w-5 -translate-y-1/2 text-white/45"
+                aria-hidden="true"
+              />
+              <input
+                type="search"
+                value={shapeQuery}
+                onChange={(event) => setShapeQuery(event.target.value)}
+                placeholder="Search shapes…"
+                className="day:border-[#bdb4a6] day:bg-white day:text-[#1d1a17] day:placeholder:text-[#756c62] h-11 w-full rounded-sm border border-white/15 bg-white/[0.05] pr-5 pl-12 text-base text-white outline-none placeholder:text-white/55 focus:border-[#cfac6c] focus:ring-2 focus:ring-[#cfac6c]/20 md:text-sm"
+              />
+            </label>
+          </div>
+        )}
         {selectedCategory === 'custom' ? (
           /* Custom Upload Section */
           <div className="py-10">
@@ -638,7 +676,7 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
           </div>
         ) : filteredShapes.length === 0 ? (
           <div className="py-20 text-center">
-            <h3 className="day:text-[#1d1a17] font-serif text-2xl text-white">
+            <h3 className="day:text-[#1d1a17] font-serif text-xl text-white md:text-2xl">
               {normalizedShapeQuery
                 ? `No shapes match “${shapeQuery.trim()}”`
                 : 'No shapes found'}
@@ -660,32 +698,7 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
           </div>
         ) : (
           <>
-            <div className="mb-6 grid gap-4 sm:grid-cols-[minmax(0,1fr)_minmax(260px,360px)] sm:items-end">
-              <div>
-                <h2 className="day:text-[#1d1a17] font-serif text-2xl text-white">
-                  {resultsHeading}
-                </h2>
-                <p className="day:text-[#625a51] mt-1 text-sm leading-6 text-white/60">
-                  Choose the outline now. You can adjust its dimensions and
-                  select a base in the next step.
-                </p>
-              </div>
-              <label className="relative block w-full sm:ml-auto sm:w-[380px]">
-                <span className="sr-only">Search shapes by name</span>
-                <MagnifyingGlassIcon
-                  className="day:text-[#756c62] pointer-events-none absolute top-1/2 left-4 h-5 w-5 -translate-y-1/2 text-white/45"
-                  aria-hidden="true"
-                />
-                <input
-                  type="search"
-                  value={shapeQuery}
-                  onChange={(event) => setShapeQuery(event.target.value)}
-                  placeholder="Search shapes (e.g. Peak, Gable, Heart)…"
-                  className="day:border-[#bdb4a6] day:bg-white day:text-[#1d1a17] day:placeholder:text-[#756c62] h-11 w-full rounded-sm border border-white/15 bg-white/[0.05] pr-5 pl-12 text-sm text-white outline-none placeholder:text-white/55 focus:border-[#cfac6c] focus:ring-2 focus:ring-[#cfac6c]/20"
-                />
-              </label>
-            </div>
-            <div className="mx-auto grid w-full max-w-6xl grid-cols-2 items-stretch gap-4 sm:grid-cols-3 lg:grid-cols-5">
+            <div className="mx-auto grid w-full max-w-6xl grid-cols-2 items-stretch gap-3 sm:grid-cols-3 md:gap-4 lg:grid-cols-5">
               {filteredShapes.map((shape) => {
                 const isSelected = selectedShapeId === shape.id;
                 // Plaque shapes (ovals and circle) are in /shapes/masks/, others in /shapes/headstones/
@@ -714,8 +727,8 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
                       className="flex w-full flex-1 cursor-pointer flex-col text-left focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[#cfac6c]"
                     >
                       <div
-                        className={`day:border-[#e4ddd2] relative aspect-square w-full overflow-hidden border-b border-white/10 ${
-                          isBlackGraniteProduct
+                        className={`day:border-[#e4ddd2] relative aspect-[4/3] w-full overflow-hidden border-b border-white/10 md:aspect-square ${
+                          useBlackShapePreview
                             ? 'bg-[#eee9df]'
                             : 'day:bg-[#f3f1ed] bg-[#101010]'
                         }`}
@@ -732,8 +745,8 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
                           src={shapeUrl}
                           alt={shape.name}
                           fill
-                          className={`object-contain p-6 brightness-0 transition-transform duration-300 group-hover:scale-[1.03] motion-reduce:transform-none ${
-                            isBlackGraniteProduct
+                          className={`object-contain p-4 brightness-0 transition-transform duration-300 group-hover:scale-[1.03] motion-reduce:transform-none md:p-6 ${
+                            useBlackShapePreview
                               ? 'opacity-100 drop-shadow-[0_7px_6px_rgba(42,33,24,0.24)]'
                               : 'day:brightness-100 day:invert-0 day:opacity-75 day:drop-shadow-[0_4px_4px_rgba(42,33,24,0.14)] drop-shadow-[0_8px_6px_rgba(0,0,0,0.55)] invert-[68%]'
                           }`}
@@ -741,8 +754,8 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
                         />
                       </div>
 
-                      <div className="flex flex-1 flex-col justify-center p-4">
-                        <h3 className="day:text-[#1d1a17] line-clamp-2 text-center font-serif text-lg leading-tight text-white">
+                      <div className="flex flex-1 flex-col justify-center p-3 md:p-4">
+                        <h3 className="day:text-[#1d1a17] line-clamp-2 text-center font-serif text-base leading-tight text-white md:text-lg">
                           {shape.name}
                         </h3>
                       </div>

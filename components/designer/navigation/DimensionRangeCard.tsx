@@ -1,4 +1,5 @@
-import type React from 'react';
+import DesignerRangeInput from '#/components/designer/ui/DesignerRangeInput';
+import React, { useId } from 'react';
 
 interface DimensionRangeCardProps {
   label: string;
@@ -57,6 +58,7 @@ export function DimensionRangeCard({
   clampOnBlur = true,
   showInvalidState = true,
 }: DimensionRangeCardProps) {
+  const inputId = useId();
   const displayValue = numberValue(valueMm);
   const displayMin = displayLength(minMm);
   const displayMax = displayLength(maxMm);
@@ -72,12 +74,14 @@ export function DimensionRangeCard({
   return (
     <div className={cardClass}>
       <div className={headerClass}>
-        <label className={labelClass}>{label}</label>
+        <label htmlFor={inputId} className={labelClass}>
+          {label}
+        </label>
         <div className="flex items-center justify-end gap-2">
           <button
             type="button"
             onClick={() => setValueMm(clampValue(valueMm - 10))}
-            disabled={disabled}
+            disabled={disabled || valueMm <= minMm}
             className={controlButtonClass}
             aria-label={`Decrease ${label.toLowerCase()} by 10mm`}
           >
@@ -96,6 +100,7 @@ export function DimensionRangeCard({
             </svg>
           </button>
           <input
+            id={inputId}
             type="number"
             min={numberMin ?? displayMin}
             max={numberMax ?? displayMax}
@@ -118,7 +123,7 @@ export function DimensionRangeCard({
           <button
             type="button"
             onClick={() => setValueMm(clampValue(valueMm + 10))}
-            disabled={disabled}
+            disabled={disabled || valueMm >= maxMm}
             className={controlButtonClass}
             aria-label={`Increase ${label.toLowerCase()} by 10mm`}
           >
@@ -142,7 +147,7 @@ export function DimensionRangeCard({
         </div>
       </div>
       <div className={rangeBlockClass}>
-        <input
+        <DesignerRangeInput
           type="range"
           min={displayMin}
           max={displayMax}
@@ -153,15 +158,18 @@ export function DimensionRangeCard({
           }
           disabled={disabled}
           {...compactSizeRangeProps}
+          aria-label={`${label} (${lengthUnit})`}
           className={rangeInputClass}
         />
         <div className={rangeBoundsClass}>
           <span>
             {displayMin}
+            {'\u00a0'}
             {lengthUnit}
           </span>
           <span>
             {displayMax}
+            {'\u00a0'}
             {lengthUnit}
           </span>
         </div>

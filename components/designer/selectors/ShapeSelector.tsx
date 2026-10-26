@@ -7,6 +7,7 @@ import { useHeadstoneStore, type ShapeOption } from '#/lib/headstone-store';
 import { isContourSupported } from '#/components/three/InsetContourLine';
 import { putSerpentineFirst } from '#/lib/shape-ordering';
 import { getDesignerProductStepHref } from '#/lib/designer-product-routes';
+import { DesignerOptionButton } from '#/components/designer/ui/DesignerControl';
 
 type ShapeSelectorProps = {
   shapes: ShapeOption[];
@@ -188,7 +189,7 @@ export default function ShapeSelector({
                 </div>
                 <div className="flex items-center justify-center p-2">
                   <div
-                    className={`line-clamp-2 text-center text-xs ${isSelected ? 'text-[#D7B356]' : 'text-slate-200'}`}
+                    className={`line-clamp-2 text-center text-xs ${isSelected ? 'day:text-[#8a641c] text-[#D7B356]' : 'day:text-[#514a43] text-slate-200'}`}
                   >
                     {catalogShape.name}
                   </div>
@@ -249,10 +250,11 @@ export default function ShapeSelector({
               key={category.id}
               type="button"
               onClick={() => setSelectedCategory(category.id)}
-              className={`shrink-0 snap-start rounded-full border px-3 py-1.5 text-xs font-medium transition-colors ${
+              aria-pressed={selectedCategory === category.id}
+              className={`shrink-0 snap-start rounded-full border px-3 py-1.5 text-xs font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--designer-focus)] ${
                 selectedCategory === category.id
                   ? 'border-[#D7B356] bg-[#D7B356] text-slate-950'
-                  : 'border-white/15 text-slate-300 hover:border-[#D7B356]/60 hover:text-white'
+                  : 'day:border-[#bdb4a6] day:text-[#514a43] day:hover:border-[#9a742f] day:hover:bg-white/55 day:hover:text-[#302719] border-white/15 text-slate-300 hover:border-[#D7B356]/60 hover:text-white'
               }`}
             >
               {category.label}
@@ -260,33 +262,30 @@ export default function ShapeSelector({
           ))}
         </div>
       )}
-      {/* Inset contour border toggle — headstones with supported shapes only */}
+      {/* Show the contour option only for shapes that support it. */}
       {!isPlaque && isContourSupported(currentShapeUrl) && (
-        <div className="rounded-xl border border-white/10 bg-[#0f0a07] p-4">
-          <div className="flex items-center justify-between">
-            <div className="space-y-1">
-              <div className="text-sm font-medium text-slate-200">
-                Inset Contour Border
-              </div>
-              <div className="text-xs text-slate-200/60">
-                White line following the shape, 15mm from edges
-              </div>
+        <div className="px-1 py-1">
+          <div
+            role="group"
+            aria-label="Inset contour border"
+            className="flex items-center gap-2"
+          >
+            <div className="mr-auto min-w-0 text-xs font-medium text-[var(--designer-text-muted)]">
+              Inset Contour Border
             </div>
-            <button
-              type="button"
-              onClick={() => setShowInsetContour(!showInsetContour)}
-              className={`relative inline-flex h-6 w-11 flex-shrink-0 items-center rounded-full transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-white/50 focus-visible:outline-none ${
-                showInsetContour ? 'bg-white' : 'bg-white/20'
-              }`}
-            >
-              <span
-                className={`inline-block h-4 w-4 rounded-full transition-transform duration-200 ${
-                  showInsetContour
-                    ? 'translate-x-6 bg-[#0f0a07]'
-                    : 'translate-x-1 bg-slate-400'
-                }`}
-              />
-            </button>
+            {[
+              { label: 'Off', value: false },
+              { label: 'On', value: true },
+            ].map((option) => (
+              <DesignerOptionButton
+                key={option.label}
+                selected={showInsetContour === option.value}
+                onClick={() => setShowInsetContour(option.value)}
+                className="min-w-20 rounded-md px-3 py-1.5 text-xs font-semibold"
+              >
+                {option.label}
+              </DesignerOptionButton>
+            ))}
           </div>
         </div>
       )}
@@ -343,7 +342,7 @@ export default function ShapeSelector({
               {/* Shape Name */}
               <div className="flex items-center justify-center p-2">
                 <div
-                  className={`line-clamp-2 text-center text-xs ${isSelected ? 'text-[#D7B356]' : 'text-slate-200'}`}
+                  className={`line-clamp-2 text-center text-xs ${isSelected ? 'day:text-[#8a641c] text-[#D7B356]' : 'day:text-[#514a43] text-slate-200'}`}
                 >
                   {shape.name}
                 </div>

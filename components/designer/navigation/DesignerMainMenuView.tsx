@@ -1,5 +1,6 @@
 'use client';
 
+import UnitCurrencySelects from './UnitCurrencySelects';
 import DesignerBrandHeader from '#/components/designer/navigation/DesignerBrandHeader';
 import DesignerMenuGroups from '#/components/designer/navigation/DesignerMenuGroups';
 import ProductConversionPanel from '#/components/designer/navigation/ProductConversionPanel';
@@ -52,6 +53,9 @@ export default function DesignerMainMenuView({
     <>
       <DesignerBrandHeader isDayTheme={isDayTheme} toggleTheme={toggleTheme} />
       <div className="flex-1 space-y-4 overflow-y-auto px-4 py-3 md:space-y-0">
+        <div className="md:hidden">
+          <UnitCurrencySelects />
+        </div>
         <ProductConversionPanel
           isOpen={showConvertPanel}
           productId={productId}

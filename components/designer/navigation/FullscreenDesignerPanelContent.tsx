@@ -27,10 +27,15 @@ type FullscreenDesignerPanelContentProps = {
 
 function PanelLoading({ label }: { label: string }) {
   return (
-    <div className="flex h-64 items-center justify-center">
+    <div role="status" className="flex h-64 items-center justify-center">
       <div className="flex flex-col items-center gap-4">
-        <div className="h-12 w-12 animate-spin rounded-full border-4 border-[#3A3A3A] border-t-white" />
-        <p className="text-sm text-white/60">Loading {label}...</p>
+        <div
+          aria-hidden="true"
+          className="day:border-[#d8cfbf] day:border-t-[#9a742f] h-12 w-12 animate-spin rounded-full border-4 border-[#3A3A3A] border-t-white"
+        />
+        <p className="day:text-[#625a51] text-sm text-white/60">
+          Loading {label}…
+        </p>
       </div>
     </div>
   );

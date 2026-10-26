@@ -135,9 +135,11 @@ type ProductGridProps = {
 function ProductCarousel({
   children,
   label,
+  heading,
 }: {
   children: ReactNode;
   label: string;
+  heading?: ReactNode;
 }) {
   const trackRef = useRef<HTMLDivElement>(null);
   const [canScrollBack, setCanScrollBack] = useState(false);
@@ -166,7 +168,12 @@ function ProductCarousel({
     const track = trackRef.current;
     if (!track) return;
     track.scrollBy({
-      left: direction * (track.clientWidth + 20),
+      left:
+        direction *
+        (window.innerWidth < 768
+          ? (track.firstElementChild?.getBoundingClientRect().width ??
+              track.clientWidth) + 12
+          : track.clientWidth + 20),
       behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches
         ? 'instant'
         : 'smooth',
@@ -174,9 +181,10 @@ function ProductCarousel({
   };
 
   return (
-    <div>
+    <div className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-x-2 md:block">
+      {heading}
       {(canScrollBack || canScrollForward) && (
-        <div className="mb-3 flex justify-end gap-2">
+        <div className="col-start-2 mb-3 flex justify-end gap-1 md:gap-2">
           {[-1, 1].map((direction) => (
             <button
               key={direction}
@@ -200,7 +208,7 @@ function ProductCarousel({
         role="region"
         aria-label={`${label} products`}
         tabIndex={0}
-        className="grid snap-x snap-mandatory auto-cols-[100%] grid-flow-col items-stretch gap-5 overflow-x-auto overscroll-x-contain p-1 pb-3 focus-visible:outline-2 focus-visible:outline-[#9a742f] @min-[38rem]/products:auto-cols-[calc((100%-20px)/2)] @min-[60rem]/products:auto-cols-[calc((100%-60px)/4)]"
+        className="col-span-2 grid snap-x snap-mandatory auto-cols-[88%] grid-flow-col items-stretch gap-3 overflow-x-auto overscroll-x-contain p-1 pb-3 [scrollbar-width:none] focus-visible:outline-2 focus-visible:outline-[#9a742f] md:auto-cols-[100%] md:gap-5 md:[scrollbar-width:auto] @min-[38rem]/products:auto-cols-[calc((100%-20px)/2)] @min-[60rem]/products:auto-cols-[calc((100%-60px)/4)]"
       >
         {children}
       </div>
@@ -254,15 +262,20 @@ export default function ProductSelectionGrid({
     <div className="day:bg-[#f7f4ee] @container/products min-h-screen bg-[#0c0b0a]">
       {/* Header Section */}
       <div className="day:border-[#cfc5b7] day:bg-[#eee9df] relative overflow-hidden border-b border-white/10 bg-[#1d1a17] lg:flex lg:h-36 lg:items-center">
-        <div className="relative mx-auto w-full max-w-7xl px-6 py-8 lg:px-8 lg:py-0">
+        <div className="relative mx-auto w-full max-w-7xl px-4 pt-3 pb-4 md:px-6 md:py-8 lg:px-8 lg:py-0">
           <UnitCurrencySelects className="mb-3 justify-end sm:absolute sm:top-4 sm:right-6 sm:mb-0 lg:right-8" />
           <div className="text-center sm:px-20">
-            <h1 className="day:text-[#1d1a17] font-serif text-3xl font-normal tracking-[-0.025em] text-white sm:text-4xl lg:text-3xl">
+            <h1 className="day:text-[#1d1a17] font-serif text-[28px] font-normal tracking-[-0.025em] text-white sm:text-4xl lg:text-3xl">
               Choose your memorial
             </h1>
-            <p className="day:text-[#625a51] mx-auto mt-3 max-w-xl text-sm leading-6 text-white/70">
-              Compare materials and styles to find the right starting point.
-              Next: choose the shape.
+            <p className="day:text-[#625a51] mx-auto mt-2 max-w-xl text-sm leading-6 text-white/70 md:mt-3">
+              <span className="md:hidden">
+                Choose a product, then customise its shape.
+              </span>
+              <span className="hidden md:inline">
+                Compare materials and styles to find the right starting point.
+                Next: choose the shape.
+              </span>
             </p>
           </div>
         </div>
@@ -270,12 +283,12 @@ export default function ProductSelectionGrid({
 
       {/* Category Filter */}
       <div className="day:border-[#d8cdb9] day:bg-[#f7f4ee] relative border-b border-white/10 bg-[#15120f]">
-        <div className="relative mx-auto max-w-7xl px-6 py-3.5 lg:px-8">
-          <div className="-mx-6 flex snap-x gap-2 overflow-x-auto px-6 [scrollbar-width:none] sm:mx-0 sm:px-0 [&::-webkit-scrollbar]:hidden">
+        <div className="relative mx-auto max-w-7xl px-4 py-2 md:px-6 md:py-3.5 lg:px-8">
+          <div className="-mx-4 flex snap-x gap-2 overflow-x-auto px-4 [scrollbar-width:none] sm:mx-0 sm:px-0 [&::-webkit-scrollbar]:hidden">
             <button
               onClick={() => setSelectedCategory('all')}
               aria-pressed={selectedCategory === 'all'}
-              className={`shrink-0 snap-start rounded-sm border px-3 py-2.5 text-sm font-medium whitespace-nowrap transition-colors ${
+              className={`min-h-10 shrink-0 snap-start rounded-sm border px-3 py-2 text-xs font-medium whitespace-nowrap transition-colors md:min-h-0 md:py-2.5 md:text-sm ${
                 selectedCategory === 'all'
                   ? 'day:border-[#1d1a17] day:bg-[#1d1a17] day:text-white border-[#cfac6c] bg-[#cfac6c] text-[#1d1a17]'
                   : 'day:border-[#bdb4a6] day:text-[#514a43] day:hover:border-[#9a742f] day:hover:bg-white/55 border-white/20 text-white/80 hover:border-[#cfac6c]/70 hover:bg-white/[0.06]'
@@ -288,7 +301,7 @@ export default function ProductSelectionGrid({
                 key={category.id}
                 onClick={() => setSelectedCategory(category.id)}
                 aria-pressed={selectedCategory === category.id}
-                className={`shrink-0 snap-start rounded-sm border px-3 py-2.5 text-sm font-medium whitespace-nowrap transition-colors ${
+                className={`min-h-10 shrink-0 snap-start rounded-sm border px-3 py-2 text-xs font-medium whitespace-nowrap transition-colors md:min-h-0 md:py-2.5 md:text-sm ${
                   selectedCategory === category.id
                     ? 'day:border-[#1d1a17] day:bg-[#1d1a17] day:text-white border-[#cfac6c] bg-[#cfac6c] text-[#1d1a17]'
                     : 'day:border-[#bdb4a6] day:text-[#514a43] day:hover:border-[#9a742f] day:hover:bg-white/55 border-white/20 text-white/80 hover:border-[#cfac6c]/70 hover:bg-white/[0.06]'
@@ -311,7 +324,7 @@ export default function ProductSelectionGrid({
       </div>
 
       {/* Products Grid */}
-      <div className="mx-auto max-w-7xl px-6 pt-5 pb-36 lg:px-8 lg:pb-5">
+      <div className="mx-auto max-w-7xl px-4 pt-4 pb-36 md:px-6 md:pt-5 lg:px-8 lg:pb-5">
         {filteredProducts.length === 0 ? (
           <div className="py-20 text-center">
             <h3 className="day:text-gray-900 text-xl font-medium text-white">
@@ -336,27 +349,34 @@ export default function ProductSelectionGrid({
                     selectedCategory === 'all' ? undefined : group.name
                   }
                 >
-                  {selectedCategory === 'all' && (
-                    <div className="day:border-[#d8cdb9] mb-4 border-b border-white/10 pb-3">
-                      <div>
-                        <h2
-                          id={`product-group-${group.id}`}
-                          className="day:text-[#1d1a17] font-serif text-2xl font-normal text-white"
-                        >
-                          {group.name}{' '}
-                          <span className="day:text-[#756c62] ml-1 font-sans text-sm font-medium text-white/55">
-                            ({group.products.length} item
-                            {group.products.length !== 1 ? 's' : ''})
-                          </span>
-                        </h2>
-                        <p className="day:text-[#625a51] mt-1 text-sm text-white/60">
-                          {group.description}
-                        </p>
-                      </div>
-                    </div>
-                  )}
-
-                  <ProductCarousel label={group.name}>
+                  <ProductCarousel
+                    label={group.name}
+                    heading={
+                      selectedCategory === 'all' && (
+                        <div className="day:border-[#d8cdb9] mb-3 md:mb-4 md:border-b md:border-white/10 md:pb-3">
+                          <div>
+                            <h2
+                              id={`product-group-${group.id}`}
+                              className="day:text-[#1d1a17] font-serif text-xl font-normal text-white md:text-2xl"
+                            >
+                              {group.name}{' '}
+                              <span className="day:text-[#756c62] ml-1 font-sans text-sm font-medium text-white/55">
+                                ({group.products.length}
+                                <span className="hidden md:inline">
+                                  {' '}
+                                  item{group.products.length !== 1 ? 's' : ''}
+                                </span>
+                                )
+                              </span>
+                            </h2>
+                            <p className="day:text-[#625a51] mt-1 text-xs text-white/60 md:text-sm">
+                              {group.description}
+                            </p>
+                          </div>
+                        </div>
+                      )
+                    }
+                  >
                     {group.products.map((product) => {
                       const priceRange = priceMap[product.id];
                       const summary = productSummaries[product.id];
@@ -372,7 +392,7 @@ export default function ProductSelectionGrid({
                           aria-label={`Select ${product.name}`}
                           className="group day:border-[#e4ddd2] day:bg-white day:shadow-[0_10px_30px_rgba(0,0,0,0.03)] day:hover:border-[#9a742f] relative flex h-full min-w-0 cursor-pointer snap-start flex-col overflow-hidden rounded-sm border border-white/12 bg-[#171717] text-left transition-colors hover:border-[#cfac6c]/60 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#9a742f] disabled:cursor-wait disabled:opacity-70"
                         >
-                          <div className="day:border-[#e4ddd2] day:bg-[#f3f1ed] relative aspect-square w-full overflow-hidden border-b border-white/10 bg-[#101010]">
+                          <div className="day:border-[#e4ddd2] day:bg-[#f3f1ed] relative h-44 w-full overflow-hidden border-b border-white/10 bg-[#101010] md:aspect-square md:h-auto">
                             <Image
                               src={`/webp/products/${product.image}`}
                               alt={product.name}
@@ -382,7 +402,7 @@ export default function ProductSelectionGrid({
                             />
                           </div>
 
-                          <div className="flex flex-1 flex-col gap-3 p-5">
+                          <div className="flex flex-1 flex-col gap-2 p-3 md:gap-3 md:p-5">
                             <h3 className="day:text-[#1d1a17] font-serif text-xl leading-tight text-white">
                               {summary?.name ?? product.name}
                             </h3>

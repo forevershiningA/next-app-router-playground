@@ -1,5 +1,7 @@
 'use client';
 
+import DesignerRangeInput from '#/components/designer/ui/DesignerRangeInput';
+
 import React, {
   useState,
   useMemo,
@@ -200,7 +202,7 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
   const rangeInputClass =
     'fs-range h-1.5 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-webkit-slider-thumb]:h-[20px] [&::-webkit-slider-thumb]:w-[20px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#171717] [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.35),0_0_0_3px_rgba(0,0,0,0.25)] [&::-webkit-slider-thumb]:transition-shadow [&::-webkit-slider-thumb]:hover:shadow-[0_0_12px_rgba(215,179,86,0.55),0_0_0_3px_rgba(0,0,0,0.25)] [&::-moz-range-thumb]:h-[20px] [&::-moz-range-thumb]:w-[20px] [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-[#171717] [&::-moz-range-thumb]:bg-[#D7B356] [&::-moz-range-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.35),0_0_0_3px_rgba(0,0,0,0.25)]';
   const rangeBoundsClass =
-    'mt-1 flex w-full justify-between text-xs text-white/35 day:text-gray-400';
+    'mt-1 flex w-full justify-between text-xs text-white/60 day:text-gray-600';
   const cropSectionClass =
     'rounded-lg border border-white/10 bg-[#171717] p-3 shadow-lg shadow-black/15 day:border-gray-200 day:bg-white';
   const cropAdjustButtonClass =
@@ -1059,7 +1061,7 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                   </div>
                 </div>
                 <div className="relative mt-3">
-                  <input
+                  <DesignerRangeInput
                     type="range"
                     min={1}
                     max={maxSize}
@@ -1174,7 +1176,7 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                   </div>
                 </div>
                 <div className="relative mt-3">
-                  <input
+                  <DesignerRangeInput
                     type="range"
                     min={flexibleMinHeight}
                     max={flexibleMaxHeight}
@@ -1418,7 +1420,7 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
               </div>
             </div>
             <div className="relative mt-3">
-              <input
+              <DesignerRangeInput
                 type="range"
                 min={-180}
                 max={180}
@@ -1732,7 +1734,7 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                         </span>
                       </div>
                       <div className="relative mt-2.5">
-                        <input
+                        <DesignerRangeInput
                           type="range"
                           min="20"
                           max="80"
@@ -1886,7 +1888,7 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                         </span>
                       </div>
                       <div className="relative mt-2.5">
-                        <input
+                        <DesignerRangeInput
                           type="range"
                           min="-180"
                           max="180"

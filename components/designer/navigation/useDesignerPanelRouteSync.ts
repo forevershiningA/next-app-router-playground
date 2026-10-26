@@ -48,8 +48,11 @@ export function useDesignerPanelRouteSync({
   const setEditingObject = useHeadstoneStore((state) => state.setEditingObject);
   const setSelected = useHeadstoneStore((state) => state.setSelected);
   const didApplyInitialInscriptionTargetRef = useRef(false);
+  const previousPathnameRef = useRef(pathname);
 
   useEffect(() => {
+    const pathnameChanged = previousPathnameRef.current !== pathname;
+    previousPathnameRef.current = pathname;
     if (!isCanvasVisible) {
       if (activeFullscreenPanel) {
         if (
@@ -70,9 +73,11 @@ export function useDesignerPanelRouteSync({
 
     if (
       activeFullscreenPanel === 'select-shape' &&
-      designerStepSlug !== 'select-shape'
+      designerStepSlug !== 'select-shape' &&
+      !pathnameChanged
     ) {
-      // Shape can be opened as an overlay from any canvas-visible step.
+      // Keep the shape overlay on its current route, but let a new route
+      // replace it when the user selects another section.
       return;
     }
 

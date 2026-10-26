@@ -200,7 +200,7 @@ function CameraController() {
     // hydration, before the product type is available.
     // The sizing step owns its camera through AutoFit so the active element
     // remains centred above the mobile configuration sheet.
-    if (isMobileDesignerStep) {
+    if (isSelectSizeStep || isMobileDesignerStep) {
       wasSelectSizeStep.current = true;
       return;
     }
@@ -229,7 +229,7 @@ function CameraController() {
 
     hasInitialized.current = true;
     wasSelectSizeStep.current = false;
-  }, [controls, camera, isMobileDesignerStep, productType]);
+  }, [controls, camera, isSelectSizeStep, isMobileDesignerStep, productType]);
 
   return null;
 }
@@ -323,39 +323,10 @@ function ProductNameHeader() {
     );
   }, [activeCatalog, productId, fallbackProductId, catalog]);
 
-  const totalPrice = useMemo(
-    () => {
-      const productPrices = calculateCheckPriceProductPrices({
-        productId,
-        catalog: activeCatalog,
-        shapeUrl,
-        widthMm,
-        heightMm,
-        uprightThickness,
-        headstoneMaterialUrl,
-        fixedSizes,
-        showBase,
-        baseWidthMm,
-        baseHeightMm,
-        baseThickness,
-      });
-      return (
-        productPrices.headstonePrice +
-        productPrices.basePrice +
-        productPrices.ledgerPrice +
-        productPrices.kerbsetPrice +
-        calculateCheckPriceBorderPrice(productId, borderName) +
-        imageCost +
-        inscriptionCost +
-        motifCost +
-        additionCost +
-        emblemCost
-      );
-    },
-    [
+  const totalPrice = useMemo(() => {
+    const productPrices = calculateCheckPriceProductPrices({
       productId,
-      borderName,
-      activeCatalog,
+      catalog: activeCatalog,
       shapeUrl,
       widthMm,
       heightMm,
@@ -366,13 +337,39 @@ function ProductNameHeader() {
       baseWidthMm,
       baseHeightMm,
       baseThickness,
-      imageCost,
-      inscriptionCost,
-      motifCost,
-      additionCost,
-      emblemCost,
-    ],
-  );
+    });
+    return (
+      productPrices.headstonePrice +
+      productPrices.basePrice +
+      productPrices.ledgerPrice +
+      productPrices.kerbsetPrice +
+      calculateCheckPriceBorderPrice(productId, borderName) +
+      imageCost +
+      inscriptionCost +
+      motifCost +
+      additionCost +
+      emblemCost
+    );
+  }, [
+    productId,
+    borderName,
+    activeCatalog,
+    shapeUrl,
+    widthMm,
+    heightMm,
+    uprightThickness,
+    headstoneMaterialUrl,
+    fixedSizes,
+    showBase,
+    baseWidthMm,
+    baseHeightMm,
+    baseThickness,
+    imageCost,
+    inscriptionCost,
+    motifCost,
+    additionCost,
+    emblemCost,
+  ]);
 
   const activeDimension = useMemo(() => {
     switch (editingObject) {
@@ -508,7 +505,7 @@ function ProductNameHeader() {
           sheet otherwise covers it while editing a design step. */}
       {activeDimension.widthMm > 0 && activeDimension.heightMm > 0 && (
         <div
-          className={`pointer-events-auto absolute top-[4.75rem] left-1/2 z-40 w-[calc(100vw-2rem)] -translate-x-1/2 md:top-auto md:bottom-8 md:w-auto ${
+          className={`pointer-events-auto absolute top-20 left-1/2 z-40 w-[calc(100vw-2rem)] -translate-x-1/2 md:top-auto md:bottom-8 md:w-auto ${
             isSelectSizeStep ? 'hidden md:block' : ''
           }`}
         >
@@ -516,7 +513,7 @@ function ProductNameHeader() {
             type="button"
             onClick={() => setActivePanel('checkprice')}
             aria-label="Open check price breakdown"
-            className="day:border-[#d8cfc2] day:bg-[#fbf9f5]/95 day:text-[#2a2118] day:shadow-[#49392b]/15 day:hover:bg-[#f3eee6] flex h-12 w-full cursor-pointer items-center justify-between gap-1.5 rounded-full border border-white/10 bg-black/80 px-4 py-3 font-sans text-base text-white shadow-xl backdrop-blur-md transition-colors hover:bg-black/90 sm:gap-4 md:px-5"
+            className="day:border-[#d8cfc2] day:bg-[#fbf9f5]/95 day:text-[#2a2118] day:shadow-[#49392b]/15 day:hover:bg-[#f3eee6] flex h-9 w-full cursor-pointer items-center justify-between gap-1.5 rounded-xl border border-white/10 bg-black/80 px-3 py-1.5 font-sans text-base text-white shadow-xl backdrop-blur-md transition-colors hover:bg-black/90 sm:gap-4 md:h-12 md:rounded-full md:px-4 md:px-5 md:py-3"
           >
             <span className="day:text-[#62584d] flex min-w-0 flex-1 items-center gap-1 text-sm leading-none text-white/80 md:gap-1.5">
               <span className="truncate">{sizeLabel}</span>
@@ -870,7 +867,7 @@ export default function ThreeScene() {
               {/* Left Arrow */}
               <button
                 onClick={rotateLeft}
-                className="absolute top-[45%] left-3 flex h-10 w-10 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full border border-white/20 bg-white/10 shadow-lg backdrop-blur-sm transition-all hover:scale-110 hover:bg-white/20 hover:shadow-xl hover:shadow-[#cfac6c]/50 md:top-1/2 md:left-8 md:h-12 md:w-12"
+                className="absolute top-[45%] left-3 hidden h-10 w-10 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full border border-white/20 bg-white/10 shadow-lg backdrop-blur-sm transition-all hover:scale-110 hover:bg-white/20 hover:shadow-xl hover:shadow-[#cfac6c]/50 md:top-1/2 md:left-8 md:flex md:h-12 md:w-12"
                 aria-label="Rotate left"
               >
                 <svg
@@ -891,7 +888,7 @@ export default function ThreeScene() {
               {/* Right Arrow */}
               <button
                 onClick={rotateRight}
-                className="absolute top-[45%] right-3 flex h-10 w-10 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full border border-white/20 bg-white/10 shadow-lg backdrop-blur-sm transition-all hover:scale-110 hover:bg-white/20 hover:shadow-xl hover:shadow-[#cfac6c]/50 md:top-1/2 md:right-8 md:h-12 md:w-12"
+                className="absolute top-[45%] right-3 hidden h-10 w-10 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full border border-white/20 bg-white/10 shadow-lg backdrop-blur-sm transition-all hover:scale-110 hover:bg-white/20 hover:shadow-xl hover:shadow-[#cfac6c]/50 md:top-1/2 md:right-8 md:flex md:h-12 md:w-12"
                 aria-label="Rotate right"
               >
                 <svg

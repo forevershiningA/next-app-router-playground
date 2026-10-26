@@ -8,6 +8,8 @@ import * as THREE from 'three';
 import { useThree } from '@react-three/fiber';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import { useMobileNavStore } from '#/lib/mobile-nav-store';
+import { usePathname } from 'next/navigation';
+import { fitMobilePreview } from './mobile-preview-framing';
 import { FULL_MONUMENT_GROUP_NAME, UPRIGHT_ASSEMBLY_NAME } from './constants';
 
 type FullMonumentFitProps = { trigger?: number };
@@ -97,6 +99,8 @@ export default function FullMonumentFit({ trigger }: FullMonumentFitProps) {
   const isBottomSheetCollapsed = useMobileNavStore(
     (s) => s.isBottomSheetCollapsed,
   );
+  const pathname = usePathname();
+  const isMobileMaterialStep = pathname?.endsWith('/select-material') ?? false;
   const isMobileSheetCompact =
     isSizeAdjustmentCompact || isBottomSheetCollapsed;
   const selectedInscriptionSurface = useHeadstoneStore((s) =>
@@ -252,17 +256,17 @@ export default function FullMonumentFit({ trigger }: FullMonumentFitProps) {
       const depthPad = zoomToHeadstone
         ? sizeVec.z * 0.25 + 0.2
         : sizeVec.z * 0.4 + 0.4;
-      const distance = Math.max(distX, distY) + depthPad;
+      let distance = Math.max(distX, distY) + depthPad;
 
       const elevation = THREE.MathUtils.degToRad(zoomToHeadstone ? 10 : 12);
       const fallbackDirection =
         assembly === 'polish-traditional-double'
-          ? new THREE.Vector3(0.48, Math.sin(elevation + 0.08), 0.88).normalize()
-          : new THREE.Vector3(
-              0,
-              Math.sin(elevation),
-              Math.cos(elevation),
-            );
+          ? new THREE.Vector3(
+              0.48,
+              Math.sin(elevation + 0.08),
+              0.88,
+            ).normalize()
+          : new THREE.Vector3(0, Math.sin(elevation), Math.cos(elevation));
       const dir =
         preferredDirection && preferredDirection.lengthSq() > 1e-6
           ? preferredDirection.clone().normalize()
@@ -298,6 +302,20 @@ export default function FullMonumentFit({ trigger }: FullMonumentFitProps) {
         Math.max(minTargetY, targetY - mobileVerticalBias),
         center.z,
       );
+      if (mobileSheetVisible && window.innerWidth < 768) {
+        const mobile = fitMobilePreview(
+          box.getBoundingSphere(new THREE.Sphere()),
+          dir,
+          camera.fov,
+          size.width,
+          size.height,
+          isBottomSheetCollapsed,
+          isSizeAdjustmentCompact,
+          isMobileMaterialStep ? 0.48 : 0.75,
+        );
+        distance = mobile.distance;
+        target.copy(mobile.target);
+      }
       const camPos = target.clone().addScaledVector(dir, distance);
       const camDist = camPos.distanceTo(target);
 
@@ -370,6 +388,12 @@ export default function FullMonumentFit({ trigger }: FullMonumentFitProps) {
       const startFar = camera.far;
       const startTime = performance.now();
       const animationTarget = new THREE.Vector3();
+
+      if (window.innerWidth < 768 && isMobileNavOpen && controls?.target) {
+        const fittedDistance = pose.position.distanceTo(pose.target);
+        controls.minDistance = fittedDistance * 0.6;
+        controls.maxDistance = fittedDistance * 1.5;
+      }
 
       // The canvas normally renders on demand. Keep it live just while the
       // camera is interpolating; relying on one invalidate per manual RAF can
@@ -570,6 +594,9 @@ export default function FullMonumentFit({ trigger }: FullMonumentFitProps) {
     isMaterialChange,
     isMobileNavOpen,
     isMobileSheetCompact,
+    isBottomSheetCollapsed,
+    isSizeAdjustmentCompact,
+    isMobileMaterialStep,
     isSizeAdjustmentActive,
     camera,
     size.width,

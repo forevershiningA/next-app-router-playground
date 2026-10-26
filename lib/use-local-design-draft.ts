@@ -72,6 +72,15 @@ export function useLocalDesignDraft() {
 
     const restore = async () => {
       try {
+        // A normal visit (including a reload) starts a fresh design. IndexedDB
+        // survives browser cache clearing and must not silently replace it.
+        // Only resume the draft when returning to an explicit save/checkout
+        // action after authentication.
+        const action = new URLSearchParams(window.location.search).get(
+          'action',
+        );
+        if (action !== 'save-design' && action !== 'proceed-purchase') return;
+
         const draft = await readDraft();
         if (disposed || !draft?.productId) return;
         const currentProductId = useHeadstoneStore.getState().productId;

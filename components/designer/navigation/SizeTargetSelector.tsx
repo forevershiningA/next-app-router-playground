@@ -71,7 +71,14 @@ export function SizeTargetSelector({
         editingObject === 'headstone' &&
         !isPlaque && (
           <>
-            <div className="flex gap-2">
+            <div
+              role="group"
+              aria-label="Headstone style"
+              className="flex items-center gap-2 px-1 py-1"
+            >
+              <span className="mr-auto text-xs font-medium text-[var(--designer-text-muted)]">
+                Style
+              </span>
               {[
                 { label: 'Upright', value: 'upright' },
                 { label: 'Slant', value: 'slant' },
@@ -79,17 +86,16 @@ export function SizeTargetSelector({
                 <DesignerOptionButton
                   key={option.value}
                   selected={headstoneStyle === option.value}
-                  variant="solid"
+                  variant="soft"
                   onClick={() =>
                     setHeadstoneStyle(option.value as 'upright' | 'slant')
                   }
-                  className="flex-1 rounded-md px-3 py-1.5 font-semibold"
+                  className="min-w-20 rounded-md px-3 py-1.5 text-xs font-semibold"
                 >
                   {option.label}
                 </DesignerOptionButton>
               ))}
             </div>
-            <div className="-mx-3 border-t border-white/10 md:-mx-3.5" />
           </>
         )}
     </>

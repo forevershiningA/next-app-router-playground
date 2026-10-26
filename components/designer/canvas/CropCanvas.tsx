@@ -3,6 +3,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import Image from 'next/image';
 import { useHeadstoneStore } from '#/lib/headstone-store';
+import { useMobileNavStore } from '#/lib/mobile-nav-store';
 
 type MaskShape = 'oval' | 'horizontal-oval' | 'square' | 'rectangle' | 'heart' | 'teardrop' | 'triangle';
 type CropCanvasData = NonNullable<ReturnType<typeof useHeadstoneStore.getState>['cropCanvasData']>;
@@ -18,6 +19,7 @@ export default function CropCanvas() {
 }
 
 function CropCanvasContent({ cropCanvasData }: { cropCanvasData: CropCanvasData }) {
+  const isBottomSheetCollapsed = useMobileNavStore((s) => s.isBottomSheetCollapsed);
   const [dragState, setDragState] = useState({
     isDragging: false,
     handle: null as 'move' | 'nw' | 'ne' | 'sw' | 'se' | null,
@@ -389,7 +391,7 @@ function CropCanvasContent({ cropCanvasData }: { cropCanvasData: CropCanvasData 
   }, [allowFreeformHandles, dragState, hasFixedSizes, imageBoxPx.height, imageBoxPx.width, maskBounds, updateCropArea]);
 
   return (
-    <div className="absolute inset-x-0 top-0 bottom-[44dvh] flex items-center justify-center bg-[#0A0A0A] day:bg-gray-200 md:bottom-0">
+    <div className={`absolute inset-x-0 top-[112px] ${isBottomSheetCollapsed ? 'bottom-[52px]' : 'bottom-[75dvh]'} flex items-center justify-center bg-[#0A0A0A] day:bg-gray-200 md:top-0 md:bottom-0`}>
       <div className="h-full w-full max-w-6xl p-3 md:max-h-[90vh] md:p-8">
         {/* Interactive Crop Preview */}
         <div className="relative w-full h-full bg-gray-900 day:bg-gray-300 rounded-lg overflow-hidden" ref={previewRef}>
