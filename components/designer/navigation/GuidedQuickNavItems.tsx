@@ -47,13 +47,16 @@ export function GuidedQuickNavItems({
           onClick={handleClick}
           aria-label={`Go to ${label}`}
           aria-current={isCurrent ? 'step' : undefined}
-          className={`flex min-h-14 items-center justify-center rounded-md transition-colors ${
+          className={`flex min-h-14 min-w-0 flex-col items-center justify-center gap-1 rounded-md px-1 py-1 transition-colors ${
             isCurrent
               ? 'bg-[#D7B356] text-slate-950 shadow-sm'
               : 'day:text-gray-600 day:hover:bg-white day:hover:text-gray-900 text-white/70 hover:bg-white/10 hover:text-white'
           }`}
         >
-          <Icon className="h-5 w-5" aria-hidden="true" />
+          <Icon className="h-4 w-4 shrink-0" aria-hidden="true" />
+          <span className="w-full truncate text-[9px] leading-none font-semibold">
+            {label}
+          </span>
         </button>
       );
     }

@@ -176,7 +176,7 @@ export default function InscriptionEditPanel() {
         ? 'text-right'
         : 'text-center';
   const sectionCardClass =
-    'rounded-lg border border-white/10 bg-[#171717] p-3.5 shadow-lg shadow-black/15 day:border-gray-200 day:bg-white';
+    'rounded-lg border border-white/10 bg-[#171717] p-2.5 shadow-lg shadow-black/15 day:border-gray-200 day:bg-white md:p-3.5';
   const labelClass =
     'mb-2 block text-sm font-semibold text-slate-100 day:text-gray-800';
   const fieldClass =
@@ -268,12 +268,48 @@ export default function InscriptionEditPanel() {
   return (
     <div
       data-testid="designer-inscriptions-panel"
-      className="flex flex-col gap-3"
+      className="flex flex-col gap-2 md:gap-3"
     >
       <div className="day:text-gray-800 hidden px-1 pt-1 text-sm font-semibold text-slate-100 md:block">
         {inscriptionPriceModel?.name ?? 'Inscription'}
       </div>
       <div className={`${sectionCardClass} order-1`}>
+        {lines.length > 0 && (
+          <div className="mb-3">
+            <p className="mb-2 text-sm font-semibold text-[var(--designer-text)]">
+              Inscriptions on your design ({lines.length})
+            </p>
+            <div
+              role="group"
+              aria-label="Select an inscription"
+              className="flex max-h-44 flex-col gap-1 overflow-y-auto"
+            >
+              {lines.map((line, index) => (
+                <DesignerOptionButton
+                  key={line.id}
+                  selected={line.id === selectedInscriptionId}
+                  aria-label={`Edit inscription ${index + 1}: ${line.text || 'Empty inscription'}`}
+                  className="w-full whitespace-pre-wrap break-words px-3 py-2 text-left"
+                  onClick={() => {
+                    finishTextEditing();
+                    setSelectedInscriptionId(line.id);
+                  }}
+                >
+                  <span className="block text-xs opacity-80">
+                    {index + 1}.{' '}
+                    {line.target === 'base'
+                      ? 'Base'
+                      : line.target === 'ledger'
+                        ? 'Ledger'
+                        : 'Headstone'}
+                    {line.id === selectedInscriptionId ? ' · Editing' : ''}
+                  </span>
+                  <span className="block">{line.text || 'Empty inscription'}</span>
+                </DesignerOptionButton>
+              ))}
+            </div>
+          </div>
+        )}
         <div className="mb-2">{AlignControls}</div>
         <textarea
           id="inscriptionTextInput"
@@ -292,7 +328,7 @@ export default function InscriptionEditPanel() {
           spellCheck={false}
           autoCorrect="off"
         />
-        <div className="mt-3 flex flex-col gap-3">
+        <div className="mt-2 flex flex-col gap-2 md:mt-3 md:gap-3">
           {/* Tabs for font and color (only show tabs if color is available) */}
           {showInscriptionColor && (
             <div

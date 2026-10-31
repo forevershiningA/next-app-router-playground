@@ -13,6 +13,7 @@ type DesignerWorkflowModalsProps = Pick<
   | 'showNewDesignConfirm'
   | 'setShowNewDesignConfirm'
   | 'isSavingDesign'
+  | 'saveError'
   | 'showGuestCheckout'
   | 'setShowGuestCheckout'
   | 'handleSaveDesign'
@@ -26,6 +27,7 @@ export default function DesignerWorkflowModals({
   showNewDesignConfirm,
   setShowNewDesignConfirm,
   isSavingDesign,
+  saveError,
   showGuestCheckout,
   setShowGuestCheckout,
   handleSaveDesign,
@@ -39,6 +41,7 @@ export default function DesignerWorkflowModals({
         onClose={() => setShowSaveDesignModal(false)}
         onSave={handleSaveDesign}
         isSaving={isSavingDesign}
+        saveError={saveError}
       />
       <GuestCheckoutModal
         isOpen={showGuestCheckout}

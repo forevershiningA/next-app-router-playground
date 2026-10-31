@@ -23,7 +23,9 @@ import {
 const LASER_ETCHED_BLACK_GRANITE_TEXTURE =
   '/textures/forever/l/Glory-Black-2.webp';
 
-type ProductSelectionSlice = Pick<HeadstoneState, 'productId' | 'setProductId'>;
+type ProductSelectionSlice = Pick<HeadstoneState, 'productId' | 'productConfigurationReadyId' | 'setProductId'>;
+
+let selectionSequence = 0;
 
 export const createProductSelectionSlice: StateCreator<
   HeadstoneState,
@@ -32,7 +34,9 @@ export const createProductSelectionSlice: StateCreator<
   ProductSelectionSlice
 > = (set, get) => ({
   productId: null,
+  productConfigurationReadyId: null,
   setProductId: async (id) => {
+    const sequence = ++selectionSequence;
     const prevSnapshot = get();
     const prevHeadstoneHeight = Math.max(prevSnapshot.heightMm || 0, 1);
     const prevBaseHeight = Math.max(
@@ -43,14 +47,14 @@ export const createProductSelectionSlice: StateCreator<
     // Immediately capture the user's selection so downstream effects know a
     // product has been chosen even while the catalog XML is loading.
     // CRITICAL: Clear the old catalog to prevent showing stale data
-    set({ productId: id, catalog: null, fixingType: 'flat-back' });
+    set({ productId: id, productConfigurationReadyId: null, catalog: null, fixingType: 'flat-back' });
 
     try {
       const response = await fetch(`/xml/catalog-id-${id}.xml`);
       const xmlText = await response.text();
       const catalog = normalizeCatalogData(await parseCatalogXML(xmlText, id));
 
-      if (get().productId !== id) {
+      if (sequence !== selectionSequence || get().productId !== id) {
         if (process.env.NODE_ENV !== 'production') {
           console.warn(
             '[Store] Ignoring stale catalog response for product',
@@ -157,6 +161,7 @@ export const createProductSelectionSlice: StateCreator<
         isUrnProduct,
         isBronzePlaqueProduct,
       });
+      if (sequence !== selectionSequence || get().productId !== id) return;
       set({ fixedSizes });
       set({ materials });
       if (!showInscriptionColor) {
@@ -193,6 +198,7 @@ export const createProductSelectionSlice: StateCreator<
         const inscriptionDetails = await fetchAndParseInscriptionDetails(
           inscriptionAddition.id,
         );
+        if (sequence !== selectionSequence || get().productId !== id) return;
         if (inscriptionDetails) {
           set({ inscriptionPriceModel: inscriptionDetails.priceModel });
         }
@@ -402,11 +408,15 @@ export const createProductSelectionSlice: StateCreator<
       set({ motifInitHeight: 100 });
 
       const motifPricing = await fetchAndParseMotifPricing(motifType);
+      if (sequence !== selectionSequence || get().productId !== id) return;
       if (motifPricing) {
         set({
           motifPriceModel: motifPricing,
           motifInitHeight: motifPricing.initHeight,
         });
+      }
+      if (sequence === selectionSequence && get().productId === id) {
+        set({ productConfigurationReadyId: id });
       }
     } catch (error) {
       console.error('Failed to load or parse catalog XML:', error);

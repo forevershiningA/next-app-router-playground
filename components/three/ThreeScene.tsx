@@ -14,6 +14,7 @@ import { PerspectiveCamera } from '@react-three/drei';
 import { usePathname } from 'next/navigation';
 import Scene from './Scene';
 import { useHeadstoneStore } from '#/lib/headstone-store';
+import { useMobileNavStore } from '#/lib/mobile-nav-store';
 import type { CatalogData } from '#/lib/xml-parser';
 import {
   calculateCheckPriceBorderPrice,
@@ -237,6 +238,7 @@ function CameraController() {
 // Product Name Header Component - Apple Studio Look
 function ProductNameHeader() {
   const pathname = usePathname();
+  const isMobileNavOpen = useMobileNavStore((state) => state.isOpen);
   const isSelectSizeStep = getDesignerStepSlug(pathname) === 'select-size';
   const catalog = useHeadstoneStore((s) => s.catalog);
   const productId = useHeadstoneStore((s) => s.productId);
@@ -506,7 +508,7 @@ function ProductNameHeader() {
       {activeDimension.widthMm > 0 && activeDimension.heightMm > 0 && (
         <div
           className={`pointer-events-auto absolute top-20 left-1/2 z-40 w-[calc(100vw-2rem)] -translate-x-1/2 md:top-auto md:bottom-8 md:w-auto ${
-            isSelectSizeStep ? 'hidden md:block' : ''
+            isSelectSizeStep || isMobileNavOpen ? 'hidden md:block' : ''
           }`}
         >
           <button

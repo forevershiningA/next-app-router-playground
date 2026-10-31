@@ -34,6 +34,7 @@ type Props = {
 type ImageTextureInfo = {
   texture: THREE.Texture;
   isPlaceholder: boolean;
+  sourceUrl: string;
 };
 
 function createEditPlaceholderTexture() {
@@ -229,7 +230,7 @@ export default function ImageModel({
         }
 
         activeTexture = texture;
-        setTextureInfo({ texture, isPlaceholder });
+        setTextureInfo({ texture, isPlaceholder, sourceUrl: imageUrl });
       } catch (error) {
         console.error('[ImageModel] Failed to load image texture', imageUrl, error);
       }
@@ -789,7 +790,8 @@ export default function ImageModel({
       };
 
   return (
-    <group ref={ref} name={`image-${id}`} position={groupPosition} rotation={groupRotation}>
+    <group ref={ref} name={`image-${id}`} position={groupPosition} rotation={groupRotation}
+      userData={{ previewImageId: id, previewImageUrl: textureInfo.sourceUrl, previewImagePlaceholder: isPlaceholder }}>
       {!isLedgerSurface && centerGuideProgress > 0.01 && (
         <Line
           points={[

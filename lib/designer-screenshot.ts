@@ -17,7 +17,15 @@ type ScreenshotRenderer = {
   domElement: HTMLCanvasElement;
 };
 
-export function captureDesignerScreenshot(): string | null {
+export class BlankDesignerPreviewError extends Error {
+  constructor() {
+    super('The product is not visible in the preview yet.');
+  }
+}
+
+export function captureDesignerScreenshot(
+  requireRenderer = false,
+): string | null {
   const browser = window as unknown as Record<string, unknown>;
   const renderer = browser.__r3fGL as ScreenshotRenderer | undefined;
   const scene = browser.__r3fScene as THREE.Scene | undefined;
@@ -27,8 +35,15 @@ export function captureDesignerScreenshot(): string | null {
     try {
       return captureRendererFrame(renderer, scene, camera);
     } catch (error) {
+      if (requireRenderer) throw error;
       console.warn('R3F screenshot failed, falling back to DOM canvas:', error);
     }
+  }
+
+  if (requireRenderer) {
+    throw new Error(
+      'The design preview is unavailable. Please wait for it to load and save again.',
+    );
   }
 
   const rankedCanvases = Array.from(document.querySelectorAll('canvas'))
@@ -102,6 +117,7 @@ function captureRendererFrame(
     );
   }
   context.putImageData(image, 0, 0);
+  if (isLikelyBlankCanvas(source)) throw new BlankDesignerPreviewError();
   return encodeCanvasForUpload(source);
 }
 

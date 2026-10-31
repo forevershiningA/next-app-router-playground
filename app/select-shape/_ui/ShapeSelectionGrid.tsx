@@ -21,6 +21,7 @@ import {
 } from '#/lib/designer-product-routes';
 import { useMobileNavStore } from '#/lib/mobile-nav-store';
 import UnitCurrencySelects from '#/components/designer/navigation/UnitCurrencySelects';
+import { selectCatalogShape } from '#/lib/select-catalog-shape';
 import DesignerPageHeading from '#/components/designer/DesignerPageHeading';
 
 type ShapeCategory = { id: string; name: string; description: string };
@@ -90,8 +91,6 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
   const router = useRouter();
   const pathname = usePathname();
   const setShapeUrl = useHeadstoneStore((s) => s.setShapeUrl);
-  const setWidthMm = useHeadstoneStore((s) => s.setWidthMm);
-  const setHeightMm = useHeadstoneStore((s) => s.setHeightMm);
   const setBorderName = useHeadstoneStore((s) => s.setBorderName);
   const catalog = useHeadstoneStore((s) => s.catalog);
   const productId = useHeadstoneStore((s) => s.productId);
@@ -165,17 +164,13 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
   // Handle urn shape selection — applies fixed dimensions from catalog
   const handleUrnShapeSelect = (catalogShape: ShapeData) => {
     const svgPath = `/shapes/urns/${(catalogShape.code ?? catalogShape.name).toLowerCase()}.svg`;
-    setShapeUrl(svgPath);
-    setWidthMm(catalogShape.table.initWidth);
-    setHeightMm(catalogShape.table.initHeight);
+    selectCatalogShape(catalogShape, svgPath);
     router.push(designerHref('select-material'));
     openPanel('select-material');
   };
 
   const handlePetRockShapeSelect = (catalogShape: ShapeData) => {
-    setShapeUrl(getPetRockShapeUrl(catalogShape));
-    setWidthMm(catalogShape.table.initWidth);
-    setHeightMm(catalogShape.table.initHeight);
+    selectCatalogShape(catalogShape, getPetRockShapeUrl(catalogShape));
     router.push(designerHref('select-size'));
   };
 

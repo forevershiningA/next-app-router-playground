@@ -271,7 +271,7 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
       yPos = 0,
       rotationDeg = 0,
       editable = false,
-      selected = false,
+      selected: selectedProp = false,
       onSelect,
       approxHeight,
       onSelectInscription,
@@ -284,6 +284,8 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
     ref,
   ) => {
     const threeContext = useThree() as ThreeContextValue;
+    const screenshotMode = useHeadstoneStore((s) => s.screenshotMode);
+    const selected = selectedProp && !screenshotMode;
     const { camera, gl, controls, scene } = threeContext;
     // Keep the rendered typeface stable while Troika generates the glyph atlas
     // for the newly selected font. Otherwise Text suspends and vanishes for a
@@ -1008,6 +1010,7 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
           />
         ) : null}
         <Text
+          userData={{ inscriptionId: id, requestedFont: font }}
           font={visibleFont}
           color={renderedTextColor}
           anchorX="center"

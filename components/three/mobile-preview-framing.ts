@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 
-// Match the phone header/price row and the two bottom-sheet positions.
+// Match the phone navigation header and the two bottom-sheet positions.
 // Desktop cameras do not use this calculation.
 export function fitMobilePreview(
   sphere: THREE.Sphere,
@@ -12,7 +12,7 @@ export function fitMobilePreview(
   compact: boolean,
   expandedSheetFraction = 0.75,
 ) {
-  const top = 112;
+  const top = 72;
   const bottom = collapsed
     ? 52
     : compact
@@ -32,5 +32,12 @@ export function fitMobilePreview(
   const target = sphere.center
     .clone()
     .addScaledVector(up, -centerNdc * distance * tanHalfFov);
+  if (collapsed) {
+    // Keep the monument visually centred in the exposed canvas area. The
+    // assembly's bounding sphere places the broad base below the visual
+    // centre, so lower the camera target slightly while the sheet is tucked
+    // away.
+    target.addScaledVector(up, -sphere.radius * 0.12);
+  }
   return { distance, target };
 }
