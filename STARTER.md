@@ -144,8 +144,16 @@
 131. [October 23 Product Selection, Currency Controls, and Build Memory](#current-status-2026-10-23--product-selection-currency-controls-and-build-memory)
 132. [October 25 Compact Guided Navigation and Size Panel](#current-status-2026-10-25--compact-guided-navigation-and-size-panel)
 133. [October 26 Mobile Designer, Product and Shape Selection, and Draft Startup](#current-status-2026-10-26--mobile-designer-product-and-shape-selection-and-draft-startup)
+134. [October 31 MCP Live Test Preview](#current-status-2026-10-31--mcp-live-test-preview)
 
 ---
+
+## Current Status (2026-10-31) — MCP Live Test Preview
+
+- The MCP remains a local stdio server connected over loopback CDP to one explicitly selected browser tab. A production build installs the bridge only when `NEXT_PUBLIC_DESIGNER_MCP_LIVE_TEST=1` and `/api/admin/designer-mcp` validates a signed-in admin session. The server rechecks authorization on each live tool call and rejects navigation outside `DESIGNER_MCP_LIVE_ORIGIN`. See `docs/designer-agent-readiness.md` for setup and limits; this is not a hosted remote MCP endpoint.
+- Local validation passed: the isolated production build; a real production-mode browser check for anonymous, ordinary and administrator sessions; real MCP `get_design` and `get_preview` calls against that build; five access/origin unit cases; and the intercepted-HTTPS Playwright test for tab pinning, navigation and authorization revocation. Build logged existing `jose` Edge-runtime warnings.
+- The Vercel project is `forevershiningas-projects/next-app-router-playground`. `forevershining.org` remains on its existing production deployment. The separate GitHub branch `codex/mcp-live-test-20261031` contains test commit `49420b804257bd6f038ad2f512bec18746b7c39f`; the local branch and index were not changed. The branch has its own Preview-only `SESSION_SECRET` and `NEXT_PUBLIC_DESIGNER_MCP_LIVE_TEST` settings. Never include their values in documentation.
+- The direct Vercel CLI upload was abandoned: the source archive is approximately 9 GB and exceeds Vercel CLI source-upload limits. Preview deployments `next-app-router-playground-55z3iilkz-forevershiningas-projects.vercel.app` and `next-app-router-playground-i3kgylk5x-forevershiningas-projects.vercel.app` failed because they used pnpm 9.15.9 instead of the required 9.6.0. The branch-specific `ENABLE_EXPERIMENTAL_COREPACK` was added after the first deployment, but CLI redeploy retained the original build configuration. A new Git-triggered deployment is needed to pick up current branch settings. **Deployed access is not yet verified.** Preview can use the configured Preview database and email services: saving may create real data and send email.
 
 ## Current Status (2026-10-27) — Local configurator MCP coverage and boundaries
 
