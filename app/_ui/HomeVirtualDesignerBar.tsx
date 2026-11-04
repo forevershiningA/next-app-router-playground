@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
+import { useRouter } from 'next/navigation';
 import {
   SparklesIcon,
   ArrowRightIcon,
@@ -87,6 +88,7 @@ async function persistSnapshotToIndexedDb(snapshot: any): Promise<void> {
 }
 
 export default function HomeVirtualDesignerBar() {
+  const router = useRouter();
   const [command, setCommand] = useState('');
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<VirtualAgentResponse | null>(null);
@@ -137,7 +139,7 @@ export default function HomeVirtualDesignerBar() {
         ? `${data.designerHref}?draftId=${encodeURIComponent(data.draftId)}&action=load-draft`
         : `${data.designerHref}?action=load-draft`;
 
-      window.location.href = targetUrl;
+      router.push(targetUrl);
     } catch (err: any) {
       setErrorMsg(err.message || 'Failed to process command. Please try again.');
       setLoading(false);
@@ -152,7 +154,7 @@ export default function HomeVirtualDesignerBar() {
     const targetUrl = result.draftId
       ? `${result.designerHref}?draftId=${encodeURIComponent(result.draftId)}&action=load-draft`
       : `${result.designerHref}?action=load-draft`;
-    window.location.href = targetUrl;
+    router.push(targetUrl);
   };
 
   return (

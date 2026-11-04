@@ -205,27 +205,30 @@ export async function POST(req: NextRequest) {
       previewUrl: draft.previewUrl,
     });
 
-    // Optionally persist to local filesystem if writable
-    try {
-      const dir = path.join(process.cwd(), 'output/mcp-local-drafts');
-      if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
-      fs.writeFileSync(
-        path.join(dir, `${draft.draftId}.json`),
-        JSON.stringify(
-          {
-            version: 1,
-            id: draft.draftId,
-            title: draft.title,
-            snapshot: draft.snapshot,
-            savedAt: new Date().toISOString(),
-          },
-          null,
-          2,
-        ),
-        'utf8',
-      );
-    } catch {
-      // Ignore filesystem write errors on read-only environments
+    // Persist to local filesystem only when explicitly enabled (e.g. CLI/pilot benchmarks),
+    // avoiding unnecessary disk writes and watcher triggers during live interactive usage
+    if (process.env.PERSIST_MCP_DRAFTS === '1' || process.env.ENABLE_LOCAL_MCP === '1') {
+      try {
+        const dir = path.join(process.cwd(), 'output/mcp-local-drafts');
+        if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+        fs.writeFileSync(
+          path.join(dir, `${draft.draftId}.json`),
+          JSON.stringify(
+            {
+              version: 1,
+              id: draft.draftId,
+              title: draft.title,
+              snapshot: draft.snapshot,
+              savedAt: new Date().toISOString(),
+            },
+            null,
+            2,
+          ),
+          'utf8',
+        );
+      } catch {
+        // Ignore filesystem write errors on read-only environments
+      }
     }
 
     return NextResponse.json({

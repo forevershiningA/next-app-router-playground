@@ -65,6 +65,17 @@ const nextConfig = {
         : process.env.VERCEL === '1'
           ? 4
           : config.parallelism;
+
+    // Do not trigger file watching / hot recompilation on generated drafts, outputs, or test scripts
+    config.watchOptions = {
+      ...(config.watchOptions || {}),
+      ignored: [
+        '**/output/**',
+        '**/scratch/**',
+        '**/.git/**',
+      ],
+    };
+
     return config;
   },
   // Exclude large static assets from serverless functions
