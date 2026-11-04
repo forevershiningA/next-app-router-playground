@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-11-03
+**Last Updated:** 2026-11-04
 
 **Status entry order:** Add new dated status entries immediately after the table of contents, before the existing status entries. Keep status entries in reverse chronological order (newest first); do not append them to the end of this file.
 **Tech Stack:** Next.js 15.5.26, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots), **Vitest 4.1.8** (unit tests), **Playwright 1.59.1** (E2E tests)
@@ -148,6 +148,56 @@
 135. [November 1 OpenBot Local Pilot](#current-status-2026-11-01--openbot-local-pilot)
 136. [November 3 Multi-Agent Session Sharing & MCP Persistence](#current-status-2026-11-03--multi-agent-session-sharing--mcp-persistence)
 137. [November 4 Autonomous AI Design Assistant & Production Handoff](#current-status-2026-11-04--autonomous-ai-design-assistant--production-handoff)
+138. [November 4 3D Transition Stability, Layout.js Fix, Back-Button Recovery & OpenBot Canon Alignment](#current-status-2026-11-04--3d-transition-stability-layoutjs-fix-back-button-recovery--openbot-canon-alignment)
+
+---
+
+## Current Status (2026-11-04) — 3D Transition Stability, Layout.js Fix, Back-Button Recovery & OpenBot Canon Alignment
+
+- **Session Summary & Completed Implementation (November 4 Afternoon & Evening):**
+  1. *`layout.js` Truncation & Webpack Watcher Fast Refresh Fix (`next.config.ts`, `app/api/virtual-assistant/route.ts`, `app/_ui/HomeVirtualDesignerBar.tsx`):*
+     - **Issue:** Clicking "Create Design" on the homepage triggered `Uncaught SyntaxError: Invalid or unexpected token (at layout.js:216:29)` upon loading the 3D configurator, resulting in a blank screen.
+     - **Root Cause:**
+       - The API route `/api/virtual-assistant` was writing JSON draft snapshots and preview images to `output/mcp-local-drafts/` on every incoming web request.
+       - The Next.js Webpack file watcher detected new files in `output/` and initiated an immediate Fast Refresh recompilation (`[Fast Refresh] rebuilding`).
+       - Concurrently, `HomeVirtualDesignerBar.tsx` executed a hard page navigation using `window.location.href = targetUrl`, requesting the ~18.3 MB dev bundle `/layout.js`.
+       - Mid-transfer, the Webpack dev server terminated the chunk stream to serve the new rebuild, sending a truncated script (~1.3–3.4 MB) terminating mid-quote or mid-identifier (`viewBox: "0 0 24 24` or `// Fast Refr`). V8 encountered an unexpected EOF while parsing, causing the SyntaxError.
+     - **Remediation:**
+       - Added `watchOptions.ignored: ['**/output/**', '**/scratch/**', '**/.git/**']` in `next.config.ts` to prevent Webpack file watching of runtime artifacts.
+       - Gated disk writes in `app/api/virtual-assistant/route.ts` behind `process.env.PERSIST_MCP_DRAFTS === '1' || process.env.ENABLE_LOCAL_MCP === '1'`, completely suppressing disk I/O during user web requests and relying on the in-memory `draftCache`.
+       - Replaced hard `window.location.href` navigation in `HomeVirtualDesignerBar.tsx` with Next.js client-side navigation using `router.push(targetUrl)`.
+
+  2. *Browser Back-Button State Recovery (`app/_ui/HomeVirtualDesignerBar.tsx`):*
+     - **Issue:** Navigating forward to the 3D designer and subsequently clicking the browser Back button left the AI Assistant CTA permanently frozen on "Please wait...", preventing any further interaction.
+     - **Root Cause:** The `loading` React state was set to `true` upon submission and only reset in the `catch` block. When returning via the browser back-forward cache (bfcache) or Next.js SPA history, the component restored its frozen `loading: true` state.
+     - **Remediation:**
+       - Added `usePathname()` hook resetting `loading = false` whenever the active route resolves to `/`.
+       - Added `pageshow` (handling `event.persisted`) and `popstate` window event listeners to reset `loading = false` on browser navigation.
+       - Added a 500 ms safety timeout post-`router.push()` to reset the button state regardless of route transition timing.
+
+  3. *OpenBot Stonemason Typography Canon & Crown Clearance Alignment (`lib/virtual-designer-assistant.ts`):*
+     - **Issue:** Layouts generated for prompts like *"Laser-etched granite headstone for Helen Davis 1948 — 2020"* (Product 4 Serpentine arch) suffered from severe visual flaws: the cross motif was clipped against the top serpentine curve apex, text lines were overly compressed, and typography lacked hierarchical gravitas (all lines at identical font sizes).
+     - **Root Cause:** The offline deterministic fallback engine (`buildDeterministicDraft`) used outdated hardcoded coordinates without applying the stonemason rules from `skills/forever-reference-design/SKILL.md` or `compose_memorial_layout` from `scripts/designer-mcp.mjs`, and omitted `coordinateSpace: 'mm-center'`.
+     - **Remediation:**
+       - **Product 4 (Laser-Etched Granite Serpentine):**
+         - Lowered cross motif from `yPos: -184` to `yPos: -120 mm` (`h * 0.20`, height 55 mm), safely clearing the serpentine apex arch.
+         - Applied explicit `coordinateSpace: 'mm-center'` to all inscriptions.
+         - Enforced canonical stonemason typography hierarchy: Header (*"IN LOVING MEMORY"*, Roman font, size 22 mm at $+72\text{ mm}$), Deceased Name (*"HELEN DAVIS"*, Roman font, size 48 mm gravitas at $+21\text{ mm}$), Dates (*"1948 — 2020"*, Roman font, size 22 mm at $-33\text{ mm}$), and Epitaph (*"Forever in our hearts"*, Great Vibes script, size 34 mm at $-132\text{ mm}$).
+       - **Product 124 (Traditional Upright Headstone & Companion):**
+         - Converted all inscriptions to `coordinateSpace: 'mm-center'`.
+         - Structured hierarchy: Header at $+115\text{ mm}$ (24 mm), Name at $+40\text{ mm}$ (50 mm), Dates at $-35\text{ mm}$ (22 mm), Valediction at $-195\text{ mm}$ (34 mm Great Vibes), with crown apex motif clearance lowered to $-160\text{ mm}$.
+       - **Product 101 (Full Monument):**
+         - Converted twin companion inscriptions to `coordinateSpace: 'mm-center'` with lateral offset $\pm 160\text{ mm}$, Header at $+120\text{ mm}$, Name at $+45\text{ mm}$ (46 mm), Dates at $-25\text{ mm}$, Valediction at $-180\text{ mm}$, and crown cross at $-140\text{ mm}$.
+       - Updated unit tests in `tests/unit/virtual-designer-assistant.test.ts` to assert `coordinateSpace: 'mm-center'` and exact coordinates.
+
+  4. *AI Assistant Navigation Architecture Decision:*
+     - Evaluated user proposal regarding adding an "AI Assistant" section into the left/top step ribbon of the 3D configurator (alongside Shape, Border, Size, Inscriptions, etc.).
+     - Concluded against adding AI as a primary horizontal carousel step because the carousel represents a linear physical manufacturing progression (Shape -> Size -> Border -> Inscriptions -> Accessories).
+     - Recommended contextual micro-assistants (e.g. "Suggest Epitaph", "Fix Spacing & Balance", "Auto-Format Dates") directly within the Inscriptions and Layout panels where users actively compose text.
+
+  5. *Test Suite & Type Safety Status:*
+     - Vitest: 23 test suites, 164 unit tests passing (100% green).
+     - TypeScript: `pnpm type-check` (`tsc --noEmit`) passes with 0 errors.
 
 ---
 
