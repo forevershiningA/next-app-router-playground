@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import {
   SparklesIcon,
   ArrowRightIcon,
@@ -89,12 +89,30 @@ async function persistSnapshotToIndexedDb(snapshot: any): Promise<void> {
 
 export default function HomeVirtualDesignerBar() {
   const router = useRouter();
+  const pathname = usePathname();
   const [command, setCommand] = useState('');
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<VirtualAgentResponse | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [placeholderIndex, setPlaceholderIndex] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  // Reset loading state when returning to the home page via browser back/forward or route change
+  useEffect(() => {
+    setLoading(false);
+  }, [pathname]);
+
+  useEffect(() => {
+    const handleNavigationResume = () => {
+      setLoading(false);
+    };
+    window.addEventListener('pageshow', handleNavigationResume);
+    window.addEventListener('popstate', handleNavigationResume);
+    return () => {
+      window.removeEventListener('pageshow', handleNavigationResume);
+      window.removeEventListener('popstate', handleNavigationResume);
+    };
+  }, []);
 
   // Rotate placeholder examples periodically to demonstrate prompt variety
   useEffect(() => {
@@ -140,6 +158,9 @@ export default function HomeVirtualDesignerBar() {
         : `${data.designerHref}?action=load-draft`;
 
       router.push(targetUrl);
+      setTimeout(() => {
+        setLoading(false);
+      }, 500);
     } catch (err: any) {
       setErrorMsg(err.message || 'Failed to process command. Please try again.');
       setLoading(false);
@@ -155,6 +176,9 @@ export default function HomeVirtualDesignerBar() {
       ? `${result.designerHref}?draftId=${encodeURIComponent(result.draftId)}&action=load-draft`
       : `${result.designerHref}?action=load-draft`;
     router.push(targetUrl);
+    setTimeout(() => {
+      setLoading(false);
+    }, 500);
   };
 
   return (
