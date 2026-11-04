@@ -2,7 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import {
   parseVirtualDesignerCommand,
   executeVirtualDesignerIntent,
+  buildDeterministicDraft,
 } from '#/lib/virtual-designer-assistant';
+import { generateDraftSvgPreview } from '#/lib/virtual-designer-svg';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
 import path from 'node:path';
@@ -64,13 +66,24 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: 'Draft JSON not found' }, { status: 404 });
     }
 
-    // Serve authentic 3D render JPG from the 3D configurator
+    // Serve authentic 3D render JPG from the 3D configurator if available
     const imgPath = path.join(process.cwd(), 'output/mcp-local-drafts', `${safeId}.jpg`);
     if (fs.existsSync(imgPath)) {
       const buffer = fs.readFileSync(imgPath);
       return new NextResponse(buffer, {
         headers: {
           'Content-Type': 'image/jpeg',
+          'Cache-Control': 'public, max-age=86400',
+        },
+      });
+    }
+
+    // Otherwise serve dynamic vector preview from snapshot (e.g. serverless live environments)
+    if (snapshot) {
+      const svg = generateDraftSvgPreview(snapshot);
+      return new NextResponse(svg, {
+        headers: {
+          'Content-Type': 'image/svg+xml; charset=utf-8',
           'Cache-Control': 'public, max-age=86400',
         },
       });
@@ -123,59 +136,115 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    // Primary Execution: Authentic 3D Designer MCP Engine (Three.js WebGL Configurator)
-    let mcpConn: { client: Client; transport: any } | null = null;
-    try {
-      mcpConn = await createLocalMcpClient();
-      const execution = await executeVirtualDesignerIntent(parsed, mcpConn.client);
+    // Multi-tier Execution:
+    // Tier 1: Local MCP 3D Configurator Engine (Three.js WebGL via Playwright/CDP)
+    // Only attempted in environments capable of running a browser (not Vercel serverless functions,
+    // unless an external CDP debugging host or ENABLE_LOCAL_MCP is explicitly configured).
+    const isServerless = Boolean(process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME);
+    const allowMcp = Boolean(
+      process.env.DESIGNER_MCP_CDP_URL ||
+      process.env.ENABLE_LOCAL_MCP === '1' ||
+      (!isServerless && process.env.NODE_ENV !== 'production')
+    );
 
-      let snapshot = null;
-      let imageData: string | null = null;
+    if (allowMcp) {
+      let mcpConn: { client: Client; transport: any } | null = null;
+      try {
+        mcpConn = await createLocalMcpClient();
+        const execution = await executeVirtualDesignerIntent(parsed, mcpConn.client);
 
-      if (execution.filePath && fs.existsSync(execution.filePath)) {
-        try {
-          const draftContent = JSON.parse(fs.readFileSync(execution.filePath, 'utf8'));
-          snapshot = draftContent.snapshot;
-        } catch {}
-      }
+        let snapshot = null;
+        let imageData: string | null = null;
 
-      if (execution.previewPath && fs.existsSync(execution.previewPath)) {
-        try {
-          const imgBuf = fs.readFileSync(execution.previewPath);
-          imageData = `data:image/jpeg;base64,${imgBuf.toString('base64')}`;
-        } catch {}
-      }
+        if (execution.filePath && fs.existsSync(execution.filePath)) {
+          try {
+            const draftContent = JSON.parse(fs.readFileSync(execution.filePath, 'utf8'));
+            snapshot = draftContent.snapshot;
+          } catch {}
+        }
 
-      const previewUrl = execution.draftId ? `/api/virtual-assistant?draftId=${execution.draftId}` : null;
+        if (execution.previewPath && fs.existsSync(execution.previewPath)) {
+          try {
+            const imgBuf = fs.readFileSync(execution.previewPath);
+            imageData = `data:image/jpeg;base64,${imgBuf.toString('base64')}`;
+          } catch {}
+        }
 
-      if (execution.draftId && snapshot) {
-        draftCache.set(execution.draftId, {
+        const previewUrl = execution.draftId ? `/api/virtual-assistant?draftId=${execution.draftId}` : null;
+
+        if (execution.draftId && snapshot) {
+          draftCache.set(execution.draftId, {
+            snapshot,
+            previewUrl: previewUrl || '',
+          });
+        }
+
+        return NextResponse.json({
+          ...execution,
+          imageData,
+          previewUrl,
+          designerHref,
           snapshot,
-          previewUrl: previewUrl || '',
         });
-      }
-
-      return NextResponse.json({
-        ...execution,
-        imageData,
-        previewUrl,
-        designerHref,
-        snapshot,
-      });
-    } catch (mcpErr: any) {
-      console.error('[virtual-assistant] MCP 3D configurator error:', mcpErr);
-      return NextResponse.json(
-        {
-          success: false,
-          error: `Błąd konfiguratora 3D MCP: ${mcpErr?.message || String(mcpErr)}`,
-        },
-        { status: 500 },
-      );
-    } finally {
-      if (mcpConn) {
-        await mcpConn.client.close().catch(() => {});
+      } catch (mcpErr: any) {
+        console.warn(
+          '[virtual-assistant] MCP 3D configurator unavailable or disconnected, proceeding with instant 3D draft:',
+          mcpErr?.message || mcpErr,
+        );
+      } finally {
+        if (mcpConn) {
+          await mcpConn.client.close().catch(() => {});
+        }
       }
     }
+
+    // Tier 0: Deterministic 3D Design Engine (Serverless & Live Production Ready)
+    // Generates the full 3D DesignerSnapshot with exact stonemason coordinates, materials, and personalized text.
+    const draft = buildDeterministicDraft(parsed);
+
+    // Persist to in-memory cache for fast retrieval
+    draftCache.set(draft.draftId, {
+      snapshot: draft.snapshot,
+      previewUrl: draft.previewUrl,
+    });
+
+    // Optionally persist to local filesystem if writable
+    try {
+      const dir = path.join(process.cwd(), 'output/mcp-local-drafts');
+      if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+      fs.writeFileSync(
+        path.join(dir, `${draft.draftId}.json`),
+        JSON.stringify(
+          {
+            version: 1,
+            id: draft.draftId,
+            title: draft.title,
+            snapshot: draft.snapshot,
+            savedAt: new Date().toISOString(),
+          },
+          null,
+          2,
+        ),
+        'utf8',
+      );
+    } catch {
+      // Ignore filesystem write errors on read-only environments
+    }
+
+    return NextResponse.json({
+      success: true,
+      intent: draft.intent,
+      productId: draft.productId,
+      title: draft.title,
+      message: draft.message,
+      draftId: draft.draftId,
+      previewUrl: draft.previewUrl,
+      imageData: draft.imageData,
+      designerHref: draft.designerHref,
+      warnings: draft.warnings,
+      executionTimeMs: draft.executionTimeMs,
+      snapshot: draft.snapshot,
+    });
   } catch (err: any) {
     return NextResponse.json(
       {
