@@ -138,13 +138,10 @@ export async function POST(req: NextRequest) {
 
     // Multi-tier Execution:
     // Tier 1: Local MCP 3D Configurator Engine (Three.js WebGL via Playwright/CDP)
-    // Only attempted in environments capable of running a browser (not Vercel serverless functions,
-    // unless an external CDP debugging host or ENABLE_LOCAL_MCP is explicitly configured).
-    const isServerless = Boolean(process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME);
+    // Attempted when explicitly enabled via ENABLE_LOCAL_MCP=1 or when a dedicated CDP worker is connected.
     const allowMcp = Boolean(
       process.env.DESIGNER_MCP_CDP_URL ||
-      process.env.ENABLE_LOCAL_MCP === '1' ||
-      (!isServerless && process.env.NODE_ENV !== 'production')
+      process.env.ENABLE_LOCAL_MCP === '1'
     );
 
     if (allowMcp) {

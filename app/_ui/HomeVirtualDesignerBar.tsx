@@ -89,6 +89,7 @@ async function persistSnapshotToIndexedDb(snapshot: any): Promise<void> {
 export default function HomeVirtualDesignerBar() {
   const [command, setCommand] = useState('');
   const [loading, setLoading] = useState(false);
+  const [loadingStep, setLoadingStep] = useState('');
   const [result, setResult] = useState<VirtualAgentResponse | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [placeholderIndex, setPlaceholderIndex] = useState(0);
@@ -112,6 +113,7 @@ export default function HomeVirtualDesignerBar() {
     if (loading) return;
 
     setLoading(true);
+    setLoadingStep('Designing memorial in 3D...');
     setErrorMsg(null);
     setResult(null);
 
@@ -127,11 +129,23 @@ export default function HomeVirtualDesignerBar() {
         throw new Error(data.error || 'An error occurred while creating the design.');
       }
 
-      setResult(data);
+      setLoadingStep('Launching 3D Studio...');
+
+      // Persist snapshot to local IndexedDB draft store
+      if (data.snapshot) {
+        await persistSnapshotToIndexedDb(data.snapshot);
+      }
+
+      // Seamless direct transition into the real 3D Configurator
+      const targetUrl = data.draftId
+        ? `${data.designerHref}?draftId=${encodeURIComponent(data.draftId)}&action=load-draft`
+        : `${data.designerHref}?action=load-draft`;
+
+      window.location.href = targetUrl;
     } catch (err: any) {
       setErrorMsg(err.message || 'Failed to process command. Please try again.');
-    } finally {
       setLoading(false);
+      setLoadingStep('');
     }
   };
 
@@ -204,7 +218,7 @@ export default function HomeVirtualDesignerBar() {
                 {loading ? (
                   <>
                     <div className="day:border-white day:border-t-transparent h-4 w-4 animate-spin rounded-full border-2 border-[#16120d] border-t-transparent" />
-                    <span>Designing in 3D...</span>
+                    <span>{loadingStep || 'Designing in 3D...'}</span>
                   </>
                 ) : (
                   <>
@@ -215,6 +229,15 @@ export default function HomeVirtualDesignerBar() {
               </button>
             </div>
           </form>
+
+          {/* Active 3D Generation Transition Status */}
+          {loading && (
+            <div className="day:border-[#cfc5b7]/60 day:bg-[#f6f2ea] day:text-[#383129] flex items-center justify-center gap-2.5 rounded-xl border border-[#cfac6c]/30 bg-[#cfac6c]/10 py-2.5 px-4 text-xs font-medium text-[#f4d68e] shadow-inner animate-pulse">
+              <SparklesIcon className="h-4 w-4 text-[#cfac6c] animate-spin" />
+              <span>{loadingStep || 'Designing memorial in 3D...'}</span>
+              <span className="text-[11px] opacity-75 hidden sm:inline">• Launching 3D Studio</span>
+            </div>
+          )}
 
           {/* Quick Suggestions Chips — Concise single-line pills avoiding orphans */}
           <div className="flex flex-wrap items-center gap-1.5 pt-0.5">
