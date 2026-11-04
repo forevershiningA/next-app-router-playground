@@ -1420,7 +1420,7 @@ function AdditionModelInner({
   return (
     <>
       {/* Parent group for positioning - convert Y-down saved coords to Y-up display */}
-      <group position={groupPosition} rotation={groupRotation}>
+      <group position={groupPosition} rotation={groupRotation} userData={{ previewAdditionId: id, previewAdditionSurface: surface }}>
         {additionKind === 'application' &&
           !isLedgerSurface &&
           centerGuideProgress > 0.01 && (

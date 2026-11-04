@@ -6,6 +6,8 @@ import {
   groupDesignsByProduct,
   isIndexableCategoryDesignSet,
 } from '../../lib/design-seo';
+import { HIDDEN_DESIGN_REASONS, isHiddenDesign, isHiddenDesignPath } from '../../lib/design-hidden';
+import { getAllSavedDesigns } from '../../lib/saved-designs-data';
 
 describe('design gallery indexing policy', () => {
   const designs = getSeoReadyDesigns();
@@ -23,6 +25,21 @@ describe('design gallery indexing policy', () => {
     expect(isIndexableCategoryDesignSet(
       Array.from({ length: 5 }, () => ({ ...designs[0], productSlug: 'legacy-product' })),
     )).toBe(false);
+  });
+
+  it('excludes reviewed holds from the gallery and sitemap while preserving source records', () => {
+    const all = getAllSavedDesigns();
+    const publishedIds = new Set(designs.map((design) => design.id));
+    const urls = new Set(sitemap().map((entry) => entry.url));
+    for (const id of Object.keys(HIDDEN_DESIGN_REASONS)) {
+      const original = all.find((design) => design.id === id);
+      expect(original, `missing underlying record ${id}`).toBeDefined();
+      expect(isHiddenDesign(id)).toBe(true);
+      expect(isHiddenDesignPath(`/designs/${original!.productSlug}/${original!.category}/${original!.slug}`)).toBe(true);
+      expect(publishedIds.has(id)).toBe(false);
+      expect(urls.has(`https://forevershining.org/designs/${original!.productSlug}/${original!.category}/${original!.slug}`)).toBe(false);
+    }
+    expect(isHiddenDesign('not-a-held-design')).toBe(false);
   });
 
   it('keeps sitemap categories consistent with the page indexing policy', () => {

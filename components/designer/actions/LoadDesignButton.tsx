@@ -18,6 +18,7 @@ import {
 } from '@heroicons/react/24/outline';
 import { StarIcon as StarIconSolid } from '@heroicons/react/24/solid';
 import { getAllSavedDesigns, type SavedDesignMetadata } from '#/lib/saved-designs-data';
+import { isHiddenDesign } from '#/lib/design-hidden';
 import { loadDesignById } from '#/components/projects/DefaultDesignLoader';
 import { loadMLData, getMLCategories, type MLDesignEntry } from '#/lib/ml-search-service';
 import { useHiddenDesigns } from '#/lib/useHiddenDesigns';
@@ -185,7 +186,7 @@ export default function LoadDesignButton({ label = 'Load Design', variant = 'flo
   const productId = useHeadstoneStore((s) => s.productId);
 
   const allDesigns = useMemo(() => {
-    const designs = getAllSavedDesigns();
+    const designs = getAllSavedDesigns().filter((design) => !isHiddenDesign(design.id));
     if (hiddenIds.size === 0) return designs;
     return designs.filter((d) => !hiddenIds.has(d.id));
   }, [hiddenIds]);

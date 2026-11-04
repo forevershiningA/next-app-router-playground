@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback, useRef, useMemo } from 'react';
 import type { SavedDesignMetadata } from '#/lib/saved-designs-data';
+import { isHiddenDesign } from '#/lib/design-hidden';
 import { ChevronRightIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -64,7 +65,7 @@ export default function DesignsPageClient({ initialQuery = '' }: { initialQuery?
       ]);
 
       const v2026Set = new Set(v2026Ids);
-      let designs = Object.values(SAVED_DESIGNS).filter((d) => v2026Set.has(d.id));
+      let designs = Object.values(SAVED_DESIGNS).filter((d) => v2026Set.has(d.id) && !isHiddenDesign(d.id));
 
       const isLocal =
         window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';

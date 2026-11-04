@@ -9,6 +9,7 @@ interface SaveDesignModalProps {
   onClose: () => void;
   onSave: (designName: string) => Promise<void>;
   isSaving?: boolean;
+  saveError?: string;
 }
 
 export default function SaveDesignModal({
@@ -16,6 +17,7 @@ export default function SaveDesignModal({
   onClose,
   onSave,
   isSaving = false,
+  saveError = '',
 }: SaveDesignModalProps) {
   const [designName, setDesignName] = useState('');
   const [error, setError] = useState('');
@@ -69,6 +71,11 @@ export default function SaveDesignModal({
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-4">
+          {saveError && (
+            <p role="alert" className="text-sm text-red-400 day:text-red-700">
+              {saveError}
+            </p>
+          )}
           <div>
             <label
               htmlFor="design-name"

@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import type { DesignCategory, SavedDesignMetadata } from '#/lib/saved-designs-data';
+import { isHiddenDesign } from '#/lib/design-hidden';
 import { ChevronRightIcon } from '@heroicons/react/24/outline';
 import MobileNavToggle from '#/components/shared/MobileNavToggle';
 import DesignsTreeNav from '#/components/designs/DesignsTreeNav';
@@ -135,7 +136,7 @@ export default function CategoryPageClient({ productSlug, category }: CategoryPa
       const categoryDesigns = getDesignsByCategory(category as DesignCategory);
       // Filter by product slug and sort alphabetically by formatted title
       const filtered = categoryDesigns
-        .filter(d => d.productSlug === productSlug)
+        .filter(d => d.productSlug === productSlug && !isHiddenDesign(d.id))
         .sort((a, b) => formatDesignTitle(a).localeCompare(formatDesignTitle(b)));
       setDesigns(filtered);
       setLoading(false);

@@ -75,16 +75,44 @@ export function useLocalDesignDraft() {
         // A normal visit (including a reload) starts a fresh design. IndexedDB
         // survives browser cache clearing and must not silently replace it.
         // Only resume the draft when returning to an explicit save/checkout
-        // action after authentication.
-        const action = new URLSearchParams(window.location.search).get(
-          'action',
-        );
-        if (action !== 'save-design' && action !== 'proceed-purchase') return;
+        // action after authentication, or when loading a generated assistant draft.
+        const params = new URLSearchParams(window.location.search);
+        const action = params.get('action');
+        const draftId = params.get('draftId');
+        const shouldRestore =
+          action === 'save-design' ||
+          action === 'proceed-purchase' ||
+          action === 'load-draft' ||
+          Boolean(draftId);
 
-        const draft = await readDraft();
+        if (!shouldRestore) return;
+
+        let draft: DesignerSnapshot | null = null;
+        if (draftId) {
+          try {
+            const res = await fetch(`/api/virtual-assistant?draftId=${encodeURIComponent(draftId)}&format=json`);
+            if (res.ok) {
+              const data = await res.json();
+              if (data?.snapshot) {
+                draft = data.snapshot;
+              }
+            }
+          } catch (e) {
+            console.warn('[local-design-draft] Could not fetch draft JSON', e);
+          }
+        }
+
+        if (!draft) {
+          draft = await readDraft();
+        }
+
         if (disposed || !draft?.productId) return;
         const currentProductId = useHeadstoneStore.getState().productId;
         if (!currentProductId || currentProductId === draft.productId) {
+          await applyDesignSnapshot(draft);
+          window.dispatchEvent(new CustomEvent('design-draft-restored'));
+        } else {
+          // If product differs, applyDesignSnapshot loads product and hydrates
           await applyDesignSnapshot(draft);
           window.dispatchEvent(new CustomEvent('design-draft-restored'));
         }

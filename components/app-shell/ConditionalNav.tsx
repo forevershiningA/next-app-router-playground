@@ -102,6 +102,7 @@ export default function ConditionalNav() {
           ? (DRAWER_PANEL_TITLES[designerStepSlug] ?? 'Designer')
           : 'Designer';
   const isFixedSizeSheet = designerStepSlug === 'select-size';
+  const isInscriptionSheet = designerStepSlug === 'inscriptions';
   useEffect(() => {
     if (designerStepSlug !== 'select-size') {
       setSizeAdjustmentCompact(false);
@@ -257,6 +258,7 @@ export default function ConditionalNav() {
       mobileSheetTitle,
       isImageCropActive,
       isFixedSizeSheet,
+      isInscriptionSheet,
       isSizeAdjustmentCompact,
       setSizeAdjustmentCompact,
       isBottomSheetCollapsed,
@@ -274,6 +276,7 @@ export default function ConditionalNav() {
       mobileSheetTitle,
       isImageCropActive,
       isFixedSizeSheet,
+      isInscriptionSheet,
       isSizeAdjustmentCompact,
       setSizeAdjustmentCompact,
       isBottomSheetCollapsed,
@@ -292,6 +295,7 @@ function renderDesignerSidebar(
   mobileSheetTitle: string,
   isImageCropActive: boolean,
   isFixedSizeSheet: boolean,
+  isInscriptionSheet: boolean,
   isSizeAdjustmentCompact: boolean,
   setSizeAdjustmentCompact: (v: boolean) => void,
   isBottomSheetCollapsed: boolean,
@@ -307,11 +311,15 @@ function renderDesignerSidebar(
       : isFixedSizeSheet && isSizeAdjustmentCompact
         ? 'h-40 max-h-40'
         : useBottomSheet
-          ? (mobileSheetTitle === 'Select Material' ||
+          ? isFixedSizeSheet
+            ? 'h-[44dvh] max-h-[44dvh] md:h-[44dvh] md:max-h-[44dvh]'
+            : isInscriptionSheet
+              ? 'h-[60dvh] max-h-[60dvh] md:h-[44dvh] md:max-h-[44dvh]'
+            : (mobileSheetTitle === 'Select Material' ||
               mobileSheetTitle === 'Select Background') &&
             !isImageCropActive
-            ? 'h-[48dvh] max-h-[48dvh] md:h-[44dvh] md:max-h-[44dvh]'
-            : 'h-[75dvh] max-h-[75dvh] md:h-[44dvh] md:max-h-[44dvh]'
+              ? 'h-[48dvh] max-h-[48dvh] md:h-[44dvh] md:max-h-[44dvh]'
+              : 'h-[75dvh] max-h-[75dvh] md:h-[44dvh] md:max-h-[44dvh]'
           : 'h-[100dvh]';
   return (
     <>

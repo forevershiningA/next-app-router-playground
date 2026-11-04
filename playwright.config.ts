@@ -51,7 +51,7 @@ export default defineConfig({
     // 3. Unauthenticated tests (API boundary checks, no auth needed)
     {
       name: 'api-unauth',
-      testMatch: /\.unauth\.spec\.ts/,
+      testMatch: /\.unauth\.spec\.(?:ts|mjs)$/,
       use: { ...devices['Desktop Chrome'] },
     },
   ],

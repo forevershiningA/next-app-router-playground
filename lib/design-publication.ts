@@ -1,4 +1,5 @@
 import previewIds from './design-preview-ids.json';
+import { isHiddenDesign } from './design-hidden';
 import {
   getAllSavedDesigns,
   type SavedDesignMetadata,
@@ -27,6 +28,7 @@ export function getPublishedPreviewIds(): Set<string> {
 
 export function isDesignIndexable(design: SavedDesignMetadata): boolean {
   return (
+    !isHiddenDesign(design.id) &&
     INDEXABLE_PRODUCT_SLUGS.has(design.productSlug) &&
     availablePreviews.has(design.id)
   );

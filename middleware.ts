@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifySessionFromRequest } from '#/lib/auth/session';
 import { resolveUnitSystemFromCountry } from '#/lib/unit-system';
+import { isHiddenDesignPath } from '#/lib/design-hidden';
 
 // Only protect raw API endpoints — /my-account pages handle their own auth UI
 const PROTECTED_API = ['/api/account', '/api/orders'];
@@ -41,6 +42,9 @@ export async function middleware(request: NextRequest) {
   }
 
   const { pathname } = request.nextUrl;
+  if (isHiddenDesignPath(pathname)) {
+    return new NextResponse(null, { status: 404, headers: { 'X-Robots-Tag': 'noindex' } });
+  }
   const isProtected = PROTECTED_API.some((r) => pathname.startsWith(r));
   const isBlocked = BLOCKED_PATHS.test(pathname);
   const countryHeader =

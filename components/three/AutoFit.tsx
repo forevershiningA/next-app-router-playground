@@ -199,7 +199,13 @@ export default function AutoFit({
         size.height,
         isBottomSheetCollapsed,
         isSizeAdjustmentCompact,
-        designerStepSlug === 'select-material' ? 0.48 : 0.75,
+        designerStepSlug === 'select-size'
+          ? 0.44
+          : designerStepSlug === 'select-material'
+            ? 0.48
+            : designerStepSlug === 'inscriptions'
+              ? 0.6
+              : 0.75,
       );
       dist = mobile.distance;
       toTgt.copy(mobile.target);

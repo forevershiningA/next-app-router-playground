@@ -113,6 +113,11 @@ export const createInscriptionSlice: StateCreator<
       yPos,
       color,
       target,
+      coordinateSpace:
+        patch.coordinateSpace ??
+        (target === 'base' || target === 'headstone'
+          ? 'mm-center'
+          : undefined),
       textAlign: patch.textAlign ?? 'center',
       layer: getNextDesignLayer(state),
       ref: React.createRef<Group>(),

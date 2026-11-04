@@ -5,6 +5,7 @@ import {
   getDesignFromSlug,
 } from '../lib/saved-designs-data';
 import { getDesignPresentation } from '../lib/design-presentation';
+import { isHiddenDesign } from '../lib/design-hidden';
 
 const records = getAllSavedDesigns().map((design) => {
   const presentation = getDesignPresentation(design);
@@ -15,15 +16,18 @@ const records = getAllSavedDesigns().map((design) => {
         productSlug: design.productSlug,
         category: design.category,
       })?.id === design.id,
-    publicationReason: presentation.indexEligible
-      ? 'eligible-product-with-preview'
-      : 'retired-product-or-missing-preview',
+    publicationReason: isHiddenDesign(design.id)
+      ? 'hidden-pending-review'
+      : presentation.indexEligible
+        ? 'eligible-product-with-preview'
+        : 'retired-product-or-missing-preview',
   };
 });
 const summary = {
   total: records.length,
   galleryEligible: records.filter((item) => item.galleryEligible).length,
   indexEligible: records.filter((item) => item.indexEligible).length,
+  hiddenPendingReview: records.filter((item) => isHiddenDesign(item.id)).length,
   routeFailures: records.filter((item) => !item.routeResolves).length,
   sourceStatus: records.reduce<Record<string, number>>((counts, item) => {
     counts[item.source.status] = (counts[item.source.status] ?? 0) + 1;

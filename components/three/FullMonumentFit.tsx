@@ -101,6 +101,8 @@ export default function FullMonumentFit({ trigger }: FullMonumentFitProps) {
   );
   const pathname = usePathname();
   const isMobileMaterialStep = pathname?.endsWith('/select-material') ?? false;
+  const isMobileSizeStep = pathname?.endsWith('/select-size') ?? false;
+  const isMobileInscriptionStep = pathname?.endsWith('/inscriptions') ?? false;
   const isMobileSheetCompact =
     isSizeAdjustmentCompact || isBottomSheetCollapsed;
   const selectedInscriptionSurface = useHeadstoneStore((s) =>
@@ -311,7 +313,13 @@ export default function FullMonumentFit({ trigger }: FullMonumentFitProps) {
           size.height,
           isBottomSheetCollapsed,
           isSizeAdjustmentCompact,
-          isMobileMaterialStep ? 0.48 : 0.75,
+          isMobileSizeStep
+            ? 0.44
+            : isMobileMaterialStep
+              ? 0.48
+              : isMobileInscriptionStep
+                ? 0.6
+                : 0.75,
         );
         distance = mobile.distance;
         target.copy(mobile.target);
@@ -597,6 +605,8 @@ export default function FullMonumentFit({ trigger }: FullMonumentFitProps) {
     isBottomSheetCollapsed,
     isSizeAdjustmentCompact,
     isMobileMaterialStep,
+    isMobileSizeStep,
+    isMobileInscriptionStep,
     isSizeAdjustmentActive,
     camera,
     size.width,

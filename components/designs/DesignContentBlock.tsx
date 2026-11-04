@@ -4,6 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import type { SavedDesignMetadata } from '#/lib/saved-designs-data';
 import { getRelatedDesigns, getDesignsByCategory, DESIGN_CATEGORIES } from '#/lib/saved-designs-data';
+import { isHiddenDesign } from '#/lib/design-hidden';
 import {
   BuildingOffice2Icon,
   ClipboardDocumentCheckIcon,
@@ -270,8 +271,8 @@ export default function DesignContentBlock({
   const faq = generateFAQ();
   
   // Get related designs for internal linking
-  const relatedDesigns = getRelatedDesigns(design, 6);
-  const sameCategoryDesigns = getDesignsByCategory(design.category).filter(d => d.id !== design.id).slice(0, 4);
+  const relatedDesigns = getRelatedDesigns(design, 6).filter(d => !isHiddenDesign(d.id));
+  const sameCategoryDesigns = getDesignsByCategory(design.category).filter(d => d.id !== design.id && !isHiddenDesign(d.id)).slice(0, 4);
 
   return (
     <div className="bg-white border-t border-slate-200 mt-12">

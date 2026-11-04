@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { type SavedDesignMetadata, getDesignsByCategory, type DesignCategory } from '#/lib/saved-designs-data';
 import Image from 'next/image';
 import Link from 'next/link';
+import { isHiddenDesign } from '#/lib/design-hidden';
 
 interface DesignSidebarProps {
   currentDesignId: string;
@@ -27,7 +28,7 @@ export default function DesignSidebar({
     
     // Filter by product slug and exclude current design
     const filtered = categoryDesigns
-      .filter(d => d.productSlug === productSlug && d.id !== currentDesignId)
+      .filter(d => d.productSlug === productSlug && d.id !== currentDesignId && !isHiddenDesign(d.id))
       .slice(0, maxItems);
     
     setDesigns(filtered);

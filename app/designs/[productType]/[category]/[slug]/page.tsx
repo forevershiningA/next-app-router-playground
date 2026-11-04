@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { getProductFromId } from '#/lib/product-utils';
 import { isDesignIndexable } from '#/lib/design-publication';
+import { isHiddenDesign } from '#/lib/design-hidden';
 import { getDesignPresentation } from '#/lib/design-presentation';
 import StartSavedDesignButton from './StartSavedDesignButton';
 import DesignPageClient from './DesignPageClient';
@@ -145,8 +146,8 @@ export async function generateMetadata({
   );
   const design = getDesignFromSlug(slug, { productSlug, category });
 
-  if (!design) {
-    return { title: 'Design Not Found' };
+  if (!design || isHiddenDesign(design.id)) {
+    return { title: 'Design Not Found', robots: { index: false, follow: true } };
   }
 
   const product = getProductFromId(design.productId);
@@ -257,7 +258,7 @@ export default async function SavedDesignPage({
   );
   const design = getDesignFromSlug(slug, { productSlug, category });
 
-  if (!design) {
+  if (!design || isHiddenDesign(design.id)) {
     notFound();
   }
 

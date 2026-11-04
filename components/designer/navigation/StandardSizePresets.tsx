@@ -65,7 +65,7 @@ export default function StandardSizePresets({
         </span>
         <span>Width × height</span>
       </div>
-      <div className="flex flex-wrap gap-2">
+      <div className="flex w-full touch-pan-x snap-x snap-mandatory flex-nowrap gap-2 overflow-x-auto overscroll-x-contain pb-1 [scrollbar-width:none] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--designer-focus)] md:flex-wrap md:overflow-visible md:[scrollbar-width:auto]">
         {marketSizes[target].map((size) => {
           const available = !disabled && isStandardSizeAvailable(size, limits);
           const label = formatDimensionPair(
@@ -110,7 +110,7 @@ export default function StandardSizePresets({
                   state.setBaseThickness(base.depthMm);
                 }
               }}
-              className="rounded-md px-3 py-1.5 text-xs font-semibold tabular-nums disabled:cursor-not-allowed disabled:opacity-40"
+              className="shrink-0 snap-start rounded-md px-3 py-1.5 text-xs font-semibold tabular-nums disabled:cursor-not-allowed disabled:opacity-40 md:shrink"
             >
               {label}
             </DesignerOptionButton>

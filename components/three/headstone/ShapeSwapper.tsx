@@ -897,6 +897,13 @@ export default function ShapeSwapper({
     <>
       <group ref={tabletRef}>
         <React.Suspense fallback={null}>
+          <group userData={{
+            previewHeadstone: true,
+            previewShapeUrl: shapeUrl,
+            previewShapeReady: !shapeSwapping,
+            previewHeadstoneMaterialUrl: headstoneMaterialUrl,
+            previewHeadstoneMaterialReady: !textureTransitioning,
+          }}>
           <SvgHeadstone
             key={resolvedUrl}
             url={resolvedUrl}
@@ -1216,6 +1223,7 @@ export default function ShapeSwapper({
               );
             }}
           </SvgHeadstone>
+          </group>
         </React.Suspense>
 
         {catalog?.product.type === 'full-monument' ? (

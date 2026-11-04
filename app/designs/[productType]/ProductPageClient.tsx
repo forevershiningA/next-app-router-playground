@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import type { SavedDesignMetadata } from '#/lib/saved-designs-data';
+import { isHiddenDesign } from '#/lib/design-hidden';
 import { ChevronRightIcon } from '@heroicons/react/24/outline';
 import MobileNavToggle from '#/components/shared/MobileNavToggle';
 import DesignsTreeNav from '#/components/designs/DesignsTreeNav';
@@ -19,7 +20,7 @@ export default function ProductPageClient({ productSlug }: ProductPageClientProp
     // Get all designs and filter by product slug
     import('#/lib/saved-designs-data').then(({ getAllSavedDesigns }) => {
       const allDesigns = getAllSavedDesigns();
-      const filtered = allDesigns.filter(d => d.productSlug === productSlug);
+      const filtered = allDesigns.filter(d => d.productSlug === productSlug && !isHiddenDesign(d.id));
       setDesigns(filtered);
       setLoading(false);
     });

@@ -68,6 +68,7 @@ export default function DesignerNav() {
     showNewDesignConfirm,
     setShowNewDesignConfirm,
     isSavingDesign,
+    saveError,
     showGuestCheckout,
     setShowGuestCheckout,
     openSaveDesign,
@@ -199,6 +200,7 @@ export default function DesignerNav() {
         showNewDesignConfirm={showNewDesignConfirm}
         setShowNewDesignConfirm={setShowNewDesignConfirm}
         isSavingDesign={isSavingDesign}
+        saveError={saveError}
         showGuestCheckout={showGuestCheckout}
         setShowGuestCheckout={setShowGuestCheckout}
         handleSaveDesign={handleSaveDesign}

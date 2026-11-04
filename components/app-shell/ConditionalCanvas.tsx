@@ -11,6 +11,7 @@ import ErrorBoundary from '#/components/shared/ErrorBoundary';
 import { getDesignerStepSlug } from '#/lib/designer-route-state';
 import { useSceneOverlayStore } from '#/lib/scene-overlay-store';
 import { useHeadstoneStore } from '#/lib/headstone-store';
+import { installDesignerAgentBridge } from '#/lib/designer-agent-bridge';
 
 const CanvasLoadingFallback = (
   <div className="flex min-h-[400px] items-center justify-center">
@@ -32,10 +33,24 @@ const CropCanvas = dynamic(
 );
 
 export default function ConditionalCanvas() {
+  useEffect(() => {
+    if (process.env.NODE_ENV !== 'production') return installDesignerAgentBridge();
+    if (process.env.NEXT_PUBLIC_DESIGNER_MCP_LIVE_TEST !== '1') return;
+    const controller = new AbortController();
+    let uninstall: (() => void) | undefined;
+    void fetch('/api/admin/designer-mcp', { cache: 'no-store', signal: controller.signal })
+      .then((response) => {
+        if (response.ok && !controller.signal.aborted) uninstall = installDesignerAgentBridge(true);
+      })
+      .catch(() => {});
+    return () => { controller.abort(); uninstall?.(); };
+  }, []);
   const pathname = usePathname();
   const designerStepSlug = getDesignerStepSlug(pathname);
   const hideOverlay = useSceneOverlayStore((s) => s.hide);
   const cropCanvasData = useHeadstoneStore((s) => s.cropCanvasData);
+  const screenshotMode = useHeadstoneStore((s) => s.screenshotMode);
+  const captureRequested = screenshotMode && designerStepSlug !== null;
 
   // Hide canvas on design pages:
   // /designs/ -> ['designs'] = 1 segment (root page)
@@ -155,27 +170,28 @@ export default function ConditionalCanvas() {
 
   // Also hide when pathname is null (e.g. SSR edge case before router context is ready)
   if (
-    !pathname ||
-    ((isHomePage ||
-      isContactPage ||
-      isDesignPage ||
-      isMemorialsPage ||
-      isProductsPage ||
-      isSelectProductPage ||
-      isSelectShapePage ||
-      isCheckPricePage ||
-      isMyAccountPage ||
-      isAdminPage ||
-      isDesignSharePage ||
-      isOrdersPage) &&
-      !isSelectSizePage &&
-      !isInscriptionsPage &&
-      !isSelectMaterialPage &&
-      !isSelectAdditionsPage &&
-      !isSelectMotifsPage &&
-      !isSelectBorderPage &&
-      !isSelectFasteningPage &&
-      !isDesignMenuPage)
+    !captureRequested &&
+    (!pathname ||
+      ((isHomePage ||
+        isContactPage ||
+        isDesignPage ||
+        isMemorialsPage ||
+        isProductsPage ||
+        isSelectProductPage ||
+        isSelectShapePage ||
+        isCheckPricePage ||
+        isMyAccountPage ||
+        isAdminPage ||
+        isDesignSharePage ||
+        isOrdersPage) &&
+        !isSelectSizePage &&
+        !isInscriptionsPage &&
+        !isSelectMaterialPage &&
+        !isSelectAdditionsPage &&
+        !isSelectMotifsPage &&
+        !isSelectBorderPage &&
+        !isSelectFasteningPage &&
+        !isDesignMenuPage))
   ) {
     return null;
   }
@@ -183,7 +199,8 @@ export default function ConditionalCanvas() {
   return (
     <div
       id="scene-root"
-      className="fixed inset-0 z-0 lg:left-[var(--designer-sidebar-width,400px)]"
+      aria-hidden={captureRequested || undefined}
+      className={`fixed inset-0 z-0 lg:left-[var(--designer-sidebar-width,400px)] ${captureRequested ? 'pointer-events-none opacity-0' : ''}`}
     >
       <Suspense fallback={CanvasLoadingFallback}>
         <ErrorBoundary
@@ -206,7 +223,11 @@ export default function ConditionalCanvas() {
           <SEOPanel />
           <SceneryToggleButton />
           {/* Show CropCanvas when cropping, otherwise show ThreeScene */}
-          {cropCanvasData ? <CropCanvas /> : <ThreeScene />}
+          {cropCanvasData && !captureRequested ? (
+            <CropCanvas />
+          ) : (
+            <ThreeScene />
+          )}
         </ErrorBoundary>
       </Suspense>
     </div>

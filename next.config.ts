@@ -30,9 +30,11 @@ const sentryReleaseName =
 const nextConfig = {
   // Isolate local asset generation from other dev/build processes.
   distDir:
-    process.env.DESIGN_PREVIEW_CAPTURE === '1'
-      ? '.next-design-previews'
-      : '.next',
+    process.env.DESIGNER_MCP_PILOT === '1'
+      ? '.next-openbot-pilot'
+      : process.env.DESIGN_PREVIEW_CAPTURE === '1'
+        ? '.next-design-previews'
+        : '.next',
   pageExtensions: ['js', 'jsx', 'mdx', 'ts', 'tsx'],
   eslint: { ignoreDuringBuilds: true },
   // Optimize production build

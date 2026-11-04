@@ -13,9 +13,11 @@ export function useDesignerSaveWorkflow() {
   const [showSaveDesignModal, setShowSaveDesignModal] = React.useState(false);
   const [showNewDesignConfirm, setShowNewDesignConfirm] = React.useState(false);
   const [isSavingDesign, setIsSavingDesign] = React.useState(false);
+  const [saveError, setSaveError] = React.useState('');
   const [showGuestCheckout, setShowGuestCheckout] = React.useState(false);
 
   const openSaveDesign = React.useCallback(async () => {
+    setSaveError('');
     const response = await fetch('/api/auth/session');
     if (!response.ok) {
       const returnTo = encodeURIComponent(pathname + '?action=save-design');
@@ -54,6 +56,7 @@ export function useDesignerSaveWorkflow() {
   const handleSaveDesign = React.useCallback(
     async (designName: string, proceedToPurchase = false) => {
       setIsSavingDesign(true);
+      setSaveError('');
       try {
         const { project } = await saveDesignerProject(designName);
         setShowSaveDesignModal(false);
@@ -63,6 +66,12 @@ export function useDesignerSaveWorkflow() {
           router.push('/my-account');
         }
       } catch (error) {
+        setSaveError(
+          error instanceof Error
+            ? error.message
+            : 'Could not save your design. Please try again.',
+        );
+        setShowSaveDesignModal(true);
         console.error('Error saving design:', error);
         if (error instanceof Error) {
           console.error('Error message:', error.message);
@@ -136,6 +145,7 @@ export function useDesignerSaveWorkflow() {
     showNewDesignConfirm,
     setShowNewDesignConfirm,
     isSavingDesign,
+    saveError,
     showGuestCheckout,
     setShowGuestCheckout,
     openSaveDesign,

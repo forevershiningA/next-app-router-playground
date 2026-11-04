@@ -156,7 +156,7 @@ type NavFn = (href: string, opts?: { replace?: boolean }) => void;
 export type LinePatch = Partial<
   Pick<
     Line,
-    'text' | 'font' | 'sizeMm' | 'rotationDeg' | 'xPos' | 'yPos' | 'color' | 'textAlign'
+    'text' | 'font' | 'sizeMm' | 'rotationDeg' | 'xPos' | 'yPos' | 'color' | 'textAlign' | 'coordinateSpace'
   >
 >;
 
@@ -276,6 +276,7 @@ export type HeadstoneState = {
   updateImageRotation: (id: string, rotationZ: number) => void;
 
   productId: string | null;
+  productConfigurationReadyId: string | null;
   setProductId: (id: string) => Promise<void>;
 
   currentProjectId: string | null;

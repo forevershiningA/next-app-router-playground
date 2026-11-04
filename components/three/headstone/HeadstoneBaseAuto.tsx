@@ -670,6 +670,11 @@ const HeadstoneBaseAuto = forwardRef<THREE.Mesh, HeadstoneBaseAutoProps>(
     return (
       <React.Fragment>
         <Suspense fallback={null}>
+          <group userData={{
+            previewBase: true,
+            previewBaseMaterialUrl: baseMaterialUrl,
+            previewBaseMaterialReady: !baseSwapping,
+          }}>
           <BaseMesh
             baseRef={baseRef}
             baseTexture={baseTexture}
@@ -687,6 +692,7 @@ const HeadstoneBaseAuto = forwardRef<THREE.Mesh, HeadstoneBaseAutoProps>(
             isStainlessSteel={isStainlessSteelBase}
             stainlessFinish={stainlessBaseFinish}
           />
+          </group>
         </Suspense>
 
         {baseOption === 'flower-pots' && (

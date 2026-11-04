@@ -51,7 +51,8 @@ export default function EmblemModel({
     [],
   );
   const fallbackIntersection = React.useMemo(() => new THREE.Vector3(), []);
-  const [texture, setTexture] = React.useState<THREE.Texture | null>(null);
+  const [textureInfo, setTextureInfo] = React.useState<{ texture: THREE.Texture; sourceUrl: string } | null>(null);
+  const texture = textureInfo?.texture ?? null;
   const planeGeometry = React.useMemo(() => new THREE.PlaneGeometry(1, 1), []);
 
   React.useEffect(() => () => planeGeometry.dispose(), [planeGeometry]);
@@ -85,7 +86,7 @@ export default function EmblemModel({
             }
             activeTexture = tex;
             tex.colorSpace = THREE.SRGBColorSpace;
-            setTexture(tex);
+            setTextureInfo({ texture: tex, sourceUrl: imageUrl });
             return;
           } catch {
             // try next
@@ -364,6 +365,7 @@ export default function EmblemModel({
       ref={ref}
       position={[displayX, displayY, groupZ]}
       rotation={[0, 0, rotZ]}
+      userData={{ previewEmblemId: id, previewEmblemUrl: textureInfo?.sourceUrl, previewEmblemSurface: surface }}
     >
       {/* Emblem texture plane */}
       <mesh

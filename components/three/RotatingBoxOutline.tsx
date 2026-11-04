@@ -4,6 +4,7 @@
 import * as React from 'react';
 import * as THREE from 'three';
 import { useFrame, useThree } from '@react-three/fiber';
+import { useHeadstoneStore } from '#/lib/headstone-store';
 
 type RotatingBoxOutlineProps<T extends THREE.Object3D = THREE.Object3D> = {
   /** Object whose bounds should be outlined */
@@ -94,7 +95,7 @@ function createOutlineGroup(
  */
 export default function RotatingBoxOutline<T extends THREE.Object3D = THREE.Object3D>({
   targetRef,
-  visible = true,
+  visible: requestedVisible = true,
   color = 'white',
   pad = 0.004,
   depthPad,
@@ -109,6 +110,8 @@ export default function RotatingBoxOutline<T extends THREE.Object3D = THREE.Obje
   opacity = 1,
   animationDuration = 420,
 }: RotatingBoxOutlineProps) {
+  const screenshotMode = useHeadstoneStore((state) => state.screenshotMode);
+  const visible = requestedVisible && !screenshotMode;
   const { gl, invalidate } = useThree();
   const helperRef = React.useRef<OutlineGroup | null>(null);
   const depthPadding = depthPad ?? pad;

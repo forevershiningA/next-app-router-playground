@@ -1,10 +1,124 @@
 'use client';
 
-import { captureDesignerScreenshot } from './designer-screenshot';
+import {
+  BlankDesignerPreviewError,
+  captureDesignerScreenshot,
+} from './designer-screenshot';
 import { calculateEstimatedDesignPricing } from './estimated-design-pricing';
 import { useHeadstoneStore } from './headstone-store';
 import { captureDesignSnapshot } from './project-serializer';
 import type { ProjectSummary } from './project-schemas';
+import {
+  areDesignerAdditionsReady,
+  areDesignerEmblemsReady,
+  areDesignerImagesReady,
+  areDesignerMotifsReady,
+  areInscriptionGlyphsReady,
+  getTraditionalHeadstoneReadiness,
+} from './designer-preview-ready';
+import type { Object3D } from 'three';
+import { assessHeadstoneMotifLayout } from './designer-motif-layout';
+
+async function waitForPreview() {
+  const deadline = Date.now() + 15000;
+  let previousSnapshot = '';
+  let stableChecks = 0;
+  while (Date.now() < deadline) {
+    await new Promise((resolve) => setTimeout(resolve, 50));
+    const snapshot = captureDesignSnapshot();
+    const serialized = JSON.stringify(snapshot);
+    const state = useHeadstoneStore.getState();
+    const scene = (window as unknown as { __r3fScene?: Object3D }).__r3fScene;
+    const structuralReadiness = scene ? getTraditionalHeadstoneReadiness(scene, snapshot) : { supported: false as const };
+    const ready =
+      scene &&
+      !state.loading &&
+      !state.baseSwapping &&
+      !state.fontLoading &&
+      (!structuralReadiness.supported || (structuralReadiness.shapeReady && structuralReadiness.headstoneMaterialReady && structuralReadiness.baseReady)) &&
+      areDesignerAdditionsReady(
+        scene,
+        snapshot.selectedAdditions
+          .map((id) => ({
+            id,
+            surface: snapshot.additionOffsets[id]?.targetSurface ?? 'headstone',
+          }))
+          .filter(
+            ({ surface }) =>
+              surface === 'headstone' ||
+              (surface === 'base' && snapshot.showBase) ||
+              (surface === 'ledger' && snapshot.showLedger),
+          ),
+      ) &&
+      areDesignerEmblemsReady(
+        scene,
+        (snapshot.selectedEmblems ?? [])
+          .map((emblem) => ({
+            ...emblem,
+            surface: snapshot.emblemOffsets?.[emblem.id]?.target ?? 'headstone',
+          }))
+          .filter(
+            ({ surface }) =>
+              surface === 'headstone' ||
+              (surface === 'base' && snapshot.showBase) ||
+              (surface === 'ledger' && snapshot.showLedger),
+          ),
+      ) &&
+      areDesignerMotifsReady(
+        scene,
+        snapshot.selectedMotifs
+          .map((motif) => ({
+            ...motif,
+            surface: snapshot.motifOffsets[motif.id]?.target ?? 'headstone',
+          }))
+          .filter(
+            ({ surface }) =>
+              surface === 'headstone' ||
+              (surface === 'base' && snapshot.showBase) ||
+              (surface === 'ledger' && snapshot.showLedger),
+          ),
+      ) &&
+      areDesignerImagesReady(
+        scene,
+        snapshot.selectedImages.filter((image) => {
+          const target = image.target ?? 'headstone';
+          return (
+            target === 'headstone' ||
+            (target === 'base' && snapshot.showBase) ||
+            (target === 'ledger' && snapshot.showLedger)
+          );
+        }),
+      ) &&
+      areInscriptionGlyphsReady(
+        scene,
+        snapshot.inscriptions,
+        window.location.href,
+      );
+    stableChecks = ready
+      ? serialized === previousSnapshot
+        ? stableChecks + 1
+        : 1
+      : 0;
+    previousSnapshot = serialized;
+    if (stableChecks >= 2 && scene) {
+      try {
+        const screenshot = captureDesignerScreenshot(true);
+        if (!screenshot)
+          throw new Error(
+            'Could not capture your preview. Please try saving again.',
+          );
+        return { snapshot, screenshot, structuralReadiness, motifLayout: assessHeadstoneMotifLayout(scene, snapshot) };
+      } catch (error) {
+        // A newly mounted scene can finish its glyphs before AutoFit frames
+        // the product. Keep the scene mounted and wait for that first frame.
+        if (!(error instanceof BlankDesignerPreviewError)) throw error;
+      }
+    }
+  }
+  throw new Error(
+    'The preview is still updating. Wait for all design elements to appear, then try again.',
+  );
+}
 
 export type SaveDesignerProjectResult = { project: ProjectSummary };
 
@@ -38,28 +152,46 @@ function parseResponseBody(
   }
 }
 
-export async function saveDesignerProject(
-  title: string,
-): Promise<SaveDesignerProjectResult> {
+export async function prepareDesignerPreview() {
   const initialState = useHeadstoneStore.getState();
   initialState.setScreenshotMode(true);
 
-  await new Promise<void>((resolve) =>
-    requestAnimationFrame(() => requestAnimationFrame(() => resolve())),
-  );
-
   let screenshot: string | null = null;
+  let snapshot: ReturnType<typeof captureDesignSnapshot>;
+  let estimatedPricing: ReturnType<typeof calculateEstimatedDesignPricing>;
+  let structuralReadiness: ReturnType<typeof getTraditionalHeadstoneReadiness>;
+  let motifLayout: ReturnType<typeof assessHeadstoneMotifLayout>;
   try {
-    screenshot = captureDesignerScreenshot();
-  } catch (error) {
-    console.warn('Failed to capture canvas screenshot:', error);
+    ({ snapshot, screenshot, structuralReadiness, motifLayout } = await waitForPreview());
+    estimatedPricing = calculateEstimatedDesignPricing(
+      useHeadstoneStore.getState(),
+    );
+    if (JSON.stringify(captureDesignSnapshot()) !== JSON.stringify(snapshot)) {
+      throw new Error(
+        'Your design or price changed while preparing the preview. Please save again.',
+      );
+    }
   } finally {
     useHeadstoneStore.getState().setScreenshotMode(false);
   }
 
-  const state = useHeadstoneStore.getState();
-  const estimatedPricing = calculateEstimatedDesignPricing(state);
-  const snapshot = captureDesignSnapshot();
+  return { snapshot, screenshot, estimatedPricing, structuralReadiness, motifLayout };
+}
+
+export async function saveDesignerProject(
+  title: string,
+  expectedSnapshot?: string,
+): Promise<SaveDesignerProjectResult> {
+  const { snapshot, screenshot, estimatedPricing } =
+    await prepareDesignerPreview();
+
+  if (
+    expectedSnapshot !== undefined &&
+    JSON.stringify(snapshot) !== expectedSnapshot
+  ) {
+    throw new Error('REVISION_CONFLICT');
+  }
+
   const designState = {
     ...snapshot,
     metadata: { ...snapshot.metadata, screenshot },

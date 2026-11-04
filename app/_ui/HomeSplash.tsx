@@ -11,6 +11,7 @@ import {
 } from '@heroicons/react/24/outline';
 import { ThemeToggle } from '#/components/theme/ThemeToggle';
 import HomeBrandCard from './HomeBrandCard';
+import HomeVirtualDesignerBar from './HomeVirtualDesignerBar';
 
 const MEMORIAL_LINKS = [
   { label: 'Home', href: '/' },
@@ -212,6 +213,9 @@ export default function HomeSplash() {
           id="how-it-works"
           className="relative z-10 mx-auto w-full max-w-7xl scroll-mt-24 px-4 pt-24 pb-12 sm:px-6 sm:pt-[140px] sm:pb-14 lg:px-8 lg:pt-[136px] lg:pb-16"
         >
+          {/* AI Virtual Stonecraft Prompt Bar */}
+          <HomeVirtualDesignerBar />
+
           <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,0.74fr)_minmax(0,1.26fr)] lg:gap-10">
             <div className="flex max-w-xl flex-col items-start text-left">
               <h1

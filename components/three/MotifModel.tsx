@@ -159,7 +159,7 @@ export default function MotifModel({
   );
   const dragPlane = React.useMemo(() => new THREE.Plane(new THREE.Vector3(0, 0, 1), 0), []);
   const fallbackIntersection = React.useMemo(() => new THREE.Vector3(), []);
-  const [textureInfo, setTextureInfo] = React.useState<{ texture: THREE.CanvasTexture; alphaTexture: THREE.CanvasTexture; aspect: number } | null>(null);
+  const [textureInfo, setTextureInfo] = React.useState<{ texture: THREE.CanvasTexture; alphaTexture: THREE.CanvasTexture; aspect: number; sourcePath: string; stainless: boolean; dimension: number } | null>(null);
   const planeGeometry = React.useMemo(() => new THREE.PlaneGeometry(1, 1), []);
   const pointerCaptureTargetRef = React.useRef<HTMLElement | null>(null);
   const isLedgerSurface = surface === 'ledger';
@@ -316,6 +316,9 @@ export default function MotifModel({
               texture: activeTexture,
               alphaTexture: activeAlphaTexture,
               aspect: canvas.width / canvas.height || 1,
+              sourcePath: svgPath,
+              stainless: isStainlessSteelMotif,
+              dimension: textureDimension,
             });
           }
         } finally {
@@ -852,7 +855,7 @@ export default function MotifModel({
   return (
     <>
       {/* Parent group for positioning - same coordinate system as inscriptions */}
-      <group position={groupPosition} rotation={groupRotation}>
+      <group position={groupPosition} rotation={groupRotation} userData={{ previewMotifId: id, previewMotifPath: textureInfo.sourcePath, previewMotifSurface: surface ?? 'headstone', previewMotifReady: textureInfo.stainless === isStainlessSteelMotif && textureInfo.dimension === textureDimension }}>
         {!isLedgerSurface && guideProgress > 0.01 && (
           <Line
             points={[

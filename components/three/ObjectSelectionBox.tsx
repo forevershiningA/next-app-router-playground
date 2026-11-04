@@ -4,6 +4,7 @@ import * as React from 'react';
 import * as THREE from 'three';
 import { useThree, useFrame } from '@react-three/fiber';
 import { Line } from '@react-three/drei';
+import { useHeadstoneStore } from '#/lib/headstone-store';
 
 const DEFAULT_ANIMATION_DURATION_MS = 520;
 const HANDLE_SCREEN_SIZE_PX = 12;
@@ -76,6 +77,7 @@ export default function SelectionBox({
   animateOnShow = false,
   animationDuration = DEFAULT_ANIMATION_DURATION_MS,
 }: Props) {
+  const screenshotMode = useHeadstoneStore((state) => state.screenshotMode);
   const threeContext = useThree();
   const { camera, gl, controls, invalidate, size, viewport } = threeContext;
 
@@ -764,7 +766,7 @@ export default function SelectionBox({
   }
 
   return (
-    <group ref={groupRef} position={position} rotation={[0, 0, rotation]}>
+    <group ref={groupRef} position={position} rotation={[0, 0, rotation]} visible={!screenshotMode}>
       {/* Box outline */}
       {shouldShowOutline &&
         animatedSegments.map((segment, index) => (
