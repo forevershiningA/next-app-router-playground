@@ -27,6 +27,8 @@ export interface ParsedMemorialIntent {
     | 'unknown';
   productId?: string;
   title?: string;
+  widthMm?: number;
+  heightMm?: number;
   names?: {
     singleName?: string;
     firstName?: string;
@@ -103,6 +105,29 @@ function normalizePolishGenitiveName(name: string): string {
 }
 
 /**
+ * Computes safe stonemason inscription font size in mm so text never overflows plaque or headstone borders.
+ * Uses realistic character metrics for uppercase serif typefaces (Garamond/Cinzel) with 3D letter spacing.
+ */
+export function computeSafeInscriptionSize(
+  text: string,
+  baseSizeMm: number,
+  plaqueWidthMm: number,
+  borderMarginMm = 80,
+  minSizeMm = 8,
+): number {
+  if (!text || text.trim().length === 0) return baseSizeMm;
+  const availableWidthMm = Math.max(80, plaqueWidthMm - borderMarginMm);
+  const approxCharWidthRatio = 0.85;
+  const estimatedWidth = text.length * baseSizeMm * approxCharWidthRatio;
+  if (estimatedWidth <= availableWidthMm) {
+    return baseSizeMm;
+  }
+  const maxSafeSize = availableWidthMm / (text.length * approxCharWidthRatio);
+  const fitted = Math.floor(maxSafeSize * 2) / 2;
+  return Math.max(minSizeMm, Math.min(baseSizeMm, fitted));
+}
+
+/**
  * Parses user natural language command into structured memorial intent & slots without LLM.
  */
 export function parseVirtualDesignerCommand(rawCommand: string): ParsedMemorialIntent {
@@ -112,6 +137,11 @@ export function parseVirtualDesignerCommand(rawCommand: string): ParsedMemorialI
   // Extract Dates (e.g. 1945 — 2022, 1945-2022, * 10.03.1934 † 14.05.2018)
   const dateMatch = text.match(/(\*\s*\d{1,2}[./-]\d{1,2}[./-]\d{2,4}\s*[†+]\s*\d{1,2}[./-]\d{1,2}[./-]\d{2,4}|\b\d{4}\s*[—–-]\s*\d{4}\b|\b\d{4}\b)/i);
   const dates = dateMatch ? cleanText(dateMatch[1]) : undefined;
+
+  // Extract explicit dimensions (e.g. 450x300, 380x280, 420x280)
+  const dimMatch = text.match(/(\d{2,4})\s*[x×*]\s*(\d{2,4})/i);
+  const parsedWidthMm = dimMatch ? parseInt(dimMatch[1], 10) : undefined;
+  const parsedHeightMm = dimMatch ? parseInt(dimMatch[2], 10) : undefined;
 
   // Extract Vases flag
   const hasVases =
@@ -162,6 +192,8 @@ export function parseVirtualDesignerCommand(rawCommand: string): ParsedMemorialI
       intent: 'create_bronze_plaque',
       productId: '5',
       title,
+      widthMm: parsedWidthMm || 450,
+      heightMm: parsedHeightMm || 300,
       names: { singleName: person },
       dates: dates || '1938 — 2019',
       borderName: 'Border 4',
@@ -402,8 +434,11 @@ export async function executeVirtualDesignerIntent(
       sessionId = parseMcpResponse(s).sessionId;
       await new Promise((r) => setTimeout(r, 500));
 
+      const widthMm = parsed.widthMm || 450;
+      const heightMm = parsed.heightMm || 300;
+
       await client.callTool({ name: 'set_shape', arguments: { shapeId: '67', expectedRevision: 'latest' } });
-      await client.callTool({ name: 'set_dimensions', arguments: { widthMm: 380, heightMm: 280, expectedRevision: 'latest' } });
+      await client.callTool({ name: 'set_dimensions', arguments: { widthMm, heightMm, expectedRevision: 'latest' } });
       await client.callTool({
         name: 'set_assembly_options',
         arguments: {
@@ -415,14 +450,17 @@ export async function executeVirtualDesignerIntent(
         },
       });
 
+      const motifYPos = -Math.round(heightMm * 0.32);
+      const motifHeight = Math.round(heightMm * 0.125);
+
       await client.callTool({
         name: 'add_motif',
         arguments: {
           categoryId: 'Religious',
           svgPath: '/shapes/motifs/cross_001.svg',
-          heightMm: 45,
+          heightMm: motifHeight,
           xPos: 0,
-          yPos: -85,
+          yPos: motifYPos,
           expectedRevision: 'latest',
         },
       });
@@ -433,15 +471,21 @@ export async function executeVirtualDesignerIntent(
       const subText = isPl ? 'WYBITNY NAUKOWIEC I PEDAGOG' : 'DISTINGUISHED SCHOLAR AND MENTOR';
       const bottomText = isPl ? 'WDZIĘCZNI STUDENCI I WSPÓŁPRACOWNICY' : 'FOREVER IN OUR HEARTS';
 
+      const headerSize = computeSafeInscriptionSize(headerText, 13, widthMm);
+      const personSize = computeSafeInscriptionSize(person, 17, widthMm);
+      const subSize = computeSafeInscriptionSize(subText, 10.5, widthMm);
+      const datesSize = computeSafeInscriptionSize(parsed.dates || '1938 — 2019', 12.5, widthMm);
+      const bottomSize = computeSafeInscriptionSize(bottomText, 10, widthMm);
+
       await client.callTool({
         name: 'add_inscriptions',
         arguments: {
           inscriptions: [
-            { text: headerText, font: 'Garamond', sizeMm: 16, color: '#D4AF37', xPos: 0, yPos: 42 },
-            { text: person, font: 'Garamond', sizeMm: 20, color: '#D4AF37', xPos: 0, yPos: 15 },
-            { text: subText, font: 'Garamond', sizeMm: 13, color: '#D4AF37', xPos: 0, yPos: -12 },
-            { text: parsed.dates || '1938 — 2019', font: 'Garamond', sizeMm: 14, color: '#D4AF37', xPos: 0, yPos: -38 },
-            { text: bottomText, font: 'Garamond', sizeMm: 11, color: '#D4AF37', xPos: 0, yPos: -70 },
+            { text: headerText, font: 'Garamond', sizeMm: headerSize, color: '#D4AF37', xPos: 0, yPos: Math.round(heightMm * 0.20) },
+            { text: person, font: 'Garamond', sizeMm: personSize, color: '#D4AF37', xPos: 0, yPos: Math.round(heightMm * 0.09) },
+            { text: subText, font: 'Garamond', sizeMm: subSize, color: '#D4AF37', xPos: 0, yPos: -Math.round(heightMm * 0.015) },
+            { text: parsed.dates || '1938 — 2019', font: 'Garamond', sizeMm: datesSize, color: '#D4AF37', xPos: 0, yPos: -Math.round(heightMm * 0.12) },
+            { text: bottomText, font: 'Garamond', sizeMm: bottomSize, color: '#D4AF37', xPos: 0, yPos: -Math.round(heightMm * 0.23) },
           ],
           expectedRevision: 'latest',
         },
@@ -461,8 +505,8 @@ export async function executeVirtualDesignerIntent(
       const saveData = parseMcpResponse(saveRes);
 
       const message = isPl
-        ? `Pomyślnie utworzono tablicę pamiątkową z brązu (380 × 280 mm, Border 4, mocowanie ${parsed.fixingType || 'lugs-with-studs'}). Układ zweryfikowany z 0 ostrzeżeń.`
-        : `Successfully created cast bronze memorial plaque (380 × 280 mm, Border 4, ${parsed.fixingType || 'lugs-with-studs'} fixing). Stonemason layout verified with 0 warnings.`;
+        ? `Pomyślnie utworzono tablicę pamiątkową z brązu (${widthMm} × ${heightMm} mm, Border 4, mocowanie ${parsed.fixingType || 'lugs-with-studs'}). Układ zweryfikowany z 0 ostrzeżeń.`
+        : `Successfully created cast bronze memorial plaque (${widthMm} × ${heightMm} mm, Border 4, ${parsed.fixingType || 'lugs-with-studs'} fixing). Stonemason layout verified with 0 warnings.`;
 
       return {
         success: true,
@@ -866,6 +910,18 @@ export function buildDeterministicDraft(
     const bottomText = isPl ? 'WDZIĘCZNI STUDENCI I WSPÓŁPRACOWNICY' : 'FOREVER IN OUR HEARTS';
     const title = parsed.title || (isPl ? `Tablica Pamiątkowa — ${person}` : `Bronze Memorial Plaque — ${person}`);
 
+    const widthMm = parsed.widthMm || 450;
+    const heightMm = parsed.heightMm || 300;
+
+    const headerSize = computeSafeInscriptionSize(headerText, 13, widthMm);
+    const personSize = computeSafeInscriptionSize(person, 17, widthMm);
+    const subSize = computeSafeInscriptionSize(subText, 10.5, widthMm);
+    const datesSize = computeSafeInscriptionSize(parsed.dates || '1938 — 2019', 12.5, widthMm);
+    const bottomSize = computeSafeInscriptionSize(bottomText, 10, widthMm);
+
+    const motifHeight = Math.round(heightMm * 0.125);
+    const motifOffset = -Math.round(heightMm * 0.32);
+
     const snapshot: DesignerSnapshot = {
       version: 1,
       productId: '5',
@@ -879,8 +935,8 @@ export function buildDeterministicDraft(
       baseMaterialUrl: '/textures/forever/l/Imperial-Red.webp',
       ledgerMaterialUrl: '/textures/forever/l/Imperial-Red.webp',
       kerbsetMaterialUrl: '/textures/forever/l/Imperial-Red.webp',
-      widthMm: 380,
-      heightMm: 280,
+      widthMm,
+      heightMm,
       baseWidthMm: 1260,
       baseHeightMm: 0,
       baseThickness: 250,
@@ -911,16 +967,16 @@ export function buildDeterministicDraft(
       motifOffsets: {
         'motif-cross-bronze': {
           xPos: 0,
-          yPos: -85,
+          yPos: motifOffset,
           scale: 1,
           rotationZ: 0,
-          heightMm: 45,
+          heightMm: motifHeight,
           target: 'headstone',
           coordinateSpace: 'offset',
           flipX: false,
           flipY: false,
-          baseWidthMm: 380,
-          baseHeightMm: 280,
+          baseWidthMm: widthMm,
+          baseHeightMm: heightMm,
         },
       },
       selectedEmblems: [],
@@ -931,71 +987,71 @@ export function buildDeterministicDraft(
           id: 'l-bronze-1',
           text: headerText,
           font: 'Garamond',
-          sizeMm: 16,
+          sizeMm: headerSize,
           rotationDeg: 0,
           xPos: 0,
-          yPos: 191.58,
+          yPos: Math.round(heightMm * 0.69 * 100) / 100,
           color: '#ffb35a',
           target: 'headstone',
           textAlign: 'center',
-          baseWidthMm: 380,
-          baseHeightMm: 280,
+          baseWidthMm: widthMm,
+          baseHeightMm: heightMm,
         },
         {
           id: 'l-bronze-2',
           text: person,
           font: 'Garamond',
-          sizeMm: 20,
+          sizeMm: personSize,
           rotationDeg: 0,
           xPos: 0,
-          yPos: 163.16,
+          yPos: Math.round(heightMm * 0.585 * 100) / 100,
           color: '#ffb35a',
           target: 'headstone',
           textAlign: 'center',
-          baseWidthMm: 380,
-          baseHeightMm: 280,
+          baseWidthMm: widthMm,
+          baseHeightMm: heightMm,
         },
         {
           id: 'l-bronze-3',
           text: subText,
           font: 'Garamond',
-          sizeMm: 13,
+          sizeMm: subSize,
           rotationDeg: 0,
           xPos: 0,
-          yPos: 134.74,
+          yPos: Math.round(heightMm * 0.485 * 100) / 100,
           color: '#ffb35a',
           target: 'headstone',
           textAlign: 'center',
-          baseWidthMm: 380,
-          baseHeightMm: 280,
+          baseWidthMm: widthMm,
+          baseHeightMm: heightMm,
         },
         {
           id: 'l-bronze-4',
           text: parsed.dates || '1938 — 2019',
           font: 'Garamond',
-          sizeMm: 14,
+          sizeMm: datesSize,
           rotationDeg: 0,
           xPos: 0,
-          yPos: 107.37,
+          yPos: Math.round(heightMm * 0.385 * 100) / 100,
           color: '#ffb35a',
           target: 'headstone',
           textAlign: 'center',
-          baseWidthMm: 380,
-          baseHeightMm: 280,
+          baseWidthMm: widthMm,
+          baseHeightMm: heightMm,
         },
         {
           id: 'l-bronze-5',
           text: bottomText,
           font: 'Garamond',
-          sizeMm: 11,
+          sizeMm: bottomSize,
           rotationDeg: 0,
           xPos: 0,
-          yPos: 73.68,
+          yPos: Math.round(heightMm * 0.27 * 100) / 100,
           color: '#ffb35a',
           target: 'headstone',
           textAlign: 'center',
-          baseWidthMm: 380,
-          baseHeightMm: 280,
+          baseWidthMm: widthMm,
+          baseHeightMm: heightMm,
         },
       ],
       metadata: {
@@ -1005,8 +1061,8 @@ export function buildDeterministicDraft(
     };
 
     const message = isPl
-      ? `Pomyślnie utworzono tablicę pamiątkową z brązu (380 × 280 mm, Border 1, montaż śrubowy). Układ zweryfikowany ze standardem kamieniarskim.`
-      : `Successfully created cast bronze memorial plaque (380 × 280 mm, Border 1, lugs-with-studs fixing). Stonemason layout verified with 0 warnings.`;
+      ? `Pomyślnie utworzono tablicę pamiątkową z brązu (${widthMm} × ${heightMm} mm, ${parsed.borderName || 'Border 1'}, montaż śrubowy). Układ zweryfikowany ze standardem kamieniarskim.`
+      : `Successfully created cast bronze memorial plaque (${widthMm} × ${heightMm} mm, ${parsed.borderName || 'Border 1'}, lugs-with-studs fixing). Stonemason layout verified with 0 warnings.`;
 
     const svgPreview = generateDraftSvgPreview(snapshot, { title });
     const imageData = generateDraftSvgDataUri(snapshot, { title });

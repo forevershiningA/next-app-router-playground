@@ -312,9 +312,9 @@ function renderBronzePlaqueSvg(
         text-anchor="middle"
         fill="url(#bronzeRim)"
         font-family="'Garamond', serif"
-        font-size="15"
+        font-size="${subLine.length > 24 ? '13' : '15'}"
         font-weight="600"
-        letter-spacing="1.5"
+        letter-spacing="${subLine.length > 24 ? '1' : '1.5'}"
         filter="url(#bronzeBevel)">${esc(subLine)}</text>
 
   <!-- Dates -->

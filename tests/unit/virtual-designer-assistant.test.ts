@@ -2,10 +2,11 @@ import { describe, it, expect } from 'vitest';
 import {
   parseVirtualDesignerCommand,
   buildDeterministicDraft,
+  computeSafeInscriptionSize,
 } from '#/lib/virtual-designer-assistant';
 
 describe('Deterministic Virtual Designer Assistant', () => {
-  it('builds a cast bronze plaque draft with dynamic vector preview', () => {
+  it('builds a cast bronze plaque draft with dynamic vector preview and safe margins', () => {
     const cmd = 'Zaprojektuj tablicę pamiątkową z brązu dla prof. Jerzego Nowickiego 1938 — 2019';
     const parsed = parseVirtualDesignerCommand(cmd);
     expect(parsed.intent).toBe('create_bronze_plaque');
@@ -18,10 +19,37 @@ describe('Deterministic Virtual Designer Assistant', () => {
     expect(draft.previewUrl).toContain('/api/virtual-assistant?draftId=');
     expect(draft.imageData).toContain('data:image/svg+xml;base64,');
     expect(draft.svgPreview).toContain('JERZY NOWICKI');
-    expect(draft.snapshot.widthMm).toBe(380);
-    expect(draft.snapshot.heightMm).toBe(280);
+    expect(draft.snapshot.widthMm).toBe(450);
+    expect(draft.snapshot.heightMm).toBe(300);
     expect(draft.snapshot.inscriptions.length).toBeGreaterThanOrEqual(4);
     expect(draft.snapshot.selectedMotifs.length).toBe(1);
+
+    // Verify long text fits comfortably within safe margins
+    const subLine = draft.snapshot.inscriptions.find((i) => i.id === 'l-bronze-3');
+    expect(subLine).toBeDefined();
+    expect(subLine!.sizeMm).toBeLessThanOrEqual(11);
+  });
+
+  it('respects custom bronze plaque dimensions when explicitly requested', () => {
+    const cmd = 'Tablica z brązu 380x280 dla Jana Nowaka 1950 — 2021';
+    const parsed = parseVirtualDesignerCommand(cmd);
+    expect(parsed.widthMm).toBe(380);
+    expect(parsed.heightMm).toBe(280);
+
+    const draft = buildDeterministicDraft(parsed);
+    expect(draft.snapshot.widthMm).toBe(380);
+    expect(draft.snapshot.heightMm).toBe(280);
+  });
+
+  it('computes safe inscription sizes dynamically to prevent border overflow', () => {
+    // 32 chars on 450mm plaque -> safe size around 10.5-11mm
+    const sizeOnWide = computeSafeInscriptionSize('DISTINGUISHED SCHOLAR AND MENTOR', 11, 450);
+    expect(sizeOnWide).toBe(11);
+
+    // Extreme long text (50 chars) -> automatically scaled down
+    const sizeLong = computeSafeInscriptionSize('VERY LONG ACADEMIC TITLE HONORING DISTINGUISHED PROFESSOR', 16, 450);
+    expect(sizeLong).toBeLessThan(10);
+    expect(sizeLong).toBeGreaterThanOrEqual(8);
   });
 
   it('builds a companion headstone draft with base vases in African Black', () => {
