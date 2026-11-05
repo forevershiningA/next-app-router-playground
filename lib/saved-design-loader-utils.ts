@@ -266,6 +266,9 @@ const resolveCanonicalShapeUrl = (shapeName?: string) => {
   if (!shapeName) {
     return `/shapes/headstones/${DEFAULT_SHAPE_FILE}`;
   }
+  if (shapeName.startsWith('/shapes/') || shapeName.startsWith('http')) {
+    return shapeName;
+  }
 
   const normalized = normalizeShapeKey(shapeName);
   const normalizedWithoutParens = stripParenthetical(normalized) || normalized;
@@ -1257,7 +1260,15 @@ export async function loadCanonicalDesignIntoEditor(
     store.setShowBase(false);
   }
 
-  if (ledgerComponent) {
+  const isFullMonument =
+    designData.product?.type === 'full-monument' ||
+    useHeadstoneStore.getState().catalog?.product?.type === 'full-monument';
+
+  const hasValidLedger =
+    isFullMonument &&
+    Boolean(ledgerComponent && (ledgerComponent.width_mm ?? 0) > 1);
+
+  if (hasValidLedger && ledgerComponent) {
     store.setShowLedger(true);
     if (ledgerComponent.width_mm) {
       store.setLedgerWidthMm(ledgerComponent.width_mm);
@@ -1272,7 +1283,11 @@ export async function loadCanonicalDesignIntoEditor(
     store.setShowLedger(false);
   }
 
-  if (kerbComponent) {
+  const hasValidKerb =
+    isFullMonument &&
+    Boolean(kerbComponent && (kerbComponent.width_mm ?? 0) > 1);
+
+  if (hasValidKerb && kerbComponent) {
     store.setShowKerbset(true);
     if (kerbComponent.width_mm) {
       store.setKerbWidthMm(kerbComponent.width_mm);
@@ -1286,6 +1301,20 @@ export async function loadCanonicalDesignIntoEditor(
     if (kerbComponent.texture) {
       const mappedKerbTexture = mapTexture(kerbComponent.texture, String(productId ?? ''));
       store.setKerbsetMaterialUrl(mappedKerbTexture);
+    }
+  } else {
+    store.setShowKerbset(false);
+  }
+
+  // Ensure non-full-monument products never have active editing/selection on ledger or kerbset
+  if (!isFullMonument) {
+    const currentEditingObject = useHeadstoneStore.getState().editingObject;
+    if (currentEditingObject === 'ledger' || currentEditingObject === 'kerbset') {
+      store.setEditingObject('headstone');
+    }
+    const currentSelected = useHeadstoneStore.getState().selected;
+    if (currentSelected === 'ledger' || currentSelected === 'kerbset') {
+      store.setSelected(null);
     }
   }
 

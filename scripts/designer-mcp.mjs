@@ -274,7 +274,15 @@ async function pageForSession() {
   if (candidates.length === 0) {
     // When starting without an open browser tab, launch the default designer tab
     const context = browser.contexts()[0] ?? (await browser.newContext());
-    const origin = liveOrigin || 'http://127.0.0.1:3104';
+    let origin = liveOrigin || process.env.DESIGNER_APP_ORIGIN;
+    if (!origin) {
+      try {
+        const res = await fetch('http://127.0.0.1:3104', { signal: AbortSignal.timeout(500) }).catch(() => null);
+        origin = res ? 'http://127.0.0.1:3104' : 'http://127.0.0.1:3000';
+      } catch {
+        origin = 'http://127.0.0.1:3000';
+      }
+    }
     const initialUrl = `${origin}/traditional-engraved-headstone/inscriptions`;
     const initialPage = await context.newPage();
     await initialPage.goto(initialUrl, { waitUntil: 'domcontentloaded', timeout: 60000 });
@@ -337,7 +345,12 @@ async function withRevision(
       'REVISION_CONFLICT',
       'The design has changed. Read it again.',
     );
-  const outcome = await action(JSON.stringify(before.snapshot));
+  let outcome = await action(JSON.stringify(before.snapshot));
+  if (outcome?.error === 'REVISION_CONFLICT' && expectedRevision === 'latest') {
+    await new Promise((r) => setTimeout(r, 200));
+    const freshBefore = await read(page);
+    outcome = await action(JSON.stringify(freshBefore.snapshot));
+  }
   if (outcome.error)
     return failure(
       outcome.error,
@@ -2139,7 +2152,6 @@ server.registerTool(
                   });
                 });
               }
-            }
             } else if (preset === 'single_centered') {
               const person = leftPerson || rightPerson;
               if (person) {

@@ -1,0 +1,143 @@
+{
+  "version": "1.0",
+  "generatedAt": "2026-11-05T18:31:10.860Z",
+  "units": "mm",
+  "source": {
+    "id": "1762000000014",
+    "mlDir": "headstonesdesigner",
+    "savedAt": "2026-11-05T18:31:10.860Z",
+    "format": "canonical"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "shape": "/shapes/headstones/first-responders/first-aid-kit.svg"
+  },
+  "scene": {
+    "coordinateSystem": {
+      "positionMode": "p3d-mm-center",
+      "coordinateSpace": "headstone-center-mm",
+      "headstonePlacement": "auto-center"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 600,
+      "height_mm": 550,
+      "thickness_mm": 100,
+      "shape": "/shapes/headstones/first-responders/first-aid-kit.svg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "base": {
+      "width_mm": 700,
+      "height_mm": 100,
+      "depth_mm": 250,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-0",
+        "text": "SERVANT OF HEALING",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 18,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 0,
+          "y_mm": 130
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#FFFFFF",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-1",
+        "text": "SARAH J. ANDERSON",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 26,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 0,
+          "y_mm": 55
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#FFFFFF",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "PARAMEDIC • 25 YEARS OF CARE",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 15,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 0,
+          "y_mm": 20
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#FFFFFF",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "1965 — 2020",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 18,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 0,
+          "y_mm": -40
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#FFFFFF",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Forever Caring in God's Arms",
+        "font": {
+          "family": "Great Vibes",
+          "size_mm": 22,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 0,
+          "y_mm": -95
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#FFFFFF",
+        "align": "center",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  }
+}

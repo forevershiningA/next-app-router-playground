@@ -1,0 +1,143 @@
+{
+  "version": "1.0",
+  "generatedAt": "2026-11-05T18:29:00.144Z",
+  "units": "mm",
+  "source": {
+    "id": "1762000000008",
+    "mlDir": "headstonesdesigner",
+    "savedAt": "2026-11-05T18:29:00.144Z",
+    "format": "canonical"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "shape": "/shapes/headstones/military/pledge-soldier.svg"
+  },
+  "scene": {
+    "coordinateSystem": {
+      "positionMode": "p3d-mm-center",
+      "coordinateSpace": "headstone-center-mm",
+      "headstonePlacement": "auto-center"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 500,
+      "height_mm": 700,
+      "thickness_mm": 100,
+      "shape": "/shapes/headstones/military/pledge-soldier.svg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "base": {
+      "width_mm": 600,
+      "height_mm": 100,
+      "depth_mm": 250,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-0",
+        "text": "FOR GOD AND COUNTRY",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 18,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 0,
+          "y_mm": 170
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#FFFFFF",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-1",
+        "text": "LT. GREGORY WHITE",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 26,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 0,
+          "y_mm": 80
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#FFFFFF",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "UNITED STATES ARMED FORCES",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 16,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 0,
+          "y_mm": 30
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#FFFFFF",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "1950 — 2022",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 18,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 0,
+          "y_mm": -35
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#FFFFFF",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "A Faithful Servant of the Nation",
+        "font": {
+          "family": "Great Vibes",
+          "size_mm": 22,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 0,
+          "y_mm": -120
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#FFFFFF",
+        "align": "center",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  }
+}

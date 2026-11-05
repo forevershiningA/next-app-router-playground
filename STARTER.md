@@ -150,10 +150,92 @@
 137. [November 4 Autonomous AI Design Assistant & Production Handoff](#current-status-2026-11-04--autonomous-ai-design-assistant--production-handoff)
 138. [November 4 3D Transition Stability, Layout.js Fix, Back-Button Recovery & OpenBot Canon Alignment](#current-status-2026-11-04--3d-transition-stability-layoutjs-fix-back-button-recovery--openbot-canon-alignment)
 139. [November 5 Bronze Plaque Layout Polish, Zero-Invention Rule & WWII Preservation](#current-status-2026-11-05--bronze-plaque-layout-polish-zero-invention-rule--wwii-preservation)
+140. [November 5 100% Configurator Product Coverage & Dual HTML/Markdown Autonomous Test Matrix](#current-status-2026-11-05--100-configurator-product-coverage--dual-htmlmarkdown-autonomous-test-matrix)
+141. [November 5 Military & First Responders 3D Catalog Design Generator & Gallery Integration](#current-status-2026-11-05--military--first-responders-3d-catalog-design-generator--gallery-integration)
 
 ---
 
-## Current Status (2026-11-05) — Bronze Plaque Layout Polish, Zero-Invention Rule & WWII Preservation
+## Current Status (2026-11-05) — Military & First Responders 3D Catalog Design Generator & Gallery Integration
+
+- **Session Summary & Completed Implementation (November 5 Night):**
+  1. *Autonomous Catalog Design Generator (`scripts/generate-catalog-designs.mjs`):*
+     - Created an end-to-end generator script using the Forever MCP server (`scripts/designer-mcp.mjs`) to generate complete, ready-to-personalize 3D designs for all custom shapes.
+     - Phase 1 generated **16 new designs** covering 100% of the Military and First Responder shape catalog:
+       - **Military (10 shapes):** Military Pentagon (`pentagon.svg`), Naval Ship (`ferry.svg`), Tank (`war-tank.svg`), Combat Boot (`military-boot.svg`), Honor Guard (`palace-guards-with-machine-gun-variant.svg`), Communications Soldier (`communications-soldier.svg`), Paratrooper (`paratrooper.svg`), Pledge Soldier (`pledge-soldier.svg`), Soldier of Freedom (`soldier.svg`), Final Salute (`soldier (1).svg`).
+       - **First Responders (6 shapes):** Fire Engine (`firefighters.svg`), Fallen Firefighter (`firemen.svg`), Eternal Flame (`fire.svg`), Paramedic & First Aid Kit (`first-aid-kit.svg`), Fire Chief Helmet (`helmet.svg`), Physician & Healer (`medical-doctor-profession-specialist-medic.svg`).
+     - Tailored typography, service titles, ranks, and respectful valedictions for each silhouette, rendered in 3D, and captured at full resolution.
+
+  2. *Granite Material Alignment & Glory Black 2 Precision:*
+     - **Issue:** Laser-etched black granite headstones were initially generated with African Black (`materialId: '1'`), which is meant for traditional carved memorials rather than high-contrast laser ablation.
+     - **Resolution:** Re-generated all 16 designs with **Glory Black 2** (`materialId: '19'`, texture path `/textures/forever/l/Glory-Black-2.webp`) for both headstone and base components across MCP 3D rendering and canonical JSON outputs.
+
+  3. *Full Personalization Manifest Enablement & Dynamic Routing:*
+     - **Issue:** "Start with this design" / "Personalize This Design" button was disabled because new designs lacked registration in `lib/design-source-manifest.json` and `lib/design-personalization-manifest.json`.
+     - **Resolution:** Updated `scripts/generate-catalog-designs.mjs` to automatically register each generated template into:
+       - `lib/design-source-manifest.json` (`status: 'source-ready'`, `materialTexture: '/textures/forever/l/Glory-Black-2.webp'`, `materialName: 'Glory Black'`)
+       - `lib/design-personalization-manifest.json` (`expectedProductIds[designId] = '4'`)
+       - `lib/design-preview-ids.json`
+       - `lib/saved-designs-data.json`
+       - `lib/slug-to-id-mapping.json`
+       - `public/screenshots/v2026-3d-ids.json`
+     - All 16 design detail pages now have active, clickable "Personalize This Design" buttons that seamlessly load into the 3D configurator with proper shape, Glory Black texture, and inscription text.
+
+  4. *Live Gallery Integration (`/designs/`):*
+     - **Canonical Storage:** Output valid canonical JSON files into `public/designs/v2026-p3d/${designId}.json` for immediate loading into the 3D editor.
+     - **Thumbnails & Screenshots:** Converted rendered previews via `sharp` into dual-size PNGs (`public/screenshots/v2026-3d/${designId}.png` and `_small.png`).
+     - **URL Compatibility:** Added direct path preservation in `resolveCanonicalShapeUrl` (`lib/saved-design-loader-utils.ts`) so shapes under `/shapes/headstones/military/` and `/shapes/headstones/first-responders/` resolve directly without distortion.
+
+  5. *Verification & Web Validation:*
+     - Verified HTTP 200 responses and interactive "Personalize This Design" buttons for generated URLs:
+       - `/designs/laser-etched-headstone/military-veteran/military-pentagon-sgt-robert-j-miller`
+       - `/designs/laser-etched-headstone/service-memorial/firefighter-sean-kelly-memorial`
+     - TypeScript compiler check `pnpm exec tsc --noEmit` passed with 0 errors.
+
+  6. *Full Monument Component Isolation (Ledger & Kerbset Exclusion for Headstones):*
+     - **Issue:** When loading a saved headstone design (e.g. `1762000000015` Fire Chief Helmet), the 3D scene erroneously rendered a massive Ledger slab and Kerbset, setting `editingObject` to `'ledger'` and driving quote price up to €2,268+.
+     - **Root Cause:**
+       1. Canonical design JSON generation included dummy placeholder components: `ledger: { width_mm: 0.1, ... }` and `kerb: { width_mm: 0.1, ... }`.
+       2. In `lib/saved-design-loader-utils.ts`, `if (ledgerComponent)` truthy check ran without verifying if the product is a `full-monument` or if dimensions were > 1 mm, thereby setting `store.setShowLedger(true)` and `store.setShowKerbset(true)`.
+       3. In `components/three/headstone/HeadstoneAssembly.tsx`, `<LedgerSlab>` and `<KerbsetBorder>` lacked strict `isFullMonument` outer guards.
+     - **Resolution:**
+       1. Hardened `lib/saved-design-loader-utils.ts`: Ledger and Kerbset can ONLY be activated if `isFullMonument` is true AND `width_mm > 1`. If `!isFullMonument`, `showLedger` and `showKerbset` are unconditionally set to `false`, and any active `editingObject` or `selected` pointing to `ledger`/`kerbset` is safely reset to `headstone`.
+       2. Hardened `components/three/headstone/HeadstoneAssembly.tsx`: Wrapped the entire Ledger & Kerbset 3D render tree in `{isFullMonument && ( ... )}` so non-full-monument products can never render them under any state anomaly.
+       3. Cleaned `scripts/generate-catalog-designs.mjs` and all 16 canonical JSON files (`public/designs/v2026-p3d/1762000000001.json` – `1762000000016.json`) to completely remove dummy `ledger` and `kerb` components for Product 4.
+
+  7. *Front Engraving Depth Testing (`SvgHeadstone.tsx`):*
+     - **Issue:** Front SVG contour engraving lines (outer helmet contour + inner badge) shone through the solid stone when viewed from the rear (as seen in `screen.png`).
+     - **Root Cause:** In `components/three/headstone/SvgHeadstone.tsx`, the fallback `<lineLoop>` (used when `engravingStrokeWidthMm` is undefined, e.g. for Laser-Etched Product 4) and `<DreiLine>`/`<sourceSvgOverlay>` had `depthTest={false}` instead of `depthTest={true}`.
+     - **Resolution:** Enabled `depthTest` (depth testing active) on `lineBasicMaterial`, `DreiLine`, and `sourceSvgOverlay` in `SvgHeadstone.tsx`. Now, when viewing the monument from the rear, the opaque solid granite headstone occludes the front lines as expected.
+
+- **Session Summary & Completed Implementation (November 5 Evening):**
+  1. *Full Configurator Catalog Coverage (18/18 Variants, 100% PASS):*
+     - Expanded the automated MCP test suite (`skills/forever-product-test-matrix/scripts/run-product-test-matrix.mjs`) from a 5-product sample to cover **all 17 configurable products** plus the WWII regression test:
+       - **Headstones & Light Series:** Product 1 (Stainless Light Transmitting), Product 4 (Laser-Etched Helen Davis), Product 23 (Stainless Light Reflective), Product 124 (Companion with Base Vases).
+       - **Full Monuments:** Product 100 (Laser-Etched Full Monument), Product 101 (Multi-Surface Traditional Engraved with Vases), Product 103 (Polish Traditional Full Monument).
+       - **Cast & Engraved Plaques:** Product 5 (Bronze Plaque Nowicki), Product 5-minimal (WWII Zero-Invention), Product 9 (Laser Pet Plaque), Product 30 (Laser Granite Plaque), Product 32 (Full Colour Plaque), Product 34 (Traditional Engraved Plaque), Product 52 (YAG Lasered Stainless Steel Plaque).
+       - **Pet & Specialty Monuments:** Product 8 (Laser Pet Mini Headstone), Product 22 (Laser Granite Mini Headstone), Product 135 (Laser Pet Rock), Product 2350 (Stainless Enamel Urn).
+     - Executed full test matrix in autonomous MCP environment, achieving **18/18 PASS (100% success rate)** with zero errors.
+
+  2. *Dual-Format HTML & Markdown Reporting:*
+     - Implemented `generateHtmlReport()` within the test matrix runner to produce standalone, responsive HTML reports alongside standard `.md` reports in `output/reports/`:
+       - **Modern UI:** Styled with a dark slate & gold theme (`#0d1117`, `#161b22`, `#d4af37`, `#238636`).
+       - **KPI Summary Cards:** Total Tests, Passed Count, Failed Count, Success Rate %, and Suite Duration.
+       - **Interactive Client-Side Filtering:** Instant search input and filter buttons (`All`, `Passed`, `Failed`) requiring zero external dependencies.
+       - **Dual Presentation:** High-density summary matrix table and visual card gallery with embedded JPG preview thumbnails and direct links to JSON drafts and high-res previews.
+
+  3. *Bridge & Readiness Bug Fixes (`lib/designer-agent-bridge.ts`, `lib/designer-preview-ready.ts`):*
+     - **Product 30 Missing Bridge Inclusion:** Added `'30'` to `CONFIGURABLE_PRODUCTS` in `lib/designer-agent-bridge.ts`, resolving `productConfigurationReady` hangs during session initialization.
+     - **Product 103 (Polish Traditional Monument) Readiness Guard:** `PolishMonumentAssembly` features procedural parametric stone courses without 3D glyph/motif meshes. Added assembly guard `scene.getObjectByName('polish-tomb-body')` across `areInscriptionGlyphsReady`, `areDesignerMotifsReady`, `areDesignerAdditionsReady`, and `areDesignerEmblemsReady` in `lib/designer-preview-ready.ts`, allowing proper 3D screenshot capture without false `PREVIEW_NOT_READY` timeouts.
+
+  4. *OpenBot Skills Synchronization:*
+     - Mirrored updated `run-product-test-matrix.mjs` and `SKILL.md` directly into both active OpenBot agent workspaces:
+       - `C:/Users/polcr/OpenBot/Agents/agent-18109007-b3d8-4076-9f2e-fb22e579b2b0/.agents/skills/forever-product-test-matrix/`
+       - `C:/Users/polcr/OpenBot/Agents/agent-cf469eec-df11-4822-a4b8-c8d27185aba4/.agents/skills/forever-product-test-matrix/`
+
+  5. *Verification Artifacts on Disk:*
+     - **HTML Report:** `output/reports/product-test-matrix-1793889477795.html`
+     - **Markdown Report:** `output/reports/product-test-matrix-1793889477795.md`
+     - **TypeScript Integrity:** `pnpm exec tsc --noEmit` clean (0 errors).
 
 - **Session Summary & Completed Implementation (November 5):**
   1. *Prompt Parsing & Acronym Preservation (`lib/virtual-designer-assistant.ts`):*

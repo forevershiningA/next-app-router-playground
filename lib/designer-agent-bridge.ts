@@ -38,6 +38,7 @@ const CONFIGURABLE_PRODUCTS = new Set([
   '8',
   '9',
   '22',
+  '30',
   '34',
   '32',
   '52',

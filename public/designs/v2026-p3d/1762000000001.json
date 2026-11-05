@@ -1,0 +1,143 @@
+{
+  "version": "1.0",
+  "generatedAt": "2026-11-05T18:26:21.424Z",
+  "units": "mm",
+  "source": {
+    "id": "1762000000001",
+    "mlDir": "headstonesdesigner",
+    "savedAt": "2026-11-05T18:26:21.426Z",
+    "format": "canonical"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "shape": "/shapes/headstones/military/pentagon.svg"
+  },
+  "scene": {
+    "coordinateSystem": {
+      "positionMode": "p3d-mm-center",
+      "coordinateSpace": "headstone-center-mm",
+      "headstonePlacement": "auto-center"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 600,
+      "height_mm": 600,
+      "thickness_mm": 100,
+      "shape": "/shapes/headstones/military/pentagon.svg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "base": {
+      "width_mm": 700,
+      "height_mm": 100,
+      "depth_mm": 250,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-0",
+        "text": "HONOR • COURAGE • SACRIFICE",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 16,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 0,
+          "y_mm": 140
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#FFFFFF",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-1",
+        "text": "SGT. ROBERT J. MILLER",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 28,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 0,
+          "y_mm": 60
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#FFFFFF",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "UNITED STATES MARINE CORPS",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 16,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 0,
+          "y_mm": 15
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#FFFFFF",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "1944 — 2018",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 18,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 0,
+          "y_mm": -30
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#FFFFFF",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Forever in Our Hearts",
+        "font": {
+          "family": "Great Vibes",
+          "size_mm": 22,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 0,
+          "y_mm": -100
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#FFFFFF",
+        "align": "center",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  }
+}

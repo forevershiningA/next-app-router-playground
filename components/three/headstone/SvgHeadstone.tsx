@@ -2702,7 +2702,7 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(
                 lineWidth={2.5}
                 transparent
                 opacity={0.96}
-                depthTest={false}
+                depthTest
                 depthWrite={false}
                 renderOrder={12}
               />
@@ -2742,7 +2742,7 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(
                   color={engravingColor}
                   transparent
                   opacity={0.9}
-                  depthTest={false}
+                  depthTest
                   depthWrite={false}
                   toneMapped={false}
                 />
@@ -2770,10 +2770,10 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(
             transparent
             alphaTest={0.05}
             opacity={0.9}
-            depthTest={false}
+            depthTest
             depthWrite={false}
             toneMapped={false}
-            side={THREE.DoubleSide}
+            side={THREE.FrontSide}
           />
         </mesh>
       ) : null;

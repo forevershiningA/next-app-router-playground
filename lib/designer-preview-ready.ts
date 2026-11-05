@@ -68,6 +68,11 @@ export function areInscriptionGlyphsReady(
   inscriptions: ReadonlyArray<{ id: string; text: string }>,
   baseUrl: string,
 ): boolean {
+  if (inscriptions.length === 0) return true;
+  if (scene.getObjectByName('polish-tomb-body')) {
+    // Polish assembly has dedicated procedural geometry; inscription meshes are not mounted in 3D scene
+    return true;
+  }
   const expected = new Map(inscriptions.map((line) => [line.id, line.text]));
   const found = new Set<string>();
   let ready = true;
@@ -101,6 +106,8 @@ export function areDesignerImagesReady(
   scene: Object3D,
   images: ReadonlyArray<{ id: string; imageUrl: string }>,
 ): boolean {
+  if (images.length === 0) return true;
+  if (scene.getObjectByName('polish-tomb-body')) return true;
   const expected = new Map(images.map((image) => [image.id, image.imageUrl]));
   const found = new Set<string>();
   let ready = true;
@@ -123,6 +130,8 @@ export function areDesignerMotifsReady(
   scene: Object3D,
   motifs: ReadonlyArray<{ id: string; svgPath: string; surface: string }>,
 ): boolean {
+  if (motifs.length === 0) return true;
+  if (scene.getObjectByName('polish-tomb-body')) return true;
   const expected = new Map(motifs.map((motif) => [motif.id, motif]));
   const found = new Set<string>();
   let ready = true;
@@ -146,6 +155,8 @@ export function areDesignerAdditionsReady(
   scene: Object3D,
   additions: ReadonlyArray<{ id: string; surface: string }>,
 ): boolean {
+  if (additions.length === 0) return true;
+  if (scene.getObjectByName('polish-tomb-body')) return true;
   const expected = new Map(additions.map((item) => [item.id, item.surface]));
   const found = new Set<string>();
   let ready = true;
@@ -166,6 +177,8 @@ export function areDesignerEmblemsReady(
   scene: Object3D,
   emblems: ReadonlyArray<{ id: string; imageUrl: string; surface: string }>,
 ): boolean {
+  if (emblems.length === 0) return true;
+  if (scene.getObjectByName('polish-tomb-body')) return true;
   const expected = new Map(emblems.map((item) => [item.id, item]));
   const found = new Set<string>();
   let ready = true;
