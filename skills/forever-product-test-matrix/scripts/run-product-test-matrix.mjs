@@ -366,6 +366,86 @@ async function testProduct5BronzePlaque(client) {
   }
 }
 
+async function testProduct5BronzePlaqueZeroInvention(client) {
+  const title = 'Product 5 — Cast Bronze Plaque (Zero-Invention WWII Minimal)';
+  console.log(`\n▶ Starting test: ${title}...`);
+  const t0 = Date.now();
+  let sessionId = null;
+
+  try {
+    const s = await client.callTool({ name: 'create_local_session', arguments: { productId: '5' } });
+    sessionId = parseRes(s, 'create_local_session').sessionId;
+    await new Promise((r) => setTimeout(r, 600));
+
+    await client.callTool({ name: 'set_shape', arguments: { shapeId: '67', expectedRevision: 'latest' } });
+    await client.callTool({ name: 'set_dimensions', arguments: { widthMm: 450, heightMm: 300, expectedRevision: 'latest' } });
+    await client.callTool({
+      name: 'set_assembly_options',
+      arguments: {
+        options: { borderName: 'Border 4', fixingType: 'lugs-with-studs' },
+        expectedRevision: 'latest',
+      },
+    });
+
+    await client.callTool({
+      name: 'add_motif',
+      arguments: {
+        categoryId: 'Religious',
+        svgPath: '/shapes/motifs/cross_001.svg',
+        heightMm: 45,
+        xPos: 0,
+        yPos: -95,
+        expectedRevision: 'latest',
+      },
+    });
+
+    await client.callTool({
+      name: 'compose_memorial_layout',
+      arguments: {
+        preset: 'bronze_plaque',
+        headerText: 'IN MEMORY OF',
+        leftPerson: {
+          name: 'FALLEN WWII SOLDIERS',
+          font: 'Garamond',
+        },
+        textColor: '#D4AF37',
+        clearExisting: true,
+        expectedRevision: 'latest',
+      },
+    });
+
+    const prevData = await getPreviewWithRetry(client);
+
+    const save = await client.callTool({
+      name: 'save_local_design',
+      arguments: {
+        title,
+        expectedRevision: prevData.revision,
+        previewId: prevData.previewId,
+        visuallyReviewed: true,
+      },
+    });
+    const saveData = parseRes(save, 'save_local_design');
+    const durationMs = Date.now() - t0;
+
+    return {
+      productId: '5',
+      variant: 'Bronze Plaque Minimal (2-Line WWII Zero-Invention)',
+      status: prevData.previewId && saveData.id ? 'PASS' : 'FAIL',
+      warningsCount: (prevData.motifLayout?.warnings?.length || 0) + (prevData.inscriptionLayout?.warnings?.length || 0),
+      draftId: saveData.id,
+      filePath: saveData.filePath,
+      previewPath: saveData.previewPath,
+      previewSizeKb: saveData.previewPath && fs.existsSync(saveData.previewPath) ? Math.round(fs.statSync(saveData.previewPath).size / 1024) : 0,
+      durationMs,
+    };
+  } finally {
+    if (sessionId) {
+      await client.callTool({ name: 'close_local_session', arguments: { sessionId, discardUnsavedChanges: true } }).catch(() => {});
+    }
+  }
+}
+
 async function testProduct4LaserEtched(client) {
   const title = 'Product 4 — Laser-Etched Black Granite Headstone';
   console.log(`\n▶ Starting test: ${title}...`);
@@ -456,6 +536,7 @@ async function main() {
     { id: '124', fn: testProduct124Companion },
     { id: '101', fn: testProduct101FullMonument },
     { id: '5', fn: testProduct5BronzePlaque },
+    { id: '5-minimal', fn: testProduct5BronzePlaqueZeroInvention },
     { id: '4', fn: testProduct4LaserEtched },
   ];
 
