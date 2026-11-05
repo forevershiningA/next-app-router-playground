@@ -7,7 +7,7 @@
  * and compiles them into proven stonecraft archetypes with ZERO external API calls.
  */
 
-import type { DesignerSnapshot } from './project-schemas';
+import type { DesignerSnapshot, SavedInscription } from './project-schemas';
 import {
   generateDraftSvgPreview,
   generateDraftSvgDataUri,
@@ -31,6 +31,7 @@ export interface ParsedMemorialIntent {
   heightMm?: number;
   names?: {
     singleName?: string;
+    roleOrTitle?: string;
     firstName?: string;
     lastName?: string;
     leftPersonName?: string;
@@ -39,6 +40,9 @@ export interface ParsedMemorialIntent {
     rightDates?: string;
     sharedSurname?: string;
   };
+  roleOrTitle?: string;
+  subText?: string;
+  bottomText?: string;
   dates?: string;
   epitaph?: string;
   baseText?: string;
@@ -102,6 +106,22 @@ function normalizePolishGenitiveName(name: string): string {
     .replace(/\bNowakowej\b/gi, 'Nowak');
 
   return res.toUpperCase();
+}
+
+/**
+ * Converts a text string to Title Case while respecting common prepositions/conjunctions.
+ */
+export function toTitleCase(str: string): string {
+  const smallWords = new Set(['of', 'and', 'the', 'in', 'on', 'at', 'to', 'for', 'a', 'an', 'z', 'i', 'w', 'na', 'do', 'o', 'dla']);
+  return str
+    .trim()
+    .toLowerCase()
+    .split(/\s+/)
+    .map((word, index) => {
+      if (index > 0 && smallWords.has(word)) return word;
+      return word.charAt(0).toUpperCase() + word.slice(1);
+    })
+    .join(' ');
 }
 
 /**
@@ -177,16 +197,66 @@ export function parseVirtualDesignerCommand(rawCommand: string): ParsedMemorialI
     lower.includes('plaque')
   ) {
     let person = 'JOHN MILLER';
-    const forMatch = text.match(/(?:for|dla|in memory of|pamięci|ku czci|imienia|prof\.?|dr\.?)\s+([A-ZĄĆĘŁŃÓŚŹŻa-ząćęłńóśźż\s.]+?)(?=\s+\d{4}|\s*[,—–\-]|$|with|in)/i);
+    let roleOrTitle: string | undefined;
+
+    const forMatch = text.match(/(?:for|dla|in memory of|pamięci|ku czci|imienia|prof\.?|dr\.?|dedicated to|dedykowan[ay]|upamiętniając[ay]|:)\s+([A-Z0-9ĄĆĘŁŃÓŚŹŻa-ząćęłńóśźż\s.'/-]+?)(?=\s+\d{4}|\s*[,—–\-]|$|\bwith\b|\bin\b|\bdistinguished\b|\bwybitny\b|\bforever\b|\bwdzięczni\b|\blest we forget\b)/i);
+
+    const roleRegex = /\b(?:founder(?:\s+of)?|co-founder(?:\s+of)?|założyciel(?:a|em|ka)?|współzałożyciel(?:a)?|creator(?:\s+of)?|twórca|director(?:\s+of)?|dyrektor(?:a)?|president(?:\s+of)?|prezes(?:a)?|chairman(?:\s+of)?|przewodnicząc(?:y|ego)|minister(?:a)?|fundator(?:a|em)?|funder(?:\s+of)?|commander(?:\s+of)?|dowódc(?:a|y)|patron(?:a)?|author(?:\s+of)?|autor(?:a)?)\b\s*(.*)/i;
+
     if (forMatch && forMatch[1].trim().length > 2) {
-      person = normalizePolishGenitiveName(forMatch[1].trim());
+      const captured = forMatch[1].trim();
+      const roleMatch = captured.match(roleRegex);
+      if (roleMatch && roleMatch.index !== undefined && roleMatch.index > 0) {
+        const namePart = captured.slice(0, roleMatch.index).trim();
+        if (namePart.length > 2) {
+          person = normalizePolishGenitiveName(namePart);
+        }
+        let rawRole = roleMatch[0].trim();
+        rawRole = rawRole.split(/[,—–\n]|(?:\b(?:distinguished|wybitny|forever|wdzięczni|spoczywaj|rest in peace|lest we forget)\b)/i)[0].trim();
+        rawRole = rawRole.replace(/\b(?:funded|founded)\b\s*$/i, '').trim();
+        if (rawRole.length > 0) {
+          roleOrTitle = toTitleCase(rawRole);
+        }
+      } else {
+        person = normalizePolishGenitiveName(captured);
+      }
+    }
+
+    if (!roleOrTitle) {
+      const standaloneRoleMatch = text.match(roleRegex);
+      if (standaloneRoleMatch) {
+        let rawRole = standaloneRoleMatch[0].split(/[,—–\n]|(?:\b\d{4}\b)|distinguished|wybitny|forever|wdzięczni|lest we forget/i)[0].trim();
+        rawRole = rawRole.replace(/\b(?:funded|founded)\b\s*$/i, '').trim();
+        if (rawRole.length > 3) {
+          roleOrTitle = toTitleCase(rawRole);
+        }
+      }
+    }
+
+    let subText: string | undefined;
+    let bottomText: string | undefined;
+
+    if (/distinguished scholar and mentor/i.test(text)) {
+      subText = 'Distinguished Scholar and Mentor';
+    } else if (/wybitny naukowiec i pedagog/i.test(text)) {
+      subText = 'Wybitny Naukowiec i Pedagog';
+    }
+
+    if (/forever in our hearts/i.test(text)) {
+      bottomText = 'Forever in our Hearts';
+    } else if (/wdzięczni studenci i współpracownicy/i.test(text)) {
+      bottomText = 'Wdzięczni Studenci i Współpracownicy';
+    } else if (/spoczywaj w pokoju|rest in peace/i.test(text)) {
+      bottomText = lower.includes('tablic') || lower.includes('brąz') ? 'Spoczywaj w Pokoju' : 'Rest in Peace';
+    } else if (/lest we forget/i.test(text)) {
+      bottomText = 'Lest We Forget';
+    } else if (/nigdy nie zapomnimy/i.test(text)) {
+      bottomText = 'Nigdy Nie Zapomnimy';
     }
 
     const isPl = lower.includes('tablic') || lower.includes('brąz') || lower.includes('braz');
     const title = isPl ? `Tablica Pamiątkowa z Brązu — ${person}` : `Bronze Memorial Plaque — ${person}`;
-    const epitaph = isPl
-      ? 'WYBITNY NAUKOWIEC I PEDAGOG\nWDZIĘCZNI STUDENCI I WSPÓŁPRACOWNICY'
-      : 'DISTINGUISHED SCHOLAR AND MENTOR\nFOREVER IN OUR HEARTS';
+    const epitaph = [subText, bottomText].filter(Boolean).join('\n') || undefined;
 
     return {
       intent: 'create_bronze_plaque',
@@ -194,8 +264,11 @@ export function parseVirtualDesignerCommand(rawCommand: string): ParsedMemorialI
       title,
       widthMm: parsedWidthMm || 450,
       heightMm: parsedHeightMm || 300,
-      names: { singleName: person },
-      dates: dates || '1938 — 2019',
+      names: { singleName: person, roleOrTitle },
+      roleOrTitle,
+      subText,
+      bottomText,
+      dates: dates || undefined,
       borderName: 'Border 4',
       fixingType: 'lugs-with-studs',
       epitaph,
@@ -467,26 +540,119 @@ export async function executeVirtualDesignerIntent(
 
       const isPl = (parsed.rawCommand || '').toLowerCase().includes('tablic') || (parsed.rawCommand || '').toLowerCase().includes('brąz');
       const person = parsed.names?.singleName || (isPl ? 'JAN KOWALSKI' : 'PROF. JOHN MILLER');
+      const roleText = parsed.names?.roleOrTitle || parsed.roleOrTitle;
       const headerText = isPl ? 'PAMIĘCI' : 'IN MEMORY OF';
-      const subText = isPl ? 'WYBITNY NAUKOWIEC I PEDAGOG' : 'DISTINGUISHED SCHOLAR AND MENTOR';
-      const bottomText = isPl ? 'WDZIĘCZNI STUDENCI I WSPÓŁPRACOWNICY' : 'FOREVER IN OUR HEARTS';
+      const subText = parsed.subText;
+      const bottomText = parsed.bottomText;
+      const rawDates = parsed.dates ? parsed.dates.trim() : undefined;
+      const formattedDates = rawDates ? (/^\d{4}$/.test(rawDates) ? `— ${rawDates} —` : rawDates) : undefined;
 
-      const headerSize = computeSafeInscriptionSize(headerText, 13, widthMm);
-      const personSize = computeSafeInscriptionSize(person, 17, widthMm);
-      const subSize = computeSafeInscriptionSize(subText, 10.5, widthMm);
-      const datesSize = computeSafeInscriptionSize(parsed.dates || '1938 — 2019', 12.5, widthMm);
-      const bottomSize = computeSafeInscriptionSize(bottomText, 10, widthMm);
+      const rawItems: Array<{
+        type: string;
+        text: string;
+        baseSize: number;
+        font: string;
+      }> = [];
+
+      rawItems.push({
+        type: 'header',
+        text: headerText,
+        baseSize: Math.max(13, Math.min(16, Math.round(heightMm * 0.05))),
+        font: 'Garamond',
+      });
+
+      rawItems.push({
+        type: 'person',
+        text: person,
+        baseSize: Math.max(22, Math.min(30, Math.round(heightMm * 0.088))),
+        font: 'Garamond',
+      });
+
+      if (roleText) {
+        rawItems.push({
+          type: 'role',
+          text: roleText,
+          baseSize: Math.max(11.5, Math.min(14, Math.round(heightMm * 0.043))),
+          font: 'Garamond',
+        });
+      }
+
+      if (subText) {
+        rawItems.push({
+          type: 'sub',
+          text: subText,
+          baseSize: Math.max(11, Math.min(13, Math.round(heightMm * 0.04))),
+          font: 'Garamond',
+        });
+      }
+
+      if (formattedDates) {
+        rawItems.push({
+          type: 'dates',
+          text: formattedDates,
+          baseSize: Math.max(12.5, Math.min(15, Math.round(heightMm * 0.046))),
+          font: 'Garamond',
+        });
+      }
+
+      if (bottomText) {
+        rawItems.push({
+          type: 'bottom',
+          text: bottomText,
+          baseSize: Math.max(10.5, Math.min(12, Math.round(heightMm * 0.038))),
+          font: 'Garamond',
+        });
+      }
+
+      let yPositions: number[] = [];
+      const count = rawItems.length;
+      if (count <= 2) {
+        yPositions = [Math.round(heightMm * 0.12), -Math.round(heightMm * 0.06)];
+      } else if (count === 3) {
+        yPositions = [
+          Math.round(heightMm * 0.18),
+          Math.round(heightMm * 0.04),
+          -Math.round(heightMm * 0.16),
+        ];
+      } else if (count === 4) {
+        yPositions = [
+          Math.round(heightMm * 0.20),
+          Math.round(heightMm * 0.07),
+          -Math.round(heightMm * 0.08),
+          -Math.round(heightMm * 0.22),
+        ];
+      } else if (count === 5) {
+        yPositions = [
+          Math.round(heightMm * 0.21),
+          Math.round(heightMm * 0.09),
+          -Math.round(heightMm * 0.02),
+          -Math.round(heightMm * 0.14),
+          -Math.round(heightMm * 0.25),
+        ];
+      } else {
+        yPositions = [
+          Math.round(heightMm * 0.22),
+          Math.round(heightMm * 0.11),
+          Math.round(heightMm * 0.02),
+          -Math.round(heightMm * 0.08),
+          -Math.round(heightMm * 0.17),
+          -Math.round(heightMm * 0.25),
+        ];
+      }
+
+      const inscriptions = rawItems.map((item, idx) => ({
+        text: item.text,
+        font: item.font,
+        sizeMm: computeSafeInscriptionSize(item.text, item.baseSize, widthMm),
+        color: '#D4AF37',
+        xPos: 0,
+        yPos: yPositions[idx] ?? 0,
+      }));
 
       await client.callTool({
         name: 'add_inscriptions',
         arguments: {
-          inscriptions: [
-            { text: headerText, font: 'Garamond', sizeMm: headerSize, color: '#D4AF37', xPos: 0, yPos: Math.round(heightMm * 0.20) },
-            { text: person, font: 'Garamond', sizeMm: personSize, color: '#D4AF37', xPos: 0, yPos: Math.round(heightMm * 0.09) },
-            { text: subText, font: 'Garamond', sizeMm: subSize, color: '#D4AF37', xPos: 0, yPos: -Math.round(heightMm * 0.015) },
-            { text: parsed.dates || '1938 — 2019', font: 'Garamond', sizeMm: datesSize, color: '#D4AF37', xPos: 0, yPos: -Math.round(heightMm * 0.12) },
-            { text: bottomText, font: 'Garamond', sizeMm: bottomSize, color: '#D4AF37', xPos: 0, yPos: -Math.round(heightMm * 0.23) },
-          ],
+          inscriptions,
           expectedRevision: 'latest',
         },
       });
@@ -904,23 +1070,108 @@ export function buildDeterministicDraft(
 
   // 1. Bronze Plaque (Product 5)
   if (parsed.intent === 'create_bronze_plaque' || parsed.productId === '5') {
+    const isPl = (parsed.rawCommand || '').toLowerCase().includes('tablic') || (parsed.rawCommand || '').toLowerCase().includes('brąz');
     const person = parsed.names?.singleName || (isPl ? 'JAN KOWALSKI' : 'PROF. JOHN MILLER');
+    const roleText = parsed.names?.roleOrTitle || parsed.roleOrTitle;
     const headerText = isPl ? 'PAMIĘCI' : 'IN MEMORY OF';
-    const subText = isPl ? 'WYBITNY NAUKOWIEC I PEDAGOG' : 'DISTINGUISHED SCHOLAR AND MENTOR';
-    const bottomText = isPl ? 'WDZIĘCZNI STUDENCI I WSPÓŁPRACOWNICY' : 'FOREVER IN OUR HEARTS';
+    const subText = parsed.subText;
+    const bottomText = parsed.bottomText;
     const title = parsed.title || (isPl ? `Tablica Pamiątkowa — ${person}` : `Bronze Memorial Plaque — ${person}`);
 
     const widthMm = parsed.widthMm || 450;
     const heightMm = parsed.heightMm || 300;
 
-    const headerSize = computeSafeInscriptionSize(headerText, 13, widthMm);
-    const personSize = computeSafeInscriptionSize(person, 17, widthMm);
-    const subSize = computeSafeInscriptionSize(subText, 10.5, widthMm);
-    const datesSize = computeSafeInscriptionSize(parsed.dates || '1938 — 2019', 12.5, widthMm);
-    const bottomSize = computeSafeInscriptionSize(bottomText, 10, widthMm);
+    const rawDates = parsed.dates ? parsed.dates.trim() : undefined;
+    const formattedDates = rawDates ? (/^\d{4}$/.test(rawDates) ? `— ${rawDates} —` : rawDates) : undefined;
 
-    const motifHeight = Math.round(heightMm * 0.125);
-    const motifOffset = -Math.round(heightMm * 0.32);
+    const rawItems: Array<{
+      id: string;
+      text: string;
+      baseSize: number;
+      font: string;
+    }> = [];
+
+    rawItems.push({
+      id: 'l-bronze-header',
+      text: headerText,
+      baseSize: Math.max(13, Math.min(16, Math.round(heightMm * 0.05))),
+      font: 'Garamond',
+    });
+
+    rawItems.push({
+      id: 'l-bronze-person',
+      text: person,
+      baseSize: Math.max(22, Math.min(30, Math.round(heightMm * 0.088))),
+      font: 'Garamond',
+    });
+
+    if (roleText) {
+      rawItems.push({
+        id: 'l-bronze-role',
+        text: roleText,
+        baseSize: Math.max(11.5, Math.min(14, Math.round(heightMm * 0.043))),
+        font: 'Garamond',
+      });
+    }
+
+    if (subText) {
+      rawItems.push({
+        id: 'l-bronze-sub',
+        text: subText,
+        baseSize: Math.max(11, Math.min(13, Math.round(heightMm * 0.04))),
+        font: 'Garamond',
+      });
+    }
+
+    if (formattedDates) {
+      rawItems.push({
+        id: 'l-bronze-dates',
+        text: formattedDates,
+        baseSize: Math.max(12.5, Math.min(15, Math.round(heightMm * 0.046))),
+        font: 'Garamond',
+      });
+    }
+
+    if (bottomText) {
+      rawItems.push({
+        id: 'l-bronze-bottom',
+        text: bottomText,
+        baseSize: Math.max(10.5, Math.min(12, Math.round(heightMm * 0.038))),
+        font: 'Garamond',
+      });
+    }
+
+    const count = rawItems.length;
+    let yFactors: number[] = [];
+    if (count <= 2) {
+      yFactors = [0.60, 0.38];
+    } else if (count === 3) {
+      yFactors = [0.65, 0.48, 0.30];
+    } else if (count === 4) {
+      yFactors = [0.68, 0.53, 0.38, 0.24];
+    } else if (count === 5) {
+      yFactors = [0.69, 0.57, 0.46, 0.35, 0.24];
+    } else {
+      yFactors = [0.70, 0.60, 0.51, 0.41, 0.32, 0.23];
+    }
+
+    const inscriptions: SavedInscription[] = rawItems.map((item, idx) => ({
+      id: item.id,
+      text: item.text,
+      font: item.font,
+      sizeMm: computeSafeInscriptionSize(item.text, item.baseSize, widthMm),
+      rotationDeg: 0,
+      xPos: 0,
+      yPos: Math.round(heightMm * (yFactors[idx] ?? 0.5) * 100) / 100,
+      color: '#ffb35a',
+      target: 'headstone',
+      textAlign: 'center',
+      baseWidthMm: widthMm,
+      baseHeightMm: heightMm,
+    }));
+
+    const motifHeight = Math.round(heightMm * 0.12);
+    const motifOffset = -Math.round(heightMm * 0.33);
 
     const snapshot: DesignerSnapshot = {
       version: 1,
@@ -982,78 +1233,7 @@ export function buildDeterministicDraft(
       selectedEmblems: [],
       emblemOffsets: {},
       selectedImages: [],
-      inscriptions: [
-        {
-          id: 'l-bronze-1',
-          text: headerText,
-          font: 'Garamond',
-          sizeMm: headerSize,
-          rotationDeg: 0,
-          xPos: 0,
-          yPos: Math.round(heightMm * 0.69 * 100) / 100,
-          color: '#ffb35a',
-          target: 'headstone',
-          textAlign: 'center',
-          baseWidthMm: widthMm,
-          baseHeightMm: heightMm,
-        },
-        {
-          id: 'l-bronze-2',
-          text: person,
-          font: 'Garamond',
-          sizeMm: personSize,
-          rotationDeg: 0,
-          xPos: 0,
-          yPos: Math.round(heightMm * 0.585 * 100) / 100,
-          color: '#ffb35a',
-          target: 'headstone',
-          textAlign: 'center',
-          baseWidthMm: widthMm,
-          baseHeightMm: heightMm,
-        },
-        {
-          id: 'l-bronze-3',
-          text: subText,
-          font: 'Garamond',
-          sizeMm: subSize,
-          rotationDeg: 0,
-          xPos: 0,
-          yPos: Math.round(heightMm * 0.485 * 100) / 100,
-          color: '#ffb35a',
-          target: 'headstone',
-          textAlign: 'center',
-          baseWidthMm: widthMm,
-          baseHeightMm: heightMm,
-        },
-        {
-          id: 'l-bronze-4',
-          text: parsed.dates || '1938 — 2019',
-          font: 'Garamond',
-          sizeMm: datesSize,
-          rotationDeg: 0,
-          xPos: 0,
-          yPos: Math.round(heightMm * 0.385 * 100) / 100,
-          color: '#ffb35a',
-          target: 'headstone',
-          textAlign: 'center',
-          baseWidthMm: widthMm,
-          baseHeightMm: heightMm,
-        },
-        {
-          id: 'l-bronze-5',
-          text: bottomText,
-          font: 'Garamond',
-          sizeMm: bottomSize,
-          rotationDeg: 0,
-          xPos: 0,
-          yPos: Math.round(heightMm * 0.27 * 100) / 100,
-          color: '#ffb35a',
-          target: 'headstone',
-          textAlign: 'center',
-          baseWidthMm: widthMm,
-          baseHeightMm: heightMm,
-        },
-      ],
+      inscriptions,
       metadata: {
         currentProjectId: null,
         currentProjectTitle: title,

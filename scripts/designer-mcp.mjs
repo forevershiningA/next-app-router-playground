@@ -1784,7 +1784,14 @@ server.registerTool(
         'companion_left',
         'companion_both',
         'companion_shared_surname',
+        'bronze_plaque',
       ]),
+      titleRole: z.string().optional(),
+      titleRoleFont: z.string().optional(),
+      titleRoleSizeMm: z.number().optional(),
+      subtitleText: z.string().optional(),
+      subtitleFont: z.string().optional(),
+      subtitleSizeMm: z.number().optional(),
       sharedSurname: z.string().optional(),
       sharedSurnameFont: z.string().optional(),
       sharedSurnameSizeMm: z.number().optional(),
@@ -1851,6 +1858,12 @@ server.registerTool(
   },
   ({
     preset,
+    titleRole,
+    titleRoleFont,
+    titleRoleSizeMm,
+    subtitleText,
+    subtitleFont,
+    subtitleSizeMm,
     sharedSurname,
     sharedSurnameFont,
     sharedSurnameSizeMm,
@@ -1872,6 +1885,12 @@ server.registerTool(
         const res = await page.evaluate(
           async ({
             preset,
+            titleRole,
+            titleRoleFont,
+            titleRoleSizeMm,
+            subtitleText,
+            subtitleFont,
+            subtitleSizeMm,
             sharedSurname,
             sharedSurnameFont,
             sharedSurnameSizeMm,
@@ -1913,6 +1932,9 @@ server.registerTool(
             const motifsToAdd = [];
 
             const h = Number(currentSnapshot.heightMm) || 900;
+            const isPlaque =
+              preset === 'bronze_plaque' ||
+              (h <= 450 && String(currentSnapshot.productId) === '5');
             const hasCenterMotif = Boolean(centerMotif?.svgPath);
 
             // Center motif: in companion_both with position 'divider' it acts as the central vertical divider; default 'crown' places it in the apex under the arch.
@@ -1927,16 +1949,22 @@ server.registerTool(
                 color: centerMotif.color || textColor,
                 heightMm:
                   centerMotif.heightMm ||
-                  (isDivider ? 90 : Math.min(80, Math.round(h * 0.09))),
+                  (isPlaque
+                    ? Math.round(h * 0.12)
+                    : isDivider
+                    ? 90
+                    : Math.min(80, Math.round(h * 0.09))),
                 xPos: 0,
-                yPos: isDivider
+                yPos: isPlaque
+                  ? -Math.round(h * 0.33)
+                  : isDivider
                   ? -Math.round(h * 0.02)
                   : -Math.min(Math.round(h * 0.23), 195),
               });
             }
 
-            // Header text (e.g. "Ś. P." or "IN LOVING MEMORY")
-            if (headerText) {
+            // Header text (e.g. "Ś. P." or "IN LOVING MEMORY") on headstone
+            if (headerText && !isPlaque) {
               inscriptionsToAdd.push({
                 text: headerText,
                 font: headerFont || 'Garamond',
@@ -1975,7 +2003,144 @@ server.registerTool(
               return { singleName: p.name };
             };
 
-            if (preset === 'single_centered') {
+            if (isPlaque) {
+              const person = leftPerson || rightPerson;
+              if (person || headerText) {
+                const names = resolvePersonNames(person);
+                const personName =
+                  names?.singleName ||
+                  [names?.firstName, names?.lastName].filter(Boolean).join(' ') ||
+                  person?.name ||
+                  '';
+                const role = titleRole || person?.relation;
+                const sub = subtitleText;
+                const dates = person?.dates?.trim();
+                const formattedDates = dates
+                  ? /^\d{4}$/.test(dates)
+                    ? `— ${dates} —`
+                    : dates
+                  : undefined;
+                const bottom = bottomText;
+
+                const plaqueItems = [];
+                if (headerText) {
+                  plaqueItems.push({
+                    type: 'header',
+                    text: headerText,
+                    font: headerFont || 'Garamond',
+                    sizeMm:
+                      headerSizeMm ||
+                      Math.max(13, Math.min(16, Math.round(h * 0.05))),
+                  });
+                }
+                if (personName) {
+                  const baseNameSize = Math.max(
+                    22,
+                    Math.min(30, Math.round(h * 0.088)),
+                  );
+                  plaqueItems.push({
+                    type: 'person',
+                    text: personName,
+                    font: person?.nameFont || person?.font || 'Garamond',
+                    sizeMm:
+                      person?.lastNameSizeMm ||
+                      person?.firstNameSizeMm ||
+                      baseNameSize,
+                  });
+                }
+                if (role) {
+                  plaqueItems.push({
+                    type: 'role',
+                    text: role,
+                    font: titleRoleFont || person?.font || 'Garamond',
+                    sizeMm:
+                      titleRoleSizeMm ||
+                      Math.max(11.5, Math.min(14, Math.round(h * 0.043))),
+                  });
+                }
+                if (sub) {
+                  plaqueItems.push({
+                    type: 'sub',
+                    text: sub,
+                    font: subtitleFont || person?.font || 'Garamond',
+                    sizeMm:
+                      subtitleSizeMm ||
+                      Math.max(11, Math.min(13, Math.round(h * 0.04))),
+                  });
+                }
+                if (formattedDates) {
+                  plaqueItems.push({
+                    type: 'dates',
+                    text: formattedDates,
+                    font: person?.font || 'Garamond',
+                    sizeMm:
+                      person?.datesSizeMm ||
+                      Math.max(12.5, Math.min(15, Math.round(h * 0.046))),
+                  });
+                }
+                if (bottom) {
+                  plaqueItems.push({
+                    type: 'bottom',
+                    text: bottom,
+                    font: bottomFont || 'Garamond',
+                    sizeMm:
+                      bottomSizeMm ||
+                      Math.max(10.5, Math.min(12, Math.round(h * 0.038))),
+                  });
+                }
+
+                const count = plaqueItems.length;
+                let yPositions = [];
+                if (count <= 2) {
+                  yPositions = [Math.round(h * 0.12), -Math.round(h * 0.06)];
+                } else if (count === 3) {
+                  yPositions = [
+                    Math.round(h * 0.18),
+                    Math.round(h * 0.04),
+                    -Math.round(h * 0.16),
+                  ];
+                } else if (count === 4) {
+                  yPositions = [
+                    Math.round(h * 0.2),
+                    Math.round(h * 0.07),
+                    -Math.round(h * 0.08),
+                    -Math.round(h * 0.22),
+                  ];
+                } else if (count === 5) {
+                  yPositions = [
+                    Math.round(h * 0.21),
+                    Math.round(h * 0.09),
+                    -Math.round(h * 0.02),
+                    -Math.round(h * 0.14),
+                    -Math.round(h * 0.25),
+                  ];
+                } else {
+                  yPositions = [
+                    Math.round(h * 0.22),
+                    Math.round(h * 0.11),
+                    Math.round(h * 0.02),
+                    -Math.round(h * 0.08),
+                    -Math.round(h * 0.17),
+                    -Math.round(h * 0.25),
+                  ];
+                }
+
+                plaqueItems.forEach((item, idx) => {
+                  inscriptionsToAdd.push({
+                    text: item.text,
+                    font: item.font,
+                    sizeMm: item.sizeMm,
+                    color: textColor,
+                    xPos: 0,
+                    yPos: yPositions[idx] ?? 0,
+                    textAlign: 'center',
+                    target: 'headstone',
+                    coordinateSpace: 'mm-center',
+                  });
+                });
+              }
+            }
+            } else if (preset === 'single_centered') {
               const person = leftPerson || rightPerson;
               if (person) {
                 const names = resolvePersonNames(person);

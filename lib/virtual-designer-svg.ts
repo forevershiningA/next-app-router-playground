@@ -228,11 +228,115 @@ function renderBronzePlaqueSvg(
 ): string {
   const title = options.title || snapshot.metadata?.currentProjectTitle || 'Cast Bronze Memorial Plaque';
 
-  const headerLine = inscriptions[0]?.text || 'IN MEMORY OF';
-  const nameLine = inscriptions[1]?.text || 'PROF. JOHN MILLER';
-  const subLine = inscriptions[2]?.text || 'DISTINGUISHED SCHOLAR AND MENTOR';
-  const datesLine = inscriptions[3]?.text || '1938 — 2019';
-  const bottomLine = inscriptions[4]?.text || 'FOREVER IN OUR HEARTS';
+  // Extract lines strictly from snapshot inscriptions without inventing dates or subtitles
+  const items = inscriptions.length > 0
+    ? inscriptions
+    : [
+        { text: 'IN MEMORY OF' },
+        { text: snapshot.metadata?.currentProjectTitle?.replace(/^Bronze Memorial Plaque —\s*/i, '') || 'HONORED MEMORY' },
+      ];
+
+  const count = items.length;
+  // Calculate dynamic vertical Y coordinates (SVG viewBox is 800x600, center is 400, vertical safe zone is 210..435)
+  let yCoords: number[] = [];
+  if (count <= 1) {
+    yCoords = [300];
+  } else if (count === 2) {
+    yCoords = [260, 335];
+  } else if (count === 3) {
+    yCoords = [235, 305, 380];
+  } else if (count === 4) {
+    yCoords = [222, 282, 342, 404];
+  } else if (count === 5) {
+    yCoords = [215, 268, 318, 368, 418];
+  } else {
+    yCoords = [210, 252, 292, 332, 372, 418];
+  }
+
+  const renderedLines = items.map((item, idx) => {
+    const text = item.text || '';
+    const y = yCoords[idx] ?? (210 + idx * 40);
+    const id = ('id' in item && typeof (item as any).id === 'string') ? (item as any).id : '';
+
+    // Header line (typically index 0 or id with header)
+    if (idx === 0 || id.includes('header')) {
+      const fontSize = count <= 2 ? 18 : 15;
+      return `  <!-- Header -->
+  <text x="400" y="${y}"
+        text-anchor="middle"
+        fill="url(#bronzeRim)"
+        font-family="'Cinzel', 'Garamond', serif"
+        font-size="${fontSize}"
+        font-weight="600"
+        letter-spacing="3"
+        filter="url(#bronzeBevel)">${esc(text)}</text>`;
+    }
+
+    // Name / Main Subject (index 1 or id with person/name)
+    if (idx === 1 || id.includes('person') || id.includes('name')) {
+      const len = text.length;
+      const fontSize = len > 28 ? 22 : len > 20 ? 25 : count <= 2 ? 30 : 28;
+      return `  <!-- Recipient / Subject -->
+  <text x="400" y="${y}"
+        text-anchor="middle"
+        fill="#f8e0a8"
+        font-family="'Garamond', 'Cinzel', serif"
+        font-size="${fontSize}"
+        font-weight="700"
+        letter-spacing="2"
+        filter="url(#bronzeBevel)">${esc(text)}</text>`;
+    }
+
+    // Dates line
+    if (id.includes('dates') || /\b\d{4}\b/.test(text)) {
+      return `  <!-- Dates -->
+  <text x="400" y="${y}"
+        text-anchor="middle"
+        fill="#f0d399"
+        font-family="'Garamond', serif"
+        font-size="17"
+        font-weight="500"
+        letter-spacing="2"
+        filter="url(#bronzeBevel)">${esc(text)}</text>`;
+    }
+
+    // Role line
+    if (id.includes('role')) {
+      return `  <!-- Role / Title -->
+  <text x="400" y="${y}"
+        text-anchor="middle"
+        fill="url(#bronzeRim)"
+        font-family="'Garamond', serif"
+        font-size="14.5"
+        font-weight="600"
+        letter-spacing="1.5"
+        filter="url(#bronzeBevel)">${esc(text)}</text>`;
+    }
+
+    // Bottom quote / epitaph
+    if (idx === count - 1 || id.includes('bottom') || id.includes('epitaph') || text.startsWith('„') || text.startsWith('"')) {
+      return `  <!-- Bottom Tribute -->
+  <text x="400" y="${y}"
+        text-anchor="middle"
+        fill="url(#bronzeRim)"
+        font-family="'Garamond', serif"
+        font-size="13.5"
+        font-weight="600"
+        letter-spacing="1.5"
+        filter="url(#bronzeBevel)">${esc(text)}</text>`;
+    }
+
+    // General Subtitle / Inscription
+    return `  <!-- Inscription Line -->
+  <text x="400" y="${y}"
+        text-anchor="middle"
+        fill="url(#bronzeRim)"
+        font-family="'Garamond', serif"
+        font-size="${text.length > 24 ? '12.5' : '14'}"
+        font-weight="600"
+        letter-spacing="${text.length > 24 ? '1' : '1.5'}"
+        filter="url(#bronzeBevel)">${esc(text)}</text>`;
+  }).join('\n\n');
 
   return `<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600">
@@ -287,55 +391,7 @@ function renderBronzePlaqueSvg(
   </g>
 
   <!-- Cast Inscriptions (Raised Gilded Luster) -->
-  <!-- Header -->
-  <text x="400" y="222"
-        text-anchor="middle"
-        fill="url(#bronzeRim)"
-        font-family="'Cinzel', 'Garamond', serif"
-        font-size="16"
-        font-weight="600"
-        letter-spacing="3"
-        filter="url(#bronzeBevel)">${esc(headerLine)}</text>
-
-  <!-- Recipient Name -->
-  <text x="400" y="275"
-        text-anchor="middle"
-        fill="#f8e0a8"
-        font-family="'Garamond', 'Cinzel', serif"
-        font-size="28"
-        font-weight="700"
-        letter-spacing="2"
-        filter="url(#bronzeBevel)">${esc(nameLine)}</text>
-
-  <!-- Subtitle / Title -->
-  <text x="400" y="318"
-        text-anchor="middle"
-        fill="url(#bronzeRim)"
-        font-family="'Garamond', serif"
-        font-size="${subLine.length > 24 ? '13' : '15'}"
-        font-weight="600"
-        letter-spacing="${subLine.length > 24 ? '1' : '1.5'}"
-        filter="url(#bronzeBevel)">${esc(subLine)}</text>
-
-  <!-- Dates -->
-  <text x="400" y="360"
-        text-anchor="middle"
-        fill="#f0d399"
-        font-family="'Garamond', serif"
-        font-size="18"
-        font-weight="500"
-        letter-spacing="2"
-        filter="url(#bronzeBevel)">${esc(datesLine)}</text>
-
-  <!-- Bottom Tribute -->
-  <text x="400" y="420"
-        text-anchor="middle"
-        fill="url(#bronzeRim)"
-        font-family="'Garamond', serif"
-        font-size="14"
-        font-weight="600"
-        letter-spacing="2"
-        filter="url(#bronzeBevel)">${esc(bottomLine)}</text>
+${renderedLines}
 
   <!-- Mounting Screws (Lugs) in 4 Corners -->
   <circle cx="145" cy="125" r="4" fill="#1b1008" stroke="url(#bronzeRim)" stroke-width="1.5" />

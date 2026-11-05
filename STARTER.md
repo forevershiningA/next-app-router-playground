@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-11-04
+**Last Updated:** 2026-11-05
 
 **Status entry order:** Add new dated status entries immediately after the table of contents, before the existing status entries. Keep status entries in reverse chronological order (newest first); do not append them to the end of this file.
 **Tech Stack:** Next.js 15.5.26, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots), **Vitest 4.1.8** (unit tests), **Playwright 1.59.1** (E2E tests)
@@ -149,6 +149,43 @@
 136. [November 3 Multi-Agent Session Sharing & MCP Persistence](#current-status-2026-11-03--multi-agent-session-sharing--mcp-persistence)
 137. [November 4 Autonomous AI Design Assistant & Production Handoff](#current-status-2026-11-04--autonomous-ai-design-assistant--production-handoff)
 138. [November 4 3D Transition Stability, Layout.js Fix, Back-Button Recovery & OpenBot Canon Alignment](#current-status-2026-11-04--3d-transition-stability-layoutjs-fix-back-button-recovery--openbot-canon-alignment)
+139. [November 5 Bronze Plaque Layout Polish, Zero-Invention Rule & WWII Preservation](#current-status-2026-11-05--bronze-plaque-layout-polish-zero-invention-rule--wwii-preservation)
+
+---
+
+## Current Status (2026-11-05) — Bronze Plaque Layout Polish, Zero-Invention Rule & WWII Preservation
+
+- **Session Summary & Completed Implementation (November 5):**
+  1. *Prompt Parsing & Acronym Preservation (`lib/virtual-designer-assistant.ts`):*
+     - **Issue:** Input prompt `"Design Bronze Plaque for fallen WWII soldiers"` lost the `"WWII"` acronym, yielding `"FALLEN SOLDIERS"`.
+     - **Root Cause:** Slot extraction regex `[A-ZĄĆĘŁŃÓŚŹŻa-ząćęłńóśźż\s.]+?` excluded digits/Roman numerals, and lookahead triggers lacked `\b` word boundaries, causing premature truncation on terms like `distinguished`.
+     - **Remediation:** Expanded regex character class to include alphanumeric tokens, Roman numerals, apostrophes, and hyphens (`[A-ZĄĆĘŁŃÓŚŹŻa-ząćęłńóśźż0-9'’/.\-\s]+?`) with strict word-boundary lookaheads (`\b(in|with|dated|dla|ku|z)\b`). Added prefix triggers (`dedicated to`, `dedykowana`, `upamiętniająca`, `:`). Full subject `"FALLEN WWII SOLDIERS"` is now preserved intact.
+
+  2. *Strict Zero-Invention Rule & Placeholder Elimination (`lib/virtual-designer-assistant.ts`, `lib/virtual-designer-svg.ts`):*
+     - **Issue:** Generating a plaque from minimal prompts erroneously injected academic honorifics (*"Distinguished Scholar and Mentor"*), fictitious lifespans (*"1938 — 2019"*), and default valedictions (*"Forever in our Hearts"*).
+     - **Root Cause:** Both the offline assistant engine (`executeVirtualDesignerIntent`, `buildDeterministicDraft`) and SVG renderer (`renderBronzePlaqueSvg`) had hardcoded string fallbacks when fields were absent.
+     - **Remediation:**
+       - Purged all hardcoded placeholder subtitles, dates, and closing epitaphs from `lib/virtual-designer-assistant.ts`. Fields now evaluate strictly to `undefined` unless explicitly present in user input.
+       - Refactored `renderBronzePlaqueSvg` in `lib/virtual-designer-svg.ts` to map and render **only** the lines present in `snapshot.inscriptions`, eliminating static fallback `<text>` blocks.
+
+  3. *Dynamic Vertical Centering & Line Spacing ($N = 2, 3, 4, 5, 6$):*
+     - **Issue:** Minimal prompts with only 2 lines (Header + Recipient) suffered from awkward upper-half crowding, leaving the lower 60% of the plaque completely blank.
+     - **Remediation:** Replaced fixed-height coordinate mapping with dynamic vertical positioning based on line count $N$:
+       - $N = 2$ (Minimal: Header + Subject): $y = [+0.12\cdot H, -0.06\cdot H]$ (SVG $y = [260, 335]$), hero font size boosted to 28–30 mm.
+       - $N = 3$ (Header + Name + Dates or Subtitle): $y = [+0.18\cdot H, +0.04\cdot H, -0.16\cdot H]$ (SVG $y = [235, 305, 380]$).
+       - $N = 4$ (Header + Name + Subtitle + Dates): $y = [+0.20\cdot H, +0.07\cdot H, -0.08\cdot H, -0.22\cdot H]$ (SVG $y = [222, 282, 342, 404]$).
+       - $N = 5$ & $N \ge 6$: Full hierarchical distribution maintaining 50–65 mm breathing margins.
+
+  4. *OpenBot Skills & MCP High-Level Tool Synchronization (`skills/forever-reference-design/SKILL.md`, `scripts/designer-mcp.mjs`):*
+     - Updated Archetype 1 (*Cast Bronze Commemorative Plaque*) in `skills/forever-reference-design/SKILL.md` with explicit guidelines enforcing the Zero-Invention Rule and documenting dynamic $N$-line vertical scales.
+     - Synchronized `SKILL.md` directly into OpenBot agent workspaces:
+       - `C:/Users/polcr/OpenBot/Agents/agent-18109007-b3d8-4076-9f2e-fb22e579b2b0/.agents/skills/forever-reference-design/SKILL.md`
+       - `C:/Users/polcr/OpenBot/Agents/agent-cf469eec-df11-4822-a4b8-c8d27185aba4/.agents/skills/forever-reference-design/SKILL.md`
+     - Updated MCP tool `compose_memorial_layout` in `scripts/designer-mcp.mjs`: for `preset: 'bronze_plaque'`, inscriptions are aggregated conditionally and positioned dynamically with balanced Y offsets across $N \le 2$ through $N \ge 6$.
+
+  5. *Test Suite & Type Safety Status:*
+     - TypeScript: `pnpm exec tsc --noEmit` passes with 0 errors.
+     - Vitest & Unit Test Runner (`tests/test-virtual-agent.mjs` via `tsx`): Confirmed that `'Design Bronze Plaque for fallen WWII soldiers'` yields exactly 2 inscriptions (`IN MEMORY OF` and `FALLEN WWII SOLDIERS`), preserves `WWII`, and outputs SVG containing 0 unwanted strings.
 
 ---
 

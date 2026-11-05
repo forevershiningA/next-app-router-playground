@@ -1,4 +1,4 @@
-import { parseVirtualDesignerCommand, executeVirtualDesignerIntent } from '../lib/virtual-designer-assistant.ts';
+import { parseVirtualDesignerCommand, executeVirtualDesignerIntent, buildDeterministicDraft } from '../lib/virtual-designer-assistant';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
 import path from 'node:path';
@@ -50,6 +50,40 @@ const testCases = [
     check: (p) => {
       assert(p.names?.singleName?.includes('ZIELIŃSK'), 'Expected person Zielińska');
       assert.strictEqual(p.dates, '1948 - 2020');
+    },
+  },
+  {
+    input: 'Design Bronze Plaque for fallen WWII soldiers',
+    expectedIntent: 'create_bronze_plaque',
+    expectedProductId: '5',
+    check: (p) => {
+      assert.strictEqual(p.names?.singleName, 'FALLEN WWII SOLDIERS', 'Expected person to be FALLEN WWII SOLDIERS');
+      assert.strictEqual(p.dates, undefined, 'Expected dates to be undefined (Zero-Invention)');
+      assert.strictEqual(p.subText, undefined, 'Expected subText to be undefined (Zero-Invention)');
+      assert.strictEqual(p.bottomText, undefined, 'Expected bottomText to be undefined (Zero-Invention)');
+
+      // Verify deterministic snapshot and SVG preview
+      const draft = buildDeterministicDraft(p);
+      assert.strictEqual(draft.snapshot.inscriptions.length, 2, 'Expected exactly 2 inscriptions for minimal prompt');
+      assert.strictEqual(draft.snapshot.inscriptions[0].text, 'IN MEMORY OF');
+      assert.strictEqual(draft.snapshot.inscriptions[1].text, 'FALLEN WWII SOLDIERS');
+      assert(!draft.svgPreview.includes('Distinguished Scholar'), 'SVG preview must not invent scholar subtext');
+      assert(!draft.svgPreview.includes('1938'), 'SVG preview must not invent dates');
+      assert(!draft.svgPreview.includes('Forever in our Hearts'), 'SVG preview must not invent bottom text');
+    },
+  },
+  {
+    input: 'Bronze plaque 450x300 in memory of John Miller founder of Military Garden funded distinguished scholar and mentor 2026 forever in our hearts',
+    expectedIntent: 'create_bronze_plaque',
+    expectedProductId: '5',
+    check: (p) => {
+      assert.strictEqual(p.names?.singleName, 'JOHN MILLER', 'Expected person to be JOHN MILLER');
+      assert.strictEqual(p.roleOrTitle, 'Founder of Military Garden', 'Expected role to be Founder of Military Garden');
+      assert.strictEqual(p.subText, 'Distinguished Scholar and Mentor', 'Expected subText');
+      assert.strictEqual(p.bottomText, 'Forever in our Hearts', 'Expected bottomText');
+      assert.strictEqual(p.dates, '2026', 'Expected date 2026');
+      assert.strictEqual(p.widthMm, 450, 'Expected width 450');
+      assert.strictEqual(p.heightMm, 300, 'Expected height 300');
     },
   },
 ];

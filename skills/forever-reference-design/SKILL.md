@@ -77,9 +77,19 @@ Match requested stone brightness in the rendered preview, not just the catalog n
        - Granite Base (`target: 'base'`): Wide family inscription (e.g. `RODZINA KOWALSKICH`, Garamond 38–40 mm, `xPos: 0, yPos: 0`). 3D granite vases (catalogId: `K2213`) mount symmetrically on the base using millimeter offsets (e.g. `xPos: -380` and `+380`).
        - Horizontal Ledger Slab (`target: 'ledger'`): Extended dedications (e.g. `PAMIĘĆ O WAS NIGDY NIE ZGAŚNIE`, Great Vibes 36 mm, `xPos: 0, yPos: 0`).
      * Cast Bronze Plaques (Product `5`):
-       - Shapes: Rectangle Landscape (`shapeId: '67'`), Rectangle Portrait (`shapeId: '68'`), Oval Landscape (`shapeId: '69'`), Circle (`shapeId: '71'`). Standard size e.g. 380×280 mm.
+       - Shapes: Rectangle Landscape (`shapeId: '67'`), Rectangle Portrait (`shapeId: '68'`), Oval Landscape (`shapeId: '69'`), Circle (`shapeId: '71'`). Standard size e.g. 380×280 mm or 450×300 mm.
        - Borders: `borderName` ('Border 1' to 'Border 10', e.g. 'Border 4' Solid), `fixingType`: 'lugs-with-studs', 'flat-back', or 'screws'.
        - Emblems & Motifs: Bronze cast motifs (crosses, floral) and emblems (`list_emblems`, `add_emblem`, `update_emblem`) mount with natural bronze finish. Motifs use offset coordinate space (negative Y is UP toward top edge). Raised bronze lettering (#D4AF37) with clean spacing.
+       - MANDATORY Stonemason Bronze Plaque Typographic & Composition Canon:
+         1. Primary Name Focal Dominance: The recipient's name MUST be the indisputable hero of the plaque (24–28 mm on 380–450 mm plaques; ~170%–200% size of subtitles, minimum 22 mm). NEVER downsize the name to match secondary lines.
+         2. Strict Segregation of Titles & Roles: NEVER concatenate names with titles, positions, achievements, or foundation details into a single line (e.g. NEVER "JOHN MILLER FOUNDER OF MILITARY GARDEN FUNDED"). Isolate titles and roles (e.g. "Founder of the Military Garden") into their own line directly under the name (12–14 mm).
+         3. Typographic Case & Style Contrast (Avoid Monotonous Wall of Caps):
+            - Name & Introductory Header: Dignified UPPERCASE (ALL CAPS).
+            - Roles, Honors & Epitaphs: Title Case (e.g. "Founder of the Military Garden", "Distinguished Scholar and Mentor") or Italic to provide visual warmth and break up monotonous capital letters.
+            - Solitary Years: Format single dates with classic em-dashes (e.g. "— 2026 —").
+            - Concluding Valedictions: Formatted in quotes or Title Case (e.g. "„Forever in our Hearts”").
+         4. Maximum Line Width & Margin Safety: No line should exceed 70% of plaque width. Long sentences must be wrapped into balanced lines.
+         5. Semantic Vertical Spacing (Cluster Spacing, Not Uniform Interval): Group the name and its role together; leave breathing space before secondary honours and dates.
    - Coordinate System: On a headstone, inscription Y increases UPWARD (larger Y is higher on the stone). Headstone motif offset Y increases DOWNWARD (larger Y is lower on the stone).
 
 ## Default Design Archetypes (Zero-Guessing Defaults for Simple Prompts)
@@ -90,15 +100,27 @@ When the user gives a concise prompt without explicit technical parameters (e.g.
 - **Keywords:** "tablica z brązu", "bronze plaque", "tablica pamiątkowa".
 - **Setup:**
   * Session: `create_local_session(productId: '5')`.
-  * Shape: Rectangle Landscape (`shapeId: '67'`), dimensions `widthMm: 380, heightMm: 280`.
+  * Shape: Rectangle Landscape (`shapeId: '67'`), dimensions `widthMm: 380, heightMm: 280` (or `450x300 mm` when requested).
   * Assembly: `borderName: 'Border 4'` (Solid), `fixingType: 'lugs-with-studs'`.
-  * Cross / Motif: `/shapes/motifs/cross_001.svg` in upper area (`heightMm: 45`, `xPos: 0`, `yPos: -85`).
-  * Inscription Hierarchy (Garamond, raised bronze `#D4AF37`):
-    - Header: e.g. "PAMIĘCI" (size 16 mm, `yPos: 42`).
-    - Full Name: (size 20 mm, `yPos: 15`).
-    - Title / Subtitle: (size 13 mm, `yPos: -12`).
-    - Vital Dates: (size 14 mm, `yPos: -38`).
-    - Dedication / Valediction: (size 11 mm, `yPos: -70`).
+  * Cross / Motif: `/shapes/motifs/cross_001.svg` in upper area (`heightMm: 36–45`, `xPos: 0`, offset `yPos: -Math.round(H * 0.32)`).
+  * **STRICT ZERO-INVENTION RULE FOR INSCRIPTIONS:**
+    - NEVER invent dates (e.g. "1938 — 2019"), academic titles (e.g. "Distinguished Scholar and Mentor"), or closing valedictions (e.g. "Forever in our Hearts") if the user prompt did NOT provide them!
+    - Only render lines explicitly provided or requested.
+    - If the user prompt is minimal (e.g. *"Design Bronze Plaque for fallen WWII soldiers"*), compose ONLY the introductory header ("IN MEMORY OF") and the requested subject ("FALLEN WWII SOLDIERS") — preserving all words, numbers, and acronyms (like WWII).
+  * **Dynamic Layout Canon based on actual line count $N$:**
+    - 2-Line Layout (minimal prompt, e.g. Header + Subject):
+      * Header: "IN MEMORY OF" / "PAMIĘCI" (size 16–18 mm, `yPos: +36 mm` [+0.12 * H]).
+      * Subject: "FALLEN WWII SOLDIERS" (size 28–30 mm, `yPos: -18 mm` [-0.06 * H] — prominent hero!).
+    - 3-Line Layout (Header + Subject + Dates OR Subtitle):
+      * Header: size 15–16 mm, `yPos: +54 mm` (+0.18 * H).
+      * Subject / Name: size 26–28 mm, `yPos: +12 mm` (+0.04 * H).
+      * Dates / Subtitle: size 14–16 mm, `yPos: -48 mm` (-0.16 * H).
+    - 4-Line Layout:
+      * Header (`yPos: +60 mm` [+0.20 * H]), Subject (`yPos: +21 mm` [+0.07 * H]), Subtitle/Dates (`yPos: -24 mm` [-0.08 * H]), Epitaph (`yPos: -66 mm` [-0.22 * H]).
+    - 5-Line Layout (when user provided Header, Name, Subtitle, Dates, and Epitaph):
+      * Header (`yPos: +63 mm`), Name (`yPos: +27 mm`), Subtitle (`yPos: -6 mm`), Dates (`yPos: -42 mm`), Epitaph (`yPos: -75 mm`).
+    - 6-Line Layout (when role/title is also explicitly supplied):
+      * Header (`yPos: +66 mm`), Name (`yPos: +33 mm`), Role (`yPos: +6 mm`), Subtitle (`yPos: -24 mm`), Dates (`yPos: -51 mm`), Epitaph (`yPos: -75 mm`).
 
 ### Archetype 2: Upright Traditional Headstone with Base (Product `124`)
 - **Keywords:** "nagrobek", "headstone", "nagrobek dla jednej/dwóch osób".
