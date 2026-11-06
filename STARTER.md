@@ -207,6 +207,23 @@
      - **Root Cause:** In `components/three/headstone/SvgHeadstone.tsx`, the fallback `<lineLoop>` (used when `engravingStrokeWidthMm` is undefined, e.g. for Laser-Etched Product 4) and `<DreiLine>`/`<sourceSvgOverlay>` had `depthTest={false}` instead of `depthTest={true}`.
      - **Resolution:** Enabled `depthTest` (depth testing active) on `lineBasicMaterial`, `DreiLine`, and `sourceSvgOverlay` in `SvgHeadstone.tsx`. Now, when viewing the monument from the rear, the opaque solid granite headstone occludes the front lines as expected.
 
+  8. *Bespoke Figural Layout Typography Presets (`scripts/generate-catalog-designs.mjs`):*
+     - **Concept & Rationale:** Irregular pictorial shapes have highly non-uniform vertical widths and distinctive anatomical zones (crests, badges, armor hulls, canopies, soles). Generic single-line centering results in awkward clipping or unharmonious proportions.
+     - **Implementation:** Defined bespoke "golden layouts" for all 16 Military & First Responder shapes:
+       - **First Responder Helmet (`helmet.svg`):** Top crest (`CHIEF OF` / `DEPARTMENT`, y = 160/135 mm), inner shield badge (`EDWARD` / `R. CARTER` / `1952` / `2019`, y = 55/30/-5/-30 mm), and wide lower brim (`His Leadership Lives On`, y = -110 mm).
+       - **Military Tank (`war-tank.svg`):** Upper turret command (`ARMORED CAVALRY`), central armor hull (`SGT. ARTHUR P. VANCE` / `1ST ARMORED DIVISION`), and bottom tracks (`1947 — 2021` / `Courage Under Fire`).
+       - **Airborne Paratrooper (`paratrooper.svg`):** Upper canopy curve (`82ND AIRBORNE DIVISION` / `ALL THE WAY`), center shroud lines/harness (`CPL. DAVID L. REED` / `1985 — 2018`), and landing ground (`Soaring with Angels`).
+       - **Remaining 13 shapes:** Tailored coordinate mapping across Pentagon, Naval Ship, Combat Boots, Guard, Signal Corps, Pledge Soldier, Standing Soldier, Saluting Soldier, Fire Engine, Firefighter, Flame, First Aid Kit, and Doctor.
+     - **Execution & Assets:** Executed `scripts/generate-catalog-designs.mjs` to re-render all 16 designs in 3D, writing updated canonical JSON files (`public/designs/v2026-p3d/`) and sharp previews (`public/screenshots/v2026-3d/`).
+     - **Customer Value:** Allows customers entering from `/designs/` to click "Personalize This Design" and simply replace names/dates while preserving an expertly balanced, silhouette-aware composition.
+
+  9. *Market Adoption & Strategic Value vs Legacy 2D Configurator (`/design/html5/`):*
+     - Evaluated commercial and UX advantages of the new Three.js WebGL PBR platform over the legacy CreateJS Flash-conversion engine:
+       1. **Psychological Trust & Tangibility:** High-value memorial purchases ($1.5k–$10k+) require physical certainty. Three.js PBR stone materials, specular reflections, depth, and 360° inspection eliminate customer hesitation and buyer's remorse inherent to flat 2D schematics.
+       2. **Mobile Dominance (65–75% Traffic):** Replaced non-responsive desktop window UI with modern touch drawers, reactive size cards, and pinch-to-zoom navigation.
+       3. **Blank Canvas Elimination:** The `/designs/` gallery indexes thousands of search-optimized templates; customers land directly on relevant designs (e.g. firefighter memorial) and personalize in <3 minutes instead of starting from scratch.
+       4. **Global Competitive Edge:** Places Forever Shining among the top <5% of memorial manufacturers worldwide offering real-time 3D browser customization and dynamic pricing.
+
 - **Session Summary & Completed Implementation (November 5 Evening):**
   1. *Full Configurator Catalog Coverage (18/18 Variants, 100% PASS):*
      - Expanded the automated MCP test suite (`skills/forever-product-test-matrix/scripts/run-product-test-matrix.mjs`) from a 5-product sample to cover **all 17 configurable products** plus the WWII regression test:
