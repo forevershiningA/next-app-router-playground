@@ -159,15 +159,19 @@ export default function HomeGallery({
               type="button"
               onClick={() => setSelectedIndex(index)}
               aria-label={`Enlarge photo: ${photo.alt}`}
-              className="group day:border-stone-200 relative aspect-square overflow-hidden rounded-sm border border-white/10 bg-[#eee9df] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#cfac6c]"
+              className="group day:border-[#e4ddd2] day:bg-white relative aspect-square overflow-hidden rounded-sm border border-white/10 bg-[#141311] text-left transition-all hover:border-[#cfac6c]/80 focus-visible:outline-2 focus-visible:outline-[#cfac6c]"
             >
               <Image
-                src={photo.thumbnail}
+                src={photo.thumbnail || photo.src}
                 alt={photo.alt}
                 fill
                 sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-                className="object-contain transition-transform duration-300 group-hover:scale-[1.03] motion-reduce:transition-none"
+                className="object-cover transition-transform duration-500 group-hover:scale-105"
               />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+              <span className="absolute right-2 bottom-2 left-2 truncate text-xs font-medium text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                {photo.alt}
+              </span>
             </button>
           ))}
         </div>

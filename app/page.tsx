@@ -1,12 +1,13 @@
 import type { Metadata } from 'next';
 import HomeSplash from './_ui/HomeSplash';
 import HomeTrustBar from './_ui/HomeTrustBar';
-import HomeFooterSections from './_ui/HomeFooterSections';
-import HomeFooter from './_ui/HomeFooter';
-import HomeProductSection from './_ui/HomeProductSection';
 import HomeReviews from './_ui/HomeReviews';
+import HomeProductSection from './_ui/HomeProductSection';
+import HomeAiPromptSection from './_ui/HomeAiPromptSection';
 import HomeTutorial from './_ui/HomeTutorial';
 import HomeGallery from './_ui/HomeGallery';
+import HomeFooterSections from './_ui/HomeFooterSections';
+import HomeFooter from './_ui/HomeFooter';
 import { homeFaqItems } from './_internal/home-content';
 
 export const metadata: Metadata = {
@@ -206,13 +207,17 @@ export default function Page() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
-      <main id="main-content" className="min-h-screen bg-[#0c0b0a]">
+      <main
+        id="main-content"
+        className="day:bg-[#f8f6f0] day:text-[#1d1a17] min-h-screen bg-[#0c0b0a] text-white"
+      >
         <HomeSplash />
         <HomeTrustBar />
         <HomeReviews />
         <HomeProductSection />
-        <HomeGallery />
         <HomeTutorial />
+        <HomeAiPromptSection />
+        <HomeGallery />
         <HomeFooterSections />
       </main>
       <HomeFooter />

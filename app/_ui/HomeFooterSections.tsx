@@ -1,152 +1,110 @@
 import Link from 'next/link';
-import { ArrowRightIcon } from '@heroicons/react/24/outline';
+import { ArrowRightIcon, PhoneIcon, EnvelopeIcon } from '@heroicons/react/24/outline';
 import { homeFaqItems } from '#/app/_internal/home-content';
 
 export default function HomeFooterSections() {
   return (
     <>
-      <section className="relative overflow-hidden bg-[#eee9df] py-20">
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="grid gap-12 lg:grid-cols-[0.72fr_1.28fr] lg:items-start">
-            <div className="max-w-xl">
-              <p className="text-xs font-semibold tracking-[0.12em] text-[#7b5a20]">
-                A clear design process
-              </p>
-              <h2 className="mt-4 font-serif text-3xl leading-[1.16] text-pretty text-[#1d1a17] sm:text-5xl">
-                How to Design Your Memorial Online
-              </h2>
-              <p className="mt-3 text-base leading-7 text-[#625a51]">
-                Work through each decision at your own pace. The 3D preview
-                updates as you choose the product, dimensions, wording, and
-                personal details.
-              </p>
-              <Link
-                href="/select-product"
-                prefetch={false}
-                className="mt-7 inline-flex min-h-11 w-fit items-center gap-2 rounded-sm bg-[#1d1a17] px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#3a332c]"
-              >
-                Choose a memorial product
-                <ArrowRightIcon className="h-4 w-4" aria-hidden="true" />
-              </Link>
-            </div>
-
-            <ol className="grid border-t border-[#bdb4a6] sm:grid-cols-3 sm:border-l">
-              {[
-                {
-                  title: 'Choose the memorial',
-                  description:
-                    'Compare headstones, plaques, monuments, urns, and pet memorials before opening the designer.',
-                },
-                {
-                  title: 'Personalize the details',
-                  description:
-                    'Select the shape, material, size, inscription, portrait, motifs, and available accessories.',
-                },
-                {
-                  title: 'Review before ordering',
-                  description:
-                    'Check the 3D preview and pricing, then save or share the proof with family before moving forward.',
-                },
-              ].map((step, index) => (
-                <li
-                  key={step.title}
-                  className="border-r border-b border-[#bdb4a6] p-6 sm:min-h-64"
-                >
-                  <span
-                    className="font-serif text-4xl text-[#9a742f]"
-                    aria-hidden="true"
-                  >
-                    0{index + 1}
-                  </span>
-                  <h3 className="mt-4 text-base font-semibold text-[#1d1a17]">
-                    {step.title}
-                  </h3>
-                  <p className="mt-2 text-sm leading-6 text-[#625a51]">
-                    {step.description}
-                  </p>
-                </li>
-              ))}
-            </ol>
-          </div>
-        </div>
-      </section>
+      {/* FAQ SECTION */}
       <section
         id="faq"
         aria-labelledby="home-faq-heading"
-        className="day:border-stone-200 day:bg-[#f7f4ee] relative scroll-mt-24 border-t border-white/10 bg-[#11100e] py-20"
+        className="day:border-[#e2dad0] day:bg-[#f8f6f0] relative scroll-mt-24 border-t border-white/10 bg-[#0d0c0b] py-20"
       >
-        <div className="mx-auto max-w-4xl px-6 lg:px-8">
+        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <p className="day:text-amber-800 text-xs font-semibold tracking-[0.12em] text-[#d0ad68]">
-              Memorial design questions
-            </p>
+            <span className="day:text-[#8a651f] text-xs font-semibold tracking-widest text-[#cfac6c] uppercase">
+              Frequently Asked Questions
+            </span>
             <h2
               id="home-faq-heading"
-              className="day:text-stone-900 mt-4 font-serif text-3xl leading-[1.16] text-pretty text-white sm:text-5xl"
+              className="day:text-[#1d1a17] mt-2 font-serif text-3xl font-normal text-white sm:text-4xl lg:text-5xl"
             >
-              Frequently Asked Questions About Designing a Memorial
+              Questions About Designing a Memorial
             </h2>
-            <p className="day:text-gray-600 mx-auto mt-4 max-w-2xl text-base leading-7 text-gray-300">
-              Practical answers about personalisation, cemetery requirements,
-              saving a design, and ordering from your region.
+            <p className="day:text-[#625a51] mx-auto mt-4 max-w-2xl text-base leading-relaxed text-white/70">
+              Clear answers about cemetery regulations, granite durability, saving your 3D draft, and ordering.
             </p>
           </div>
 
-          <div className="mt-9 space-y-3">
+          <div className="mt-12 space-y-3">
             {homeFaqItems.map((item, index) => (
               <details
                 key={item.question}
                 open={index === 0}
-                className="group day:border-stone-200 day:bg-white border-b border-white/15 bg-transparent px-4 py-5 first:border-t sm:px-5"
+                className="group day:border-[#e4ddd2] day:bg-white overflow-hidden rounded-sm border border-white/10 bg-[#141311] transition-colors"
               >
-                <summary className="day:text-gray-900 flex cursor-pointer list-none items-center justify-between gap-4 text-left text-base font-semibold text-white marker:content-none">
-                  {item.question}
-                  <span
-                    className="text-xl leading-none text-[#cfac6c] transition-transform group-open:rotate-45"
-                    aria-hidden="true"
-                  >
+                <summary className="day:hover:bg-[#fbf9f5] day:text-[#1d1a17] flex cursor-pointer list-none items-center justify-between gap-4 p-5 text-left font-serif text-lg font-medium text-white transition-colors focus-visible:outline-2 focus-visible:outline-[#cfac6c] sm:text-xl [&::-webkit-details-marker]:hidden">
+                  <span>{item.question}</span>
+                  <span className="day:text-[#8a651f] ml-2 text-xl font-light text-[#cfac6c] transition-transform duration-200 group-open:rotate-45">
                     +
                   </span>
                 </summary>
-                <p className="day:text-gray-600 mt-3 max-w-3xl text-sm leading-6 text-gray-300">
-                  {item.answer}
-                </p>
+                <div className="day:border-[#eee7dc] border-t border-white/10 px-5 pt-3 pb-5">
+                  <p className="day:text-[#625a51] text-base leading-relaxed text-white/70">
+                    {item.answer}
+                  </p>
+                </div>
               </details>
             ))}
           </div>
         </div>
       </section>
-      {/* Support CTA */}
-      <section className="day:border-gray-200 day:bg-white relative overflow-hidden border-t border-white/10 bg-[#101010] py-10">
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
-            <div className="max-w-2xl">
-              <p className="day:text-amber-700 text-xs font-semibold tracking-[0.22em] text-[#cfac6c] uppercase">
-                Need a hand?
-              </p>
-              <h2 className="day:text-gray-900 mt-2 font-serif text-2xl leading-tight text-white sm:text-3xl">
-                Get Help Choosing a Headstone, Plaque, or Memorial
-              </h2>
-              <p className="day:text-gray-600 mt-2 text-sm leading-6 text-gray-300">
-                We can help with choosing a memorial, materials, wording, and
-                the next step when you are ready.
-              </p>
-            </div>
 
-            <div className="flex flex-col gap-3 sm:flex-row lg:items-center">
-              <Link
-                href="/contact"
-                className="inline-flex min-h-11 items-center justify-center rounded-lg bg-[#cfac6c] px-5 py-2.5 text-sm font-semibold text-slate-950 transition-colors hover:bg-[#d7b979]"
-              >
-                Contact us
-              </Link>
-              <Link
-                href="/designs"
-                className="day:border-gray-300 day:text-gray-800 day:hover:bg-gray-50 inline-flex min-h-11 items-center justify-center rounded-lg border border-white/15 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:border-[#cfac6c]/60 hover:bg-white/5"
-              >
-                Browse Designs
-              </Link>
-            </div>
+      {/* CONSULTATION CTA BANNER */}
+      <section className="day:border-[#e2dad0] day:bg-[#ede7dc] border-t border-white/10 bg-[#161513] py-14">
+        <div className="mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
+          <span className="day:text-[#8a651f] text-xs font-semibold tracking-widest text-[#cfac6c] uppercase">
+            Need Guidance or Cemetery Bylaw Advice?
+          </span>
+          <h2 className="day:text-[#1d1a17] mt-2 font-serif text-2xl font-normal text-white sm:text-3xl lg:text-4xl">
+            Speak with an Experienced Memorial Consultant
+          </h2>
+          <p className="day:text-[#625a51] mx-auto mt-3 max-w-2xl text-base text-white/70">
+            We provide compassionate assistance, help verify difficult cemetery bylaws, and prepare custom technical architectural proofs at no obligation.
+          </p>
+
+          <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row sm:gap-6 text-sm">
+            <a
+              href="tel:+16473880931"
+              className="day:text-[#1d1a17] flex items-center gap-2 font-medium text-white transition-colors hover:text-[#cfac6c]"
+            >
+              <PhoneIcon className="day:text-[#8a651f] size-4 text-[#cfac6c]" />
+              <span>North America: (+1) 647 388 0931</span>
+            </a>
+            <span className="hidden sm:inline text-white/30 day:text-[#b8ad9e]">·</span>
+            <a
+              href="tel:+61861910396"
+              className="day:text-[#1d1a17] flex items-center gap-2 font-medium text-white transition-colors hover:text-[#cfac6c]"
+            >
+              <PhoneIcon className="day:text-[#8a651f] size-4 text-[#cfac6c]" />
+              <span>Australia & UK: +61 8 6191 0396</span>
+            </a>
+            <span className="hidden sm:inline text-white/30 day:text-[#b8ad9e]">·</span>
+            <a
+              href="mailto:admin@forevershining.com.au"
+              className="day:text-[#1d1a17] flex items-center gap-2 font-medium text-white transition-colors hover:text-[#cfac6c]"
+            >
+              <EnvelopeIcon className="day:text-[#8a651f] size-4 text-[#cfac6c]" />
+              <span>admin@forevershining.com.au</span>
+            </a>
+          </div>
+
+          <div className="mt-8 flex flex-col justify-center gap-4 sm:flex-row">
+            <Link
+              href="/select-product"
+              prefetch={false}
+              className="day:bg-[#1d1a17] day:text-white day:hover:bg-[#342e26] inline-flex min-h-12 items-center justify-center gap-2 rounded-sm bg-[#cfac6c] px-8 py-3 text-sm font-semibold text-[#181611] transition-colors hover:bg-[#e2c688]"
+            >
+              <span>Start Designing in 3D</span>
+              <ArrowRightIcon className="size-4" />
+            </Link>
+            <Link
+              href="/designs"
+              className="day:border-[#b8ad9e] day:text-[#1d1a17] day:hover:bg-[#dfd7c9] inline-flex min-h-12 items-center justify-center rounded-sm border border-white/20 bg-transparent px-8 py-3 text-sm font-medium text-white transition-colors hover:bg-white/5"
+            >
+              Browse Ready Designs
+            </Link>
           </div>
         </div>
       </section>

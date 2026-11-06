@@ -2,101 +2,170 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowRightIcon } from '@heroicons/react/24/outline';
 import { HOME_PRODUCT_OPTIONS } from '#/app/_internal/home-products';
+import { PRODUCT_BADGES } from '#/lib/memorial-category-details';
+import { getProductPriceSamples } from '#/lib/server/product-pricing';
+import type { ProductPriceSample } from '#/lib/types/pricing';
 
-export default function HomeProductSection() {
+function formatSamplePrice(sample?: ProductPriceSample) {
+  if (!sample || !sample.price) return null;
+  const currency = sample.currency || 'AUD';
+  const prefix =
+    currency === 'EUR'
+      ? '€'
+      : currency === 'GBP'
+        ? '£'
+        : currency === 'USD'
+          ? 'US$'
+          : '$';
+  return `${prefix}${Math.round(sample.price).toLocaleString('en-US')}`;
+}
+
+export default async function HomeProductSection() {
+  const featured = HOME_PRODUCT_OPTIONS.slice(0, 6);
+  const priceSamples = await getProductPriceSamples(featured.map((p) => p.id));
+
   return (
-    <>
-      {' '}
-      {/* Search-friendly product entry point outside the designer shell. */}
-      <section
-        aria-labelledby="home-products-heading"
-        className="day:border-stone-200 day:bg-white relative overflow-hidden border-y border-white/10 bg-[#0c0b0a] py-20"
-      >
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="max-w-3xl">
-            <p className="day:text-amber-800 text-xs font-semibold tracking-[0.12em] text-[#d0ad68]">
-              Choose your memorial
-            </p>
+    <section
+      id="featured-products"
+      aria-labelledby="home-products-heading"
+      className="day:border-[#e2dad0] day:bg-[#f8f6f0] relative scroll-mt-24 border-y border-white/10 bg-[#0d0c0b] py-20"
+    >
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
+          <div className="max-w-2xl">
+            <span className="day:text-[#8a651f] text-xs font-semibold tracking-widest text-[#cfac6c] uppercase">
+              Handcrafted Catalog & Online 3D Designer
+            </span>
             <h2
               id="home-products-heading"
-              className="day:text-stone-900 mt-4 font-serif text-3xl leading-[1.16] text-pretty text-white sm:text-5xl"
+              className="day:text-[#1d1a17] mt-2 font-serif text-3xl font-normal text-white sm:text-4xl lg:text-5xl"
             >
-              Design a custom headstone, plaque, monument, or urn online
+              Popular Memorial Styles
             </h2>
-            <p className="day:text-stone-600 mt-5 max-w-2xl text-base leading-7 text-gray-300">
-              Start with the memorial that best suits your family, cemetery, or
-              setting. Each guided designer lets you compare shapes, materials,
-              sizes, inscriptions, images, and meaningful details before
-              ordering.
+            <p className="day:text-[#625a51] mt-4 text-base leading-relaxed text-white/70">
+              Select any base style below to personalize dimensions, stone colours,
+              photo laser etchings, and heartfelt inscriptions with immediate pricing.
             </p>
           </div>
 
-          <div className="mt-12 grid grid-cols-1 items-stretch gap-x-6 gap-y-8 sm:grid-cols-2 lg:grid-cols-3">
-            {HOME_PRODUCT_OPTIONS.slice(0, 6).map((product) => (
+          <Link
+            href="/select-product"
+            prefetch={false}
+            className="day:border-[#beb4a5] day:text-[#1d1a17] day:hover:bg-[#e4ddcf] inline-flex items-center gap-2 rounded-sm border border-white/20 px-5 py-2.5 text-xs font-semibold tracking-wider text-white uppercase transition-colors hover:bg-white/10"
+          >
+            <span>View Full Catalog</span>
+            <ArrowRightIcon className="size-3.5" />
+          </Link>
+        </div>
+
+        <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {featured.map((product) => {
+            const badge = PRODUCT_BADGES[product.id];
+            const priceSample = priceSamples[product.id];
+
+            return (
               <article
-                key={product.href}
-                className="group day:border-stone-200 day:bg-white flex h-full flex-col overflow-hidden border border-white/12 bg-[#151412] transition-colors hover:border-[#d0ad68]/65"
+                key={product.id}
+                className="group day:border-[#e4ddd2] day:bg-white day:shadow-sm day:hover:shadow-md flex h-full flex-col overflow-hidden rounded-sm border border-white/10 bg-[#141311] transition-all duration-300 hover:border-[#cfac6c]/60"
               >
-                <div className="day:bg-[#f3f1ed] relative aspect-[4/3] overflow-hidden bg-[#101010]">
+                {/* Visual Image Card */}
+                <Link
+                  href={product.href}
+                  aria-label={`Design your custom ${product.name}`}
+                  className="day:border-[#e8e2d7] day:bg-[#f6f3ed] relative block aspect-[4/3] overflow-hidden border-b border-white/10 bg-[#0e0d0c] focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[#cfac6c]"
+                >
                   <Image
                     src={product.image}
-                    alt={`${product.name} available to personalize online`}
+                    alt={product.name}
                     fill
                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                    className="object-contain p-5 transition-transform duration-700 ease-out will-change-transform group-focus-within:scale-[1.025] group-hover:scale-[1.025] motion-reduce:transition-none motion-reduce:group-focus-within:transform-none motion-reduce:group-hover:transform-none"
+                    className="object-contain p-4 transition-transform duration-500 ease-out group-hover:scale-105"
                   />
-                </div>
+                  {badge && (
+                    <span className="day:border-[#d5c9b7] day:bg-white/95 day:text-[#6f511c] absolute top-3 right-3 rounded-full border border-white/20 bg-black/75 px-2.5 py-0.5 text-[10px] font-semibold tracking-wider text-[#e6cb8b] uppercase backdrop-blur-xs">
+                      {badge.label}
+                    </span>
+                  )}
+                </Link>
 
+                {/* Content */}
                 <div className="flex flex-1 flex-col p-5">
-                  <p className="day:text-amber-800 text-[11px] font-semibold tracking-[0.08em] text-[#d0ad68]">
-                    {product.category}
-                  </p>
-                  <h3 className="day:text-gray-900 mt-2 text-lg leading-snug font-semibold text-white">
-                    {product.name}
-                  </h3>
-                  <p className="day:text-gray-600 mt-3 flex-1 text-sm leading-6 text-gray-300">
-                    {product.description}
-                  </p>
-                  <div className="mt-5 grid grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)] gap-2">
-                    <Link
-                      href={product.href}
-                      prefetch={false}
-                      className="inline-flex min-h-11 items-center justify-center gap-1.5 rounded-sm bg-[#d0ad68] px-3 py-2.5 text-center text-sm font-semibold text-[#17120a] transition-colors hover:bg-[#e0c27f] focus-visible:ring-2 focus-visible:ring-[#f3d48f] focus-visible:outline-none"
-                    >
-                      Design now
-                      <ArrowRightIcon
-                        className="h-4 w-4 shrink-0"
-                        aria-hidden="true"
-                      />
-                    </Link>
-                    <Link
-                      href={product.learnMoreHref}
-                      className="day:border-stone-300 day:text-stone-800 day:hover:bg-stone-50 inline-flex min-h-11 items-center justify-center rounded-sm border border-white/20 px-3 py-2.5 text-center text-sm font-semibold text-white transition-colors hover:border-[#d0ad68]/70 hover:bg-white/[0.06]"
-                    >
-                      Learn more
-                    </Link>
+                  <div className="flex-1">
+                    <p className="day:text-[#8a651f] text-[11px] font-semibold tracking-wider text-[#cfac6c] uppercase">
+                      {product.category}
+                    </p>
+                    <h3 className="day:text-[#1d1a17] mt-1 font-serif text-xl font-normal text-white">
+                      {product.name}
+                    </h3>
+                    <p className="day:text-[#625a51] mt-2 text-sm leading-relaxed text-white/70">
+                      {product.description}
+                    </p>
+                    {badge?.highlight && (
+                      <p className="day:text-[#8a651f] mt-2 text-xs font-medium text-[#cfac6c]/90">
+                        ✦ {badge.highlight}
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Pricing and Action */}
+                  <div className="day:border-[#ebe4da] mt-6 border-t border-white/10 pt-4">
+                    <div className="mb-3 flex items-baseline justify-between">
+                      {priceSample ? (
+                        <div>
+                          <span className="day:text-[#756c62] block text-[11px] uppercase tracking-wider text-white/50">
+                            Starting from
+                          </span>
+                          <span className="day:text-[#1d1a17] text-xl font-semibold text-white">
+                            {formatSamplePrice(priceSample)}
+                          </span>
+                          <span className="day:text-[#756c62] ml-1.5 text-xs text-white/50">
+                            ({priceSample.width} × {priceSample.height} mm)
+                          </span>
+                        </div>
+                      ) : (
+                        <span className="day:text-[#756c62] text-xs text-white/50">
+                          Custom sizing available
+                        </span>
+                      )}
+                    </div>
+
+                    <div className="flex flex-col gap-2">
+                      <Link
+                        href={product.href}
+                        className="day:border-[#1d1a17] day:bg-[#1d1a17] day:text-white day:hover:bg-[#342e26] inline-flex min-h-11 w-full items-center justify-between gap-3 rounded-sm border border-[#cfac6c]/60 bg-transparent px-4 py-2.5 text-sm font-semibold text-[#f0d89f] transition-all group-hover:bg-[#cfac6c] group-hover:text-[#14120f]"
+                      >
+                        <span>Customize in 3D</span>
+                        <ArrowRightIcon className="size-4" aria-hidden="true" />
+                      </Link>
+
+                      <Link
+                        href={product.learnMoreHref}
+                        className="day:text-[#756c62] day:hover:text-[#1d1a17] text-center text-xs text-white/50 transition-colors hover:text-white"
+                      >
+                        Learn more about this category →
+                      </Link>
+                    </div>
                   </div>
                 </div>
               </article>
-            ))}
-          </div>
-
-          <div className="mt-9 flex flex-col items-center gap-3 text-center">
-            <Link
-              href="/select-product"
-              prefetch={false}
-              className="day:text-[#6f511c] inline-flex min-h-11 items-center justify-center gap-2 rounded-sm border border-[#d0ad68] px-6 py-3 text-sm font-semibold text-[#e3c887] transition-colors hover:bg-[#d0ad68] hover:text-[#17120a]"
-            >
-              View all memorial products
-              <ArrowRightIcon className="h-4 w-4" aria-hidden="true" />
-            </Link>
-            <p className="day:text-gray-500 max-w-2xl text-xs leading-5 text-gray-400">
-              You can save your design, share it with family, and review pricing
-              before making a final decision.
-            </p>
-          </div>
+            );
+          })}
         </div>
-      </section>
-    </>
+
+        <div className="mt-12 text-center">
+          <Link
+            href="/select-product"
+            prefetch={false}
+            className="day:bg-[#1d1a17] day:text-white day:hover:bg-[#342e26] inline-flex min-h-12 items-center justify-center gap-2 rounded-sm bg-[#cfac6c] px-8 py-3 text-sm font-semibold text-[#181611] transition-colors hover:bg-[#e0c48c]"
+          >
+            <span>Explore All 16 Memorial Products</span>
+            <ArrowRightIcon className="size-4" />
+          </Link>
+          <p className="day:text-[#756c62] mt-3 text-xs text-white/50">
+            Compare granite headstones, bronze plaques, full monuments, and keepsake urns.
+          </p>
+        </div>
+      </div>
+    </section>
   );
 }
