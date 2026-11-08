@@ -2,32 +2,19 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import MemorialCategoryNav from '#/components/MemorialCategoryNav';
+import MemorialCategoryNav, {
+  MEMORIAL_LINKS,
+} from '#/components/MemorialCategoryNav';
 import { useEffect, useRef, useState } from 'react';
 import {
   Bars3Icon,
   MagnifyingGlassIcon,
   XMarkIcon,
-  ShieldCheckIcon,
-  ClipboardDocumentCheckIcon,
-  CubeIcon,
-  CheckCircleIcon,
   SparklesIcon,
   ArrowRightIcon,
 } from '@heroicons/react/24/outline';
 import { ThemeToggle } from '#/components/theme/ThemeToggle';
 import HomeBrandCard from './HomeBrandCard';
-
-const MEMORIAL_LINKS = [
-  { label: 'Home', href: '/' },
-  { label: 'Headstones', href: '/memorials/headstones' },
-  { label: 'Plaques', href: '/memorials/plaques' },
-  { label: 'Full Monuments', href: '/memorials/full-monuments' },
-  { label: 'Urns', href: '/memorials/urns' },
-  { label: 'Pet Memorials', href: '/memorials/pet-memorials' },
-  { label: 'Gallery', href: '/memorials/gallery' },
-  { label: 'Contact', href: '/contact' },
-] as const;
 
 export default function HomeSplash() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -143,7 +130,7 @@ export default function HomeSplash() {
           </div>
         </header>
 
-        <MemorialCategoryNav className="day:!border-[#cfc5b7]/80 day:!bg-[linear-gradient(to_right,transparent,rgba(255,255,255,0.4)_25%,rgba(255,255,255,0.4)_75%,transparent)] day:[&_a]:text-[#514a43] day:[&_a]:after:bg-[#8a651f] day:[&_a:hover]:text-[#6f511c] day:[&_a:focus-visible]:text-[#6f511c] day:[&_a[aria-current=page]]:text-[#6f511c] absolute top-[72px] right-0 left-0 z-40 !border-white/15 !bg-none [&_a]:text-[#d8cfc1] [&_a]:after:bg-[#cfac6c] [&_a:focus-visible]:text-[#f3d48f] [&_a:hover]:text-[#f3d48f] [&_a[aria-current=page]]:text-[#f3d48f]" />
+        <MemorialCategoryNav className="day:!border-[#cfc5b7]/80 day:!bg-[#e7e1d5]/70 day:backdrop-blur-sm day:[&_a]:text-[#514a43] day:[&_a]:after:bg-[#8a651f] day:[&_a:hover]:text-[#6f511c] day:[&_a:focus-visible]:text-[#6f511c] day:[&_a[aria-current=page]]:text-[#6f511c] absolute top-[72px] right-0 left-0 z-40 !border-white/15 !bg-black/40 backdrop-blur-sm [&_a]:text-[#d8cfc1] [&_a]:after:bg-[#cfac6c] [&_a:focus-visible]:text-[#f3d48f] [&_a:hover]:text-[#f3d48f] [&_a[aria-current=page]]:text-[#f3d48f]" />
 
         {/* Mobile Menu Drawer */}
         {mobileMenuOpen && (
@@ -255,34 +242,6 @@ export default function HomeSplash() {
                 >
                   Browse Ready Designs
                 </Link>
-              </div>
-
-              {/* 4 Pillars of Assurance */}
-              <div className="day:border-[#dcd3c4] mt-10 grid w-full grid-cols-2 gap-3.5 border-t border-white/10 pt-6 sm:grid-cols-4 sm:gap-4">
-                <div className="flex items-center gap-2">
-                  <ShieldCheckIcon className="day:text-[#8a651f] size-5 shrink-0 text-[#cfac6c]" />
-                  <span className="day:text-[#38332d] text-xs font-medium text-white/90">
-                    30-Year Guarantee
-                  </span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <ClipboardDocumentCheckIcon className="day:text-[#8a651f] size-5 shrink-0 text-[#cfac6c]" />
-                  <span className="day:text-[#38332d] text-xs font-medium text-white/90">
-                    Cemetery Approval
-                  </span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <CubeIcon className="day:text-[#8a651f] size-5 shrink-0 text-[#cfac6c]" />
-                  <span className="day:text-[#38332d] text-xs font-medium text-white/90">
-                    Full 3D Real-time
-                  </span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <CheckCircleIcon className="day:text-[#8a651f] size-5 shrink-0 text-[#cfac6c]" />
-                  <span className="day:text-[#38332d] text-xs font-medium text-white/90">
-                    Architectural Proof
-                  </span>
-                </div>
               </div>
             </div>
 

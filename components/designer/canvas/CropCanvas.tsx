@@ -391,10 +391,10 @@ function CropCanvasContent({ cropCanvasData }: { cropCanvasData: CropCanvasData 
   }, [allowFreeformHandles, dragState, hasFixedSizes, imageBoxPx.height, imageBoxPx.width, maskBounds, updateCropArea]);
 
   return (
-    <div className={`absolute inset-x-0 top-[112px] ${isBottomSheetCollapsed ? 'bottom-[52px]' : 'bottom-[75dvh]'} flex items-center justify-center bg-[#0A0A0A] day:bg-gray-200 md:top-0 md:bottom-0`}>
+    <div className={`absolute inset-x-0 top-[112px] ${isBottomSheetCollapsed ? 'bottom-[52px]' : 'bottom-[75dvh]'} flex items-center justify-center bg-[#0c0b0a] day:bg-[#ece7de] md:top-0 md:bottom-0`}>
       <div className="h-full w-full max-w-6xl p-3 md:max-h-[90vh] md:p-8">
         {/* Interactive Crop Preview */}
-        <div className="relative w-full h-full bg-gray-900 day:bg-gray-300 rounded-lg overflow-hidden" ref={previewRef}>
+        <div className="relative w-full h-full bg-[#161412] day:bg-[#ded7ca] rounded-2xl border border-white/10 day:border-[#dfd7ca] shadow-2xl overflow-hidden" ref={previewRef}>
           {/* Uploaded Image */}
           <Image
             src={uploadedImage}
@@ -410,7 +410,7 @@ function CropCanvasContent({ cropCanvasData }: { cropCanvasData: CropCanvasData 
             unoptimized
           />
           
-          {/* Green Semi-Transparent Mask Overlay */}
+          {/* Semi-Transparent Mask Overlay */}
           {previewSize.width > 0 && previewSize.height > 0 && cropPx.width > 0 && cropPx.height > 0 && (
             <svg
               className="absolute inset-0 pointer-events-none"
@@ -438,7 +438,7 @@ function CropCanvasContent({ cropCanvasData }: { cropCanvasData: CropCanvasData 
                 <rect
                   width={maskRectWidth}
                   height={maskRectHeight}
-                  fill="rgba(0, 255, 0, 0.45)"
+                  fill="rgba(34, 197, 94, 0.38)"
                   mask={`url(#crop-mask-${selectedMask || 'default'})`}
                 />
               </g>
@@ -477,7 +477,7 @@ function CropCanvasContent({ cropCanvasData }: { cropCanvasData: CropCanvasData 
                 <>
                   <div className="absolute inset-0 pointer-events-none">
                     <div
-                      className="absolute border-2 border-[#D7B356] rounded"
+                      className="absolute border-2 border-[#c49a45] day:border-[#9a742f] rounded-lg shadow-sm"
                       style={boundingStyle}
                     />
                   </div>
@@ -498,7 +498,7 @@ function CropCanvasContent({ cropCanvasData }: { cropCanvasData: CropCanvasData 
                     <button
                       key={corner}
                       type="button"
-                      className="absolute h-7 w-7 touch-none -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white bg-[#D7B356] shadow md:h-4 md:w-4"
+                      className="absolute h-7 w-7 touch-none -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white bg-[#c49a45] day:bg-[#9a742f] shadow-md transition-transform hover:scale-110 active:scale-95 md:h-4 md:w-4"
                       style={{
                         left: `${left}%`,
                         top: `${top}%`,

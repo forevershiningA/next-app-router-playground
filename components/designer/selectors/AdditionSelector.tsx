@@ -82,7 +82,8 @@ export default function AdditionSelector({ additions }: Props) {
 
   return (
     <div className="flex h-full min-h-0 flex-col gap-3">
-      <div className="grid shrink-0 grid-cols-[0.85fr_1fr_0.85fr_1.35fr] gap-1.5 overflow-hidden rounded-lg border border-white/10 bg-[#0A0A0A] p-1 day:border-gray-200 day:bg-gray-100">
+      {/* Category Filters */}
+      <div className="grid shrink-0 grid-cols-4 gap-1 rounded-xl border border-white/10 bg-[#161412] p-1.5 day:border-[#dfd7ca] day:bg-[#f7f4ee]">
         {CATEGORY_FILTERS.map((filter) => {
           const isActive = category === filter.id;
           return (
@@ -90,10 +91,10 @@ export default function AdditionSelector({ additions }: Props) {
               key={filter.id}
               type="button"
               onClick={() => setCategory(filter.id)}
-              className={`min-w-0 overflow-hidden rounded-md px-1.5 py-2 text-[11px] font-semibold transition-all sm:px-2.5 sm:text-xs ${
+              className={`min-w-0 overflow-hidden rounded-lg px-2 py-2 font-serif text-xs font-medium transition-all ${
                 isActive
-                  ? 'bg-[#D7B356] text-black shadow-md'
-                  : 'text-slate-300 hover:bg-slate-800 hover:text-white day:text-gray-500 day:hover:bg-white day:hover:text-gray-900'
+                  ? 'bg-[#c49a45] text-[#121110] shadow-sm day:bg-[#9a742f] day:text-white'
+                  : 'text-white/70 hover:bg-white/[0.06] hover:text-white day:text-[#6a6156] day:hover:bg-white day:hover:text-[#1a1714]'
               }`}
             >
               {filter.label}
@@ -102,68 +103,75 @@ export default function AdditionSelector({ additions }: Props) {
         })}
       </div>
 
-      <div className="min-h-0 flex-1 overflow-y-auto pr-1 custom-scrollbar">
+      <div className="custom-scrollbar min-h-0 flex-1 overflow-y-auto pr-1">
         <div className="grid grid-cols-2 gap-2.5">
-        {filteredAdditions.map((addition) => {
-          const instanceId = findInstanceId(addition.id);
-          const isSelected = Boolean(instanceId);
-          const dirName = addition.file?.split('/')?.[0] || '';
-          const imagePath = `/additions/${dirName}/${addition.image}`;
-          const displayName = getAdditionDisplayName(addition.name);
-          const size = addition.sizes?.find((variant) => variant.availability) ?? addition.sizes?.[0];
-          const dimensions = size
-            ? formatDimensionTriplet(size.width, size.height, size.depth, unitSystem)
-            : null;
+          {filteredAdditions.map((addition) => {
+            const instanceId = findInstanceId(addition.id);
+            const isSelected = Boolean(instanceId);
+            const dirName = addition.file?.split('/')?.[0] || '';
+            const imagePath = `/additions/${dirName}/${addition.image}`;
+            const displayName = getAdditionDisplayName(addition.name);
+            const size =
+              addition.sizes?.find((variant) => variant.availability) ??
+              addition.sizes?.[0];
+            const dimensions = size
+              ? formatDimensionTriplet(
+                  size.width,
+                  size.height,
+                  size.depth,
+                  unitSystem,
+                )
+              : null;
 
-          return (
-            <button
-              key={addition.id}
-              type="button"
-              onClick={() => handleToggle(addition)}
-              className={`group flex min-h-[198px] flex-col overflow-hidden rounded-lg border text-left shadow-lg shadow-black/15 transition-all ${
-                isSelected
-                  ? 'border-[#D7B356] bg-[#211A10] shadow-[#D7B356]/15 day:bg-amber-50'
-                  : 'border-white/10 bg-[#171717] hover:-translate-y-0.5 hover:border-[#D7B356]/60 hover:bg-white/[0.06] day:border-gray-200 day:bg-white'
-              }`}
-            >
-              <div className="relative aspect-[4/3] w-full overflow-hidden border-b border-white/10 bg-[#E8E3DA] day:border-gray-200 day:bg-gray-100">
-                <Image
-                  src={imagePath}
-                  alt={displayName}
-                  fill
-                  sizes="120px"
-                  className="object-contain p-2.5 transition-transform duration-300 group-hover:scale-105"
-                />
-                {isSelected && (
-                  <div className="absolute top-2 right-2 rounded-full bg-[#D7B356] px-2 py-0.5 text-[10px] font-semibold text-black shadow-md">
-                    Added
-                  </div>
-                )}
-              </div>
-              <div className="flex min-h-[74px] flex-1 flex-col justify-between gap-2 p-2.5">
-                <div className="space-y-1 text-center">
-                  <span className="block text-xs leading-snug font-semibold break-words text-white day:text-gray-900">
-                    {displayName}
-                  </span>
-                  {dimensions && (
-                    <span className="block text-[10px] leading-snug text-slate-400 day:text-gray-500">
-                      {dimensions}
-                    </span>
+            return (
+              <button
+                key={addition.id}
+                type="button"
+                onClick={() => handleToggle(addition)}
+                className={`group flex min-h-[210px] flex-col overflow-hidden rounded-xl border text-left shadow-sm transition-all duration-200 ${
+                  isSelected
+                    ? 'border-[#c49a45] bg-[#c49a45]/10 shadow-[0_0_0_1px_rgba(196,154,69,0.3)] day:border-[#9a742f] day:bg-[#9a742f]/10'
+                    : 'border-white/10 bg-[#161412] hover:-translate-y-0.5 hover:border-[#c49a45]/50 hover:bg-white/[0.03] day:border-[#dfd7ca] day:bg-white day:shadow-xs day:hover:border-[#9a742f]'
+                }`}
+              >
+                <div className="relative aspect-[4/3] w-full overflow-hidden border-b border-white/10 bg-[#0c0b0a] day:border-[#dfd7ca] day:bg-[#f4efe6]">
+                  <Image
+                    src={imagePath}
+                    alt={displayName}
+                    fill
+                    sizes="120px"
+                    className="object-contain p-3 transition-transform duration-300 group-hover:scale-105"
+                  />
+                  {isSelected && (
+                    <div className="absolute top-2 right-2 rounded-full bg-[#c49a45] px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-[#121110] shadow-sm day:bg-[#9a742f] day:text-white">
+                      Added
+                    </div>
                   )}
                 </div>
-                <span className="text-[11px] font-semibold text-[#D7B356]">
-                  {isSelected ? 'Remove' : 'Add'} →
-                </span>
-              </div>
-            </button>
-          );
-        })}
+                <div className="flex min-h-[74px] flex-1 flex-col justify-between gap-2 p-3 text-center">
+                  <div className="space-y-1">
+                    <span className="block font-serif text-xs font-medium leading-snug break-words text-white transition-colors group-hover:text-[#f0d89f] day:text-[#1a1714] day:group-hover:text-[#9a742f]">
+                      {displayName}
+                    </span>
+                    {dimensions && (
+                      <span className="block font-sans text-[10px] tabular-nums text-white/50 day:text-[#6a6156]">
+                        {dimensions}
+                      </span>
+                    )}
+                  </div>
+                  <span className="block border-t border-white/5 pt-1.5 font-sans text-[11px] font-semibold uppercase tracking-wider text-[#c49a45] day:border-[#dfd7ca]/50 day:text-[#9a742f]">
+                    {isSelected ? '✓ Added · Remove' : 'Add →'}
+                  </span>
+                </div>
+              </button>
+            );
+          })}
 
-        {filteredAdditions.length === 0 && (
-          <div className="col-span-2 rounded-lg border border-dashed border-white/10 bg-[#171717] p-6 text-center text-xs text-gray-400 day:border-gray-200 day:bg-gray-50 day:text-gray-500">
-            No additions in this category yet.
-          </div>
-        )}
+          {filteredAdditions.length === 0 && (
+            <div className="col-span-2 rounded-xl border border-dashed border-white/10 bg-[#161412] p-8 text-center text-xs text-white/50 day:border-[#dfd7ca] day:bg-white day:text-[#6a6156]">
+              No additions in this category yet.
+            </div>
+          )}
         </div>
       </div>
     </div>

@@ -3,7 +3,10 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/24/outline';
+import {
+  ArrowLeftIcon,
+  ArrowRightIcon,
+} from '@heroicons/react/24/outline';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import { Product } from '#/lib/db';
 import type { ProductPriceSample } from '#/lib/types/pricing';
@@ -126,6 +129,26 @@ const productSummaries: Record<string, { name?: string; description: string }> =
     },
   };
 
+const PRODUCT_MATERIAL_TAGS: Record<string, string> = {
+  '5': 'Cast Bronze',
+  '4': 'Laser-Etched Granite',
+  '124': 'Traditional Engraved Stone',
+  '22': 'Compact Granite',
+  '1': 'Light-Transmitting Steel',
+  '23': 'Mirror-Polished Steel',
+  '30': 'Black Granite',
+  '32': 'Full-Colour Enamel',
+  '34': 'Engraved Natural Stone',
+  '52': 'Marine-Grade Steel',
+  '100': 'Complete Granite Monument',
+  '101': 'Traditional Stone Monument',
+  '103': 'Classic Memorial Structure',
+  '2350': 'Vitreous Enamel & Steel',
+  '8': 'Granite Pet Headstone',
+  '9': 'Granite Pet Plaque',
+  '135': 'Natural Pet Rock',
+};
+
 type ProductGridProps = {
   products: Product[];
   priceMap: Record<string, ProductPriceSample | undefined>;
@@ -184,7 +207,7 @@ function ProductCarousel({
     <div className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-x-2 md:block">
       {heading}
       {(canScrollBack || canScrollForward) && (
-        <div className="col-start-2 mb-3 flex justify-end gap-1 md:gap-2">
+        <div className="col-start-2 mb-3 flex justify-end gap-1.5 md:mb-4 md:gap-2">
           {[-1, 1].map((direction) => (
             <button
               key={direction}
@@ -192,7 +215,7 @@ function ProductCarousel({
               aria-label={`${direction === -1 ? 'Previous' : 'Next'} products in ${label}`}
               disabled={direction === -1 ? !canScrollBack : !canScrollForward}
               onClick={() => scroll(direction)}
-              className="day:border-[#bdb4a6] day:text-[#514a43] flex size-10 items-center justify-center rounded-sm border border-white/20 text-white/80 hover:border-[#cfac6c] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#9a742f] disabled:cursor-default disabled:opacity-30"
+              className="flex size-9 items-center justify-center rounded-lg border border-white/20 bg-white/[0.04] text-white/80 transition-all hover:border-[#c49a45] hover:bg-[#c49a45]/15 hover:text-white disabled:cursor-not-allowed disabled:opacity-30 day:border-[#dfd7ca] day:bg-white day:text-[#5a5248] day:hover:border-[#9a742f] day:hover:bg-[#9a742f]/10 day:hover:text-[#9a742f] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#9a742f]"
             >
               {direction === -1 ? (
                 <ArrowLeftIcon className="size-4" />
@@ -208,7 +231,7 @@ function ProductCarousel({
         role="region"
         aria-label={`${label} products`}
         tabIndex={0}
-        className="col-span-2 grid snap-x snap-mandatory auto-cols-[88%] grid-flow-col items-stretch gap-3 overflow-x-auto overscroll-x-contain p-1 pb-3 [scrollbar-width:none] focus-visible:outline-2 focus-visible:outline-[#9a742f] md:auto-cols-[100%] md:gap-5 md:[scrollbar-width:auto] @min-[38rem]/products:auto-cols-[calc((100%-20px)/2)] @min-[60rem]/products:auto-cols-[calc((100%-60px)/4)]"
+        className="col-span-2 grid snap-x snap-mandatory auto-cols-[88%] grid-flow-col items-stretch gap-3.5 overflow-x-auto overscroll-x-contain p-1 pb-4 [scrollbar-width:none] focus-visible:outline-2 focus-visible:outline-[#9a742f] md:auto-cols-[100%] md:gap-5 md:[scrollbar-width:auto] @min-[38rem]/products:auto-cols-[calc((100%-20px)/2)] @min-[60rem]/products:auto-cols-[calc((100%-60px)/4)]"
       >
         {children}
       </div>
@@ -258,85 +281,95 @@ export default function ProductSelectionGrid({
       return { ...group, products: orderProductsForDisplay(groupProducts) };
     })
     .filter((group) => group.products.length > 0);
+
   return (
-    <div className="day:bg-[#f7f4ee] @container/products min-h-screen bg-[#0c0b0a]">
-      {/* Header Section */}
-      <div className="day:border-[#cfc5b7] day:bg-[#eee9df] relative overflow-hidden border-b border-white/10 bg-[#1d1a17] lg:flex lg:h-36 lg:items-center">
-        <div className="relative mx-auto w-full max-w-7xl px-4 pt-3 pb-4 md:px-6 md:py-8 lg:px-8 lg:py-0">
-          <UnitCurrencySelects className="mb-3 justify-end sm:absolute sm:top-4 sm:right-6 sm:mb-0 lg:right-8" />
-          <div className="text-center sm:px-20">
-            <h1 className="day:text-[#1d1a17] font-serif text-[28px] font-normal tracking-[-0.025em] text-white sm:text-4xl lg:text-3xl">
-              Choose your memorial
-            </h1>
-            <p className="day:text-[#625a51] mx-auto mt-2 max-w-xl text-sm leading-6 text-white/70 md:mt-3">
-              <span className="md:hidden">
-                Choose a product, then customise its shape.
-              </span>
-              <span className="hidden md:inline">
-                Compare materials and styles to find the right starting point.
-                Next: choose the shape.
-              </span>
-            </p>
+    <div className="min-h-screen bg-[#0c0b0a] day:bg-[#f7f4ee] @container/products">
+      {/* Studio Header Section */}
+      <div className="relative overflow-hidden border-b border-white/10 bg-[#161412] day:border-[#dfd7ca] day:bg-[#f5f1e8]">
+        <div className="relative mx-auto w-full max-w-7xl px-4 py-6 md:px-6 md:py-8 lg:px-8">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+            <div className="text-left">
+              <div className="mb-2.5 inline-flex items-center gap-2 rounded-full border border-[#c49a45]/35 bg-[#c49a45]/10 px-3 py-1 text-[11px] font-semibold tracking-widest text-[#c49a45] uppercase day:border-[#9a742f]/30 day:bg-[#9a742f]/10 day:text-[#78541c]">
+                <span className="inline-block size-1.5 rounded-full bg-[#c49a45] day:bg-[#9a742f]" />
+                Step 1 of 3 · Configurator Selection
+              </div>
+              <h1 className="font-serif text-3xl font-normal tracking-tight text-white day:text-[#1a1714] sm:text-4xl lg:text-[40px] lg:leading-tight">
+                Choose Your Memorial
+              </h1>
+              <p className="mt-2 max-w-2xl text-xs leading-relaxed text-stone-300 day:text-[#5a5248] md:text-sm">
+                Select your base product and material to begin real-time 3D configuration.
+                You can personalize dimensions, shape, custom inscriptions, motifs, and finishes in subsequent steps.
+              </p>
+            </div>
+            <div className="shrink-0 pt-1 sm:pt-0">
+              <UnitCurrencySelects className="justify-start sm:justify-end" />
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Category Filter */}
-      <div className="day:border-[#d8cdb9] day:bg-[#f7f4ee] relative border-b border-white/10 bg-[#15120f]">
-        <div className="relative mx-auto max-w-7xl px-4 py-2 md:px-6 md:py-3.5 lg:px-8">
-          <div className="-mx-4 flex snap-x gap-2 overflow-x-auto px-4 [scrollbar-width:none] sm:mx-0 sm:px-0 [&::-webkit-scrollbar]:hidden">
+      {/* Category Filter Bar */}
+      <div className="sticky top-0 z-20 border-b border-white/10 bg-[#121110]/95 backdrop-blur-md day:border-[#dfd7ca] day:bg-[#f7f4ee]/95">
+        <div className="relative mx-auto max-w-7xl px-4 py-2.5 md:px-6 md:py-3.5 lg:px-8">
+          <div className="-mx-4 flex snap-x items-center gap-2 overflow-x-auto px-4 [scrollbar-width:none] sm:mx-0 sm:px-0 [&::-webkit-scrollbar]:hidden">
             <button
               onClick={() => setSelectedCategory('all')}
               aria-pressed={selectedCategory === 'all'}
-              className={`min-h-10 shrink-0 snap-start rounded-sm border px-3 py-2 text-xs font-medium whitespace-nowrap transition-colors md:min-h-0 md:py-2.5 md:text-sm ${
+              className={`min-h-9 shrink-0 snap-start rounded-full border px-4 py-1.5 text-xs font-semibold tracking-wide transition-all duration-200 md:text-sm ${
                 selectedCategory === 'all'
-                  ? 'day:border-[#1d1a17] day:bg-[#1d1a17] day:text-white border-[#cfac6c] bg-[#cfac6c] text-[#1d1a17]'
-                  : 'day:border-[#bdb4a6] day:text-[#514a43] day:hover:border-[#9a742f] day:hover:bg-white/55 border-white/20 text-white/80 hover:border-[#cfac6c]/70 hover:bg-white/[0.06]'
+                  ? 'border-[#c49a45] bg-[#c49a45] text-[#121110] shadow-sm day:border-[#9a742f] day:bg-[#9a742f] day:text-white'
+                  : 'border-white/15 bg-white/[0.04] text-white/75 hover:border-[#c49a45]/50 hover:bg-white/[0.08] hover:text-white day:border-[#d6cebf] day:bg-[#eee8dc]/70 day:text-[#5a5248] day:hover:border-[#9a742f]/50 day:hover:bg-[#e7e0d2] day:hover:text-[#1a1714]'
               }`}
             >
               All Products
             </button>
-            {productCategories.map((category) => (
-              <button
-                key={category.id}
-                onClick={() => setSelectedCategory(category.id)}
-                aria-pressed={selectedCategory === category.id}
-                className={`min-h-10 shrink-0 snap-start rounded-sm border px-3 py-2 text-xs font-medium whitespace-nowrap transition-colors md:min-h-0 md:py-2.5 md:text-sm ${
-                  selectedCategory === category.id
-                    ? 'day:border-[#1d1a17] day:bg-[#1d1a17] day:text-white border-[#cfac6c] bg-[#cfac6c] text-[#1d1a17]'
-                    : 'day:border-[#bdb4a6] day:text-[#514a43] day:hover:border-[#9a742f] day:hover:bg-white/55 border-white/20 text-white/80 hover:border-[#cfac6c]/70 hover:bg-white/[0.06]'
-                }`}
-              >
-                <span>{category.name}</span>
-                <span className="ml-1 text-xs opacity-70">
-                  (
-                  {
-                    products.filter(
-                      (product) => product.category === category.id,
-                    ).length
-                  }
-                  )
-                </span>
-              </button>
-            ))}
+            {productCategories.map((category) => {
+              const count = products.filter(
+                (product) => product.category === category.id,
+              ).length;
+              const isSelected = selectedCategory === category.id;
+              return (
+                <button
+                  key={category.id}
+                  onClick={() => setSelectedCategory(category.id)}
+                  aria-pressed={isSelected}
+                  className={`min-h-9 shrink-0 snap-start rounded-full border px-4 py-1.5 text-xs font-semibold tracking-wide transition-all duration-200 md:text-sm ${
+                    isSelected
+                      ? 'border-[#c49a45] bg-[#c49a45] text-[#121110] shadow-sm day:border-[#9a742f] day:bg-[#9a742f] day:text-white'
+                      : 'border-white/15 bg-white/[0.04] text-white/75 hover:border-[#c49a45]/50 hover:bg-white/[0.08] hover:text-white day:border-[#d6cebf] day:bg-[#eee8dc]/70 day:text-[#5a5248] day:hover:border-[#9a742f]/50 day:hover:bg-[#e7e0d2] day:hover:text-[#1a1714]'
+                  }`}
+                >
+                  <span>{category.name}</span>
+                  <span
+                    className={`ml-1.5 rounded-full px-1.5 py-0.5 text-[11px] font-semibold ${
+                      isSelected
+                        ? 'bg-black/20 text-[#121110] day:bg-white/20 day:text-white'
+                        : 'bg-white/10 text-white/60 day:bg-[#dfd7ca] day:text-[#6a6156]'
+                    }`}
+                  >
+                    {count}
+                  </span>
+                </button>
+              );
+            })}
           </div>
         </div>
       </div>
 
       {/* Products Grid */}
-      <div className="mx-auto max-w-7xl px-4 pt-4 pb-36 md:px-6 md:pt-5 lg:px-8 lg:pb-5">
+      <div className="mx-auto max-w-7xl px-4 pt-6 pb-28 md:px-6 md:pt-8 lg:px-8">
         {filteredProducts.length === 0 ? (
           <div className="py-20 text-center">
-            <h3 className="day:text-gray-900 text-xl font-medium text-white">
+            <h3 className="font-serif text-xl font-normal text-white day:text-[#1a1714]">
               No products found
             </h3>
-            <p className="day:text-gray-500 mt-2 text-gray-400">
-              Try adjusting your search or filters
+            <p className="mt-2 text-sm text-stone-400 day:text-[#786e61]">
+              Try adjusting your category selection
             </p>
           </div>
         ) : (
           <>
-            <div className="grid gap-10">
+            <div className="grid gap-12">
               {groupedProducts.map((group) => (
                 <section
                   key={group.id}
@@ -353,23 +386,21 @@ export default function ProductSelectionGrid({
                     label={group.name}
                     heading={
                       selectedCategory === 'all' && (
-                        <div className="day:border-[#d8cdb9] mb-3 md:mb-4 md:border-b md:border-white/10 md:pb-3">
+                        <div className="mb-4 flex flex-col justify-between gap-1 border-b border-white/10 pb-3 day:border-[#dfd7ca] md:flex-row md:items-baseline">
                           <div>
                             <h2
                               id={`product-group-${group.id}`}
-                              className="day:text-[#1d1a17] font-serif text-xl font-normal text-white md:text-2xl"
+                              className="font-serif text-2xl font-normal tracking-tight text-white day:text-[#1a1714] md:text-3xl"
                             >
-                              {group.name}{' '}
-                              <span className="day:text-[#756c62] ml-1 font-sans text-sm font-medium text-white/55">
-                                ({group.products.length}
-                                <span className="hidden md:inline">
-                                  {' '}
-                                  item{group.products.length !== 1 ? 's' : ''}
-                                </span>
-                                )
+                              {group.name}
+                              <span className="ml-2.5 font-sans text-xs font-semibold uppercase tracking-wider text-[#c49a45] day:text-[#9a742f]">
+                                {group.products.length}{' '}
+                                {group.products.length === 1
+                                  ? 'option'
+                                  : 'options'}
                               </span>
                             </h2>
-                            <p className="day:text-[#625a51] mt-1 text-xs text-white/60 md:text-sm">
+                            <p className="mt-1 text-xs text-white/65 day:text-[#6a6156] md:text-sm">
                               {group.description}
                             </p>
                           </div>
@@ -384,67 +415,90 @@ export default function ProductSelectionGrid({
                         summary?.description ??
                         descriptionMap[product.id] ??
                         'Fully customizable memorial with premium materials and finishes.';
+                      const materialTag = PRODUCT_MATERIAL_TAGS[product.id];
+                      const displayName = summary?.name ?? product.name;
+
                       return (
                         <button
                           key={product.id}
                           onClick={() => handleProductSelect(product)}
                           disabled={loadingProductId !== null}
-                          aria-label={`Select ${product.name}`}
-                          className="group day:border-[#e4ddd2] day:bg-white day:shadow-[0_10px_30px_rgba(0,0,0,0.03)] day:hover:border-[#9a742f] relative flex h-full min-w-0 cursor-pointer snap-start flex-col overflow-hidden rounded-sm border border-white/12 bg-[#171717] text-left transition-colors hover:border-[#cfac6c]/60 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#9a742f] disabled:cursor-wait disabled:opacity-70"
+                          aria-label={`Select ${displayName}`}
+                          className="group relative flex h-full min-w-0 cursor-pointer snap-start flex-col overflow-hidden rounded-xl border border-white/10 bg-[#161412] text-left transition-all duration-300 hover:-translate-y-1 hover:border-[#c49a45]/70 hover:shadow-xl day:border-[#dfd7ca] day:bg-white day:shadow-[0_8px_24px_rgba(40,30,20,0.06)] day:hover:border-[#9a742f] day:hover:shadow-[0_14px_34px_rgba(40,30,20,0.12)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#9a742f] disabled:cursor-wait disabled:opacity-70"
                         >
-                          <div className="day:border-[#e4ddd2] day:bg-[#f3f1ed] relative h-44 w-full overflow-hidden border-b border-white/10 bg-[#101010] md:aspect-square md:h-auto">
+                          {/* Product Image Stage */}
+                          <div className="relative h-48 w-full overflow-hidden border-b border-white/8 bg-gradient-to-b from-[#1c1a17] to-[#141210] p-4 day:border-[#ebe4d8] day:bg-gradient-to-b day:from-[#f8f5ee] day:to-[#ede6d8] md:aspect-square md:h-auto">
                             <Image
                               src={`/webp/products/${product.image}`}
-                              alt={product.name}
+                              alt={displayName}
                               fill
-                              className="object-contain p-3 transition-transform duration-700 ease-out will-change-transform group-focus-within:scale-[1.025] group-hover:scale-[1.025] motion-reduce:transition-none motion-reduce:group-focus-within:transform-none motion-reduce:group-hover:transform-none"
+                              className="object-contain p-4 transition-transform duration-500 ease-out will-change-transform group-hover:scale-105 motion-reduce:transition-none motion-reduce:group-hover:scale-100"
                               sizes="(min-width: 1360px) 25vw, (min-width: 1024px) 45vw, (min-width: 608px) 50vw, 100vw"
                             />
-                          </div>
-
-                          <div className="flex flex-1 flex-col gap-2 p-3 md:gap-3 md:p-5">
-                            <h3 className="day:text-[#1d1a17] font-serif text-xl leading-tight text-white">
-                              {summary?.name ?? product.name}
-                            </h3>
-
-                            <p className="day:text-[#625a51] text-sm leading-6 text-gray-300">
-                              {description}
-                            </p>
-
-                            {priceRange ? (
-                              <div className="mt-auto pt-2">
-                                <span className="day:text-[#1d1a17] block text-2xl font-semibold text-white">
-                                  {formatAudPrice(
-                                    priceRange.price,
-                                    currency,
-                                    rates,
-                                    0,
-                                  )}
-                                </span>
-                                <span className="day:text-[#756c62] mt-1 block text-xs leading-5 text-white/60">
-                                  Example price ·{' '}
-                                  {formatDimensionPair(
-                                    priceRange.width,
-                                    priceRange.height,
-                                    unitSystem,
-                                  )}
+                            {materialTag && (
+                              <div className="absolute top-3 left-3 z-10">
+                                <span className="inline-flex items-center rounded-md border border-white/15 bg-black/60 px-2 py-0.5 text-[11px] font-medium tracking-wide text-white backdrop-blur-md day:border-[#d6cebf] day:bg-[#f7f4ee]/90 day:text-[#5a5248]">
+                                  {materialTag}
                                 </span>
                               </div>
-                            ) : (
-                              <p className="day:text-[#625a51] mt-auto pt-2 text-sm text-gray-300">
-                                Select product to configure options and view
-                                pricing
-                              </p>
                             )}
+                          </div>
 
-                            <div className="pt-1">
-                              <span className="day:border-[#1d1a17] day:bg-[#1d1a17] day:text-white inline-flex min-h-10 w-full items-center justify-between gap-2 rounded-sm border border-[#cfac6c]/70 bg-transparent px-3 py-2 text-sm font-semibold text-[#f0d89f] transition-colors group-hover:bg-[#cfac6c] group-hover:text-[#1d1a17]">
+                          {/* Product Details */}
+                          <div className="flex flex-1 flex-col gap-2.5 p-4 md:p-5">
+                            <div>
+                              <h3 className="font-serif text-lg font-normal leading-snug text-white transition-colors group-hover:text-[#f0d89f] day:text-[#1a1714] day:group-hover:text-[#9a742f] md:text-xl">
+                                {displayName}
+                              </h3>
+                              <p className="mt-1.5 text-xs leading-relaxed text-stone-300 line-clamp-2 day:text-[#5a5248] md:text-sm">
+                                {description}
+                              </p>
+                            </div>
+
+                            {/* Pricing & Dimensions */}
+                            <div className="mt-auto border-t border-white/8 pt-3 day:border-[#eee7da]">
+                              {priceRange ? (
+                                <div className="flex items-baseline justify-between gap-2">
+                                  <div>
+                                    <span className="text-[11px] uppercase tracking-wider text-white/50 day:text-[#786e61]">
+                                      From
+                                    </span>
+                                    <span className="block text-xl font-semibold tracking-tight text-white day:text-[#1a1714] md:text-2xl">
+                                      {formatAudPrice(
+                                        priceRange.price,
+                                        currency,
+                                        rates,
+                                        0,
+                                      )}
+                                    </span>
+                                  </div>
+                                  <span className="text-right text-[11px] leading-tight text-white/50 day:text-[#786e61]">
+                                    Example size
+                                    <span className="block font-medium text-white/70 day:text-[#5a5248]">
+                                      {formatDimensionPair(
+                                        priceRange.width,
+                                        priceRange.height,
+                                        unitSystem,
+                                      )}
+                                    </span>
+                                  </span>
+                                </div>
+                              ) : (
+                                <p className="text-xs text-white/50 day:text-[#786e61]">
+                                  Select product to configure size and live pricing
+                                </p>
+                              )}
+                            </div>
+
+                            {/* CTA Button */}
+                            <div className="pt-2">
+                              <span className="inline-flex min-h-10 w-full items-center justify-between gap-2 rounded-lg border border-[#c49a45]/50 bg-transparent px-3.5 py-2 text-xs font-semibold text-[#f0d89f] transition-all duration-200 group-hover:border-[#c49a45] group-hover:bg-[#c49a45] group-hover:text-[#121110] day:border-[#9a742f]/40 day:bg-[#f7f4ee] day:text-[#78541c] day:group-hover:border-[#9a742f] day:group-hover:bg-[#9a742f] day:group-hover:text-white md:text-sm">
                                 <span>
                                   {loadingProductId === product.id
-                                    ? 'Loading product…'
-                                    : 'Select product'}
+                                    ? 'Loading 3D Studio…'
+                                    : 'Configure in 3D'}
                                 </span>
-                                <ArrowRightIcon className="h-4 w-4" />
+                                <ArrowRightIcon className="size-4 transition-transform duration-200 group-hover:translate-x-1" />
                               </span>
                             </div>
                           </div>
@@ -454,6 +508,30 @@ export default function ProductSelectionGrid({
                   </ProductCarousel>
                 </section>
               ))}
+            </div>
+
+            {/* Bottom Studio Guidance */}
+            <div className="mt-14 rounded-2xl border border-white/10 bg-[#161412] p-6 text-center day:border-[#dfd7ca] day:bg-white day:shadow-sm md:p-8">
+              <h3 className="font-serif text-xl font-normal text-white day:text-[#1a1714] md:text-2xl">
+                Need help choosing the right memorial type?
+              </h3>
+              <p className="mx-auto mt-2 max-w-xl text-xs leading-relaxed text-stone-300 day:text-[#5a5248] md:text-sm">
+                Our design specialists are available to guide you through cemetery regulations, material longevity, and custom inscriptions.
+              </p>
+              <div className="mt-5 flex flex-wrap items-center justify-center gap-3">
+                <a
+                  href="/contact"
+                  className="inline-flex items-center gap-2 rounded-lg border border-[#c49a45] bg-[#c49a45] px-4 py-2 text-xs font-semibold text-[#121110] transition-colors hover:bg-[#d5ad55] day:border-[#9a742f] day:bg-[#9a742f] day:text-white day:hover:bg-[#856325] md:text-sm"
+                >
+                  Consult a Specialist
+                </a>
+                <a
+                  href="/memorials/headstones"
+                  className="inline-flex items-center gap-2 rounded-lg border border-white/15 bg-white/[0.04] px-4 py-2 text-xs font-semibold text-white transition-colors hover:bg-white/[0.08] day:border-[#d6cebf] day:bg-[#f7f4ee] day:text-[#5a5248] day:hover:bg-[#eee8dc] day:hover:text-[#1a1714] md:text-sm"
+                >
+                  Explore Product Catalog
+                </a>
+              </div>
             </div>
           </>
         )}

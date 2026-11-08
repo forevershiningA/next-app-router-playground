@@ -27,7 +27,7 @@ const sections = [
   {
     title: 'Information we collect',
     content: (
-      <>
+      <div className="space-y-3">
         <p>
           Depending on how you use the site, we may collect your name, email
           address, telephone number, delivery and billing details, account
@@ -48,7 +48,7 @@ const sections = [
           receive transaction and payment status information needed to process
           your order, not your full card number.
         </p>
-      </>
+      </div>
     ),
   },
   {
@@ -81,7 +81,7 @@ const sections = [
   {
     title: 'Cookies and similar technologies',
     content: (
-      <>
+      <div className="space-y-3">
         <p>
           We use cookies needed for functions such as keeping you signed in,
           protecting account sessions, and remembering site preferences such as
@@ -93,7 +93,7 @@ const sections = [
           essential cookies may prevent account, checkout, or preference
           features from working correctly.
         </p>
-      </>
+      </div>
     ),
   },
   {
@@ -137,7 +137,7 @@ const sections = [
   {
     title: 'Changes and contact',
     content: (
-      <>
+      <div className="space-y-3">
         <p>
           We may update this policy as our services or practices change. The
           current version will be published on this page.
@@ -145,52 +145,73 @@ const sections = [
         <p>
           For privacy questions, access or correction requests, or complaints,
           contact us at{' '}
-          <a href="mailto:admin@forevershining.com.au">
+          <a
+            href="mailto:admin@forevershining.com.au"
+            className="text-[#c49a45] underline decoration-[#c49a45]/40 underline-offset-2 transition hover:text-[#d5ad55] day:text-[#9a742f] day:decoration-[#9a742f]/40 day:hover:text-[#78541c]"
+          >
             admin@forevershining.com.au
           </a>{' '}
-          or call (08) 6191 0396. We will review and respond to your enquiry.
+          or call{' '}
+          <a
+            href="tel:+61861910396"
+            className="text-[#c49a45] underline decoration-[#c49a45]/40 underline-offset-2 transition hover:text-[#d5ad55] day:text-[#9a742f] day:decoration-[#9a742f]/40 day:hover:text-[#78541c]"
+          >
+            (08) 6191 0396
+          </a>
+          . We will review and respond to your enquiry.
         </p>
-      </>
+      </div>
     ),
   },
 ];
 
 export default function PrivacyPage() {
   return (
-    <div className="relative min-h-screen bg-[#050301] text-[#E5E5EA] day:bg-stone-100 day:text-gray-900">
-      <div
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(244,160,80,0.18),_transparent_45%),radial-gradient(circle_at_bottom,_rgba(88,144,255,0.18),_transparent_40%)] day:hidden"
-        aria-hidden
-      />
-      <div className="relative mx-auto w-full max-w-3xl px-4 py-8 sm:px-6 lg:px-10 lg:py-10">
-        <Link
-          href="/my-account"
-          className="mb-6 inline-flex items-center gap-2 text-sm text-white/70 transition hover:text-white day:text-gray-500 day:hover:text-gray-900"
-        >
-          <ArrowLeftIcon className="h-4 w-4" />
-          Back to My Account
-        </Link>
+    <div className="min-h-screen bg-[#0c0b0a] text-white day:bg-[#f7f4ee] day:text-[#1a1714]">
+      {/* Studio Header */}
+      <section className="relative overflow-hidden border-b border-white/10 bg-[#161412] day:border-[#dfd7ca] day:bg-[#f5f1e8]">
+        <div className="absolute inset-0 bg-radial-gradient-to-r from-amber-500/5 via-transparent to-transparent pointer-events-none" />
+        <div className="relative mx-auto max-w-4xl px-4 py-8 md:px-6 md:py-10 lg:px-8">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-[#c49a45]/35 bg-[#c49a45]/10 px-3 py-1 text-[11px] font-semibold tracking-widest text-[#c49a45] uppercase day:border-[#9a742f]/30 day:bg-[#9a742f]/10 day:text-[#78541c]">
+                Legal &amp; Compliance · Policy
+              </div>
+              <h1 className="font-serif text-3xl font-normal tracking-tight text-white day:text-[#1a1714] sm:text-4xl lg:text-[40px]">
+                Privacy Policy
+              </h1>
+              <p className="mt-2 text-sm text-stone-300 day:text-[#5a5248]">
+                How Forever Shining collects, uses, and safeguards your personal data
+              </p>
+            </div>
+            <Link
+              href="/my-account"
+              className="inline-flex items-center gap-2 rounded-lg border border-white/15 bg-white/[0.04] px-4 py-2.5 text-xs font-semibold text-white transition hover:border-white/30 hover:bg-white/10 day:border-[#dfd7ca] day:bg-[#eee8dc]/70 day:text-[#1a1714] day:hover:bg-[#e7e0d2]"
+            >
+              <ArrowLeftIcon className="h-4 w-4" />
+              <span>Back to Account</span>
+            </Link>
+          </div>
+        </div>
+      </section>
 
-        <article className="rounded-2xl border border-white/10 bg-[#0c0805]/85 px-4 pt-6 pb-32 shadow-[0_25px_65px_rgba(0,0,0,0.6)] backdrop-blur-2xl day:border-gray-200 day:bg-white day:shadow-lg sm:rounded-[32px] sm:px-6 lg:px-10 lg:pt-8">
-          <header className="mb-6 border-b border-white/10 pb-6 day:border-gray-200">
-            <h1 className="text-3xl font-semibold tracking-tight day:text-gray-900">
-              Privacy Policy
-            </h1>
-            <p className="mt-2 text-sm text-white/60 day:text-gray-500">
-              How Forever Shining collects, uses, and protects your information
-            </p>
-          </header>
-
-          <div className="prose prose-invert max-w-none prose-p:leading-relaxed prose-p:text-[#D1D1D6] prose-h2:mt-9 prose-h2:mb-3 prose-h2:text-lg prose-h2:font-semibold prose-h2:text-[#F2F2F7] prose-a:text-[#D4A84F] prose-a:no-underline hover:prose-a:underline day:prose-invert-none day:prose-p:text-gray-600 day:prose-h2:text-gray-900 day:prose-a:text-amber-600">
-            {sections.map(({ title, content }) => (
-              <section key={title}>
-                <h2>{title}</h2>
-                {content}
+      {/* Main Content */}
+      <main className="mx-auto max-w-4xl px-4 pt-6 pb-20 md:px-6 md:pt-8 lg:px-8">
+        <article className="rounded-xl border border-white/10 bg-[#161412] p-6 day:border-[#dfd7ca] day:bg-white day:shadow-[0_8px_24px_rgba(40,30,20,0.06)] sm:p-10">
+          <div className="divide-y divide-white/10 day:divide-[#dfd7ca]">
+            {sections.map(({ title, content }, index) => (
+              <section key={title} className={`py-6 ${index === 0 ? 'pt-0' : ''} last:pb-0`}>
+                <h2 className="font-serif text-lg font-normal text-[#c49a45] day:text-[#9a742f]">
+                  {title}
+                </h2>
+                <div className="mt-2 text-sm leading-relaxed text-stone-300 day:text-[#5a5248]">
+                  {content}
+                </div>
               </section>
             ))}
           </div>
         </article>
-      </div>
+      </main>
     </div>
   );
 }

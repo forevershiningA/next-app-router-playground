@@ -57,13 +57,15 @@ export default function StandardSizePresets({
     <div
       role="group"
       aria-label={`Standard ${target} sizes`}
-      className="space-y-2 px-1 py-1"
+      className="space-y-2.5 px-1 py-1"
     >
-      <div className="flex flex-wrap items-center justify-between gap-x-2 gap-y-1 text-xs text-[var(--designer-text-muted)]">
-        <span className="font-medium">
-          Standard sizes · {marketSizes.market}
+      <div className="flex flex-wrap items-center justify-between gap-x-2 gap-y-1 text-xs">
+        <span className="font-sans text-xs font-semibold text-white/80 day:text-[#51493f]">
+          Standard sizes · <span className="text-[#c49a45] day:text-[#9a742f]">{marketSizes.market}</span>
         </span>
-        <span>Width × height</span>
+        <span className="text-[11px] font-semibold uppercase tracking-wider text-white/50 day:text-[#786e61]">
+          Width × height
+        </span>
       </div>
       <div className="flex w-full touch-pan-x snap-x snap-mandatory flex-nowrap gap-2 overflow-x-auto overscroll-x-contain pb-1 [scrollbar-width:none] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--designer-focus)] md:flex-wrap md:overflow-visible md:[scrollbar-width:auto]">
         {marketSizes[target].map((size) => {
@@ -77,6 +79,7 @@ export default function StandardSizePresets({
             <DesignerOptionButton
               key={`${size.widthMm}-${size.heightMm}`}
               selected={widthMm === size.widthMm && heightMm === size.heightMm}
+              variant="solid"
               disabled={!available}
               title={
                 available

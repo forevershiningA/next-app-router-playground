@@ -17,35 +17,35 @@
 /* Designer UI tokens. Components should consume these semantic values instead
    of pairing dark utilities with one-off day:* overrides. */
 :root {
-  --designer-surface: #1d1a17;
-  --designer-surface-raised: #29241f;
+  --designer-surface: #161412;
+  --designer-surface-raised: #1c1a17;
   --designer-control: rgba(255, 255, 255, 0.06);
   --designer-control-hover: rgba(255, 255, 255, 0.11);
   --designer-text: #f8f4ed;
   --designer-text-muted: #aaa198;
-  --designer-text-selected: #f3d48f;
-  --designer-border: rgba(255, 255, 255, 0.14);
-  --designer-border-strong: rgba(255, 255, 255, 0.24);
-  --designer-accent: #d7b356;
-  --designer-accent-soft: rgba(215, 179, 86, 0.15);
-  --designer-accent-foreground: #1a1308;
-  --designer-focus: #f3d48f;
+  --designer-text-selected: #f0d89f;
+  --designer-border: rgba(255, 255, 255, 0.12);
+  --designer-border-strong: rgba(255, 255, 255, 0.22);
+  --designer-accent: #c49a45;
+  --designer-accent-soft: rgba(196, 154, 69, 0.18);
+  --designer-accent-foreground: #121110;
+  --designer-focus: #c49a45;
 }
 
 html[data-theme='day'] {
-  --designer-surface: #eee9df;
-  --designer-surface-raised: #fbf9f5;
+  --designer-surface: #f5f1e8;
+  --designer-surface-raised: #ffffff;
   --designer-control: #ffffff;
-  --designer-control-hover: #f3ead8;
-  --designer-text: #302719;
-  --designer-text-muted: #6b645c;
-  --designer-text-selected: #6f511c;
-  --designer-border: #d6cec2;
-  --designer-border-strong: #bdb4a6;
-  --designer-accent: #d7b356;
-  --designer-accent-soft: rgba(215, 179, 86, 0.2);
-  --designer-accent-foreground: #1d1a17;
-  --designer-focus: #8a651f;
+  --designer-control-hover: #ede6d8;
+  --designer-text: #1a1714;
+  --designer-text-muted: #6a6156;
+  --designer-text-selected: #78541c;
+  --designer-border: #dfd7ca;
+  --designer-border-strong: #cfc5b4;
+  --designer-accent: #9a742f;
+  --designer-accent-soft: rgba(154, 116, 47, 0.15);
+  --designer-accent-foreground: #ffffff;
+  --designer-focus: #9a742f;
 }
 
 /* CRITICAL: Prevent text cursor (caret) from appearing anywhere except inputs */
@@ -640,28 +640,28 @@ html[data-theme='day'] {
 /* ── Stepper / number inputs inside the designer nav ── */
 [data-theme='day'] .fs-designer-nav input[type='number'] {
   background-color: #ffffff;
-  color: #1a1209;
-  border-color: rgba(0, 0, 0, 0.2);
+  color: #1a1714;
+  border-color: #dfd7ca;
 }
 [data-theme='day'] .fs-designer-nav input[type='number']:focus {
-  border-color: #d7b356;
+  border-color: #9a742f;
   outline: none;
 }
 
 /* ── Range sliders (track) inside designer nav ── */
 [data-theme='day'] .fs-designer-nav input[type='range'] {
-  accent-color: #d7b356;
+  accent-color: #9a742f;
 }
 
 /* ── Scrollbar in day mode ── */
 [data-theme='day'] .custom-scrollbar::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.06);
+  background: rgba(0, 0, 0, 0.04);
 }
 [data-theme='day'] .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: rgba(215, 179, 86, 0.45);
+  background: rgba(154, 116, 47, 0.4);
 }
 [data-theme='day'] .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: rgba(215, 179, 86, 0.7);
+  background: rgba(154, 116, 47, 0.65);
 }
 
 /* Hide number input spinners for cleaner appearance */

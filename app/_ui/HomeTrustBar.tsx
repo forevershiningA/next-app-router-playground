@@ -5,34 +5,34 @@ import { createPortal } from 'react-dom';
 import {
   ChatBubbleLeftRightIcon,
   ClipboardDocumentCheckIcon,
-  CubeIcon,
+  ShieldCheckIcon,
   TruckIcon,
 } from '@heroicons/react/24/outline';
 
 const benefits = [
   {
-    label: 'Carefully arranged delivery',
-    icon: TruckIcon,
+    label: '30-Year Guarantee',
+    icon: ShieldCheckIcon,
     description:
-      'Delivery is planned around your memorial and its destination. For heavy headstones, freight may be arranged to a commercial address or local depot. We confirm delivery options and available installation support before production begins.',
+      'Every memorial and plaque is crafted from enduring, first-grade natural granite and cast bronze designed to withstand all climates without fading or deterioration. We stand behind our craftsmanship with a comprehensive 30-year warranty.',
   },
   {
     label: 'Cemetery approval guidance',
     icon: ClipboardDocumentCheckIcon,
     description:
-      'Each cemetery has its own rules for dimensions, materials, and installation. Share its written requirements with our team so we can help you understand the options. Your cemetery must approve the final design and installation plan before you order.',
+      'Each cemetery has its own rules for dimensions, materials, and permits. We provide technical specifications and guide you through cemetery approval before production begins, ensuring full compliance.',
   },
   {
-    label: 'Natural granite & bronze',
-    icon: CubeIcon,
+    label: 'Carefully arranged delivery',
+    icon: TruckIcon,
     description:
-      'Explore natural granite memorials and bronze plaques in a range of styles and finishes. The material you choose affects the appearance, lettering, and available design details. Our team can help you compare options for your memorial and its setting.',
+      'Delivery is planned around your memorial and destination. For heavy headstones, freight can be arranged directly to the cemetery, a commercial address, or a local depot with verified delivery coordination.',
   },
   {
-    label: 'Support at every step',
+    label: 'Support & architectural proof',
     icon: ChatBubbleLeftRightIcon,
     description:
-      'You can contact our team for help choosing a product, personalizing the inscription, or understanding pricing. If you have already started, send us your design link or order reference. We can help you work through the details and decide on the next step at your own pace.',
+      'Receive expert design guidance, inscription assistance, and a verified architectural proof before manufacturing starts. We review every detail to ensure flawless execution at your own pace.',
   },
 ];
 

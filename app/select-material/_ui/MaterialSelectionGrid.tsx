@@ -1,27 +1,86 @@
 'use client';
 
 import { useState, useMemo, useRef } from 'react';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
+import {
+  ArrowRightIcon,
+  ArrowUpTrayIcon,
+  CheckIcon,
+  MagnifyingGlassIcon,
+  NoSymbolIcon,
+} from '@heroicons/react/24/outline';
 import {
   useHeadstoneStore,
   type Material as MaterialOption,
 } from '#/lib/headstone-store';
-import { bronzes } from '#/app/_internal/_data';
+import { bronzes, data } from '#/app/_internal/_data';
 import { resolveMaterialAssetPath } from '#/lib/material-utils';
 import { preloadSceneTexture } from '#/lib/preload-texture';
-import SegmentedControl from '#/components/ui/SegmentedControl';
-import { getDesignerProductStepHref } from '#/lib/designer-product-routes';
-import DesignerPageHeading from '#/components/designer/DesignerPageHeading';
+import {
+  getDesignerProductBySlug,
+  getDesignerProductStepHref,
+} from '#/lib/designer-product-routes';
+import UnitCurrencySelects from '#/components/designer/navigation/UnitCurrencySelects';
+import ProductGalleryThumbnail from '#/components/designer/ProductGalleryThumbnail';
 
 type MaterialCategory = { id: string; name: string; description: string };
 
 const materialCategories: MaterialCategory[] = [
-  { id: 'granite', name: 'Granite', description: 'Durable natural stone' },
-  { id: 'marble', name: 'Marble', description: 'Elegant natural stone' },
-  { id: 'bronze', name: 'Bronze', description: 'Classic metal finish' },
+  { id: 'granite', name: 'Granite', description: 'Durable, weather-resistant natural granite in polished and honed finishes' },
+  { id: 'marble', name: 'Marble', description: 'Timeless, elegant natural marble with delicate veining and classic appeal' },
+  { id: 'bronze', name: 'Bronze', description: 'Classic cast bronze finishes with rich patina and enduring dignity' },
 ];
+
+function MaterialStudioHeader({
+  title,
+  productName,
+  fallbackProduct,
+  description,
+  stepLabel = 'Material Selection',
+}: {
+  title: string;
+  productName?: string;
+  fallbackProduct?: { name: string; image: string; category: string };
+  description: React.ReactNode;
+  stepLabel?: string;
+}) {
+  return (
+    <div className="relative overflow-hidden border-b border-white/10 bg-[#161412] day:border-[#dfd7ca] day:bg-[#f5f1e8]">
+      <div className="relative mx-auto w-full max-w-7xl px-4 py-6 md:px-6 md:py-8 lg:px-8">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+          <div className="text-left">
+            <div className="mb-2.5 inline-flex items-center gap-2 rounded-full border border-[#c49a45]/35 bg-[#c49a45]/10 px-3 py-1 text-[11px] font-semibold tracking-widest text-[#c49a45] uppercase day:border-[#9a742f]/30 day:bg-[#9a742f]/10 day:text-[#78541c]">
+              <span className="inline-block size-1.5 rounded-full bg-[#c49a45] day:bg-[#9a742f]" />
+              {stepLabel}
+            </div>
+            <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+              <h1 className="font-serif text-3xl font-normal tracking-tight text-white day:text-[#1a1714] sm:text-4xl lg:text-[40px] lg:leading-tight">
+                {title}
+              </h1>
+              {productName && (
+                <span className="font-sans text-xs font-semibold uppercase tracking-wider text-[#c49a45] day:text-[#9a742f] sm:text-sm">
+                  · {productName}
+                </span>
+              )}
+            </div>
+            <p className="mt-2 max-w-2xl text-xs leading-relaxed text-stone-300 day:text-[#5a5248] md:text-sm">
+              {description}
+            </p>
+          </div>
+          <div className="flex shrink-0 items-center gap-4 pt-1 sm:pt-0">
+            {fallbackProduct?.image && (
+              <div className="hidden sm:block">
+                <ProductGalleryThumbnail product={fallbackProduct} />
+              </div>
+            )}
+            <UnitCurrencySelects className="justify-start sm:justify-end" />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export default function MaterialSelectionGrid({
   materials,
@@ -29,6 +88,7 @@ export default function MaterialSelectionGrid({
   materials: MaterialOption[];
 }) {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [materialQuery, setMaterialQuery] = useState('');
   const router = useRouter();
   const pathname = usePathname();
   const setHeadstoneMaterialUrl = useHeadstoneStore(
@@ -60,6 +120,15 @@ export default function MaterialSelectionGrid({
   const productId = useHeadstoneStore((s) => s.productId);
   const selectSizeHref = getDesignerProductStepHref('select-size', productId);
 
+  const routeProduct = getDesignerProductBySlug(pathname.split('/')[1]);
+  const fallbackProduct =
+    data.products.find((p) => p.id === productId) ?? routeProduct;
+  const productName =
+    routeProduct?.name ??
+    catalog?.product?.name ??
+    fallbackProduct?.name ??
+    '';
+
   const isPlaque = catalog?.product.type === 'plaque';
   const isBronzePlaque = productId === '5';
   const isFullColourPlaque = productId === '32';
@@ -70,7 +139,9 @@ export default function MaterialSelectionGrid({
     ? 'Select Background'
     : usesBackgrounds
       ? 'Select Background'
-      : 'Select Your Material';
+      : isStainlessSteel
+        ? 'Select Your Finish'
+        : 'Select Your Material';
   const [bgTab, setBgTab] = useState<'background' | 'color'>('background');
   const fileInputRef = useRef<HTMLInputElement>(null);
   const setIsMaterialChangeLocal = useHeadstoneStore(
@@ -143,10 +214,19 @@ export default function MaterialSelectionGrid({
     return BRUSHED_URL;
   };
 
+  // Stainless Steel view
   if (isStainlessSteel) {
     const ssFinishes = [
-      { label: 'Brushed Finish', url: BRUSHED_URL },
-      { label: 'Highly Polished Finish', url: POLISHED_URL },
+      {
+        label: 'Brushed Finish',
+        url: BRUSHED_URL,
+        description: 'Subtle satin texture, low glare and fingerprints resistance',
+      },
+      {
+        label: 'Highly Polished Finish',
+        url: POLISHED_URL,
+        description: 'Mirror-like reflective brilliance with crisp modern shine',
+      },
     ];
     const activeSsUrl = currentHeadstoneMaterialUrl?.includes('ss-swatch')
       ? normalizeStainlessFinishUrl(currentHeadstoneMaterialUrl)
@@ -160,70 +240,58 @@ export default function MaterialSelectionGrid({
     };
 
     return (
-      <div className="min-h-screen bg-gray-900">
-        <div className="border-b border-gray-800">
-          <div className="mx-auto max-w-7xl px-6 py-12 lg:px-8">
-            <div className="text-center">
-              <DesignerPageHeading sectionTitle="Select Your Finish" />
-              <p className="mx-auto mt-4 max-w-3xl text-lg text-gray-400">
-                Choose between a brushed or highly polished stainless steel
-                surface for your plaque.
-              </p>
-            </div>
-          </div>
-        </div>
+      <div className="min-h-screen bg-[#0c0b0a] day:bg-[#f7f4ee]">
+        <MaterialStudioHeader
+          title="Select Your Finish"
+          productName={productName}
+          fallbackProduct={fallbackProduct}
+          description="Choose between a brushed satin or highly polished stainless steel surface for your plaque."
+          stepLabel="Step 1 · Surface Finish"
+        />
 
-        <div className="mx-auto max-w-7xl px-6 py-12 lg:px-8">
-          <div className="mx-auto grid max-w-xl grid-cols-2 gap-6 sm:grid-cols-2">
-            {ssFinishes.map(({ label, url }) => {
+        <div className="mx-auto max-w-5xl px-4 pt-10 pb-20 md:px-6 lg:px-8">
+          <div className="mx-auto grid max-w-2xl grid-cols-1 gap-6 sm:grid-cols-2">
+            {ssFinishes.map(({ label, url, description }) => {
               const isSelected = activeSsUrl === url;
               return (
                 <button
                   key={url}
                   onClick={() => handleFinishSelect(url)}
-                  className={`group relative overflow-hidden rounded-2xl border p-6 text-left transition-all hover:scale-100 hover:shadow-2xl hover:shadow-[#cfac6c]/10 ${
+                  className={`group relative flex cursor-pointer flex-col overflow-hidden rounded-xl border p-5 text-left transition-all duration-300 hover:-translate-y-1 hover:shadow-xl ${
                     isSelected
-                      ? 'border-[#cfac6c]/70 bg-gradient-to-br from-[#cfac6c]/20 to-gray-900/50 shadow-lg shadow-[#cfac6c]/20'
-                      : 'border-white/10 bg-gradient-to-br from-gray-800/50 to-gray-900/50 hover:border-[#cfac6c]/30 hover:from-gray-700/60 hover:to-gray-800/60'
+                      ? 'border-[#c49a45] bg-[#161412] shadow-[0_12px_28px_rgba(196,154,69,0.22)] ring-2 ring-[#c49a45] day:border-[#9a742f] day:bg-white day:shadow-[0_14px_34px_rgba(154,116,47,0.18)] day:ring-2 day:ring-[#9a742f]'
+                      : 'border-white/10 bg-[#161412] hover:border-[#c49a45]/70 day:border-[#dfd7ca] day:bg-white day:shadow-[0_8px_24px_rgba(40,30,20,0.06)] day:hover:border-[#9a742f] day:hover:shadow-[0_14px_34px_rgba(40,30,20,0.12)]'
                   }`}
                 >
                   {isSelected && (
-                    <div className="absolute top-2 right-2 z-10 rounded-full bg-[#cfac6c] px-3 py-1 text-xs font-semibold text-slate-900 shadow-lg">
-                      Selected
-                    </div>
+                    <span className="absolute top-4 right-4 z-10 flex size-7 items-center justify-center rounded-full bg-[#c49a45] text-[#121110] shadow-sm day:bg-[#9a742f] day:text-white">
+                      <CheckIcon className="size-4 stroke-[2.5]" />
+                    </span>
                   )}
-                  <div className="relative mb-4 aspect-square overflow-hidden rounded-xl bg-white/5 ring-1 ring-white/10">
+                  <div className="relative mb-4 aspect-square w-full overflow-hidden rounded-lg border border-white/8 bg-gradient-to-b from-[#1c1a17] to-[#141210] day:border-[#ebe4d8] day:bg-gradient-to-b day:from-[#f8f5ee] day:to-[#ede6d8]">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={url}
                       alt={label}
                       className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
-                    <div className="absolute inset-0 bg-gradient-to-br from-[#cfac6c]/0 to-[#cfac6c]/20 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
                   </div>
-                  <div>
-                    <h3 className="mb-3 line-clamp-2 text-center text-base font-semibold tracking-wide text-white">
-                      {label}
-                    </h3>
-                    <div className="flex items-center justify-center gap-2 text-sm font-medium text-[#cfac6c]/80 transition-colors group-hover:text-[#cfac6c]">
-                      <span>Select</span>
-                      <svg
-                        className="h-4 w-4 transition-transform group-hover:translate-x-1"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M9 5l7 7-7 7"
-                        />
-                      </svg>
+                  <div className="flex flex-1 flex-col justify-between">
+                    <div>
+                      <h3 className="font-serif text-lg font-normal text-white transition-colors group-hover:text-[#f0d89f] day:text-[#1a1714] day:group-hover:text-[#9a742f]">
+                        {label}
+                      </h3>
+                      <p className="mt-1 text-xs text-stone-300 day:text-[#6a6156]">
+                        {description}
+                      </p>
+                    </div>
+                    <div className="mt-4 pt-2">
+                      <span className="inline-flex min-h-9 w-full items-center justify-between gap-2 rounded-lg border border-[#c49a45]/50 bg-transparent px-3 py-1.5 text-xs font-semibold text-[#f0d89f] transition-all duration-200 group-hover:border-[#c49a45] group-hover:bg-[#c49a45] group-hover:text-[#121110] day:border-[#9a742f]/40 day:bg-[#f7f4ee] day:text-[#78541c] day:group-hover:border-[#9a742f] day:group-hover:bg-[#9a742f] day:group-hover:text-white">
+                        <span>Select Finish</span>
+                        <ArrowRightIcon className="size-3.5 transition-transform duration-200 group-hover:translate-x-1" />
+                      </span>
                     </div>
                   </div>
-                  <div className="absolute inset-0 -z-10 bg-gradient-to-r from-gray-700/10 to-gray-800/10 opacity-0 blur-xl transition-opacity group-hover:opacity-100" />
                 </button>
               );
             })}
@@ -240,9 +308,6 @@ export default function MaterialSelectionGrid({
     }
 
     setIsMaterialChange(true);
-    // Keep the currently rendered granite until this image has decoded. The
-    // new URL is written only afterwards, including when moving to the next
-    // designer route immediately after selection.
     await preloadSceneTexture(materialUrl);
     const targetSelection = isPlaque
       ? 'headstone'
@@ -264,298 +329,374 @@ export default function MaterialSelectionGrid({
     router.push(selectSizeHref);
   };
 
-  const filteredMaterials = usesBackgrounds
-    ? displayMaterials
-    : displayMaterials.filter((material) => {
-        return (
-          selectedCategory === 'all' || material.category === selectedCategory
-        );
-      });
+  const normalizedMaterialQuery = materialQuery.trim().toLocaleLowerCase();
+
+  const filteredMaterials = (
+    usesBackgrounds
+      ? displayMaterials
+      : displayMaterials.filter((material) => {
+          return (
+            selectedCategory === 'all' || material.category === selectedCategory
+          );
+        })
+  ).filter((m) => {
+    if (!normalizedMaterialQuery) return true;
+    return m.name.toLocaleLowerCase().includes(normalizedMaterialQuery);
+  });
+
+  const categoryCounts = Object.fromEntries(
+    materialCategories.map((c) => [
+      c.id,
+      displayMaterials.filter((m) => m.category === c.id).length,
+    ]),
+  );
 
   return (
-    <div className="min-h-screen bg-gray-900">
-      {/* Header Section */}
-      <div className="border-b border-gray-800">
-        <div className="mx-auto max-w-7xl px-6 py-12 lg:px-8">
-          <div className="text-center">
-            <DesignerPageHeading sectionTitle={headingText} />
-            <p className="mx-auto mt-4 max-w-3xl text-lg text-gray-400">
-              {usesBackgrounds
-                ? 'Choose a background image or solid color.'
-                : 'Choose from premium granite and marble in various colours and finishes. Each stone is selected for its durability, weather resistance, and lasting beauty. Consider typical cemetery regulations and care requirements when making your selection.'}
-            </p>
+    <div className="min-h-screen bg-[#0c0b0a] day:bg-[#f7f4ee]">
+      {/* Studio Header Section */}
+      <MaterialStudioHeader
+        title={headingText}
+        productName={productName}
+        fallbackProduct={fallbackProduct}
+        description={
+          usesBackgrounds
+            ? 'Choose a scenic memorial background image or an elegant solid color.'
+            : isBronzePlaque
+              ? 'Select your classic cast bronze background patina and finish.'
+              : 'Choose from premium granite and marble in various colours and finishes. Each stone is selected for durability, weather resistance, and lasting beauty.'
+        }
+        stepLabel={usesBackgrounds ? 'Step 1 · Background' : 'Step 2 · Material Selection'}
+      />
+
+      {/* Sticky Category Filter Bar */}
+      <div className="sticky top-0 z-20 border-b border-white/10 bg-[#121110]/95 backdrop-blur-md day:border-[#dfd7ca] day:bg-[#f7f4ee]/95">
+        <div className="relative mx-auto max-w-7xl px-4 py-2.5 md:px-6 md:py-3.5 lg:px-8">
+          <div className="-mx-4 flex snap-x items-center gap-2 overflow-x-auto px-4 [scrollbar-width:none] sm:mx-0 sm:px-0 [&::-webkit-scrollbar]:hidden">
+            {usesBackgrounds ? (
+              <>
+                <button
+                  onClick={() => setBgTab('background')}
+                  aria-pressed={bgTab === 'background'}
+                  className={`min-h-9 shrink-0 snap-start rounded-full border px-4 py-1.5 text-xs font-semibold tracking-wide transition-all duration-200 md:text-sm ${
+                    bgTab === 'background'
+                      ? 'border-[#c49a45] bg-[#c49a45] text-[#121110] shadow-sm day:border-[#9a742f] day:bg-[#9a742f] day:text-white'
+                      : 'border-white/15 bg-white/[0.04] text-white/75 hover:border-[#c49a45]/50 hover:bg-white/[0.08] hover:text-white day:border-[#d6cebf] day:bg-[#eee8dc]/70 day:text-[#5a5248] day:hover:border-[#9a742f]/50 day:hover:bg-[#e7e0d2] day:hover:text-[#1a1714]'
+                  }`}
+                >
+                  <span>Scenic Backgrounds</span>
+                </button>
+                <button
+                  onClick={() => setBgTab('color')}
+                  aria-pressed={bgTab === 'color'}
+                  className={`min-h-9 shrink-0 snap-start rounded-full border px-4 py-1.5 text-xs font-semibold tracking-wide transition-all duration-200 md:text-sm ${
+                    bgTab === 'color'
+                      ? 'border-[#c49a45] bg-[#c49a45] text-[#121110] shadow-sm day:border-[#9a742f] day:bg-[#9a742f] day:text-white'
+                      : 'border-white/15 bg-white/[0.04] text-white/75 hover:border-[#c49a45]/50 hover:bg-white/[0.08] hover:text-white day:border-[#d6cebf] day:bg-[#eee8dc]/70 day:text-[#5a5248] day:hover:border-[#9a742f]/50 day:hover:bg-[#e7e0d2] day:hover:text-[#1a1714]'
+                  }`}
+                >
+                  <span>Solid Colors</span>
+                </button>
+              </>
+            ) : isBronzePlaque ? (
+              <button
+                onClick={() => setSelectedCategory('all')}
+                className="min-h-9 shrink-0 snap-start rounded-full border border-[#c49a45] bg-[#c49a45] px-4 py-1.5 text-xs font-semibold tracking-wide text-[#121110] shadow-sm day:border-[#9a742f] day:bg-[#9a742f] day:text-white md:text-sm"
+              >
+                <span>All Bronze Patinas</span>
+                <span className="ml-1.5 rounded-full bg-black/20 px-1.5 py-0.5 text-[11px] font-semibold text-[#121110] day:bg-white/20 day:text-white">
+                  {displayMaterials.length}
+                </span>
+              </button>
+            ) : (
+              <>
+                <button
+                  onClick={() => setSelectedCategory('all')}
+                  aria-pressed={selectedCategory === 'all'}
+                  className={`min-h-9 shrink-0 snap-start rounded-full border px-4 py-1.5 text-xs font-semibold tracking-wide transition-all duration-200 md:text-sm ${
+                    selectedCategory === 'all'
+                      ? 'border-[#c49a45] bg-[#c49a45] text-[#121110] shadow-sm day:border-[#9a742f] day:bg-[#9a742f] day:text-white'
+                      : 'border-white/15 bg-white/[0.04] text-white/75 hover:border-[#c49a45]/50 hover:bg-white/[0.08] hover:text-white day:border-[#d6cebf] day:bg-[#eee8dc]/70 day:text-[#5a5248] day:hover:border-[#9a742f]/50 day:hover:bg-[#e7e0d2] day:hover:text-[#1a1714]'
+                  }`}
+                >
+                  <span>All Materials</span>
+                  <span
+                    className={`ml-1.5 rounded-full px-1.5 py-0.5 text-[11px] font-semibold ${
+                      selectedCategory === 'all'
+                        ? 'bg-black/20 text-[#121110] day:bg-white/20 day:text-white'
+                        : 'bg-white/10 text-white/60 day:bg-[#dfd7ca] day:text-[#6a6156]'
+                    }`}
+                  >
+                    {displayMaterials.length}
+                  </span>
+                </button>
+                {materialCategories.map((category) => {
+                  const count = categoryCounts[category.id] ?? 0;
+                  const isSelected = selectedCategory === category.id;
+                  if (count === 0) return null;
+                  return (
+                    <button
+                      key={category.id}
+                      onClick={() => setSelectedCategory(category.id)}
+                      aria-pressed={isSelected}
+                      className={`min-h-9 shrink-0 snap-start rounded-full border px-4 py-1.5 text-xs font-semibold tracking-wide transition-all duration-200 md:text-sm ${
+                        isSelected
+                          ? 'border-[#c49a45] bg-[#c49a45] text-[#121110] shadow-sm day:border-[#9a742f] day:bg-[#9a742f] day:text-white'
+                          : 'border-white/15 bg-white/[0.04] text-white/75 hover:border-[#c49a45]/50 hover:bg-white/[0.08] hover:text-white day:border-[#d6cebf] day:bg-[#eee8dc]/70 day:text-[#5a5248] day:hover:border-[#9a742f]/50 day:hover:bg-[#e7e0d2] day:hover:text-[#1a1714]'
+                      }`}
+                    >
+                      <span>{category.name}</span>
+                      <span
+                        className={`ml-1.5 rounded-full px-1.5 py-0.5 text-[11px] font-semibold ${
+                          isSelected
+                            ? 'bg-black/20 text-[#121110] day:bg-white/20 day:text-white'
+                            : 'bg-white/10 text-white/60 day:bg-[#dfd7ca] day:text-[#6a6156]'
+                        }`}
+                      >
+                        {count}
+                      </span>
+                    </button>
+                  );
+                })}
+              </>
+            )}
           </div>
         </div>
       </div>
 
-      {/* Category Filter */}
-      {usesBackgrounds ? (
-        <div className="border-b border-gray-800">
-          <div className="mx-auto max-w-md px-6 py-6 lg:px-8">
-            <SegmentedControl
-              value={bgTab}
-              onChange={(value) => setBgTab(value as 'background' | 'color')}
-              options={[
-                { label: 'Background', value: 'background' },
-                { label: 'Color', value: 'color' },
-              ]}
+      {/* Materials Grid Section */}
+      <div className="mx-auto max-w-7xl px-4 pt-6 pb-20 md:px-6 md:pt-8 lg:px-8">
+        <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between md:mb-8">
+          <div>
+            <h2 className="font-serif text-2xl font-normal tracking-tight text-white day:text-[#1a1714] md:text-3xl">
+              {filteredMaterials.length} {filteredMaterials.length === 1 ? 'Option' : 'Options'} Available
+            </h2>
+            <p className="mt-1 text-xs text-white/65 day:text-[#6a6156] md:text-sm">
+              Click any swatch to apply it directly to your memorial design.
+            </p>
+          </div>
+          <label className="relative block w-full sm:max-w-xs md:max-w-sm">
+            <span className="sr-only">Search materials</span>
+            <MagnifyingGlassIcon
+              className="pointer-events-none absolute top-1/2 left-3.5 size-4 -translate-y-1/2 text-white/45 day:text-[#756c62]"
+              aria-hidden="true"
             />
-          </div>
+            <input
+              type="search"
+              value={materialQuery}
+              onChange={(e) => setMaterialQuery(e.target.value)}
+              placeholder="Search by color or name…"
+              className="h-10 w-full rounded-full border border-white/15 bg-white/[0.04] pr-4 pl-10 text-xs text-white outline-none placeholder:text-white/45 focus:border-[#c49a45] focus:ring-2 focus:ring-[#c49a45]/20 day:border-[#dfd7ca] day:bg-white day:text-[#1a1714] day:placeholder:text-[#8a8175] day:focus:border-[#9a742f] md:text-sm"
+            />
+          </label>
         </div>
-      ) : (
-        <div className="border-b border-gray-800">
-          <div className="mx-auto max-w-7xl px-6 py-6 lg:px-8">
-            <div className="flex flex-wrap justify-center gap-3">
-              <button
-                onClick={() => setSelectedCategory('all')}
-                className={`rounded-full px-6 py-3 text-sm font-medium transition-all ${
-                  selectedCategory === 'all'
-                    ? 'bg-[#cfac6c] text-slate-900 shadow-lg shadow-[#cfac6c]/20'
-                    : 'border border-white/20 text-white hover:border-[#cfac6c]/30 hover:bg-white/10'
-                }`}
-              >
-                All Materials
-              </button>
-              {materialCategories.map((category) => (
-                <button
-                  key={category.id}
-                  onClick={() => setSelectedCategory(category.id)}
-                  className={`rounded-full px-6 py-3 text-sm font-medium transition-all ${
-                    selectedCategory === category.id
-                      ? 'bg-[#cfac6c] text-slate-900 shadow-lg shadow-[#cfac6c]/20'
-                      : 'border border-white/20 text-white hover:border-[#cfac6c]/30 hover:bg-white/10'
-                  }`}
-                >
-                  <span>{category.name}</span>
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
 
-      {/* Materials Grid */}
-      <div className="mx-auto max-w-7xl px-6 py-12 lg:px-8">
         {filteredMaterials.length === 0 ? (
           <div className="py-20 text-center">
-            <div className="mb-4 text-6xl">🔍</div>
-            <h3 className="text-xl font-medium text-white">
-              No materials found
+            <h3 className="font-serif text-xl font-normal text-white day:text-[#1a1714] md:text-2xl">
+              {normalizedMaterialQuery
+                ? `No materials match “${materialQuery.trim()}”`
+                : 'No materials found'}
             </h3>
-            <p className="mt-2 text-gray-400">Try adjusting your filters</p>
+            <p className="mt-2 text-xs text-stone-300 day:text-[#5a5248] md:text-sm">
+              {normalizedMaterialQuery
+                ? 'Try searching for another tone, finish, or reset the filter.'
+                : 'Try adjusting your filters.'}
+            </p>
+            {normalizedMaterialQuery && (
+              <button
+                type="button"
+                onClick={() => setMaterialQuery('')}
+                className="mt-5 inline-flex min-h-10 items-center justify-center rounded-lg border border-[#c49a45] bg-[#c49a45] px-5 text-xs font-semibold text-[#121110] transition-colors hover:bg-[#d5ad55] day:border-[#9a742f] day:bg-[#9a742f] day:text-white day:hover:bg-[#856325] md:text-sm"
+              >
+                Reset search
+              </button>
+            )}
           </div>
         ) : (
-          <>
-            <div className="mb-6 text-sm text-gray-400">
-              Showing {filteredMaterials.length} material
-              {filteredMaterials.length !== 1 ? 's' : ''}
-            </div>
-            <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-              {/* No Background button — first position in Background tab */}
-              {usesBackgrounds && bgTab === 'background' && (
-                <button
-                  onClick={() => {
-                    setIsMaterialChangeLocal(true);
-                    setHeadstoneMaterialUrl(
-                      '/textures/forever/l/brushed-ss-swatch.webp',
-                    );
-                    setTimeout(() => setIsMaterialChangeLocal(false), 100);
-                    router.push(selectSizeHref);
-                  }}
-                  className={`group relative overflow-hidden rounded-2xl p-6 text-center transition-all hover:shadow-2xl hover:shadow-[#cfac6c]/10 ${
-                    currentHeadstoneMaterialUrl ===
-                      '/textures/forever/l/brushed-ss-swatch.webp' ||
-                    !currentHeadstoneMaterialUrl
-                      ? 'border-2 border-[#cfac6c] ring-2 ring-[#cfac6c]/30'
-                      : 'border border-white/10 hover:border-[#cfac6c]/50'
-                  }`}
-                >
-                  <div className="relative mb-4 flex aspect-square items-center justify-center overflow-hidden rounded-xl bg-white/5 ring-1 ring-white/10">
-                    <div className="flex flex-col items-center gap-2">
-                      <svg
-                        className="h-10 w-10 text-gray-400 transition-colors group-hover:text-[#cfac6c]"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        strokeWidth={1.5}
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"
-                        />
-                      </svg>
-                      <span className="text-sm text-gray-400 transition-colors group-hover:text-[#cfac6c]">
-                        None
-                      </span>
-                    </div>
+          <div className="grid grid-cols-2 items-stretch gap-3.5 sm:grid-cols-3 md:gap-5 lg:grid-cols-4 xl:grid-cols-5">
+            {/* No Background button — first position in Background tab */}
+            {usesBackgrounds && bgTab === 'background' && (
+              <button
+                onClick={() => {
+                  setIsMaterialChangeLocal(true);
+                  setHeadstoneMaterialUrl(
+                    '/textures/forever/l/brushed-ss-swatch.webp',
+                  );
+                  setTimeout(() => setIsMaterialChangeLocal(false), 100);
+                  router.push(selectSizeHref);
+                }}
+                className={`group relative flex h-full cursor-pointer flex-col overflow-hidden rounded-xl border text-left transition-all duration-300 hover:-translate-y-1 hover:shadow-xl ${
+                  currentHeadstoneMaterialUrl ===
+                    '/textures/forever/l/brushed-ss-swatch.webp' ||
+                  !currentHeadstoneMaterialUrl
+                    ? 'border-[#c49a45] bg-[#161412] shadow-[0_12px_28px_rgba(196,154,69,0.22)] ring-2 ring-[#c49a45] day:border-[#9a742f] day:bg-white day:shadow-[0_14px_34px_rgba(154,116,47,0.18)] day:ring-2 day:ring-[#9a742f]'
+                    : 'border-white/10 bg-[#161412] hover:border-[#c49a45]/70 day:border-[#dfd7ca] day:bg-white day:shadow-[0_8px_24px_rgba(40,30,20,0.06)] day:hover:border-[#9a742f] day:hover:shadow-[0_14px_34px_rgba(40,30,20,0.12)]'
+                }`}
+              >
+                <div className="relative aspect-square w-full overflow-hidden border-b border-white/8 bg-gradient-to-b from-[#1c1a17] to-[#141210] day:border-[#ebe4d8] day:bg-gradient-to-b day:from-[#f8f5ee] day:to-[#ede6d8]">
+                  <div className="flex h-full flex-col items-center justify-center gap-2">
+                    <NoSymbolIcon className="size-8 text-stone-400 transition-colors group-hover:text-[#c49a45] day:group-hover:text-[#9a742f]" />
+                    <span className="text-xs text-stone-400">None</span>
                   </div>
-                  <h3 className="mb-3 text-center text-base font-semibold tracking-wide text-white">
+                  {(currentHeadstoneMaterialUrl ===
+                    '/textures/forever/l/brushed-ss-swatch.webp' ||
+                    !currentHeadstoneMaterialUrl) && (
+                    <span className="absolute top-3 right-3 z-10 flex size-7 items-center justify-center rounded-full bg-[#c49a45] text-[#121110] shadow-sm day:bg-[#9a742f] day:text-white">
+                      <CheckIcon className="size-4 stroke-[2.5]" />
+                    </span>
+                  )}
+                </div>
+                <div className="flex flex-1 flex-col justify-center p-3.5 md:p-4">
+                  <h3 className="text-center font-serif text-base leading-snug font-normal text-white transition-colors group-hover:text-[#f0d89f] day:text-[#1a1714] day:group-hover:text-[#9a742f] md:text-lg">
                     No Background
                   </h3>
-                </button>
-              )}
+                </div>
+              </button>
+            )}
 
-              {/* Upload Image button — second position in Background tab */}
-              {usesBackgrounds && bgTab === 'background' && (
-                <>
-                  <input
-                    ref={fileInputRef}
-                    type="file"
-                    accept="image/jpeg,image/png,image/webp"
-                    className="hidden"
-                    onChange={async (e) => {
-                      const file = e.target.files?.[0];
-                      if (!file || !file.type.startsWith('image/')) return;
-                      e.target.value = '';
-                      try {
-                        const form = new FormData();
-                        form.append('file', file);
-                        const response = await fetch('/api/upload-background', {
-                          method: 'POST',
-                          body: form,
-                        });
-                        if (!response.ok)
-                          throw new Error(`Upload failed: ${response.status}`);
-                        const { url } = (await response.json()) as {
-                          url: string;
-                        };
-                        setIsMaterialChangeLocal(true);
-                        setHeadstoneMaterialUrl(url);
-                        setTimeout(() => setIsMaterialChangeLocal(false), 100);
-                        router.push(selectSizeHref);
-                      } catch (err) {
-                        console.error('Background upload failed:', err);
-                      }
-                    }}
-                  />
-                  <button
-                    onClick={() => fileInputRef.current?.click()}
-                    className="group relative overflow-hidden rounded-2xl border border-dashed border-white/20 p-6 text-center transition-all hover:border-[#cfac6c]/50 hover:shadow-2xl hover:shadow-[#cfac6c]/10"
-                  >
-                    <div className="relative mb-4 flex aspect-square items-center justify-center overflow-hidden rounded-xl bg-white/5 ring-1 ring-white/10">
-                      <div className="flex flex-col items-center gap-2">
-                        <svg
-                          className="h-10 w-10 text-gray-400 transition-colors group-hover:text-[#cfac6c]"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                          strokeWidth={1.5}
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"
-                          />
-                        </svg>
-                        <span className="text-sm text-gray-400 transition-colors group-hover:text-[#cfac6c]">
-                          Upload
-                        </span>
-                      </div>
-                    </div>
-                    <h3 className="mb-3 text-center text-base font-semibold tracking-wide text-white">
-                      Upload Image
-                    </h3>
-                    <div className="flex items-center justify-center gap-2 text-sm font-medium text-[#cfac6c]/80 transition-colors group-hover:text-[#cfac6c]">
-                      <span>Choose Photo</span>
-                    </div>
-                  </button>
-                </>
-              )}
-
-              {filteredMaterials.map((material) => {
-                const materialUrl = buildTextureUrl(material);
-                const thumbnailUrl = buildThumbnailUrl(material, materialUrl);
-                const isSelected = materialUrl
-                  ? currentMaterialUrl === materialUrl
-                  : false;
-                const coverSrc =
-                  thumbnailUrl ?? '/textures/forever/l/Imperial-Red.webp';
-                return (
-                  <button
-                    key={material.id}
-                    onClick={() =>
-                      materialUrl && handleMaterialSelect(material)
+            {/* Upload Image button — second position in Background tab */}
+            {usesBackgrounds && bgTab === 'background' && (
+              <>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp"
+                  className="hidden"
+                  onChange={async (e) => {
+                    const file = e.target.files?.[0];
+                    if (!file || !file.type.startsWith('image/')) return;
+                    e.target.value = '';
+                    try {
+                      const form = new FormData();
+                      form.append('file', file);
+                      const response = await fetch('/api/upload-background', {
+                        method: 'POST',
+                        body: form,
+                      });
+                      if (!response.ok)
+                        throw new Error(`Upload failed: ${response.status}`);
+                      const { url } = (await response.json()) as {
+                        url: string;
+                      };
+                      setIsMaterialChangeLocal(true);
+                      setHeadstoneMaterialUrl(url);
+                      setTimeout(() => setIsMaterialChangeLocal(false), 100);
+                      router.push(selectSizeHref);
+                    } catch (err) {
+                      console.error('Background upload failed:', err);
                     }
-                    disabled={!materialUrl}
-                    className={`group relative overflow-hidden rounded-2xl border p-6 text-left transition-all hover:scale-100 hover:shadow-2xl hover:shadow-[#cfac6c]/10 disabled:cursor-not-allowed ${
-                      isSelected
-                        ? 'border-[#cfac6c]/70 bg-gradient-to-br from-[#cfac6c]/20 to-gray-900/50 shadow-lg shadow-[#cfac6c]/20'
-                        : 'border-white/10 bg-gradient-to-br from-gray-800/50 to-gray-900/50 hover:border-[#cfac6c]/30 hover:from-gray-700/60 hover:to-gray-800/60'
-                    }`}
-                  >
-                    {/* Selected Badge */}
+                  }}
+                />
+                <button
+                  onClick={() => fileInputRef.current?.click()}
+                  className="group relative flex h-full cursor-pointer flex-col overflow-hidden rounded-xl border border-dashed border-white/20 bg-[#161412] text-left transition-all duration-300 hover:-translate-y-1 hover:border-[#c49a45]/70 hover:shadow-xl day:border-[#d6cebf] day:bg-white day:shadow-sm day:hover:border-[#9a742f]"
+                >
+                  <div className="relative aspect-square w-full overflow-hidden border-b border-white/8 bg-gradient-to-b from-[#1c1a17] to-[#141210] day:border-[#ebe4d8] day:bg-gradient-to-b day:from-[#f8f5ee] day:to-[#ede6d8]">
+                    <div className="flex h-full flex-col items-center justify-center gap-2">
+                      <ArrowUpTrayIcon className="size-8 text-stone-400 transition-colors group-hover:text-[#c49a45] day:group-hover:text-[#9a742f]" />
+                      <span className="text-xs text-stone-400">Upload Photo</span>
+                    </div>
+                  </div>
+                  <div className="flex flex-1 flex-col justify-center p-3.5 md:p-4">
+                    <h3 className="text-center font-serif text-base leading-snug font-normal text-white transition-colors group-hover:text-[#f0d89f] day:text-[#1a1714] day:group-hover:text-[#9a742f] md:text-lg">
+                      Upload Custom Image
+                    </h3>
+                  </div>
+                </button>
+              </>
+            )}
+
+            {filteredMaterials.map((material) => {
+              const materialUrl = buildTextureUrl(material);
+              const thumbnailUrl = buildThumbnailUrl(material, materialUrl);
+              const isSelected = materialUrl
+                ? currentMaterialUrl === materialUrl
+                : false;
+              const coverSrc =
+                thumbnailUrl ?? '/textures/forever/l/Imperial-Red.webp';
+
+              return (
+                <button
+                  key={material.id}
+                  onClick={() =>
+                    materialUrl && handleMaterialSelect(material)
+                  }
+                  disabled={!materialUrl}
+                  className={`group relative flex h-full cursor-pointer flex-col overflow-hidden rounded-xl border text-left transition-all duration-300 hover:-translate-y-1 hover:shadow-xl disabled:cursor-not-allowed ${
+                    isSelected
+                      ? 'border-[#c49a45] bg-[#161412] shadow-[0_12px_28px_rgba(196,154,69,0.22)] ring-2 ring-[#c49a45] day:border-[#9a742f] day:bg-white day:shadow-[0_14px_34px_rgba(154,116,47,0.18)] day:ring-2 day:ring-[#9a742f]'
+                      : 'border-white/10 bg-[#161412] hover:border-[#c49a45]/70 day:border-[#dfd7ca] day:bg-white day:shadow-[0_8px_24px_rgba(40,30,20,0.06)] day:hover:border-[#9a742f] day:hover:shadow-[0_14px_34px_rgba(40,30,20,0.12)]'
+                  }`}
+                >
+                  {/* Swatch Image */}
+                  <div className="relative aspect-square w-full overflow-hidden border-b border-white/8 bg-gradient-to-b from-[#1c1a17] to-[#141210] day:border-[#ebe4d8] day:bg-gradient-to-b day:from-[#f8f5ee] day:to-[#ede6d8]">
+                    <Image
+                      src={coverSrc}
+                      alt={material.name}
+                      fill
+                      className="object-cover transition-transform duration-500 ease-out will-change-transform group-hover:scale-110 motion-reduce:transition-none motion-reduce:group-hover:scale-100"
+                      sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
+                    />
                     {isSelected && (
-                      <div className="absolute top-2 right-2 z-10 rounded-full bg-[#cfac6c] px-3 py-1 text-xs font-semibold text-slate-900 shadow-lg">
-                        Selected
-                      </div>
+                      <span className="absolute top-3 right-3 z-10 flex size-7 items-center justify-center rounded-full bg-[#c49a45] text-[#121110] shadow-sm day:bg-[#9a742f] day:text-white">
+                        <CheckIcon className="size-4 stroke-[2.5]" />
+                      </span>
                     )}
-                    {/* Material Image */}
-                    <div className="relative mb-4 aspect-square overflow-hidden rounded-xl bg-white/5 ring-1 ring-white/10">
-                      <Image
-                        src={coverSrc}
-                        alt={material.name}
-                        fill
-                        className="object-cover transition-transform duration-500 group-hover:scale-105"
-                        sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
-                      <div className="absolute inset-0 bg-gradient-to-br from-[#cfac6c]/0 to-[#cfac6c]/20 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
-                    </div>
+                  </div>
 
-                    {/* Material Info */}
-                    <div>
-                      <h3 className="mb-3 line-clamp-2 text-center text-base font-semibold tracking-wide text-white">
-                        {material.name}
-                      </h3>
-                      <div className="flex items-center justify-center gap-2 text-sm font-medium text-[#cfac6c]/80 transition-colors group-hover:text-[#cfac6c]">
-                        <span>View Material</span>
-                        <svg
-                          className="h-4 w-4 transition-transform group-hover:translate-x-1"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M9 5l7 7-7 7"
-                          />
-                        </svg>
-                      </div>
-                    </div>
-
-                    {/* Hover Glow Effect */}
-                    <div className="absolute inset-0 -z-10 bg-gradient-to-r from-gray-700/10 to-gray-800/10 opacity-0 blur-xl transition-opacity group-hover:opacity-100" />
-                  </button>
-                );
-              })}
-            </div>
-          </>
+                  {/* Material Name */}
+                  <div className="flex flex-1 flex-col justify-center p-3.5 md:p-4">
+                    <h3 className="line-clamp-2 text-center font-serif text-base leading-snug font-normal text-white transition-colors group-hover:text-[#f0d89f] day:text-[#1a1714] day:group-hover:text-[#9a742f] md:text-lg">
+                      {material.name}
+                    </h3>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
         )}
       </div>
 
       {/* Category Info Cards (when category is selected) */}
-      {!usesBackgrounds && selectedCategory !== 'all' && (
-        <div className="border-t border-gray-800">
-          <div className="mx-auto max-w-7xl px-6 py-12 lg:px-8">
-            {materialCategories
-              .filter((cat) => cat.id === selectedCategory)
-              .map((category) => (
-                <div
-                  key={category.id}
-                  className="rounded-2xl border border-gray-700 bg-gray-800 p-8 text-center"
-                >
-                  <h2 className="mb-2 font-serif text-2xl font-light text-white">
-                    {category.name}
-                  </h2>
-                  <p className="text-gray-400">{category.description}</p>
-                </div>
-              ))}
-          </div>
+      {!usesBackgrounds && !isBronzePlaque && selectedCategory !== 'all' && (
+        <div className="mx-auto max-w-7xl px-4 pb-12 md:px-6 lg:px-8">
+          {materialCategories
+            .filter((cat) => cat.id === selectedCategory)
+            .map((category) => (
+              <div
+                key={category.id}
+                className="rounded-2xl border border-white/10 bg-[#161412] p-6 text-center day:border-[#dfd7ca] day:bg-white day:shadow-sm md:p-8"
+              >
+                <h3 className="font-serif text-xl font-normal text-white day:text-[#1a1714] md:text-2xl">
+                  {category.name}
+                </h3>
+                <p className="mx-auto mt-2 max-w-xl text-xs leading-relaxed text-stone-300 day:text-[#5a5248] md:text-sm">
+                  {category.description}
+                </p>
+              </div>
+            ))}
         </div>
       )}
+
+      {/* Bottom Studio Guidance */}
+      <div className="mx-auto max-w-7xl px-4 pb-16 md:px-6 lg:px-8">
+        <div className="rounded-2xl border border-white/10 bg-[#161412] p-6 text-center day:border-[#dfd7ca] day:bg-white day:shadow-sm md:p-8">
+          <h3 className="font-serif text-xl font-normal text-white day:text-[#1a1714] md:text-2xl">
+            Need guidance on stone longevity or cemetery regulations?
+          </h3>
+          <p className="mx-auto mt-2 max-w-xl text-xs leading-relaxed text-stone-300 day:text-[#5a5248] md:text-sm">
+            Our memorial specialists can help you choose the right material and finish for your climate, parish guidelines, and cemetery rules.
+          </p>
+          <div className="mt-5 flex flex-wrap items-center justify-center gap-3">
+            <a
+              href="/contact"
+              className="inline-flex items-center gap-2 rounded-lg border border-[#c49a45] bg-[#c49a45] px-4 py-2 text-xs font-semibold text-[#121110] transition-colors hover:bg-[#d5ad55] day:border-[#9a742f] day:bg-[#9a742f] day:text-white day:hover:bg-[#856325] md:text-sm"
+            >
+              Consult a Specialist
+            </a>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

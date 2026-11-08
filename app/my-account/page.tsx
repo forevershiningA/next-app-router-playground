@@ -1,9 +1,15 @@
-﻿'use client';
+'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { UserCircleIcon } from '@heroicons/react/24/outline';
+import {
+  UserCircleIcon,
+  ChevronLeftIcon,
+  PencilSquareIcon,
+  EllipsisVerticalIcon,
+  PlusIcon,
+} from '@heroicons/react/24/outline';
 
 import type { SavedDesignMetadata } from '#/lib/saved-designs-data';
 import { data } from '#/app/_internal/_data';
@@ -154,43 +160,44 @@ function AuthGate({
   }
 
   const inputCls =
-    'day:border-[#d8cfc2] day:bg-white day:text-[#2a2118] day:placeholder-[#8b7d6b] w-full rounded-lg border border-white/18 bg-white/[0.06] px-4 py-3 text-sm text-white placeholder-white/35 transition-colors focus:border-[#D4A84F] focus:outline-none focus:ring-2 focus:ring-[#D4A84F]/35';
+    'h-11 w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 font-sans text-sm text-white placeholder-white/30 transition-all focus:border-[#c49a45] focus:outline-none focus:ring-2 focus:ring-[#c49a45]/20 day:border-[#dfd7ca] day:bg-white day:text-[#1a1714] day:placeholder-[#a39788] day:focus:border-[#9a742f] day:focus:ring-[#9a742f]/20 day:shadow-xs';
 
   return (
-    <div className="day:bg-[#f4f1eb] day:text-[#2a2118] relative flex min-h-screen items-center justify-center bg-[#050301] px-6 text-white">
+    <div className="day:bg-[#f7f4ee] day:text-[#1a1714] relative flex min-h-screen items-center justify-center bg-[#0c0b0a] px-4 py-12 text-white">
       <div
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(244,160,80,0.18),_transparent_45%)]"
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(196,154,69,0.12),_transparent_55%)]"
         aria-hidden
       />
-      <div className="relative w-full max-w-sm">
-        <div className="mb-8">
+      <div className="relative w-full max-w-md rounded-2xl border border-white/10 bg-[#161412] p-7 shadow-xl backdrop-blur-md day:border-[#dfd7ca] day:bg-white day:shadow-[0_8px_30px_rgba(40,30,20,0.06)] sm:p-8">
+        <div className="mb-6">
           {isSavingDesign && onBackToDesign && !isReset && (
             <button
               type="button"
               onClick={onBackToDesign}
-              className="mb-5 inline-flex items-center gap-1.5 text-sm font-semibold text-[#D4A84F] transition-colors hover:text-[#e8bc5e]"
+              className="group mb-5 inline-flex items-center gap-1.5 font-sans text-xs font-semibold uppercase tracking-wider text-[#c49a45] transition-colors hover:text-[#f0d89f] day:text-[#9a742f] day:hover:text-[#7d5e23]"
             >
-              <span aria-hidden="true">←</span>
+              <ChevronLeftIcon className="h-4 w-4 transition-transform group-hover:-translate-x-0.5" />
               Back to your design
             </button>
           )}
-          <h1 className="day:text-[#2a2118] text-3xl font-semibold tracking-tight text-white">
+          <h1 className="font-serif text-3xl font-normal tracking-tight text-white day:text-[#1a1714]">
             {isReset ? 'Reset Password' : 'My Account'}
           </h1>
-          <p className="day:text-[#786a5a] mt-1 text-sm text-white/55">
+          <p className="mt-1 font-sans text-xs font-medium uppercase tracking-wider text-white/50 day:text-[#786e61]">
             Forever Shining Memorial Designs
           </p>
           {isSavingDesign && !isReset && (
-            <p className="day:text-[#5d5042] mt-4 rounded-lg border border-[#D4A84F]/25 bg-[#D4A84F]/10 px-3 py-2.5 text-sm leading-relaxed text-white/80">
-              Sign in or create an account to save your project and access it
-              anytime.
-            </p>
+            <div className="mt-4 rounded-xl border border-[#c49a45]/30 bg-[#c49a45]/10 p-3.5 shadow-xs day:border-[#9a742f]/30 day:bg-[#9a742f]/10">
+              <p className="font-sans text-xs font-medium leading-relaxed text-[#f0d89f] day:text-[#7d5e23]">
+                Sign in or create an account to save your project and access it anytime.
+              </p>
+            </div>
           )}
         </div>
 
         {/* Tab switcher — hidden in reset mode */}
         {!isReset && (
-          <div className="day:border-[#d8cfc2] day:bg-white mb-6 flex rounded-xl border border-white/10 bg-white/5 p-1">
+          <div className="mb-6 flex rounded-xl border border-white/10 bg-[#0c0b0a] p-1 day:border-[#dfd7ca] day:bg-[#f7f4ee]">
             {(['login', 'register'] as const).map((t) => (
               <button
                 key={t}
@@ -199,10 +206,10 @@ function AuthGate({
                   setError('');
                   setInfo('');
                 }}
-                className={`flex-1 cursor-pointer rounded-lg py-2 text-sm font-medium transition-colors ${
+                className={`flex-1 cursor-pointer rounded-lg py-2 font-sans text-xs font-semibold uppercase tracking-wider transition-all ${
                   tab === t
-                    ? 'bg-[#D4A84F] text-[#1a0f05]'
-                    : 'day:text-[#6b5d4d] day:hover:text-[#2a2118] text-white/65 hover:text-white'
+                    ? 'bg-[#c49a45] text-[#121110] shadow-sm day:bg-[#9a742f] day:text-white'
+                    : 'text-white/60 hover:text-white day:text-[#6a6156] day:hover:text-[#1a1714]'
                 }`}
               >
                 {t === 'login' ? 'Sign in' : 'Register'}
@@ -212,7 +219,7 @@ function AuthGate({
         )}
 
         {isReset && (
-          <div className="day:text-[#6b5d4d] mb-5 space-y-3 text-sm leading-relaxed text-white/70">
+          <div className="mb-5 space-y-3 font-sans text-xs leading-relaxed text-white/70 day:text-[#6a6156]">
             <p>
               If you have lost your password and cannot login, enter your login
               email address into the form below and click the Reset button.
@@ -232,14 +239,14 @@ function AuthGate({
                   setError('');
                   setInfo('');
                 }}
-                className="cursor-pointer text-[#D4A84F]/80 underline hover:text-[#D4A84F]"
+                className="cursor-pointer text-[#c49a45] underline hover:text-[#f0d89f] day:text-[#9a742f] day:hover:text-[#7d5e23]"
               >
                 Register again
               </button>
               . Please{' '}
               <a
                 href="mailto:admin@forevershining.com.au"
-                className="text-[#D4A84F]/80 underline hover:text-[#D4A84F]"
+                className="text-[#c49a45] underline hover:text-[#f0d89f] day:text-[#9a742f] day:hover:text-[#7d5e23]"
               >
                 Contact Us
               </a>{' '}
@@ -250,7 +257,7 @@ function AuthGate({
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="day:text-[#5d5042] mb-1.5 block text-xs tracking-wider text-white/70 uppercase">
+            <label className="mb-1.5 block font-sans text-xs font-semibold uppercase tracking-wider text-[#c49a45] day:text-[#9a742f]">
               Email
             </label>
             <input
@@ -266,7 +273,7 @@ function AuthGate({
 
           {!isReset && (
             <div>
-              <label className="day:text-[#5d5042] mb-1.5 block text-xs tracking-wider text-white/70 uppercase">
+              <label className="mb-1.5 block font-sans text-xs font-semibold uppercase tracking-wider text-[#c49a45] day:text-[#9a742f]">
                 Password
               </label>
               <div className="relative">
@@ -284,7 +291,7 @@ function AuthGate({
                 <button
                   type="button"
                   onClick={() => setShowPassword((shown) => !shown)}
-                  className="absolute top-1/2 right-3 -translate-y-1/2 text-xs font-semibold text-[#D4A84F] hover:text-[#e8bc5e]"
+                  className="absolute top-1/2 right-3 -translate-y-1/2 font-sans text-xs font-semibold uppercase tracking-wider text-[#c49a45] transition-colors hover:text-[#f0d89f] day:text-[#9a742f] day:hover:text-[#7d5e23]"
                 >
                   {showPassword ? 'Hide' : 'Show'}
                 </button>
@@ -293,7 +300,7 @@ function AuthGate({
           )}
           {!isReset && tab === 'register' && (
             <div>
-              <label className="day:text-[#5d5042] mb-1.5 block text-xs tracking-wider text-white/70 uppercase">
+              <label className="mb-1.5 block font-sans text-xs font-semibold uppercase tracking-wider text-[#c49a45] day:text-[#9a742f]">
                 Confirm Password
               </label>
               <input
@@ -309,13 +316,13 @@ function AuthGate({
           )}
 
           {error && (
-            <p className="rounded-lg border border-red-500/20 bg-red-500/10 px-4 py-2.5 text-sm text-red-400/80">
+            <p className="rounded-xl border border-red-500/30 bg-red-950/20 px-4 py-2.5 font-sans text-xs text-red-300 day:border-red-200 day:bg-red-50 day:text-red-700">
               {error}
             </p>
           )}
 
           {info && (
-            <p className="rounded-lg border border-emerald-500/20 bg-emerald-500/10 px-4 py-2.5 text-sm text-emerald-300/90">
+            <p className="rounded-xl border border-emerald-500/30 bg-emerald-950/20 px-4 py-2.5 font-sans text-xs text-emerald-300 day:border-emerald-200 day:bg-emerald-50 day:text-emerald-700">
               {info}
             </p>
           )}
@@ -323,12 +330,12 @@ function AuthGate({
           <button
             type="submit"
             disabled={loading}
-            className="mt-2 w-full cursor-pointer rounded-lg bg-[#D4A84F] py-3 text-sm font-semibold text-[#1a0f05] transition-colors hover:bg-[#e8bc5e] disabled:cursor-not-allowed disabled:opacity-50"
+            className="mt-2 w-full cursor-pointer rounded-xl bg-[#c49a45] py-3 font-sans text-xs font-semibold uppercase tracking-wider text-[#121110] shadow-sm transition-all hover:bg-[#d5ad55] active:scale-[0.99] day:bg-[#9a742f] day:text-white day:hover:bg-[#856325] disabled:cursor-not-allowed disabled:opacity-50"
           >
             {loading
               ? 'Please wait…'
               : isReset
-                ? 'Reset'
+                ? 'Reset Password'
                 : tab === 'login'
                   ? 'Sign in'
                   : 'Create account'}
@@ -339,10 +346,12 @@ function AuthGate({
               <button
                 type="button"
                 onClick={enterReset}
-                className="day:text-[#6b5d4d] cursor-pointer text-xs text-white/70 transition-colors hover:text-[#D4A84F]"
+                className="cursor-pointer font-sans text-xs text-white/60 transition-colors hover:text-[#c49a45] day:text-[#6a6156] day:hover:text-[#9a742f]"
               >
                 Forgot your password?{' '}
-                <span className="text-[#D4A84F]">Reset it</span>
+                <span className="font-semibold text-[#c49a45] underline day:text-[#9a742f]">
+                  Reset it
+                </span>
               </button>
             </div>
           )}
@@ -352,19 +361,19 @@ function AuthGate({
               <button
                 type="button"
                 onClick={exitReset}
-                className="day:text-[#6b5d4d] cursor-pointer text-xs text-white/70 transition-colors hover:text-[#D4A84F]"
+                className="cursor-pointer font-sans text-xs text-white/60 transition-colors hover:text-[#c49a45] day:text-[#6a6156] day:hover:text-[#9a742f]"
               >
-                ← Login to an account
+                ← Back to sign in
               </button>
             </div>
           )}
         </form>
 
-        <p className="day:text-[#806f5d] mt-8 text-center text-xs text-white/50">
+        <p className="mt-8 text-center font-sans text-xs text-white/50 day:text-[#786e61]">
           Need help?{' '}
           <a
             href="mailto:admin@forevershining.com.au"
-            className="text-[#D4A84F] hover:text-[#e8bc5e]"
+            className="font-semibold text-[#c49a45] underline transition-colors hover:text-[#f0d89f] day:text-[#9a742f] day:hover:text-[#7d5e23]"
           >
             Contact support
           </a>
@@ -568,8 +577,8 @@ function MyAccountContent() {
   // Still checking session
   if (session === undefined) {
     return (
-      <div className="day:bg-[#f4f1eb] flex min-h-screen items-center justify-center bg-[#050301]">
-        <div className="h-6 w-6 animate-spin rounded-full border-2 border-[#D4A84F]/30 border-t-[#D4A84F]" />
+      <div className="day:bg-[#f7f4ee] flex min-h-screen items-center justify-center bg-[#0c0b0a]">
+        <div className="h-7 w-7 animate-spin rounded-full border-2 border-[#c49a45]/30 border-t-[#c49a45] day:border-[#9a742f]/30 day:border-t-[#9a742f]" />
       </div>
     );
   }
@@ -597,328 +606,386 @@ function MyAccountContent() {
   }
 
   return (
-    <div className="day:bg-stone-100 day:text-gray-900 relative min-h-screen bg-[#050301] text-white">
-      <div className="relative mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 lg:px-10 lg:py-10">
-        <section
-          className="day:border-gray-200 day:bg-white/90 day:shadow-[0_8px_32px_rgba(0,0,0,0.08)] rounded-2xl border border-white/10 bg-[#0c0805]/85 px-4 py-5 shadow-[0_25px_65px_rgba(0,0,0,0.6)] backdrop-blur-2xl sm:rounded-[32px] sm:px-6 lg:px-10 lg:py-6"
-          aria-labelledby="saved-designs-heading"
-        >
-          <header className="day:border-gray-200 mb-6 border-b border-white/5 pb-6">
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-              <div className="min-w-0">
-                <h2
-                  id="saved-designs-heading"
-                  className="text-3xl font-semibold tracking-tight"
-                >
-                  Saved Designs
-                </h2>
-                <p className="day:text-gray-500 mt-3 inline-flex items-center gap-2 text-sm text-white/70">
-                  <UserCircleIcon
-                    className="day:text-gray-400 h-5 w-5 text-white/60"
-                    aria-hidden
-                  />
-                  {session.email}
-                </p>
+    <div className="relative min-h-screen bg-[#0c0b0a] text-white day:bg-[#f7f4ee] day:text-[#1a1714]">
+      {/* Studio Header Section */}
+      <div className="relative overflow-hidden border-b border-white/10 bg-[#161412] day:border-[#dfd7ca] day:bg-[#f5f1e8]">
+        <div className="relative mx-auto w-full max-w-7xl px-4 py-6 md:px-6 md:py-8 lg:px-8">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+            <div className="text-left">
+              <div className="mb-2.5 inline-flex items-center gap-2 rounded-full border border-[#c49a45]/35 bg-[#c49a45]/10 px-3 py-1 text-[11px] font-semibold tracking-widest text-[#c49a45] uppercase day:border-[#9a742f]/30 day:bg-[#9a742f]/10 day:text-[#78541c]">
+                <span className="inline-block size-1.5 rounded-full bg-[#c49a45] day:bg-[#9a742f]" />
+                Customer Portal · Account Area
               </div>
+              <h1 className="font-serif text-3xl font-normal tracking-tight text-white day:text-[#1a1714] sm:text-4xl lg:text-[40px] lg:leading-tight">
+                Saved Designs
+              </h1>
+              <p className="mt-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs leading-relaxed text-stone-300 day:text-[#5a5248] md:text-sm">
+                <span className="inline-flex items-center gap-1.5 font-medium text-white/90 day:text-[#1a1714]">
+                  <UserCircleIcon className="size-4 text-[#c49a45] day:text-[#9a742f]" />
+                  {session.email}
+                </span>
+                <span className="text-white/30 day:text-[#c4baa9]">·</span>
+                <span>Review your proofs, resume editing, or submit your memorial for fabrication.</span>
+              </p>
+            </div>
+            <div className="flex shrink-0 items-center gap-3 pt-1 sm:pt-0">
               <button
                 type="button"
                 onClick={handleNewDesign}
-                className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#D4A84F] px-4 py-2.5 text-sm font-semibold text-[#1a0f05] transition-colors hover:bg-[#e8bc5e]"
+                className="inline-flex min-h-10 items-center justify-center gap-2 rounded-xl border border-[#c49a45] bg-[#c49a45] px-4 py-2 text-xs font-semibold tracking-wider text-[#121110] shadow-sm transition-all hover:bg-[#d5ad55] day:border-[#9a742f] day:bg-[#9a742f] day:text-white day:hover:bg-[#856325] md:text-sm"
               >
-                <span aria-hidden="true">+</span>
-                New Design
+                <PlusIcon className="size-4 stroke-[2.5]" />
+                <span>New Design</span>
               </button>
             </div>
-          </header>
+          </div>
+        </div>
+      </div>
 
-          <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+      {/* Main Grid Content */}
+      <div className="mx-auto max-w-7xl px-4 pt-6 pb-20 md:px-6 md:pt-8 lg:px-8">
+        <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between md:mb-8">
+          <div>
+            <h2 className="font-serif text-2xl font-normal tracking-tight text-white day:text-[#1a1714] md:text-3xl">
+              Your Memorials · {visibleCards.length}
+            </h2>
+            <p className="mt-1 text-xs text-white/65 day:text-[#6a6156] md:text-sm">
+              Pick up right where you left off or submit your approved design to manufacturing.
+            </p>
+          </div>
+        </div>
+
+        {isLoading ? (
+          <div className="py-20 text-center">
+            <h3 className="font-serif text-xl font-normal text-white day:text-[#1a1714]">
+              Loading your saved designs…
+            </h3>
+            <p className="mt-2 text-xs text-stone-300 day:text-[#5a5248]">
+              Retrieving your memorials and proofs.
+            </p>
+          </div>
+        ) : !visibleCards.length ? (
+          <div className="py-20 text-center">
+            <h3 className="font-serif text-xl font-normal text-white day:text-[#1a1714] md:text-2xl">
+              No saved designs yet
+            </h3>
+            <p className="mt-2 text-xs text-stone-300 day:text-[#5a5248] md:text-sm">
+              Start configuring your custom memorial to save and preview proofs here.
+            </p>
+            <button
+              type="button"
+              onClick={handleNewDesign}
+              className="mt-5 inline-flex min-h-10 items-center justify-center gap-2 rounded-xl border border-[#c49a45] bg-[#c49a45] px-5 py-2 text-xs font-semibold tracking-wider text-[#121110] transition-colors hover:bg-[#d5ad55] day:border-[#9a742f] day:bg-[#9a742f] day:text-white day:hover:bg-[#856325] md:text-sm"
+            >
+              <PlusIcon className="size-4 stroke-[2.5]" />
+              <span>Create Your First Design</span>
+            </button>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 items-stretch gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3">
             {visibleCards.map((card) => {
               return (
                 <article
                   key={card.id}
-                  className="day:border-gray-200 day:bg-white day:shadow-md flex flex-col rounded-2xl border border-white/10 bg-white/5 p-5 shadow-[0_18px_50px_rgba(0,0,0,0.55)] backdrop-blur-sm"
+                  className="group relative flex h-full flex-col overflow-hidden rounded-xl border border-white/10 bg-[#161412] transition-all duration-300 hover:-translate-y-1 hover:border-[#c49a45]/70 hover:shadow-xl day:border-[#dfd7ca] day:bg-white day:shadow-[0_8px_24px_rgba(40,30,20,0.06)] day:hover:border-[#9a742f] day:hover:shadow-[0_14px_34px_rgba(40,30,20,0.12)]"
                 >
-                  {/* Preview Image */}
-                  <div className="mb-4">
-                    <div className="day:border-gray-200 relative aspect-[4/3] w-full overflow-hidden rounded-xl border border-white/10 bg-[#121212]">
-                      <img
-                        src={card.preview}
-                        alt={card.title}
-                        className="h-full w-full object-cover"
-                        loading="lazy"
-                      />
+                  {/* Preview Image with status badge */}
+                  <div className="relative aspect-[4/3] w-full overflow-hidden border-b border-white/8 bg-gradient-to-b from-[#1c1a17] to-[#141210] p-4 day:border-[#ebe4d8] day:from-[#f8f5ee] day:to-[#ede6d8]">
+                    <div className="absolute top-3 right-3 z-10">
+                      <span className="inline-flex items-center rounded-full border border-[#c49a45]/35 bg-[#161412]/80 px-2.5 py-0.5 text-[10px] font-semibold tracking-wider text-[#f0cf79] uppercase backdrop-blur-sm day:border-[#9a742f]/30 day:bg-white/90 day:text-[#8c6425]">
+                        {card.status.replace('-', ' ')}
+                      </span>
                     </div>
+                    <img
+                      src={card.preview}
+                      alt={card.title}
+                      className="h-full w-full object-contain p-2 transition-transform duration-500 ease-out will-change-transform group-hover:scale-105"
+                      loading="lazy"
+                    />
                   </div>
 
-                  {/* Card Header */}
-                  <div className="mb-3">
-                    {editingTitleId === card.id ? (
-                      <form
-                        className="flex items-center gap-2"
-                        onSubmit={(event) => {
-                          event.preventDefault();
-                          void handleRename(card.id);
-                        }}
-                      >
-                        <input
-                          value={draftTitle}
-                          onChange={(event) =>
-                            setDraftTitle(event.target.value)
-                          }
-                          maxLength={120}
-                          autoFocus
-                          className="day:bg-white day:text-gray-900 min-w-0 flex-1 rounded-md border border-[#D4A84F]/60 bg-black/20 px-2 py-1 text-lg font-semibold text-white ring-0 outline-none"
-                          aria-label="Project name"
-                        />
-                        <button
-                          type="submit"
-                          disabled={isSavingTitle}
-                          className="text-xs font-semibold text-[#D4A84F] disabled:opacity-50"
-                        >
-                          {isSavingTitle ? 'Saving…' : 'Save'}
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => setEditingTitleId(null)}
-                          className="day:text-gray-500 day:hover:text-gray-900 text-xs text-white/55 hover:text-white"
-                        >
-                          Cancel
-                        </button>
-                      </form>
-                    ) : (
-                      <div className="flex items-center gap-2">
-                        <h3 className="day:text-gray-900 min-w-0 truncate text-lg font-semibold text-white">
-                          {card.title}
-                        </h3>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setDraftTitle(card.title);
-                            setEditingTitleId(card.id);
+                  {/* Card Body */}
+                  <div className="flex flex-1 flex-col p-4 md:p-5">
+                    <div className="mb-2">
+                      {editingTitleId === card.id ? (
+                        <form
+                          className="flex items-center gap-2"
+                          onSubmit={(event) => {
+                            event.preventDefault();
+                            void handleRename(card.id);
                           }}
-                          className="day:text-gray-400 shrink-0 text-sm text-white/45 transition-colors hover:text-[#D4A84F]"
-                          aria-label={`Rename ${card.title}`}
                         >
-                          ✎
-                        </button>
-                      </div>
-                    )}
-                    <div className="day:text-gray-500 mt-1 flex flex-col gap-0.5 text-sm text-white/70 min-[360px]:flex-row min-[360px]:items-center min-[360px]:justify-between">
-                      <span className="font-medium text-[#D4A84F]">
-                        {card.priceLabel}
-                      </span>
-                      <span className="day:text-gray-400 text-white/50">
-                        {card.relativeUpdated}
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Description */}
-                  <p className="day:text-gray-600 mb-4 line-clamp-2 flex-1 text-sm text-white/75">
-                    {card.description}
-                  </p>
-
-                  {/* Action Buttons */}
-                  <div className="grid grid-cols-[1fr_1fr_auto] items-center gap-2">
-                    <Link
-                      href={`/my-account/designs/${card.id}/buy`}
-                      className="cursor-pointer rounded-lg px-3 py-2 text-center text-xs font-medium text-black transition"
-                      style={{ backgroundColor: '#D4A84F' }}
-                      onMouseEnter={(e) =>
-                        ((
-                          e.currentTarget as HTMLElement
-                        ).style.backgroundColor = '#C49940')
-                      }
-                      onMouseLeave={(e) =>
-                        ((
-                          e.currentTarget as HTMLElement
-                        ).style.backgroundColor = '#D4A84F')
-                      }
-                    >
-                      Buy
-                    </Link>
-                    <button
-                      type="button"
-                      onClick={() => handleEdit(card.id)}
-                      disabled={loadingEditId === card.id}
-                      className="day:border-gray-200 day:bg-gray-50 day:text-gray-700 day:hover:bg-gray-100 cursor-pointer rounded-lg border border-white/20 bg-white/5 px-3 py-2 text-xs font-medium text-white transition hover:bg-white/10 disabled:opacity-50"
-                    >
-                      {loadingEditId === card.id ? 'Loading…' : 'Edit'}
-                    </button>
-                    <div
-                      className="relative"
-                      ref={openMenuId === card.id ? menuRef : null}
-                    >
-                      <button
-                        type="button"
-                        className="day:border-gray-200 day:bg-gray-50 day:text-gray-700 day:hover:bg-gray-100 flex h-8 w-9 cursor-pointer items-center justify-center rounded-lg border border-white/20 bg-white/5 text-white transition hover:bg-white/10"
-                        onClick={() =>
-                          setOpenMenuId(openMenuId === card.id ? null : card.id)
-                        }
-                        aria-label="More options"
-                      >
-                        ⋮
-                      </button>
-                      {openMenuId === card.id && (
-                        <div className="day:border-gray-200 day:bg-white absolute right-0 bottom-full z-50 mb-1 w-48 overflow-hidden rounded-xl border border-white/10 bg-[#1a1208] shadow-2xl">
-                          <Link
-                            href={`/my-account/designs/${card.id}`}
-                            className="day:text-gray-700 day:hover:bg-gray-50 block w-full px-4 py-2.5 text-left text-xs text-white transition hover:bg-white/10"
-                            onClick={() => setOpenMenuId(null)}
-                          >
-                            View details
-                          </Link>
+                          <input
+                            value={draftTitle}
+                            onChange={(event) =>
+                              setDraftTitle(event.target.value)
+                            }
+                            maxLength={120}
+                            autoFocus
+                            className="min-w-0 flex-1 rounded-lg border border-[#c49a45] bg-black/30 px-3 py-1.5 font-serif text-base font-normal text-white outline-none focus:ring-2 focus:ring-[#c49a45]/20 day:border-[#9a742f] day:bg-white day:text-[#1a1714]"
+                            aria-label="Project name"
+                          />
                           <button
-                            type="button"
-                            className="day:text-gray-700 day:hover:bg-gray-50 w-full px-4 py-2.5 text-left text-xs text-white transition hover:bg-white/10"
-                            onClick={async () => {
-                              setOpenMenuId(null);
-                              try {
-                                await navigator.clipboard.writeText(
-                                  window.location.origin +
-                                    `/my-account/designs/${card.id}`,
-                                );
-                                alert('Link copied to clipboard');
-                              } catch {
-                                alert('Could not copy link');
-                              }
-                            }}
+                            type="submit"
+                            disabled={isSavingTitle}
+                            className="rounded-lg bg-[#c49a45] px-3 py-1.5 font-sans text-xs font-semibold text-[#121110] transition-colors hover:bg-[#d5ad55] disabled:opacity-50 day:bg-[#9a742f] day:text-white"
                           >
-                            🔗 Copy Link
+                            {isSavingTitle ? '…' : 'Save'}
                           </button>
                           <button
                             type="button"
-                            className="day:text-gray-700 day:hover:bg-gray-50 w-full px-4 py-2.5 text-left text-xs text-white transition hover:bg-white/10"
+                            onClick={() => setEditingTitleId(null)}
+                            className="rounded-lg border border-white/15 px-2.5 py-1.5 font-sans text-xs text-white/70 hover:text-white day:border-[#dfd7ca] day:text-[#6a6156]"
+                          >
+                            Cancel
+                          </button>
+                        </form>
+                      ) : (
+                        <div className="flex items-center justify-between gap-2">
+                          <h3 className="min-w-0 truncate font-serif text-lg font-normal text-white transition-colors group-hover:text-[#f0d89f] day:text-[#1a1714] day:group-hover:text-[#9a742f]">
+                            {card.title}
+                          </h3>
+                          <button
+                            type="button"
                             onClick={() => {
-                              setOpenMenuId(null);
-                              setShareProjectId(card.id);
-                              setShareProjectTitle(card.title);
-                              setShareProjectScreenshot(card.preview);
-                              setShareModalOpen(true);
+                              setDraftTitle(card.title);
+                              setEditingTitleId(card.id);
                             }}
+                            className="shrink-0 p-1 text-white/40 transition-colors hover:text-[#c49a45] day:text-[#786e61] day:hover:text-[#9a742f]"
+                            title={`Rename ${card.title}`}
+                            aria-label={`Rename ${card.title}`}
                           >
-                            ✉️ Email
-                          </button>
-                          <button
-                            type="button"
-                            className="day:text-gray-500 day:hover:bg-gray-50 w-full px-4 py-2.5 text-left text-xs text-white/60 transition hover:bg-white/10"
-                            onClick={() => {
-                              setOpenMenuId(null);
-                              const u =
-                                window.location.origin +
-                                `/my-account/designs/${card.id}`;
-                              window.open(
-                                `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(u)}`,
-                                '_blank',
-                                'width=600,height=400',
-                              );
-                            }}
-                          >
-                            Facebook
-                          </button>
-                          <button
-                            type="button"
-                            className="day:text-gray-500 day:hover:bg-gray-50 w-full px-4 py-2.5 text-left text-xs text-white/60 transition hover:bg-white/10"
-                            onClick={() => {
-                              setOpenMenuId(null);
-                              const u =
-                                window.location.origin +
-                                `/my-account/designs/${card.id}`;
-                              window.open(
-                                `https://twitter.com/intent/tweet?url=${encodeURIComponent(u)}&text=${encodeURIComponent('Check out my memorial design: ' + card.title)}`,
-                                '_blank',
-                                'width=600,height=400',
-                              );
-                            }}
-                          >
-                            Twitter / X
-                          </button>
-                          <button
-                            type="button"
-                            className="day:text-gray-500 day:hover:bg-gray-50 w-full px-4 py-2.5 text-left text-xs text-white/60 transition hover:bg-white/10"
-                            onClick={() => {
-                              setOpenMenuId(null);
-                              const u =
-                                window.location.origin +
-                                `/my-account/designs/${card.id}`;
-                              window.open(
-                                `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(u)}`,
-                                '_blank',
-                                'width=600,height=400',
-                              );
-                            }}
-                          >
-                            LinkedIn
-                          </button>
-                          <div className="day:border-gray-100 border-t border-white/10" />
-                          <button
-                            type="button"
-                            className="day:text-gray-700 day:hover:bg-gray-50 w-full px-4 py-2.5 text-left text-xs text-white transition hover:bg-white/10"
-                            onClick={async () => {
-                              setOpenMenuId(null);
-                              try {
-                                const detailsRes = await fetch(
-                                  `/api/projects/${card.id}`,
-                                );
-                                if (!detailsRes.ok) {
-                                  throw new Error(
-                                    'Failed to load project details',
-                                  );
-                                }
-                                const details = await detailsRes.json();
-                                const project = details.project;
-                                const { generateDesignPDF } = await import(
-                                  '#/lib/pdf-generator'
-                                );
-                                await generateDesignPDF({
-                                  title: card.title,
-                                  screenshot:
-                                    project?.screenshotPath || card.preview,
-                                  priceLabel: card.priceLabel,
-                                  createdLabel: card.createdLabel,
-                                  description: card.description,
-                                  productName: card.productName,
-                                  quote: buildPdfQuoteFromProject(
-                                    project ?? {},
-                                  ),
-                                });
-                              } catch {
-                                alert(
-                                  'Failed to generate PDF. Please try again.',
-                                );
-                              }
-                            }}
-                          >
-                            Download PDF
-                          </button>
-                          <div className="day:border-gray-100 border-t border-white/10" />
-                          <button
-                            type="button"
-                            className="day:text-red-600 day:hover:bg-red-50 w-full px-4 py-2.5 text-left text-xs text-red-400 transition hover:bg-red-500/10"
-                            onClick={() => handleDeleteCard(card.id)}
-                          >
-                            Delete
+                            <PencilSquareIcon className="size-4" />
                           </button>
                         </div>
                       )}
+
+                      <div className="mt-1 flex items-center justify-between gap-2">
+                        <span className="font-serif text-base font-medium text-[#c49a45] day:text-[#9a742f]">
+                          {card.priceLabel}
+                        </span>
+                        <span className="text-[11px] text-white/50 day:text-[#786e61]">
+                          {card.relativeUpdated}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Description */}
+                    <p className="mb-4 line-clamp-2 flex-1 text-xs leading-relaxed text-stone-300 day:text-[#5a5248]">
+                      {card.description}
+                    </p>
+
+                    {/* Action Buttons */}
+                    <div className="mt-auto grid grid-cols-[1fr_1fr_auto] items-center gap-2 border-t border-white/8 pt-3.5 day:border-[#ebe4d8]">
+                      <Link
+                        href={`/my-account/designs/${card.id}/buy`}
+                        className="inline-flex min-h-9 items-center justify-center rounded-lg border border-[#c49a45] bg-[#c49a45] px-3 py-1.5 text-center font-sans text-xs font-semibold uppercase tracking-wider text-[#121110] transition-colors hover:bg-[#d5ad55] day:border-[#9a742f] day:bg-[#9a742f] day:text-white day:hover:bg-[#856325]"
+                      >
+                        Buy
+                      </Link>
+                      <button
+                        type="button"
+                        onClick={() => handleEdit(card.id)}
+                        disabled={loadingEditId === card.id}
+                        className="inline-flex min-h-9 items-center justify-center rounded-lg border border-white/15 bg-white/[0.04] px-3 py-1.5 font-sans text-xs font-semibold uppercase tracking-wider text-white transition-colors hover:border-white/30 hover:bg-white/10 disabled:opacity-50 day:border-[#dfd7ca] day:bg-[#eee8dc]/70 day:text-[#1a1714] day:hover:bg-[#e7e0d2]"
+                      >
+                        {loadingEditId === card.id ? 'Loading…' : 'Edit'}
+                      </button>
+                      <div
+                        className="relative"
+                        ref={openMenuId === card.id ? menuRef : null}
+                      >
+                        <button
+                          type="button"
+                          className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-lg border border-white/15 bg-white/[0.04] text-white/70 transition-colors hover:border-white/30 hover:bg-white/10 hover:text-white day:border-[#dfd7ca] day:bg-[#eee8dc]/70 day:text-[#5a5248] day:hover:bg-[#e7e0d2] day:hover:text-[#1a1714]"
+                          onClick={() =>
+                            setOpenMenuId(openMenuId === card.id ? null : card.id)
+                          }
+                          aria-label="More options"
+                        >
+                          <EllipsisVerticalIcon className="size-5" />
+                        </button>
+                        {openMenuId === card.id && (
+                          <div className="absolute right-0 bottom-full z-50 mb-2 w-48 overflow-hidden rounded-xl border border-white/15 bg-[#161412] shadow-2xl day:border-[#dfd7ca] day:bg-white day:shadow-lg">
+                            <Link
+                              href={`/my-account/designs/${card.id}`}
+                              className="block w-full px-4 py-2.5 text-left text-xs font-medium text-white/80 transition hover:bg-white/10 hover:text-white day:text-[#1a1714] day:hover:bg-[#f5f1e8]"
+                              onClick={() => setOpenMenuId(null)}
+                            >
+                              View details
+                            </Link>
+                            <button
+                              type="button"
+                              className="block w-full px-4 py-2.5 text-left text-xs font-medium text-white/80 transition hover:bg-white/10 hover:text-white day:text-[#1a1714] day:hover:bg-[#f5f1e8]"
+                              onClick={async () => {
+                                setOpenMenuId(null);
+                                try {
+                                  await navigator.clipboard.writeText(
+                                    window.location.origin +
+                                      `/my-account/designs/${card.id}`,
+                                  );
+                                  alert('Link copied to clipboard');
+                                } catch {
+                                  alert('Could not copy link');
+                                }
+                              }}
+                            >
+                              🔗 Copy Link
+                            </button>
+                            <button
+                              type="button"
+                              className="block w-full px-4 py-2.5 text-left text-xs font-medium text-white/80 transition hover:bg-white/10 hover:text-white day:text-[#1a1714] day:hover:bg-[#f5f1e8]"
+                              onClick={() => {
+                                setOpenMenuId(null);
+                                setShareProjectId(card.id);
+                                setShareProjectTitle(card.title);
+                                setShareProjectScreenshot(card.preview);
+                                setShareModalOpen(true);
+                              }}
+                            >
+                              ✉️ Email
+                            </button>
+                            <button
+                              type="button"
+                              className="block w-full px-4 py-2.5 text-left text-xs font-medium text-white/60 transition hover:bg-white/10 hover:text-white day:text-[#786e61] day:hover:bg-[#f5f1e8]"
+                              onClick={() => {
+                                setOpenMenuId(null);
+                                const u =
+                                  window.location.origin +
+                                  `/my-account/designs/${card.id}`;
+                                const shareUrl =
+                                  `mailto:?subject=${encodeURIComponent(
+                                    `Forever Shining Design — ${card.title}`,
+                                  )}&body=${encodeURIComponent(
+                                    `Take a look at this memorial design on Forever Shining:\n\n${card.title}\n${card.priceLabel}\n\n${u}`,
+                                  )}`;
+                                window.location.href = shareUrl;
+                              }}
+                            >
+                              ✉️ Email Client
+                            </button>
+                            {card.htmlQuotePath && (
+                              <a
+                                href={card.htmlQuotePath}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="block w-full px-4 py-2.5 text-left text-xs font-medium text-white/80 transition hover:bg-white/10 hover:text-white day:text-[#1a1714] day:hover:bg-[#f5f1e8]"
+                                onClick={() => setOpenMenuId(null)}
+                              >
+                                📄 HTML Quote
+                              </a>
+                            )}
+                            <button
+                              type="button"
+                              className="block w-full px-4 py-2.5 text-left text-xs font-medium text-white/60 transition hover:bg-white/10 hover:text-white day:text-[#786e61] day:hover:bg-[#f5f1e8]"
+                              onClick={() => {
+                                setOpenMenuId(null);
+                                const u =
+                                  window.location.origin +
+                                  `/my-account/designs/${card.id}`;
+                                window.open(
+                                  `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(u)}`,
+                                  '_blank',
+                                  'width=600,height=400',
+                                );
+                              }}
+                            >
+                              Facebook
+                            </button>
+                            <button
+                              type="button"
+                              className="block w-full px-4 py-2.5 text-left text-xs font-medium text-white/60 transition hover:bg-white/10 hover:text-white day:text-[#786e61] day:hover:bg-[#f5f1e8]"
+                              onClick={() => {
+                                setOpenMenuId(null);
+                                const u =
+                                  window.location.origin +
+                                  `/my-account/designs/${card.id}`;
+                                window.open(
+                                  `https://twitter.com/intent/tweet?url=${encodeURIComponent(u)}&text=${encodeURIComponent('Check out my memorial design: ' + card.title)}`,
+                                  '_blank',
+                                  'width=600,height=400',
+                                );
+                              }}
+                            >
+                              Twitter / X
+                            </button>
+                            <button
+                              type="button"
+                              className="block w-full px-4 py-2.5 text-left text-xs font-medium text-white/60 transition hover:bg-white/10 hover:text-white day:text-[#786e61] day:hover:bg-[#f5f1e8]"
+                              onClick={() => {
+                                setOpenMenuId(null);
+                                const u =
+                                  window.location.origin +
+                                  `/my-account/designs/${card.id}`;
+                                window.open(
+                                  `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(u)}`,
+                                  '_blank',
+                                  'width=600,height=400',
+                                );
+                              }}
+                            >
+                              LinkedIn
+                            </button>
+                            <div className="border-t border-white/10 day:border-[#dfd7ca]" />
+                            <button
+                              type="button"
+                              className="block w-full px-4 py-2.5 text-left text-xs font-medium text-white/80 transition hover:bg-white/10 hover:text-white day:text-[#1a1714] day:hover:bg-[#f5f1e8]"
+                              onClick={async () => {
+                                setOpenMenuId(null);
+                                try {
+                                  const detailsRes = await fetch(
+                                    `/api/projects/${card.id}`,
+                                  );
+                                  if (!detailsRes.ok) {
+                                    throw new Error(
+                                      'Failed to load project details',
+                                    );
+                                  }
+                                  const details = await detailsRes.json();
+                                  const project = details.project;
+                                  const { generateDesignPDF } = await import(
+                                    '#/lib/pdf-generator'
+                                  );
+                                  await generateDesignPDF({
+                                    title: card.title,
+                                    screenshot:
+                                      project?.screenshotPath || card.preview,
+                                    priceLabel: card.priceLabel,
+                                    createdLabel: card.createdLabel,
+                                    description: card.description,
+                                    productName: card.productName,
+                                    quote: buildPdfQuoteFromProject(
+                                      project ?? {},
+                                    ),
+                                  });
+                                } catch {
+                                  alert(
+                                    'Failed to generate PDF. Please try again.',
+                                  );
+                                }
+                              }}
+                            >
+                              📥 Download PDF
+                            </button>
+                            <div className="border-t border-white/10 day:border-[#dfd7ca]" />
+                            <button
+                              type="button"
+                              className="block w-full px-4 py-2.5 text-left text-xs font-medium text-red-400 transition hover:bg-red-500/10 day:text-red-600 day:hover:bg-red-50"
+                              onClick={() => handleDeleteCard(card.id)}
+                            >
+                              🗑️ Delete Design
+                            </button>
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </article>
               );
             })}
-            {!visibleCards.length && !isLoading && (
-              <div className="day:border-gray-200 day:bg-gray-50 day:text-gray-500 col-span-full rounded-2xl border border-white/10 bg-white/5 p-10 text-center text-white/70">
-                No saved designs available yet. Start a new design to see it
-                here.
-              </div>
-            )}
-            {isLoading && (
-              <div className="day:border-gray-200 day:bg-gray-50 day:text-gray-500 col-span-full rounded-2xl border border-white/10 bg-white/5 p-10 text-center text-white/70">
-                Loading your saved designs...
-              </div>
-            )}
           </div>
-        </section>
+        )}
+      </div>
 
         <ConfirmModal
           isOpen={deleteModalOpen}
@@ -952,7 +1019,6 @@ function MyAccountContent() {
           </React.Suspense>
         )}
       </div>
-    </div>
   );
 }
 

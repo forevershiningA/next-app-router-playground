@@ -105,33 +105,35 @@ export default function ServerDesignsTreeNav({
   const treeData = buildTreeData();
 
   return (
-    <nav className="h-full overflow-y-auto bg-white [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-slate-200 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar]:w-1">
-      <div className="border-b border-slate-200 px-6">
-        <Link href="/designs" className="block transition-opacity hover:opacity-80">
+    <nav className="day:border-[#e2dad0] day:bg-[#fcfaf6] day:text-[#1d1a17] h-full overflow-y-auto border-r border-white/10 bg-[#121110] text-white [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-stone-300 day:[&::-webkit-scrollbar-thumb]:bg-stone-300 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar]:w-1">
+      <div className="day:border-[#e8e2d7] border-b border-white/10 px-6 pt-5 pb-4">
+        <Link href="/" className="block transition-opacity hover:opacity-80">
           <Image
             src="/ico/forever-transparent-logo-bw.png"
             alt="Forever Shining"
             width={400}
             height={246}
-            className="h-auto w-full"
+            className="h-auto w-full max-w-[200px]"
             priority
           />
         </Link>
-        <div className="mb-4 h-px rounded-full bg-slate-200" />
-        <div className="flex items-center justify-between pb-4">
-          <h2 className="text-sm font-semibold uppercase tracking-widest text-stone-800">
-            Memorial Designs
-          </h2>
+        <div className="day:border-[#e8e2d7] mt-4 flex items-center justify-between border-t border-white/10 pt-3">
+          <Link
+            href="/designs"
+            className="day:text-[#8a651f] text-xs font-semibold uppercase tracking-widest text-[#cfac6c]"
+          >
+            Design Collections
+          </Link>
           <Link
             href="/select-product"
-            className="inline-flex items-center justify-center gap-1.5 rounded-lg border border-stone-950 bg-stone-950 px-3 py-2 text-xs font-medium uppercase tracking-[0.14em] text-white transition-colors hover:border-[#8a6b1f] hover:bg-[#8a6b1f]"
+            className="day:bg-[#1d1a17] day:text-white day:hover:bg-[#342e26] inline-flex items-center justify-center gap-1.5 rounded-sm bg-[#cfac6c] px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-[#14120e] transition-colors hover:bg-[#e0c48c]"
           >
-            Start Design
+            Start 3D
           </Link>
         </div>
       </div>
 
-      <div className="space-y-1 px-3 pb-6 pt-4">
+      <div className="space-y-1 px-3 pb-8 pt-4">
         {treeData.map((productNode) => {
           const productPath = `/designs/${productNode.productSlug}`;
           const productLabel = formatSlugForDisplay(productNode.productSlug);
@@ -142,40 +144,40 @@ export default function ServerDesignsTreeNav({
 
           return (
             <details key={productNode.productSlug} className="group">
-              <summary className="flex w-full cursor-pointer list-none items-center gap-2.5 rounded-lg px-3 py-2.5 text-[15px] font-normal text-stone-800 transition-all hover:bg-stone-100 marker:hidden">
-                <span className="text-stone-600 transition-transform group-open:rotate-90">›</span>
-                <Link href={productPath} className="flex-1 text-left hover:text-stone-950">
+              <summary className="day:text-[#1d1a17] day:hover:bg-[#f3eee5] flex w-full cursor-pointer list-none items-center gap-2.5 rounded-sm px-3 py-2.5 text-[14px] font-medium text-white/90 transition-all hover:bg-white/5 marker:hidden">
+                <span className="day:text-[#8a651f] text-[#cfac6c] transition-transform group-open:rotate-90">›</span>
+                <Link href={productPath} className="day:hover:text-[#8a651f] flex-1 text-left transition-colors hover:text-[#cfac6c]">
                   {productLabel}
                 </Link>
-                <span className="rounded-full bg-stone-100 px-2 py-0.5 text-xs font-medium text-stone-600">
+                <span className="day:border-[#e0d8cc] day:bg-[#ece4d4] day:text-[#6a5323] rounded-full border border-white/15 bg-white/5 px-2 py-0.5 text-[11px] font-medium text-white/60">
                   {productCount}
                 </span>
               </summary>
 
-              <div className="mb-2 ml-4 mt-1 space-y-0.5 border-l border-slate-200 pl-3">
+              <div className="day:border-[#e5ded2] mb-2 ml-4 mt-1 space-y-0.5 border-l border-white/10 pl-3">
                 {Object.entries(productNode.categories).map(([categoryKey, categoryData]) => {
                   const categoryPath = `/designs/${productNode.productSlug}/${categoryKey}`;
                   return (
                     <details key={categoryKey} className="group/category">
-                      <summary className="flex w-full cursor-pointer list-none items-center gap-2 rounded-md px-3 py-2 text-[14px] font-normal text-stone-700 transition-all hover:bg-stone-50 hover:text-stone-950 marker:hidden">
-                        <span className="text-stone-500 transition-transform group-open/category:rotate-90">
+                      <summary className="day:text-[#50483f] day:hover:bg-[#f6f2ea] day:hover:text-[#1d1a17] flex w-full cursor-pointer list-none items-center gap-2 rounded-sm px-3 py-2 text-[13px] text-white/70 transition-all hover:bg-white/5 hover:text-white marker:hidden">
+                        <span className="day:text-[#a89d8d] text-white/40 transition-transform group-open/category:rotate-90">
                           ›
                         </span>
                         <Link href={categoryPath} className="flex-1 text-left">
                           {categoryData.name}
                         </Link>
-                        <span className="rounded bg-stone-100 px-1.5 py-0.5 text-[11px] font-medium text-stone-600">
+                        <span className="day:text-[#756c62] text-[11px] text-white/50">
                           {categoryData.designs.length}
                         </span>
                       </summary>
 
                       {maxDesignLinksPerCategory > 0 ? (
-                        <div className="mb-1 ml-3 mt-0.5 space-y-0.5 border-l border-slate-100 pl-3">
+                        <div className="day:border-[#ece5d8] mb-1 ml-3 mt-0.5 space-y-0.5 border-l border-white/10 pl-3">
                           {categoryData.designs.slice(0, maxDesignLinksPerCategory).map((design) => (
                             <Link
                               key={`${productNode.productSlug}-${categoryKey}-${design.id}`}
                               href={`/designs/${productNode.productSlug}/${categoryKey}/${design.slug}`}
-                              className="block rounded-md px-3 py-1.5 text-sm font-normal leading-relaxed text-stone-700 transition-all hover:bg-stone-50 hover:text-stone-950"
+                              className="day:text-[#625a51] day:hover:text-[#1d1a17] block rounded-sm px-3 py-1 text-xs leading-relaxed text-white/60 transition-all hover:text-white"
                             >
                               <span className="line-clamp-2">{design.title}</span>
                             </Link>
@@ -183,7 +185,7 @@ export default function ServerDesignsTreeNav({
                           {categoryData.designs.length > maxDesignLinksPerCategory ? (
                             <Link
                               href={categoryPath}
-                              className="block rounded-md px-3 py-1.5 text-xs font-medium uppercase tracking-[0.12em] text-[#8a6b1f]"
+                              className="day:text-[#8a651f] block rounded-sm px-3 py-1.5 text-[11px] font-medium uppercase tracking-[0.12em] text-[#cfac6c]"
                             >
                               View all {categoryData.designs.length} designs
                             </Link>

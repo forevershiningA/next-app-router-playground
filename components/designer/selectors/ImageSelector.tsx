@@ -20,7 +20,7 @@ import {
 import { MASK_OPTIONS, getMaskAspectRatio, getMaskUrl } from '#/lib/image-mask';
 import { useImageCropState } from './useImageCropState';
 import { logger } from '#/lib/logger';
-import { CheckCircleIcon } from '@heroicons/react/24/outline';
+import { CheckCircleIcon, ChevronLeftIcon } from '@heroicons/react/24/outline';
 import {
   formatImperialFractionFromMm,
   getLengthUnitLabel,
@@ -193,22 +193,22 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
   }, [cropRotation, setCropRotation]);
 
   const sectionCardClass =
-    'rounded-lg border border-white/10 bg-[#1E1E1E] p-3.5 shadow-lg shadow-black/15 day:border-gray-200 day:bg-white';
-  const labelClass = 'text-sm font-semibold text-slate-100 day:text-gray-800';
+    'rounded-xl border border-white/10 bg-[#161412] p-3.5 shadow-sm day:border-[#dfd7ca] day:bg-white day:shadow-[0_2px_8px_rgba(40,30,20,0.04)]';
+  const labelClass = 'font-serif text-sm font-normal text-white day:text-[#1a1714]';
   const controlButtonClass =
-    'flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-white/10 bg-white/[0.08] text-white transition-colors hover:border-[#D7B356]/50 hover:bg-white/[0.13] day:border-gray-200 day:bg-gray-100 day:text-gray-700 day:hover:bg-gray-200';
+    'flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-white/10 bg-white/[0.06] text-white transition-all hover:border-[#c49a45] hover:bg-[#c49a45]/15 hover:text-[#f0d89f] disabled:cursor-not-allowed disabled:opacity-30 day:border-[#dfd7ca] day:bg-white day:text-[#1a1714] day:hover:border-[#9a742f] day:hover:bg-[#9a742f]/10 day:hover:text-[#9a742f] day:shadow-sm';
   const numberInputBaseClass =
-    'h-8 rounded-md border border-white/10 bg-white/[0.08] px-2 text-right text-sm font-semibold text-white transition-colors focus:border-[#D7B356] focus:ring-2 focus:ring-[#D7B356]/30 focus:outline-none day:border-gray-300 day:bg-gray-100 day:text-gray-900';
+    'h-8 rounded-lg border border-white/10 bg-white/[0.04] px-2 text-right font-sans text-sm font-semibold tabular-nums text-white transition-colors focus:border-[#c49a45] focus:ring-2 focus:ring-[#c49a45]/20 focus:outline-none day:border-[#dfd7ca] day:bg-white day:text-[#1a1714] day:focus:border-[#9a742f] day:focus:ring-[#9a742f]/20 day:shadow-sm';
   const rangeInputClass =
-    'fs-range h-1.5 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-webkit-slider-thumb]:h-[20px] [&::-webkit-slider-thumb]:w-[20px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#171717] [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.35),0_0_0_3px_rgba(0,0,0,0.25)] [&::-webkit-slider-thumb]:transition-shadow [&::-webkit-slider-thumb]:hover:shadow-[0_0_12px_rgba(215,179,86,0.55),0_0_0_3px_rgba(0,0,0,0.25)] [&::-moz-range-thumb]:h-[20px] [&::-moz-range-thumb]:w-[20px] [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-[#171717] [&::-moz-range-thumb]:bg-[#D7B356] [&::-moz-range-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.35),0_0_0_3px_rgba(0,0,0,0.25)]';
+    'fs-range h-1.5 w-full cursor-pointer appearance-none rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--designer-focus)] [&::-moz-range-thumb]:h-5 [&::-moz-range-thumb]:w-5 [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-[#161412] [&::-moz-range-thumb]:bg-[#c49a45] [&::-moz-range-thumb]:shadow-md [&::-webkit-slider-thumb]:h-5 [&::-webkit-slider-thumb]:w-5 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#161412] [&::-webkit-slider-thumb]:bg-[#c49a45] [&::-webkit-slider-thumb]:shadow-md day:[&::-webkit-slider-thumb]:border-white day:[&::-webkit-slider-thumb]:bg-[#9a742f] day:[&::-moz-range-thumb]:border-white day:[&::-moz-range-thumb]:bg-[#9a742f]';
   const rangeBoundsClass =
-    'mt-1 flex w-full justify-between text-xs text-white/60 day:text-gray-600';
+    'mt-1.5 flex w-full justify-between font-sans text-[11px] font-medium tabular-nums text-white/50 day:text-[#786e61]';
   const cropSectionClass =
-    'rounded-lg border border-white/10 bg-[#171717] p-3 shadow-lg shadow-black/15 day:border-gray-200 day:bg-white';
+    'rounded-xl border border-white/10 bg-[#161412] p-3.5 shadow-sm day:border-[#dfd7ca] day:bg-white day:shadow-[0_2px_8px_rgba(40,30,20,0.04)]';
   const cropAdjustButtonClass =
-    'flex h-7 items-center justify-center gap-2 rounded-md border border-white/10 bg-white/[0.08] px-3 text-xs font-semibold text-white/75 transition-colors hover:border-[#D7B356]/50 hover:bg-white/[0.13] hover:text-white day:border-gray-200 day:bg-gray-100 day:text-gray-600 day:hover:bg-gray-200 day:hover:text-gray-900';
+    'flex h-8 items-center justify-center gap-2 rounded-lg border border-white/10 bg-white/[0.04] px-3 font-sans text-xs font-semibold text-white/80 transition-all hover:border-[#c49a45] hover:bg-[#c49a45]/15 hover:text-[#f0d89f] day:border-[#dfd7ca] day:bg-white day:text-[#5a5248] day:hover:border-[#9a742f] day:hover:bg-[#f7f4ee] day:hover:text-[#1a1714] day:shadow-sm';
   const cropToolButtonClass =
-    'flex h-7 items-center justify-center rounded-md border border-white/10 bg-white/[0.08] px-2 text-xs font-semibold text-white/85 transition-colors hover:border-[#D7B356]/50 hover:bg-white/[0.13] hover:text-white day:border-gray-200 day:bg-gray-100 day:text-gray-900 day:hover:bg-gray-200';
+    'flex h-8 items-center justify-center rounded-lg border border-white/10 bg-white/[0.04] px-2.5 font-sans text-xs font-semibold text-white/80 transition-all hover:border-[#c49a45] hover:bg-[#c49a45]/15 hover:text-[#f0d89f] day:border-[#dfd7ca] day:bg-white day:text-[#5a5248] day:hover:border-[#9a742f] day:hover:bg-[#f7f4ee] day:hover:text-[#1a1714] day:shadow-sm';
 
   // Callback to update crop area from CropCanvas
   const updateCropAreaCallback = (newCropArea: typeof cropArea) => {
@@ -876,227 +876,62 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
           onChange={handleUpdateUpload}
           className="hidden"
         />
-        <div className="day:text-gray-900 px-1 pt-1 text-sm font-semibold text-white">
-          {selectedImage.typeName}
+
+        {/* Back to all images navigation bar */}
+        <div className="flex items-center justify-between px-1">
+          <button
+            type="button"
+            onClick={() => setSelectedImageId(null)}
+            className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-white/70 transition-colors hover:text-[#c49a45] day:text-[#6a6156] day:hover:text-[#9a742f]"
+          >
+            <ChevronLeftIcon className="h-3.5 w-3.5" />
+            All Images ({selectedImages.length})
+          </button>
+          <span className="rounded-md border border-[#c49a45]/30 bg-[#c49a45]/10 px-2 py-0.5 font-sans text-xs font-medium text-[#f0d89f] day:border-[#9a742f]/30 day:bg-[#9a742f]/10 day:text-[#9a742f]">
+            Selected
+          </span>
         </div>
-        <div className="flex items-center gap-3 px-1 pt-1">
-          <label className={`${labelClass} shrink-0`}>Size</label>
-          {hasFixedSizes ? (
-            <select
-              value={currentSizeVariant}
-              onChange={(e) => applyFixedSizeVariant(Number(e.target.value))}
-              className="day:border-gray-300 day:bg-gray-100 day:text-gray-900 min-w-0 flex-1 rounded-md border border-white/10 bg-[#121212] px-3 py-2 text-sm font-semibold text-white outline-none focus:border-[#D7B356]"
-            >
-              {sizeOptions.map((size, index) => (
-                <option key={size.label} value={index + 1}>
-                  {formatImageSize(size.height * aspectRatio, size.height)}
-                </option>
-              ))}
-            </select>
-          ) : (
-            <span className="day:text-gray-600 min-w-0 flex-1 text-right text-sm font-medium text-white/65">
-              {formatImageSize(selectedImage.widthMm, selectedImage.heightMm)}
-            </span>
-          )}
-        </div>
-        <div className="space-y-3">
-          {/* Size Slider */}
-          <div className={hasFixedSizes ? 'hidden' : 'px-1 pt-1'}>
+
+        {/* Image Info & Size Card */}
+        <div className={sectionCardClass}>
+          <div className="flex items-center gap-3">
+            <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-lg border border-white/10 bg-[#0c0b0a] day:border-[#dfd7ca] day:bg-[#ede7dc]">
+              <Image
+                src={selectedImage.imageUrl}
+                alt={selectedImage.typeName}
+                fill
+                className="object-cover"
+                unoptimized
+              />
+            </div>
+            <div className="min-w-0 flex-1">
+              <h3 className="font-serif text-base font-medium text-white day:text-[#1a1714]">
+                {selectedImage.typeName}
+              </h3>
+              <p className="font-sans text-xs text-white/60 day:text-[#6a6156]">
+                {formatImageSize(selectedImage.widthMm, selectedImage.heightMm)}
+              </p>
+            </div>
+          </div>
+
+          <div className="mt-3 border-t border-white/10 pt-3 day:border-[#dfd7ca]">
+            <div className="mb-2 font-sans text-xs font-semibold tracking-wider text-[#c49a45] uppercase day:text-[#9a742f]">
+              Size
+            </div>
             {hasFixedSizes ? (
-              <>
-                <div className="flex items-center justify-between gap-2">
-                  <label className={labelClass}>Size</label>
-                  <div className="flex items-center justify-end gap-2">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        const newSize = Math.max(1, currentSizeVariant - 1);
-                        updateImageSizeVariant(selectedImageId, newSize);
-                        if (hasFixedSizes) {
-                          const dims = sizeOptions[newSize - 1];
-                          const selectedImg = selectedImages.find(
-                            (img) => img.id === selectedImageId,
-                          );
-                          const aspectRatio =
-                            selectedImg?.croppedAspectRatio ||
-                            dims.width / dims.height;
-                          const scaledHeight = dims.height;
-                          const scaledWidth = scaledHeight * aspectRatio;
-                          updateImageSize(
-                            selectedImageId,
-                            scaledWidth,
-                            scaledHeight,
-                          );
-                        }
-                      }}
-                      className={controlButtonClass}
-                      aria-label="Decrease size"
-                    >
-                      <svg
-                        className="h-4 w-4"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M20 12H4"
-                        />
-                      </svg>
-                    </button>
-                    <input
-                      type="number"
-                      min={1}
-                      max={maxSize}
-                      step={1}
-                      value={currentSizeVariant}
-                      onChange={(e) => {
-                        const val = parseInt(e.target.value);
-                        if (!isNaN(val) && val >= 1 && val <= maxSize) {
-                          updateImageSizeVariant(selectedImageId, val);
-                          if (hasFixedSizes) {
-                            const dims = sizeOptions[val - 1];
-                            const selectedImg = selectedImages.find(
-                              (img) => img.id === selectedImageId,
-                            );
-                            const aspectRatio =
-                              selectedImg?.croppedAspectRatio ||
-                              dims.width / dims.height;
-                            const scaledHeight = dims.height;
-                            const scaledWidth = scaledHeight * aspectRatio;
-                            updateImageSize(
-                              selectedImageId,
-                              scaledWidth,
-                              scaledHeight,
-                            );
-                          }
-                        }
-                      }}
-                      onBlur={(e) => {
-                        const val = parseInt(e.target.value);
-                        if (isNaN(val) || val < 1) {
-                          updateImageSizeVariant(selectedImageId, 1);
-                          if (hasFixedSizes) {
-                            const dims = sizeOptions[0];
-                            const selectedImg = selectedImages.find(
-                              (img) => img.id === selectedImageId,
-                            );
-                            const aspectRatio =
-                              selectedImg?.croppedAspectRatio ||
-                              dims.width / dims.height;
-                            const scaledHeight = dims.height;
-                            const scaledWidth = scaledHeight * aspectRatio;
-                            updateImageSize(
-                              selectedImageId,
-                              scaledWidth,
-                              scaledHeight,
-                            );
-                          }
-                        } else if (val > maxSize) {
-                          updateImageSizeVariant(selectedImageId, maxSize);
-                          if (hasFixedSizes) {
-                            const dims = sizeOptions[maxSize - 1];
-                            const selectedImg = selectedImages.find(
-                              (img) => img.id === selectedImageId,
-                            );
-                            const aspectRatio =
-                              selectedImg?.croppedAspectRatio ||
-                              dims.width / dims.height;
-                            const scaledHeight = dims.height;
-                            const scaledWidth = scaledHeight * aspectRatio;
-                            updateImageSize(
-                              selectedImageId,
-                              scaledWidth,
-                              scaledHeight,
-                            );
-                          }
-                        }
-                      }}
-                      className={`${numberInputBaseClass} w-16`}
-                    />
-                    <button
-                      type="button"
-                      onClick={() => {
-                        const newSize = Math.min(
-                          maxSize,
-                          currentSizeVariant + 1,
-                        );
-                        updateImageSizeVariant(selectedImageId, newSize);
-                        if (hasFixedSizes) {
-                          const dims = sizeOptions[newSize - 1];
-                          const selectedImg = selectedImages.find(
-                            (img) => img.id === selectedImageId,
-                          );
-                          const aspectRatio =
-                            selectedImg?.croppedAspectRatio ||
-                            dims.width / dims.height;
-                          const scaledHeight = dims.height;
-                          const scaledWidth = scaledHeight * aspectRatio;
-                          updateImageSize(
-                            selectedImageId,
-                            scaledWidth,
-                            scaledHeight,
-                          );
-                        }
-                      }}
-                      className={controlButtonClass}
-                      aria-label="Increase size"
-                    >
-                      <svg
-                        className="h-4 w-4"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M12 4v16m8-8H4"
-                        />
-                      </svg>
-                    </button>
-                  </div>
-                </div>
-                <div className="relative mt-3">
-                  <DesignerRangeInput
-                    type="range"
-                    min={1}
-                    max={maxSize}
-                    step={1}
-                    value={currentSizeVariant}
-                    onChange={(e) => {
-                      const newSize = parseInt(e.target.value);
-                      updateImageSizeVariant(selectedImageId, newSize);
-                      if (hasFixedSizes) {
-                        const dims = sizeOptions[newSize - 1];
-                        const selectedImg = selectedImages.find(
-                          (img) => img.id === selectedImageId,
-                        );
-                        const aspectRatio =
-                          selectedImg?.croppedAspectRatio ||
-                          dims.width / dims.height;
-                        const scaledHeight = dims.height;
-                        const scaledWidth = scaledHeight * aspectRatio;
-                        updateImageSize(
-                          selectedImageId,
-                          scaledWidth,
-                          scaledHeight,
-                        );
-                      }
-                    }}
-                    className={rangeInputClass}
-                  />
-                  <div className={rangeBoundsClass}>
-                    <span>Size 1</span>
-                    <span>Size {maxSize}</span>
-                  </div>
-                </div>
-              </>
+              <select
+                value={currentSizeVariant}
+                onChange={(e) => applyFixedSizeVariant(Number(e.target.value))}
+                className="w-full rounded-lg border border-white/10 bg-white/[0.04] px-3 py-2 font-sans text-xs font-semibold text-white transition-colors outline-none focus:border-[#c49a45] focus:ring-2 focus:ring-[#c49a45]/20 day:border-[#dfd7ca] day:bg-[#f7f4ee] day:text-[#1a1714] day:focus:border-[#9a742f] day:shadow-sm [&>option]:bg-white [&>option]:text-gray-900"
+              >
+                {sizeOptions.map((size, index) => (
+                  <option key={size.label} value={index + 1}>
+                    {formatImageSize(size.height * aspectRatio, size.height)}
+                  </option>
+                ))}
+              </select>
             ) : (
-              <>
+              <div>
                 <div className="flex items-center justify-between gap-2">
                   <label className={labelClass}>Height</label>
                   <div className="flex items-center justify-end gap-2">
@@ -1145,7 +980,7 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                       }}
                       className={`${numberInputBaseClass} w-20`}
                     />
-                    <span className="day:text-gray-600 text-sm font-semibold text-white/70">
+                    <span className="font-sans text-xs text-white/70 day:text-[#6a6156]">
                       {lengthUnit}
                     </span>
                     <button
@@ -1196,279 +1031,291 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                     </span>
                   </div>
                 </div>
-              </>
+              </div>
             )}
           </div>
+        </div>
 
-          <div className={`${sectionCardClass} md:hidden`}>
-            <label className={labelClass}>Position</label>
-            <button
-              type="button"
-              onClick={() =>
-                updateSelectedImagePosition(0, selectedImage.yPos ?? 0)
-              }
-              className="mt-2 mb-3 flex w-full items-center justify-center gap-2 rounded-lg border border-[#D7B356]/70 bg-transparent px-3 py-2 text-sm font-semibold text-[#F2D58B] transition-colors hover:bg-[#D7B356]/15"
-            >
-              <span aria-hidden="true">↔</span>
-              Center horizontally
-            </button>
-            <div className="grid grid-cols-3 place-items-center gap-1">
-              <span />
-              <button
-                type="button"
-                aria-label="Move image up"
-                onClick={() =>
-                  updateSelectedImagePosition(
-                    selectedImage.xPos ?? 0,
-                    (selectedImage.yPos ?? 0) + imagePositionStep,
-                  )
-                }
-                className={`${controlButtonClass} active:scale-90 active:bg-[#D7B356]/20`}
-              >
-                <svg
-                  className="h-4 w-4"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth={2.5}
+        {/* Rotation Card */}
+        <div className={sectionCardClass}>
+          <div className="flex items-center justify-between">
+            <div className="font-sans text-xs font-semibold tracking-wider text-[#c49a45] uppercase day:text-[#9a742f]">
+              Rotation
+            </div>
+            <div className="flex items-center gap-2">
+              {imageRotationDeg !== 0 && (
+                <button
+                  type="button"
+                  onClick={() => updateImageRotationDegrees(0)}
+                  className="rounded border border-[#c49a45]/50 px-2 py-0.5 text-xs font-semibold text-[#f0d89f] transition-colors hover:bg-[#c49a45]/15 day:border-[#9a742f]/40 day:text-[#9a742f] day:hover:bg-[#9a742f]/10"
                 >
-                  <path
-                    d="m18 15-6-6-6 6"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </button>
-              <span />
-              <button
-                type="button"
-                aria-label="Move image left"
-                onClick={() =>
-                  updateSelectedImagePosition(
-                    (selectedImage.xPos ?? 0) - imagePositionStep,
-                    selectedImage.yPos ?? 0,
-                  )
-                }
-                className={`${controlButtonClass} active:scale-90 active:bg-[#D7B356]/20`}
-              >
-                <svg
-                  className="h-4 w-4"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth={2.5}
-                >
-                  <path
-                    d="m15 18-6-6 6-6"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </button>
-              <button
-                type="button"
-                onClick={() =>
-                  setNudgeStepIndex((index) => (index + 1) % nudgeSteps.length)
-                }
-                className="rounded px-1.5 py-1 text-xs font-semibold text-[#F2D58B] hover:bg-[#D7B356]/15"
-              >
-                {nudgeStep.label}
-              </button>
-              <button
-                type="button"
-                aria-label="Move image right"
-                onClick={() =>
-                  updateSelectedImagePosition(
-                    (selectedImage.xPos ?? 0) + imagePositionStep,
-                    selectedImage.yPos ?? 0,
-                  )
-                }
-                className={`${controlButtonClass} active:scale-90 active:bg-[#D7B356]/20`}
-              >
-                <svg
-                  className="h-4 w-4"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth={2.5}
-                >
-                  <path
-                    d="m9 18 6-6-6-6"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </button>
-              <span />
-              <button
-                type="button"
-                aria-label="Move image down"
-                onClick={() =>
-                  updateSelectedImagePosition(
-                    selectedImage.xPos ?? 0,
-                    (selectedImage.yPos ?? 0) - imagePositionStep,
-                  )
-                }
-                className={`${controlButtonClass} active:scale-90 active:bg-[#D7B356]/20`}
-              >
-                <svg
-                  className="h-4 w-4"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth={2.5}
-                >
-                  <path
-                    d="m6 9 6 6 6-6"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </button>
-              <span />
+                  Reset 0°
+                </button>
+              )}
+              <span className="rounded-md border border-white/10 bg-white/[0.06] px-2 py-0.5 font-sans text-xs font-semibold tabular-nums text-white/70 day:border-[#dfd7ca] day:bg-[#f7f4ee] day:text-[#6a6156]">
+                {Math.round(imageRotationDeg)}°
+              </span>
             </div>
           </div>
-
-          {/* Rotation Slider */}
-          <div className="hidden px-1 pt-1 md:block">
-            <div className="flex items-center justify-between gap-2">
-              <div className="flex items-center gap-2">
-                <label className={labelClass}>Rotation</label>
-                {imageRotationDeg !== 0 && (
-                  <button
-                    type="button"
-                    onClick={() => updateImageRotationDegrees(0)}
-                    className="rounded border border-[#D7B356]/60 px-2 py-1 text-xs font-semibold text-[#F2D58B] hover:bg-[#D7B356]/15"
-                  >
-                    Reset 0°
-                  </button>
-                )}
-              </div>
-              <div className="flex items-center justify-end gap-2">
-                <button
-                  type="button"
-                  onClick={() => {
-                    updateImageRotationDegrees(
-                      Math.max(-180, imageRotationDeg - 1),
-                    );
-                  }}
-                  className={controlButtonClass}
-                  aria-label="Decrease rotation by 1 degree"
-                >
-                  <svg
-                    className="h-4 w-4"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M20 12H4"
-                    />
-                  </svg>
-                </button>
-                <input
-                  type="number"
-                  min={-180}
-                  max={180}
-                  step={1}
-                  value={Math.round(imageRotationDeg)}
-                  onChange={(e) => {
-                    updateImageRotationDegrees(
-                      snapImageRotation(Number(e.target.value)),
-                    );
-                  }}
-                  onBlur={(e) => {
-                    const val = Number(e.target.value);
-                    if (val < -180) {
-                      updateImageRotationDegrees(-180);
-                    } else if (val > 180) {
-                      updateImageRotationDegrees(180);
-                    }
-                  }}
-                  className={`${numberInputBaseClass} w-16`}
+          <div className="mt-3 flex items-center justify-end gap-2">
+            <button
+              type="button"
+              onClick={() => {
+                updateImageRotationDegrees(
+                  Math.max(-180, imageRotationDeg - 1),
+                );
+              }}
+              className={controlButtonClass}
+              aria-label="Decrease rotation by 1 degree"
+            >
+              <svg
+                className="h-4 w-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M20 12H4"
                 />
-                <button
-                  type="button"
-                  onClick={() => {
-                    updateImageRotationDegrees(
-                      Math.min(180, imageRotationDeg + 1),
-                    );
-                  }}
-                  className={controlButtonClass}
-                  aria-label="Increase rotation by 1 degree"
-                >
-                  <svg
-                    className="h-4 w-4"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M12 4v16m8-8H4"
-                    />
-                  </svg>
-                </button>
-                <span className="day:text-gray-600 text-sm font-semibold text-white/70">
-                  °
-                </span>
-              </div>
-            </div>
-            <div className="relative mt-3">
-              <DesignerRangeInput
-                type="range"
-                min={-180}
-                max={180}
-                step={1}
-                value={imageRotationDeg}
-                onChange={(e) => {
-                  updateImageRotationDegrees(
-                    snapImageRotation(Number(e.target.value)),
-                  );
-                }}
-                className={rangeInputClass}
-              />
-              <div className={rangeBoundsClass}>
-                <span>-180°</span>
-                <span>180°</span>
-              </div>
+              </svg>
+            </button>
+            <input
+              type="number"
+              min={-180}
+              max={180}
+              step={1}
+              value={Math.round(imageRotationDeg)}
+              onChange={(e) => {
+                updateImageRotationDegrees(
+                  snapImageRotation(Number(e.target.value)),
+                );
+              }}
+              onBlur={(e) => {
+                const val = Number(e.target.value);
+                if (val < -180) {
+                  updateImageRotationDegrees(-180);
+                } else if (val > 180) {
+                  updateImageRotationDegrees(180);
+                }
+              }}
+              className={`${numberInputBaseClass} w-16 text-center`}
+            />
+            <button
+              type="button"
+              onClick={() => {
+                updateImageRotationDegrees(
+                  Math.min(180, imageRotationDeg + 1),
+                );
+              }}
+              className={controlButtonClass}
+              aria-label="Increase rotation by 1 degree"
+            >
+              <svg
+                className="h-4 w-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 4v16m8-8H4"
+                />
+              </svg>
+            </button>
+            <span className="font-sans text-xs text-white/70 day:text-[#6a6156]">
+              °
+            </span>
+          </div>
+          <div className="relative mt-3">
+            <DesignerRangeInput
+              type="range"
+              min={-180}
+              max={180}
+              step={1}
+              value={imageRotationDeg}
+              onChange={(e) => {
+                updateImageRotationDegrees(
+                  snapImageRotation(Number(e.target.value)),
+                );
+              }}
+              className={rangeInputClass}
+            />
+            <div className={rangeBoundsClass}>
+              <span>-180°</span>
+              <span>0°</span>
+              <span>+180°</span>
             </div>
           </div>
         </div>
 
-        <div className="day:border-gray-200 grid grid-cols-3 gap-2 border-t border-white/10 pt-3">
+        {/* Position Nudge Controls (Available for fine tuning) */}
+        <div className={sectionCardClass}>
+          <div className="mb-2 font-sans text-xs font-semibold tracking-wider text-[#c49a45] uppercase day:text-[#9a742f]">
+            Position
+          </div>
           <button
             type="button"
-            className="cursor-pointer rounded-lg border border-[#D7B356]/70 bg-transparent px-3 py-2 text-sm font-semibold text-[#F2D58B] transition-colors hover:bg-[#D7B356]/15"
-            onClick={() => {
-              setUpdatingImageId(selectedImageId);
-              updateFileInputRef.current?.click();
-            }}
+            onClick={() =>
+              updateSelectedImagePosition(0, selectedImage.yPos ?? 0)
+            }
+            className="mb-3 flex w-full items-center justify-center gap-2 rounded-lg border border-white/10 bg-white/[0.04] px-3 py-2 text-xs font-semibold text-white/80 transition-all hover:border-[#c49a45] hover:bg-[#c49a45]/15 hover:text-[#f0d89f] day:border-[#dfd7ca] day:bg-[#f7f4ee] day:text-[#5a5248] day:hover:border-[#9a742f] day:hover:text-[#1a1714]"
           >
-            Update
+            <span aria-hidden="true">↔</span>
+            Center Horizontally
           </button>
-          <button
-            type="button"
-            className="day:bg-white day:text-[#8a6a12] cursor-pointer rounded-lg border border-[#D7B356]/60 bg-[#171717] px-3 py-2 text-sm font-semibold text-[#F2D58B] transition-colors hover:bg-[#D7B356]/15"
-            onClick={() => duplicateImage(selectedImageId)}
-          >
-            Duplicate
-          </button>
-          <button
-            type="button"
-            className="day:bg-white day:text-red-700 cursor-pointer rounded-lg border border-red-500/50 bg-[#171717] px-3 py-2 text-sm font-semibold text-red-200 transition-colors hover:bg-red-500/15"
-            onClick={() => {
-              removeImage(selectedImageId);
-              setSelectedImageId(null);
-            }}
-          >
-            Delete
-          </button>
+          <div className="grid grid-cols-3 place-items-center gap-1">
+            <span />
+            <button
+              type="button"
+              aria-label="Move image up"
+              onClick={() =>
+                updateSelectedImagePosition(
+                  selectedImage.xPos ?? 0,
+                  (selectedImage.yPos ?? 0) + imagePositionStep,
+                )
+              }
+              className={`${controlButtonClass} active:scale-90`}
+            >
+              <svg
+                className="h-4 w-4"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={2.5}
+              >
+                <path
+                  d="m18 15-6-6-6 6"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </button>
+            <span />
+            <button
+              type="button"
+              aria-label="Move image left"
+              onClick={() =>
+                updateSelectedImagePosition(
+                  (selectedImage.xPos ?? 0) - imagePositionStep,
+                  selectedImage.yPos ?? 0,
+                )
+              }
+              className={`${controlButtonClass} active:scale-90`}
+            >
+              <svg
+                className="h-4 w-4"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={2.5}
+              >
+                <path
+                  d="m15 18-6-6 6-6"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </button>
+            <button
+              type="button"
+              onClick={() =>
+                setNudgeStepIndex((index) => (index + 1) % nudgeSteps.length)
+              }
+              className="rounded px-2 py-1 text-xs font-semibold text-[#f0d89f] transition-colors hover:bg-[#c49a45]/15 day:text-[#9a742f]"
+            >
+              {nudgeStep.label}
+            </button>
+            <button
+              type="button"
+              aria-label="Move image right"
+              onClick={() =>
+                updateSelectedImagePosition(
+                  (selectedImage.xPos ?? 0) + imagePositionStep,
+                  selectedImage.yPos ?? 0,
+                )
+              }
+              className={`${controlButtonClass} active:scale-90`}
+            >
+              <svg
+                className="h-4 w-4"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={2.5}
+              >
+                <path
+                  d="m9 18 6-6-6-6"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </button>
+            <span />
+            <button
+              type="button"
+              aria-label="Move image down"
+              onClick={() =>
+                updateSelectedImagePosition(
+                  selectedImage.xPos ?? 0,
+                  (selectedImage.yPos ?? 0) - imagePositionStep,
+                )
+              }
+              className={`${controlButtonClass} active:scale-90`}
+            >
+              <svg
+                className="h-4 w-4"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={2.5}
+              >
+                <path
+                  d="m6 9 6 6 6-6"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </button>
+            <span />
+          </div>
+        </div>
+
+        {/* Action Buttons Card */}
+        <div className={sectionCardClass}>
+          <div className="grid grid-cols-3 gap-2">
+            <button
+              type="button"
+              className="flex cursor-pointer items-center justify-center gap-1.5 rounded-lg border border-[#c49a45]/60 bg-[#c49a45]/15 px-3 py-2.5 text-xs font-semibold uppercase tracking-wider text-[#f0d89f] transition-all hover:bg-[#c49a45]/25 day:border-[#9a742f]/40 day:bg-[#9a742f]/10 day:text-[#9a742f] day:hover:bg-[#9a742f]/20"
+              onClick={() => {
+                setUpdatingImageId(selectedImageId);
+                updateFileInputRef.current?.click();
+              }}
+            >
+              Update
+            </button>
+            <button
+              type="button"
+              className="flex cursor-pointer items-center justify-center gap-1.5 rounded-lg border border-white/10 bg-white/[0.04] px-3 py-2.5 text-xs font-semibold uppercase tracking-wider text-white transition-all hover:bg-white/10 day:border-[#dfd7ca] day:bg-[#f7f4ee] day:text-[#1a1714] day:hover:bg-[#ede7dc]"
+              onClick={() => duplicateImage(selectedImageId)}
+            >
+              Duplicate
+            </button>
+            <button
+              type="button"
+              className="flex cursor-pointer items-center justify-center gap-1.5 rounded-lg border border-red-500/30 bg-red-950/20 px-3 py-2.5 text-xs font-semibold uppercase tracking-wider text-red-300 transition-all hover:bg-red-900/30 day:border-red-200 day:bg-red-50 day:text-red-700"
+              onClick={() => {
+                removeImage(selectedImageId);
+                setSelectedImageId(null);
+              }}
+            >
+              Delete
+            </button>
+          </div>
         </div>
       </div>
     );
@@ -1500,16 +1347,16 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
       )}
       {!selectedType ? (
         <>
-          <div className="flex items-center justify-between">
-            <h3 className="day:text-gray-900 text-sm font-semibold text-white">
+          <div className="flex items-center justify-between pb-1">
+            <h3 className="font-serif text-sm font-normal text-white day:text-[#1a1714]">
               Select image type
             </h3>
-            <span className="day:text-gray-600 text-sm text-white/60">
+            <span className="font-sans text-xs font-medium text-white/60 day:text-[#786e61]">
               {imageTypes.length} types
             </span>
           </div>
           <div className="custom-scrollbar flex-1 overflow-y-auto pr-1">
-            <div className="grid grid-cols-3 gap-3 p-1">
+            <div className="grid grid-cols-3 gap-2.5 p-1">
               {imageTypes.map((imageType) => {
                 const thumbnail =
                   IMAGE_THUMBNAILS[imageType.id] || '/jpg/photos/m.jpg';
@@ -1519,14 +1366,14 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                     key={imageType.id}
                     type="button"
                     onClick={() => handleImageTypeSelect(imageType)}
-                    className="group day:bg-white day:border-gray-200 relative flex min-h-[174px] cursor-pointer flex-col overflow-hidden rounded-lg border border-white/10 bg-[#171717] text-left shadow-lg shadow-black/15 transition-all hover:-translate-y-0.5 hover:border-[#D7B356]/60 hover:bg-white/[0.06] hover:shadow-[#D7B356]/10"
+                    className="group relative flex min-h-[174px] cursor-pointer flex-col overflow-hidden rounded-xl border border-white/10 bg-[#161412] text-left transition-all duration-300 hover:-translate-y-1 hover:border-[#c49a45]/70 hover:shadow-xl day:border-[#dfd7ca] day:bg-white day:shadow-[0_4px_16px_rgba(40,30,20,0.06)] day:hover:border-[#9a742f] day:hover:shadow-[0_10px_26px_rgba(40,30,20,0.12)]"
                   >
-                    <div className="day:bg-gray-100 relative aspect-square w-full overflow-hidden bg-[#0A0A0A]">
+                    <div className="relative aspect-square w-full overflow-hidden border-b border-white/8 bg-gradient-to-b from-[#1c1a17] to-[#141210] day:border-[#ebe4d8] day:bg-gradient-to-b day:from-[#f8f5ee] day:to-[#ede6d8]">
                       <Image
                         src={thumbnail}
                         alt={imageType.name}
                         fill
-                        className="object-cover transition-transform duration-300 group-hover:scale-105"
+                        className="object-cover transition-transform duration-500 ease-out will-change-transform group-hover:scale-110 motion-reduce:transition-none"
                         unoptimized
                         onError={(e) => {
                           const target = e.target as HTMLImageElement;
@@ -1534,8 +1381,8 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                         }}
                       />
                     </div>
-                    <div className="flex min-h-[66px] items-start p-3">
-                      <span className="day:text-gray-900 flex-1 text-xs leading-snug font-semibold whitespace-pre-line text-white">
+                    <div className="flex min-h-[58px] items-center justify-center p-2">
+                      <span className="line-clamp-2 text-center font-serif text-xs leading-snug font-normal text-white transition-colors group-hover:text-[#f0d89f] day:text-[#1a1714] day:group-hover:text-[#9a742f]">
                         {getImageTypeLabel(imageType.name)}
                       </span>
                     </div>
@@ -1551,21 +1398,9 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
             <div className="flex items-center justify-between">
               <button
                 onClick={handleBackToImageTypes}
-                className="day:text-gray-600 day:hover:text-gray-900 flex items-center gap-2 text-sm text-white/80 transition-colors hover:text-white"
+                className="flex items-center gap-1.5 font-sans text-xs font-semibold text-white/80 transition-colors hover:text-[#c49a45] day:text-[#5a5248] day:hover:text-[#9a742f]"
               >
-                <svg
-                  className="h-4 w-4"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M15 19l-7-7 7-7"
-                  />
-                </svg>
+                <ChevronLeftIcon className="h-4 w-4" />
                 Back to image types
               </button>
             </div>
@@ -1578,8 +1413,8 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
               }
             >
               {selectedType && !showCropSection && (
-                <div className="day:border-gray-200 day:bg-white flex items-center gap-3 rounded-lg border border-[#D7B356] bg-[#171717] p-3 shadow-lg shadow-[#D7B356]/10">
-                  <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-md bg-white/[0.04]">
+                <div className="flex items-center gap-3 rounded-xl border border-[#c49a45] bg-[#161412] p-3 shadow-md day:border-[#9a742f] day:bg-white day:shadow-[0_4px_16px_rgba(40,30,20,0.06)]">
+                  <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-lg border border-white/10 bg-white/[0.04] day:border-[#ebe4d8]">
                     <Image
                       src={
                         IMAGE_THUMBNAILS[selectedType.id] || '/jpg/photos/m.jpg'
@@ -1592,20 +1427,20 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                     />
                   </div>
                   <div className="min-w-0 flex-1">
-                    <div className="day:text-gray-500 text-[10px] font-semibold tracking-wide text-[#D7B356] uppercase">
+                    <div className="font-sans text-[10px] font-semibold tracking-wider text-[#c49a45] uppercase day:text-[#9a742f]">
                       Selected
                     </div>
-                    <div className="day:text-gray-900 text-sm leading-snug font-semibold whitespace-pre-line text-white">
+                    <div className="font-serif text-sm leading-snug font-normal text-white day:text-[#1a1714]">
                       {getImageTypeLabel(selectedType.name)}
                     </div>
                   </div>
-                  <CheckCircleIcon className="h-5 w-5 shrink-0 text-[#D7B356]" />
+                  <CheckCircleIcon className="h-5 w-5 shrink-0 text-[#c49a45] day:text-[#9a742f]" />
                 </div>
               )}
 
               {/* Upload Section */}
               {!showCropSection && (
-                <div className="day:border-gray-300 day:bg-white rounded-lg border border-dashed border-white/20 bg-[#171717] p-6 text-center shadow-lg shadow-black/15">
+                <div className="rounded-xl border border-dashed border-white/20 bg-[#161412] p-6 text-center transition-all hover:border-[#c49a45]/60 day:border-[#d6cebf] day:bg-white day:shadow-sm day:hover:border-[#9a742f]">
                   <input
                     type="file"
                     accept="image/*"
@@ -1619,7 +1454,7 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                   >
                     <div className="mb-4">
                       <svg
-                        className="day:text-gray-500 mx-auto h-12 w-12 text-gray-400"
+                        className="mx-auto h-12 w-12 text-stone-400 transition-colors group-hover:text-[#c49a45] day:text-[#8a8175] day:group-hover:text-[#9a742f]"
                         stroke="currentColor"
                         fill="none"
                         viewBox="0 0 48 48"
@@ -1632,11 +1467,11 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                         />
                       </svg>
                     </div>
-                    <div className="day:text-gray-900 mb-2 font-semibold text-white">
-                      Click to upload
+                    <div className="mb-1.5 font-serif text-base font-normal text-white day:text-[#1a1714]">
+                      Click to upload photo
                     </div>
-                    <div className="day:text-gray-500 text-sm text-gray-400">
-                      PNG, JPG, GIF up to 5MB
+                    <div className="font-sans text-xs text-stone-400 day:text-[#786e61]">
+                      PNG, JPG, WebP up to 5MB
                     </div>
                   </label>
                 </div>
@@ -1648,7 +1483,7 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                   {/* Step 1: Select Mask — hidden for Full Color Plaque (printed directly) */}
                   {productId !== '32' && (
                     <div className={cropSectionClass}>
-                      <div className="day:text-gray-500 mb-2 text-xs font-semibold tracking-wide text-white/45 uppercase">
+                      <div className="mb-2 font-sans text-xs font-semibold tracking-wider text-[#c49a45] uppercase day:text-[#9a742f]">
                         Step 1 · Mask
                       </div>
                       <div className="grid grid-cols-5 gap-1.5">
@@ -1666,10 +1501,10 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                             key={mask.id}
                             onClick={() => setSelectedMask(mask.id)}
                             title={mask.label}
-                            className={`h-12 rounded-md border-2 transition-all ${
+                            className={`h-12 rounded-lg border-2 transition-all ${
                               selectedMask === mask.id
-                                ? 'border-[#D7B356] bg-[#D7B356]/20 shadow-[0_0_0_2px_rgba(215,179,86,0.18)]'
-                                : 'day:border-gray-200 day:bg-white day:hover:border-gray-300 border-white/10 bg-white/[0.05] hover:border-[#D7B356]/50'
+                                ? 'border-[#c49a45] bg-[#c49a45]/20 shadow-[0_0_0_2px_rgba(196,154,69,0.2)]'
+                                : 'border-white/10 bg-white/[0.04] hover:border-[#c49a45]/50 day:border-[#dfd7ca] day:bg-white day:shadow-sm day:hover:border-[#9a742f]'
                             }`}
                           >
                             <div className="flex h-full items-center justify-center p-1">
@@ -1678,7 +1513,7 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                                 alt={mask.label}
                                 width={24}
                                 height={24}
-                                className="h-8 w-8 object-contain opacity-80"
+                                className="h-8 w-8 object-contain opacity-80 invert day:invert-0"
                                 unoptimized
                               />
                             </div>
@@ -1690,27 +1525,34 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
 
                   {/* Step 2: Color Mode */}
                   <div className={cropSectionClass}>
-                    <div className="day:text-gray-500 mb-2 text-xs font-semibold tracking-wide text-white/45 uppercase">
+                    <div className="mb-2 font-sans text-xs font-semibold tracking-wider text-[#c49a45] uppercase day:text-[#9a742f]">
                       Step 2 · Photo finish
                     </div>
-                    <select
-                      value={cropColorMode}
-                      onChange={(e) =>
-                        setCropColorMode(
-                          e.target.value as 'full' | 'bw' | 'sepia',
-                        )
-                      }
-                      disabled={isGraniteImage}
-                      className={`day:border-gray-300 day:bg-gray-100 day:text-gray-900 w-full rounded-lg border border-white/10 bg-white/[0.08] px-3 py-1.5 text-sm font-semibold text-white transition-colors outline-none focus:border-[#D7B356] focus:ring-2 focus:ring-[#D7B356]/30 [&>option]:bg-white [&>option]:text-gray-900 ${
-                        isGraniteImage ? 'cursor-not-allowed opacity-60' : ''
-                      }`}
-                    >
-                      <option value="full">Full color</option>
-                      <option value="bw">Black & White</option>
-                      <option value="sepia">Sepia</option>
-                    </select>
+                    <div className="grid grid-cols-3 gap-2">
+                      {(
+                        [
+                          { id: 'full', label: 'Full Color' },
+                          { id: 'bw', label: 'B & W' },
+                          { id: 'sepia', label: 'Sepia' },
+                        ] as const
+                      ).map((mode) => (
+                        <button
+                          key={mode.id}
+                          type="button"
+                          onClick={() => setCropColorMode(mode.id)}
+                          disabled={isGraniteImage && mode.id !== 'bw'}
+                          className={`flex h-9 items-center justify-center rounded-lg border text-xs font-medium transition-all ${
+                            cropColorMode === mode.id
+                              ? 'border-[#c49a45] bg-[#c49a45]/20 text-[#f0d89f] shadow-sm day:border-[#9a742f] day:bg-[#9a742f]/15 day:text-[#9a742f]'
+                              : 'border-white/10 bg-white/[0.04] text-white/70 hover:border-white/20 hover:text-white day:border-[#dfd7ca] day:bg-white day:text-[#5a5248] day:hover:border-[#9a742f] day:hover:text-[#1a1714]'
+                          } ${isGraniteImage && mode.id !== 'bw' ? 'cursor-not-allowed opacity-40' : ''}`}
+                        >
+                          {mode.label}
+                        </button>
+                      ))}
+                    </div>
                     {isGraniteImage && (
-                      <div className="day:text-gray-500 mt-2 text-xs text-white/60">
+                      <div className="mt-2 font-sans text-xs text-white/60 day:text-[#6a6156]">
                         Granite images are laser etched and limited to Black &
                         White.
                       </div>
@@ -1719,17 +1561,17 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
 
                   {/* Step 3: Position and Resize */}
                   <div className={cropSectionClass}>
-                    <div className="day:text-gray-500 mb-2 text-xs font-semibold tracking-wide text-white/45 uppercase">
+                    <div className="mb-2 font-sans text-xs font-semibold tracking-wider text-[#c49a45] uppercase day:text-[#9a742f]">
                       Step 3 · Crop area
                     </div>
 
                     {/* Size Slider - controls mask height */}
-                    <div className="day:border-gray-200 day:bg-gray-50 rounded-lg border border-white/10 bg-white/[0.04] p-2.5">
+                    <div className="rounded-lg border border-white/10 bg-white/[0.04] p-3 day:border-[#dfd7ca] day:bg-[#f7f4ee]">
                       <div className="flex items-center justify-between text-sm">
-                        <span className="day:text-gray-900 font-semibold text-white">
+                        <span className="font-serif text-sm font-normal text-white day:text-[#1a1714]">
                           Size
                         </span>
-                        <span className="day:border-gray-200 day:bg-white day:text-gray-500 rounded-md border border-white/10 bg-white/[0.06] px-2 py-1 text-xs font-semibold text-white/65">
+                        <span className="rounded-md border border-white/10 bg-white/[0.06] px-2 py-0.5 font-sans text-xs font-semibold tabular-nums text-white/70 day:border-[#dfd7ca] day:bg-white day:text-[#6a6156]">
                           {Math.round(cropArea.height)}%
                         </span>
                       </div>
@@ -1878,12 +1720,12 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                     </div>
 
                     {/* Rotation (always available) */}
-                    <div className="day:border-gray-200 day:bg-gray-50 mt-2.5 rounded-lg border border-white/10 bg-white/[0.04] p-2.5">
+                    <div className="mt-2.5 rounded-lg border border-white/10 bg-white/[0.04] p-3 day:border-[#dfd7ca] day:bg-[#f7f4ee]">
                       <div className="flex items-center justify-between text-sm">
-                        <span className="day:text-gray-900 font-semibold text-white">
+                        <span className="font-serif text-sm font-normal text-white day:text-[#1a1714]">
                           Rotation
                         </span>
-                        <span className="day:border-gray-200 day:bg-white day:text-gray-500 rounded-md border border-white/10 bg-white/[0.06] px-2 py-1 text-xs font-semibold text-white/65">
+                        <span className="rounded-md border border-white/10 bg-white/[0.06] px-2 py-0.5 font-sans text-xs font-semibold tabular-nums text-white/70 day:border-[#dfd7ca] day:bg-white day:text-[#6a6156]">
                           {cropRotation}°
                         </span>
                       </div>
@@ -1935,17 +1777,17 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                     </div>
                   </div>
 
-                  <div className="day:border-gray-200 border-t border-white/10 pt-2">
+                  <div className="space-y-2 border-t border-white/10 pt-3 day:border-[#dfd7ca]">
                     {/* Crop Button */}
                     <button
                       onClick={handleCropImage}
                       disabled={isCropping}
-                      className="flex w-full items-center justify-center gap-2 rounded-lg border border-[#D7B356] bg-[#D7B356] px-4 py-2.5 font-semibold text-black transition-colors hover:bg-[#E4C778] disabled:cursor-not-allowed disabled:opacity-70"
+                      className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#c49a45] px-4 py-3 font-sans text-xs font-semibold uppercase tracking-wider text-[#121110] shadow-md transition-all hover:bg-[#d5ad55] day:bg-[#9a742f] day:text-white day:hover:bg-[#856325] disabled:cursor-not-allowed disabled:opacity-50"
                     >
                       {isCropping ? (
                         <>
                           <svg
-                            className="h-5 w-5 animate-spin"
+                            className="h-4 w-4 animate-spin"
                             fill="none"
                             viewBox="0 0 24 24"
                           >
@@ -1968,7 +1810,7 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                       ) : (
                         <>
                           <svg
-                            className="h-5 w-5"
+                            className="h-4 w-4"
                             fill="none"
                             viewBox="0 0 24 24"
                             stroke="currentColor"
@@ -1981,36 +1823,34 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                             />
                           </svg>
                           {updatingImageId
-                            ? 'Update Cropped Image on Headstone'
+                            ? 'Update Cropped Image'
                             : 'Add Cropped Image to Headstone'}
                         </>
                       )}
                     </button>
 
-                    <div className="mt-2">
-                      <button
-                        onClick={() => {
-                          resetCropState();
-                          setUpdatingImageId(null);
-                        }}
-                        className="day:bg-white day:text-red-700 flex w-full items-center justify-center gap-2 rounded-lg border border-red-500/50 bg-[#171717] px-3 py-2 text-sm font-semibold text-red-200 transition-colors hover:bg-red-500/15"
+                    <button
+                      onClick={() => {
+                        resetCropState();
+                        setUpdatingImageId(null);
+                      }}
+                      className="flex w-full items-center justify-center gap-2 rounded-xl border border-red-500/30 bg-red-950/20 px-3 py-2.5 font-sans text-xs font-medium uppercase tracking-wider text-red-300 transition-colors hover:bg-red-900/30 day:border-red-200 day:bg-red-50 day:text-red-700"
+                    >
+                      <svg
+                        className="h-4 w-4"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
                       >
-                        <svg
-                          className="h-4 w-4"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                          />
-                        </svg>
-                        Cancel
-                      </button>
-                    </div>
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                        />
+                      </svg>
+                      Cancel Crop
+                    </button>
                   </div>
                 </div>
               )}
@@ -2018,16 +1858,16 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
               {/* Currently Added Images */}
               {selectedImages.length > 0 && (
                 <div className={sectionCardClass}>
-                  <h4 className="day:text-gray-900 mb-3 text-sm font-semibold text-white">
+                  <h4 className="day:text-[#1a1714] mb-3 text-sm font-medium uppercase tracking-wider text-white/80">
                     Added Images ({selectedImages.length})
                   </h4>
                   <div className="space-y-2">
                     {selectedImages.map((img) => (
                       <div
                         key={img.id}
-                        className="day:border-gray-200 day:bg-gray-50 flex items-center gap-3 rounded-lg border border-white/10 bg-white/[0.05] p-3"
+                        className="day:border-[#dfd7ca] day:bg-white/80 flex items-center gap-3 rounded-xl border border-white/10 bg-[#161412] p-3 shadow-xs"
                       >
-                        <div className="day:bg-gray-100 relative h-12 w-12 overflow-hidden rounded bg-gray-800">
+                        <div className="day:bg-[#ede7dc] day:border-[#dfd7ca] relative h-12 w-12 overflow-hidden rounded-lg border border-white/10 bg-[#0c0b0a]">
                           <Image
                             src={img.imageUrl}
                             alt={img.typeName}
@@ -2037,10 +1877,10 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                           />
                         </div>
                         <div className="min-w-0 flex-1">
-                          <div className="day:text-gray-900 text-sm font-medium text-white">
+                          <div className="day:text-[#1a1714] text-sm font-serif font-medium text-white">
                             {img.typeName}
                           </div>
-                          <div className="day:text-gray-500 text-xs text-gray-400">
+                          <div className="day:text-[#6a6156] text-xs text-white/50">
                             {formatImageSize(img.widthMm, img.heightMm)}
                           </div>
                         </div>

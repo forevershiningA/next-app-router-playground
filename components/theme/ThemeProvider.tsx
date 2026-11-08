@@ -30,26 +30,25 @@ export function useTheme() {
 
 /** Read stored theme from localStorage (client-only, safe for lazy useState init). */
 function readStoredTheme(): UiTheme {
-  if (typeof window === 'undefined') return 'dark';
+  if (typeof window === 'undefined') return 'day';
   try {
     const stored = localStorage.getItem(LS_KEY);
-    return stored === 'day' ? 'day' : 'dark';
+    return stored === 'dark' ? 'dark' : 'day';
   } catch {
-    return 'dark';
+    return 'day';
   }
 }
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  // Start with 'dark' to match SSR; sync from localStorage after mount to avoid hydration mismatch.
-  const [theme, setThemeState] = useState<UiTheme>('dark');
+  // Start with 'day' to match SSR; sync from localStorage after mount to avoid hydration mismatch.
+  const [theme, setThemeState] = useState<UiTheme>('day');
 
   // On mount: read localStorage and align state + DOM attribute.
   useEffect(() => {
     const stored = readStoredTheme();
-    if (stored !== 'dark') {
-      setThemeState(stored);
-      document.documentElement.setAttribute('data-theme', stored);
-    }
+    setThemeState(stored);
+    document.documentElement.setAttribute('data-theme', stored);
+    document.documentElement.style.colorScheme = stored === 'dark' ? 'dark' : 'light';
   }, []);
 
   const setTheme = useCallback((t: UiTheme) => {
@@ -58,6 +57,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       localStorage.setItem(LS_KEY, t);
     } catch {}
     document.documentElement.setAttribute('data-theme', t);
+    document.documentElement.style.colorScheme = t === 'dark' ? 'dark' : 'light';
   }, []);
 
   const toggleTheme = useCallback(() => {
@@ -67,6 +67,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
         localStorage.setItem(LS_KEY, next);
       } catch {}
       document.documentElement.setAttribute('data-theme', next);
+      document.documentElement.style.colorScheme = next === 'dark' ? 'dark' : 'light';
       return next;
     });
   }, []);

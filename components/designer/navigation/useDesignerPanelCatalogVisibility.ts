@@ -42,10 +42,7 @@ export function useDesignerPanelCatalogVisibility({
   const isMotifCatalogVisible =
     activeFullscreenPanel === 'select-motifs' &&
     (forceMotifCatalog || !selectedMotifId);
-  const shouldShowBackToListButton =
-    (activeFullscreenPanel === 'select-additions' &&
-      !isAdditionCatalogVisible) ||
-    (activeFullscreenPanel === 'select-motifs' && !isMotifCatalogVisible);
+  const shouldShowBackToListButton = false;
 
   return {
     isAdditionCatalogVisible,

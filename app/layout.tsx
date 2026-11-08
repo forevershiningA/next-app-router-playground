@@ -56,15 +56,15 @@ export default function RootLayout({
   return (
     <html
       lang="en-US"
-      data-theme="dark"
-      className="[color-scheme:dark]"
+      data-theme="day"
+      className="[color-scheme:light]"
       suppressHydrationWarning
     >
       {/* Prevent flash-of-unstyled-content: read theme from localStorage before first paint */}
       <head>
         <script
           dangerouslySetInnerHTML={{
-            __html: `(function(){try{var t=localStorage.getItem('fs_ui_theme');if(t==='day'){document.documentElement.setAttribute('data-theme','day');document.documentElement.style.colorScheme='light';}}catch(e){}})();`,
+            __html: `(function(){try{var t=localStorage.getItem('fs_ui_theme');if(t==='dark'){document.documentElement.setAttribute('data-theme','dark');document.documentElement.style.colorScheme='dark';}else{document.documentElement.setAttribute('data-theme','day');document.documentElement.style.colorScheme='light';}}catch(e){}})();`,
           }}
         />
       </head>

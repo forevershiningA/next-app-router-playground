@@ -76,7 +76,7 @@ export function SizeTargetSelector({
               aria-label="Headstone style"
               className="flex items-center gap-2 px-1 py-1"
             >
-              <span className="mr-auto text-xs font-medium text-[var(--designer-text-muted)]">
+              <span className="mr-auto font-serif text-sm font-normal text-white day:text-[#1a1714]">
                 Style
               </span>
               {[
@@ -86,11 +86,11 @@ export function SizeTargetSelector({
                 <DesignerOptionButton
                   key={option.value}
                   selected={headstoneStyle === option.value}
-                  variant="soft"
+                  variant="solid"
                   onClick={() =>
                     setHeadstoneStyle(option.value as 'upright' | 'slant')
                   }
-                  className="min-w-20 rounded-md px-3 py-1.5 text-xs font-semibold"
+                  className="min-w-20 rounded-lg px-3 py-1.5 font-sans text-xs font-semibold"
                 >
                   {option.label}
                 </DesignerOptionButton>

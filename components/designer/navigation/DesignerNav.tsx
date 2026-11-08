@@ -152,7 +152,7 @@ export default function DesignerNav() {
   });
 
   return (
-    <nav className="day:bg-[#eee9df] day:text-[#1d1a17] fs-designer-nav flex h-full min-h-0 flex-col overflow-hidden bg-[#1d1a17] text-white">
+    <nav className="day:bg-[#f5f1e8] day:text-[#1a1714] fs-designer-nav flex h-full min-h-0 flex-col overflow-hidden bg-[#141210] text-white">
       {/* Full-Screen Panel Overlay */}
       {shouldShowFullscreenPanel ? (
         <DesignerFullscreenPanelView

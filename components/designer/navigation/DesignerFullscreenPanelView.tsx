@@ -58,7 +58,7 @@ export default function DesignerFullscreenPanelView({
             : title;
 
   return (
-    <div className="day:bg-[#eee9df] flex h-full min-h-0 flex-col bg-[#1d1a17]">
+    <div className="day:bg-[#f5f1e8] flex h-full min-h-0 flex-col bg-[#161412]">
       <GuidedDesktopHeader
         isDayTheme={isDayTheme}
         toggleTheme={toggleTheme}
@@ -107,12 +107,12 @@ export default function DesignerFullscreenPanelView({
       </div>
       {activeFullscreenPanel &&
         (navigation.prevPanelSlug || navigation.nextPanelSlug) && (
-          <div className="hidden shrink-0 items-center gap-3 border-t border-[var(--designer-border)] p-3 md:flex">
+          <div className="hidden shrink-0 items-center gap-3 border-t border-white/10 p-3 day:border-[#dfd7ca] md:flex">
             {navigation.prevPanelSlug && (
               <button
                 type="button"
                 onClick={() => onNavigate(navigation.prevPanelSlug!)}
-                className="flex min-h-11 items-center gap-1 rounded-md px-3 text-sm text-[var(--designer-text-muted)] transition-colors hover:bg-[var(--designer-control-hover)] focus-visible:outline-2 focus-visible:outline-[var(--designer-focus)]"
+                className="flex min-h-11 items-center gap-1.5 rounded-lg border border-white/10 bg-white/[0.04] px-4 text-sm font-medium text-white/80 transition-all hover:border-[#c49a45]/50 hover:bg-white/[0.08] hover:text-white day:border-[#dfd7ca] day:bg-white day:text-[#5a5248] day:hover:border-[#9a742f] day:hover:bg-[#f7f4ee] day:hover:text-[#1a1714] day:shadow-sm focus-visible:outline-2 focus-visible:outline-[var(--designer-focus)]"
               >
                 <ChevronLeftIcon className="h-4 w-4" aria-hidden="true" />
                 Back
@@ -123,7 +123,7 @@ export default function DesignerFullscreenPanelView({
                 type="button"
                 onClick={() => onNavigate(navigation.nextPanelSlug!)}
                 disabled={navigation.isImageCropActive}
-                className="ml-auto flex min-h-11 flex-1 items-center justify-center gap-2 rounded-md bg-[var(--designer-accent)] px-4 text-sm font-semibold text-[var(--designer-accent-foreground)] transition-colors hover:brightness-105 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--designer-focus)] disabled:cursor-not-allowed disabled:opacity-40"
+                className="ml-auto flex min-h-11 flex-1 items-center justify-center gap-2 rounded-lg bg-[#c49a45] px-4 text-sm font-semibold text-[#121110] shadow-sm transition-all hover:bg-[#d5ad55] day:bg-[#9a742f] day:text-white day:hover:bg-[#856325] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--designer-focus)] disabled:cursor-not-allowed disabled:opacity-40"
               >
                 {navigation.isImageCropActive
                   ? 'Finish crop'

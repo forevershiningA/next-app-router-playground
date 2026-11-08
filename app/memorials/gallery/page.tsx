@@ -29,8 +29,54 @@ export default async function MemorialGalleryPage({
   const { category } = await searchParams;
   const initialCategory =
     categories.find((group) => group.id === category)?.id ?? 'all';
+
+  const baseUrl = 'https://forevershining.org';
+  const canonicalUrl = `${baseUrl}/memorials/gallery`;
+
+  const structuredData = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'ImageGallery',
+        '@id': `${canonicalUrl}#gallery`,
+        url: canonicalUrl,
+        name: 'Forever Shining Completed Memorial Gallery',
+        description:
+          'Explore headstones, plaques, full monuments, urns, and pet memorials created by Forever Shining.',
+      },
+      {
+        '@type': 'BreadcrumbList',
+        '@id': `${canonicalUrl}#breadcrumb`,
+        itemListElement: [
+          {
+            '@type': 'ListItem',
+            position: 1,
+            name: 'Home',
+            item: baseUrl,
+          },
+          {
+            '@type': 'ListItem',
+            position: 2,
+            name: 'Memorials',
+            item: `${baseUrl}/memorials`,
+          },
+          {
+            '@type': 'ListItem',
+            position: 3,
+            name: 'Gallery',
+            item: canonicalUrl,
+          },
+        ],
+      },
+    ],
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
       <MemorialPublicHeader activeType="gallery" />
       <main id="main-content">
         <HomeGallery

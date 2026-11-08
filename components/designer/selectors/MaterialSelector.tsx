@@ -14,6 +14,7 @@ import { useRouter } from 'next/navigation';
 import {
   ArrowUpTrayIcon,
   CheckCircleIcon,
+  CheckIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
   NoSymbolIcon,
@@ -482,29 +483,33 @@ export default function MaterialSelector({
                   setEditingObject('headstone');
                   setTimeout(() => setIsMaterialChange(false), 100);
                 }}
-                className={`group relative flex h-full cursor-pointer flex-col overflow-hidden rounded-lg border bg-[#171717] text-left transition-all ${
+                className={`group relative flex h-full cursor-pointer flex-col overflow-hidden rounded-xl border text-left transition-all duration-300 hover:-translate-y-1 hover:shadow-xl ${
                   isSelected
-                    ? 'border-[#D7B356] shadow-lg shadow-[#D7B356]/15'
-                    : 'border-white/10 hover:-translate-y-0.5 hover:border-[#D7B356]/60 hover:shadow-lg hover:shadow-[#D7B356]/10'
+                    ? 'border-[#c49a45] bg-[#161412] shadow-[0_8px_20px_rgba(196,154,69,0.25)] ring-2 ring-[#c49a45] day:border-[#9a742f] day:bg-white day:shadow-[0_8px_24px_rgba(154,116,47,0.18)] day:ring-2 day:ring-[#9a742f]'
+                    : 'border-white/10 bg-[#161412] hover:border-[#c49a45]/70 day:border-[#dfd7ca] day:bg-white day:shadow-[0_4px_16px_rgba(40,30,20,0.06)] day:hover:border-[#9a742f]'
                 }`}
                 title={label}
               >
-                <div className="relative aspect-square overflow-hidden bg-[#101010]">
+                <div className="relative aspect-square overflow-hidden border-b border-white/8 bg-gradient-to-b from-[#1c1a17] to-[#141210] day:border-[#ebe4d8] day:bg-gradient-to-b day:from-[#f8f5ee] day:to-[#ede6d8]">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={url}
                     alt={label}
-                    className="absolute inset-0 h-full w-full object-cover"
+                    className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 ease-out will-change-transform group-hover:scale-105"
                   />
                   {isSelected && (
-                    <span className="absolute top-1.5 right-1.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-[#D7B356] text-slate-950 shadow-lg">
-                      <CheckCircleIcon className="h-3.5 w-3.5" />
+                    <span className="absolute top-2 right-2 inline-flex size-6 items-center justify-center rounded-full bg-[#c49a45] text-[#121110] shadow-sm day:bg-[#9a742f] day:text-white">
+                      <CheckIcon className="size-3.5 stroke-[2.5]" />
                     </span>
                   )}
                 </div>
-                <div className="flex min-h-12 items-center justify-center px-2 py-2">
+                <div className="flex min-h-11 items-center justify-center px-2 py-2">
                   <div
-                    className={`line-clamp-2 text-center text-xs leading-tight font-semibold ${isSelected ? 'text-[#D7B356]' : 'text-slate-100'}`}
+                    className={`line-clamp-2 text-center font-serif text-xs leading-snug font-normal transition-colors ${
+                      isSelected
+                        ? 'text-[#f0d89f] day:text-[#9a742f]'
+                        : 'text-white/90 group-hover:text-[#f0d89f] day:text-[#1a1714] day:group-hover:text-[#9a742f]'
+                    }`}
                   >
                     {label}
                   </div>
@@ -893,22 +898,19 @@ export default function MaterialSelector({
       />
 
       <div className="flex items-center justify-between gap-3 pr-2">
-        <div className="day:text-[#51493f] text-xs font-semibold text-slate-200">
+        <div className="font-sans text-xs font-semibold text-white/80 day:text-[#51493f]">
           Showing{' '}
-          {displayMaterials.length +
-            (usesBackgrounds && bgTab === 'background' ? 2 : 0)}{' '}
-          option
-          {displayMaterials.length +
-            (usesBackgrounds && bgTab === 'background' ? 2 : 0) !==
-          1
-            ? 's'
-            : ''}
+          <span className="text-[#c49a45] day:text-[#9a742f]">
+            {displayMaterials.length +
+              (usesBackgrounds && bgTab === 'background' ? 2 : 0)}
+          </span>{' '}
+          options
         </div>
-        <div className="day:text-[#776e62] truncate text-right text-[10px] font-semibold tracking-[0.1em] text-white/55 uppercase">
+        <div className="truncate text-right text-[11px] font-semibold tracking-wider text-white/60 uppercase day:text-[#6a6156]">
           {selectedMaterialName ? (
             <>
               Selected:{' '}
-              <span className="day:text-[#9a6b1d] text-[#e3b85f]">
+              <span className="font-serif text-[#f0d89f] day:text-[#9a742f]">
                 {selectedMaterialName}
               </span>
             </>
@@ -953,30 +955,30 @@ export default function MaterialSelector({
                 );
                 setTimeout(() => setIsMaterialChange(false), 100);
               }}
-              className={`group day:border-[#d8d1c6] day:bg-[#fbfaf7] relative flex h-full cursor-pointer flex-col overflow-hidden rounded-lg border bg-[#171717] text-left transition-all ${
+              className={`group relative flex h-full cursor-pointer flex-col overflow-hidden rounded-xl border text-left transition-all duration-300 hover:-translate-y-1 hover:shadow-xl ${
                 currentHeadstoneMaterialUrl ===
                   '/textures/forever/l/brushed-ss-swatch.webp' ||
                 !currentHeadstoneMaterialUrl
-                  ? 'border-[#D7B356] shadow-lg shadow-[#D7B356]/15'
-                  : 'border-white/10 hover:-translate-y-0.5 hover:border-[#D7B356]/60 hover:shadow-lg hover:shadow-[#D7B356]/10'
+                  ? 'border-[#c49a45] bg-[#161412] shadow-[0_8px_20px_rgba(196,154,69,0.25)] ring-2 ring-[#c49a45] day:border-[#9a742f] day:bg-white day:shadow-[0_8px_24px_rgba(154,116,47,0.18)] day:ring-2 day:ring-[#9a742f]'
+                  : 'border-white/10 bg-[#161412] hover:border-[#c49a45]/70 day:border-[#dfd7ca] day:bg-white day:shadow-[0_4px_16px_rgba(40,30,20,0.06)] day:hover:border-[#9a742f]'
               }`}
               title="No Background"
             >
-              <div className="day:bg-[#eeeae2] relative flex aspect-square items-center justify-center overflow-hidden bg-[#101010]">
+              <div className="relative flex aspect-square items-center justify-center overflow-hidden border-b border-white/8 bg-gradient-to-b from-[#1c1a17] to-[#141210] day:border-[#ebe4d8] day:bg-gradient-to-b day:from-[#f8f5ee] day:to-[#ede6d8]">
                 <div className="flex flex-col items-center gap-1">
-                  <NoSymbolIcon className="h-6 w-6 text-gray-400 transition-colors group-hover:text-[#D7B356]" />
-                  <span className="text-[10px] text-gray-400">None</span>
+                  <NoSymbolIcon className="size-6 text-stone-400 transition-colors group-hover:text-[#c49a45] day:group-hover:text-[#9a742f]" />
+                  <span className="text-[10px] text-stone-400">None</span>
                 </div>
                 {(currentHeadstoneMaterialUrl ===
                   '/textures/forever/l/brushed-ss-swatch.webp' ||
                   !currentHeadstoneMaterialUrl) && (
-                  <span className="absolute top-1.5 right-1.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-[#D7B356] text-slate-950 shadow-lg">
-                    <CheckCircleIcon className="h-3.5 w-3.5" />
+                  <span className="absolute top-2 right-2 inline-flex size-6 items-center justify-center rounded-full bg-[#c49a45] text-[#121110] shadow-sm day:bg-[#9a742f] day:text-white">
+                    <CheckIcon className="size-3.5 stroke-[2.5]" />
                   </span>
                 )}
               </div>
-              <div className="flex min-h-10 items-center justify-center px-2 py-2">
-                <div className="day:text-[#2f2921] line-clamp-2 text-center text-xs leading-tight font-semibold text-slate-100">
+              <div className="flex min-h-11 items-center justify-center px-2 py-2">
+                <div className="line-clamp-2 text-center font-serif text-xs leading-snug font-normal text-white transition-colors group-hover:text-[#f0d89f] day:text-[#1a1714] day:group-hover:text-[#9a742f]">
                   No Background
                 </div>
               </div>
@@ -987,17 +989,17 @@ export default function MaterialSelector({
           {usesBackgrounds && bgTab === 'background' && (
             <button
               onClick={() => fileInputRef.current?.click()}
-              className="group day:border-[#cfc6b8] day:bg-[#fbfaf7] relative flex h-full cursor-pointer flex-col overflow-hidden rounded-lg border border-dashed border-white/20 bg-[#171717] text-left transition-all hover:-translate-y-0.5 hover:border-[#D7B356]/60 hover:shadow-lg hover:shadow-[#D7B356]/10"
+              className="group relative flex h-full cursor-pointer flex-col overflow-hidden rounded-xl border border-dashed border-white/20 bg-[#161412] text-left transition-all duration-300 hover:-translate-y-1 hover:border-[#c49a45]/70 hover:shadow-xl day:border-[#d6cebf] day:bg-white day:shadow-sm day:hover:border-[#9a742f]"
               title="Upload Image"
             >
-              <div className="day:bg-[#eeeae2] relative flex aspect-square items-center justify-center overflow-hidden bg-[#101010]">
+              <div className="relative flex aspect-square items-center justify-center overflow-hidden border-b border-white/8 bg-gradient-to-b from-[#1c1a17] to-[#141210] day:border-[#ebe4d8] day:bg-gradient-to-b day:from-[#f8f5ee] day:to-[#ede6d8]">
                 <div className="flex flex-col items-center gap-1">
-                  <ArrowUpTrayIcon className="h-6 w-6 text-gray-400 transition-colors group-hover:text-[#D7B356]" />
-                  <span className="text-[10px] text-gray-400">Upload</span>
+                  <ArrowUpTrayIcon className="size-6 text-stone-400 transition-colors group-hover:text-[#c49a45] day:group-hover:text-[#9a742f]" />
+                  <span className="text-[10px] text-stone-400">Upload</span>
                 </div>
               </div>
-              <div className="flex min-h-10 items-center justify-center px-2 py-2">
-                <div className="day:text-[#2f2921] line-clamp-2 text-center text-xs leading-tight font-semibold text-slate-100">
+              <div className="flex min-h-11 items-center justify-center px-2 py-2">
+                <div className="line-clamp-2 text-center font-serif text-xs leading-snug font-normal text-white transition-colors group-hover:text-[#f0d89f] day:text-[#1a1714] day:group-hover:text-[#9a742f]">
                   Upload Image
                 </div>
               </div>
@@ -1017,34 +1019,41 @@ export default function MaterialSelector({
               <button
                 key={material.id}
                 onClick={() => textureUrl && handleMaterialSelect(material)}
-                className={`group day:border-[#d8d1c6] day:bg-[#fbfaf7] relative flex h-full cursor-pointer flex-col overflow-hidden rounded-lg border bg-[#171717] text-left transition-all disabled:cursor-not-allowed disabled:opacity-60 max-md:w-28 max-md:shrink-0 max-md:snap-start md:w-auto ${
+                className={`group relative flex h-full cursor-pointer flex-col overflow-hidden rounded-xl border text-left transition-all duration-300 hover:-translate-y-1 hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-60 max-md:w-28 max-md:shrink-0 max-md:snap-start md:w-auto ${
                   isSelected
-                    ? 'day:bg-[#fffaf0] border-[#D7B356] shadow-lg ring-1 shadow-[#D7B356]/15 ring-[#D7B356]/45'
-                    : 'border-white/10 hover:-translate-y-0.5 hover:border-[#D7B356]/60 hover:shadow-lg hover:shadow-[#D7B356]/10'
+                    ? 'border-[#c49a45] bg-[#161412] shadow-[0_8px_20px_rgba(196,154,69,0.25)] ring-2 ring-[#c49a45] day:border-[#9a742f] day:bg-white day:shadow-[0_8px_24px_rgba(154,116,47,0.18)] day:ring-2 day:ring-[#9a742f]'
+                    : 'border-white/10 bg-[#161412] hover:border-[#c49a45]/70 day:border-[#dfd7ca] day:bg-white day:shadow-[0_4px_16px_rgba(40,30,20,0.06)] day:hover:border-[#9a742f] day:hover:shadow-[0_8px_24px_rgba(40,30,20,0.12)]'
                 }`}
                 title={material.name}
                 disabled={!textureUrl}
               >
                 {/* Material Image */}
-                <div className="day:bg-[#eeeae2] relative aspect-square overflow-hidden bg-[#101010]">
+                <div className="relative aspect-square overflow-hidden border-b border-white/8 bg-gradient-to-b from-[#1c1a17] to-[#141210] day:border-[#ebe4d8] day:bg-gradient-to-b day:from-[#f8f5ee] day:to-[#ede6d8]">
                   <Image
                     src={coverSrc}
                     alt={material.name}
                     fill
-                    className="object-cover transition-transform duration-300 group-hover:scale-105"
-                    sizes="100px"
+                    className="object-cover transition-transform duration-500 ease-out will-change-transform group-hover:scale-110 motion-reduce:transition-none motion-reduce:group-hover:scale-100"
+                    sizes="140px"
                   />
                   {isSelected && (
-                    <span className="absolute top-1.5 right-1.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-[#D7B356] text-slate-950 shadow-lg">
-                      <CheckCircleIcon className="h-3.5 w-3.5" />
+                    <span
+                      className="absolute top-2 right-2 inline-flex size-6 items-center justify-center rounded-full bg-[#c49a45] text-[#121110] shadow-sm day:bg-[#9a742f] day:text-white"
+                      aria-label="Selected material"
+                    >
+                      <CheckIcon className="size-3.5 stroke-[2.5]" />
                     </span>
                   )}
                 </div>
 
                 {/* Material Name */}
-                <div className="flex min-h-10 items-center justify-center px-2 py-2">
+                <div className="flex min-h-11 items-center justify-center px-2 py-2">
                   <div
-                    className={`line-clamp-2 text-center text-xs leading-tight font-semibold ${isSelected ? 'day:text-[#9a6b1d] text-[#D7B356]' : 'day:text-[#2f2921] text-slate-100'}`}
+                    className={`line-clamp-2 text-center font-serif text-xs leading-snug font-normal transition-colors ${
+                      isSelected
+                        ? 'text-[#f0d89f] day:text-[#9a742f]'
+                        : 'text-white/90 group-hover:text-[#f0d89f] day:text-[#1a1714] day:group-hover:text-[#9a742f]'
+                    }`}
                   >
                     {material.name}
                   </div>

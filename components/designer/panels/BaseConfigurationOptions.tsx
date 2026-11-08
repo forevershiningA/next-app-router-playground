@@ -40,13 +40,13 @@ export default function BaseConfigurationOptions({
         aria-label="Base style"
         className="flex items-center gap-2 px-1 py-1"
       >
-        <span className="mr-auto text-xs font-medium text-[var(--designer-text-muted)]">
+        <span className="mr-auto font-serif text-sm font-normal text-white day:text-[#1a1714]">
           Style
         </span>
         <DesignerOptionButton
           selected={!showBase}
           onClick={() => setShowBase(false)}
-          className="min-w-20 rounded-md px-3 py-1.5 text-xs font-semibold"
+          className="min-w-20 rounded-lg px-3 py-1.5 font-sans text-xs font-semibold"
         >
           No Base
         </DesignerOptionButton>
@@ -59,7 +59,7 @@ export default function BaseConfigurationOptions({
                 setBaseMaterialUrl(STAINLESS_STEEL_BASE_TEX);
                 setShowBase(true);
               }}
-              className="min-w-20 rounded-md px-3 py-1.5 text-xs font-semibold"
+              className="min-w-20 rounded-lg px-3 py-1.5 font-sans text-xs font-semibold"
             >
               Stainless
             </DesignerOptionButton>
@@ -70,7 +70,7 @@ export default function BaseConfigurationOptions({
                 setBaseMaterialUrl(GRANITE_BASE_TEX);
                 setShowBase(true);
               }}
-              className="min-w-20 rounded-md px-3 py-1.5 text-xs font-semibold"
+              className="min-w-20 rounded-lg px-3 py-1.5 font-sans text-xs font-semibold"
             >
               Granite
             </DesignerOptionButton>
@@ -83,7 +83,7 @@ export default function BaseConfigurationOptions({
                 setBaseFinish('default');
                 setShowBase(true);
               }}
-              className="min-w-20 rounded-md px-3 py-1.5 text-xs font-semibold"
+              className="min-w-20 rounded-lg px-3 py-1.5 font-sans text-xs font-semibold"
             >
               Polished
             </DesignerOptionButton>
@@ -93,33 +93,33 @@ export default function BaseConfigurationOptions({
                 setBaseFinish('rock-pitch');
                 setShowBase(true);
               }}
-              className="min-w-20 rounded-md px-3 py-1.5 text-xs font-semibold"
+              className="min-w-20 rounded-lg px-3 py-1.5 font-sans text-xs font-semibold"
             >
               Rockface
             </DesignerOptionButton>
           </>
         )}
       </div>
-      <div className="-mx-3 border-t border-white/10 md:-mx-3.5"></div>
+      <div className="-mx-3 border-t border-white/10 day:border-[#dfd7ca] md:-mx-3.5" />
       {supportsFlowerPots && (
         <div className="order-last space-y-3 md:order-none">
-          <div className="-mx-3.5 border-t border-white/10"></div>
+          <div className="-mx-3.5 border-t border-white/10 day:border-[#dfd7ca]" />
           <fieldset className="space-y-2 text-sm">
-            <legend className="day:text-[#625a51] text-white/75">
+            <legend className="font-serif text-sm font-normal text-white day:text-[#1a1714]">
               Base option
             </legend>
             <div className="flex gap-2" role="group" aria-label="Base option">
               <DesignerOptionButton
                 selected={baseOption === 'none'}
                 onClick={() => setBaseOption('none')}
-                className="flex-1 rounded-md px-3 py-1.5 font-medium"
+                className="flex-1 rounded-lg px-3 py-1.5 font-sans text-xs font-semibold"
               >
                 None
               </DesignerOptionButton>
               <DesignerOptionButton
                 selected={baseOption === 'flower-pots'}
                 onClick={() => setBaseOption('flower-pots')}
-                className="flex-1 rounded-md px-3 py-1.5 font-medium"
+                className="flex-1 rounded-lg px-3 py-1.5 font-sans text-xs font-semibold"
               >
                 Flower Pots
               </DesignerOptionButton>
@@ -127,7 +127,7 @@ export default function BaseConfigurationOptions({
           </fieldset>
           {baseOption === 'flower-pots' && (
             <fieldset className="space-y-2 text-sm">
-              <legend className="day:text-[#625a51] text-white/75">
+              <legend className="font-serif text-sm font-normal text-white day:text-[#1a1714]">
                 Lid finish
               </legend>
               <div className="flex gap-2" role="group" aria-label="Lid finish">
@@ -144,7 +144,7 @@ export default function BaseConfigurationOptions({
                         option.value as 'black' | 'silver' | 'gold',
                       )
                     }
-                    className="flex-1 rounded-md px-3 py-1.5 font-medium"
+                    className="flex-1 rounded-lg px-3 py-1.5 font-sans text-xs font-semibold"
                   >
                     {option.label}
                   </DesignerOptionButton>

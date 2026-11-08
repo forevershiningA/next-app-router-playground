@@ -196,20 +196,20 @@ export default function SelectSizePanel({
   };
 
   const dimensionCardClass =
-    'min-h-[88px] border-t border-white/10 px-3 py-2 day:border-gray-200 md:min-h-0 md:px-3.5 md:py-2';
+    'rounded-xl border border-white/10 bg-white/[0.02] p-3 transition-colors day:border-[#dfd7ca] day:bg-white/70 day:shadow-[0_2px_8px_rgba(40,30,20,0.04)] md:min-h-0 md:p-3.5';
   const dimensionHeaderClass =
     'flex min-h-8 items-center justify-between gap-2';
   const dimensionLabelClass =
-    'text-sm font-semibold text-slate-100 day:text-gray-800';
+    'font-serif text-sm font-normal text-white day:text-[#1a1714]';
   const controlButtonClass =
-    'flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-white/10 bg-white/[0.08] text-white transition-colors hover:border-[#D7B356]/50 hover:bg-white/[0.13] disabled:cursor-not-allowed disabled:opacity-30 day:border-gray-200 day:bg-gray-100 day:text-gray-700 day:hover:bg-gray-200';
+    'flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-white/10 bg-white/[0.06] text-white transition-all hover:border-[#c49a45] hover:bg-[#c49a45]/15 hover:text-[#f0d89f] disabled:cursor-not-allowed disabled:opacity-30 day:border-[#dfd7ca] day:bg-white day:text-[#1a1714] day:hover:border-[#9a742f] day:hover:bg-[#9a742f]/10 day:hover:text-[#9a742f] day:shadow-sm';
   const numberInputBaseClass =
-    'h-8 w-16 rounded-md border bg-white/[0.08] px-2 text-right text-sm font-semibold text-white transition-colors focus:ring-2 focus:outline-none day:bg-gray-100 day:text-gray-900';
+    'h-8 w-18 rounded-lg border bg-white/[0.04] px-2 text-right font-sans text-sm font-semibold text-white transition-colors focus:ring-2 focus:ring-[#c49a45]/20 focus:outline-none day:bg-white day:text-[#1a1714] day:border-[#dfd7ca] day:focus:border-[#9a742f] day:focus:ring-[#9a742f]/20 day:shadow-sm';
   const rangeInputClass =
-    'fs-range h-1.5 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-moz-range-thumb]:h-[20px] [&::-moz-range-thumb]:w-[20px] [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-[#171717] [&::-moz-range-thumb]:bg-[#D7B356] [&::-moz-range-thumb]:shadow-sm [&::-webkit-slider-thumb]:h-[20px] [&::-webkit-slider-thumb]:w-[20px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#171717] [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-sm [&::-webkit-slider-thumb]:transition-shadow [&::-webkit-slider-thumb]:hover:shadow-md';
-  const rangeBlockClass = 'relative mt-1.5 h-[31px]';
+    'fs-range h-1.5 w-full cursor-pointer appearance-none rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--designer-focus)] [&::-moz-range-thumb]:h-5 [&::-moz-range-thumb]:w-5 [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-[#161412] [&::-moz-range-thumb]:bg-[#c49a45] [&::-moz-range-thumb]:shadow-md [&::-webkit-slider-thumb]:h-5 [&::-webkit-slider-thumb]:w-5 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#161412] [&::-webkit-slider-thumb]:bg-[#c49a45] [&::-webkit-slider-thumb]:shadow-md day:[&::-webkit-slider-thumb]:border-white day:[&::-webkit-slider-thumb]:bg-[#9a742f] day:[&::-moz-range-thumb]:border-white day:[&::-moz-range-thumb]:bg-[#9a742f]';
+  const rangeBlockClass = 'relative mt-2 h-[31px]';
   const rangeBoundsClass =
-    'mt-1 flex h-4 w-full justify-between text-xs leading-4 tabular-nums text-white/60 day:text-gray-600';
+    'mt-1.5 flex h-4 w-full justify-between font-sans text-[11px] font-medium tabular-nums text-white/50 day:text-[#786e61]';
   // Which dimension controls exist for the current editing target. Width and
   // Height always exist; the third (depth) is Thickness or Length depending on
   // the target.

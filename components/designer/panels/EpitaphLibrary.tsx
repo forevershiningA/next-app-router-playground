@@ -37,14 +37,14 @@ export default function EpitaphLibrary({
           setIsOpen(!isOpen);
           setPendingText(null);
         }}
-        className="flex w-full items-center justify-between gap-2 rounded-md px-3 py-2 text-xs font-semibold"
+        className="flex w-full items-center justify-between gap-2 rounded-lg px-3.5 py-2.5 text-xs font-semibold"
       >
         <span className="flex items-center gap-2">
           <BookOpenIcon className="h-4 w-4" aria-hidden="true" />
           Browse epitaphs
         </span>
         <ChevronDownIcon
-          className={`h-4 w-4 ${isOpen ? 'rotate-180' : ''}`}
+          className={`h-4 w-4 transition-transform ${isOpen ? 'rotate-180' : ''}`}
           aria-hidden="true"
         />
       </DesignerOptionButton>
@@ -60,6 +60,7 @@ export default function EpitaphLibrary({
               <DesignerOptionButton
                 key={item.id}
                 selected={categoryId === item.id}
+                variant="solid"
                 onClick={() => {
                   setCategoryId(item.id);
                   setPendingText(null);
@@ -72,28 +73,29 @@ export default function EpitaphLibrary({
           </div>
           <ul
             aria-label={`${category.label} epitaphs`}
-            className="max-h-72 space-y-2 overflow-y-auto overscroll-contain pr-1"
+            className="max-h-72 space-y-2.5 overflow-y-auto overscroll-contain pr-1 custom-scrollbar"
           >
             {category.texts.map((text) => (
               <li
                 key={text}
-                className="rounded-md border border-[var(--designer-border)] bg-[var(--designer-control)] p-3"
+                className="rounded-xl border border-white/10 bg-white/[0.04] p-3.5 day:border-[#dfd7ca] day:bg-white day:shadow-sm"
               >
-                <p className="text-sm leading-relaxed text-[var(--designer-text)]">
+                <p className="font-serif text-sm leading-relaxed text-white day:text-[#1a1714]">
                   {text}
                 </p>
                 {pendingText === text ? (
                   <div
                     role="group"
                     aria-label="Insert epitaph"
-                    className="mt-2 space-y-2"
+                    className="mt-2.5 space-y-2 border-t border-white/10 pt-2.5 day:border-[#dfd7ca]"
                   >
-                    <p className="text-xs text-[var(--designer-text-muted)]">
+                    <p className="font-sans text-xs text-stone-300 day:text-[#6a6156]">
                       Your text field already contains text.
                     </p>
                     <div className="flex flex-wrap gap-2">
                       <DesignerOptionButton
                         selected={false}
+                        variant="solid"
                         className={optionClass}
                         onClick={() => insert(text)}
                       >
@@ -124,7 +126,7 @@ export default function EpitaphLibrary({
                 ) : (
                   <DesignerOptionButton
                     selected={false}
-                    className={`${optionClass} mt-2`}
+                    className={`${optionClass} mt-2.5`}
                     onClick={() =>
                       value.trim() ? setPendingText(text) : insert(text)
                     }

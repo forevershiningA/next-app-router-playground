@@ -39,7 +39,7 @@ export default function GuidedDesktopHeader({
 }: GuidedDesktopHeaderProps) {
   const quickNavRef = React.useRef<HTMLDivElement>(null);
   const headerButtonClass =
-    'day:border-[#bdb4a6] day:bg-white/25 day:text-[#302719] day:hover:border-[#9a742f] day:hover:bg-white/55 day:hover:text-[#302719] inline-flex h-9 shrink-0 items-center justify-center rounded-md border border-white/20 bg-white/[0.06] text-xs font-medium text-white/80 transition-colors hover:border-[#cfac6c]/70 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--designer-focus)]';
+    'day:border-[#dfd7ca] day:bg-white day:text-[#1a1714] day:hover:border-[#9a742f] day:hover:bg-[#f7f4ee] day:hover:text-[#9a742f] day:shadow-sm inline-flex h-9 shrink-0 items-center justify-center rounded-lg border border-white/10 bg-white/[0.04] text-xs font-semibold text-white/80 transition-all hover:border-[#c49a45]/70 hover:bg-white/[0.08] hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--designer-focus)]';
 
   React.useEffect(() => {
     const frameId = window.requestAnimationFrame(() => {
@@ -65,7 +65,7 @@ export default function GuidedDesktopHeader({
   };
 
   return (
-    <div className="day:border-[#cfc5b7] day:bg-[#eee9df] @container relative hidden shrink-0 border-b border-white/10 bg-[#1d1a17] px-5 py-3 md:block">
+    <div className="day:border-[#dfd7ca] day:bg-[#f5f1e8] @container relative hidden shrink-0 border-b border-white/10 bg-[#161412] px-5 py-3 md:block">
       <div className="flex min-h-9 items-center justify-between gap-2">
         <button
           type="button"
@@ -89,7 +89,7 @@ export default function GuidedDesktopHeader({
           Menu
         </button>
 
-        <h2 className="day:text-[#1d1a17] min-w-0 text-center font-serif text-xl leading-tight font-normal tracking-[-0.02em] text-white">
+        <h2 className="day:text-[#1a1714] min-w-0 text-center font-serif text-xl leading-tight font-normal tracking-[-0.02em] text-white">
           {title}
         </h2>
 
@@ -118,12 +118,12 @@ export default function GuidedDesktopHeader({
           List
         </button>
       )}
-      <div className="day:border-[#ddd2c2] mt-2 flex items-center gap-1 border-t border-white/10 pt-2">
+      <div className="day:border-[#dfd7ca] mt-2 flex items-center gap-1 border-t border-white/10 pt-2">
         <button
           type="button"
           onClick={() => scrollQuickNav(-1)}
           aria-label="Scroll configuration actions left"
-          className="day:border-[#ddd2c2] day:bg-[#fbf9f5] day:text-[#625a51] day:hover:bg-[#eee6d9] flex h-9 w-7 shrink-0 items-center justify-center rounded-md border border-white/10 bg-white/5 text-white/65 transition-colors hover:bg-white/10 hover:text-white"
+          className="day:border-[#dfd7ca] day:bg-white day:text-[#5a5248] day:hover:bg-[#f7f4ee] day:hover:text-[#1a1714] day:shadow-sm flex h-9 w-7 shrink-0 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-white/65 transition-colors hover:bg-white/10 hover:text-white"
         >
           <ChevronLeftIcon className="h-4 w-4" aria-hidden="true" />
         </button>
@@ -144,7 +144,7 @@ export default function GuidedDesktopHeader({
           type="button"
           onClick={() => scrollQuickNav(1)}
           aria-label="Scroll configuration actions right"
-          className="day:border-[#ddd2c2] day:bg-[#fbf9f5] day:text-[#625a51] day:hover:bg-[#eee6d9] flex h-9 w-7 shrink-0 items-center justify-center rounded-md border border-white/10 bg-white/5 text-white/65 transition-colors hover:bg-white/10 hover:text-white"
+          className="day:border-[#dfd7ca] day:bg-white day:text-[#5a5248] day:hover:bg-[#f7f4ee] day:hover:text-[#1a1714] day:shadow-sm flex h-9 w-7 shrink-0 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-white/65 transition-colors hover:bg-white/10 hover:text-white"
         >
           <ChevronRightIcon className="h-4 w-4" aria-hidden="true" />
         </button>

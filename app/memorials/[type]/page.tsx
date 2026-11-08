@@ -410,7 +410,7 @@ export default async function MemorialTypePage({ params }: PageProps) {
 
                 <Link
                   href={productDesignerUrl(flagshipProduct.id)}
-                  className="day:border-[#1d1a17] day:bg-[#1d1a17] day:text-white day:hover:bg-[#342e26] mt-4 flex min-h-10 w-full items-center justify-center gap-2 rounded-sm border border-[#cfac6c]/60 bg-[#cfac6c]/15 px-4 py-2.5 text-xs font-semibold tracking-wider text-[#f5dfae] uppercase transition-colors hover:bg-[#cfac6c] hover:text-[#14120f]"
+                  className="day:border-[#1d1a17] day:bg-[#1d1a17] day:text-white day:hover:bg-[#342e26] day:hover:text-white mt-4 flex min-h-10 w-full items-center justify-center gap-2 rounded-sm border border-[#cfac6c]/60 bg-[#cfac6c]/15 px-4 py-2.5 text-xs font-semibold tracking-wider text-[#f5dfae] uppercase transition-colors hover:bg-[#cfac6c] hover:text-[#14120f]"
                 >
                   <span>Customize this Style in 3D</span>
                   <ArrowRightIcon className="size-3.5" />
@@ -512,7 +512,7 @@ export default async function MemorialTypePage({ params }: PageProps) {
 
                     <Link
                       href={productDesignerUrl(product.id)}
-                      className="day:border-[#1d1a17] day:bg-[#1d1a17] day:text-white day:hover:bg-[#342e26] inline-flex min-h-11 w-full items-center justify-between gap-3 rounded-sm border border-[#cfac6c]/60 bg-transparent px-4 py-2.5 text-sm font-semibold text-[#f0d89f] transition-all group-hover:bg-[#cfac6c] group-hover:text-[#14120f]"
+                      className="day:border-[#1d1a17] day:bg-[#1d1a17] day:text-white day:hover:bg-[#342e26] day:hover:text-white day:group-hover:bg-[#342e26] day:group-hover:text-white inline-flex min-h-11 w-full items-center justify-between gap-3 rounded-sm border border-[#cfac6c]/60 bg-transparent px-4 py-2.5 text-sm font-semibold text-[#f0d89f] transition-all group-hover:bg-[#cfac6c] group-hover:text-[#14120f]"
                     >
                       <span>Customize in 3D</span>
                       <ArrowRightIcon className="size-4" aria-hidden="true" />

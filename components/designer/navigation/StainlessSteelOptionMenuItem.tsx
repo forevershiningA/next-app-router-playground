@@ -19,10 +19,10 @@ export default function StainlessSteelOptionMenuItem({
       onClick={onClick}
       onMouseDown={(event) => event.preventDefault()}
       style={{ caretColor: 'transparent', userSelect: 'none' }}
-      className={`flex w-full cursor-pointer items-center gap-3 rounded-lg px-4 py-3 text-left text-base font-light transition-all ${
+      className={`flex w-full cursor-pointer items-center gap-2.5 rounded-lg px-3 py-2 text-left text-sm font-normal transition-all duration-200 ${
         isActive
-          ? 'day:border-[#D7B356]/40 day:bg-[#DEBD68]/10 day:text-[#3d2817] border border-white/30 bg-white/15 text-white shadow-lg backdrop-blur-sm'
-          : 'day:border-gray-200 day:text-gray-700 day:hover:border-gray-300 day:hover:bg-gray-100 border border-white/10 text-gray-200 hover:border-white/20 hover:bg-white/10'
+          ? 'border border-[#c49a45]/40 bg-[#c49a45]/15 text-[#f0d89f] shadow-sm day:border-[#9a742f]/40 day:bg-[#9a742f]/10 day:text-[#78541c] backdrop-blur-sm'
+          : 'border border-transparent text-white/70 hover:border-white/15 hover:bg-white/[0.06] hover:text-white day:border-transparent day:text-[#5a5248] day:hover:border-[#dfd7ca] day:hover:bg-[#f0ebe1] day:hover:text-[#1a1714]'
       }`}
     >
       <Icon className="h-5 w-5 flex-shrink-0" aria-hidden="true" />

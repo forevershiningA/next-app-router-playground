@@ -27,11 +27,26 @@ export default function ClientShell() {
   // Skip client-only dynamic components here, including their SSR bailouts.
   if (pathname === '/') return null;
 
+  // Account and legal portal routes do not use the 3D designer canvas.
+  const isAccountRoute =
+    pathname === '/my-account' ||
+    pathname?.startsWith('/my-account/') ||
+    pathname === '/orders' ||
+    pathname?.startsWith('/orders/') ||
+    pathname === '/account' ||
+    pathname?.startsWith('/account/') ||
+    pathname === '/privacy' ||
+    pathname?.startsWith('/privacy/') ||
+    pathname === '/terms' ||
+    pathname?.startsWith('/terms/') ||
+    pathname === '/login' ||
+    pathname?.startsWith('/login/');
+
   return (
     <>
       <RouterBinder />
       <DefaultDesignLoader />
-      <ConditionalCanvas />
+      {!isAccountRoute && <ConditionalCanvas />}
     </>
   );
 }

@@ -132,7 +132,7 @@ export default async function HomeProductSection() {
                     <div className="flex flex-col gap-2">
                       <Link
                         href={product.href}
-                        className="day:border-[#1d1a17] day:bg-[#1d1a17] day:text-white day:hover:bg-[#342e26] inline-flex min-h-11 w-full items-center justify-between gap-3 rounded-sm border border-[#cfac6c]/60 bg-transparent px-4 py-2.5 text-sm font-semibold text-[#f0d89f] transition-all group-hover:bg-[#cfac6c] group-hover:text-[#14120f]"
+                        className="day:border-[#1d1a17] day:bg-[#1d1a17] day:text-white day:hover:bg-[#342e26] day:hover:text-white day:group-hover:bg-[#342e26] day:group-hover:text-white inline-flex min-h-11 w-full items-center justify-between gap-3 rounded-sm border border-[#cfac6c]/60 bg-transparent px-4 py-2.5 text-sm font-semibold text-[#f0d89f] transition-all group-hover:bg-[#cfac6c] group-hover:text-[#14120f]"
                       >
                         <span>Customize in 3D</span>
                         <ArrowRightIcon className="size-4" aria-hidden="true" />

@@ -60,8 +60,8 @@ export function DesignerOptionButton({
 }: DesignerOptionButtonProps) {
   const selectedClass =
     variant === 'solid'
-      ? 'border-[var(--designer-accent)] bg-[var(--designer-accent)] text-[var(--designer-accent-foreground)] shadow-sm'
-      : 'border-2 border-[var(--designer-accent)] bg-[var(--designer-accent-soft)] text-[var(--designer-text-selected)]';
+      ? 'border-[#c49a45] bg-[#c49a45] text-[#121110] shadow-sm day:border-[#9a742f] day:bg-[#9a742f] day:text-white'
+      : 'border-2 border-[#c49a45] bg-[#c49a45]/15 text-[#f0d89f] font-semibold day:border-[#9a742f] day:bg-[#9a742f]/15 day:text-[#78541c]';
 
   return (
     <button
@@ -69,11 +69,11 @@ export function DesignerOptionButton({
       aria-pressed={selected}
       data-state={selected ? 'selected' : 'idle'}
       className={cn(
-        'shrink-0 rounded-lg border px-4 py-2 text-sm transition-colors',
+        'shrink-0 rounded-lg border px-4 py-2 text-sm transition-all duration-200',
         'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--designer-focus)]',
         selected
           ? selectedClass
-          : 'border-[var(--designer-border)] bg-[var(--designer-control)] text-[var(--designer-text-muted)] hover:border-[var(--designer-border-strong)] hover:bg-[var(--designer-control-hover)] hover:text-[var(--designer-text)]',
+          : 'border-white/15 bg-white/[0.04] text-white/75 hover:border-[#c49a45]/50 hover:bg-white/[0.08] hover:text-white day:border-[#d6cebf] day:bg-white day:text-[#5a5248] day:hover:border-[#9a742f]/50 day:hover:bg-[#f7f4ee] day:hover:text-[#1a1714] day:shadow-sm',
         className,
       )}
       {...props}

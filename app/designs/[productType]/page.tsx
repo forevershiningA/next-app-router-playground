@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation';
 import { ChevronRightIcon } from '@heroicons/react/24/outline';
 import MobileNavToggle from '#/components/shared/MobileNavToggle';
 import ServerDesignsTreeNav from '#/components/designs/ServerDesignsTreeNav';
+import { ThemeToggle } from '#/components/theme/ThemeToggle';
 import {
   getCategoryDescription,
   getCategoryTitle,
@@ -179,61 +180,69 @@ export default async function ProductTypePage({ params }: ProductPageProps) {
         <ServerDesignsTreeNav />
       </MobileNavToggle>
       <aside
-        className="fixed top-0 left-0 z-10 hidden h-full flex-col border-r border-slate-200 md:block"
+        className="day:border-[#e2dad0] fixed top-0 left-0 z-10 hidden h-full flex-col border-r border-white/10 md:block"
         style={{ width: '400px' }}
       >
         <ServerDesignsTreeNav />
       </aside>
 
-      <main className="min-h-screen overflow-y-auto bg-[#f7f5f0] md:ml-[400px]">
-        <div className="container mx-auto max-w-7xl px-4 pt-20 pb-14 md:px-8 md:py-12">
-          <nav
-            className="mb-8 flex items-center gap-2 text-sm text-stone-500"
-            aria-label="Breadcrumb"
-          >
-            <Link
-              href="/"
-              className="font-light tracking-wide transition-colors hover:text-stone-950"
+      <main className="day:bg-[#f8f6f0] day:text-[#1d1a17] min-h-screen overflow-y-auto bg-[#0d0c0b] text-white md:ml-[400px]">
+        <div className="container mx-auto max-w-7xl px-4 pt-20 pb-16 md:px-8 md:py-12">
+          <div className="mb-8 flex items-center justify-between gap-4">
+            <nav
+              className="flex items-center gap-2 text-sm text-[#756c62]"
+              aria-label="Breadcrumb"
             >
-              Home
-            </Link>
-            <ChevronRightIcon className="h-4 w-4" />
-            <Link
-              href="/designs"
-              className="font-light tracking-wide transition-colors hover:text-stone-950"
-            >
-              Memorial Designs
-            </Link>
-            <ChevronRightIcon className="h-4 w-4" />
-            <span className="font-medium tracking-wide text-stone-950">
-              {productInfo.name}
-            </span>
-          </nav>
+              <Link
+                href="/"
+                className="day:hover:text-[#1d1a17] transition-colors hover:text-[#cfac6c]"
+              >
+                Home
+              </Link>
+              <ChevronRightIcon className="h-3.5 w-3.5 text-[#a89d8d]" />
+              <Link
+                href="/designs"
+                className="day:hover:text-[#1d1a17] transition-colors hover:text-[#cfac6c]"
+              >
+                Memorial Designs
+              </Link>
+              <ChevronRightIcon className="h-3.5 w-3.5 text-[#a89d8d]" />
+              <span className="day:text-[#1d1a17] font-medium text-[#c0b39f]">
+                {productInfo.name}
+              </span>
+            </nav>
+            <ThemeToggle inline />
+          </div>
 
           <header className="mb-12 max-w-4xl">
-            <p className="mb-3 text-xs font-semibold tracking-[0.22em] text-[#9b7a24] uppercase">
-              Browse by memorial theme
-            </p>
-            <h1 className="mb-5 font-serif text-4xl font-light tracking-tight text-stone-950 md:text-6xl">
+            <span className="day:border-[#d0c2ad] day:bg-[#e8e0d1] day:text-[#74551d] inline-flex items-center gap-1.5 rounded-full border border-[#cfac6c]/40 bg-[#cfac6c]/10 px-3.5 py-1 text-xs font-semibold tracking-wider text-[#e6cb8b] uppercase">
+              Browse by Memorial Theme
+            </span>
+            <h1 className="day:text-[#1d1a17] mt-4 font-serif text-3xl leading-[1.12] tracking-tight text-white sm:text-4xl lg:text-5xl">
               {productInfo.name} Designs
             </h1>
-            <p className="max-w-3xl text-lg leading-relaxed font-light text-stone-600 md:text-xl">
+            <p className="day:text-[#5c544a] mt-4 max-w-3xl text-base leading-relaxed text-[#c3bbb0] sm:text-lg">
               {productInfo.description} Browse by memorial theme, then
               personalize a design with names, dates, verses, motifs and photos.
             </p>
-            <p className="mt-5 text-sm font-light text-stone-500">
+            <p className="day:text-[#756c62] mt-4 text-xs text-white/50">
               {productDesigns.length.toLocaleString()} designs in{' '}
               {categoryGroups.length} strong categories
             </p>
           </header>
 
           <section aria-labelledby="product-categories-heading">
-            <h2
-              id="product-categories-heading"
-              className="mb-6 font-serif text-2xl font-light text-stone-950"
-            >
-              Browse {productInfo.shortName} Themes
-            </h2>
+            <div className="mb-6">
+              <span className="day:text-[#8a651f] text-xs font-semibold tracking-widest text-[#cfac6c] uppercase">
+                Curated Themes
+              </span>
+              <h2
+                id="product-categories-heading"
+                className="day:text-[#1d1a17] mt-1 font-serif text-2xl font-normal text-white sm:text-3xl"
+              >
+                Browse {productInfo.shortName} Themes
+              </h2>
+            </div>
 
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {categoryGroups.map(([category, designs]) => {
@@ -242,31 +251,31 @@ export default async function ProductTypePage({ params }: ProductPageProps) {
                   <Link
                     key={category}
                     href={`/designs/${productSlug}/${category}`}
-                    className="group overflow-hidden rounded-lg border border-stone-200 bg-white transition-all duration-300 hover:border-[#d8c487] hover:shadow-lg"
+                    className="group day:border-[#e4ddd2] day:bg-white day:shadow-sm day:hover:shadow-md flex h-full flex-col overflow-hidden rounded-sm border border-white/10 bg-[#141311] transition-all duration-300 hover:border-[#cfac6c]/60"
                   >
-                    <div className="relative aspect-[4/3] bg-[radial-gradient(circle_at_50%_28%,#ffffff_0%,#f4f0e7_52%,#e6e0d3_100%)]">
+                    <div className="day:border-[#e8e2d7] day:bg-[#f6f3ed] relative aspect-[4/3] overflow-hidden border-b border-white/10 bg-[#0e0d0c]">
                       <Image
                         src={`/screenshots/v2026-3d/${preview.id}_small.png`}
                         alt={`${getCategoryTitle(category)} ${productInfo.shortName} preview`}
                         fill
-                        className="object-contain p-4"
+                        className="object-contain p-4 transition-transform duration-500 ease-out group-hover:scale-105"
                         sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
                       />
                     </div>
-                    <div className="p-6">
-                      <h3 className="mb-2 font-serif text-xl font-light text-stone-950 transition-colors group-hover:text-[#8a6b1f]">
+                    <div className="flex flex-1 flex-col p-5">
+                      <h3 className="day:text-[#1d1a17] day:group-hover:text-[#8a651f] font-serif text-xl font-normal text-white transition-colors group-hover:text-[#f0d89f]">
                         {getCategoryTitle(category)}
                       </h3>
-                      <p className="mb-4 text-sm leading-relaxed font-light text-stone-600">
+                      <p className="day:text-[#625a51] mt-2 text-sm leading-relaxed text-white/70">
                         {getCategoryDescription(category)}
                       </p>
-                      <div className="flex items-center justify-between gap-4 text-sm">
-                        <span className="font-light text-stone-500">
+                      <div className="day:border-[#ebe4da] mt-auto flex items-center justify-between border-t border-white/10 pt-4 text-xs">
+                        <span className="day:text-[#756c62] text-white/50">
                           {designs.length.toLocaleString()} designs
                         </span>
-                        <span className="inline-flex items-center font-light tracking-wider text-[#8a6b1f] uppercase transition-transform group-hover:translate-x-1">
+                        <span className="day:text-[#8a651f] inline-flex items-center font-semibold tracking-wider text-[#cfac6c] uppercase transition-transform group-hover:translate-x-1">
                           View Designs
-                          <ChevronRightIcon className="ml-1 h-4 w-4" />
+                          <ChevronRightIcon className="ml-1 h-3.5 w-3.5" />
                         </span>
                       </div>
                     </div>

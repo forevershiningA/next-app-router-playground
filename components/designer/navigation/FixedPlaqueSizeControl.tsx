@@ -63,11 +63,11 @@ export function FixedPlaqueSizeControl({
   return (
     <div className="space-y-4">
       {!isCompact && (
-        <div className="rounded-xl border border-white/15 bg-white/5 p-4">
-          <div className="mb-1 text-xs tracking-[0.2em] text-white/60 uppercase">
+        <div className="rounded-xl border border-white/10 bg-white/[0.04] p-4 day:border-[#dfd7ca] day:bg-white day:shadow-sm">
+          <div className="mb-1 font-sans text-xs font-semibold tracking-wider text-[#c49a45] uppercase day:text-[#9a742f]">
             Plaque Price
           </div>
-          <div className="text-2xl font-semibold text-white">
+          <div className="font-serif text-2xl font-normal text-white day:text-[#1a1714]">
             {formatAudPrice(activeSize.price, currency, rates)}
           </div>
         </div>
@@ -98,7 +98,7 @@ export function FixedPlaqueSizeControl({
                 />
               </svg>
             </button>
-            <span className="min-w-[90px] text-center text-sm font-semibold text-white">
+            <span className="min-w-[90px] text-center font-sans text-sm font-semibold tabular-nums text-white day:text-[#1a1714]">
               {displayedWidth} × {displayedHeight} mm
             </span>
             <button

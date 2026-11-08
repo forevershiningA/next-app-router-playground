@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-11-05
+**Last Updated:** 2026-11-07
 
 **Status entry order:** Add new dated status entries immediately after the table of contents, before the existing status entries. Keep status entries in reverse chronological order (newest first); do not append them to the end of this file.
 **Tech Stack:** Next.js 15.5.26, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots), **Vitest 4.1.8** (unit tests), **Playwright 1.59.1** (E2E tests)
@@ -152,10 +152,121 @@
 139. [November 5 Bronze Plaque Layout Polish, Zero-Invention Rule & WWII Preservation](#current-status-2026-11-05--bronze-plaque-layout-polish-zero-invention-rule--wwii-preservation)
 140. [November 5 100% Configurator Product Coverage & Dual HTML/Markdown Autonomous Test Matrix](#current-status-2026-11-05--100-configurator-product-coverage--dual-htmlmarkdown-autonomous-test-matrix)
 141. [November 5 Military & First Responders 3D Catalog Design Generator & Gallery Integration](#current-status-2026-11-05--military--first-responders-3d-catalog-design-generator--gallery-integration)
+142. [November 6 Warm Minimal Studio Modernization: Product Catalog, Memorials, Designs, Gallery & Contact](#current-status-2026-11-06--warm-minimal-studio-modernization-product-catalog-memorials-designs-gallery--contact)
+143. [November 6 Configurator Step 1 (/select-product) Warm Minimal Studio Redesign](#current-status-2026-11-06--configurator-step-1-select-product-warm-minimal-studio-redesign)
+144. [November 7 End-to-End Configurator Studio Modernization: Shape, Material, Size, Inscriptions, Images, Additions, Motifs & Save Design](#current-status-2026-11-07--end-to-end-configurator-studio-modernization-shape-material-size-inscriptions-images-additions-motifs--save-design)
 
 ---
 
-## Current Status (2026-11-05) — Military & First Responders 3D Catalog Design Generator & Gallery Integration
+## Current Status (2026-11-07) — End-to-End Configurator Studio Modernization: Shape, Material, Size, Inscriptions, Images, Additions, Motifs & Save Design
+
+- **Session Summary & Completed Implementation (November 7 Full Day):**
+  1. *Shape & Category Selection (`/select-shape`, [`components/designer/selectors/ShapeSelector.tsx`](file:///C:/Users/polcr/documents/github/next-app-router-playground/components/designer/selectors/ShapeSelector.tsx)):*
+     - Elevated shape category cards and shape selection grid to Warm Minimal Studio aesthetic.
+     - Implemented square gallery pedestals (`day:bg-white`, `day:border-[#dfd7ca]`, `hover:shadow-md`, `hover:-translate-y-0.5`), responsive hover zoom (`group-hover:scale-105`), and Studio gold active states (`#c49a45` / `day:#9a742f`).
+  2. *Material Selection (`/select-material`, [`components/designer/selectors/MaterialSelector.tsx`](file:///C:/Users/polcr/documents/github/next-app-router-playground/components/designer/selectors/MaterialSelector.tsx)):*
+     - Redesigned granite, bronze, and stainless steel swatches with circular indicators, checkmarks, texture pedestals, and refined typography.
+     - Standardized borders and shadows across Day/Night themes.
+  3. *Size & Base Selection (`/select-size`, [`components/designer/selectors/SizeSelector.tsx`](file:///C:/Users/polcr/documents/github/next-app-router-playground/components/designer/selectors/SizeSelector.tsx)):*
+     - Unified size variant cards, dimension triplets, custom size inputs, and base options into Studio card containers.
+  4. *Inscriptions Step (`/inscriptions`, [`components/designer/panels/InscriptionEditPanel.tsx`](file:///C:/Users/polcr/documents/github/next-app-router-playground/components/designer/panels/InscriptionEditPanel.tsx)):*
+     - Modernized inscription line editor, font selectors, color palettes, size/rotation steppers, and position nudge controls.
+  5. *Images & Photo Crop (`/select-images`, [`components/designer/selectors/ImageSelector.tsx`](file:///C:/Users/polcr/documents/github/next-app-router-playground/components/designer/selectors/ImageSelector.tsx), [`components/designer/canvas/CropCanvas.tsx`](file:///C:/Users/polcr/documents/github/next-app-router-playground/components/designer/canvas/CropCanvas.tsx)):*
+     - Restyled photo upload dropzone, ceramic/etched photo selector cards, crop overlay, and corner handles in Studio gold (`#c49a45`).
+     - Modernized active image controls (size, rotation, position nudge, flip X/Y, delete/duplicate).
+  6. *3D Additions (`/select-additions`, [`components/designer/selectors/AdditionSelector.tsx`](file:///C:/Users/polcr/documents/github/next-app-router-playground/components/designer/selectors/AdditionSelector.tsx), [`components/designer/navigation/SelectAdditionsPanel.tsx`](file:///C:/Users/polcr/documents/github/next-app-router-playground/components/designer/navigation/SelectAdditionsPanel.tsx)):*
+     - Transformed additions catalog into a clean 2-column gallery with warm pedestal backgrounds.
+     - Redesigned active addition drawer panel with Studio cards, height/rotation sliders, position nudge D-pad, and action buttons.
+     - Replaced nested outer box with direct flex container to eliminate double-border artifact.
+  7. *Motifs Catalog & Active Motif Editor (`/select-motifs`, [`components/designer/selectors/MotifSelectorPanel.tsx`](file:///C:/Users/polcr/documents/github/next-app-router-playground/components/designer/selectors/MotifSelectorPanel.tsx), [`components/designer/navigation/SelectMotifsPanel.tsx`](file:///C:/Users/polcr/documents/github/next-app-router-playground/components/designer/navigation/SelectMotifsPanel.tsx)):*
+     - Modernized 3-column motif category grid and individual motif list with square pedestals (`aspect-square`), smooth hover zoom (`group-hover:scale-105`), and sticky category header with back button and count badge.
+     - Fixed dark hover glitch in Day mode by providing explicit `day:hover:bg-white` classes.
+     - Upgraded active motif drawer with compact single-row steppers for Height and Rotation, circular color swatches (`grid grid-cols-7`), Gold/Silver gilding toggles with checkmarks, unified D-pad nudge button (`1 mm` / `5 mm` / `10 mm`), and bottom padding (`pb-14`) to prevent action button clipping.
+  8. *3D Viewport Selection Handles ([`components/three/ObjectSelectionBox.tsx`](file:///C:/Users/polcr/documents/github/next-app-router-playground/components/three/ObjectSelectionBox.tsx)):*
+     - Updated selection bounding boxes and resize corner handles from yellow to Studio gold (`0xc49a45`).
+  9. *Save Design & Account Auth Gate (`/my-account`, [`app/my-account/page.tsx`](file:///C:/Users/polcr/documents/github/next-app-router-playground/app/my-account/page.tsx)):*
+     - Rebuilt the authentication screen into an elevated Studio card with warm backdrop, `Back to your design` button, serif typography, gold notice box, Studio tab switcher, input fields, and submit button.
+     - Updated logged-in Saved Designs dashboard with Studio cards, serif titles, and gold CTAs.
+  10. *Verification & Stability:*
+      - Full TypeScript type-check passed with 0 errors (`npm run type-check`).
+
+---
+
+## Current Status (2026-11-06) — Configurator Step 1 (/select-product) Warm Minimal Studio Redesign
+
+- **Session Summary & Completed Implementation:**
+  1. *Configurator Step 1 Elevation ([`app/select-product/_ui/ProductSelectionGrid.tsx`](file:///C:/Users/polcr/documents/github/next-app-router-playground/app/select-product/_ui/ProductSelectionGrid.tsx)):*
+     - Replaced dated utilitarian grid layout with the Warm Minimal Studio aesthetic matching the public storefront and catalog.
+     - **Hero & Header:** Added eyebrow badge (`Step 1 of 3 · Configurator Selection`), Playfair Display serif title (*Choose Your Memorial*), and warm editorial description. Removed redundant marketing assurance pillars (*Real-Time 3D Studio, Transparent Pricing, Lifetime Warranty, Design Proof Review*) to maintain a focused, high-clarity workspace above the fold.
+     - **Refined Category Pills:** Replaced heavy black blocks with soft pill filters with warm gold active state (`#9a742f` / `#c49a45`), rounded count badges, and sticky backdrop-blur navigation. Fixed hover text contrast in Day Mode by adding `day:hover:text-[#1a1714]` to prevent white text on light beige hover background.
+     - **Studio Product Cards:** Elevated card design with warm subtle borders (`border-[#dfd7ca]` / `border-white/10`), rounded-xl corners, smooth hover elevation, material tags (`Cast Bronze`, `Black Granite`, `Full-Colour Enamel`, `Marine-Grade Steel`, etc.), and updated CTA buttons (*"Configure in 3D →"*).
+     - **Bottom Consultation & Catalog Banner:** Added studio guidance card for cemetery regulations, material longevity advice, and direct links to `/contact` and `/memorials/headstones`.
+  2. *Designer Left Sidebar Modernization ([`components/designer/navigation/*`](file:///C:/Users/polcr/documents/github/next-app-router-playground/components/designer/navigation/DesignerNav.tsx)):*
+     - Modernized the entire left drawer and navigation sidebar to match the Warm Minimal Studio standard:
+     - **Container & Header:** Unified background to warm studio stone (`day:bg-[#f5f1e8]`, `bg-[#141210]`), updated brand header with rounded-xl theme toggle button.
+     - **Accordion Groups (Setup, Design, Account):** Refined card containers with `rounded-xl`, warm border accents (`day:border-[#dfd7ca]`), elegant Roman numeral step badges (`I`, `II`, `III`), and Playfair Display typography.
+     - **Step Menu Items:** Unified item padding (`px-3 py-2`), standardized typography and hover states (`day:hover:bg-[#f0ebe1] day:hover:text-[#1a1714]`), and gave active steps a warm gold studio accent (`day:bg-[#9a742f]/10 day:text-[#78541c] day:border-[#9a742f]/40`).
+     - Aligned inline sub-selectors (`Select Material`, `Select Border`, `Advanced tools`, `Save Design`).
+  3. *Verification & Stability:*
+     - Full TypeScript type-check passed with 0 errors (`pnpm type-check`).
+     - Tested both Day Mode and Night Mode rendering via Playwright screenshots.
+     - Verified end-to-end selection click, catalog loading, and transition into 3D configurator (`/bronze-plaque/select-shape`).
+
+---
+
+## Current Status (2026-11-06) — Warm Minimal Studio Modernization: Product Catalog, Memorials, Designs, Gallery & Contact
+
+- **Session Summary & Completed Implementation (November 6 Full Day):**
+  1. *Warm Minimal Studio Aesthetic Across Catalog (`/select-product`):*
+     - Evaluated photorealistic product cuts vs 3D renders. Kept authentic, real product photography on warm stone studio backgrounds (`/webp/products/APP_ID_{id}-big.webp`).
+     - Refined contrast, eliminated gradient clashes, and verified clean typography across all 17 product cards.
+     - Generated responsive multi-resolution WebP sets (`big`, `medium`, `small`) with original asset backups.
+
+  2. *Memorial Category Hubs Redesign (`/memorials/[type]`):*
+     - Completely modernized all 5 category hubs: `/memorials/headstones`, `plaques`, `full-monuments`, `urns`, and `pet-memorials`.
+     - Standardized on 4 Pillars of Assurance: *30-Year Guarantee*, *100% Cemetery Regulation Approval*, *Full 3D Real-time Customization*, and *Architectural Proof & Free Revisions*.
+     - Unified multiple fragmented buttons into a single, high-conversion primary CTA: *"Personalize in 3D →"*.
+     - Added live starting prices via `getProductPriceSamples([id])` and material badges (*Laser Granite*, *Heritage Bronze*, *Marine Stainless*).
+     - Integrated interactive FAQ accordion (`MemorialFaqAccordion.tsx`) and cemetery installation gallery (`MemorialCemeteryGallery.tsx`).
+
+  3. *Homepage (`/`) Modernization:*
+     - Overhauled Hero section ([`app/_ui/HomeSplash.tsx`](file:///C:/Users/polcr/documents/github/next-app-router-playground/app/_ui/HomeSplash.tsx)): integrated 4 assurance trust badges, removed top cluttered AI prompt bar.
+     - Created dedicated AI Prompt Section ([`app/_ui/HomeAiPromptSection.tsx`](file:///C:/Users/polcr/documents/github/next-app-router-playground/app/_ui/HomeAiPromptSection.tsx)) for natural-language memorial search.
+     - Modernized Product Grid ([`app/_ui/HomeProductSection.tsx`](file:///C:/Users/polcr/documents/github/next-app-router-playground/app/_ui/HomeProductSection.tsx)) with warm studio cards and dynamic price ranges.
+     - Rebuilt Video Tutorial ([`app/_ui/HomeTutorial.tsx`](file:///C:/Users/polcr/documents/github/next-app-router-playground/app/_ui/HomeTutorial.tsx)) unifying the 3-step creation process directly with interactive video chapters.
+     - Streamlined Footer sections ([`app/_ui/HomeFooterSections.tsx`](file:///C:/Users/polcr/documents/github/next-app-router-playground/app/_ui/HomeFooterSections.tsx)) removing redundant steps and refining FAQ + consultation banner.
+     - Updated Photo Gallery ([`app/_ui/HomeGallery.tsx`](file:///C:/Users/polcr/documents/github/next-app-router-playground/app/_ui/HomeGallery.tsx)) with hover overlays and smooth zoom.
+
+  4. *Design Gallery Modernization (`/designs/`):*
+     - Overhauled main index ([`app/designs/page.tsx`](file:///C:/Users/polcr/documents/github/next-app-router-playground/app/designs/page.tsx)) with 4 assurance pillars, elevated search bar, quick category filter pills, dynamic pricing, and consultation footer.
+     - Refactored Left Sidebar Navigation ([`components/designs/ServerDesignsTreeNav.tsx`](file:///C:/Users/polcr/documents/github/next-app-router-playground/components/designs/ServerDesignsTreeNav.tsx)) to warm stone palette, gold accents, active details tags, and template counters.
+     - Modernized product collection pages ([`app/designs/[productType]/page.tsx`](file:///C:/Users/polcr/documents/github/next-app-router-playground/app/designs/[productType]/page.tsx)) with theme tiles and 3D previews.
+     - Modernized category template lists ([`app/designs/[productType]/[category]/page.tsx`](file:///C:/Users/polcr/documents/github/next-app-router-playground/app/designs/[productType]/[category]/page.tsx)) with warm studio cards, inscription badges, and motif tags.
+     - Preserved full SEO metadata, schema.org JSON-LD (`CollectionPage`, `BreadcrumbList`, `ItemList`, `FAQPage`), and ISR caching (`revalidate = 86400`).
+
+  5. *Memorial Photo Gallery Modernization (`/memorials/gallery`):*
+     - Rebuilt standalone view in [`app/_ui/HomeGallery.tsx`](file:///C:/Users/polcr/documents/github/next-app-router-playground/app/_ui/HomeGallery.tsx) with Warm Minimal Studio header, 4 pillars of assurance, and category filter pills with live counters (e.g. `Headstones (24)`).
+     - Polished lightbox modal with blurred backdrop, navigation arrows, photo counter, and dark/day theme adaptation.
+     - Added bottom design & consultation CTA banner.
+     - Added schema.org `ImageGallery` and `BreadcrumbList` JSON-LD in [`app/memorials/gallery/page.tsx`](file:///C:/Users/polcr/documents/github/next-app-router-playground/app/memorials/gallery/page.tsx).
+
+  6. *Contact & Consultation Hub Modernization (`/contact`):*
+     - Redesigned [`app/contact/page.tsx`](file:///C:/Users/polcr/documents/github/next-app-router-playground/app/contact/page.tsx) with hero section, breadcrumbs, and 4 pillars of assurance.
+     - Created client component [`app/contact/ContactForm.tsx`](file:///C:/Users/polcr/documents/github/next-app-router-playground/app/contact/ContactForm.tsx) with full validation, loading states, success confirmation, and direct integration with `/api/enquiries`.
+     - Structured studio cards for US & Canada and Australia & International with direct contact links and business hours.
+     - Added design advisory card for users with existing 3D projects or cemetery specifications, plus pre-purchase FAQ accordion.
+     - Added schema.org `ContactPage` and `Organization` JSON-LD.
+
+  7. *Theme System Polish — Day Mode by Default & Nav Gradient Fix:*
+     - **Issue:** Application was defaulting to `data-theme="dark"` in `<html>`, forcing night mode upon initial visit for users without saved localStorage preferences.
+     - **Resolution:** Updated [`app/layout.tsx`](file:///C:/Users/polcr/documents/github/next-app-router-playground/app/layout.tsx) and [`components/theme/ThemeProvider.tsx`](file:///C:/Users/polcr/documents/github/next-app-router-playground/components/theme/ThemeProvider.tsx) to default to `'day'` (`data-theme="day"`, `color-scheme: light`).
+     - **Hero Dark Gradient Overlay Fix:** Added `day:bg-none` to hero sections in [`app/contact/page.tsx`](file:///C:/Users/polcr/documents/github/next-app-router-playground/app/contact/page.tsx) and [`app/_ui/HomeGallery.tsx`](file:///C:/Users/polcr/documents/github/next-app-router-playground/app/_ui/HomeGallery.tsx) to disable `bg-gradient-to-b` in Day Mode, allowing the warm `#f1ede3` tone to shine through without overlay.
+     - **Category Navigation Dark Strip Fix:** Replaced `bg-[linear-gradient(to_right,transparent,...)]` in [`components/MemorialCategoryNav.tsx`](file:///C:/Users/polcr/documents/github/next-app-router-playground/components/MemorialCategoryNav.tsx) with clean `day:bg-[#e7e1d5]`, eliminating the base dark `#121110` background from bleeding through transparent gradient edges under the menu.
+     - **Theme Toggle Accessibility:** Enabled `<ThemeToggle inline />` on `/designs` pages in [`components/theme/ThemeToggle.tsx`](file:///C:/Users/polcr/documents/github/next-app-router-playground/components/theme/ThemeToggle.tsx) and added toggle buttons to design page breadcrumb bars.
+
+  8. *Verification & Quality Assurance:*
+     - `pnpm type-check` executed with **0 errors**.
+     - Verified clean Day Mode and Dark Mode rendering across `/`, `/memorials/headstones`, `/designs`, `/memorials/gallery`, and `/contact` via Playwright visual test scripts.
 
 - **Session Summary & Completed Implementation (November 5 Night):**
   1. *Autonomous Catalog Design Generator (`scripts/generate-catalog-designs.mjs`):*

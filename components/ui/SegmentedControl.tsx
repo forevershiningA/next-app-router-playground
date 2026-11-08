@@ -27,11 +27,7 @@ export default function SegmentedControl({
       role="group"
       className={cn(
         // Container / Track styling
-        'relative flex w-full items-center rounded-full bg-[var(--designer-control)] p-1 ring-1 ring-[var(--designer-border)] backdrop-blur-sm',
-        // Inner shadow for depth
-        'shadow-[inset_0_2px_4px_rgba(0,0,0,0.5)]',
-        // Day mode
-        'day:shadow-none',
+        'relative flex w-full items-center rounded-full border border-white/10 bg-white/[0.04] p-1 day:border-[#dfd7ca] day:bg-white/80 day:shadow-inner backdrop-blur-sm',
         className,
       )}
     >
@@ -45,22 +41,17 @@ export default function SegmentedControl({
             aria-pressed={isActive}
             onClick={() => onChange(option.value)}
             className={cn(
-              'relative z-10 flex-1 py-2 text-sm font-medium transition-colors duration-200 ease-out focus-visible:ring-2 focus-visible:ring-[#c99d44] focus-visible:ring-offset-2 focus-visible:outline-none',
+              'relative z-10 flex-1 py-1.5 md:py-2 text-xs md:text-sm font-semibold transition-colors duration-200 ease-out focus-visible:ring-2 focus-visible:ring-[#c49a45] day:focus-visible:ring-[#9a742f] focus-visible:ring-offset-2 focus-visible:outline-none',
               isActive
-                ? 'text-[var(--designer-accent-foreground)]'
-                : 'text-[var(--designer-text-muted)] hover:text-[var(--designer-text)]',
+                ? 'text-[#121110] day:text-white'
+                : 'text-white/60 hover:text-white day:text-[#6a6156] day:hover:text-[#1a1714]',
             )}
           >
             {isActive && (
               <motion.div
                 layoutId={`active-pill-${options[0].value}`} // unique ID per group
-                className="absolute inset-0 rounded-full bg-[var(--designer-accent)] shadow-sm"
+                className="absolute inset-0 rounded-full bg-[#c49a45] shadow-sm day:bg-[#9a742f]"
                 transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-                style={{
-                  // Optional: Add a subtle gradient to the gold button
-                  backgroundImage:
-                    'linear-gradient(to bottom, #e3b85f, #c99d44)',
-                }}
               />
             )}
             <span className="relative z-20">{option.label}</span>

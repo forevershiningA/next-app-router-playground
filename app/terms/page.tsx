@@ -84,40 +84,44 @@ const sections = [
 
 export default function TermsPage() {
   return (
-    <div className="day:bg-stone-100 day:text-gray-900 relative min-h-screen bg-[#050301] text-[#E5E5EA]">
-      <div
-        className="day:hidden pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(244,160,80,0.18),_transparent_45%),radial-gradient(circle_at_bottom,_rgba(88,144,255,0.18),_transparent_40%)]"
-        aria-hidden
-      />
-      <main className="relative mx-auto w-full max-w-3xl px-4 py-8 sm:px-6 lg:px-10 lg:py-10">
-        <Link
-          href="/"
-          className="day:text-gray-500 day:hover:text-gray-900 mb-6 inline-flex items-center gap-2 text-sm text-white/70 transition hover:text-white"
-        >
-          <ArrowLeftIcon className="h-4 w-4" />
-          Back to home
-        </Link>
+    <div className="min-h-screen bg-[#0c0b0a] text-white day:bg-[#f7f4ee] day:text-[#1a1714]">
+      {/* Studio Header */}
+      <section className="relative overflow-hidden border-b border-white/10 bg-[#161412] day:border-[#dfd7ca] day:bg-[#f5f1e8]">
+        <div className="absolute inset-0 bg-radial-gradient-to-r from-amber-500/5 via-transparent to-transparent pointer-events-none" />
+        <div className="relative mx-auto max-w-4xl px-4 py-8 md:px-6 md:py-10 lg:px-8">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-[#c49a45]/35 bg-[#c49a45]/10 px-3 py-1 text-[11px] font-semibold tracking-widest text-[#c49a45] uppercase day:border-[#9a742f]/30 day:bg-[#9a742f]/10 day:text-[#78541c]">
+                Legal &amp; Compliance · Terms
+              </div>
+              <h1 className="font-serif text-3xl font-normal tracking-tight text-white day:text-[#1a1714] sm:text-4xl lg:text-[40px]">
+                Terms &amp; Conditions
+              </h1>
+              <p className="mt-2 text-sm text-stone-300 day:text-[#5a5248]">
+                Last updated October 12, 2026 · Ordering custom memorial products from Forever Shining
+              </p>
+            </div>
+            <Link
+              href="/my-account"
+              className="inline-flex items-center gap-2 rounded-lg border border-white/15 bg-white/[0.04] px-4 py-2.5 text-xs font-semibold text-white transition hover:border-white/30 hover:bg-white/10 day:border-[#dfd7ca] day:bg-[#eee8dc]/70 day:text-[#1a1714] day:hover:bg-[#e7e0d2]"
+            >
+              <ArrowLeftIcon className="h-4 w-4" />
+              <span>Back to Account</span>
+            </Link>
+          </div>
+        </div>
+      </section>
 
-        <article className="day:border-gray-200 day:bg-white day:shadow-lg rounded-2xl border border-white/10 bg-[#0c0805]/85 px-4 pt-6 pb-20 shadow-[0_25px_65px_rgba(0,0,0,0.6)] backdrop-blur-2xl sm:rounded-[32px] sm:px-6 lg:px-10 lg:pt-8">
-          <header className="day:border-gray-200 mb-8 border-b border-white/10 pb-6">
-            <p className="day:text-amber-700 mb-2 text-sm font-semibold tracking-[0.16em] text-[#D4A84F] uppercase">
-              Forever Shining
-            </p>
-            <h1 className="day:text-gray-900 text-3xl font-semibold tracking-tight sm:text-4xl">
-              Terms &amp; Conditions
-            </h1>
-            <p className="day:text-gray-500 mt-3 text-sm text-white/55">
-              Last updated October 12, 2026
-            </p>
-          </header>
-
-          <div className="space-y-8">
-            {sections.map((section) => (
-              <section key={section.title}>
-                <h2 className="day:text-gray-900 text-xl font-semibold text-[#F2F2F7]">
+      {/* Main Content */}
+      <main className="mx-auto max-w-4xl px-4 pt-6 pb-20 md:px-6 md:pt-8 lg:px-8">
+        <article className="rounded-xl border border-white/10 bg-[#161412] p-6 day:border-[#dfd7ca] day:bg-white day:shadow-[0_8px_24px_rgba(40,30,20,0.06)] sm:p-10">
+          <div className="divide-y divide-white/10 day:divide-[#dfd7ca]">
+            {sections.map((section, index) => (
+              <section key={section.title} className={`py-6 ${index === 0 ? 'pt-0' : ''} last:pb-0`}>
+                <h2 className="font-serif text-lg font-normal text-[#c49a45] day:text-[#9a742f]">
                   {section.title}
                 </h2>
-                <div className="day:text-gray-600 mt-3 space-y-3 leading-relaxed text-[#D1D1D6]">
+                <div className="mt-2 space-y-3 text-sm leading-relaxed text-stone-300 day:text-[#5a5248]">
                   {section.paragraphs.map((paragraph) => (
                     <p key={paragraph}>{paragraph}</p>
                   ))}
@@ -126,11 +130,11 @@ export default function TermsPage() {
             ))}
           </div>
 
-          <footer className="day:border-gray-200 day:text-gray-600 mt-10 border-t border-white/10 pt-6 text-sm text-white/65">
+          <footer className="mt-8 border-t border-white/10 pt-6 text-sm text-stone-400 day:border-[#dfd7ca] day:text-[#786e61]">
             Read our{' '}
             <Link
               href="/privacy"
-              className="day:text-amber-700 text-[#D4A84F] hover:underline"
+              className="text-[#c49a45] underline decoration-[#c49a45]/40 underline-offset-2 transition hover:text-[#d5ad55] day:text-[#9a742f] day:decoration-[#9a742f]/40 day:hover:text-[#78541c]"
             >
               Privacy Policy
             </Link>

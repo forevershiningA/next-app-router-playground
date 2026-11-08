@@ -176,21 +176,21 @@ export default function InscriptionEditPanel() {
         ? 'text-right'
         : 'text-center';
   const sectionCardClass =
-    'rounded-lg border border-white/10 bg-[#171717] p-2.5 shadow-lg shadow-black/15 day:border-gray-200 day:bg-white md:p-3.5';
+    'rounded-xl border border-white/10 bg-[#161412] p-3 shadow-sm day:border-[#dfd7ca] day:bg-white day:shadow-[0_2px_8px_rgba(40,30,20,0.04)] md:p-3.5';
   const labelClass =
-    'mb-2 block text-sm font-semibold text-slate-100 day:text-gray-800';
+    'mb-2 block font-serif text-sm font-normal text-white day:text-[#1a1714]';
   const fieldClass =
-    'w-full rounded-lg border border-white/10 bg-white/[0.08] px-3 py-2 text-sm font-medium text-white outline-none transition-colors focus:border-[#D7B356] focus:ring-2 focus:ring-[#D7B356]/30 day:border-gray-300 day:bg-gray-100 day:text-gray-900 day:placeholder:text-gray-400';
+    'w-full rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2.5 font-serif text-sm font-normal text-white outline-none transition-all focus:border-[#c49a45] focus:ring-2 focus:ring-[#c49a45]/20 day:border-[#dfd7ca] day:bg-white day:text-[#1a1714] day:placeholder:text-[#8a8175] day:focus:border-[#9a742f] day:focus:ring-[#9a742f]/20 day:shadow-sm';
   const controlButtonClass =
-    'flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-white/10 bg-white/[0.08] text-white transition-colors hover:border-[#D7B356]/50 hover:bg-white/[0.13] day:border-gray-200 day:bg-gray-100 day:text-gray-700 day:hover:bg-gray-200';
+    'flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-white/10 bg-white/[0.06] text-white transition-all hover:border-[#c49a45] hover:bg-[#c49a45]/15 hover:text-[#f0d89f] disabled:cursor-not-allowed disabled:opacity-30 day:border-[#dfd7ca] day:bg-white day:text-[#1a1714] day:hover:border-[#9a742f] day:hover:bg-[#9a742f]/10 day:hover:text-[#9a742f] day:shadow-sm';
   const numberInputBaseClass =
-    'h-8 w-16 rounded-md border bg-white/[0.08] px-2 text-right text-sm font-semibold text-white transition-colors focus:ring-2 focus:outline-none day:bg-gray-100 day:text-gray-900';
+    'h-8 w-18 rounded-lg border bg-white/[0.04] px-2 text-right font-sans text-sm font-semibold text-white transition-colors focus:ring-2 focus:ring-[#c49a45]/20 focus:outline-none day:bg-white day:text-[#1a1714] day:border-[#dfd7ca] day:focus:border-[#9a742f] day:focus:ring-[#9a742f]/20 day:shadow-sm';
   const rangeInputClass =
-    'fs-range h-1.5 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-webkit-slider-thumb]:h-[20px] [&::-webkit-slider-thumb]:w-[20px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#171717] [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.35),0_0_0_3px_rgba(0,0,0,0.25)] [&::-webkit-slider-thumb]:transition-shadow [&::-webkit-slider-thumb]:hover:shadow-[0_0_12px_rgba(215,179,86,0.55),0_0_0_3px_rgba(0,0,0,0.25)] [&::-moz-range-thumb]:h-[20px] [&::-moz-range-thumb]:w-[20px] [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-[#171717] [&::-moz-range-thumb]:bg-[#D7B356] [&::-moz-range-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.35),0_0_0_3px_rgba(0,0,0,0.25)]';
+    'fs-range h-1.5 w-full cursor-pointer appearance-none rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--designer-focus)] [&::-moz-range-thumb]:h-5 [&::-moz-range-thumb]:w-5 [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-[#161412] [&::-moz-range-thumb]:bg-[#c49a45] [&::-moz-range-thumb]:shadow-md [&::-webkit-slider-thumb]:h-5 [&::-webkit-slider-thumb]:w-5 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#161412] [&::-webkit-slider-thumb]:bg-[#c49a45] [&::-webkit-slider-thumb]:shadow-md day:[&::-webkit-slider-thumb]:border-white day:[&::-webkit-slider-thumb]:bg-[#9a742f] day:[&::-moz-range-thumb]:border-white day:[&::-moz-range-thumb]:bg-[#9a742f]';
   const rangeBoundsClass =
-    'mt-1 flex w-full justify-between text-xs text-white/60 day:text-gray-600';
+    'mt-1.5 flex w-full justify-between font-sans text-[11px] font-medium tabular-nums text-white/50 day:text-[#786e61]';
   const AlignControls = (
-    <div className="day:border-gray-200 day:bg-gray-100 flex w-full items-center justify-between gap-1.5 rounded-lg border border-white/10 bg-[#0A0A0A] p-1">
+    <div className="flex w-full items-center justify-between gap-1 rounded-xl border border-white/10 bg-white/[0.04] p-1 day:border-[#dfd7ca] day:bg-[#f7f4ee] day:shadow-inner">
       <div className="grid min-w-0 flex-1 grid-cols-3 gap-1">
         {(
           [
@@ -206,10 +206,10 @@ export default function InscriptionEditPanel() {
               type="button"
               onClick={() => setAlign(opt.value)}
               aria-pressed={isActive}
-              className={`w-full rounded-md px-3 py-2 text-center text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--designer-focus)] ${
+              className={`w-full rounded-lg px-3 py-1.5 text-center font-sans text-xs font-semibold tracking-wide transition-all ${
                 isActive
-                  ? 'bg-[#D7B356] text-slate-900 shadow-sm'
-                  : 'day:text-gray-600 day:hover:bg-gray-200 day:hover:text-gray-900 text-white/60 hover:bg-white/10 hover:text-white'
+                  ? 'border border-[#c49a45] bg-[#c49a45] text-[#121110] shadow-sm day:border-[#9a742f] day:bg-[#9a742f] day:text-white'
+                  : 'text-white/70 hover:bg-white/10 hover:text-white day:text-[#6a6156] day:hover:bg-white day:hover:text-[#1a1714]'
               }`}
             >
               {opt.label}
@@ -222,7 +222,7 @@ export default function InscriptionEditPanel() {
           type="button"
           onMouseDown={(event) => event.preventDefault()}
           onClick={finishTextEditing}
-          className="shrink-0 rounded-md bg-[#D7B356] px-3 py-1.5 text-xs font-semibold text-slate-950 md:hidden"
+          className="shrink-0 rounded-lg bg-[#c49a45] px-3 py-1.5 text-xs font-semibold text-[#121110] day:bg-[#9a742f] day:text-white md:hidden"
         >
           Done
         </button>
@@ -270,13 +270,13 @@ export default function InscriptionEditPanel() {
       data-testid="designer-inscriptions-panel"
       className="flex flex-col gap-2 md:gap-3"
     >
-      <div className="day:text-gray-800 hidden px-1 pt-1 text-sm font-semibold text-slate-100 md:block">
+      <div className="hidden px-1 pt-1 font-serif text-lg font-normal text-white day:text-[#1a1714] md:block">
         {inscriptionPriceModel?.name ?? 'Inscription'}
       </div>
       <div className={`${sectionCardClass} order-1`}>
         {lines.length > 0 && (
           <div className="mb-3">
-            <p className="mb-2 text-sm font-semibold text-[var(--designer-text)]">
+            <p className="mb-2 font-serif text-sm font-normal text-white day:text-[#1a1714]">
               Inscriptions on your design ({lines.length})
             </p>
             <div
@@ -336,19 +336,21 @@ export default function InscriptionEditPanel() {
               aria-label="Inscription options"
               className="order-2 hidden items-center gap-2 px-1 py-1 md:flex"
             >
-              <span className="mr-auto text-xs font-medium text-[var(--designer-text-muted)]">
+              <span className="mr-auto font-serif text-sm font-normal text-white day:text-[#1a1714]">
                 Edit
               </span>
               <DesignerOptionButton
                 selected={activeTab === 'font'}
-                className="min-w-20 rounded-md px-3 py-1.5 text-xs font-semibold"
+                variant="solid"
+                className="min-w-20 rounded-lg px-3 py-1.5 font-sans text-xs font-semibold"
                 onClick={() => setActiveTab('font')}
               >
                 Font
               </DesignerOptionButton>
               <DesignerOptionButton
                 selected={activeTab === 'color'}
-                className="min-w-20 rounded-md px-3 py-1.5 text-xs font-semibold"
+                variant="solid"
+                className="min-w-20 rounded-lg px-3 py-1.5 font-sans text-xs font-semibold"
                 onClick={() => setActiveTab('color')}
               >
                 Color
@@ -386,7 +388,7 @@ export default function InscriptionEditPanel() {
                 <div className="relative hidden md:block">
                   <select
                     aria-label="Inscription font"
-                    className={`${fieldClass} appearance-none pr-8`}
+                    className={`${fieldClass} cursor-pointer appearance-none pr-8 font-sans`}
                     style={{ colorScheme: 'dark' }}
                     value={active?.font ?? selectedFont}
                     onChange={(e) => {
@@ -408,7 +410,7 @@ export default function InscriptionEditPanel() {
                       </option>
                     ))}
                   </select>
-                  <span className="day:text-gray-500 pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-slate-400">
+                  <span className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-white/50 day:text-[#6a6156]">
                     ▾
                   </span>
                 </div>
@@ -419,7 +421,7 @@ export default function InscriptionEditPanel() {
           {showInscriptionColor && activeTab === 'color' && (
             <div className={`order-4 px-1 ${active ? '' : 'opacity-55'}`}>
               {!active && (
-                <p className="day:text-gray-500 mb-3 text-sm text-white/60">
+                <p className="mb-3 text-sm text-stone-300 day:text-[#6a6156]">
                   Add or select an inscription to choose its colour.
                 </p>
               )}
@@ -428,48 +430,48 @@ export default function InscriptionEditPanel() {
                   <button
                     type="button"
                     disabled={!active}
-                    className={`day:bg-gray-50 flex flex-col items-center gap-1.5 rounded-lg border p-3 transition-colors ${
+                    className={`flex flex-col items-center gap-1.5 rounded-xl border p-3 transition-all ${
                       active
-                        ? 'cursor-pointer hover:bg-white/[0.08]'
-                        : 'cursor-not-allowed'
+                        ? 'cursor-pointer hover:border-[#c49a45]/60 hover:bg-white/[0.04] day:hover:border-[#9a742f]'
+                        : 'cursor-not-allowed opacity-50'
                     } ${
                       active?.color === '#c99d44'
-                        ? 'border-2 border-[#D7B356] bg-[#D7B356]/15 ring-2 ring-[#D7B356]/30'
-                        : 'day:border-gray-300 day:hover:border-[#D7B356] border-white/10 hover:border-[#D7B356]/60'
+                        ? 'border-[#c49a45] bg-[#c49a45]/15 ring-2 ring-[#c49a45] day:border-[#9a742f] day:bg-[#9a742f]/10 day:ring-[#9a742f]'
+                        : 'border-white/10 bg-white/[0.02] day:border-[#dfd7ca] day:bg-white day:shadow-sm'
                     }`}
                     onClick={() =>
                       active && updateLine(active.id, { color: '#c99d44' })
                     }
                   >
                     <div
-                      className="day:border-gray-300 h-6 w-6 rounded-md border border-slate-600"
+                      className="h-6 w-6 rounded-md border border-white/20 shadow-sm"
                       style={{ backgroundColor: '#c99d44' }}
                     />
-                    <span className="day:text-gray-700 text-xs font-semibold text-slate-100">
+                    <span className="font-serif text-xs font-normal text-white day:text-[#1a1714]">
                       Gold Gilding
                     </span>
                   </button>
                   <button
                     type="button"
                     disabled={!active}
-                    className={`day:bg-gray-50 flex flex-col items-center gap-1.5 rounded-lg border p-3 transition-colors ${
+                    className={`flex flex-col items-center gap-1.5 rounded-xl border p-3 transition-all ${
                       active
-                        ? 'cursor-pointer hover:bg-white/[0.08]'
-                        : 'cursor-not-allowed'
+                        ? 'cursor-pointer hover:border-[#c49a45]/60 hover:bg-white/[0.04] day:hover:border-[#9a742f]'
+                        : 'cursor-not-allowed opacity-50'
                     } ${
                       active?.color === '#eeeeee'
-                        ? 'border-2 border-[#D7B356] bg-[#D7B356]/15 ring-2 ring-[#D7B356]/30'
-                        : 'day:border-gray-300 day:hover:border-[#D7B356] border-white/10 hover:border-[#D7B356]/60'
+                        ? 'border-[#c49a45] bg-[#c49a45]/15 ring-2 ring-[#c49a45] day:border-[#9a742f] day:bg-[#9a742f]/10 day:ring-[#9a742f]'
+                        : 'border-white/10 bg-white/[0.02] day:border-[#dfd7ca] day:bg-white day:shadow-sm'
                     }`}
                     onClick={() =>
                       active && updateLine(active.id, { color: '#eeeeee' })
                     }
                   >
                     <div
-                      className="day:border-gray-300 h-6 w-6 rounded-md border border-slate-600"
+                      className="h-6 w-6 rounded-md border border-white/20 shadow-sm"
                       style={{ backgroundColor: '#eeeeee' }}
                     />
-                    <span className="day:text-gray-700 text-xs font-semibold text-slate-100">
+                    <span className="font-serif text-xs font-normal text-white day:text-[#1a1714]">
                       Silver Gilding
                     </span>
                   </button>
@@ -487,14 +489,14 @@ export default function InscriptionEditPanel() {
                         : `${color.name}; add an inscription to select it`
                     }
                     disabled={!active}
-                    className={`h-8 w-8 shrink-0 rounded-full border-2 transition-colors md:h-7 md:w-7 md:rounded-md ${
+                    className={`h-8 w-8 shrink-0 rounded-full border-2 transition-all md:h-7 md:w-7 md:rounded-md ${
                       active
-                        ? 'cursor-pointer hover:border-[#D7B356]'
-                        : 'cursor-not-allowed'
+                        ? 'cursor-pointer hover:border-[#c49a45] hover:scale-110'
+                        : 'cursor-not-allowed opacity-40'
                     } ${
                       active?.color === color.hex
-                        ? 'day:ring-offset-white border-[#fff4bf] ring-2 ring-[#D7B356] ring-offset-2 ring-offset-[#171717]'
-                        : 'border-white/15'
+                        ? 'ring-2 ring-[#c49a45] ring-offset-2 ring-offset-[#161412] day:ring-[#9a742f] day:ring-offset-white border-white'
+                        : 'border-white/15 day:border-[#dfd7ca]'
                     }`}
                     style={{ backgroundColor: color.hex }}
                     onClick={() =>
@@ -524,7 +526,7 @@ export default function InscriptionEditPanel() {
           type="button"
           onClick={handleAddInscription}
           disabled={!active && !canAddInscription}
-          className="mt-2 flex w-full items-center justify-center gap-2 rounded-lg border border-[#D7B356] bg-[#D7B356] px-4 py-2.5 text-sm font-semibold text-black transition-colors hover:bg-[#E4C778] disabled:cursor-not-allowed disabled:opacity-45 disabled:hover:bg-[#D7B356]"
+          className="mt-3 flex w-full items-center justify-center gap-2 rounded-lg border border-[#c49a45] bg-[#c49a45] px-4 py-2.5 font-sans text-sm font-semibold text-[#121110] shadow-sm transition-all hover:bg-[#d5ad55] day:border-[#9a742f] day:bg-[#9a742f] day:text-white day:hover:bg-[#856325] disabled:cursor-not-allowed disabled:opacity-40"
         >
           <span aria-hidden="true">+</span>
           {active ? 'New Inscription' : 'Add Inscription'}
@@ -537,7 +539,7 @@ export default function InscriptionEditPanel() {
           {/* Size Slider */}
           <div className="order-5 px-1 pt-1">
             <div className="flex items-center justify-between gap-2">
-              <label className="day:text-gray-800 text-sm font-semibold text-slate-100">
+              <label className="font-serif text-sm font-normal text-white day:text-[#1a1714]">
                 Size
               </label>
               <div className="flex items-center justify-end gap-2">
@@ -588,7 +590,7 @@ export default function InscriptionEditPanel() {
                     (active.sizeMm ?? 30) < inscriptionMinHeight ||
                     (active.sizeMm ?? 30) > inscriptionMaxHeight
                       ? 'border-red-500 focus:border-red-500 focus:ring-red-500/50'
-                      : 'day:border-gray-300 border-white/10 focus:border-[#D7B356] focus:ring-[#D7B356]/30'
+                      : 'border-white/10 day:border-[#dfd7ca] focus:border-[#c49a45] day:focus:border-[#9a742f] focus:ring-[#c49a45]/20 day:focus:ring-[#9a742f]/20'
                   }`}
                 />
                 <button
@@ -617,7 +619,7 @@ export default function InscriptionEditPanel() {
                     />
                   </svg>
                 </button>
-                <span className="day:text-gray-600 text-sm font-semibold text-white/70">
+                <span className="font-sans text-xs font-semibold text-white/60 day:text-[#6a6156]">
                   {getLengthUnitLabel(unitSystem)}
                 </span>
               </div>
@@ -809,7 +811,7 @@ export default function InscriptionEditPanel() {
           {/* Rotation Slider */}
           <div className="order-7 hidden px-1 pt-1 md:block">
             <div className="flex items-center justify-between gap-2">
-              <label className="day:text-gray-800 text-sm font-semibold text-slate-100">
+              <label className="font-serif text-sm font-normal text-white day:text-[#1a1714]">
                 Rotation
               </label>
               <div className="flex items-center justify-end gap-2">
@@ -862,7 +864,7 @@ export default function InscriptionEditPanel() {
                     (active.rotationDeg ?? 0) < -180 ||
                     (active.rotationDeg ?? 0) > 180
                       ? 'border-red-500 focus:border-red-500 focus:ring-red-500/50'
-                      : 'day:border-gray-300 border-white/10 focus:border-[#D7B356] focus:ring-[#D7B356]/30'
+                      : 'border-white/10 day:border-[#dfd7ca] focus:border-[#c49a45] day:focus:border-[#9a742f] focus:ring-[#c49a45]/20 day:focus:ring-[#9a742f]/20'
                   }`}
                 />
                 <button
@@ -888,7 +890,7 @@ export default function InscriptionEditPanel() {
                     />
                   </svg>
                 </button>
-                <span className="day:text-gray-600 text-sm font-semibold text-white/70">
+                <span className="font-sans text-xs font-semibold text-white/60 day:text-[#6a6156]">
                   °
                 </span>
               </div>
@@ -916,18 +918,18 @@ export default function InscriptionEditPanel() {
 
       {/* Actions for the selected inscription */}
       {active && (
-        <div className="day:border-gray-200 order-8 border-t border-white/10 pt-3">
+        <div className="order-8 border-t border-white/10 pt-3 day:border-[#dfd7ca]">
           <div className="grid grid-cols-2 gap-2">
             <button
               type="button"
-              className="day:bg-white day:text-[#8a6a12] cursor-pointer rounded-lg border border-[#D7B356]/60 bg-[#171717] px-3 py-2 text-sm font-semibold text-[#F2D58B] transition-colors hover:bg-[#D7B356]/15"
+              className="cursor-pointer rounded-lg border border-[#c49a45]/60 bg-[#161412] px-3 py-2 text-sm font-semibold text-[#f0d89f] transition-all hover:bg-[#c49a45]/15 day:border-[#9a742f] day:bg-white day:text-[#78541c] day:hover:bg-[#9a742f]/10 day:shadow-sm"
               onClick={() => duplicateInscription(active.id)}
             >
               Duplicate
             </button>
             <button
               type="button"
-              className="day:bg-white day:text-red-700 cursor-pointer rounded-lg border border-red-500/50 bg-[#171717] px-3 py-2 text-sm font-semibold text-red-200 transition-colors hover:bg-red-500/15"
+              className="cursor-pointer rounded-lg border border-red-500/50 bg-[#161412] px-3 py-2 text-sm font-semibold text-red-300 transition-all hover:bg-red-500/15 day:border-red-300 day:bg-white day:text-red-700 day:hover:bg-red-50 day:shadow-sm"
               onClick={() => deleteInscription(active.id)}
             >
               Delete

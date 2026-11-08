@@ -108,7 +108,7 @@ export default function AccountDetailsPage() {
       if (res.ok) {
         setProfile((p) => ({ ...p, firstName: personalForm.firstName, lastName: personalForm.lastName, phone: personalForm.phone }));
         setAccount((a) => ({ ...a, email: personalForm.email }));
-        setPersonalMsg('Saved');
+        setPersonalMsg('Saved successfully');
         setEditingPersonal(false);
       } else {
         const d = await res.json();
@@ -142,7 +142,7 @@ export default function AccountDetailsPage() {
         }),
       });
       if (res.ok) {
-        setPasswordMsg('Password updated');
+        setPasswordMsg('Password updated successfully');
         setEditingPassword(false);
         setPasswordForm({ currentPassword: '', newPassword: '', confirmPassword: '' });
       } else {
@@ -166,7 +166,7 @@ export default function AccountDetailsPage() {
         body: JSON.stringify(businessForm),
       });
       if (res.ok) {
-        setBusinessMsg('Saved');
+        setBusinessMsg('Saved successfully');
         setEditingBusiness(false);
       } else {
         setBusinessMsg('Failed to save');
@@ -179,311 +179,476 @@ export default function AccountDetailsPage() {
   }
 
   const inputClass =
-    'w-full rounded-lg border border-white/20 bg-white/5 px-3 py-2 text-sm text-white placeholder-white/30 focus:border-[#D4A84F]/60 focus:outline-none focus:ring-1 focus:ring-[#D4A84F]/40 day:border-gray-300 day:bg-white day:text-gray-900 day:placeholder-gray-400 day:focus:border-amber-500 day:focus:ring-amber-400/40';
-  const labelClass = 'block text-xs font-medium text-white/70 mb-1 day:text-gray-600';
-  const fieldValueClass = 'text-sm break-words text-white day:text-gray-900';
-  const fieldLabelClass = 'text-xs text-white/55 mb-0.5 day:text-gray-400';
-  const emptyClass = 'text-sm text-white/30 day:text-gray-400';
-  const btnClass = 'inline-flex items-center gap-1.5 rounded-lg border border-white/30 bg-white/5 px-3 py-1.5 text-xs font-medium text-white/80 hover:bg-white/10 hover:border-white/50 transition day:border-gray-300 day:bg-gray-50 day:text-gray-600 day:hover:bg-gray-100 day:hover:border-gray-400';
+    'w-full rounded-lg border border-white/15 bg-white/[0.04] px-3.5 py-2.5 text-sm text-white placeholder-stone-400 focus:border-[#c49a45] focus:outline-none focus:ring-1 focus:ring-[#c49a45] day:border-[#dfd7ca] day:bg-[#fcfbf9] day:text-[#1a1714] day:placeholder-[#8c8273] day:focus:border-[#9a742f] day:focus:ring-[#9a742f]';
+  const labelClass = 'block text-xs font-medium text-stone-300 mb-1.5 day:text-[#5a5248]';
+  const fieldValueClass = 'text-sm font-medium break-words text-white day:text-[#1a1714]';
+  const fieldLabelClass = 'text-xs text-stone-400 mb-1 day:text-[#786e61]';
+  const emptyClass = 'text-sm italic text-stone-500 day:text-stone-400';
+  const btnClass =
+    'inline-flex items-center gap-1.5 rounded-lg border border-white/15 bg-white/[0.04] px-3 py-1.5 text-xs font-medium text-white transition hover:border-white/30 hover:bg-white/10 day:border-[#dfd7ca] day:bg-[#eee8dc]/70 day:text-[#1a1714] day:hover:bg-[#e7e0d2]';
 
   return (
-    <div className="relative min-h-screen bg-[#050301] text-white day:bg-stone-100 day:text-gray-900">
-      <div
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(244,160,80,0.18),_transparent_45%),radial-gradient(circle_at_bottom,_rgba(88,144,255,0.18),_transparent_40%)] day:hidden"
-        aria-hidden
-      />
-      <div className="relative mx-auto w-full max-w-3xl px-4 py-8 sm:px-6 lg:px-10 lg:py-10">
-        {/* Back link */}
-        <Link
-          href="/my-account"
-          className="mb-6 inline-flex items-center gap-2 text-sm text-white/70 hover:text-white transition day:text-gray-500 day:hover:text-gray-900"
-        >
-          <ArrowLeftIcon className="h-4 w-4" />
-          Back to Saved Designs
-        </Link>
+    <div className="min-h-screen bg-[#0c0b0a] text-white day:bg-[#f7f4ee] day:text-[#1a1714]">
+      {/* Studio Header */}
+      <section className="relative overflow-hidden border-b border-white/10 bg-[#161412] day:border-[#dfd7ca] day:bg-[#f5f1e8]">
+        <div className="absolute inset-0 bg-radial-gradient-to-r from-amber-500/5 via-transparent to-transparent pointer-events-none" />
+        <div className="relative mx-auto max-w-4xl px-4 py-8 md:px-6 md:py-10 lg:px-8">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-[#c49a45]/35 bg-[#c49a45]/10 px-3 py-1 text-[11px] font-semibold tracking-widest text-[#c49a45] uppercase day:border-[#9a742f]/30 day:bg-[#9a742f]/10 day:text-[#78541c]">
+                Customer Portal · Account Profile
+              </div>
+              <h1 className="font-serif text-3xl font-normal tracking-tight text-white day:text-[#1a1714] sm:text-4xl lg:text-[40px]">
+                Account Details
+              </h1>
+              <p className="mt-2 text-sm text-stone-300 day:text-[#5a5248]">
+                {account.email ? `Managing profile for ${account.email}` : 'Update your personal info, login password and business details'}
+              </p>
+            </div>
+            <Link
+              href="/my-account"
+              className="inline-flex items-center gap-2 rounded-lg border border-white/15 bg-white/[0.04] px-4 py-2.5 text-xs font-semibold text-white transition hover:border-white/30 hover:bg-white/10 day:border-[#dfd7ca] day:bg-[#eee8dc]/70 day:text-[#1a1714] day:hover:bg-[#e7e0d2]"
+            >
+              <ArrowLeftIcon className="h-4 w-4" />
+              <span>Back to Designs</span>
+            </Link>
+          </div>
+        </div>
+      </section>
 
-        <div className="rounded-2xl border border-white/10 bg-[#0c0805]/85 px-4 py-6 shadow-[0_25px_65px_rgba(0,0,0,0.6)] backdrop-blur-2xl [scrollbar-color:rgba(212,168,79,0.3)_rgba(255,255,255,0.04)] [scrollbar-width:thin] day:border-gray-200 day:bg-white day:shadow-lg sm:rounded-[32px] sm:px-6 lg:px-10 lg:py-8">
-          <header className="mb-0 pb-6">
-            <h1 className="py-[10px] text-3xl font-semibold tracking-tight day:text-gray-900">Account Details</h1>
-          </header>
-
-          {isLoading ? (
-            <p className="text-sm text-white/40 day:text-gray-400">Loading…</p>
-          ) : (
-            <div className="space-y-6">
-
-              {/* Personal Details */}
-              <section className="rounded-2xl border border-white/10 bg-white/5 p-6 day:border-gray-200 day:bg-gray-50">
-                <div className="mb-4 flex items-center justify-between gap-3">
-                  <h2 className="text-base font-semibold text-white/90 day:text-gray-900">Personal Details</h2>
-                  {!editingPersonal && (
-                    <button
-                      onClick={() => { setEditingPersonal(true); setPersonalMsg(''); }}
-                      className={`${btnClass} shrink-0 px-2.5`}
-                      aria-label="Edit personal details"
-                    >
-                      <PencilIcon className="h-3.5 w-3.5" />
-                      <span className="sr-only sm:not-sr-only">Edit</span>
-                    </button>
-                  )}
+      {/* Main Form Content */}
+      <main className="mx-auto max-w-4xl px-4 pt-6 pb-20 md:px-6 md:pt-8 lg:px-8">
+        {isLoading ? (
+          <div className="rounded-xl border border-white/10 bg-[#161412] p-12 text-center day:border-[#dfd7ca] day:bg-white day:shadow-[0_8px_24px_rgba(40,30,20,0.06)]">
+            <div className="mx-auto h-8 w-8 animate-spin rounded-full border-2 border-[#c49a45] border-t-transparent day:border-[#9a742f]" />
+            <p className="mt-4 text-sm text-stone-300 day:text-[#5a5248]">Loading account details…</p>
+          </div>
+        ) : (
+          <div className="space-y-6">
+            {/* Personal Details Card */}
+            <section className="rounded-xl border border-white/10 bg-[#161412] p-6 day:border-[#dfd7ca] day:bg-white day:shadow-[0_8px_24px_rgba(40,30,20,0.06)]">
+              <div className="mb-5 flex items-center justify-between gap-3 border-b border-white/10 pb-4 day:border-[#dfd7ca]">
+                <div>
+                  <h2 className="font-serif text-xl font-normal text-white day:text-[#1a1714]">
+                    Personal Details
+                  </h2>
+                  <p className="mt-1 text-xs text-stone-400 day:text-[#786e61]">
+                    Your contact information associated with orders and quotes
+                  </p>
                 </div>
+                {!editingPersonal && (
+                  <button
+                    onClick={() => { setEditingPersonal(true); setPersonalMsg(''); }}
+                    className={btnClass}
+                    aria-label="Edit personal details"
+                  >
+                    <PencilIcon className="h-3.5 w-3.5 text-[#c49a45] day:text-[#9a742f]" />
+                    <span>Edit</span>
+                  </button>
+                )}
+              </div>
 
-                {editingPersonal ? (
-                  <div className="space-y-4">
-                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                      <div>
-                        <label className={labelClass}>First Name</label>
-                        <input className={inputClass} value={personalForm.firstName} onChange={(e) => setPersonalForm((f) => ({ ...f, firstName: e.target.value }))} />
-                      </div>
-                      <div>
-                        <label className={labelClass}>Last Name</label>
-                        <input className={inputClass} value={personalForm.lastName} onChange={(e) => setPersonalForm((f) => ({ ...f, lastName: e.target.value }))} />
-                      </div>
+              {editingPersonal ? (
+                <div className="space-y-4">
+                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                    <div>
+                      <label className={labelClass}>First Name</label>
+                      <input
+                        className={inputClass}
+                        value={personalForm.firstName}
+                        onChange={(e) => setPersonalForm((f) => ({ ...f, firstName: e.target.value }))}
+                        placeholder="John"
+                      />
                     </div>
                     <div>
-                      <label className={labelClass}>Email</label>
-                      <input className={inputClass} type="email" value={personalForm.email} onChange={(e) => setPersonalForm((f) => ({ ...f, email: e.target.value }))} />
-                    </div>
-                    <div>
-                      <label className={labelClass}>Phone</label>
-                      <input className={inputClass} value={personalForm.phone} onChange={(e) => setPersonalForm((f) => ({ ...f, phone: e.target.value }))} />
-                    </div>
-                    {personalMsg && <p className={`text-xs ${personalMsg === 'Saved' ? 'text-green-400' : 'text-red-400'}`}>{personalMsg}</p>}
-                    <div className="flex gap-3">
-                      <button
-                        onClick={savePersonal}
-                        disabled={personalSaving}
-                        className="rounded-lg bg-[#D4A84F] px-4 py-2 text-sm font-semibold text-black hover:bg-[#e0b86a] disabled:opacity-50 transition"
-                      >
-                        {personalSaving ? 'Saving…' : 'Save Changes'}
-                      </button>
-                      <button
-                        onClick={() => { setEditingPersonal(false); setPersonalMsg(''); }}
-                       className="rounded-lg border border-white/20 px-4 py-2 text-sm text-white/60 hover:text-white transition day:border-gray-300 day:text-gray-500 day:hover:text-gray-900"
-                      >
-                        Cancel
-                      </button>
+                      <label className={labelClass}>Last Name</label>
+                      <input
+                        className={inputClass}
+                        value={personalForm.lastName}
+                        onChange={(e) => setPersonalForm((f) => ({ ...f, lastName: e.target.value }))}
+                        placeholder="Doe"
+                      />
                     </div>
                   </div>
-                ) : (
-                  <dl className="grid grid-cols-1 gap-y-4 sm:grid-cols-2 sm:gap-x-8">
-                    <div>
-                      <dt className={fieldLabelClass}>First Name</dt>
-                      <dd className={profile.firstName ? fieldValueClass : emptyClass}>{profile.firstName || 'Not provided'}</dd>
-                    </div>
-                    <div>
-                      <dt className={fieldLabelClass}>Last Name</dt>
-                      <dd className={profile.lastName ? fieldValueClass : emptyClass}>{profile.lastName || 'Not provided'}</dd>
-                    </div>
-                    <div>
-                      <dt className={fieldLabelClass}>Email</dt>
-                      <dd className={account.email ? fieldValueClass : emptyClass}>{account.email || 'Not provided'}</dd>
-                    </div>
-                    <div>
-                      <dt className={fieldLabelClass}>Phone</dt>
-                      <dd className={profile.phone ? fieldValueClass : emptyClass}>{profile.phone || 'Not provided'}</dd>
-                    </div>
-                    <div>
-                      <dt className={fieldLabelClass}>Role</dt>
-                      <dd className={account.role ? fieldValueClass : emptyClass}>{account.role || 'Not provided'}</dd>
-                    </div>
-                    <div>
-                      <dt className={fieldLabelClass}>Status</dt>
-                      <dd>
-                        {account.status ? (
-                          <span className={`inline-block rounded-full px-2.5 py-0.5 text-xs font-medium ${account.status === 'active' ? 'bg-green-500/15 text-green-400 day:bg-green-100 day:text-green-700' : 'bg-white/10 text-white/60 day:bg-gray-100 day:text-gray-500'}`}>
-                            {account.status}
-                          </span>
-                        ) : (
-                          <span className={emptyClass}>Not provided</span>
-                        )}
-                      </dd>
-                    </div>
-                  </dl>
-                )}
-              </section>
-
-              {/* Password */}
-              <section className="rounded-2xl border border-white/10 bg-white/5 p-6 day:border-gray-200 day:bg-gray-50">
-                <div className="mb-4">
-                  <h2 className="text-base font-semibold text-white/90 day:text-gray-900">Password</h2>
+                  <div>
+                    <label className={labelClass}>Email Address</label>
+                    <input
+                      className={inputClass}
+                      type="email"
+                      value={personalForm.email}
+                      onChange={(e) => setPersonalForm((f) => ({ ...f, email: e.target.value }))}
+                      placeholder="john@example.com"
+                    />
+                  </div>
+                  <div>
+                    <label className={labelClass}>Phone Number</label>
+                    <input
+                      className={inputClass}
+                      value={personalForm.phone}
+                      onChange={(e) => setPersonalForm((f) => ({ ...f, phone: e.target.value }))}
+                      placeholder="+61 400 000 000"
+                    />
+                  </div>
+                  {personalMsg && (
+                    <p className={`text-xs font-medium ${personalMsg.includes('success') ? 'text-emerald-400 day:text-emerald-600' : 'text-rose-400 day:text-rose-600'}`}>
+                      {personalMsg}
+                    </p>
+                  )}
+                  <div className="flex gap-3 pt-2">
+                    <button
+                      onClick={savePersonal}
+                      disabled={personalSaving}
+                      className="inline-flex items-center justify-center rounded-lg border border-[#c49a45] bg-[#c49a45] px-4 py-2 text-xs font-semibold text-[#121110] transition hover:bg-[#d5ad55] disabled:opacity-50 day:border-[#9a742f] day:bg-[#9a742f] day:text-white day:hover:bg-[#856325]"
+                    >
+                      {personalSaving ? 'Saving…' : 'Save Changes'}
+                    </button>
+                    <button
+                      onClick={() => { setEditingPersonal(false); setPersonalMsg(''); }}
+                      className="inline-flex items-center justify-center rounded-lg border border-white/15 bg-white/[0.04] px-4 py-2 text-xs font-medium text-white transition hover:border-white/30 hover:bg-white/10 day:border-[#dfd7ca] day:bg-[#eee8dc]/70 day:text-[#1a1714] day:hover:bg-[#e7e0d2]"
+                    >
+                      Cancel
+                    </button>
+                  </div>
                 </div>
+              ) : (
+                <dl className="grid grid-cols-1 gap-y-4 sm:grid-cols-2 sm:gap-x-8">
+                  <div>
+                    <dt className={fieldLabelClass}>First Name</dt>
+                    <dd className={profile.firstName ? fieldValueClass : emptyClass}>
+                      {profile.firstName || 'Not provided'}
+                    </dd>
+                  </div>
+                  <div>
+                    <dt className={fieldLabelClass}>Last Name</dt>
+                    <dd className={profile.lastName ? fieldValueClass : emptyClass}>
+                      {profile.lastName || 'Not provided'}
+                    </dd>
+                  </div>
+                  <div>
+                    <dt className={fieldLabelClass}>Email Address</dt>
+                    <dd className={account.email ? fieldValueClass : emptyClass}>
+                      {account.email || 'Not provided'}
+                    </dd>
+                  </div>
+                  <div>
+                    <dt className={fieldLabelClass}>Phone Number</dt>
+                    <dd className={profile.phone ? fieldValueClass : emptyClass}>
+                      {profile.phone || 'Not provided'}
+                    </dd>
+                  </div>
+                  <div>
+                    <dt className={fieldLabelClass}>Account Role</dt>
+                    <dd className={account.role ? fieldValueClass : emptyClass}>
+                      {account.role || 'Customer'}
+                    </dd>
+                  </div>
+                  <div>
+                    <dt className={fieldLabelClass}>Status</dt>
+                    <dd>
+                      {account.status ? (
+                        <span className="inline-block rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-0.5 text-xs font-medium text-emerald-400 day:border-emerald-600/30 day:bg-emerald-50 day:text-emerald-700">
+                          {account.status}
+                        </span>
+                      ) : (
+                        <span className={emptyClass}>Active</span>
+                      )}
+                    </dd>
+                  </div>
+                </dl>
+              )}
+            </section>
 
-                {editingPassword ? (
-                  <div className="space-y-4">
-                    <div>
-                      <label className={labelClass}>Current Password</label>
-                      <input className={inputClass} type="password" value={passwordForm.currentPassword} onChange={(e) => setPasswordForm((f) => ({ ...f, currentPassword: e.target.value }))} />
-                    </div>
+            {/* Password Card */}
+            <section className="rounded-xl border border-white/10 bg-[#161412] p-6 day:border-[#dfd7ca] day:bg-white day:shadow-[0_8px_24px_rgba(40,30,20,0.06)]">
+              <div className="mb-5 border-b border-white/10 pb-4 day:border-[#dfd7ca]">
+                <h2 className="font-serif text-xl font-normal text-white day:text-[#1a1714]">
+                  Password &amp; Security
+                </h2>
+                <p className="mt-1 text-xs text-stone-400 day:text-[#786e61]">
+                  Ensure your account is protected with a strong password
+                </p>
+              </div>
+
+              {editingPassword ? (
+                <div className="space-y-4">
+                  <div>
+                    <label className={labelClass}>Current Password</label>
+                    <input
+                      className={inputClass}
+                      type="password"
+                      value={passwordForm.currentPassword}
+                      onChange={(e) => setPasswordForm((f) => ({ ...f, currentPassword: e.target.value }))}
+                      placeholder="••••••••••••"
+                    />
+                  </div>
+                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                     <div>
                       <label className={labelClass}>New Password</label>
-                      <input className={inputClass} type="password" value={passwordForm.newPassword} onChange={(e) => setPasswordForm((f) => ({ ...f, newPassword: e.target.value }))} />
+                      <input
+                        className={inputClass}
+                        type="password"
+                        value={passwordForm.newPassword}
+                        onChange={(e) => setPasswordForm((f) => ({ ...f, newPassword: e.target.value }))}
+                        placeholder="At least 8 characters"
+                      />
                     </div>
                     <div>
                       <label className={labelClass}>Confirm New Password</label>
-                      <input className={inputClass} type="password" value={passwordForm.confirmPassword} onChange={(e) => setPasswordForm((f) => ({ ...f, confirmPassword: e.target.value }))} />
-                    </div>
-                    {passwordMsg && <p className={`text-xs ${passwordMsg === 'Password updated' ? 'text-green-400' : 'text-red-400'}`}>{passwordMsg}</p>}
-                    <div className="flex gap-3">
-                      <button
-                        onClick={savePassword}
-                        disabled={passwordSaving}
-                        className="rounded-lg bg-[#D4A84F] px-4 py-2 text-sm font-semibold text-black hover:bg-[#e0b86a] disabled:opacity-50 transition"
-                      >
-                        {passwordSaving ? 'Saving…' : 'Update Password'}
-                      </button>
-                      <button
-                        onClick={() => { setEditingPassword(false); setPasswordMsg(''); setPasswordForm({ currentPassword: '', newPassword: '', confirmPassword: '' }); }}
-                       className="rounded-lg border border-white/20 px-4 py-2 text-sm text-white/60 hover:text-white transition day:border-gray-300 day:text-gray-500 day:hover:text-gray-900"
-                      >
-                        Cancel
-                      </button>
+                      <input
+                        className={inputClass}
+                        type="password"
+                        value={passwordForm.confirmPassword}
+                        onChange={(e) => setPasswordForm((f) => ({ ...f, confirmPassword: e.target.value }))}
+                        placeholder="Repeat new password"
+                      />
                     </div>
                   </div>
-                ) : (
-                  <div className="space-y-4">
-                    <p className="text-sm tracking-[0.2em] text-white/40 day:text-gray-400">{'\u2022'.repeat(12)}</p>
-                    <button
-                      onClick={() => { setEditingPassword(true); setPasswordMsg(''); }}
-                      className={`${btnClass} w-full justify-center sm:w-auto`}
-                    >
-                      <PencilIcon className="h-3.5 w-3.5" /> Change Password
-                    </button>
-                  </div>
-                )}
-              </section>
-
-              {/* Business & Invoice */}
-              <section className="rounded-2xl border border-white/10 bg-white/5 p-6 day:border-gray-200 day:bg-gray-50">
-                <div className="mb-4 flex items-center justify-between gap-3">
-                  <h2 className="text-base font-semibold text-white/90 day:text-gray-900">Business &amp; Invoice Details</h2>
-                  {!editingBusiness && (
-                    <button
-                      onClick={() => { setEditingBusiness(true); setBusinessMsg(''); }}
-                      className={`${btnClass} shrink-0 px-2.5`}
-                      aria-label="Edit business and invoice details"
-                    >
-                      <PencilIcon className="h-3.5 w-3.5" />
-                      <span className="sr-only sm:not-sr-only">Edit</span>
-                    </button>
+                  {passwordMsg && (
+                    <p className={`text-xs font-medium ${passwordMsg.includes('success') ? 'text-emerald-400 day:text-emerald-600' : 'text-rose-400 day:text-rose-600'}`}>
+                      {passwordMsg}
+                    </p>
                   )}
+                  <div className="flex gap-3 pt-2">
+                    <button
+                      onClick={savePassword}
+                      disabled={passwordSaving}
+                      className="inline-flex items-center justify-center rounded-lg border border-[#c49a45] bg-[#c49a45] px-4 py-2 text-xs font-semibold text-[#121110] transition hover:bg-[#d5ad55] disabled:opacity-50 day:border-[#9a742f] day:bg-[#9a742f] day:text-white day:hover:bg-[#856325]"
+                    >
+                      {passwordSaving ? 'Updating…' : 'Update Password'}
+                    </button>
+                    <button
+                      onClick={() => { setEditingPassword(false); setPasswordMsg(''); setPasswordForm({ currentPassword: '', newPassword: '', confirmPassword: '' }); }}
+                      className="inline-flex items-center justify-center rounded-lg border border-white/15 bg-white/[0.04] px-4 py-2 text-xs font-medium text-white transition hover:border-white/30 hover:bg-white/10 day:border-[#dfd7ca] day:bg-[#eee8dc]/70 day:text-[#1a1714] day:hover:bg-[#e7e0d2]"
+                    >
+                      Cancel
+                    </button>
+                  </div>
                 </div>
+              ) : (
+                <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
+                  <div>
+                    <span className="font-mono text-sm tracking-[0.25em] text-stone-400 day:text-[#786e61]">
+                      ••••••••••••
+                    </span>
+                    <p className="mt-1 text-xs text-stone-500 day:text-stone-400">
+                      Password was last updated previously
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => { setEditingPassword(true); setPasswordMsg(''); }}
+                    className={btnClass}
+                  >
+                    <PencilIcon className="h-3.5 w-3.5 text-[#c49a45] day:text-[#9a742f]" />
+                    <span>Change Password</span>
+                  </button>
+                </div>
+              )}
+            </section>
 
-                {editingBusiness ? (
-                  <div className="space-y-4">
-                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                      <div>
-                        <label className={labelClass}>Trading Name</label>
-                        <input className={inputClass} value={businessForm.tradingName || ''} onChange={(e) => setBusinessForm((f) => ({ ...f, tradingName: e.target.value }))} />
-                      </div>
-                      <div>
-                        <label className={labelClass}>Business Name</label>
-                        <input className={inputClass} value={businessForm.businessName || ''} onChange={(e) => setBusinessForm((f) => ({ ...f, businessName: e.target.value }))} />
-                      </div>
-                    </div>
-                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                      <div>
-                        <label className={labelClass}>ABN / Tax ID</label>
-                        <input className={inputClass} value={businessForm.taxId || ''} onChange={(e) => setBusinessForm((f) => ({ ...f, taxId: e.target.value }))} />
-                      </div>
-                      <div>
-                        <label className={labelClass}>Phone</label>
-                        <input className={inputClass} value={businessForm.phone || ''} onChange={(e) => setBusinessForm((f) => ({ ...f, phone: e.target.value }))} />
-                      </div>
+            {/* Business Details Card */}
+            <section className="rounded-xl border border-white/10 bg-[#161412] p-6 day:border-[#dfd7ca] day:bg-white day:shadow-[0_8px_24px_rgba(40,30,20,0.06)]">
+              <div className="mb-5 flex items-center justify-between gap-3 border-b border-white/10 pb-4 day:border-[#dfd7ca]">
+                <div>
+                  <h2 className="font-serif text-xl font-normal text-white day:text-[#1a1714]">
+                    Business &amp; Invoice Details
+                  </h2>
+                  <p className="mt-1 text-xs text-stone-400 day:text-[#786e61]">
+                    Optional business details for tax invoices and billing
+                  </p>
+                </div>
+                {!editingBusiness && (
+                  <button
+                    onClick={() => { setEditingBusiness(true); setBusinessMsg(''); }}
+                    className={btnClass}
+                    aria-label="Edit business and invoice details"
+                  >
+                    <PencilIcon className="h-3.5 w-3.5 text-[#c49a45] day:text-[#9a742f]" />
+                    <span>Edit</span>
+                  </button>
+                )}
+              </div>
+
+              {editingBusiness ? (
+                <div className="space-y-4">
+                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                    <div>
+                      <label className={labelClass}>Trading Name</label>
+                      <input
+                        className={inputClass}
+                        value={businessForm.tradingName || ''}
+                        onChange={(e) => setBusinessForm((f) => ({ ...f, tradingName: e.target.value }))}
+                        placeholder="Acme Co."
+                      />
                     </div>
                     <div>
-                      <label className={labelClass}>Website</label>
-                      <input className={inputClass} value={businessForm.website || ''} onChange={(e) => setBusinessForm((f) => ({ ...f, website: e.target.value }))} />
-                    </div>
-                    <div>
-                      <label className={labelClass}>Street Address</label>
-                      <input className={inputClass} value={businessForm.address || ''} onChange={(e) => setBusinessForm((f) => ({ ...f, address: e.target.value }))} />
-                    </div>
-                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-                      <div>
-                        <label className={labelClass}>City</label>
-                        <input className={inputClass} value={businessForm.city || ''} onChange={(e) => setBusinessForm((f) => ({ ...f, city: e.target.value }))} />
-                      </div>
-                      <div>
-                        <label className={labelClass}>State</label>
-                        <input className={inputClass} value={businessForm.state || ''} onChange={(e) => setBusinessForm((f) => ({ ...f, state: e.target.value }))} />
-                      </div>
-                      <div>
-                        <label className={labelClass}>Postcode</label>
-                        <input className={inputClass} value={businessForm.postcode || ''} onChange={(e) => setBusinessForm((f) => ({ ...f, postcode: e.target.value }))} />
-                      </div>
-                    </div>
-                    <div>
-                      <label className={labelClass}>Country</label>
-                      <input className={inputClass} value={businessForm.country || ''} onChange={(e) => setBusinessForm((f) => ({ ...f, country: e.target.value }))} />
-                    </div>
-                    {businessMsg && <p className={`text-xs ${businessMsg === 'Saved' ? 'text-green-400' : 'text-red-400'}`}>{businessMsg}</p>}
-                    <div className="flex gap-3">
-                      <button
-                        onClick={saveBusiness}
-                        disabled={businessSaving}
-                        className="rounded-lg bg-[#D4A84F] px-4 py-2 text-sm font-semibold text-black hover:bg-[#e0b86a] disabled:opacity-50 transition"
-                      >
-                        {businessSaving ? 'Saving…' : 'Save Changes'}
-                      </button>
-                      <button
-                        onClick={() => { setEditingBusiness(false); setBusinessMsg(''); }}
-                       className="rounded-lg border border-white/20 px-4 py-2 text-sm text-white/60 hover:text-white transition day:border-gray-300 day:text-gray-500 day:hover:text-gray-900"
-                      >
-                        Cancel
-                      </button>
+                      <label className={labelClass}>Business Name</label>
+                      <input
+                        className={inputClass}
+                        value={businessForm.businessName || ''}
+                        onChange={(e) => setBusinessForm((f) => ({ ...f, businessName: e.target.value }))}
+                        placeholder="Acme Pty Ltd"
+                      />
                     </div>
                   </div>
-                ) : (
-                  <dl className="grid grid-cols-1 gap-y-4 sm:grid-cols-2 sm:gap-x-8">
+                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                     <div>
-                      <dt className={fieldLabelClass}>Trading Name</dt>
-                      <dd className={businessForm.tradingName ? fieldValueClass : emptyClass}>{businessForm.tradingName || 'Not provided'}</dd>
+                      <label className={labelClass}>ABN / Tax ID</label>
+                      <input
+                        className={inputClass}
+                        value={businessForm.taxId || ''}
+                        onChange={(e) => setBusinessForm((f) => ({ ...f, taxId: e.target.value }))}
+                        placeholder="12 345 678 901"
+                      />
                     </div>
                     <div>
-                      <dt className={fieldLabelClass}>Business Name</dt>
-                      <dd className={businessForm.businessName ? fieldValueClass : emptyClass}>{businessForm.businessName || 'Not provided'}</dd>
+                      <label className={labelClass}>Business Phone</label>
+                      <input
+                        className={inputClass}
+                        value={businessForm.phone || ''}
+                        onChange={(e) => setBusinessForm((f) => ({ ...f, phone: e.target.value }))}
+                        placeholder="+61 2 0000 0000"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label className={labelClass}>Website</label>
+                    <input
+                      className={inputClass}
+                      value={businessForm.website || ''}
+                      onChange={(e) => setBusinessForm((f) => ({ ...f, website: e.target.value }))}
+                      placeholder="https://example.com.au"
+                    />
+                  </div>
+                  <div>
+                    <label className={labelClass}>Street Address</label>
+                    <input
+                      className={inputClass}
+                      value={businessForm.address || ''}
+                      onChange={(e) => setBusinessForm((f) => ({ ...f, address: e.target.value }))}
+                      placeholder="123 Example Street"
+                    />
+                  </div>
+                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+                    <div>
+                      <label className={labelClass}>City</label>
+                      <input
+                        className={inputClass}
+                        value={businessForm.city || ''}
+                        onChange={(e) => setBusinessForm((f) => ({ ...f, city: e.target.value }))}
+                        placeholder="Sydney"
+                      />
                     </div>
                     <div>
-                      <dt className={fieldLabelClass}>ABN / Tax ID</dt>
-                      <dd className={businessForm.taxId ? fieldValueClass : emptyClass}>{businessForm.taxId || 'Not provided'}</dd>
+                      <label className={labelClass}>State</label>
+                      <input
+                        className={inputClass}
+                        value={businessForm.state || ''}
+                        onChange={(e) => setBusinessForm((f) => ({ ...f, state: e.target.value }))}
+                        placeholder="NSW"
+                      />
                     </div>
                     <div>
-                      <dt className={fieldLabelClass}>Phone</dt>
-                      <dd className={businessForm.phone ? fieldValueClass : emptyClass}>{businessForm.phone || 'Not provided'}</dd>
+                      <label className={labelClass}>Postcode</label>
+                      <input
+                        className={inputClass}
+                        value={businessForm.postcode || ''}
+                        onChange={(e) => setBusinessForm((f) => ({ ...f, postcode: e.target.value }))}
+                        placeholder="2000"
+                      />
                     </div>
-                    <div>
-                      <dt className={fieldLabelClass}>Website</dt>
-                      <dd className={businessForm.website ? fieldValueClass : emptyClass}>{businessForm.website || 'Not provided'}</dd>
-                    </div>
-                    <div>
-                      <dt className={fieldLabelClass}>Street Address</dt>
-                      <dd className={businessForm.address ? fieldValueClass : emptyClass}>{businessForm.address || 'Not provided'}</dd>
-                    </div>
-                    <div>
-                      <dt className={fieldLabelClass}>City</dt>
-                      <dd className={businessForm.city ? fieldValueClass : emptyClass}>{businessForm.city || 'Not provided'}</dd>
-                    </div>
-                    <div>
-                      <dt className={fieldLabelClass}>State</dt>
-                      <dd className={businessForm.state ? fieldValueClass : emptyClass}>{businessForm.state || 'Not provided'}</dd>
-                    </div>
-                    <div>
-                      <dt className={fieldLabelClass}>Postcode</dt>
-                      <dd className={businessForm.postcode ? fieldValueClass : emptyClass}>{businessForm.postcode || 'Not provided'}</dd>
-                    </div>
-                    <div>
-                      <dt className={fieldLabelClass}>Country</dt>
-                      <dd className={businessForm.country ? fieldValueClass : emptyClass}>{businessForm.country || 'Not provided'}</dd>
-                    </div>
-                  </dl>
-                )}
-              </section>
-
-            </div>
-          )}
-        </div>
-      </div>
+                  </div>
+                  <div>
+                    <label className={labelClass}>Country</label>
+                    <input
+                      className={inputClass}
+                      value={businessForm.country || ''}
+                      onChange={(e) => setBusinessForm((f) => ({ ...f, country: e.target.value }))}
+                      placeholder="Australia"
+                    />
+                  </div>
+                  {businessMsg && (
+                    <p className={`text-xs font-medium ${businessMsg.includes('success') ? 'text-emerald-400 day:text-emerald-600' : 'text-rose-400 day:text-rose-600'}`}>
+                      {businessMsg}
+                    </p>
+                  )}
+                  <div className="flex gap-3 pt-2">
+                    <button
+                      onClick={saveBusiness}
+                      disabled={businessSaving}
+                      className="inline-flex items-center justify-center rounded-lg border border-[#c49a45] bg-[#c49a45] px-4 py-2 text-xs font-semibold text-[#121110] transition hover:bg-[#d5ad55] disabled:opacity-50 day:border-[#9a742f] day:bg-[#9a742f] day:text-white day:hover:bg-[#856325]"
+                    >
+                      {businessSaving ? 'Saving…' : 'Save Changes'}
+                    </button>
+                    <button
+                      onClick={() => { setEditingBusiness(false); setBusinessMsg(''); }}
+                      className="inline-flex items-center justify-center rounded-lg border border-white/15 bg-white/[0.04] px-4 py-2 text-xs font-medium text-white transition hover:border-white/30 hover:bg-white/10 day:border-[#dfd7ca] day:bg-[#eee8dc]/70 day:text-[#1a1714] day:hover:bg-[#e7e0d2]"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <dl className="grid grid-cols-1 gap-y-4 sm:grid-cols-2 sm:gap-x-8">
+                  <div>
+                    <dt className={fieldLabelClass}>Trading Name</dt>
+                    <dd className={businessForm.tradingName ? fieldValueClass : emptyClass}>
+                      {businessForm.tradingName || 'Not provided'}
+                    </dd>
+                  </div>
+                  <div>
+                    <dt className={fieldLabelClass}>Business Name</dt>
+                    <dd className={businessForm.businessName ? fieldValueClass : emptyClass}>
+                      {businessForm.businessName || 'Not provided'}
+                    </dd>
+                  </div>
+                  <div>
+                    <dt className={fieldLabelClass}>ABN / Tax ID</dt>
+                    <dd className={businessForm.taxId ? fieldValueClass : emptyClass}>
+                      {businessForm.taxId || 'Not provided'}
+                    </dd>
+                  </div>
+                  <div>
+                    <dt className={fieldLabelClass}>Business Phone</dt>
+                    <dd className={businessForm.phone ? fieldValueClass : emptyClass}>
+                      {businessForm.phone || 'Not provided'}
+                    </dd>
+                  </div>
+                  <div className="sm:col-span-2">
+                    <dt className={fieldLabelClass}>Website</dt>
+                    <dd className={businessForm.website ? fieldValueClass : emptyClass}>
+                      {businessForm.website || 'Not provided'}
+                    </dd>
+                  </div>
+                  <div className="sm:col-span-2">
+                    <dt className={fieldLabelClass}>Street Address</dt>
+                    <dd className={businessForm.address ? fieldValueClass : emptyClass}>
+                      {businessForm.address || 'Not provided'}
+                    </dd>
+                  </div>
+                  <div>
+                    <dt className={fieldLabelClass}>City</dt>
+                    <dd className={businessForm.city ? fieldValueClass : emptyClass}>
+                      {businessForm.city || 'Not provided'}
+                    </dd>
+                  </div>
+                  <div>
+                    <dt className={fieldLabelClass}>State &amp; Postcode</dt>
+                    <dd className={businessForm.state || businessForm.postcode ? fieldValueClass : emptyClass}>
+                      {[businessForm.state, businessForm.postcode].filter(Boolean).join(' ') || 'Not provided'}
+                    </dd>
+                  </div>
+                  <div>
+                    <dt className={fieldLabelClass}>Country</dt>
+                    <dd className={businessForm.country ? fieldValueClass : emptyClass}>
+                      {businessForm.country || 'Not provided'}
+                    </dd>
+                  </div>
+                </dl>
+              )}
+            </section>
+          </div>
+        )}
+      </main>
     </div>
   );
 }

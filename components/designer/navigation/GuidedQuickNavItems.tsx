@@ -47,10 +47,10 @@ export function GuidedQuickNavItems({
           onClick={handleClick}
           aria-label={`Go to ${label}`}
           aria-current={isCurrent ? 'step' : undefined}
-          className={`flex min-h-14 min-w-0 flex-col items-center justify-center gap-1 rounded-md px-1 py-1 transition-colors ${
+          className={`flex min-h-14 min-w-0 flex-col items-center justify-center gap-1 rounded-lg px-1 py-1 transition-all ${
             isCurrent
-              ? 'bg-[#D7B356] text-slate-950 shadow-sm'
-              : 'day:text-gray-600 day:hover:bg-white day:hover:text-gray-900 text-white/70 hover:bg-white/10 hover:text-white'
+              ? 'bg-[#c49a45] text-[#121110] shadow-sm day:bg-[#9a742f] day:text-white'
+              : 'text-white/70 hover:bg-white/10 hover:text-white day:text-[#6a6156] day:hover:bg-white day:hover:text-[#1a1714]'
           }`}
         >
           <Icon className="h-4 w-4 shrink-0" aria-hidden="true" />
@@ -69,10 +69,10 @@ export function GuidedQuickNavItems({
         data-quick-nav-slug={slug}
         aria-current={isCurrent ? 'step' : undefined}
         title={`Go to ${label}`}
-        className={`group flex h-12 snap-start flex-col items-center justify-center gap-1 rounded-md px-1.5 py-1 text-[11px] font-semibold transition-colors ${
+        className={`group flex h-12 snap-start flex-col items-center justify-center gap-1 rounded-lg px-2 py-1 text-[11px] font-semibold transition-all ${
           isCurrent
-            ? 'bg-[#D7B356] text-slate-950 shadow-sm'
-            : 'day:text-gray-600 day:hover:bg-white day:hover:text-gray-900 text-white/60 hover:bg-white/10 hover:text-white'
+            ? 'bg-[#c49a45] text-[#121110] shadow-sm day:bg-[#9a742f] day:text-white'
+            : 'text-white/60 hover:bg-white/10 hover:text-white day:text-[#6a6156] day:hover:bg-white day:hover:text-[#1a1714]'
         }`}
       >
         <Icon className="h-5 w-5" aria-hidden="true" />

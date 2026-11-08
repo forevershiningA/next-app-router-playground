@@ -124,26 +124,34 @@ export default function SelectionBox({
     : objectType === 'inscription' || enableResizeHandles || !usesSubtleOutline;
   const shouldShowOutline = true;
   // A gold outline remains legible on both the light canvas and dark granite.
-  const outlineColor = usesInscriptionSelectionStyle
-    ? 0x5c9dff
-    : objectType === 'motif'
-      ? 0xd7b356
-      : usesTransformOutline
-        ? 0xf8f5ee
-        : 0x5c9dff;
+  const outlineColor =
+    objectType === 'motif' ||
+    objectType === 'addition' ||
+    useImageSelectionStyle
+      ? 0xc49a45
+      : usesInscriptionSelectionStyle
+        ? 0x5c9dff
+        : usesTransformOutline
+          ? 0xf8f5ee
+          : 0xc49a45;
   const outlineLineWidth =
-    !usesInscriptionSelectionStyle && objectType === 'motif' ? 2.5 : 1.5;
+    !usesInscriptionSelectionStyle && objectType === 'motif' ? 2 : 1.5;
   const baseOutlineOpacity =
     !usesInscriptionSelectionStyle && objectType === 'motif'
       ? 1
       : usesTransformOutline
         ? 0.9
         : 1;
-  const handleColor = usesInscriptionSelectionStyle
-    ? 0xffffff
-    : shouldShowHandles
-      ? 0x2196f3
-      : outlineColor;
+  const handleColor =
+    objectType === 'motif' ||
+    objectType === 'addition' ||
+    useImageSelectionStyle
+      ? 0xc49a45
+      : usesInscriptionSelectionStyle
+        ? 0xffffff
+        : shouldShowHandles
+          ? 0xc49a45
+          : outlineColor;
 
   // Modern flat-object controls must track the real bounds even when the
   // object becomes smaller than a handle. The handles themselves are kept at

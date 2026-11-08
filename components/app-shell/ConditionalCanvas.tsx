@@ -97,6 +97,21 @@ export default function ConditionalCanvas() {
   const isMyAccountPage =
     pathname === '/my-account' || pathname?.startsWith('/my-account/');
 
+  // Hide canvas on all account area, legal and portal pages
+  const isAccountAreaPage =
+    pathname === '/my-account' ||
+    pathname?.startsWith('/my-account/') ||
+    pathname === '/orders' ||
+    pathname?.startsWith('/orders/') ||
+    pathname === '/account' ||
+    pathname?.startsWith('/account/') ||
+    pathname === '/privacy' ||
+    pathname?.startsWith('/privacy/') ||
+    pathname === '/terms' ||
+    pathname?.startsWith('/terms/') ||
+    pathname === '/login' ||
+    pathname?.startsWith('/login/');
+
   // Hide canvas on admin pages
   const isAdminPage = pathname === '/admin' || pathname?.startsWith('/admin/');
 
@@ -120,6 +135,7 @@ export default function ConditionalCanvas() {
   useEffect(() => {
     if (
       !pathname ||
+      isAccountAreaPage ||
       ((isHomePage ||
         isContactPage ||
         isDesignPage ||
@@ -145,6 +161,7 @@ export default function ConditionalCanvas() {
     }
   }, [
     pathname,
+    isAccountAreaPage,
     isHomePage,
     isContactPage,
     isDesignPage,
@@ -172,6 +189,7 @@ export default function ConditionalCanvas() {
   if (
     !captureRequested &&
     (!pathname ||
+      isAccountAreaPage ||
       ((isHomePage ||
         isContactPage ||
         isDesignPage ||

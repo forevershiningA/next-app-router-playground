@@ -11,10 +11,11 @@ export function ThemeToggle({ inline = false }: { inline?: boolean }) {
   const pathname = usePathname();
   const isDay = theme === 'day';
 
-  // Designs pages always use white background — toggle not needed and would overlap the sidebar logo
-  if (pathname?.startsWith('/designs')) return null;
+  // Float toggle is hidden where inline headers provide it, or on designer routes
+  if (pathname?.startsWith('/designs') && !inline) return null;
   if (pathname === '/' && !inline) return null;
   if (pathname === '/contact' && !inline) return null;
+  if (pathname?.startsWith('/memorials') && !inline) return null;
   if (isDesignerRoutePath(pathname) && pathname !== '/' && !inline) return null;
 
   const accountRoutePrefixes = [
@@ -22,11 +23,14 @@ export function ThemeToggle({ inline = false }: { inline?: boolean }) {
     '/orders',
     '/account',
     '/privacy',
+    '/terms',
   ];
-  const insideAccountSidebarOnMobile = accountRoutePrefixes.some((prefix) =>
-    pathname?.startsWith(prefix),
-  );
-  const insideMemorialsOnMobile = pathname?.startsWith('/memorials');
+  if (
+    accountRoutePrefixes.some((prefix) => pathname?.startsWith(prefix)) &&
+    !inline
+  ) {
+    return null;
+  }
 
   return (
     <button
@@ -36,7 +40,7 @@ export function ThemeToggle({ inline = false }: { inline?: boolean }) {
       className={
         inline
           ? 'day:border-[#bdb4a6] day:text-[#1d1a17] day:hover:border-[#7b5a20] day:hover:bg-white/45 inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-white/20 text-[#f4eee4] transition-colors hover:border-[#cfac6c] hover:bg-white/10'
-          : `fixed top-5 z-[9999] ${insideMemorialsOnMobile ? 'right-5 left-auto lg:right-auto lg:left-5' : 'left-5'} day:border-[#D7B356]/50 day:bg-white/90 day:text-amber-700 day:hover:border-[#D7B356]/80 day:hover:bg-white day:hover:text-amber-800 h-9 w-9 items-center justify-center rounded-full border border-white/20 bg-[#1a1208]/80 text-white/60 shadow-md backdrop-blur-sm transition-[background-color,border-color,color] duration-200 hover:border-white/40 hover:bg-[#1a1208]/95 hover:text-white ${insideAccountSidebarOnMobile || insideMemorialsOnMobile ? 'hidden lg:flex' : 'flex'}`
+          : 'fixed top-5 left-5 z-[9999] day:border-[#D7B356]/50 day:bg-white/90 day:text-amber-700 day:hover:border-[#D7B356]/80 day:hover:bg-white day:hover:text-amber-800 flex h-9 w-9 items-center justify-center rounded-full border border-white/20 bg-[#1a1208]/80 text-white/60 shadow-md backdrop-blur-sm transition-[background-color,border-color,color] duration-200 hover:border-white/40 hover:bg-[#1a1208]/95 hover:text-white'
       }
     >
       {isDay ? (

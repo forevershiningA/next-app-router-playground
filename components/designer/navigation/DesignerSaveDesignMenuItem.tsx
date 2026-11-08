@@ -16,7 +16,7 @@ export default function DesignerSaveDesignMenuItem({
       type="button"
       onClick={onClick}
       data-testid="save-design-nav-btn"
-      className="flex w-full cursor-pointer items-center gap-3 rounded-lg border border-white/10 px-4 py-3 text-left text-base font-light text-gray-200 transition-all hover:border-white/20 hover:bg-white/10"
+      className="flex w-full cursor-pointer items-center gap-2.5 rounded-lg border border-transparent px-3 py-2 text-left text-sm font-normal text-white/70 transition-all duration-200 hover:border-white/15 hover:bg-white/[0.06] hover:text-white day:border-transparent day:text-[#5a5248] day:hover:border-[#dfd7ca] day:hover:bg-[#f0ebe1] day:hover:text-[#1a1714]"
     >
       <Icon className="h-5 w-5 flex-shrink-0" aria-hidden="true" />
       <span>{label}</span>

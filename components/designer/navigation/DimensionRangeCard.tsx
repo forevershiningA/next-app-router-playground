@@ -66,7 +66,7 @@ export function DimensionRangeCard({
   const numberInputClass = `${numberInputBaseClass} ${
     isOutOfBounds && showInvalidState
       ? 'border-red-500 focus:border-red-500 focus:ring-red-500/50'
-      : 'day:border-gray-300 border-white/10 focus:border-[#D7B356] focus:ring-[#D7B356]/30'
+      : 'border-white/10 day:border-[#dfd7ca] focus:border-[#c49a45] day:focus:border-[#9a742f] focus:ring-[#c49a45]/20 day:focus:ring-[#9a742f]/20'
   }`;
 
   const clampValue = (value: number) => Math.max(minMm, Math.min(maxMm, value));
@@ -141,7 +141,7 @@ export function DimensionRangeCard({
               />
             </svg>
           </button>
-          <span className="day:text-gray-600 text-sm font-semibold text-white/70">
+          <span className="font-sans text-xs font-semibold text-white/60 day:text-[#6a6156]">
             {lengthUnit}
           </span>
         </div>

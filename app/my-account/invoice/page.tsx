@@ -67,7 +67,7 @@ export default function InvoiceDetailsPage() {
       });
       if (res.ok) {
         setInvoice({ ...form });
-        setMsg('Saved');
+        setMsg('Saved successfully');
         setEditing(false);
       } else {
         setMsg('Failed to save');
@@ -80,184 +80,274 @@ export default function InvoiceDetailsPage() {
   }
 
   const inputClass =
-    'w-full rounded-lg border border-white/20 bg-white/5 px-3 py-2 text-sm text-white placeholder-white/30 focus:border-[#D4A84F]/60 focus:outline-none focus:ring-1 focus:ring-[#D4A84F]/40 day:border-gray-300 day:bg-white day:text-gray-900 day:placeholder-gray-400 day:focus:border-amber-500 day:focus:ring-amber-400/40';
-  const labelClass = 'block text-xs font-medium text-white/70 mb-1 day:text-gray-600';
-  const fieldValueClass = 'text-sm break-words text-white day:text-gray-900';
-  const fieldLabelClass = 'text-xs text-white/55 mb-0.5 day:text-gray-400';
-  const emptyClass = 'text-sm text-white/30 day:text-gray-400';
+    'w-full rounded-lg border border-white/15 bg-white/[0.04] px-3.5 py-2.5 text-sm text-white placeholder-stone-400 focus:border-[#c49a45] focus:outline-none focus:ring-1 focus:ring-[#c49a45] day:border-[#dfd7ca] day:bg-[#fcfbf9] day:text-[#1a1714] day:placeholder-[#8c8273] day:focus:border-[#9a742f] day:focus:ring-[#9a742f]';
+  const labelClass = 'block text-xs font-medium text-stone-300 mb-1.5 day:text-[#5a5248]';
+  const fieldValueClass = 'text-sm font-medium break-words text-white day:text-[#1a1714]';
+  const fieldLabelClass = 'text-xs text-stone-400 mb-1 day:text-[#786e61]';
+  const emptyClass = 'text-sm italic text-stone-500 day:text-stone-400';
   const btnClass =
-    'inline-flex items-center gap-1.5 rounded-lg border border-white/30 bg-white/5 px-3 py-1.5 text-xs font-medium text-white/80 hover:bg-white/10 hover:border-white/50 transition day:border-gray-300 day:bg-gray-50 day:text-gray-600 day:hover:bg-gray-100 day:hover:border-gray-400';
+    'inline-flex items-center gap-1.5 rounded-lg border border-white/15 bg-white/[0.04] px-3 py-1.5 text-xs font-medium text-white transition hover:border-white/30 hover:bg-white/10 day:border-[#dfd7ca] day:bg-[#eee8dc]/70 day:text-[#1a1714] day:hover:bg-[#e7e0d2]';
 
   return (
-    <div className="relative min-h-screen bg-[#050301] text-white day:bg-stone-100 day:text-gray-900">
-      <div
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(244,160,80,0.18),_transparent_45%),radial-gradient(circle_at_bottom,_rgba(88,144,255,0.18),_transparent_40%)] day:hidden"
-        aria-hidden
-      />
-      <div className="relative mx-auto w-full max-w-3xl px-4 py-8 sm:px-6 lg:px-10 lg:py-10">
-        <Link
-          href="/my-account"
-          className="mb-6 inline-flex items-center gap-2 text-sm text-white/70 hover:text-white transition day:text-gray-500 day:hover:text-gray-900"
-        >
-          <ArrowLeftIcon className="h-4 w-4" />
-          Back to Saved Designs
-        </Link>
+    <div className="min-h-screen bg-[#0c0b0a] text-white day:bg-[#f7f4ee] day:text-[#1a1714]">
+      {/* Studio Header */}
+      <section className="relative overflow-hidden border-b border-white/10 bg-[#161412] day:border-[#dfd7ca] day:bg-[#f5f1e8]">
+        <div className="absolute inset-0 bg-radial-gradient-to-r from-amber-500/5 via-transparent to-transparent pointer-events-none" />
+        <div className="relative mx-auto max-w-4xl px-4 py-8 md:px-6 md:py-10 lg:px-8">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-[#c49a45]/35 bg-[#c49a45]/10 px-3 py-1 text-[11px] font-semibold tracking-widest text-[#c49a45] uppercase day:border-[#9a742f]/30 day:bg-[#9a742f]/10 day:text-[#78541c]">
+                Customer Portal · Tax &amp; Invoicing
+              </div>
+              <h1 className="font-serif text-3xl font-normal tracking-tight text-white day:text-[#1a1714] sm:text-4xl lg:text-[40px]">
+                Invoice Details
+              </h1>
+              <p className="mt-2 text-sm text-stone-300 day:text-[#5a5248]">
+                Manage legal billing entity details that appear on all generated invoices and receipts
+              </p>
+            </div>
+            <Link
+              href="/my-account"
+              className="inline-flex items-center gap-2 rounded-lg border border-white/15 bg-white/[0.04] px-4 py-2.5 text-xs font-semibold text-white transition hover:border-white/30 hover:bg-white/10 day:border-[#dfd7ca] day:bg-[#eee8dc]/70 day:text-[#1a1714] day:hover:bg-[#e7e0d2]"
+            >
+              <ArrowLeftIcon className="h-4 w-4" />
+              <span>Back to Designs</span>
+            </Link>
+          </div>
+        </div>
+      </section>
 
-        <div className="rounded-2xl border border-white/10 bg-[#0c0805]/85 px-4 py-6 shadow-[0_25px_65px_rgba(0,0,0,0.6)] backdrop-blur-2xl [scrollbar-color:rgba(212,168,79,0.3)_rgba(255,255,255,0.04)] [scrollbar-width:thin] day:border-gray-200 day:bg-white day:shadow-lg sm:rounded-[32px] sm:px-6 lg:px-10 lg:py-8">
-          <header className="mb-0 pb-6">
-            <h1 className="py-[10px] text-3xl font-semibold tracking-tight day:text-gray-900">Invoice Details</h1>
-          </header>
-
-          {isLoading ? (
-            <p className="text-sm text-white/40 day:text-gray-400">Loading…</p>
-          ) : (
-            <div className="space-y-6">
-
-              <section className="rounded-2xl border border-white/10 bg-white/5 p-6 day:border-gray-200 day:bg-gray-50">
-                <div className="mb-4 flex items-center justify-between gap-3">
-                  <h2 className="text-base font-semibold text-white/90 day:text-gray-900">Business Identity</h2>
-                  {!editing && (
-                    <button
-                      onClick={() => { setEditing(true); setMsg(''); }}
-                      className={`${btnClass} shrink-0 px-2.5`}
-                      aria-label="Edit invoice details"
-                    >
-                      <PencilIcon className="h-3.5 w-3.5" />
-                      <span className="sr-only sm:not-sr-only">Edit</span>
-                    </button>
-                  )}
+      {/* Main Content */}
+      <main className="mx-auto max-w-4xl px-4 pt-6 pb-20 md:px-6 md:pt-8 lg:px-8">
+        {isLoading ? (
+          <div className="rounded-xl border border-white/10 bg-[#161412] p-12 text-center day:border-[#dfd7ca] day:bg-white day:shadow-[0_8px_24px_rgba(40,30,20,0.06)]">
+            <div className="mx-auto h-8 w-8 animate-spin rounded-full border-2 border-[#c49a45] border-t-transparent day:border-[#9a742f]" />
+            <p className="mt-4 text-sm text-stone-300 day:text-[#5a5248]">Loading invoice settings…</p>
+          </div>
+        ) : (
+          <div className="space-y-6">
+            <section className="rounded-xl border border-white/10 bg-[#161412] p-6 day:border-[#dfd7ca] day:bg-white day:shadow-[0_8px_24px_rgba(40,30,20,0.06)]">
+              <div className="mb-5 flex items-center justify-between gap-3 border-b border-white/10 pb-4 day:border-[#dfd7ca]">
+                <div>
+                  <h2 className="font-serif text-xl font-normal text-white day:text-[#1a1714]">
+                    Business &amp; Tax Information
+                  </h2>
+                  <p className="mt-1 text-xs text-stone-400 day:text-[#786e61]">
+                    These details will be printed on commercial tax invoices
+                  </p>
                 </div>
+                {!editing && (
+                  <button
+                    onClick={() => { setEditing(true); setMsg(''); }}
+                    className={btnClass}
+                    aria-label="Edit invoice details"
+                  >
+                    <PencilIcon className="h-3.5 w-3.5 text-[#c49a45] day:text-[#9a742f]" />
+                    <span>Edit</span>
+                  </button>
+                )}
+              </div>
 
-                {editing ? (
-                  <div className="space-y-4">
-                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                      <div>
-                        <label className={labelClass}>Trading Name</label>
-                        <input className={inputClass} value={form.tradingName || ''} onChange={(e) => setForm((f) => ({ ...f, tradingName: e.target.value }))} placeholder="e.g. Acme Co." />
-                      </div>
-                      <div>
-                        <label className={labelClass}>Business / Legal Name</label>
-                        <input className={inputClass} value={form.businessName || ''} onChange={(e) => setForm((f) => ({ ...f, businessName: e.target.value }))} placeholder="e.g. Acme Pty Ltd" />
-                      </div>
-                    </div>
-                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                      <div>
-                        <label className={labelClass}>ABN / Tax ID</label>
-                        <input className={inputClass} value={form.taxId || ''} onChange={(e) => setForm((f) => ({ ...f, taxId: e.target.value }))} placeholder="e.g. 12 345 678 901" />
-                      </div>
-                      <div>
-                        <label className={labelClass}>Business Phone</label>
-                        <input className={inputClass} value={form.phone || ''} onChange={(e) => setForm((f) => ({ ...f, phone: e.target.value }))} placeholder="+61 2 0000 0000" />
-                      </div>
+              {editing ? (
+                <div className="space-y-4">
+                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                    <div>
+                      <label className={labelClass}>Trading Name</label>
+                      <input
+                        className={inputClass}
+                        value={form.tradingName || ''}
+                        onChange={(e) => setForm((f) => ({ ...f, tradingName: e.target.value }))}
+                        placeholder="e.g. Acme Co."
+                      />
                     </div>
                     <div>
-                      <label className={labelClass}>Website</label>
-                      <input className={inputClass} value={form.website || ''} onChange={(e) => setForm((f) => ({ ...f, website: e.target.value }))} placeholder="https://example.com.au" />
-                    </div>
-
-                    <div className="border-t border-white/8 pt-4 day:border-gray-200">
-                      <p className="mb-3 text-xs font-medium text-white/50 uppercase tracking-widest day:text-gray-400">Billing Address</p>
-                      <div className="space-y-3">
-                        <div>
-                          <label className={labelClass}>Street Address</label>
-                          <input className={inputClass} value={form.address || ''} onChange={(e) => setForm((f) => ({ ...f, address: e.target.value }))} placeholder="123 Example Street" />
-                        </div>
-                        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-                          <div>
-                            <label className={labelClass}>City</label>
-                            <input className={inputClass} value={form.city || ''} onChange={(e) => setForm((f) => ({ ...f, city: e.target.value }))} placeholder="Sydney" />
-                          </div>
-                          <div>
-                            <label className={labelClass}>State</label>
-                            <input className={inputClass} value={form.state || ''} onChange={(e) => setForm((f) => ({ ...f, state: e.target.value }))} placeholder="NSW" />
-                          </div>
-                          <div>
-                            <label className={labelClass}>Postcode</label>
-                            <input className={inputClass} value={form.postcode || ''} onChange={(e) => setForm((f) => ({ ...f, postcode: e.target.value }))} placeholder="2000" />
-                          </div>
-                        </div>
-                        <div>
-                          <label className={labelClass}>Country</label>
-                          <input className={inputClass} value={form.country || ''} onChange={(e) => setForm((f) => ({ ...f, country: e.target.value }))} placeholder="Australia" />
-                        </div>
-                      </div>
-                    </div>
-
-                    {msg && <p className={`text-xs ${msg === 'Saved' ? 'text-green-400' : 'text-red-400'}`}>{msg}</p>}
-                    <div className="flex gap-3">
-                      <button
-                        onClick={save}
-                        disabled={saving}
-                        className="rounded-lg bg-[#D4A84F] px-4 py-2 text-sm font-semibold text-black hover:bg-[#e0b86a] disabled:opacity-50 transition"
-                      >
-                        {saving ? 'Saving…' : 'Save Changes'}
-                      </button>
-                      <button
-                        onClick={() => { setEditing(false); setMsg(''); setForm({ ...invoice }); }}
-                       className="rounded-lg border border-white/20 px-4 py-2 text-sm text-white/60 hover:text-white transition day:border-gray-300 day:text-gray-500 day:hover:text-gray-900"
-                      >
-                        Cancel
-                      </button>
+                      <label className={labelClass}>Business / Legal Name</label>
+                      <input
+                        className={inputClass}
+                        value={form.businessName || ''}
+                        onChange={(e) => setForm((f) => ({ ...f, businessName: e.target.value }))}
+                        placeholder="e.g. Acme Pty Ltd"
+                      />
                     </div>
                   </div>
-                ) : (
-                  <div className="space-y-6">
+                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                    <div>
+                      <label className={labelClass}>ABN / Tax ID</label>
+                      <input
+                        className={inputClass}
+                        value={form.taxId || ''}
+                        onChange={(e) => setForm((f) => ({ ...f, taxId: e.target.value }))}
+                        placeholder="e.g. 12 345 678 901"
+                      />
+                    </div>
+                    <div>
+                      <label className={labelClass}>Business Phone</label>
+                      <input
+                        className={inputClass}
+                        value={form.phone || ''}
+                        onChange={(e) => setForm((f) => ({ ...f, phone: e.target.value }))}
+                        placeholder="+61 2 0000 0000"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label className={labelClass}>Website</label>
+                    <input
+                      className={inputClass}
+                      value={form.website || ''}
+                      onChange={(e) => setForm((f) => ({ ...f, website: e.target.value }))}
+                      placeholder="https://example.com.au"
+                    />
+                  </div>
+
+                  <div className="border-t border-white/10 pt-4 day:border-[#dfd7ca]">
+                    <p className="mb-3 text-xs font-semibold tracking-wider text-stone-400 uppercase day:text-[#786e61]">
+                      Billing Address
+                    </p>
+                    <div className="space-y-3">
+                      <div>
+                        <label className={labelClass}>Street Address</label>
+                        <input
+                          className={inputClass}
+                          value={form.address || ''}
+                          onChange={(e) => setForm((f) => ({ ...f, address: e.target.value }))}
+                          placeholder="123 Example Street"
+                        />
+                      </div>
+                      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+                        <div>
+                          <label className={labelClass}>City</label>
+                          <input
+                            className={inputClass}
+                            value={form.city || ''}
+                            onChange={(e) => setForm((f) => ({ ...f, city: e.target.value }))}
+                            placeholder="Sydney"
+                          />
+                        </div>
+                        <div>
+                          <label className={labelClass}>State</label>
+                          <input
+                            className={inputClass}
+                            value={form.state || ''}
+                            onChange={(e) => setForm((f) => ({ ...f, state: e.target.value }))}
+                            placeholder="NSW"
+                          />
+                        </div>
+                        <div>
+                          <label className={labelClass}>Postcode</label>
+                          <input
+                            className={inputClass}
+                            value={form.postcode || ''}
+                            onChange={(e) => setForm((f) => ({ ...f, postcode: e.target.value }))}
+                            placeholder="2000"
+                          />
+                        </div>
+                      </div>
+                      <div>
+                        <label className={labelClass}>Country</label>
+                        <input
+                          className={inputClass}
+                          value={form.country || ''}
+                          onChange={(e) => setForm((f) => ({ ...f, country: e.target.value }))}
+                          placeholder="Australia"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {msg && (
+                    <p className={`text-xs font-medium ${msg.includes('success') ? 'text-emerald-400 day:text-emerald-600' : 'text-rose-400 day:text-rose-600'}`}>
+                      {msg}
+                    </p>
+                  )}
+                  <div className="flex gap-3 pt-2">
+                    <button
+                      onClick={save}
+                      disabled={saving}
+                      className="inline-flex items-center justify-center rounded-lg border border-[#c49a45] bg-[#c49a45] px-4 py-2 text-xs font-semibold text-[#121110] transition hover:bg-[#d5ad55] disabled:opacity-50 day:border-[#9a742f] day:bg-[#9a742f] day:text-white day:hover:bg-[#856325]"
+                    >
+                      {saving ? 'Saving…' : 'Save Changes'}
+                    </button>
+                    <button
+                      onClick={() => { setEditing(false); setMsg(''); setForm({ ...invoice }); }}
+                      className="inline-flex items-center justify-center rounded-lg border border-white/15 bg-white/[0.04] px-4 py-2 text-xs font-medium text-white transition hover:border-white/30 hover:bg-white/10 day:border-[#dfd7ca] day:bg-[#eee8dc]/70 day:text-[#1a1714] day:hover:bg-[#e7e0d2]"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <div className="space-y-6">
+                  <dl className="grid grid-cols-1 gap-y-4 sm:grid-cols-2 sm:gap-x-8">
+                    <div>
+                      <dt className={fieldLabelClass}>Trading Name</dt>
+                      <dd className={invoice.tradingName ? fieldValueClass : emptyClass}>
+                        {invoice.tradingName || 'Not provided'}
+                      </dd>
+                    </div>
+                    <div>
+                      <dt className={fieldLabelClass}>Business / Legal Name</dt>
+                      <dd className={invoice.businessName ? fieldValueClass : emptyClass}>
+                        {invoice.businessName || 'Not provided'}
+                      </dd>
+                    </div>
+                    <div>
+                      <dt className={fieldLabelClass}>ABN / Tax ID</dt>
+                      <dd className={invoice.taxId ? fieldValueClass : emptyClass}>
+                        {invoice.taxId || 'Not provided'}
+                      </dd>
+                    </div>
+                    <div>
+                      <dt className={fieldLabelClass}>Business Phone</dt>
+                      <dd className={invoice.phone ? fieldValueClass : emptyClass}>
+                        {invoice.phone || 'Not provided'}
+                      </dd>
+                    </div>
+                    <div className="sm:col-span-2">
+                      <dt className={fieldLabelClass}>Website</dt>
+                      <dd className={invoice.website ? fieldValueClass : emptyClass}>
+                        {invoice.website || 'Not provided'}
+                      </dd>
+                    </div>
+                  </dl>
+
+                  <div className="border-t border-white/10 pt-5 day:border-[#dfd7ca]">
+                    <p className="mb-4 text-xs font-semibold tracking-wider text-stone-400 uppercase day:text-[#786e61]">
+                      Billing Address
+                    </p>
                     <dl className="grid grid-cols-1 gap-y-4 sm:grid-cols-2 sm:gap-x-8">
-                      <div>
-                        <dt className={fieldLabelClass}>Trading Name</dt>
-                        <dd className={invoice.tradingName ? fieldValueClass : emptyClass}>{invoice.tradingName || 'Not provided'}</dd>
-                      </div>
-                      <div>
-                        <dt className={fieldLabelClass}>Business / Legal Name</dt>
-                        <dd className={invoice.businessName ? fieldValueClass : emptyClass}>{invoice.businessName || 'Not provided'}</dd>
-                      </div>
-                      <div>
-                        <dt className={fieldLabelClass}>ABN / Tax ID</dt>
-                        <dd className={invoice.taxId ? fieldValueClass : emptyClass}>{invoice.taxId || 'Not provided'}</dd>
-                      </div>
-                      <div>
-                        <dt className={fieldLabelClass}>Business Phone</dt>
-                        <dd className={invoice.phone ? fieldValueClass : emptyClass}>{invoice.phone || 'Not provided'}</dd>
-                      </div>
                       <div className="sm:col-span-2">
-                        <dt className={fieldLabelClass}>Website</dt>
-                        <dd className={invoice.website ? fieldValueClass : emptyClass}>{invoice.website || 'Not provided'}</dd>
+                        <dt className={fieldLabelClass}>Street Address</dt>
+                        <dd className={invoice.address ? fieldValueClass : emptyClass}>
+                          {invoice.address || 'Not provided'}
+                        </dd>
+                      </div>
+                      <div>
+                        <dt className={fieldLabelClass}>City</dt>
+                        <dd className={invoice.city ? fieldValueClass : emptyClass}>
+                          {invoice.city || 'Not provided'}
+                        </dd>
+                      </div>
+                      <div>
+                        <dt className={fieldLabelClass}>State &amp; Postcode</dt>
+                        <dd className={invoice.state || invoice.postcode ? fieldValueClass : emptyClass}>
+                          {[invoice.state, invoice.postcode].filter(Boolean).join(' ') || 'Not provided'}
+                        </dd>
+                      </div>
+                      <div>
+                        <dt className={fieldLabelClass}>Country</dt>
+                        <dd className={invoice.country ? fieldValueClass : emptyClass}>
+                          {invoice.country || 'Not provided'}
+                        </dd>
                       </div>
                     </dl>
-
-                    <div className="border-t border-white/8 pt-4 day:border-gray-200">
-                      <p className="mb-3 text-xs font-medium text-white/50 uppercase tracking-widest day:text-gray-400">Billing Address</p>
-                      <dl className="grid grid-cols-1 gap-y-4 sm:grid-cols-2 sm:gap-x-8">
-                        <div className="sm:col-span-2">
-                          <dt className={fieldLabelClass}>Street Address</dt>
-                          <dd className={invoice.address ? fieldValueClass : emptyClass}>{invoice.address || 'Not provided'}</dd>
-                        </div>
-                        <div>
-                          <dt className={fieldLabelClass}>City</dt>
-                          <dd className={invoice.city ? fieldValueClass : emptyClass}>{invoice.city || 'Not provided'}</dd>
-                        </div>
-                        <div>
-                          <dt className={fieldLabelClass}>State</dt>
-                          <dd className={invoice.state ? fieldValueClass : emptyClass}>{invoice.state || 'Not provided'}</dd>
-                        </div>
-                        <div>
-                          <dt className={fieldLabelClass}>Postcode</dt>
-                          <dd className={invoice.postcode ? fieldValueClass : emptyClass}>{invoice.postcode || 'Not provided'}</dd>
-                        </div>
-                        <div>
-                          <dt className={fieldLabelClass}>Country</dt>
-                          <dd className={invoice.country ? fieldValueClass : emptyClass}>{invoice.country || 'Not provided'}</dd>
-                        </div>
-                      </dl>
-                    </div>
                   </div>
-                )}
-              </section>
-
-            </div>
-          )}
-        </div>
-      </div>
+                </div>
+              )}
+            </section>
+          </div>
+        )}
+      </main>
     </div>
   );
 }
