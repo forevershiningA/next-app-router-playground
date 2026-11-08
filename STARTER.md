@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-11-07
+**Last Updated:** 2026-11-08
 
 **Status entry order:** Add new dated status entries immediately after the table of contents, before the existing status entries. Keep status entries in reverse chronological order (newest first); do not append them to the end of this file.
 **Tech Stack:** Next.js 15.5.26, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots), **Vitest 4.1.8** (unit tests), **Playwright 1.59.1** (E2E tests)
@@ -155,6 +155,51 @@
 142. [November 6 Warm Minimal Studio Modernization: Product Catalog, Memorials, Designs, Gallery & Contact](#current-status-2026-11-06--warm-minimal-studio-modernization-product-catalog-memorials-designs-gallery--contact)
 143. [November 6 Configurator Step 1 (/select-product) Warm Minimal Studio Redesign](#current-status-2026-11-06--configurator-step-1-select-product-warm-minimal-studio-redesign)
 144. [November 7 End-to-End Configurator Studio Modernization: Shape, Material, Size, Inscriptions, Images, Additions, Motifs & Save Design](#current-status-2026-11-07--end-to-end-configurator-studio-modernization-shape-material-size-inscriptions-images-additions-motifs--save-design)
+145. [November 8 My Account, Orders, Account Details, Invoices & Legal Pages Studio Redesign, 3D Canvas Isolation, and Vercel Memory Tuning](#current-status-2026-11-08--my-account-orders-account-details-invoices--legal-pages-studio-redesign-3d-canvas-isolation-and-vercel-memory-tuning)
+
+---
+
+## Current Status (2026-11-08) — My Account, Orders, Account Details, Invoices & Legal Pages Studio Redesign, 3D Canvas Isolation, and Vercel Memory Tuning
+
+- **Session Summary & Completed Implementation (November 8 Full Day):**
+  1. *Public & Navigation Integration:*
+     - Added direct **My Account** navigation links to [`components/MemorialCategoryNav.tsx`](file:///C:/Users/polcr/documents/github/next-app-router-playground/components/MemorialCategoryNav.tsx), [`app/_ui/HomeSplash.tsx`](file:///C:/Users/polcr/documents/github/next-app-router-playground/app/_ui/HomeSplash.tsx) mobile drawer, and [`components/MemorialPublicHeader.tsx`](file:///C:/Users/polcr/documents/github/next-app-router-playground/components/MemorialPublicHeader.tsx) dropdown menu adjacent to Contact.
+     - Cleaned up the designer sidebar header in [`components/designer/navigation/DesignerBrandHeader.tsx`](file:///C:/Users/polcr/documents/github/next-app-router-playground/components/designer/navigation/DesignerBrandHeader.tsx) by removing the dividing horizontal line under the Forever Shining logo.
+     - Removed obsolete Roman numeral badge circles (I, II, III) and connecting vertical line from [`components/designer/navigation/DesignerMenuGroupHeader.tsx`](file:///C:/Users/polcr/documents/github/next-app-router-playground/components/designer/navigation/DesignerMenuGroupHeader.tsx) and [`components/designer/navigation/DesignerMenuGroups.tsx`](file:///C:/Users/polcr/documents/github/next-app-router-playground/components/designer/navigation/DesignerMenuGroups.tsx) for a sleek, modern look.
+     - Implemented accordion auto-state in [`components/designer/navigation/useMenuAccordionState.ts`](file:///C:/Users/polcr/documents/github/next-app-router-playground/components/designer/navigation/useMenuAccordionState.ts) so navigating to `/my-account` automatically expands group III (Account) while collapsing groups I and II.
+     - Redesigned [`components/account/AccountNav.tsx`](file:///C:/Users/polcr/documents/github/next-app-router-playground/components/account/AccountNav.tsx) sidebar to feature the monochrome brand logo, integrated day/night theme toggle button on the right, and golden active states (`#c49a45`).
+     - Suppressed the duplicate floating day/night toggle button on account routes in [`components/theme/ThemeToggle.tsx`](file:///C:/Users/polcr/documents/github/next-app-router-playground/components/theme/ThemeToggle.tsx).
+
+  2. *Saved Designs Dashboard Modernization ([`app/my-account/page.tsx`](file:///C:/Users/polcr/documents/github/next-app-router-playground/app/my-account/page.tsx)):*
+     - Replaced dated floating card layout with the Studio Header standard: golden pill badge (`Customer Portal · Saved Designs`), Playfair Display serif title (*My Saved Designs*), session email indicator, and quick action buttons.
+     - Modernized the saved designs grid with Warm Minimal Studio cards (`border-white/10 bg-[#161412] day:border-[#dfd7ca] day:bg-white`), square thumbnail viewports, golden price styling, and clean action menus (Open in 3D, Duplicate, Share, Delete).
+
+  3. *Order History Modernization ([`app/orders/page.tsx`](file:///C:/Users/polcr/documents/github/next-app-router-playground/app/orders/page.tsx)):*
+     - Elevated order listing to the Studio Header format (`Customer Portal · Order History`, *Your Orders*).
+     - Modernized order cards with formatted item breakdowns, serif golden pricing, relative creation timestamps, and color-coded status badges (Completed, Processing, In-Production, Pending, Cancelled).
+     - Upgraded the Order Details modal with structured Studio sections, itemized quantities, and payment receipt rows.
+     - Created an elegant empty state with golden icon badge and *Start Designing* CTA.
+
+  4. *Account Details & Invoice Details Modernization ([`app/my-account/details/page.tsx`](file:///C:/Users/polcr/documents/github/next-app-router-playground/app/my-account/details/page.tsx), [`app/my-account/invoice/page.tsx`](file:///C:/Users/polcr/documents/github/next-app-router-playground/app/my-account/invoice/page.tsx)):*
+     - Upgraded both profile management pages with dedicated Studio Headers, back navigation links to Saved Designs, and responsive multi-column Studio cards.
+     - Standardized form inputs (`day:bg-[#fcfbf9]`, golden focus rings `#c49a45`), typography labels, inline editing modes, and saving indicator states.
+     - Handled personal details, password changes, business entity credentials (ABN/Tax ID), and tax invoice billing addresses.
+
+  5. *Legal & Policy Pages Modernization ([`app/privacy/page.tsx`](file:///C:/Users/polcr/documents/github/next-app-router-playground/app/privacy/page.tsx), [`app/terms/page.tsx`](file:///C:/Users/polcr/documents/github/next-app-router-playground/app/terms/page.tsx)):*
+     - Converted Privacy Policy and Terms & Conditions to the Studio Header design system (`Legal & Compliance · Policy / Terms`).
+     - Displayed policy articles inside elegant divided Studio card containers with warm serif section headings and golden hyperlink accents.
+
+  6. *3D Configurator Isolation in Account Area & Bug Fix ([`components/app-shell/ConditionalCanvas.tsx`](file:///C:/Users/polcr/documents/github/next-app-router-playground/components/app-shell/ConditionalCanvas.tsx), [`components/app-shell/ClientShell.tsx`](file:///C:/Users/polcr/documents/github/next-app-router-playground/components/app-shell/ClientShell.tsx)):*
+     - Fixed bug where the 3D configurator scene, ground landscape, and floating tools rendered in the background on Privacy Policy and other non-designer routes.
+     - Added comprehensive `isAccountAreaPage` definition covering `/my-account`, `/orders`, `/account`, `/privacy`, `/terms`, `/login`.
+     - Ensured `ConditionalCanvas` immediately unmounts Three.js (`return null`) and dismisses all overlays (`hideOverlay()`).
+     - Added parent-level guard in `ClientShell` (`!isAccountRoute && <ConditionalCanvas />`) preventing the dynamic 3D chunk from even mounting on account routes.
+
+  7. *Production Build Verification & Memory Tuning:*
+     - Identified that Next.js 15.5.26 production builds with massive Three.js dynamic chunks and 126 static routes exceeded 4096 MB heap limit on Windows/Vercel.
+     - Tuned `package.json` build script to `--max-old-space-size=8192` to match Vercel builder capacity.
+     - Successfully completed full production build (`next build`) with 126/126 static pages generated without warnings.
+     - Committed and deployed all changes to `origin/main` (`ae234f4297`).
 
 ---
 
