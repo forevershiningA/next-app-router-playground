@@ -28,16 +28,6 @@ export default function HomeBrandCard() {
     <div
       ref={rootRef}
       className="relative shrink-0"
-      onPointerEnter={(event) => {
-        if (event.pointerType === 'mouse') setOpen(true);
-      }}
-      onPointerLeave={(event) => {
-        if (
-          event.pointerType === 'mouse' &&
-          !rootRef.current?.contains(document.activeElement)
-        )
-          setOpen(false);
-      }}
       onBlur={(event) => {
         if (!event.currentTarget.contains(event.relatedTarget)) setOpen(false);
       }}
@@ -50,9 +40,16 @@ export default function HomeBrandCard() {
         onFocus={(event) => {
           if (event.currentTarget.matches(':focus-visible')) setOpen(true);
         }}
-        className="day:text-[#2b2926] day:hover:text-[#7b5a20] cursor-pointer rounded-sm font-serif text-xl leading-none tracking-[-0.015em] text-[#f4eee4] transition-colors hover:text-[#cfac6c] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#cfac6c] sm:text-[1.6875rem]"
+        className="cursor-pointer rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#cfac6c]"
       >
-        Forever Shining
+        <Image
+          src="/ico/forever-transparent-logo-bw.png"
+          alt="Forever Shining — Design Online"
+          width={400}
+          height={246}
+          className="h-28 w-auto object-contain"
+          priority
+        />
       </button>
       {open && (
         <div

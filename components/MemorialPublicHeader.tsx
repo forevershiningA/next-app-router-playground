@@ -1,6 +1,7 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import MemorialCategoryNav from '#/components/MemorialCategoryNav';
-import { Bars3Icon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
+import { Bars3Icon, ClipboardDocumentCheckIcon, MagnifyingGlassIcon, ShieldCheckIcon, TruckIcon } from '@heroicons/react/24/outline';
 import { ThemeToggle } from '#/components/theme/ThemeToggle';
 import {
   memorialTypePages,
@@ -22,14 +23,29 @@ export default function MemorialPublicHeader({
 }) {
   return (
     <header className="day:border-[#bdb4a6] day:bg-[#eee9df] day:text-[#1d1a17] relative z-50 border-b border-white/10 bg-[#141311] text-white transition-colors">
-      <div className="mx-auto flex h-[72px] max-w-7xl items-center justify-between gap-5 px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto flex min-h-36 max-w-7xl items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8">
         <Link
           href="/"
-          className="day:text-[#2b2926] day:hover:text-[#7b5a20] shrink-0 font-serif text-xl leading-none tracking-[-0.015em] text-white transition-colors hover:text-[#cfac6c] sm:text-[1.6875rem]"
+          className="shrink-0 rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#cfac6c]"
           aria-label="Forever Shining home"
         >
-          Forever Shining
+          <Image src="/ico/forever-transparent-logo-bw.png" alt="Forever Shining — Design Online" width={400} height={246} className="h-28 w-auto object-contain" priority />
         </Link>
+
+        <div className="day:text-[#74551d] hidden flex-1 items-center justify-center gap-6 text-[#e6cb8b] lg:flex">
+          <span className="flex items-center gap-2 text-sm font-semibold">
+            <ShieldCheckIcon className="h-6 w-6 shrink-0" aria-hidden="true" />
+            30-Year Guarantee
+          </span>
+          <span className="flex items-center gap-2 text-sm font-semibold">
+            <ClipboardDocumentCheckIcon className="h-6 w-6 shrink-0" aria-hidden="true" />
+            Cemetery approval guidance
+          </span>
+          <span className="hidden items-center gap-2 text-sm font-semibold 2xl:flex">
+            <TruckIcon className="h-6 w-6 shrink-0" aria-hidden="true" />
+            Carefully arranged delivery
+          </span>
+        </div>
 
         <nav
           className="ml-auto hidden items-center gap-2 xl:flex"
@@ -57,7 +73,7 @@ export default function MemorialPublicHeader({
 
         <Link
           href="/select-product"
-          className="day:bg-[#1d1a17] day:text-white day:hover:bg-[#3a332c] hidden min-h-11 items-center justify-center rounded-sm bg-[#cfac6c] px-4 text-sm font-semibold text-[#17120a] transition-colors hover:bg-[#e4c988] md:inline-flex xl:hidden"
+          className="day:bg-[#1d1a17] day:text-white day:hover:bg-[#3a332c] hidden min-h-11 items-center justify-center rounded-sm bg-[#cfac6c] px-4 text-sm font-semibold text-[#17120a] transition-colors hover:bg-[#e4c988] md:inline-flex lg:hidden"
         >
           Start Designing
         </Link>

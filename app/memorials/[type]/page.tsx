@@ -306,12 +306,12 @@ export default async function MemorialTypePage({ params }: PageProps) {
           <div className="grid gap-10 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:items-center lg:gap-14">
             {/* Left Column: Headline, Description & CTAs */}
             <div className="flex flex-col items-start">
-              <span className="day:border-[#d0c2ad] day:bg-[#e8e0d1] day:text-[#74551d] inline-flex items-center gap-1.5 rounded-full border border-[#cfac6c]/40 bg-[#cfac6c]/10 px-3.5 py-1 text-xs font-semibold tracking-wider text-[#e6cb8b] uppercase">
+              <span className="day:border-[#d0c2ad] day:bg-[#e8e0d1] day:text-[#74551d] mb-4 inline-flex items-center gap-1.5 rounded-full border border-[#cfac6c]/40 bg-[#cfac6c]/10 px-3.5 py-1 text-xs font-semibold tracking-wider text-[#e6cb8b] uppercase">
                 <SparklesIcon className="size-3.5" />
                 Handcrafted Precision · 3D Online Studio
               </span>
 
-              <h1 className="day:text-[#1d1a17] mt-4 max-w-2xl font-serif text-3xl leading-[1.12] tracking-tight text-white sm:text-4xl lg:text-5xl">
+              <h1 className="day:text-[#1d1a17] max-w-2xl font-serif text-3xl leading-[1.12] tracking-tight text-white sm:text-4xl lg:text-5xl">
                 {categoryDetails.heroHeadline}
               </h1>
 
