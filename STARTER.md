@@ -162,17 +162,36 @@
 
 ## Current Status (2026-11-09) — Vercel Build OOM Recovery & Memory Tuning
 
-- **Issue & Resolution:**
-  - Vercel production build failed with `Next.js build worker exited with code: null and signal: SIGKILL` followed by `ELIFECYCLE Command failed with exit code 1`.
-  - Root cause:
-    1. `webpackBuildWorker: true` forked an auxiliary Node.js child process (`Next.js build worker`) for Webpack compilation. With Sentry source-map upload and 4-thread parallelism, both the parent Next.js process and the child build worker ran concurrently, rapidly exhausting the 8 GB cgroup container limit on Vercel.
-    2. Missing `typescript: { ignoreBuildErrors: true }` caused in-process `tsc` validation to run concurrently with page data collection, adding ~1.5–2 GB RAM pressure.
-    3. Default multi-worker static page generation spawned 4 concurrent workers (one per CPU core) in the 8 GB builder VM.
-  - Comprehensive Fix:
-    1. Removed `webpackBuildWorker: true` and `webpackMemoryOptimizations: true` from `next.config.ts`, returning to single-process Webpack compilation (matching verified working deployment logs `build2.txt`).
-    2. Added `typescript: { ignoreBuildErrors: true }` to `next.config.ts` (type-checking is already enforced independently via `pnpm type-check`).
-    3. Added `experimental.cpus: 1` in `next.config.ts` to enforce single-worker static page generation and eliminate multi-core worker memory duplication.
-    4. Capped heap at 4 GB (`cross-env NODE_OPTIONS=--max-old-space-size=4096 next build`) and restricted Webpack module parallelism on Vercel to 2 (`process.env.VERCEL === '1' ? 2 : config.parallelism`).
+- **Session Summary & Root-Cause Investigation:**
+  - Vercel production deployment failed with `Next.js build worker exited with code: null and signal: SIGKILL` followed by `ELIFECYCLE Command failed with exit code 1` and `[BUILD_UTILS_SPAWN_1] Command "npx --yes pnpm@9.6.0 run build" exited with 1`.
+  - Build machine profile: Vercel Standard Build Machine (Cleveland cle1, 4 vCPUs, 8 GB RAM cgroup container ceiling).
+  - Diagnostic timeline from Vercel logs:
+    1. `16:47:04.988`: Build initiated (`cross-env NODE_OPTIONS=--max-old-space-size=6144 next build`).
+    2. `16:53:20.655`: Webpack compilation completed; Sentry uploaded Node.js source maps (`[@sentry/nextjs - Node.js] Info: Successfully uploaded source maps to Sentry`).
+    3. `16:55:00.808`: Child process `Next.js build worker` was terminated by Linux kernel OOM Killer with `SIGKILL` (exit code `null`).
+    4. `16:55:06.788`: Vercel reported: `At least one "Out of Memory" ("OOM") event was detected during the build.`
+  - Comparative analysis with past successful deployments (`build2.txt`, `build-logs.txt`):
+    1. **Process duplication via `webpackBuildWorker`:** In commit `637fe896d6`, `experimental.webpackBuildWorker: true` and `webpackMemoryOptimizations: true` were added. This caused Next.js to spawn a separate child process for Webpack compilation. Having two heavyweight Node.js instances (parent Next.js orchestrator + child build worker) active at the same time duplicated memory buffers and exhausted the 8 GB container.
+    2. **Missing build-time TypeScript bypass:** In `build3.txt`, `Checking validity of types ...` ran for 8 minutes and caused an OOM crash. While `eslint.ignoreDuringBuilds: true` was present, `typescript.ignoreBuildErrors: true` had not been set in `next.config.ts`.
+    3. **Unbounded CPU parallelism during static generation:** Next.js defaulted to 4 parallel workers on 4-core builders (`os.cpus()`), compounding memory spikes when generating the 126 static routes.
+    4. **Unsafe heap limit setting:** Commit `ae234f4297` had increased `--max-old-space-size=8192` in `package.json`, which prevented V8 from triggering garbage collection before total system RSS exceeded the container limit.
+
+- **Completed Implementation & Configuration Hardening:**
+  1. *Eliminated Webpack Build Worker:*
+     - Removed `experimental.webpackBuildWorker: true` and `experimental.webpackMemoryOptimizations: true` from [`next.config.ts`](file:///C:/Users/polcr/documents/github/next-app-router-playground/next.config.ts), restoring the proven single-process Webpack architecture from `build2.txt`.
+  2. *Bypassed In-Build TypeScript Checking:*
+     - Added `typescript: { ignoreBuildErrors: true }` to [`next.config.ts`](file:///C:/Users/polcr/documents/github/next-app-router-playground/next.config.ts). Type validation is strictly verified prior to deployment via `pnpm type-check` (confirmed passing with 0 errors).
+  3. *Restricted Static Generation Concurrency:*
+     - Added `experimental.cpus: 1` to [`next.config.ts`](file:///C:/Users/polcr/documents/github/next-app-router-playground/next.config.ts) to serialize page generation into a single worker, eliminating multi-core RAM multiplication.
+  4. *Capped Webpack Parallelism on Vercel:*
+     - Restricted Webpack compilation parallelism on Vercel to 2 (`process.env.VERCEL === '1' ? 2 : config.parallelism`).
+  5. *Re-anchored Heap Ceiling:*
+     - Restored `cross-env NODE_OPTIONS=--max-old-space-size=4096 next build` in [`package.json`](file:///C:/Users/polcr/documents/github/next-app-router-playground/package.json), ensuring V8 aggressively reclaims dead objects and reserves 4 GB for the OS and native buffers.
+
+- **Commits Deployed to `origin/main`:**
+  - `634b9aed8d`: `fix(build): tune max-old-space-size to 6144 and reduce Vercel Webpack parallelism to 2 to prevent OOM`
+  - `b99f820d6a`: `chore(sentry): disable telemetry during build`
+  - `fb8504e8d2`: `fix(build): eliminate webpackBuildWorker, limit cpus to 1, skip in-build tsc and cap heap at 4096 to prevent Vercel SIGKILL`
 
 ---
 
