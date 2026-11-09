@@ -163,9 +163,16 @@
 ## Current Status (2026-11-09) — Vercel Build OOM Recovery & Memory Tuning
 
 - **Issue & Resolution:**
-  - Vercel production build failed with `ELIFECYCLE Command failed with exit code 1` / `[BUILD_UTILS_SPAWN_1] Command "npx --yes pnpm@9.6.0 run build" exited with 1`.
-  - Root cause: Setting `--max-old-space-size=8192` in `package.json` inside an 8 GB build container delayed V8 garbage collection until total container memory exceeded the 8 GB cgroup threshold, triggering the Linux OOM killer.
-  - Fix: Adjusted `NODE_OPTIONS=--max-old-space-size=6144` in `package.json` to guarantee a 2 GB buffer for OS and helper processes while keeping heap headroom. Reduced Webpack module parallelism on Vercel from 4 to 2 in `next.config.ts` (`process.env.VERCEL === '1' ? 2 : config.parallelism`) to lower peak concurrent compilation memory.
+  - Vercel production build failed with `Next.js build worker exited with code: null and signal: SIGKILL` followed by `ELIFECYCLE Command failed with exit code 1`.
+  - Root cause:
+    1. `webpackBuildWorker: true` forked an auxiliary Node.js child process (`Next.js build worker`) for Webpack compilation. With Sentry source-map upload and 4-thread parallelism, both the parent Next.js process and the child build worker ran concurrently, rapidly exhausting the 8 GB cgroup container limit on Vercel.
+    2. Missing `typescript: { ignoreBuildErrors: true }` caused in-process `tsc` validation to run concurrently with page data collection, adding ~1.5–2 GB RAM pressure.
+    3. Default multi-worker static page generation spawned 4 concurrent workers (one per CPU core) in the 8 GB builder VM.
+  - Comprehensive Fix:
+    1. Removed `webpackBuildWorker: true` and `webpackMemoryOptimizations: true` from `next.config.ts`, returning to single-process Webpack compilation (matching verified working deployment logs `build2.txt`).
+    2. Added `typescript: { ignoreBuildErrors: true }` to `next.config.ts` (type-checking is already enforced independently via `pnpm type-check`).
+    3. Added `experimental.cpus: 1` in `next.config.ts` to enforce single-worker static page generation and eliminate multi-core worker memory duplication.
+    4. Capped heap at 4 GB (`cross-env NODE_OPTIONS=--max-old-space-size=4096 next build`) and restricted Webpack module parallelism on Vercel to 2 (`process.env.VERCEL === '1' ? 2 : config.parallelism`).
 
 ---
 

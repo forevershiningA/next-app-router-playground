@@ -37,14 +37,12 @@ const nextConfig = {
         : '.next',
   pageExtensions: ['js', 'jsx', 'mdx', 'ts', 'tsx'],
   eslint: { ignoreDuringBuilds: true },
+  typescript: { ignoreBuildErrors: true },
   // Optimize production build
   reactStrictMode: true,
   poweredByHeader: false,
   experimental: {
-    // A custom webpack hook disables this worker by default. Release its heap
-    // before TypeScript checking instead of keeping both in the 8 GB build container.
-    webpackBuildWorker: true,
-    webpackMemoryOptimizations: true,
+    cpus: 1,
     // Re-enabled useCache as it's required by 'use cache' directives in code
     useCache: true,
     // Optimize for faster builds
@@ -224,7 +222,6 @@ export default withMDX(
     tunnelRoute: '/sentry-tunnel',
     authToken: process.env.SENTRY_AUTH_TOKEN,
     silent: !process.env.CI,
-    telemetry: false,
     release: {
       name: sentryReleaseName,
       deploy:

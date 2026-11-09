@@ -10,7 +10,7 @@
     "designs:publication-report": "tsx scripts/report-design-publication.ts",
     "dev": "next dev",
     "mcp:designer": "node scripts/designer-mcp.mjs",
-    "build": "cross-env NODE_OPTIONS=--max-old-space-size=6144 next build",
+    "build": "cross-env NODE_OPTIONS=--max-old-space-size=4096 next build",
     "start": "next start",
     "lint": "eslint . --quiet",
     "lint:strict": "eslint . --max-warnings 0",
