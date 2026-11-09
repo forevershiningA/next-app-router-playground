@@ -63,7 +63,7 @@ const nextConfig = {
       Number.isInteger(override) && override > 0
         ? override
         : process.env.VERCEL === '1'
-          ? 4
+          ? 2
           : config.parallelism;
 
     // Do not trigger file watching / hot recompilation on generated drafts, outputs, or test scripts

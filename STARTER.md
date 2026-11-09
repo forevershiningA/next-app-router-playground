@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-11-08
+**Last Updated:** 2026-11-09
 
 **Status entry order:** Add new dated status entries immediately after the table of contents, before the existing status entries. Keep status entries in reverse chronological order (newest first); do not append them to the end of this file.
 **Tech Stack:** Next.js 15.5.26, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots), **Vitest 4.1.8** (unit tests), **Playwright 1.59.1** (E2E tests)
@@ -156,6 +156,16 @@
 143. [November 6 Configurator Step 1 (/select-product) Warm Minimal Studio Redesign](#current-status-2026-11-06--configurator-step-1-select-product-warm-minimal-studio-redesign)
 144. [November 7 End-to-End Configurator Studio Modernization: Shape, Material, Size, Inscriptions, Images, Additions, Motifs & Save Design](#current-status-2026-11-07--end-to-end-configurator-studio-modernization-shape-material-size-inscriptions-images-additions-motifs--save-design)
 145. [November 8 My Account, Orders, Account Details, Invoices & Legal Pages Studio Redesign, 3D Canvas Isolation, and Vercel Memory Tuning](#current-status-2026-11-08--my-account-orders-account-details-invoices--legal-pages-studio-redesign-3d-canvas-isolation-and-vercel-memory-tuning)
+146. [November 9 Vercel Build OOM Recovery & Memory Tuning](#current-status-2026-11-09--vercel-build-oom-recovery--memory-tuning)
+
+---
+
+## Current Status (2026-11-09) — Vercel Build OOM Recovery & Memory Tuning
+
+- **Issue & Resolution:**
+  - Vercel production build failed with `ELIFECYCLE Command failed with exit code 1` / `[BUILD_UTILS_SPAWN_1] Command "npx --yes pnpm@9.6.0 run build" exited with 1`.
+  - Root cause: Setting `--max-old-space-size=8192` in `package.json` inside an 8 GB build container delayed V8 garbage collection until total container memory exceeded the 8 GB cgroup threshold, triggering the Linux OOM killer.
+  - Fix: Adjusted `NODE_OPTIONS=--max-old-space-size=6144` in `package.json` to guarantee a 2 GB buffer for OS and helper processes while keeping heap headroom. Reduced Webpack module parallelism on Vercel from 4 to 2 in `next.config.ts` (`process.env.VERCEL === '1' ? 2 : config.parallelism`) to lower peak concurrent compilation memory.
 
 ---
 
