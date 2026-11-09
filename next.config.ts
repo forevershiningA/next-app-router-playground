@@ -224,6 +224,7 @@ export default withMDX(
     tunnelRoute: '/sentry-tunnel',
     authToken: process.env.SENTRY_AUTH_TOKEN,
     silent: !process.env.CI,
+    telemetry: false,
     release: {
       name: sentryReleaseName,
       deploy:
