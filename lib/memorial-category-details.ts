@@ -46,7 +46,7 @@ export const CATEGORY_DETAILS: Record<string, CategoryDetails> = {
     slug: 'headstones',
     heroHeadline: 'Custom Upright Headstones Crafted for Generations',
     heroSubheadline:
-      'Explore handcrafted black granite, traditional carved stone, and marine-grade stainless steel headstones. Personalise online with real-time 3D preview and guaranteed cemetery compliance.',
+      'Explore laser-etched black granite, traditional carved stone, and marine-grade stainless steel headstones. Personalise online with real-time 3D preview and guaranteed cemetery compliance.',
     flagshipProductId: '4',
     flagshipBadge: 'Most Popular Choice',
     comparisons: [

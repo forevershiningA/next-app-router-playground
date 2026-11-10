@@ -16,7 +16,7 @@ export default function DesignerBrandHeader({
   return (
     <>
       {/* Desktop Header */}
-      <div className="day:bg-[#f5f1e8] hidden h-36 shrink-0 items-center justify-between bg-[#161412] px-6 md:flex">
+      <div className="day:bg-[#f5f1e8] hidden h-24 shrink-0 items-center justify-between bg-[#161412] px-6 md:flex">
         <Link
           href="/"
           className="transition-opacity hover:opacity-85"
@@ -27,7 +27,7 @@ export default function DesignerBrandHeader({
             alt="Forever Shining — Design Online"
             width={400}
             height={246}
-            className="h-28 w-auto object-contain"
+            className="h-20 w-auto object-contain"
             priority
           />
         </Link>

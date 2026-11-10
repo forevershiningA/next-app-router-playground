@@ -13,7 +13,6 @@ export default function DesignerMenuGroupHeader({
   label,
   index,
   isCurrent,
-  isPast,
   isOpen,
   onToggle,
 }: DesignerMenuGroupHeaderProps) {
@@ -29,14 +28,14 @@ export default function DesignerMenuGroupHeader({
       }`}
     >
       <div className="flex min-w-0 items-center gap-2">
+        <span className={`flex size-7 shrink-0 items-center justify-center rounded-full border text-xs font-semibold ${isCurrent ? 'border-[#c49a45] bg-[#c49a45]/20 text-[#c49a45] day:text-[#78541c]' : 'border-white/20 text-white/60 day:border-[#d2c8b9] day:text-[#756c62]'}`}>
+          {index + 1}
+        </span>
         <p className="font-serif text-lg font-normal tracking-[-0.01em] text-white/90 day:text-[#1a1714]">
           {label}
         </p>
       </div>
       <div className="flex shrink-0 items-center gap-2.5">
-        <span className="font-playfair-display text-[11px] tracking-[0.2em] italic text-[#c49a45]/80 day:text-[#9a742f]/80">
-          Step {index + 1}
-        </span>
         <ChevronDownIcon
           className={`h-4 w-4 shrink-0 text-white/40 transition-transform duration-200 day:text-[#8a8074] ${
             isOpen ? 'rotate-0' : '-rotate-90'

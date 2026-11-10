@@ -7,35 +7,9 @@ import {
   ArrowLeftIcon,
   ArrowRightIcon,
   XMarkIcon,
-  ShieldCheckIcon,
-  CheckCircleIcon,
   SparklesIcon,
-  CubeIcon,
 } from '@heroicons/react/24/outline';
 import categories from '#/app/_internal/home-gallery.json';
-
-const GALLERY_PILLARS = [
-  {
-    icon: ShieldCheckIcon,
-    title: '30-Year Guarantee',
-    description: 'Marine-grade materials & permanent finishes',
-  },
-  {
-    icon: CheckCircleIcon,
-    title: '100% Cemetery Compliant',
-    description: 'Direct verification with local authorities',
-  },
-  {
-    icon: SparklesIcon,
-    title: 'Real Installations',
-    description: 'Actual completed tributes & memorials',
-  },
-  {
-    icon: CubeIcon,
-    title: 'Architectural Proof',
-    description: 'Free 3D preview & revisions before crafting',
-  },
-];
 
 export default function HomeGallery({
   standalone = false,
@@ -180,32 +154,6 @@ export default function HomeGallery({
                 : 'Find inspiration in the shapes, portraits, inscriptions, and details chosen to remember a loved one.'}
             </p>
           </div>
-
-          {standalone && (
-            <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
-              {GALLERY_PILLARS.map((pillar) => {
-                const Icon = pillar.icon;
-                return (
-                  <div
-                    key={pillar.title}
-                    className="day:border-[#e4ddd2] day:bg-white/80 flex items-start gap-3 rounded-sm border border-white/10 bg-[#141311]/80 p-3.5 backdrop-blur-sm"
-                  >
-                    <div className="day:border-[#d0c2ad] day:bg-[#f1ece2] flex size-8 shrink-0 items-center justify-center rounded-sm border border-white/15 bg-white/5 text-[#cfac6c]">
-                      <Icon className="size-4" />
-                    </div>
-                    <div>
-                      <div className="day:text-[#1d1a17] text-xs font-semibold text-white">
-                        {pillar.title}
-                      </div>
-                      <div className="day:text-[#756c62] text-[11px] text-[#a89d8d]">
-                        {pillar.description}
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          )}
 
           <div
             role="group"

@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-11-09
+**Last Updated:** 2026-11-10
 
 **Status entry order:** Add new dated status entries immediately after the table of contents, before the existing status entries. Keep status entries in reverse chronological order (newest first); do not append them to the end of this file.
 **Tech Stack:** Next.js 15.5.26, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots), **Vitest 4.1.8** (unit tests), **Playwright 1.59.1** (E2E tests)
@@ -157,6 +157,16 @@
 144. [November 7 End-to-End Configurator Studio Modernization: Shape, Material, Size, Inscriptions, Images, Additions, Motifs & Save Design](#current-status-2026-11-07--end-to-end-configurator-studio-modernization-shape-material-size-inscriptions-images-additions-motifs--save-design)
 145. [November 8 My Account, Orders, Account Details, Invoices & Legal Pages Studio Redesign, 3D Canvas Isolation, and Vercel Memory Tuning](#current-status-2026-11-08--my-account-orders-account-details-invoices--legal-pages-studio-redesign-3d-canvas-isolation-and-vercel-memory-tuning)
 146. [November 9 Vercel Build OOM Recovery & Memory Tuning](#current-status-2026-11-09--vercel-build-oom-recovery--memory-tuning)
+
+---
+
+## Current Status (2026-11-10) — Memorial Pages and Designer Navigation
+
+- Removed the duplicate assurance cards from `/memorials/gallery`, updated the headstones hero copy, and linked category hero images to their flagship product's 3D configurator. The public header displays “Carefully arranged delivery” from the `lg` breakpoint.
+- Compact designer sidebar header and numbered group headings; moved Load Design above the groups and made Advanced tools expandable. Product conversion now has day/night styling and explains when conversion is unavailable. Load Design uses the selected day/night theme in the designer.
+- Checkout's Back to Design action reloads the saved snapshot and returns directly to the product configurator, rather than opening the account design details page.
+- **Known limitation:** guest checkout currently creates an active internal account and session. It is not yet a checkout-only guest identity; the intended guest-only behavior still needs implementation.
+- Validation so far: `git diff --check` for changed files. The updated checkout flow and modal themes still need browser verification.
 
 ---
 

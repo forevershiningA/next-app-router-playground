@@ -8,6 +8,7 @@ import { useHeadstoneStore } from '#/lib/headstone-store';
 import SelectSizePanel from '#/components/designer/navigation/SelectSizePanel';
 import DesignerBaseOptionMenuItem from '#/components/designer/navigation/DesignerBaseOptionMenuItem';
 import DesignerAdvancedMenuActions from '#/components/designer/navigation/DesignerAdvancedMenuActions';
+import LoadDesignButton from '#/components/designer/actions/LoadDesignButton';
 import DesignerMobilePurchaseAction from '#/components/designer/navigation/DesignerMobilePurchaseAction';
 import DesignerNewDesignAction from '#/components/designer/navigation/DesignerNewDesignAction';
 import DesignerCheckPriceMenuItem from '#/components/designer/navigation/DesignerCheckPriceMenuItem';
@@ -79,6 +80,7 @@ export default function DesignerMenuGroups({
         isVisible={hasCustomizations}
         onNewDesign={handleNewDesign}
       />
+      <LoadDesignButton label="Load Design" variant="menu" />
       {menuGroups.map((group, groupIndex) => {
         const isCurrentGroup = groupIndex === activeGroupIndex;
         const isPastGroup = activeGroupIndex > groupIndex;

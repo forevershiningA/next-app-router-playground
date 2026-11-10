@@ -5,6 +5,8 @@ import Link from 'next/link';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { ArrowLeftIcon, CheckCircleIcon } from '@heroicons/react/24/outline';
 import Script from 'next/script';
+import { applyDesignSnapshot } from '#/lib/project-serializer';
+import { getDesignerProductStepHref } from '#/lib/designer-product-routes';
 
 type ShippingForm = {
   fullName: string;
@@ -40,7 +42,7 @@ const currencyFormatter = new Intl.NumberFormat('en-AU', {
 
 export default function BuyDesignPage() {
   const { id } = useParams<{ id: string }>();
-  const _router = useRouter();
+  const router = useRouter();
   const searchParams = useSearchParams();
 
   // A return URL is not payment confirmation. The payment provider must confirm
@@ -62,6 +64,7 @@ export default function BuyDesignPage() {
   const [placed, setPlaced] = useState(false);
   const [confirmedPrice, setConfirmedPrice] = useState<string | null>(null);
   const [error, setError] = useState('');
+  const [returningToDesign, setReturningToDesign] = useState(false);
   const [isLocalhost, setIsLocalhost] = useState(false);
   const testOrderRef = useRef(false);
 
@@ -305,13 +308,28 @@ export default function BuyDesignPage() {
         aria-hidden
       />
       <div className="relative mx-auto w-full max-w-3xl px-4 py-6 sm:px-6 sm:py-10 lg:px-10">
-        <Link
-          href={`/my-account/designs/${id}`}
-          className="day:text-[#6b5d4d] day:hover:text-[#2a2118] mb-6 inline-flex items-center gap-2 text-sm text-white/70 transition hover:text-white"
+        <button
+          type="button"
+          disabled={returningToDesign}
+          onClick={async () => {
+            setReturningToDesign(true);
+            try {
+              const response = await fetch(`/api/projects/${id}`);
+              if (!response.ok) throw new Error('Failed to load design');
+              const { project: savedProject } = await response.json();
+              const snapshot = { ...savedProject.designState, metadata: { ...savedProject.designState?.metadata, currentProjectId: savedProject.id, currentProjectTitle: savedProject.title } };
+              await applyDesignSnapshot(snapshot);
+              router.push(getDesignerProductStepHref('select-size', snapshot.productId));
+            } catch {
+              setError('Could not return to your design. Please try again.');
+              setReturningToDesign(false);
+            }
+          }}
+          className="day:text-[#6b5d4d] day:hover:text-[#2a2118] mb-6 inline-flex items-center gap-2 text-sm text-white/70 transition hover:text-white disabled:opacity-50"
         >
           <ArrowLeftIcon className="h-4 w-4" />
-          Back to Design
-        </Link>
+          {returningToDesign ? 'Loading design…' : 'Back to Design'}
+        </button>
 
         <div className="day:border-[#d8cfc2] day:bg-white/95 day:shadow-[0_14px_38px_rgba(73,57,43,0.12)] rounded-2xl border border-white/10 bg-[#0c0805]/85 px-4 py-6 shadow-[0_25px_65px_rgba(0,0,0,0.6)] backdrop-blur-2xl sm:rounded-[32px] sm:px-10 sm:py-8">
           <header className="mb-0 pb-6">

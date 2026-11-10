@@ -371,7 +371,11 @@ export default async function MemorialTypePage({ params }: PageProps) {
             {/* Right Column: Flagship Visual Card */}
             {flagshipProduct && (
               <div className="day:border-[#e2dad0] day:bg-white day:shadow-xl relative overflow-hidden rounded-sm border border-white/12 bg-[#161513] p-5 shadow-2xl">
-                <div className="day:border-[#ece5d9] day:bg-[#f6f3ed] relative aspect-[4/3] w-full overflow-hidden rounded-sm border border-white/10 bg-[#0e0d0c]">
+                <Link
+                  href={productDesignerUrl(flagshipProduct.id)}
+                  aria-label={`Customize ${flagshipProduct.displayName} in 3D`}
+                  className="day:border-[#ece5d9] day:bg-[#f6f3ed] relative block aspect-[4/3] w-full overflow-hidden rounded-sm border border-white/10 bg-[#0e0d0c] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#cfac6c]"
+                >
                   <Image
                     src={`/webp/products/${flagshipProduct.image}`}
                     alt={flagshipProduct.displayName}
@@ -383,7 +387,7 @@ export default async function MemorialTypePage({ params }: PageProps) {
                   <div className="day:border-[#d5c9b7] day:bg-white/90 day:text-[#70521c] absolute top-3 left-3 rounded-full border border-white/20 bg-black/70 px-3 py-1 text-[11px] font-semibold tracking-wide text-[#e8cf94] uppercase backdrop-blur-xs">
                     {flagshipBadge}
                   </div>
-                </div>
+                </Link>
 
                 <div className="mt-4 flex flex-col justify-between gap-3 sm:flex-row sm:items-end">
                   <div>

@@ -23,6 +23,7 @@ import { loadDesignById } from '#/components/projects/DefaultDesignLoader';
 import { loadMLData, getMLCategories, type MLDesignEntry } from '#/lib/ml-search-service';
 import { useHiddenDesigns } from '#/lib/useHiddenDesigns';
 import { useHeadstoneStore } from '#/lib/headstone-store';
+import { useTheme } from '#/components/theme/ThemeProvider';
 
 interface LoadDesignButtonProps {
   label?: string;
@@ -164,6 +165,7 @@ function sortCategoryEntries(entries: [string, CategoryTree[string]][]): [string
 }
 
 export default function LoadDesignButton({ label = 'Load Design', variant = 'floating' }: LoadDesignButtonProps) {
+  const { theme } = useTheme();
   const router = useRouter();
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
@@ -333,14 +335,14 @@ export default function LoadDesignButton({ label = 'Load Design', variant = 'flo
     setIsOpen(false);
   };
 
-  const useGalleryModalStyle = Boolean(isDesignGalleryRoute);
+  const useGalleryModalStyle = Boolean(isDesignGalleryRoute) || theme === 'day';
   const modalClasses = {
     overlay: useGalleryModalStyle
       ? 'fixed inset-0 z-[9999] flex items-center justify-center bg-stone-950/35 px-4 py-6 backdrop-blur-sm'
       : 'fixed inset-0 z-[9999] flex items-center justify-center bg-black/75 px-4 py-6 backdrop-blur-sm',
     panel: useGalleryModalStyle
       ? 'relative flex h-[82vh] w-full max-w-5xl flex-col overflow-hidden rounded-lg border border-stone-200 bg-[#f7f5f0] text-stone-950 shadow-2xl'
-      : 'relative flex h-[80vh] w-full max-w-4xl flex-col overflow-hidden rounded-3xl border border-[#d4af37]/35 bg-gradient-to-b from-[#191108]/95 via-[#120d07]/95 to-[#0a0704]/95 text-white shadow-[0_35px_90px_rgba(0,0,0,0.7)] ring-1 ring-white/10',
+      : 'relative flex h-[80vh] w-full max-w-4xl flex-col overflow-hidden rounded-xl border border-white/15 bg-[#161412] text-white shadow-2xl',
     header: useGalleryModalStyle
       ? 'relative flex items-center justify-between border-b border-stone-200 bg-white px-6 py-5 md:px-7'
       : 'relative flex items-center justify-between border-b border-white/10 px-6 py-5 md:px-7',
@@ -374,7 +376,7 @@ export default function LoadDesignButton({ label = 'Load Design', variant = 'flo
     emptyText: useGalleryModalStyle ? 'text-sm text-stone-600' : 'text-sm text-white/70',
     categoryPanel: useGalleryModalStyle
       ? 'rounded-lg border border-stone-200 bg-white shadow-sm'
-      : 'rounded-2xl border border-white/10 bg-white/[0.03]',
+      : 'rounded-lg border border-white/10 bg-white/[0.03]',
     categoryHeader: useGalleryModalStyle
       ? 'flex w-full items-center gap-2 px-4 py-3 text-left text-stone-950 cursor-pointer'
       : 'flex w-full items-center gap-2 px-4 py-3 text-left text-white cursor-pointer',
@@ -386,7 +388,7 @@ export default function LoadDesignButton({ label = 'Load Design', variant = 'flo
     expandedPanel: useGalleryModalStyle ? 'border-t border-stone-100 p-4' : 'border-t border-white/10 p-4',
     card: useGalleryModalStyle
       ? 'group relative flex flex-col overflow-hidden rounded-lg border border-stone-200 bg-white transition-all duration-300 hover:border-[#d8c487] hover:shadow-lg'
-      : 'group relative flex flex-col overflow-hidden rounded-2xl border border-white/[0.08] bg-black/25 transition-all duration-300 hover:border-[#d4af37]/30 hover:shadow-lg hover:shadow-black/40',
+      : 'group relative flex flex-col overflow-hidden rounded-lg border border-white/[0.08] bg-black/25 transition-all duration-300 hover:border-[#d4af37]/30 hover:shadow-lg hover:shadow-black/40',
     thumb: useGalleryModalStyle
       ? 'relative aspect-[4/3] w-full overflow-hidden bg-[radial-gradient(circle_at_50%_28%,#ffffff_0%,#f4f0e7_52%,#e6e0d3_100%)]'
       : 'relative aspect-[4/3] w-full overflow-hidden bg-[#cccccc]',

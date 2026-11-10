@@ -32,7 +32,7 @@ export default function MemorialPublicHeader({
           <Image src="/ico/forever-transparent-logo-bw.png" alt="Forever Shining — Design Online" width={400} height={246} className="h-28 w-auto object-contain" priority />
         </Link>
 
-        <div className="day:text-[#74551d] hidden flex-1 items-center justify-center gap-6 text-[#e6cb8b] lg:flex">
+        <div className="day:text-[#74551d] hidden flex-1 items-center justify-center gap-3 text-[#e6cb8b] lg:flex 2xl:gap-6">
           <span className="flex items-center gap-2 text-sm font-semibold">
             <ShieldCheckIcon className="h-6 w-6 shrink-0" aria-hidden="true" />
             30-Year Guarantee
@@ -41,7 +41,7 @@ export default function MemorialPublicHeader({
             <ClipboardDocumentCheckIcon className="h-6 w-6 shrink-0" aria-hidden="true" />
             Cemetery approval guidance
           </span>
-          <span className="hidden items-center gap-2 text-sm font-semibold 2xl:flex">
+          <span className="flex items-center gap-2 text-sm font-semibold">
             <TruckIcon className="h-6 w-6 shrink-0" aria-hidden="true" />
             Carefully arranged delivery
           </span>

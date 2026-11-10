@@ -1,8 +1,7 @@
 'use client';
 
 import { useState, type MouseEvent } from 'react';
-import { Squares2X2Icon } from '@heroicons/react/24/outline';
-import LoadDesignButton from '#/components/designer/actions/LoadDesignButton';
+import { ChevronDownIcon, Squares2X2Icon } from '@heroicons/react/24/outline';
 
 interface DesignerAdvancedMenuActionsProps {
   productId: string | null;
@@ -23,22 +22,10 @@ export default function DesignerAdvancedMenuActions({
 
   return (
     <>
-      <label className="flex w-full cursor-pointer items-center gap-2.5 rounded-lg border border-transparent px-3 py-2 text-left text-sm font-normal text-white/70 transition-all duration-200 hover:border-white/15 hover:bg-white/[0.06] hover:text-white day:border-transparent day:text-[#5a5248] day:hover:border-[#dfd7ca] day:hover:bg-[#f0ebe1] day:hover:text-[#1a1714]">
-        <input
-          type="checkbox"
-          checked={isExpanded}
-          onChange={(event) => {
-            const isEnabled = event.target.checked;
-            setIsExpanded(isEnabled);
-            if (!isEnabled) onCloseConvertPanel();
-          }}
-          className="h-4 w-4 rounded border-white/30 bg-transparent accent-[#c49a45] day:border-[#dfd7ca] day:accent-[#9a742f]"
-        />
-        <span className="flex-1 text-white/80 day:text-[#5a5248]">Advanced</span>
-        <span className="text-xs text-white/40 day:text-[#8a8074]">
-          Optional tools
-        </span>
-      </label>
+      <button type="button" aria-expanded={isExpanded} onClick={() => { setIsExpanded(!isExpanded); if (isExpanded) onCloseConvertPanel(); }} className="flex w-full items-center gap-2.5 rounded-lg border border-transparent px-3 py-2 text-left text-sm text-white/70 hover:bg-white/[0.06] day:text-[#5a5248] day:hover:bg-[#f0ebe1]">
+        <span className="flex-1">Advanced tools</span>
+        <ChevronDownIcon aria-hidden="true" className={`size-4 transition-transform ${isExpanded ? 'rotate-180' : ''}`} />
+      </button>
       {isExpanded && (
         <>
           <button
@@ -54,7 +41,7 @@ export default function DesignerAdvancedMenuActions({
             <Squares2X2Icon className="h-5 w-5" aria-hidden="true" />
             <span>Convert Design</span>
           </button>
-          <LoadDesignButton label="Load Design" variant="menu" />
+          {(!productId || !isCanvasAvailable) && <p className="px-3 text-xs text-white/60 day:text-[#756c62]">Select a product and open the 3D canvas to convert your design.</p>}
         </>
       )}
     </>
