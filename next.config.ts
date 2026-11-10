@@ -43,6 +43,8 @@ const nextConfig = {
   poweredByHeader: false,
   experimental: {
     cpus: 1,
+    // Reduce peak Webpack memory on constrained build machines.
+    webpackMemoryOptimizations: true,
     // Re-enabled useCache as it's required by 'use cache' directives in code
     useCache: true,
     // Optimize for faster builds
