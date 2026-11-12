@@ -161,7 +161,14 @@ export default async function DesignsPage({
   if (q?.trim()) {
     const query = q.trim();
     const designs = getSeoReadyDesigns();
-    const results = designs.filter((design) => matchesDesignSearch(design, query)).slice(0, 120);
+    const results = designs
+      .filter((design) => matchesDesignSearch(design, query))
+      .sort((a, b) => {
+        const aTime = /^\d{13}$/.test(a.id) ? Number(a.id) : 0;
+        const bTime = /^\d{13}$/.test(b.id) ? Number(b.id) : 0;
+        return bTime - aTime;
+      })
+      .slice(0, 120);
 
     return (
       <>

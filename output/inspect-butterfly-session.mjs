@@ -1,0 +1,1 @@
+import {chromium} from 'playwright';const b=await chromium.connectOverCDP('http://127.0.0.1:19223');for(const c of b.contexts())for(const p of c.pages()){try{console.log(JSON.stringify(await p.evaluate(()=>({url:location.href,selected:window.__headstoneStore?.getState().selectedInscriptionId,lines:window.__headstoneStore?.getState().inscriptions}))))}catch{}}await b.close()

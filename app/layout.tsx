@@ -60,11 +60,11 @@ export default function RootLayout({
       className="[color-scheme:light]"
       suppressHydrationWarning
     >
-      {/* Prevent flash-of-unstyled-content: read theme from localStorage before first paint */}
+      {/* Apply the saved or system theme before first paint. */}
       <head>
         <script
           dangerouslySetInnerHTML={{
-            __html: `(function(){try{var t=localStorage.getItem('fs_ui_theme');if(t==='dark'){document.documentElement.setAttribute('data-theme','dark');document.documentElement.style.colorScheme='dark';}else{document.documentElement.setAttribute('data-theme','day');document.documentElement.style.colorScheme='light';}}catch(e){}})();`,
+            __html: `(function(){var t;try{t=localStorage.getItem('fs_ui_theme')}catch(e){}if(t!=='day'&&t!=='dark'){t=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'day'}document.documentElement.setAttribute('data-theme',t);document.documentElement.style.colorScheme=t==='dark'?'dark':'light'})();`,
           }}
         />
       </head>

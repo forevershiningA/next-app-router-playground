@@ -144,7 +144,9 @@ export async function generateMetadata({
   const title = `${searchTitle} | Forever Shining`;
 
   // Build description
-  const description = `Browse ${designCount} ${categoryTitle.toLowerCase()} ${productInfo.kind} designs in ${productInfo.finish}. ${categoryDesc} Customize online with inscriptions, motifs, photos and live preview.`;
+  const description = category === 'butterfly-memorial' && productInfo.kind === 'headstone'
+    ? `Explore ${designCount} butterfly headstone designs in ${productInfo.finish}. Compare shapes and layouts, then personalize a design with a 3D preview.`
+    : `Browse ${designCount} ${categoryTitle.toLowerCase()} ${productInfo.kind} designs in ${productInfo.finish}. ${categoryDesc} Customize online with inscriptions, motifs, photos and live preview.`;
 
   // Build keywords
   const keywords = [
@@ -170,7 +172,7 @@ export async function generateMetadata({
   const canonicalUrl = `${baseUrl}/designs/${productSlug}/${category}`;
 
   return {
-    title,
+    title: searchTitle,
     description,
     keywords,
     alternates: {
@@ -198,6 +200,11 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   const categoryTitle = getCategoryTitle(category);
   const categoryDescription = getCategoryDescription(category);
   const categorySeoCopy = getCategorySeoCopy(category);
+  const searchTitle = getCategorySearchTitle(
+    category,
+    productInfo.kind,
+    `${categoryTitle} ${productInfo.shortName} Designs`,
+  );
   const designs = getSeoReadyDesigns()
     .filter(
       (design) =>
@@ -324,7 +331,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
               Choose a Starting Layout
             </span>
             <h1 className="day:text-[#1d1a17] mt-4 font-serif text-3xl leading-[1.12] tracking-tight text-white sm:text-4xl lg:text-5xl">
-              {categoryTitle} {productInfo.shortName} Designs
+              {searchTitle}
             </h1>
             <p className="day:text-[#5c544a] mt-4 max-w-3xl text-base leading-relaxed text-[#c3bbb0] sm:text-lg">
               {categoryDescription} These {productInfo.kind} templates can be
@@ -382,7 +389,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
                     <div className="day:border-[#e8e2d7] day:bg-[#f6f3ed] relative aspect-[4/3] overflow-hidden border-b border-white/10 bg-[#0e0d0c]">
                       <Image
                         src={`/screenshots/v2026-3d/${design.id}_small.png`}
-                        alt={`${title} memorial design preview`}
+                        alt={`${title} ${categoryTitle.toLowerCase()} ${productInfo.kind} design preview`}
                         fill
                         className="object-contain p-4 transition-transform duration-500 group-hover:scale-105"
                         sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"

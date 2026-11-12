@@ -28,14 +28,12 @@ export function useTheme() {
   return useContext(ThemeContext);
 }
 
-/** Read stored theme from localStorage (client-only, safe for lazy useState init). */
-function readStoredTheme(): UiTheme {
-  if (typeof window === 'undefined') return 'day';
+function readStoredTheme(): UiTheme | null {
   try {
     const stored = localStorage.getItem(LS_KEY);
-    return stored === 'dark' ? 'dark' : 'day';
+    return stored === 'dark' || stored === 'day' ? stored : null;
   } catch {
-    return 'day';
+    return null;
   }
 }
 
@@ -43,12 +41,22 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   // Start with 'day' to match SSR; sync from localStorage after mount to avoid hydration mismatch.
   const [theme, setThemeState] = useState<UiTheme>('day');
 
-  // On mount: read localStorage and align state + DOM attribute.
+  // Follow the system until the user explicitly chooses a theme.
   useEffect(() => {
-    const stored = readStoredTheme();
-    setThemeState(stored);
-    document.documentElement.setAttribute('data-theme', stored);
-    document.documentElement.style.colorScheme = stored === 'dark' ? 'dark' : 'light';
+    const media = window.matchMedia('(prefers-color-scheme: dark)');
+    const syncTheme = () => {
+      const resolved = readStoredTheme() ?? (media.matches ? 'dark' : 'day');
+      setThemeState(resolved);
+      document.documentElement.setAttribute('data-theme', resolved);
+      document.documentElement.style.colorScheme = resolved === 'dark' ? 'dark' : 'light';
+    };
+    syncTheme();
+    media.addEventListener('change', syncTheme);
+    window.addEventListener('storage', syncTheme);
+    return () => {
+      media.removeEventListener('change', syncTheme);
+      window.removeEventListener('storage', syncTheme);
+    };
   }, []);
 
   const setTheme = useCallback((t: UiTheme) => {

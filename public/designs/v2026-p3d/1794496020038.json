@@ -1,0 +1,70 @@
+{
+  "version": "1.0",
+  "generatedAt": "2026-11-12T15:07:00.551Z",
+  "units": "mm",
+  "source": {
+    "id": "1794496020038",
+    "mlDir": "headstonesdesigner",
+    "savedAt": "2026-11-12T15:07:00.551Z",
+    "format": "canonical"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "shape": "/shapes/headstones/headstone_27.svg",
+    "material": {
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "coordinateSystem": {
+      "positionMode": "p3d-mm-center",
+      "coordinateSpace": "headstone-center-mm",
+      "headstonePlacement": "auto-center"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 600,
+      "height_mm": 600,
+      "thickness_mm": 80,
+      "shape": "/shapes/headstones/headstone_27.svg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "base": {
+      "width_mm": 700,
+      "height_mm": 100,
+      "depth_mm": 250,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "l-c7f0e17c-7a63-4c20-9f79-cca5879f1ab6",
+        "text": "FOREVER IN OUR HEARTS",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 22,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 0,
+          "y_mm": -40
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "align": "center",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  }
+}

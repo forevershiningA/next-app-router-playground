@@ -1,0 +1,3 @@
+import {chromium} from 'playwright';const b=await chromium.launch({headless:true});const p=await b.newPage();p.on('console',m=>{if(m.type()==='error')console.log('CONSOLE',m.text())});p.on('requestfailed',r=>console.log('FAIL',r.url()));await p.goto('http://localhost:3001/designs/laser-etched-headstone/butterfly-memorial/butterfly-shaped-headstone-32',{waitUntil:'domcontentloaded',timeout:120000});await p.waitForTimeout(8000);let button=p.getByRole('button',{name:'Personalize This Design'}).first();console.log('disabled',await button.isDisabled());await button.click();await p.waitForTimeout(12000);console.log('url',p.url(),'status',await p.locator('[role=status]').allInnerTexts());await b.close();
+
+

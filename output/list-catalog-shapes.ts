@@ -1,0 +1,1 @@
+import {data} from '../app/_internal/_data';import fs from 'node:fs';let x=data.shapes.filter(s=>s.category==='traditional'||s.category==='modern');fs.writeFileSync('output/classic-modern-shapes.json',JSON.stringify(x,null,2));console.log(x.length);

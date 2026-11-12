@@ -1,0 +1,4 @@
+import {chromium} from 'playwright'; import fs from 'node:fs/promises';
+const browser=await chromium.launch({headless:true});const page=await browser.newPage({viewport:{width:1440,height:900}});
+await page.goto('http://localhost:3000/designs?q=butterfly',{waitUntil:'domcontentloaded',timeout:90000});await page.waitForTimeout(12000); await page.screenshot({path:'output/butterfly-gallery.png',fullPage:true});
+const x=await page.locator('a[href^="/designs/"]').evaluateAll(as=>as.filter(a=>a.querySelector('img')).map(a=>({href:a.getAttribute('href'),img:a.querySelector('img')?.getAttribute('src'),alt:a.querySelector('img')?.getAttribute('alt'),text:a.innerText})));await fs.writeFile('output/butterfly-gallery-results.json',JSON.stringify(x,null,2));console.log('RESULTS',x.length,JSON.stringify(x.slice(0,2)));await browser.close();

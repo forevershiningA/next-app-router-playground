@@ -917,9 +917,9 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(
       // above the body). They are separate contours in the SVG, not decorative
       // strokes, so they need their own caps and perimeter walls.
       const additionalSolidShapes = shapesWithBounds
-        // A single SVG path can contain nested subpaths for decorative cut-outs.
-        // Only independent SVG paths are separate stone components.
-        .filter(({ pathIndex }) => pathIndex !== primary.pathIndex)
+        // createShapes has already assigned nested contours as holes. Other
+        // shapes are independent solids, even when they share one SVG path.
+        .filter((entry) => entry !== primary)
         .map(({ shape }) => cloneSolid(shape));
       // The primary shape supplies the editable face outline, while detached
       // filled paths still belong to the same physical headstone. Normalize all
