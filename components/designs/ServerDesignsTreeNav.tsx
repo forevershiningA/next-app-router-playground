@@ -100,7 +100,7 @@ interface ServerDesignsTreeNavProps {
 }
 
 export default function ServerDesignsTreeNav({
-  maxDesignLinksPerCategory = 40,
+  maxDesignLinksPerCategory = 3,
 }: ServerDesignsTreeNavProps) {
   const treeData = buildTreeData();
 
