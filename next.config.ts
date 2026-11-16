@@ -45,6 +45,9 @@ const nextConfig = {
     cpus: 1,
     // Reduce peak Webpack memory on constrained build machines.
     webpackMemoryOptimizations: true,
+    // Custom webpack configuration disables this worker by default. Isolate
+    // each compiler so its memory is released before the next one starts.
+    webpackBuildWorker: true,
     // Re-enabled useCache as it's required by 'use cache' directives in code
     useCache: true,
     // Optimize for faster builds
