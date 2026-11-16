@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-11-10
+**Last Updated:** 2026-11-12
 
 **Status entry order:** Add new dated status entries immediately after the table of contents, before the existing status entries. Keep status entries in reverse chronological order (newest first); do not append them to the end of this file.
 **Tech Stack:** Next.js 15.5.26, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots), **Vitest 4.1.8** (unit tests), **Playwright 1.59.1** (E2E tests)
@@ -157,6 +157,19 @@
 144. [November 7 End-to-End Configurator Studio Modernization: Shape, Material, Size, Inscriptions, Images, Additions, Motifs & Save Design](#current-status-2026-11-07--end-to-end-configurator-studio-modernization-shape-material-size-inscriptions-images-additions-motifs--save-design)
 145. [November 8 My Account, Orders, Account Details, Invoices & Legal Pages Studio Redesign, 3D Canvas Isolation, and Vercel Memory Tuning](#current-status-2026-11-08--my-account-orders-account-details-invoices--legal-pages-studio-redesign-3d-canvas-isolation-and-vercel-memory-tuning)
 146. [November 9 Vercel Build OOM Recovery & Memory Tuning](#current-status-2026-11-09--vercel-build-oom-recovery--memory-tuning)
+147. [November 12 Shape Gallery, Search and Build Memory](#current-status-2026-11-12--shape-gallery-search-and-build-memory)
+
+---
+
+## Current Status (2026-11-12) — Shape Gallery, Search and Build Memory
+
+- Added one descriptive laser-etched headstone gallery design for each of the 55 Classic/Modern shapes: 54 new templates plus the earlier Butterfly Headstone 32 template. Their canonical sources are in `public/designs/v2026-p3d/`, with full and small previews in `public/screenshots/v2026-3d/`. Catalog metadata, slug mappings, preview/source manifests, and personalization product IDs were updated. The templates use a neutral inscription that families can personalize.
+- `SvgHeadstone.tsx` now retains separate filled shapes from the same SVG path. This fixes Headstone 32 (`headstone_38.svg`), whose butterfly and lower stone are distinct contours. Nested holes are handled by `SVGLoader.createShapes`; they are not independent solids.
+- Reviewed defective butterfly-related gallery results and added reversible holds to `lib/design-hidden-manifest.json`, including the two requested pet monument URLs. Holds remove designs from the published gallery and sitemap while retaining their source records and assets.
+- The active server-rendered `/designs?q=...` search in `app/designs/page.tsx` sorts matching designs by descending 13-digit timestamp ID **before** the 120-result limit. IDs are the available ordering proxy; historical or manually assigned IDs are not necessarily exact publication dates. The legacy `DesignsPageClient.tsx` is not the search route shown by this page.
+- GSC exports and a grouped keyword review are in `gsc/`; `gsc/headstone-opportunities-2026-11-12.md` records the butterfly, serpentine, dove, floral and other query groups, with the limitations of overlapping exports and incomplete query reporting.
+- **Vercel build memory:** commit `e54cdfa` failed during static generation with a reported container OOM. `ServerDesignsTreeNav.tsx` was changed in `ffcc83ce35` to show at most three direct design links per category by default, with a “View all” link for the complete category. A local butterfly category response dropped from approximately 9 MB to 4 MB and retained category links. The user subsequently reported that the Vercel build passed; this does not establish the sole cause of the earlier OOM.
+- **Verification and limits:** the gallery publication tests, TypeScript check and targeted lint passed during the gallery work; representative generated projects were opened in the editor and a shape was visually checked after the scene loaded. Two isolated local builds ran with Node 24 (the project requires Node 22) and failed at the 4 GB V8 heap limit during compilation, including one with `WEBPACK_PARALLELISM=2`; they did not verify the static-generation stage. The successful Vercel build was reported by the user, not independently inspected in this session.
 
 ---
 

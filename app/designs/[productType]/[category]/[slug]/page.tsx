@@ -8,6 +8,8 @@ import { isHiddenDesign } from '#/lib/design-hidden';
 import { getDesignPresentation } from '#/lib/design-presentation';
 import StartSavedDesignButton from './StartSavedDesignButton';
 import DesignPageClient from './DesignPageClient';
+import DesignsIndexMobileNavToggle from '#/components/designs/DesignsIndexMobileNavToggle';
+import ServerDesignsTreeNav from '#/components/designs/ServerDesignsTreeNav';
 
 const BRONZE_PLAQUE_FINISH = 'Clear lacquer seal over natural aluminium';
 
@@ -484,6 +486,14 @@ export default async function SavedDesignPage({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
+
+      <DesignsIndexMobileNavToggle />
+      <aside
+        className="day:border-[#e2dad0] fixed left-0 top-0 z-10 hidden h-full flex-col border-r border-white/10 md:block"
+        style={{ width: '400px' }}
+      >
+        <ServerDesignsTreeNav maxDesignLinksPerCategory={0} />
+      </aside>
 
       {/* SSR-visible content for search engine indexing — hidden once client hydrates */}
       <div

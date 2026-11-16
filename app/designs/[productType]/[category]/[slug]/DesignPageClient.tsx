@@ -21,15 +21,14 @@ import {
   InformationCircleIcon,
 } from '@heroicons/react/24/outline';
 import { getProductFromId } from '#/lib/product-utils';
-import type { SavedDesignMetadata, DesignCategory } from '#/lib/saved-designs-data';
+import type { SavedDesignMetadata } from '#/lib/saved-designs-data';
 import React from 'react';
 import { MotifsData } from '#/motifs_data';
-import DesignSidebar from '#/components/designs/DesignSidebar';
 import DesignContentBlock from '#/components/designs/DesignContentBlock';
 import type { CropBounds } from '#/lib/screenshot-crop';
 import { getMotifCategoryName } from '#/lib/motif-translations';
-import MobileNavToggle from '#/components/shared/MobileNavToggle';
-import DesignsTreeNav from '#/components/designs/DesignsTreeNav';
+import { ThemeToggle } from '#/components/theme/ThemeToggle';
+import './design-detail.css';
 import { logger } from '#/lib/logger';
 import { getDesignerProductStepHref } from '#/lib/designer-product-routes';
 
@@ -2961,9 +2960,6 @@ export default function DesignPageClient({
   if (loading || !nameDatabase) {
     return (
       <>
-        <MobileNavToggle>
-          <DesignsTreeNav />
-        </MobileNavToggle>
         <div className="bg-gradient-to-br from-slate-50 via-white to-slate-100 min-h-screen md:ml-[400px]">
           <div className="container mx-auto px-8 py-16 max-w-7xl">
             <div className="flex items-center gap-4 justify-center">
@@ -2997,33 +2993,24 @@ export default function DesignPageClient({
         </div>
       )}
 
-      <MobileNavToggle>
-        <DesignsTreeNav />
-      </MobileNavToggle>
-      
-      {/* Left Sidebar with Related Designs */}
-      <DesignSidebar 
-        currentDesignId={designId}
-        category={category as DesignCategory}
-        productSlug={productSlug}
-        maxItems={15}
-      />
-      
-      <div className="bg-[#f7f5f0] md:ml-[400px] min-h-screen">
-      <div className="relative z-10 border-b border-stone-200 bg-[#fdfcf9]">
+      <div className="day:bg-[#f8f6f0] day:text-[#1d1a17] min-h-screen bg-[#0d0c0b] text-white md:ml-[400px]">
+      <div className="day:border-[#e2dad0] relative z-10 border-b border-white/10">
         <div className="container mx-auto max-w-7xl px-4 pb-4 pt-20 md:px-8 md:py-8">
-          <nav className="hidden md:flex items-center gap-2 text-sm text-stone-500 mb-7" aria-label="Breadcrumb">
-            <Link href="/designs" className="hover:text-stone-950 transition-colors font-light tracking-wide">Memorial Designs</Link>
+          <div className="mb-7 flex items-center justify-between gap-4">
+          <nav className="hidden md:flex items-center gap-2 text-sm text-[#a89d8d]" aria-label="Breadcrumb">
+            <Link href="/designs" className="day:hover:text-[#1d1a17] hover:text-[#cfac6c] transition-colors font-light tracking-wide">Memorial Designs</Link>
             <ChevronRightIcon className="w-4 h-4 flex-shrink-0" />
-            <Link href={`/designs/${productSlug}`} className="hover:text-stone-950 transition-colors font-light tracking-wide">{productName}</Link>
+            <Link href={`/designs/${productSlug}`} className="day:hover:text-[#1d1a17] hover:text-[#cfac6c] transition-colors font-light tracking-wide">{productName}</Link>
             <ChevronRightIcon className="w-4 h-4 flex-shrink-0" />
-            <Link href={`/designs/${productSlug}/${category}`} className="hover:text-stone-950 transition-colors font-light tracking-wide">{categoryTitle}</Link>
+            <Link href={`/designs/${productSlug}/${category}`} className="day:hover:text-[#1d1a17] hover:text-[#cfac6c] transition-colors font-light tracking-wide">{categoryTitle}</Link>
             <ChevronRightIcon className="w-4 h-4 flex-shrink-0" />
-            <span className="text-stone-950 font-medium tracking-wide truncate">{formattedDesignTitle}</span>
+            <span className="day:text-[#1d1a17] font-medium tracking-wide text-[#c0b39f] truncate">{formattedDesignTitle}</span>
           </nav>
+          <div className="ml-auto"><ThemeToggle inline /></div>
+          </div>
 
           <nav className="md:hidden flex items-center gap-2 text-sm text-stone-500 mb-4" aria-label="Breadcrumb">
-            <Link href={`/designs/${productSlug}/${category}`} className="hover:text-stone-950 transition-colors font-light">
+            <Link href={`/designs/${productSlug}/${category}`} className="day:hover:text-[#1d1a17] hover:text-[#cfac6c] transition-colors font-light">
               <ChevronRightIcon className="w-4 h-4 rotate-180 inline" />
               <span className="ml-1">Back to {categoryTitle}</span>
             </Link>
@@ -3031,16 +3018,16 @@ export default function DesignPageClient({
 
           <div className="grid gap-7 lg:grid-cols-[minmax(0,1.05fr)_380px] lg:items-start">
             <section aria-labelledby="design-title">
-              <p className="mb-3 text-xs font-semibold uppercase tracking-[0.22em] text-[#9b7a24]">
+              <p className="mb-3 day:text-[#8a651f] text-xs font-semibold uppercase tracking-[0.22em] text-[#cfac6c]">
                 Customizable memorial design
               </p>
-              <h1 id="design-title" className="max-w-4xl text-3xl md:text-5xl font-serif font-light text-stone-950 tracking-tight">
+              <h1 id="design-title" className="max-w-4xl text-3xl md:text-5xl font-serif font-light day:text-[#1d1a17] text-white tracking-tight">
                 {formattedDesignTitle}
               </h1>
-              <p className="mt-3 text-base md:text-lg text-stone-600 font-light">
+              <p className="mt-3 text-base md:text-lg day:text-[#625a51] text-[#c3bbb0] font-light">
                 {categoryTitle} · {simplifiedProductName} {productTypeDisplay}
               </p>
-              <p className="mt-5 max-w-3xl text-sm md:text-base text-stone-700 leading-relaxed font-light">
+              <p className="mt-5 max-w-3xl text-sm md:text-base day:text-[#625a51] text-[#c3bbb0] leading-relaxed font-light">
                 {heroSummary}
               </p>
 
@@ -3048,14 +3035,14 @@ export default function DesignPageClient({
                 {heroFeatures.map((feature) => (
                   <span
                     key={feature}
-                    className="rounded-full border border-stone-200 bg-white/80 px-3 py-1 text-xs md:text-sm text-stone-600"
+                    className="day:border-[#e4ddd2] day:bg-white day:text-[#625a51] rounded-full border border-white/15 bg-white/5 px-3 py-1 text-xs md:text-sm text-white/80"
                   >
                     {feature}
                   </span>
                 ))}
               </div>
 
-              <div className="mt-7 overflow-hidden rounded-lg border border-stone-200 bg-white">
+              <div className="day:border-[#e4ddd2] mt-7 overflow-hidden rounded-sm border border-white/10 bg-[#141311]">
                 <div className="flex min-h-[360px] items-center justify-center bg-[radial-gradient(circle_at_50%_30%,#ffffff_0%,#f3f0e8_48%,#e6e1d7_100%)] px-4 py-8 md:min-h-[470px]">
                   <img
                     src={`/screenshots/v2026-3d/${designId}.png`}
@@ -3069,33 +3056,33 @@ export default function DesignPageClient({
             </section>
 
             <aside className="lg:sticky lg:top-6">
-              <div className="rounded-lg border border-stone-200 bg-white p-5 shadow-sm">
-                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-stone-500">
+              <div className="day:border-[#e4ddd2] day:bg-white day:shadow-sm rounded-sm border border-white/10 bg-[#141311] p-5">
+                <p className="day:text-[#8a651f] text-xs font-semibold uppercase tracking-[0.18em] text-[#cfac6c]">
                   Ready to personalize
                 </p>
                 <div className="mt-4 grid grid-cols-2 gap-3 text-sm">
-                  <div className="rounded-lg bg-stone-50 p-3">
-                    <p className="text-xs text-stone-500">Material</p>
-                    <p className="mt-1 font-medium text-stone-950">{simplifiedProductName}</p>
+                  <div className="day:bg-[#f6f3ed] rounded-sm bg-white/5 p-3">
+                    <p className="day:text-[#756c62] text-xs text-white/60">Material</p>
+                    <p className="day:text-[#1d1a17] mt-1 font-medium text-white">{simplifiedProductName}</p>
                   </div>
-                  <div className="rounded-lg bg-stone-50 p-3">
-                    <p className="text-xs text-stone-500">Shape</p>
-                    <p className="mt-1 font-medium text-stone-950">{shapeDisplayName || 'Standard'}</p>
+                  <div className="day:bg-[#f6f3ed] rounded-sm bg-white/5 p-3">
+                    <p className="day:text-[#756c62] text-xs text-white/60">Shape</p>
+                    <p className="day:text-[#1d1a17] mt-1 font-medium text-white">{shapeDisplayName || 'Standard'}</p>
                   </div>
-                  <div className="rounded-lg bg-stone-50 p-3">
-                    <p className="text-xs text-stone-500">Text areas</p>
-                    <p className="mt-1 font-medium text-stone-950">{designMetadata.inscriptionCount}</p>
+                  <div className="day:bg-[#f6f3ed] rounded-sm bg-white/5 p-3">
+                    <p className="day:text-[#756c62] text-xs text-white/60">Text areas</p>
+                    <p className="day:text-[#1d1a17] mt-1 font-medium text-white">{designMetadata.inscriptionCount}</p>
                   </div>
-                  <div className="rounded-lg bg-stone-50 p-3">
-                    <p className="text-xs text-stone-500">Proof</p>
-                    <p className="mt-1 font-medium text-stone-950">Free</p>
+                  <div className="day:bg-[#f6f3ed] rounded-sm bg-white/5 p-3">
+                    <p className="day:text-[#756c62] text-xs text-white/60">Proof</p>
+                    <p className="day:text-[#1d1a17] mt-1 font-medium text-white">Free</p>
                   </div>
                 </div>
 
                 <button
                   onClick={startPersonalising}
                   disabled={!canStartPersonalising}
-                  className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-stone-950 px-5 py-3 text-sm font-medium text-white transition-colors hover:bg-stone-800 disabled:cursor-not-allowed disabled:opacity-50"
+                  className="mt-5 inline-flex w-full items-center justify-center gap-2 day:bg-[#1d1a17] day:text-white day:hover:bg-[#342e26] rounded-sm bg-[#cfac6c] px-5 py-3 text-sm font-medium text-[#14120e] transition-colors hover:bg-[#e0c48c] disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   {(loading || canonicalLoadState === 'loading') ? (
                     <>
@@ -3111,16 +3098,16 @@ export default function DesignPageClient({
                     </>
                   )}
                 </button>
-                {personalization.message ? <p className="mt-3 text-sm text-stone-600" role="status">{personalization.message}</p> : null}
+                {personalization.message ? <p className="day:text-[#625a51] mt-3 text-sm text-white/70" role="status">{personalization.message}</p> : null}
                 <a
                   href="#price-guide"
-                  className="mt-3 inline-flex w-full items-center justify-center rounded-lg border border-stone-300 bg-white px-5 py-3 text-sm font-medium text-stone-800 transition-colors hover:bg-stone-50"
+                  className="mt-3 inline-flex w-full items-center justify-center day:border-[#bdb4a6] day:text-[#1d1a17] day:hover:bg-[#f6f3ed] rounded-sm border border-[#cfac6c]/60 px-5 py-3 text-sm font-medium text-[#f0d89f] transition-colors hover:bg-white/5"
                 >
                   See price guide
                 </a>
 
-                <div className="mt-5 border-t border-stone-200 pt-4">
-                  <ul className="space-y-2 text-sm text-stone-600">
+                <div className="day:border-[#e2dad0] mt-5 border-t border-white/10 pt-4">
+                  <ul className="day:text-[#625a51] space-y-2 text-sm text-white/70">
                     <li className="flex gap-2">
                       <span className="mt-0.5 text-[#9b7a24]">✓</span>
                       <span>Change wording, fonts, motifs and photo placement</span>
@@ -3141,7 +3128,7 @@ export default function DesignPageClient({
         </div>
       </div>
 
-      <div className="container mx-auto max-w-7xl px-4 md:px-8">
+      <div className="design-detail-content container mx-auto max-w-7xl px-4 pb-24 md:px-8 md:pb-8">
 
       {/* Download Links */}
       {isLocalhost && (
@@ -3254,11 +3241,11 @@ export default function DesignPageClient({
       </div>
       
       {/* Sticky Mobile CTA */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 shadow-lg z-40 p-4">
+      <div className="day:border-[#e2dad0] day:bg-white md:hidden fixed bottom-0 left-0 right-0 bg-[#141311] border-t border-white/10 shadow-lg z-40 p-4">
         <button
           onClick={startPersonalising}
           disabled={!canStartPersonalising}
-          className="w-full inline-flex items-center justify-center gap-2 px-6 py-3 bg-slate-900 text-white rounded-lg hover:bg-slate-800 transition-all font-medium text-center disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full inline-flex items-center justify-center gap-2 day:bg-[#1d1a17] day:text-white day:hover:bg-[#342e26] px-6 py-3 bg-[#cfac6c] text-[#14120e] rounded-sm hover:bg-[#e0c48c] transition-all font-medium text-center disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {(loading || canonicalLoadState === 'loading') ? (
             <>
