@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import {
   ArrowRightIcon,
   ArrowUpTrayIcon,
@@ -129,6 +129,14 @@ const getPetRockShapeUrl = (catalogShape: ShapeData) => {
     : '/shapes/headstones/pet_bone.svg';
 };
 
+const plaqueShapeImages = [
+  'landscape.svg',
+  'portrait.svg',
+  'oval_horizontal.svg',
+  'oval_vertical.svg',
+  'circle.svg',
+];
+
 export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [shapeQuery, setShapeQuery] = useState('');
@@ -136,10 +144,12 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
   const pathname = usePathname();
+  const requestedShapeId = useSearchParams().get('shapeId');
   const setShapeUrl = useHeadstoneStore((s) => s.setShapeUrl);
   const setBorderName = useHeadstoneStore((s) => s.setBorderName);
   const catalog = useHeadstoneStore((s) => s.catalog);
   const productId = useHeadstoneStore((s) => s.productId);
+  const readyProductId = useHeadstoneStore((s) => s.productConfigurationReadyId);
 
   // Check product type — use fallbackProduct.category as a safety net while
   // the catalog XML is still loading asynchronously.
@@ -193,6 +203,23 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
     catalog?.product?.border === '1' || (catalog === null && productId === '5');
   const useBlackShapePreview =
     canUseShapeCategoryFilters || isBlackGraniteProduct;
+
+  useEffect(() => {
+    const routeProductId = routeProduct?.id;
+    if (
+      (routeProductId !== '4' && routeProductId !== '124') ||
+      readyProductId !== routeProductId ||
+      !requestedShapeId
+    ) {
+      return;
+    }
+
+    const shape = shapes.find((item) => item.id === requestedShapeId);
+    if (!shape || plaqueShapeImages.includes(shape.image)) return;
+
+    setShapeUrl(`/shapes/headstones/${shape.image}`);
+    router.replace(getDesignerProductStepHref('select-material', routeProductId));
+  }, [readyProductId, requestedShapeId, routeProduct, router, setShapeUrl, shapes]);
 
   useEffect(() => {
     if (!canUseShapeCategoryFilters && selectedCategory !== 'all') {
@@ -500,14 +527,8 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
   // For headstones: EXCLUDE plaque shapes, show all others
   const uniqueShapes = shapes.reduce((acc, shape) => {
     const rectangleShapes = ['landscape.svg', 'portrait.svg'];
-    const allPlaqueShapes = [
-      ...rectangleShapes,
-      'oval_horizontal.svg',
-      'oval_vertical.svg',
-      'circle.svg',
-    ];
     const isDuplicate = acc.some((s) => s.image === shape.image);
-    const isPlaqueShape = allPlaqueShapes.includes(shape.image);
+    const isPlaqueShape = plaqueShapeImages.includes(shape.image);
     const isRectangleShape = rectangleShapes.includes(shape.image);
 
     let shouldInclude: boolean;

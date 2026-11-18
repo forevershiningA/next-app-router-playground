@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import HomeSplash from './_ui/HomeSplash';
+import HomeHeadstoneShapes from './_ui/HomeHeadstoneShapes';
 import HomeReviews from './_ui/HomeReviews';
 import HomeProductSection from './_ui/HomeProductSection';
 import HomeAiPromptSection from './_ui/HomeAiPromptSection';
@@ -211,6 +212,7 @@ export default function Page() {
         className="day:bg-[#f8f6f0] day:text-[#1d1a17] min-h-screen bg-[#0c0b0a] text-white"
       >
         <HomeSplash />
+        <HomeHeadstoneShapes />
         <HomeReviews />
         <HomeProductSection />
         <HomeTutorial />
