@@ -16,7 +16,7 @@ const featuredShapes = [
   { id: '10', label: 'Serpentine' },
   { id: '55', label: 'Butterfly Headstone' },
   { id: '56', label: 'Pentagon' },
-  { id: '58', label: 'Tank' },
+  { id: '36', label: 'Headstone 20' },
 ];
 
 export default function HomeHeadstoneShapes() {
@@ -37,7 +37,7 @@ export default function HomeHeadstoneShapes() {
             id="home-headstone-shapes-heading"
             className="font-serif text-3xl font-normal text-white day:text-[#1d1a17] sm:text-4xl"
           >
-            Featured Headstone Shapes
+            Popular Headstone Shapes
           </h2>
           <label className="flex flex-wrap items-center gap-2 text-sm text-white/75 day:text-[#625a51]">
             Engraving style
