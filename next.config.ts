@@ -45,9 +45,9 @@ const nextConfig = {
     cpus: 1,
     // Reduce peak Webpack memory on constrained build machines.
     webpackMemoryOptimizations: true,
-    // Custom webpack configuration disables this worker by default. Isolate
-    // each compiler so its memory is released before the next one starts.
-    webpackBuildWorker: true,
+    // Keep compilation in the main process on Vercel to avoid the combined
+    // memory overhead of the Next.js coordinator and its Webpack worker.
+    webpackBuildWorker: process.env.VERCEL !== '1',
     // Re-enabled useCache as it's required by 'use cache' directives in code
     useCache: true,
     // Optimize for faster builds
