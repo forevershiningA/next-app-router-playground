@@ -12,11 +12,11 @@ import {
 } from '#/lib/headstone-constants';
 
 const featuredShapes = [
-  { id: '38', label: 'Heart Shape' },
-  { id: '10', label: 'Serpentine' },
-  { id: '55', label: 'Butterfly Headstone' },
-  { id: '56', label: 'Pentagon' },
-  { id: '36', label: 'Headstone 20' },
+  { id: '38', label: 'Heart-Shaped Headstone' },
+  { id: '10', label: 'Serpentine-Shaped Headstone' },
+  { id: '55', label: 'Butterfly-Shaped Headstone' },
+  { id: '56', label: 'Pentagon-Shaped Headstone' },
+  { id: '36', label: 'Cross-Shaped Headstone' },
 ];
 
 export default function HomeHeadstoneShapes() {
