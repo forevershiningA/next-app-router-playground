@@ -59,7 +59,7 @@ export default function HomeSplash() {
                 </Link>
                 <Link
                   href="/designs"
-                  className="day:border-[#b8ad9e] day:text-[#1d1a17] day:hover:bg-[#e4ddcf] inline-flex min-h-12 items-center justify-center rounded-sm border border-white/20 bg-transparent px-5 py-3 text-center text-sm font-medium text-white transition-colors hover:bg-white/5 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#6f511c]"
+                  className="day:border-[#b8ad9e] day:hover:bg-[#e4ddcf] inline-flex min-h-12 items-center justify-center rounded-sm border border-white/20 bg-white px-5 py-3 text-center text-sm font-medium text-[#1d1a17] transition-colors hover:bg-[#f1ede3] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#6f511c]"
                 >
                   Browse Ready Designs
                 </Link>

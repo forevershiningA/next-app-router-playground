@@ -1,11 +1,15 @@
 'use client';
 
 import { useState } from 'react';
-import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowRightIcon } from '@heroicons/react/24/outline';
 import { data } from '#/app/_internal/_data';
 import { getDesignerProductStepHref } from '#/lib/designer-product-routes';
+import {
+  BLUE_PEARL_TEXTURE,
+  LASER_ETCHED_BLACK_GRANITE_TEXTURE,
+  SHAPES_BASE,
+} from '#/lib/headstone-constants';
 
 const featuredShapes = [
   { id: '38', label: 'Heart Shape' },
@@ -18,6 +22,9 @@ const featuredShapes = [
 export default function HomeHeadstoneShapes() {
   const [productId, setProductId] = useState('4');
   const designerHref = getDesignerProductStepHref('select-shape', productId);
+  const textureUrl = productId === '124'
+    ? BLUE_PEARL_TEXTURE
+    : LASER_ETCHED_BLACK_GRANITE_TEXTURE;
 
   return (
     <section
@@ -57,13 +64,13 @@ export default function HomeHeadstoneShapes() {
                   className="group block h-full overflow-hidden rounded-sm border border-white/15 hover:border-[#cfac6c] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#cfac6c] day:border-[#d5c9b7] day:bg-white day:hover:border-[#8a651f] day:focus-visible:outline-[#8a651f]"
                 >
                   <div className="relative aspect-[4/3] bg-[#e8e2d5]">
-                    <Image
-                      src={`/shapes/headstones/${shape.image}`}
-                      alt=""
-                      fill
-                      unoptimized
-                      sizes="(min-width: 1024px) 240px, (min-width: 640px) 33vw, 50vw"
-                      className="object-contain p-4 sm:p-6"
+                    <div
+                      aria-hidden="true"
+                      className="absolute inset-4 bg-cover bg-center mask-contain mask-center mask-no-repeat sm:inset-6"
+                      style={{
+                        backgroundImage: `url("${textureUrl}")`,
+                        maskImage: `url("${SHAPES_BASE}${shape.image}")`,
+                      }}
                     />
                   </div>
                   <div className="px-3 py-3 sm:px-4">

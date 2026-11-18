@@ -16,6 +16,10 @@ import { data } from '#/app/_internal/_data';
 import type { ShapeData } from '#/lib/xml-parser';
 import { putSerpentineFirst } from '#/lib/shape-ordering';
 import {
+  BLUE_PEARL_TEXTURE,
+  LASER_ETCHED_BLACK_GRANITE_TEXTURE,
+} from '#/lib/headstone-constants';
+import {
   getDesignerProductBySlug,
   getDesignerProductStepHref,
 } from '#/lib/designer-product-routes';
@@ -146,6 +150,8 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
   const pathname = usePathname();
   const requestedShapeId = useSearchParams().get('shapeId');
   const setShapeUrl = useHeadstoneStore((s) => s.setShapeUrl);
+  const setHeadstoneMaterialUrl = useHeadstoneStore((s) => s.setHeadstoneMaterialUrl);
+  const setBaseMaterialUrl = useHeadstoneStore((s) => s.setBaseMaterialUrl);
   const setBorderName = useHeadstoneStore((s) => s.setBorderName);
   const catalog = useHeadstoneStore((s) => s.catalog);
   const productId = useHeadstoneStore((s) => s.productId);
@@ -218,8 +224,22 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
     if (!shape || plaqueShapeImages.includes(shape.image)) return;
 
     setShapeUrl(`/shapes/headstones/${shape.image}`);
+    const textureUrl = routeProductId === '124'
+      ? BLUE_PEARL_TEXTURE
+      : LASER_ETCHED_BLACK_GRANITE_TEXTURE;
+    setHeadstoneMaterialUrl(textureUrl);
+    setBaseMaterialUrl(textureUrl);
     router.replace(getDesignerProductStepHref('select-material', routeProductId));
-  }, [readyProductId, requestedShapeId, routeProduct, router, setShapeUrl, shapes]);
+  }, [
+    readyProductId,
+    requestedShapeId,
+    routeProduct,
+    router,
+    setBaseMaterialUrl,
+    setHeadstoneMaterialUrl,
+    setShapeUrl,
+    shapes,
+  ]);
 
   useEffect(() => {
     if (!canUseShapeCategoryFilters && selectedCategory !== 'all') {

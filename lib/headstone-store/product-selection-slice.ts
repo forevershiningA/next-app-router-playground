@@ -1,5 +1,6 @@
 import type { StateCreator } from 'zustand';
 import { data } from '#/app/_internal/_data';
+import { LASER_ETCHED_BLACK_GRANITE_TEXTURE } from '#/lib/headstone-constants';
 import { normalizeThreeColorValue } from '#/lib/headstone-store/color-utils';
 import { normalizeCatalogData } from '#/lib/headstone-store/catalog-normalization';
 import { clampEditingObject } from '#/lib/headstone-store/editing-object';
@@ -19,9 +20,6 @@ import {
   normalizeTextureUrl,
   type HeadstoneState,
 } from '#/lib/headstone-store.types';
-
-const LASER_ETCHED_BLACK_GRANITE_TEXTURE =
-  '/textures/forever/l/Glory-Black-2.webp';
 
 type ProductSelectionSlice = Pick<HeadstoneState, 'productId' | 'productConfigurationReadyId' | 'setProductId'>;
 

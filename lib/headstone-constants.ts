@@ -8,6 +8,8 @@ export const DEFAULT_SHAPE_URL = SHAPES_BASE + DEFAULT_SHAPE_IMAGE;
 // Texture paths
 export const TEX_BASE = '/textures/forever/l/';
 export const DEFAULT_TEX = 'Imperial-Red.webp';
+export const BLUE_PEARL_TEXTURE = TEX_BASE + 'Blue-Pearl.webp';
+export const LASER_ETCHED_BLACK_GRANITE_TEXTURE = TEX_BASE + 'Glory-Black-2.webp';
 
 // Headstone dimension constraints (mm)
 export const MIN_HEADSTONE_DIM = 300;
