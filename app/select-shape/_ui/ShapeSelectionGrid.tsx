@@ -156,10 +156,19 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
   const catalog = useHeadstoneStore((s) => s.catalog);
   const productId = useHeadstoneStore((s) => s.productId);
   const readyProductId = useHeadstoneStore((s) => s.productConfigurationReadyId);
+  const failedProductId = useHeadstoneStore((s) => s.productConfigurationFailedId);
+  const setProductId = useHeadstoneStore((s) => s.setProductId);
 
   // Check product type — use fallbackProduct.category as a safety net while
   // the catalog XML is still loading asynchronously.
   const routeProduct = getDesignerProductBySlug(pathname.split('/')[1]);
+  const presetProductId = routeProduct?.id;
+  const presetShape =
+    presetProductId === '4' || presetProductId === '124'
+      ? shapes.find(
+          (shape) => shape.id === requestedShapeId && !plaqueShapeImages.includes(shape.image),
+        )
+      : undefined;
   const fallbackProduct =
     data.products.find((p) => p.id === productId) ?? routeProduct;
   const productName =
@@ -211,34 +220,23 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
     canUseShapeCategoryFilters || isBlackGraniteProduct;
 
   useEffect(() => {
-    const routeProductId = routeProduct?.id;
-    if (
-      (routeProductId !== '4' && routeProductId !== '124') ||
-      readyProductId !== routeProductId ||
-      !requestedShapeId
-    ) {
-      return;
-    }
+    if (!presetShape || !presetProductId || readyProductId !== presetProductId) return;
 
-    const shape = shapes.find((item) => item.id === requestedShapeId);
-    if (!shape || plaqueShapeImages.includes(shape.image)) return;
-
-    setShapeUrl(`/shapes/headstones/${shape.image}`);
-    const textureUrl = routeProductId === '124'
+    setShapeUrl(`/shapes/headstones/${presetShape.image}`);
+    const textureUrl = presetProductId === '124'
       ? BLUE_PEARL_TEXTURE
       : LASER_ETCHED_BLACK_GRANITE_TEXTURE;
     setHeadstoneMaterialUrl(textureUrl);
     setBaseMaterialUrl(textureUrl);
-    router.replace(getDesignerProductStepHref('select-material', routeProductId));
+    router.replace(getDesignerProductStepHref('select-material', presetProductId));
   }, [
     readyProductId,
-    requestedShapeId,
-    routeProduct,
+    presetProductId,
+    presetShape,
     router,
     setBaseMaterialUrl,
     setHeadstoneMaterialUrl,
     setShapeUrl,
-    shapes,
   ]);
 
   useEffect(() => {
@@ -246,6 +244,33 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
       setSelectedCategory('all');
     }
   }, [canUseShapeCategoryFilters, selectedCategory]);
+
+  if (presetShape && presetProductId) {
+    return (
+      <div className="day:bg-[#f7f4ee] day:text-[#1a1714] grid min-h-dvh place-items-center bg-[#0c0b0a] px-4 text-white">
+        {failedProductId === presetProductId ? (
+          <div className="flex flex-col items-center gap-4 text-center">
+            <p role="alert">We couldn’t load the 3D designer.</p>
+            <button
+              type="button"
+              onClick={() => void setProductId(presetProductId)}
+              className="day:bg-[#1d1a17] day:text-white min-h-11 rounded-sm bg-[#cfac6c] px-4 text-sm font-semibold text-[#1d1a17] focus-visible:outline-2 focus-visible:outline-offset-4"
+            >
+              Try Again
+            </button>
+          </div>
+        ) : (
+          <div role="status" className="flex flex-col items-center gap-4 text-center">
+            <span
+              aria-hidden="true"
+              className="day:border-[#d8cfbf] day:border-t-[#9a742f] size-10 rounded-full border-2 border-white/20 border-t-[#cfac6c] motion-safe:animate-spin"
+            />
+            <span>Preparing your 3D design…</span>
+          </div>
+        )}
+      </div>
+    );
+  }
 
   const openPanel = (panel: string) => {
     if (typeof window !== 'undefined') {

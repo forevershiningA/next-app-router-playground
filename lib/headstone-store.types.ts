@@ -277,6 +277,7 @@ export type HeadstoneState = {
 
   productId: string | null;
   productConfigurationReadyId: string | null;
+  productConfigurationFailedId: string | null;
   setProductId: (id: string) => Promise<void>;
 
   currentProjectId: string | null;

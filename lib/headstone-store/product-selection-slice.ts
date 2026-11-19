@@ -21,7 +21,10 @@ import {
   type HeadstoneState,
 } from '#/lib/headstone-store.types';
 
-type ProductSelectionSlice = Pick<HeadstoneState, 'productId' | 'productConfigurationReadyId' | 'setProductId'>;
+type ProductSelectionSlice = Pick<
+  HeadstoneState,
+  'productId' | 'productConfigurationReadyId' | 'productConfigurationFailedId' | 'setProductId'
+>;
 
 let selectionSequence = 0;
 
@@ -33,6 +36,7 @@ export const createProductSelectionSlice: StateCreator<
 > = (set, get) => ({
   productId: null,
   productConfigurationReadyId: null,
+  productConfigurationFailedId: null,
   setProductId: async (id) => {
     const sequence = ++selectionSequence;
     const prevSnapshot = get();
@@ -45,7 +49,13 @@ export const createProductSelectionSlice: StateCreator<
     // Immediately capture the user's selection so downstream effects know a
     // product has been chosen even while the catalog XML is loading.
     // CRITICAL: Clear the old catalog to prevent showing stale data
-    set({ productId: id, productConfigurationReadyId: null, catalog: null, fixingType: 'flat-back' });
+    set({
+      productId: id,
+      productConfigurationReadyId: null,
+      productConfigurationFailedId: null,
+      catalog: null,
+      fixingType: 'flat-back',
+    });
 
     try {
       const response = await fetch(`/xml/catalog-id-${id}.xml`);
@@ -417,6 +427,9 @@ export const createProductSelectionSlice: StateCreator<
         set({ productConfigurationReadyId: id });
       }
     } catch (error) {
+      if (sequence === selectionSequence && get().productId === id) {
+        set({ productConfigurationFailedId: id });
+      }
       console.error('Failed to load or parse catalog XML:', error);
     }
   },

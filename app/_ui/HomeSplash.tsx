@@ -41,9 +41,9 @@ export default function HomeSplash() {
               </h1>
 
               <p className="day:text-[#5c544a] mt-5 max-w-lg text-base leading-7 text-pretty text-[#bdb3a5] sm:text-lg sm:leading-8">
-                Choose the stone, shape, inscription, and meaningful details in
-                one guided designer. See every change and the price in 3D, then
-                save or share your design when you are ready.
+                Choose the stone, shape, and inscription. Preview your design in
+                3D, see the price update as you make changes, and save or share
+                it when you’re ready.
               </p>
 
               {/* Dual Action CTAs */}
@@ -68,12 +68,7 @@ export default function HomeSplash() {
 
             {/* Right Column: Hero Visual Container */}
             <div className="order-first lg:order-none">
-              <Link
-                href="/select-product"
-                prefetch={false}
-                aria-label="Open the 3D memorial designer"
-                className="group day:border-[#e2dad0] day:bg-white day:shadow-xl relative block overflow-hidden rounded-sm border border-white/15 bg-[#171410] p-3 shadow-2xl transition-all duration-300 hover:border-[#cfac6c]/50"
-              >
+              <figure className="day:border-[#e2dad0] day:bg-white day:shadow-xl relative overflow-hidden rounded-sm border border-white/15 bg-[#171410] p-3 shadow-2xl">
                 <div className="day:border-[#ece5d9] relative aspect-video overflow-hidden rounded-sm border border-white/10 bg-black">
                   <video
                     autoPlay
@@ -83,7 +78,7 @@ export default function HomeSplash() {
                     preload="metadata"
                     poster="/videos/hero-garden-v9-poster.webp"
                     aria-hidden="true"
-                    className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.02] motion-reduce:hidden"
+                    className="h-full w-full object-cover motion-reduce:hidden"
                   >
                     <source src="/videos/hero-garden-v9.webm" type="video/webm" />
                     <source src="/videos/hero-garden-v9.mp4" type="video/mp4" />
@@ -101,16 +96,10 @@ export default function HomeSplash() {
                   </div>
                 </div>
 
-                <div className="mt-3 flex items-center justify-between px-2 py-1 text-xs">
-                  <span className="day:text-[#1d1a17] font-medium text-white/90">
-                    Interactive 3D Preview with Instant Pricing
-                  </span>
-                  <span className="day:text-[#8a651f] flex items-center gap-1 font-semibold text-[#cfac6c]">
-                    <span>Explore Studio</span>
-                    <ArrowRightIcon className="size-3" />
-                  </span>
-                </div>
-              </Link>
+                <figcaption className="day:text-[#1d1a17] mt-3 px-2 py-1 text-xs font-medium text-white/90">
+                  Interactive 3D Preview with Instant Pricing
+                </figcaption>
+              </figure>
             </div>
           </div>
         </div>

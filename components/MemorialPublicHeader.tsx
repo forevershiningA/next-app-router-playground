@@ -23,7 +23,7 @@ export default function MemorialPublicHeader({
 }) {
   return (
     <header className="day:border-[#bdb4a6] day:bg-[#eee9df] day:text-[#1d1a17] relative z-50 border-b border-white/10 bg-[#141311] text-white transition-colors">
-      <div className="mx-auto flex min-h-36 max-w-7xl items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8">
+      <div className="mx-auto flex min-h-36 max-w-7xl items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:min-h-28 lg:px-8 lg:py-1">
         <Link
           href="/"
           className="shrink-0 rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#cfac6c]"
@@ -59,12 +59,6 @@ export default function MemorialPublicHeader({
           >
             <MagnifyingGlassIcon className="h-5 w-5" aria-hidden="true" />
           </Link>
-          <Link
-            href="/designs"
-            className="day:border-[#bdb4a6] day:text-[#1d1a17] day:hover:border-[#7b5a20] day:hover:bg-white/45 inline-flex min-h-10 items-center justify-center rounded-lg border border-white/15 px-4 text-sm font-semibold text-white/90 transition-colors hover:border-[#cfac6c] hover:bg-white/5"
-          >
-            Browse Designs
-          </Link>
         </nav>
 
         <div className="ml-auto xl:hidden">
@@ -89,7 +83,12 @@ export default function MemorialPublicHeader({
           >
             <Link
               href="/"
-              className="day:hover:bg-white rounded-sm px-3 py-2 text-sm transition-colors hover:bg-white/10"
+              aria-current={activeType === undefined ? 'page' : undefined}
+              className={`rounded-sm px-3 py-2 text-sm transition-colors ${
+                activeType === undefined
+                  ? 'day:bg-[#e8dfd0] day:text-[#6f511c] bg-white/10 font-semibold text-[#cfac6c]'
+                  : 'day:hover:bg-white hover:bg-white/10'
+              }`}
             >
               Home
             </Link>

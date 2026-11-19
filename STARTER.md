@@ -158,8 +158,17 @@
 145. [November 8 My Account, Orders, Account Details, Invoices & Legal Pages Studio Redesign, 3D Canvas Isolation, and Vercel Memory Tuning](#current-status-2026-11-08--my-account-orders-account-details-invoices--legal-pages-studio-redesign-3d-canvas-isolation-and-vercel-memory-tuning)
 146. [November 9 Vercel Build OOM Recovery & Memory Tuning](#current-status-2026-11-09--vercel-build-oom-recovery--memory-tuning)
 147. [November 12 Shape Gallery, Search and Build Memory](#current-status-2026-11-12--shape-gallery-search-and-build-memory)
+148. [November 18 Home Shape Cards and Vercel Build Memory](#current-status-2026-11-18--home-shape-cards-and-vercel-build-memory)
 
 ---
+
+## Current Status (2026-11-18) — Home Shape Cards and Vercel Build Memory
+
+- The homepage shows **Popular Headstone Shapes** below the hero. The cards appear in this order: Heart-Shaped Headstone, Serpentine-Shaped Headstone, Butterfly-Shaped Headstone, Pentagon-Shaped Headstone, and Cross-Shaped Headstone. The butterfly uses the catalog shape from Butterfly Top Headstone 39. The hero's **Browse Ready Designs** button has a white default background.
+- The **Engraving style** selector defaults to Laser Etched and updates all five card links and previews. Laser Etched uses Glory Black granite. Traditional Engraved uses Blue Pearl. Opening a card applies the selected shape and matching granite to the headstone and base, then opens the material step in the 3D configurator.
+- Vercel's Standard Build Machine in `iad1` reported an out-of-memory event while compiling `25b9fd1` and terminated the Next.js build worker with `SIGKILL`. That commit changes five card labels. The log establishes the memory failure, with the source of peak memory still unconfirmed.
+- `next.config.ts` disables the separate Webpack build worker when `VERCEL=1` to reduce the combined memory overhead of the coordinator and worker. Vercel retains Webpack memory optimizations, default Webpack parallelism of 2, `experimental.cpus: 1`, and the existing 4096 MB Node.js heap limit. Local builds keep the worker enabled.
+- The production configuration loaded locally with `VERCEL=1`, and `pnpm exec tsc --noEmit --incremental false` passed. A new Vercel build is needed to verify the memory change.
 
 ## Current Status (2026-11-12) — Shape Gallery, Search and Build Memory
 
