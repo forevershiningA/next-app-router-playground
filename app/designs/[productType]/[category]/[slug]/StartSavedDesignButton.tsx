@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { markReadyDesignStart } from '#/lib/ready-design-open';
 import { getDesignerProductStepHref } from '#/lib/designer-product-routes';
 import type { DesignPersonalization } from '#/lib/design-personalization';
 
@@ -42,7 +43,9 @@ export default function StartSavedDesignButton({
         return;
       }
 
-      router.push(getDesignerProductStepHref('select-size', result.productId));
+      const destination = getDesignerProductStepHref('select-size', result.productId);
+      markReadyDesignStart(designId, destination);
+      router.push(destination);
     } catch (err) {
       console.error('Failed to start saved design', err);
       setError('Failed to load design');

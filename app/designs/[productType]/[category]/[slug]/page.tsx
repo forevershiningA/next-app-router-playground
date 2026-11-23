@@ -74,6 +74,15 @@ function getSimplifiedProductType(productName: string): string {
   return productName;
 }
 
+function getEditorialTitle(design: { id: string; slug: string; productSlug: string }) {
+  if (design.id === '1721089090837') {
+    return 'Vertical Rectangular Memorial Plaque with Bird and Flower Engraving';
+  }
+  if (design.productSlug === 'traditional-headstone' && design.slug === 'curved-gable-may-heavens-eternal-happiness-be-thine') {
+    return 'Curved Gable Granite Headstone with Cross and Flowers';
+  }
+}
+
 function buildDesignSeoTitle({
   shapeName,
   categoryTitle,
@@ -111,12 +120,6 @@ function buildDesignDescription({
       ? ` Layout: ${phraseFromSlug.replace(/\s+\d+$/, '')}.`
       : '';
   return `${seoTitle}.${motifText}${phraseText} Personalize inscriptions and preview your memorial online before requesting a proof.`;
-}
-
-function truncateMetaDescription(description: string): string {
-  return description.length > 160
-    ? `${description.substring(0, 157)}...`
-    : description;
 }
 
 interface SavedDesignPageProps {
@@ -195,7 +198,8 @@ export async function generateMetadata({
           .replace(/,([^,]*)$/, ' and$1')
       : null;
 
-  const seoTitle = buildDesignSeoTitle({
+  const isVerticalBirdPlaque = design.id === '1721089090837';
+  const seoTitle = getEditorialTitle(design) ?? buildDesignSeoTitle({
     shapeName: shapeDisplay,
     categoryTitle,
     simplifiedProduct,
@@ -203,10 +207,12 @@ export async function generateMetadata({
     phraseFromSlug,
     motifList,
   });
-  const description = truncateMetaDescription(
-    buildDesignDescription({ seoTitle, phraseFromSlug, motifList }),
-  );
-  const pageTitle = `${seoTitle} | Forever Shining`;
+  const subject = [shapeDisplay, simplifiedProduct, productTypeDisplay]
+    .filter(Boolean).join(' ').toLowerCase();
+  const artwork = motifList ? ` with ${motifList} artwork` : '';
+  const description = isVerticalBirdPlaque
+    ? 'Compare the bird and flower engraving on this vertical memorial plaque. Preview your own inscription in the design before requesting a proof.'
+    : `Preview this ${subject}${artwork}. Personalize the inscription online and request a proof.`;
 
   // Build canonical URL with clean slug
   const baseUrl = 'https://forevershining.org';
@@ -215,7 +221,7 @@ export async function generateMetadata({
   const canonicalUrl = `${baseUrl}${currentPath}`;
 
   return {
-    title: pageTitle,
+    title: seoTitle,
     description,
     alternates: {
       canonical: canonicalUrl,
@@ -344,7 +350,8 @@ export default async function SavedDesignPage({
   const canonicalUrl = `${baseUrl}${canonicalPath}`;
   const previewScreenshotSrc = `/screenshots/v2026-3d/${design.id}.png`;
 
-  const formattedH1 = buildDesignSeoTitle({
+  const editorialTitle = getEditorialTitle(design);
+  const formattedH1 = editorialTitle ?? buildDesignSeoTitle({
     shapeName,
     categoryTitle,
     simplifiedProduct,
@@ -688,7 +695,7 @@ export default async function SavedDesignPage({
               id="price-heading-ssr"
               className="mb-1 text-xl font-semibold text-slate-800"
             >
-              Price Guide
+              What affects your quote
             </h2>
             <p className="mb-4 text-sm text-slate-500">
               Indicative components only. Exact pricing is generated in the
@@ -816,6 +823,7 @@ export default async function SavedDesignPage({
       </div>
 
       <DesignPageClient
+        editorialTitle={editorialTitle}
         productSlug={productSlug}
         category={category}
         slug={slug}

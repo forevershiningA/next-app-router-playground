@@ -5,6 +5,8 @@
 // `ssr: false` is only valid inside a Client Component, so this wrapper exists
 // purely to host those dynamic() calls.
 
+import { useEffect } from 'react';
+import { recordReadyDesignArrival } from '#/lib/ready-design-open';
 import dynamic from 'next/dynamic';
 import { usePathname } from 'next/navigation';
 
@@ -22,6 +24,10 @@ const ConditionalCanvas = dynamic(
 
 export default function ClientShell() {
   const pathname = usePathname();
+
+  useEffect(() => {
+    if (pathname) recordReadyDesignArrival(pathname);
+  }, [pathname]);
 
   // The homepage has its own preview video and does not use the designer.
   // Skip client-only dynamic components here, including their SSR bailouts.

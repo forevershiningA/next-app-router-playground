@@ -44,7 +44,7 @@ export default function DesignYourOwnGuide() {
           </h2>
           <ul className="list-disc pl-6 text-slate-700 font-light space-y-2">
             <li>Add and edit inscriptions with 10+ professional fonts</li>
-            <li>Choose from over 5,000 motifs including religious symbols, flora, and fauna</li>
+            <li>Choose from over 5,000 motifs including religious symbols, flora, and fauna. Compare the artwork in these <Link className="underline" href="/designs/laser-etched-headstone/butterfly-memorial">butterfly headstone designs</Link>.</li>
             <li>Upload and position photos with laser-etching or ceramic overlay options</li>
             <li>Adjust sizes, colors, and positioning with real-time preview</li>
             <li>Save designs and return to edit later</li>

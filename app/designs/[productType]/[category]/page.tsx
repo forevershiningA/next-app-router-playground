@@ -80,25 +80,14 @@ function formatDesignTitle(design: {
   return restPart ? `${shapePart} - ${restPart}` : shapePart;
 }
 
-function designDescription(
-  design: { id: string; shapeName?: string },
-  finish: string,
-  categoryTitle: string,
-  productKind: string,
-): string {
-  const shapeName = design.shapeName
-    ? formatShapeName(design.shapeName)
-    : 'Classic';
-  const hash = design.id
-    .split('')
-    .reduce((sum, char) => sum + char.charCodeAt(0), 0);
-  const descriptions = [
-    `A ${shapeName.toLowerCase()} ${finish} ${productKind} layout for ${categoryTitle.toLowerCase()} inscriptions and personal wording.`,
-    `This ${shapeName.toLowerCase()} memorial design gives ${categoryTitle.toLowerCase()} tributes a balanced layout with space for names, dates and verses.`,
-    `A refined ${shapeName.toLowerCase()} design suited to ${categoryTitle.toLowerCase()} memorials, with clear proportions for readable inscriptions.`,
-  ];
-
-  return descriptions[hash % descriptions.length];
+function getCollectionDesigns(productSlug: string, category: string) {
+  return getSeoReadyDesigns().filter((design) => {
+    if (design.productSlug !== productSlug) return false;
+    if (productSlug === 'traditional-headstone' && category === 'serpentine-top') {
+      return design.shapeName?.toLowerCase().startsWith('serpentine');
+    }
+    return design.category === category;
+  });
 }
 
 function getCategorySearchTitle(
@@ -106,6 +95,8 @@ function getCategorySearchTitle(
   productKind: ReturnType<typeof getProductSeoInfo>['kind'],
   fallback: string,
 ): string {
+  if (category === 'serpentine-top') return 'Serpentine Top Headstone Designs';
+
   if (category === 'butterfly-memorial' && productKind === 'headstone') {
     return 'Butterfly Headstone Designs';
   }
@@ -126,10 +117,7 @@ export async function generateMetadata({
   const productInfo = getProductSeoInfo(productSlug);
 
   // Get designs count
-  const designs = getSeoReadyDesigns().filter(
-    (design) =>
-      design.productSlug === productSlug && design.category === category,
-  );
+  const designs = getCollectionDesigns(productSlug, category);
   const designCount = designs.length;
 
   // Get category description
@@ -205,11 +193,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
     productInfo.kind,
     `${categoryTitle} ${productInfo.shortName} Designs`,
   );
-  const designs = getSeoReadyDesigns()
-    .filter(
-      (design) =>
-        design.productSlug === productSlug && design.category === category,
-    )
+  const designs = getCollectionDesigns(productSlug, category)
     .sort((a, b) => formatDesignTitle(a).localeCompare(formatDesignTitle(b)));
 
   if (!designs.length) {
@@ -343,34 +327,6 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
             </p>
           </header>
 
-          {categorySeoCopy && (
-            <section
-              aria-labelledby="category-guide-heading"
-              className="day:border-[#e4ddd2] day:bg-white/80 mb-12 max-w-4xl rounded-sm border border-white/10 bg-[#141311]/80 p-6 sm:p-8 backdrop-blur-sm"
-            >
-              <h2
-                id="category-guide-heading"
-                className="day:text-[#1d1a17] mb-3 font-serif text-xl font-normal text-white sm:text-2xl"
-              >
-                Choosing {categoryTitle.toLowerCase()} {productInfo.kind}{' '}
-                designs
-              </h2>
-              <p className="day:text-[#5c544a] mb-6 text-sm leading-relaxed text-[#c3bbb0]">
-                {categorySeoCopy.intro}
-              </p>
-              <ul className="grid gap-3 text-xs leading-relaxed md:grid-cols-3">
-                {categorySeoCopy.points.map((point) => (
-                  <li
-                    key={point}
-                    className="day:border-[#cfac6c] day:text-[#5c544a] border-l-2 border-[#cfac6c] pl-3 text-[#c3bbb0]"
-                  >
-                    {point}
-                  </li>
-                ))}
-              </ul>
-            </section>
-          )}
-
           <section aria-labelledby="category-designs-heading">
             <h2 id="category-designs-heading" className="sr-only">
               {categoryTitle} design templates
@@ -412,12 +368,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
                         </h3>
                       </div>
                       <p className="day:text-[#5c544a] mb-4 flex-1 text-xs leading-relaxed text-[#c3bbb0]">
-                        {designDescription(
-                          design,
-                          productInfo.finish,
-                          categoryTitle,
-                          productInfo.kind,
-                        )}
+                        {[productInfo.finish, design.hasPhoto && 'Photo layout', design.hasAdditions && 'Includes accessories'].filter(Boolean).join(' · ')}
                       </p>
 
                       {motifs.length > 0 && (
@@ -448,6 +399,34 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
               })}
             </div>
           </section>
+          {categorySeoCopy && (
+            <section
+              aria-labelledby="category-guide-heading"
+              className="day:border-[#e4ddd2] day:bg-white/80 mb-12 max-w-4xl rounded-sm border border-white/10 bg-[#141311]/80 p-6 sm:p-8 backdrop-blur-sm"
+            >
+              <h2
+                id="category-guide-heading"
+                className="day:text-[#1d1a17] mb-3 font-serif text-xl font-normal text-white sm:text-2xl"
+              >
+                Choosing {categoryTitle.toLowerCase()} {productInfo.kind}{' '}
+                designs
+              </h2>
+              <p className="day:text-[#5c544a] mb-6 text-sm leading-relaxed text-[#c3bbb0]">
+                {categorySeoCopy.intro}
+              </p>
+              <ul className="grid gap-3 text-xs leading-relaxed md:grid-cols-3">
+                {categorySeoCopy.points.map((point) => (
+                  <li
+                    key={point}
+                    className="day:border-[#cfac6c] day:text-[#5c544a] border-l-2 border-[#cfac6c] pl-3 text-[#c3bbb0]"
+                  >
+                    {point}
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
+
         </div>
       </main>
     </>

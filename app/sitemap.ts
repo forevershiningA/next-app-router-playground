@@ -148,6 +148,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...memorialTypePagesSitemap,
     ...productPages,
     ...categoryPages,
+    { url: `${BASE_URL}/designs/traditional-headstone/serpentine-top` },
     ...designPages,
   ];
 }

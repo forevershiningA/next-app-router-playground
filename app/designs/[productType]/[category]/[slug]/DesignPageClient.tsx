@@ -30,6 +30,7 @@ import { getMotifCategoryName } from '#/lib/motif-translations';
 import { ThemeToggle } from '#/components/theme/ThemeToggle';
 import './design-detail.css';
 import { logger } from '#/lib/logger';
+import { markReadyDesignStart } from '#/lib/ready-design-open';
 import { getDesignerProductStepHref } from '#/lib/designer-product-routes';
 
 // Legacy parity IDs no longer needed — 2D preview removed, all designs use canonical loader
@@ -216,6 +217,7 @@ function getPredominantMotifCategory(designData: any[]): string | null {
 }
 
 interface DesignPageClientProps {
+  editorialTitle?: string;
   personalization: import('#/lib/design-personalization').DesignPersonalization;
   productSlug: string;  // e.g., 'bronze-plaque'
   category: string;     // e.g., 'memorial', 'in-loving-memory'
@@ -1169,6 +1171,7 @@ function DraggableElement({
 }
 
 export default function DesignPageClient({
+  editorialTitle,
   productSlug,
   category,
   slug,
@@ -2978,7 +2981,9 @@ export default function DesignPageClient({
   const startPersonalising = () => {
     if (!canStartPersonalising) return;
     setLoadingIntoEditor(true);
-    router.push(getDesignerProductStepHref('select-size', designMetadata.productId));
+    const destination = getDesignerProductStepHref('select-size', designMetadata.productId);
+    markReadyDesignStart(designId, destination);
+    router.push(destination);
   };
 
   return (
@@ -3022,7 +3027,7 @@ export default function DesignPageClient({
                 Customizable memorial design
               </p>
               <h1 id="design-title" className="max-w-4xl text-3xl md:text-5xl font-serif font-light day:text-[#1d1a17] text-white tracking-tight">
-                {formattedDesignTitle}
+                {editorialTitle ?? formattedDesignTitle}
               </h1>
               <p className="mt-3 text-base md:text-lg day:text-[#625a51] text-[#c3bbb0] font-light">
                 {categoryTitle} · {simplifiedProductName} {productTypeDisplay}
@@ -3052,6 +3057,9 @@ export default function DesignPageClient({
                     loading="eager"
                   />
                 </div>
+                <a className="block px-4 pb-3 text-center text-sm underline" href={`/screenshots/v2026-3d/${designId}.png`}>
+                  View full-size design
+                </a>
               </div>
             </section>
 
@@ -3103,7 +3111,7 @@ export default function DesignPageClient({
                   href="#price-guide"
                   className="mt-3 inline-flex w-full items-center justify-center day:border-[#bdb4a6] day:text-[#1d1a17] day:hover:bg-[#f6f3ed] rounded-sm border border-[#cfac6c]/60 px-5 py-3 text-sm font-medium text-[#f0d89f] transition-colors hover:bg-white/5"
                 >
-                  See price guide
+                  View quote details
                 </a>
 
                 <div className="day:border-[#e2dad0] mt-5 border-t border-white/10 pt-4">

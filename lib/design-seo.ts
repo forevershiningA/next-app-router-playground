@@ -205,10 +205,12 @@ export function formatSlug(slug: string): string {
 }
 
 export function getCategoryTitle(category: string): string {
+  if (category === 'serpentine-top') return 'Serpentine Top';
   return DESIGN_CATEGORIES[category as DesignCategory]?.name ?? formatSlug(category);
 }
 
 export function getCategoryDescription(category: string): string {
+  if (category === 'serpentine-top') return 'Compare engraved granite headstones with a curved serpentine top. Explore floral, religious and portrait layouts to see how the lettering fits beneath the curve.';
   return (
     categorySeoCopy[category]?.description ??
     DESIGN_CATEGORIES[category as DesignCategory]?.description ??

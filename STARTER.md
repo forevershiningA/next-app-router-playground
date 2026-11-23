@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-11-12
+**Last Updated:** 2026-11-19
 
 **Status entry order:** Add new dated status entries immediately after the table of contents, before the existing status entries. Keep status entries in reverse chronological order (newest first); do not append them to the end of this file.
 **Tech Stack:** Next.js 15.5.26, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots), **Vitest 4.1.8** (unit tests), **Playwright 1.59.1** (E2E tests)
@@ -159,8 +159,16 @@
 146. [November 9 Vercel Build OOM Recovery & Memory Tuning](#current-status-2026-11-09--vercel-build-oom-recovery--memory-tuning)
 147. [November 12 Shape Gallery, Search and Build Memory](#current-status-2026-11-12--shape-gallery-search-and-build-memory)
 148. [November 18 Home Shape Cards and Vercel Build Memory](#current-status-2026-11-18--home-shape-cards-and-vercel-build-memory)
+149. [November 19 Public Header and Popular Shape Loading](#current-status-2026-11-19--public-header-and-popular-shape-loading)
 
 ---
+
+## Current Status (2026-11-19) — Public Header and Popular Shape Loading
+
+- The homepage hero offers **Start Designing in 3D** and **Browse Ready Designs**. Its copy explains that the 3D preview and price update during editing. The hero media is a non-interactive preview with a caption.
+- `components/MemorialPublicHeader.tsx` provides the compact header on the homepage, all five memorial category pages, Gallery, and Contact. The top row is 120 px on desktop, the search icon links to `/designs`, and both navigation layouts mark the active page. **My Account** remains in the navigation and uses its existing account layout.
+- **Popular Headstone Shapes** passes the selected shape in `?shapeId=`. For valid Laser Etched and Traditional Engraved presets, `app/select-shape/_ui/ShapeSelectionGrid.tsx` shows **Preparing your 3D design…** while the product configuration loads. It then applies the shape and matching material and opens `select-material` automatically. Manual selection and invalid presets use the regular shape grid. A failed catalog load offers **Try Again**.
+- Chromium checks covered the public header on desktop and mobile, the existing My Account login view, both preset engraving styles with delayed catalog loading, invalid preset fallback, and retry after a catalog failure. TypeScript passed. Targeted lint reported an existing raw `/contact` link in `ShapeSelectionGrid.tsx`.
 
 ## Current Status (2026-11-18) — Home Shape Cards and Vercel Build Memory
 

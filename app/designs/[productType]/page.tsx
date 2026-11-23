@@ -229,6 +229,16 @@ export default async function ProductTypePage({ params }: ProductPageProps) {
               {productDesigns.length.toLocaleString()} designs in{' '}
               {categoryGroups.length} strong categories
             </p>
+            {productSlug === 'traditional-headstone' && (
+              <Link className="mt-4 inline-block underline" href="/designs/traditional-headstone/serpentine-top">
+                Compare serpentine top headstone designs
+              </Link>
+            )}
+            {productSlug === 'laser-etched-headstone' && (
+              <Link className="mt-4 inline-block underline" href="/designs/laser-etched-headstone/butterfly-memorial">
+                Compare butterfly headstone designs
+              </Link>
+            )}
           </header>
 
           <section aria-labelledby="product-categories-heading">
