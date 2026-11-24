@@ -252,6 +252,10 @@ export function groupDesignsByCategory(designs: SavedDesignMetadata[]) {
   return Array.from(groups.entries()).sort((a, b) => b[1].length - a[1].length);
 }
 
+export function getListedCategoryGroups(designs: SavedDesignMetadata[]) {
+  return groupDesignsByCategory(designs).filter(([, group]) => isIndexableCategoryDesignSet(group));
+}
+
 export function isIndexableCategoryDesignSet(designs: SavedDesignMetadata[]) {
   const first = designs[0];
   if (!first || !INDEXABLE_PRODUCT_SLUGS.has(first.productSlug)) return false;

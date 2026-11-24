@@ -17,9 +17,9 @@ import DesignsIndexMobileNavToggle from '#/components/designs/DesignsIndexMobile
 import ServerDesignsTreeNav from '#/components/designs/ServerDesignsTreeNav';
 import { ThemeToggle } from '#/components/theme/ThemeToggle';
 import { data } from '#/app/_internal/_data';
-import { PRODUCT_STATS } from '#/lib/saved-designs-data';
 import {
   getCategoryTitle,
+  getListedCategoryGroups,
   getProductSeoInfo,
   getSeoReadyDesigns,
   groupDesignsByCategory,
@@ -89,7 +89,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { q } = await searchParams;
   const hasSearchQuery = Boolean(q?.trim());
-  const totalDesigns = Object.values(PRODUCT_STATS).reduce((sum, n) => sum + n, 0);
+  const totalDesigns = getSeoReadyDesigns().length;
   
   const title = 'Headstone & Grave Marker Designs | Forever Shining USA';
   const description = `Browse ${totalDesigns.toLocaleString()} custom headstone, grave marker and memorial plaque designs for US families. Personalize inscriptions, motifs and photos online with live 3D preview.`;
@@ -120,7 +120,7 @@ export async function generateMetadata({
   const canonicalUrl = `${baseUrl}/designs`;
 
   return {
-    title,
+    title: { absolute: title },
     description,
     keywords: keywords.join(', '),
     openGraph: {
@@ -524,7 +524,7 @@ export default async function DesignsPage({
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {productGroups.map(([productSlug, productDesigns]) => {
                 const product = getProductSeoInfo(productSlug);
-                const categories = new Set(productDesigns.map((design) => design.category));
+                const categories = getListedCategoryGroups(productDesigns);
                 const productId = PRODUCT_SLUG_TO_ID[productSlug] || '4';
                 const badge = PRODUCT_BADGES[productId];
                 const priceSample = priceSamples[productId];
@@ -596,7 +596,7 @@ export default async function DesignsPage({
                           href={`/designs/${productSlug}`}
                           className="day:border-[#1d1a17] day:bg-[#1d1a17] day:text-white day:hover:bg-[#342e26] day:hover:text-white day:group-hover:bg-[#342e26] day:group-hover:text-white inline-flex min-h-11 w-full items-center justify-between gap-3 rounded-sm border border-[#cfac6c]/60 bg-transparent px-4 py-2.5 text-sm font-semibold text-[#f0d89f] transition-all group-hover:bg-[#cfac6c] group-hover:text-[#14120f]"
                         >
-                          <span>Browse {categories.size} Categories</span>
+                          <span>Browse {categories.length} Categories</span>
                           <ArrowRightIcon className="size-4" aria-hidden="true" />
                         </Link>
                       </div>

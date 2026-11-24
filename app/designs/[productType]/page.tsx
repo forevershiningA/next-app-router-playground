@@ -11,9 +11,8 @@ import {
   getCategoryTitle,
   getProductSeoInfo,
   getSeoReadyDesigns,
-  groupDesignsByCategory,
+  getListedCategoryGroups,
   INDEXABLE_PRODUCT_SLUGS,
-  isIndexableCategoryDesignSet,
 } from '#/lib/design-seo';
 
 interface ProductPageProps {
@@ -46,7 +45,7 @@ export async function generateMetadata({
   );
 
   // Get unique categories
-  const categories = Array.from(new Set(designs.map((d) => d.category)));
+  const categories = getListedCategoryGroups(designs).map(([category]) => category);
   const categoryCount = categories.length;
   const designCount = designs.length;
 
@@ -54,7 +53,7 @@ export async function generateMetadata({
   const title = `${productInfo.name} Designs | Forever Shining`;
 
   // Build description
-  const description = `Browse ${designCount} ${productInfo.shortName.toLowerCase()} designs across ${categoryCount} categories. ${productInfo.description} Customize inscriptions, verses, motifs and photos online with live preview.`;
+  const description = `Explore ${designCount.toLocaleString('en-US')} ${productInfo.shortName.toLowerCase()} designs, with ${categoryCount} featured categories to browse. ${productInfo.description} Customize inscriptions, verses, motifs and photos online with live preview.`;
 
   // Build keywords
   const keywords = [
@@ -81,7 +80,7 @@ export async function generateMetadata({
   const canonicalUrl = `${baseUrl}/designs/${productSlug}`;
 
   return {
-    title,
+    title: { absolute: title },
     description,
     keywords,
     alternates: {
@@ -114,9 +113,7 @@ export default async function ProductTypePage({ params }: ProductPageProps) {
     notFound();
   }
 
-  const categoryGroups = groupDesignsByCategory(productDesigns).filter(
-    ([, designs]) => isIndexableCategoryDesignSet(designs),
-  );
+  const categoryGroups = getListedCategoryGroups(productDesigns);
 
   const baseUrl = 'https://forevershining.org';
   const canonicalUrl = `${baseUrl}/designs/${productSlug}`;
@@ -176,15 +173,9 @@ export default async function ProductTypePage({ params }: ProductPageProps) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
-      <MobileNavToggle>
+      <MobileNavToggle desktopSidebar>
         <ServerDesignsTreeNav />
       </MobileNavToggle>
-      <aside
-        className="day:border-[#e2dad0] fixed top-0 left-0 z-10 hidden h-full flex-col border-r border-white/10 md:block"
-        style={{ width: '400px' }}
-      >
-        <ServerDesignsTreeNav />
-      </aside>
 
       <main className="day:bg-[#f8f6f0] day:text-[#1d1a17] min-h-screen overflow-y-auto bg-[#0d0c0b] text-white md:ml-[400px]">
         <div className="container mx-auto max-w-7xl px-4 pt-20 pb-16 md:px-8 md:py-12">
@@ -226,8 +217,8 @@ export default async function ProductTypePage({ params }: ProductPageProps) {
               personalize a design with names, dates, verses, motifs and photos.
             </p>
             <p className="day:text-[#756c62] mt-4 text-xs text-white/50">
-              {productDesigns.length.toLocaleString()} designs in{' '}
-              {categoryGroups.length} strong categories
+              {productDesigns.length.toLocaleString()} total designs ·{' '}
+              {categoryGroups.length} featured categories
             </p>
             {productSlug === 'traditional-headstone' && (
               <Link className="mt-4 inline-block underline" href="/designs/traditional-headstone/serpentine-top">

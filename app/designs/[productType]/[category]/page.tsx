@@ -3,6 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ChevronRightIcon } from '@heroicons/react/24/outline';
+import CategoryReturnFocus from '#/components/designs/CategoryReturnFocus';
 import MobileNavToggle from '#/components/shared/MobileNavToggle';
 import ServerDesignsTreeNav from '#/components/designs/ServerDesignsTreeNav';
 import { ThemeToggle } from '#/components/theme/ThemeToggle';
@@ -119,6 +120,7 @@ export async function generateMetadata({
   // Get designs count
   const designs = getCollectionDesigns(productSlug, category);
   const designCount = designs.length;
+  const designNoun = designCount === 1 ? 'design' : 'designs';
 
   // Get category description
   const categoryDesc = getCategoryDescription(category);
@@ -133,8 +135,8 @@ export async function generateMetadata({
 
   // Build description
   const description = category === 'butterfly-memorial' && productInfo.kind === 'headstone'
-    ? `Explore ${designCount} butterfly headstone designs in ${productInfo.finish}. Compare shapes and layouts, then personalize a design with a 3D preview.`
-    : `Browse ${designCount} ${categoryTitle.toLowerCase()} ${productInfo.kind} designs in ${productInfo.finish}. ${categoryDesc} Customize online with inscriptions, motifs, photos and live preview.`;
+    ? `Explore ${designCount} butterfly headstone ${designNoun} in ${productInfo.finish}. Compare shapes and layouts, then personalize a design with a 3D preview.`
+    : `Browse ${designCount} ${categoryTitle.toLowerCase()} ${productInfo.kind} ${designNoun} in ${productInfo.finish}. ${categoryDesc} Customize online with inscriptions, motifs, photos and live preview.`;
 
   // Build keywords
   const keywords = [
@@ -265,15 +267,9 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
-      <MobileNavToggle>
+      <MobileNavToggle desktopSidebar>
         <ServerDesignsTreeNav />
       </MobileNavToggle>
-      <aside
-        className="day:border-[#e2dad0] fixed top-0 left-0 z-10 hidden h-full flex-col border-r border-white/10 md:block"
-        style={{ width: '400px' }}
-      >
-        <ServerDesignsTreeNav />
-      </aside>
 
       <main className="day:bg-[#f8f6f0] day:text-[#1d1a17] min-h-screen overflow-y-auto bg-[#0d0c0b] text-white md:ml-[400px]">
         <div className="container mx-auto max-w-7xl px-4 pt-20 pb-16 md:px-8 md:py-12">
@@ -318,16 +314,18 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
               {searchTitle}
             </h1>
             <p className="day:text-[#5c544a] mt-4 max-w-3xl text-base leading-relaxed text-[#c3bbb0] sm:text-lg">
-              {categoryDescription} These {productInfo.kind} templates can be
+              {categoryDescription} {designs.length === 1 ? 'This' : 'These'} {productInfo.kind}{' '}
+              {designs.length === 1 ? 'template' : 'templates'} can be
               personalized with names, dates, verses, motifs and photos before
               ordering in real-time 3D.
             </p>
             <p className="day:text-[#756c62] mt-4 text-xs text-white/50">
-              {designs.length.toLocaleString()} design templates to personalize
+              {designs.length.toLocaleString()} design {designs.length === 1 ? 'template' : 'templates'} to personalize
             </p>
           </header>
 
-          <section aria-labelledby="category-designs-heading">
+          <section id="category-design-list" aria-labelledby="category-designs-heading">
+            <CategoryReturnFocus />
             <h2 id="category-designs-heading" className="sr-only">
               {categoryTitle} design templates
             </h2>
