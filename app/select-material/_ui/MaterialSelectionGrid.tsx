@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useMemo, useRef } from 'react';
+import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import Image from 'next/image';
 import {
@@ -688,12 +689,12 @@ export default function MaterialSelectionGrid({
             Our memorial specialists can help you choose the right material and finish for your climate, parish guidelines, and cemetery rules.
           </p>
           <div className="mt-5 flex flex-wrap items-center justify-center gap-3">
-            <a
+            <Link
               href="/contact"
               className="inline-flex items-center gap-2 rounded-lg border border-[#c49a45] bg-[#c49a45] px-4 py-2 text-xs font-semibold text-[#121110] transition-colors hover:bg-[#d5ad55] day:border-[#9a742f] day:bg-[#9a742f] day:text-white day:hover:bg-[#856325] md:text-sm"
             >
               Consult a Specialist
-            </a>
+            </Link>
           </div>
         </div>
       </div>

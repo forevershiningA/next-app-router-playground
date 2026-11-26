@@ -25,7 +25,9 @@ describe('Deterministic Virtual Designer Assistant', () => {
     expect(draft.snapshot.selectedMotifs.length).toBe(1);
 
     // Verify long text fits comfortably within safe margins
-    const subLine = draft.snapshot.inscriptions.find((i) => i.id === 'l-bronze-3');
+    const subLine = draft.snapshot.inscriptions.find(
+      (i) => i.id === 'l-bronze-sub' || i.id === 'l-bronze-3',
+    );
     expect(subLine).toBeDefined();
     expect(subLine!.sizeMm).toBeLessThanOrEqual(11);
   });

@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState, type ReactNode } from 'react';
+import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import {
@@ -519,18 +520,18 @@ export default function ProductSelectionGrid({
                 Our design specialists are available to guide you through cemetery regulations, material longevity, and custom inscriptions.
               </p>
               <div className="mt-5 flex flex-wrap items-center justify-center gap-3">
-                <a
+                <Link
                   href="/contact"
                   className="inline-flex items-center gap-2 rounded-lg border border-[#c49a45] bg-[#c49a45] px-4 py-2 text-xs font-semibold text-[#121110] transition-colors hover:bg-[#d5ad55] day:border-[#9a742f] day:bg-[#9a742f] day:text-white day:hover:bg-[#856325] md:text-sm"
                 >
                   Consult a Specialist
-                </a>
-                <a
+                </Link>
+                <Link
                   href="/memorials/headstones"
                   className="inline-flex items-center gap-2 rounded-lg border border-white/15 bg-white/[0.04] px-4 py-2 text-xs font-semibold text-white transition-colors hover:bg-white/[0.08] day:border-[#d6cebf] day:bg-[#f7f4ee] day:text-[#5a5248] day:hover:bg-[#eee8dc] day:hover:text-[#1a1714] md:text-sm"
                 >
                   Explore Product Catalog
-                </a>
+                </Link>
               </div>
             </div>
           </>

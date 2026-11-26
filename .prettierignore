@@ -1,5 +1,6 @@
 # Build output
 .next
+.next*
 out
 build
 dist
@@ -17,19 +18,31 @@ package-lock.json
 yarn.lock
 
 # Large asset directories (skip formatting for performance)
-public/textures/
-public/additions/
-public/motifs/
-public/xml/
+public/
+output/
+database-exports/
+m3d/
+gsc/
 
-# Legacy and documentation
+# Legacy, archive and documentation
 legacy/
+src/
+archive/
 docs/
+
+# Temporary and test outputs
+tmp/
+.tmp/
+test-results/
+playwright-report/
 
 # Logs
 *.log
 logs.log
+logs/
 
-# Vercel
+# Vercel & metadata
 .vercel
-
+*.txt
+*.jsonl
+STARTER.md

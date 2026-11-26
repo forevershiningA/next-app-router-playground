@@ -2,6 +2,7 @@
 
 const nextCoreWebVitals = require('eslint-config-next/core-web-vitals');
 const nextTypeScript = require('eslint-config-next/typescript');
+
 module.exports = [
   {
     ignores: [
@@ -15,6 +16,14 @@ module.exports = [
       'test-results/**',
       'playwright-report/**',
       '.next/**',
+      '.next*/**',
+      '.tmp/**',
+      'tmp/**',
+      'output/**',
+      'database-exports/**',
+      'logs/**',
+      'm3d/**',
+      'gsc/**',
       'next-env.d.ts',
       'node_modules/**',
     ],
@@ -22,6 +31,7 @@ module.exports = [
   ...nextCoreWebVitals,
   ...nextTypeScript,
   {
+    files: ['**/*.{js,jsx,mjs,ts,tsx,mts,cts}'],
     rules: {
       '@typescript-eslint/no-explicit-any': 'warn',
       '@typescript-eslint/no-unused-vars': [

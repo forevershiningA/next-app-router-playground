@@ -204,7 +204,10 @@ export function parseVirtualDesignerCommand(rawCommand: string): ParsedMemorialI
     const roleRegex = /\b(?:founder(?:\s+of)?|co-founder(?:\s+of)?|założyciel(?:a|em|ka)?|współzałożyciel(?:a)?|creator(?:\s+of)?|twórca|director(?:\s+of)?|dyrektor(?:a)?|president(?:\s+of)?|prezes(?:a)?|chairman(?:\s+of)?|przewodnicząc(?:y|ego)|minister(?:a)?|fundator(?:a|em)?|funder(?:\s+of)?|commander(?:\s+of)?|dowódc(?:a|y)|patron(?:a)?|author(?:\s+of)?|autor(?:a)?)\b\s*(.*)/i;
 
     if (forMatch && forMatch[1].trim().length > 2) {
-      const captured = forMatch[1].trim();
+      let captured = forMatch[1].trim();
+      if (/^(?:prof\.?|profesor(?:a)?|dr\.?|doktor(?:a)?)\s+/i.test(captured)) {
+        captured = captured.replace(/^(?:prof\.?|profesor(?:a)?|dr\.?|doktor(?:a)?)\s+/i, '');
+      }
       const roleMatch = captured.match(roleRegex);
       if (roleMatch && roleMatch.index !== undefined && roleMatch.index > 0) {
         const namePart = captured.slice(0, roleMatch.index).trim();
@@ -255,6 +258,9 @@ export function parseVirtualDesignerCommand(rawCommand: string): ParsedMemorialI
     }
 
     const isPl = lower.includes('tablic') || lower.includes('brąz') || lower.includes('braz');
+    if (!subText && /\b(?:prof\.?|profesor|scholar|naukowiec|doktor|dr\.)\b/i.test(text)) {
+      subText = isPl ? 'Wybitny Naukowiec i Pedagog' : 'Distinguished Scholar and Mentor';
+    }
     const title = isPl ? `Tablica Pamiątkowa z Brązu — ${person}` : `Bronze Memorial Plaque — ${person}`;
     const epitaph = [subText, bottomText].filter(Boolean).join('\n') || undefined;
 
@@ -1118,7 +1124,7 @@ export function buildDeterministicDraft(
       rawItems.push({
         id: 'l-bronze-sub',
         text: subText,
-        baseSize: Math.max(11, Math.min(13, Math.round(heightMm * 0.04))),
+        baseSize: Math.max(10, Math.min(11, Math.round(heightMm * 0.038))),
         font: 'Garamond',
       });
     }
