@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-11-19
+**Last Updated:** 2026-11-24
 
 **Status entry order:** Add new dated status entries immediately after the table of contents, before the existing status entries. Keep status entries in reverse chronological order (newest first); do not append them to the end of this file.
 **Tech Stack:** Next.js 15.5.26, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots), **Vitest 4.1.8** (unit tests), **Playwright 1.59.1** (E2E tests)
@@ -160,8 +160,17 @@
 147. [November 12 Shape Gallery, Search and Build Memory](#current-status-2026-11-12--shape-gallery-search-and-build-memory)
 148. [November 18 Home Shape Cards and Vercel Build Memory](#current-status-2026-11-18--home-shape-cards-and-vercel-build-memory)
 149. [November 19 Public Header and Popular Shape Loading](#current-status-2026-11-19--public-header-and-popular-shape-loading)
+150. [November 24 Design Catalog Counts and Category Navigation](#current-status-2026-11-24--design-catalog-counts-and-category-navigation)
 
 ---
+
+## Current Status (2026-11-24) — Design Catalog Counts and Category Navigation
+
+- The `/designs` page and its meta description both count published designs via `getSeoReadyDesigns()`. The local catalog contained 2,980 designs across 11 collections. Product cards and product pages use `getListedCategoryGroups()` to count the featured categories visitors can browse.
+- The shared `/designs/[productType]` template covers both `/designs/traditional-headstone` and `/designs/laser-etched-headstone`. The catalog and product page titles include the brand once. The laser-etched page showed 1,315 total designs and 25 featured categories during verification.
+- On `/designs/[productType]/[category]`, single-design collections use singular wording in the page and meta description. Returning from a design restores keyboard focus to its card. In mobile Playwright testing on the 169-design Mother Memorial list, Back restored focus to card 81 at the same scroll position, and Tab moved to card 82.
+- Product and category pages share one navigation tree between mobile and desktop. On the Psalm 23 Memorial category, the uncompressed HTML response fell from 3.86 MB to 2.16 MB (44%) in a local Next.js development comparison.
+- Commit `cb3e3e570e` contains the implementation. Type checking and all four design SEO unit tests passed. Browser verification covered the catalog, the laser-etched product page, and its Mother Memorial and Psalm 23 Memorial categories. Production deployment was unverified at handoff.
 
 ## Current Status (2026-11-19) — Public Header and Popular Shape Loading
 

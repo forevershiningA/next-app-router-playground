@@ -855,7 +855,13 @@ export default function Scene({
         onClick={handleSceneryClick}
       >
         <planeGeometry args={[200, 200]} />
-        <meshBasicMaterial transparent opacity={0} side={THREE.DoubleSide} />
+        {/* This click target can sit between the mobile camera and the lettering. */}
+        <meshBasicMaterial
+          transparent
+          opacity={0}
+          depthWrite={false}
+          side={THREE.DoubleSide}
+        />
       </mesh>
       
       <group ref={groupRef}>
